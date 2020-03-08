@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camelot.DataAccess", "Camel
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camelot.DataAccess.LiteDb", "Camelot.DataAccess.LiteDb\Camelot.DataAccess.LiteDb.csproj", "{1A99F6B2-14DF-4364-BD6C-1C0F43A6AFC5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camelot.Tests", "Camelot.Tests\Camelot.Tests.csproj", "{6AFD8B6F-3FA3-4E22-821C-94FEB0BB4983}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{1A99F6B2-14DF-4364-BD6C-1C0F43A6AFC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1A99F6B2-14DF-4364-BD6C-1C0F43A6AFC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1A99F6B2-14DF-4364-BD6C-1C0F43A6AFC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6AFD8B6F-3FA3-4E22-821C-94FEB0BB4983}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6AFD8B6F-3FA3-4E22-821C-94FEB0BB4983}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6AFD8B6F-3FA3-4E22-821C-94FEB0BB4983}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6AFD8B6F-3FA3-4E22-821C-94FEB0BB4983}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(AvalonStudioProperties) = preSolution
 		StartupItem = {DBB08575-833E-4079-86F8-45EF9C550021}

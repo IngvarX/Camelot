@@ -13,39 +13,14 @@ namespace Camelot.Services.Implementations
         {
             _fileSystemWatcher = fileSystemWatcher;
 
-            SetupFileSystemWatcher();
-        }
-
-        public void WatchDirectory(string directory)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void UnwatchDirectory(string directory)
-        {
-            throw new System.NotImplementedException();
+            SubscribeToEvents();
         }
 
         public void Dispose()
         {
             UnsubscribeFromEvents();
-        }
 
-        private void SetupFileSystemWatcher()
-        {
-            _fileSystemWatcher.IncludeSubdirectories = true;
-            _fileSystemWatcher.NotifyFilter = NotifyFilters.Attributes |
-                                              NotifyFilters.CreationTime |
-                                              NotifyFilters.DirectoryName |
-                                              NotifyFilters.FileName |
-                                              NotifyFilters.LastAccess |
-                                              NotifyFilters.LastWrite |
-                                              NotifyFilters.Security |
-                                              NotifyFilters.Size;
-
-            SubscribeToEvents();
-
-            _fileSystemWatcher.EnableRaisingEvents = true;
+            _fileSystemWatcher.Dispose();
         }
 
         private void SubscribeToEvents()
