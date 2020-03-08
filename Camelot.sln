@@ -1,0 +1,40 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+#
+MinimumVisualStudioVersion = 10.0.40219.1
+VisualStudioVersion = 15.0.27009.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camelot", "Camelot\Camelot.csproj", "{DBB08575-833E-4079-86F8-45EF9C550021}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camelot.Services", "Camelot.Services\Camelot.Services.csproj", "{EA118C52-A2B0-46DF-9E54-99C15D25FCBD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camelot.DataAccess", "Camelot.DataAccess\Camelot.DataAccess.csproj", "{F50475AF-B915-424B-BF32-E326DF405BAB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camelot.DataAccess.LiteDb", "Camelot.DataAccess.LiteDb\Camelot.DataAccess.LiteDb.csproj", "{1A99F6B2-14DF-4364-BD6C-1C0F43A6AFC5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DBB08575-833E-4079-86F8-45EF9C550021}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBB08575-833E-4079-86F8-45EF9C550021}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBB08575-833E-4079-86F8-45EF9C550021}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBB08575-833E-4079-86F8-45EF9C550021}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA118C52-A2B0-46DF-9E54-99C15D25FCBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA118C52-A2B0-46DF-9E54-99C15D25FCBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA118C52-A2B0-46DF-9E54-99C15D25FCBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA118C52-A2B0-46DF-9E54-99C15D25FCBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F50475AF-B915-424B-BF32-E326DF405BAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F50475AF-B915-424B-BF32-E326DF405BAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F50475AF-B915-424B-BF32-E326DF405BAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F50475AF-B915-424B-BF32-E326DF405BAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A99F6B2-14DF-4364-BD6C-1C0F43A6AFC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A99F6B2-14DF-4364-BD6C-1C0F43A6AFC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A99F6B2-14DF-4364-BD6C-1C0F43A6AFC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A99F6B2-14DF-4364-BD6C-1C0F43A6AFC5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(AvalonStudioProperties) = preSolution
+		StartupItem = {DBB08575-833E-4079-86F8-45EF9C550021}
+	EndGlobalSection
+EndGlobal
