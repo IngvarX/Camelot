@@ -1,20 +1,19 @@
 using System;
 using System.IO;
-using Camelot.Services.Interfaces;
-using IoFileSystemWatcher = System.IO.FileSystemWatcher;
+using Camelot.FileSystemWatcherWrapper.Interfaces;
 
-namespace Camelot.Services.Implementations
+namespace Camelot.FileSystemWatcherWrapper.Implementations
 {
-    public class FileSystemWatcherFactory : IFileSystemWatcherFactory
+    public class FileSystemWatcherWrapperFactory : IFileSystemWatcherWrapperFactory
     {
-        public IFileSystemWatcher Create(string directory)
+        public IFileSystemWatcherWrapper Create(string directory)
         {
             if (string.IsNullOrWhiteSpace(directory))
             {
                 throw new ArgumentNullException(nameof(directory));
             }
 
-            var fileSystemWatcher = new IoFileSystemWatcher(directory)
+            var fileSystemWatcher = new FileSystemWatcher(directory)
             {
                 IncludeSubdirectories = true,
                 NotifyFilter = NotifyFilters.Attributes |
@@ -24,11 +23,10 @@ namespace Camelot.Services.Implementations
                                NotifyFilters.LastAccess |
                                NotifyFilters.LastWrite |
                                NotifyFilters.Security |
-                               NotifyFilters.Size,
-                EnableRaisingEvents = true
+                               NotifyFilters.Size
             };
 
-            return new FileSystemWatcher(fileSystemWatcher);
+            return new FileSystemWatcherWrapper(fileSystemWatcher);
         }
     }
 }

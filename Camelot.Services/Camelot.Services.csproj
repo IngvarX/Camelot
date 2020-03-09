@@ -4,4 +4,9 @@
         <TargetFramework>netcoreapp3.1</TargetFramework>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Camelot.Extensions\Camelot.Extensions.csproj" />
+      <ProjectReference Include="..\Camelot.FileSystemWatcherWrapper\Camelot.FileSystemWatcherWrapper.csproj" />
+    </ItemGroup>
+
 </Project>
