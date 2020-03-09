@@ -30,7 +30,7 @@ namespace Camelot.Services.Implementations
             SubscribeToEvents();
         }
 
-        public void StopWatching(string directory)
+        public void StopWatching()
         {
             CleanupFileSystemWatcher();
         }

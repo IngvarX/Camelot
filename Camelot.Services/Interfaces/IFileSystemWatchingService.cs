@@ -12,6 +12,6 @@ namespace Camelot.Services.Interfaces
 
         void StartWatching(string directory);
 
-        void StopWatching(string directory);
+        void StopWatching();
     }
 }

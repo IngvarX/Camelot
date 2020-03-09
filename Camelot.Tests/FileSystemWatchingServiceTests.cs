@@ -101,5 +101,32 @@ namespace Camelot.Tests
 
             Assert.True(callbackCalled);
         }
+
+        [Fact]
+        public void TestCallbackNotCalledWithoutSubscription()
+        {
+            _fileSystemWatchingService.NodeRenamed += (sender, eventArgs) =>
+            {
+                AssertExtensions.Fail();
+            };
+
+            var args = new RenamedEventArgs(WatcherChangeTypes.Renamed, CurrentDirectory, FileName, FileName);
+            _fileSystemWatcherMock.Raise(m => m.Renamed += null, args);
+        }
+
+        [Fact]
+        public void TestCallbackNotCalledAfterUnsubscription()
+        {
+            _fileSystemWatchingService.NodeRenamed += (sender, eventArgs) =>
+            {
+                AssertExtensions.Fail();
+            };
+
+            _fileSystemWatchingService.StartWatching(CurrentDirectory);
+            _fileSystemWatchingService.StopWatching();
+
+            var args = new RenamedEventArgs(WatcherChangeTypes.Renamed, CurrentDirectory, FileName, FileName);
+            _fileSystemWatcherMock.Raise(m => m.Renamed += null, args);
+        }
     }
 }
