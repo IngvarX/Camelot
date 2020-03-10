@@ -5,10 +5,10 @@ namespace Camelot.Services.Interfaces
 {
     public interface IFileSystemWatchingService
     {
-        event EventHandler<NodeDeletedEventArgs> NodeDeleted;
-        event EventHandler<NodeCreatedEventArgs> NodeCreated;
-        event EventHandler<NodeChangedEventArgs> NodeChanged;
-        event EventHandler<NodeRenamedEventArgs> NodeRenamed;
+        event EventHandler<FileDeletedEventArgs> FileDeleted;
+        event EventHandler<FileCreatedEventArgs> FileCreated;
+        event EventHandler<FileChangedEventArgs> FileChanged;
+        event EventHandler<FileRenamedEventArgs> FileRenamed;
 
         void StartWatching(string directory);
 

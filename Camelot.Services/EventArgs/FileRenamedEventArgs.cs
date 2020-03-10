@@ -1,10 +1,10 @@
 namespace Camelot.Services.EventArgs
 {
-    public class NodeRenamedEventArgs : NodeEventArgsBase
+    public class FileRenamedEventArgs : FileEventArgsBase
     {
         public string NewName { get; }
 
-        public NodeRenamedEventArgs(string node, string newName)
+        public FileRenamedEventArgs(string node, string newName)
             : base(node)
         {
             NewName = newName;

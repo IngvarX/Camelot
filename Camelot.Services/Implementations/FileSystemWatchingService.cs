@@ -13,10 +13,10 @@ namespace Camelot.Services.Implementations
 
         private IFileSystemWatcherWrapper _fileSystemWatcher;
 
-        public event EventHandler<NodeDeletedEventArgs> NodeDeleted;
-        public event EventHandler<NodeCreatedEventArgs> NodeCreated;
-        public event EventHandler<NodeChangedEventArgs> NodeChanged;
-        public event EventHandler<NodeRenamedEventArgs> NodeRenamed;
+        public event EventHandler<FileDeletedEventArgs> FileDeleted;
+        public event EventHandler<FileCreatedEventArgs> FileCreated;
+        public event EventHandler<FileChangedEventArgs> FileChanged;
+        public event EventHandler<FileRenamedEventArgs> FileRenamed;
 
         public FileSystemWatchingService(IFileSystemWatcherWrapperFactory fileSystemWatcherWrapperFactory)
         {
@@ -75,30 +75,30 @@ namespace Camelot.Services.Implementations
 
         private void FileSystemWatcherOnChanged(object sender, FileSystemEventArgs e)
         {
-            var args = new NodeChangedEventArgs(e.FullPath);
+            var args = new FileChangedEventArgs(e.FullPath);
 
-            NodeChanged.Raise(this, args);
+            FileChanged.Raise(this, args);
         }
 
         private void FileSystemWatcherOnCreated(object sender, FileSystemEventArgs e)
         {
-            var args = new NodeCreatedEventArgs(e.FullPath);
+            var args = new FileCreatedEventArgs(e.FullPath);
 
-            NodeCreated.Raise(this, args);
+            FileCreated.Raise(this, args);
         }
 
         private void FileSystemWatcherOnDeleted(object sender, FileSystemEventArgs e)
         {
-            var args = new NodeDeletedEventArgs(e.FullPath);
+            var args = new FileDeletedEventArgs(e.FullPath);
 
-            NodeDeleted.Raise(this, args);
+            FileDeleted.Raise(this, args);
         }
 
         private void FileSystemWatcherOnRenamed(object sender, RenamedEventArgs e)
         {
-            var args = new NodeRenamedEventArgs(e.OldFullPath, e.FullPath);
+            var args = new FileRenamedEventArgs(e.OldFullPath, e.FullPath);
 
-            NodeRenamed.Raise(this, args);
+            FileRenamed.Raise(this, args);
         }
     }
 }

@@ -34,7 +34,7 @@ namespace Camelot.Tests
         public void TestFileRemoved()
         {
             var callbackCalled = false;
-            _fileSystemWatchingService.NodeDeleted += (sender, eventArgs) =>
+            _fileSystemWatchingService.FileDeleted += (sender, eventArgs) =>
             {
                 callbackCalled = true;
                 Assert.True(eventArgs.Node == FilePath);
@@ -52,7 +52,7 @@ namespace Camelot.Tests
         public void TestFileCreated()
         {
             var callbackCalled = false;
-            _fileSystemWatchingService.NodeCreated += (sender, eventArgs) =>
+            _fileSystemWatchingService.FileCreated += (sender, eventArgs) =>
             {
                 callbackCalled = true;
                 Assert.True(eventArgs.Node == FilePath);
@@ -70,7 +70,7 @@ namespace Camelot.Tests
         public void TestFileChanged()
         {
             var callbackCalled = false;
-            _fileSystemWatchingService.NodeChanged += (sender, eventArgs) =>
+            _fileSystemWatchingService.FileChanged += (sender, eventArgs) =>
             {
                 callbackCalled = true;
                 Assert.True(eventArgs.Node == FilePath);
@@ -88,7 +88,7 @@ namespace Camelot.Tests
         public void TestFileRenamed()
         {
             var callbackCalled = false;
-            _fileSystemWatchingService.NodeRenamed += (sender, eventArgs) =>
+            _fileSystemWatchingService.FileRenamed += (sender, eventArgs) =>
             {
                 callbackCalled = true;
                 Assert.True(eventArgs.Node == FilePath);
@@ -105,7 +105,7 @@ namespace Camelot.Tests
         [Fact]
         public void TestCallbackNotCalledWithoutSubscription()
         {
-            _fileSystemWatchingService.NodeRenamed += (sender, eventArgs) =>
+            _fileSystemWatchingService.FileRenamed += (sender, eventArgs) =>
             {
                 AssertExtensions.Fail();
             };
@@ -117,7 +117,7 @@ namespace Camelot.Tests
         [Fact]
         public void TestCallbackNotCalledAfterUnsubscription()
         {
-            _fileSystemWatchingService.NodeRenamed += (sender, eventArgs) =>
+            _fileSystemWatchingService.FileRenamed += (sender, eventArgs) =>
             {
                 AssertExtensions.Fail();
             };

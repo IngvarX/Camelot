@@ -1,10 +1,10 @@
 namespace Camelot.Services.EventArgs
 {
-    public class NodeEventArgsBase : System.EventArgs
+    public class FileEventArgsBase : System.EventArgs
     {
         public string Node { get; }
 
-        public NodeEventArgsBase(string node)
+        public FileEventArgsBase(string node)
         {
             Node = node;
         }
