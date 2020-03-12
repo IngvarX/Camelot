@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,28 +7,32 @@ namespace Camelot.Services.Operations.Implementations
 {
     public class CopyOperation : OperationBase
     {
-        private readonly IList<(string Source, string Destination)> _filesToCopy;
+        private readonly string _sourceFile;
+        private readonly string _destinationFile;
 
-        public CopyOperation(IList<(string Source, string Destination)> filesToCopy)
+        public CopyOperation(string sourceFile, string destinationFile)
         {
-            _filesToCopy = filesToCopy;
+            if (string.IsNullOrWhiteSpace(sourceFile))
+            {
+                throw new ArgumentNullException(nameof(sourceFile));
+            }
+
+            if (string.IsNullOrWhiteSpace(destinationFile))
+            {
+                throw new ArgumentNullException(nameof(destinationFile));
+            }
+
+            _sourceFile = sourceFile;
+            _destinationFile = destinationFile;
         }
 
         public override Task RunAsync(CancellationToken cancellationToken)
         {
-            // TODO: parallel
-            var filesCount = _filesToCopy.Count;
-            for (var i = 0; i < filesCount; i++)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
+            cancellationToken.ThrowIfCancellationRequested();
 
-                var (source, destination) = _filesToCopy[i];
-                File.Copy(source, destination);
+            File.Copy(_sourceFile, _destinationFile);
 
-                var currentProgress = (double)i / filesCount;
-                FireProgressChangedEvent(currentProgress);
-            }
-
+            FireProgressChangedEvent(1);
             FireOperationFinishedEvent();
 
             return Task.CompletedTask;

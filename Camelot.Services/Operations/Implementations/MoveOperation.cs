@@ -17,7 +17,6 @@ namespace Camelot.Services.Operations.Implementations
 
         public override async Task RunAsync(CancellationToken cancellationToken)
         {
-            // TODO: support parallel copy and delete
             await _copyOperation.RunAsync(cancellationToken);
             await _deleteOperation.RunAsync(cancellationToken);
         }

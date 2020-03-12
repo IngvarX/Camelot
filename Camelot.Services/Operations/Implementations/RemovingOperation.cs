@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,26 +7,23 @@ namespace Camelot.Services.Operations.Implementations
 {
     public class RemovingOperation : OperationBase
     {
-        private readonly IList<string> _filesToRemove;
+        private readonly string _fileToRemove;
 
-        public RemovingOperation(IList<string> filesToRemove)
+        public RemovingOperation(string fileToRemove)
         {
-            _filesToRemove = filesToRemove;
+            if (string.IsNullOrWhiteSpace(fileToRemove))
+            {
+                throw new ArgumentNullException(nameof(fileToRemove));
+            }
+
+            _fileToRemove = fileToRemove;
         }
 
         public override Task RunAsync(CancellationToken cancellationToken)
         {
-            var filesCount = _filesToRemove.Count;
-            for (var i = 0; i < filesCount; i++)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
+            File.Delete(_fileToRemove);
 
-                File.Delete(_filesToRemove[i]);
-
-                var currentProgress = (double)i / filesCount;
-                FireProgressChangedEvent(currentProgress);
-            }
-
+            FireProgressChangedEvent(1);
             FireOperationFinishedEvent();
 
             return Task.CompletedTask;
