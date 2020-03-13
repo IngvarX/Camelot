@@ -2,11 +2,19 @@ using System.Collections.Generic;
 using System.Linq;
 using Camelot.Services.Operations.Interfaces;
 using Camelot.Services.Operations.Settings;
+using Camelot.TaskPool.Interfaces;
 
 namespace Camelot.Services.Operations.Implementations
 {
     public class OperationsFactory : IOperationsFactory
     {
+        private readonly ITaskPool _taskPool;
+
+        public OperationsFactory(ITaskPool taskPool)
+        {
+            _taskPool = taskPool;
+        }
+
         public IOperation CreateMoveOperation(IList<BinaryFileOperationSettings> settings)
         {
             var operations = settings
@@ -57,9 +65,9 @@ namespace Camelot.Services.Operations.Implementations
             return new RemovingOperation(filePath);
         }
 
-        private static IOperation CreateCompositeOperation(IList<IOperation> operations)
+        private IOperation CreateCompositeOperation(IList<IOperation> operations)
         {
-            return new CompositeOperation(operations);
+            return new CompositeOperation(_taskPool, operations);
         }
     }
 }

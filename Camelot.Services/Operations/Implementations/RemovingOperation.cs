@@ -21,9 +21,9 @@ namespace Camelot.Services.Operations.Implementations
 
         public override Task RunAsync(CancellationToken cancellationToken)
         {
+            // TODO: move to trash
             File.Delete(_fileToRemove);
 
-            FireProgressChangedEvent(1);
             FireOperationFinishedEvent();
 
             return Task.CompletedTask;

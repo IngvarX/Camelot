@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camelot.Extensions", "Camel
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camelot.FileSystemWatcherWrapper", "Camelot.FileSystemWatcherWrapper\Camelot.FileSystemWatcherWrapper.csproj", "{95C5E0A6-1B8D-48EF-A4CE-0A2CA938E9E0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camelot.TaskPool", "Camelot.TaskPool\Camelot.TaskPool.csproj", "{D4DE85C4-A15E-4F7A-B0F7-3BA08EA727C5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{95C5E0A6-1B8D-48EF-A4CE-0A2CA938E9E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95C5E0A6-1B8D-48EF-A4CE-0A2CA938E9E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95C5E0A6-1B8D-48EF-A4CE-0A2CA938E9E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4DE85C4-A15E-4F7A-B0F7-3BA08EA727C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4DE85C4-A15E-4F7A-B0F7-3BA08EA727C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4DE85C4-A15E-4F7A-B0F7-3BA08EA727C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4DE85C4-A15E-4F7A-B0F7-3BA08EA727C5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(AvalonStudioProperties) = preSolution
 		StartupItem = {DBB08575-833E-4079-86F8-45EF9C550021}

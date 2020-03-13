@@ -2,32 +2,52 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Camelot.Services.Operations.Interfaces;
+using Camelot.TaskPool.Interfaces;
 
 namespace Camelot.Services.Operations.Implementations
 {
     public class CompositeOperation : OperationBase
     {
+        private readonly ITaskPool _taskPool;
         private readonly IList<IOperation> _operations;
 
-        public CompositeOperation(IList<IOperation> operations)
+        private int _finishedOperationsCount;
+
+        public CompositeOperation(ITaskPool taskPool, IList<IOperation> operations)
         {
+            _taskPool = taskPool;
             _operations = operations;
         }
 
         public override async Task RunAsync(CancellationToken cancellationToken)
         {
-            // TODO: use task pool
+            _finishedOperationsCount = 0;
+
             var operationsCount = _operations.Count;
             for (var i = 0; i < operationsCount; i++)
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                await _operations[i].RunAsync(cancellationToken);
+                var currentOperation = _operations[i];
+                currentOperation.OperationFinished += CurrentOperationOnOperationFinished;
 
-                FireProgressChangedEvent((double) i / operationsCount);
+                await _taskPool.ExecuteAsync(() => currentOperation.RunAsync(cancellationToken));
             }
+        }
 
-            FireOperationFinishedEvent();
+        private void CurrentOperationOnOperationFinished(object sender, System.EventArgs e)
+        {
+            var finishedOperationsCount = Interlocked.Increment(ref _finishedOperationsCount);
+            var totalOperationsCount = _operations.Count;
+
+            if (finishedOperationsCount == totalOperationsCount)
+            {
+                FireOperationFinishedEvent();
+            }
+            else
+            {
+                FireProgressChangedEvent((double)finishedOperationsCount / totalOperationsCount);
+            }
         }
     }
 }

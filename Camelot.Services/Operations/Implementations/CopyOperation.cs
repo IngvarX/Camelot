@@ -32,7 +32,6 @@ namespace Camelot.Services.Operations.Implementations
 
             File.Copy(_sourceFile, _destinationFile);
 
-            FireProgressChangedEvent(1);
             FireOperationFinishedEvent();
 
             return Task.CompletedTask;

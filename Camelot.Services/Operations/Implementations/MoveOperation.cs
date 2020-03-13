@@ -18,7 +18,9 @@ namespace Camelot.Services.Operations.Implementations
         public override async Task RunAsync(CancellationToken cancellationToken)
         {
             await _copyOperation.RunAsync(cancellationToken);
+            FireProgressChangedEvent(0.5);
             await _deleteOperation.RunAsync(cancellationToken);
+            FireOperationFinishedEvent();
         }
     }
 }

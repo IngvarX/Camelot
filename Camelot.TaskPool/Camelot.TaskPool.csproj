@@ -6,8 +6,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Camelot.Extensions\Camelot.Extensions.csproj" />
-      <ProjectReference Include="..\Camelot.FileSystemWatcherWrapper\Camelot.FileSystemWatcherWrapper.csproj" />
-      <ProjectReference Include="..\Camelot.TaskPool\Camelot.TaskPool.csproj" />
     </ItemGroup>
 
 </Project>
