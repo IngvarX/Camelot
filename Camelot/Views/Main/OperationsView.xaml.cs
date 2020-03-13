@@ -1,12 +1,11 @@
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
 namespace Camelot.Views.Main
 {
-    public class BottomButtonsView : UserControl
+    public class OperationsView : UserControl
     {
-        public BottomButtonsView()
+        public OperationsView()
         {
             InitializeComponent();
         }

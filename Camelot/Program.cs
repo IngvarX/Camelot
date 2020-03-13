@@ -1,21 +1,36 @@
 ﻿using System;
+using System.Threading;
 using Avalonia;
-using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Logging.Serilog;
 using Avalonia.ReactiveUI;
+using Splat;
 
 namespace Camelot
 {
-    class Program
+    internal class Program
     {
-        // Initialization code. Don't use any Avalonia, third-party APIs or any
-        // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
-        // yet and stuff might break.
-        public static void Main(string[] args) => BuildAvaloniaApp()
-            .StartWithClassicDesktopLifetime(args);
+        public static void Main(string[] args)
+        {
+            var mutex = new Mutex(false, typeof(Program).FullName);
 
-        // Avalonia configuration, don't remove; also used by visual designer.
-        public static AppBuilder BuildAvaloniaApp()
+            try
+            {
+                if (!mutex.WaitOne(TimeSpan.FromSeconds(5), true))
+                {
+                    return;
+                }
+
+                Registry.Register(Locator.CurrentMutable, Locator.Current);
+
+                BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+            }
+            finally
+            {
+                mutex.ReleaseMutex();
+            }
+        }
+
+        private static AppBuilder BuildAvaloniaApp()
             => AppBuilder.Configure<App>()
                 .UsePlatformDetect()
                 .LogToDebug()

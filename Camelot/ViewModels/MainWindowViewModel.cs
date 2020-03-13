@@ -1,11 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Camelot.Services.Interfaces;
+using Camelot.ViewModels.MainWindow;
 
 namespace Camelot.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        public string Greeting => "Hello World!";
+        public OperationsViewModel OperationsViewModel { get; }
+
+        public FilesPanelViewModel LeftFilesPanelViewModel { get; }
+
+        public FilesPanelViewModel RightFilesPanelViewModel { get; }
+
+        public MainWindowViewModel(IFileService fileService)
+        {
+            LeftFilesPanelViewModel = new FilesPanelViewModel(fileService);
+            RightFilesPanelViewModel = new FilesPanelViewModel(fileService);
+        }
     }
 }

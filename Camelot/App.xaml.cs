@@ -3,6 +3,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Camelot.ViewModels;
 using Camelot.Views;
+using Splat;
 
 namespace Camelot
 {
@@ -19,7 +20,7 @@ namespace Camelot
             {
                 desktop.MainWindow = new MainWindow
                 {
-                    DataContext = new MainWindowViewModel(),
+                    DataContext = Locator.Current.GetService<MainWindowViewModel>()
                 };
             }
 

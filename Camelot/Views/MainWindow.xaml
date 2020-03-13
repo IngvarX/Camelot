@@ -13,6 +13,29 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    <main:FilesPanelView />
 
+    <StackPanel Orientation="Vertical">
+        <DockPanel>
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="_File">
+                    <MenuItem Header="_Open..."/>
+                    <Separator/>
+                    <MenuItem Header="_Exit"/>
+                </MenuItem>
+                <MenuItem Header="_Edit">
+                    <MenuItem Header="Copy"/>
+                    <MenuItem Header="Paste"/>
+                </MenuItem>
+            </Menu>
+        </DockPanel>
+
+        <main:TopSettingsView />
+
+        <StackPanel Orientation="Horizontal">
+            <main:FilesPanelView DataContext="{Binding LeftFilesPanelViewModel}" />
+            <main:FilesPanelView DataContext="{Binding RightFilesPanelViewModel}" />
+        </StackPanel>
+
+        <main:OperationsView />
+    </StackPanel>
 </Window>
