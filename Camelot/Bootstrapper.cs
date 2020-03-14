@@ -29,12 +29,15 @@ namespace Camelot
                 resolver.GetService<ITaskPool>()));
             services.Register<IFileSystemWatchingService>(() => new FileSystemWatchingService(
                 resolver.GetService<IFileSystemWatcherWrapperFactory>()));
-
+            services.Register<IFilesSelectionService>(() => new FilesSelectionService());
+            services.Register<IDirectoryService>(() => new DirectoryService());
         }
 
         private static void RegisterViewModels(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
-            services.Register(() => new OperationsViewModel());
+            services.Register(() => new OperationsViewModel(
+                resolver.GetService<IFilesSelectionService>(),
+                resolver.GetService<IOperationsFactory>()));
             services.Register(() => new FilesPanelViewModel(
                 resolver.GetService<IFileService>()));
 

@@ -1,15 +1,13 @@
-using System;
+using System.IO;
 
 namespace Camelot.Services.Models
 {
-    public class FileModel
+    public class FileModel : ModelBase
     {
-        public string Name { get; set; }
-
         public int SizeBytes { get; set; }
 
-        public DateTime LastModifiedDateTime { get; set; }
+        public FileType Type { get; set; }
 
-        public NodeType Type { get; set; }
+        public string Extension => Path.GetExtension(Name);
     }
 }

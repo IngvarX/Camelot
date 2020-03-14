@@ -10,52 +10,30 @@ namespace Camelot.Services.Implementations
     {
         public IReadOnlyCollection<FileModel> GetFiles(string directory)
         {
-            var directories = GetDirectories(directory);
-            var regularFiles = GetRegularFiles(directory);
-
-            return directories.Concat(regularFiles).ToArray();
-        }
-
-        private static IEnumerable<FileModel> GetDirectories(string directory)
-        {
-            var directories = Directory
-                .GetDirectories(directory)
-                .Select(d => CreateFrom(new DirectoryInfo(d)));
-
-            return directories;
-        }
-
-        private static IEnumerable<FileModel> GetRegularFiles(string directory)
-        {
-            var directories = Directory
+            var files = Directory
                 .GetFiles(directory)
-                .Select(f => CreateFrom(new FileInfo(f)));
+                .Select(CreateFrom);
 
-            return directories;
+            return files.ToArray();
         }
 
-        private static FileModel CreateFrom(FileSystemInfo directory)
+        private static FileModel CreateFrom(string file)
         {
+            var fileInfo = new FileInfo(file);
             var fileModel = new FileModel
             {
-                Name = directory.Name,
-                LastModifiedDateTime = directory.LastWriteTime,
-                Type = NodeType.Directory
+                Name = fileInfo.Name,
+                FullPath = fileInfo.FullName,
+                LastModifiedDateTime = fileInfo.LastWriteTime,
+                Type = GetFileType(fileInfo)
             };
 
             return fileModel;
         }
 
-        private static FileModel CreateFrom(FileInfo file)
+        private static FileType GetFileType(FileSystemInfo fileInfo)
         {
-            var fileModel = new FileModel
-            {
-                Name = file.Name,
-                LastModifiedDateTime = file.LastWriteTime,
-                Type = NodeType.RegularFile
-            };
-
-            return fileModel;
+            return fileInfo.Attributes.HasFlag(FileAttributes.ReparsePoint) ? FileType.Link : FileType.RegularFile;
         }
     }
 }

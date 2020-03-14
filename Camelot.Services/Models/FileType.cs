@@ -1,9 +1,8 @@
 namespace Camelot.Services.Models
 {
-    public enum NodeType
+    public enum FileType
     {
         RegularFile,
-        Directory,
         Link,
         SpecialFile
     }

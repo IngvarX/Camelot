@@ -1,28 +1,41 @@
 using System;
+using System.Linq;
 using System.Reactive;
+using System.Threading.Tasks;
+using Camelot.Services.Interfaces;
+using Camelot.Services.Operations.Interfaces;
+using Camelot.Services.Operations.Settings;
 using ReactiveUI;
 
 namespace Camelot.ViewModels.MainWindow
 {
     public class OperationsViewModel : ViewModelBase
     {
-        public ReactiveCommand<Unit, Unit> EditCommand { get; set; }
+        private readonly IFilesSelectionService _filesSelectionService;
+        private readonly IOperationsFactory _operationsFactory;
 
-        public ReactiveCommand<Unit, Unit> CopyCommand { get; set; }
+        public IReactiveCommand EditCommand { get; set; }
 
-        public ReactiveCommand<Unit, Unit> MoveCommand { get;  set;}
+        public IReactiveCommand CopyCommand { get; set; }
 
-        public ReactiveCommand<Unit, Unit> NewFolderCommand { get; set; }
+        public IReactiveCommand MoveCommand { get;  set;}
 
-        public ReactiveCommand<Unit, Unit> RemoveCommand { get; set; }
+        public IReactiveCommand NewFolderCommand { get; set; }
 
-        public OperationsViewModel()
+        public IReactiveCommand RemoveCommand { get; set; }
+
+        public OperationsViewModel(
+            IFilesSelectionService filesSelectionService,
+            IOperationsFactory operationsFactory)
         {
+            _filesSelectionService = filesSelectionService;
+            _operationsFactory = operationsFactory;
+
             EditCommand = ReactiveCommand.Create(Edit);
-            CopyCommand = ReactiveCommand.Create(Copy);
+            CopyCommand = ReactiveCommand.CreateFromTask(CopyAsync);
             MoveCommand = ReactiveCommand.Create(Move);
             NewFolderCommand = ReactiveCommand.Create(CreateNewFolder);
-            RemoveCommand = ReactiveCommand.Create(Remove);
+            RemoveCommand = ReactiveCommand.CreateFromTask(RemoveAsync);
         }
 
         private void Edit()
@@ -30,9 +43,9 @@ namespace Camelot.ViewModels.MainWindow
             throw new System.NotImplementedException();
         }
 
-        private void Copy()
+        private Task CopyAsync()
         {
-            Console.WriteLine("COpy");
+            return Task.CompletedTask;
         }
 
         private void Move()
@@ -45,9 +58,20 @@ namespace Camelot.ViewModels.MainWindow
             throw new System.NotImplementedException();
         }
 
-        private void Remove()
+        private async Task RemoveAsync()
         {
-            throw new System.NotImplementedException();
+            var selectedFiles = _filesSelectionService
+                .SelectedFiles
+                .Select(f => new UnaryFileOperationSettings(f.Name))
+                .ToArray();
+            if (!selectedFiles.Any())
+            {
+                return;
+            }
+
+            var deleteOperation = _operationsFactory.CreateDeleteOperation(selectedFiles);
+
+            await deleteOperation.RunAsync();
         }
     }
 }
