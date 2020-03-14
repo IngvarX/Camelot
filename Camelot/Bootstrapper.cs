@@ -39,7 +39,8 @@ namespace Camelot
                 resolver.GetService<IFilesSelectionService>(),
                 resolver.GetService<IOperationsFactory>()));
             services.Register(() => new FilesPanelViewModel(
-                resolver.GetService<IFileService>()));
+                resolver.GetService<IFileService>(),
+                resolver.GetService<IDirectoryService>()));
 
             services.Register(() => new MainWindowViewModel(
                 resolver.GetService<OperationsViewModel>(),

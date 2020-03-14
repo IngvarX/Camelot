@@ -31,10 +31,15 @@
 
         <main:TopSettingsView />
 
-        <StackPanel Orientation="Horizontal">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
             <main:FilesPanelView DataContext="{Binding LeftFilesPanelViewModel}" />
-            <main:FilesPanelView DataContext="{Binding RightFilesPanelViewModel}" />
-        </StackPanel>
+            <main:FilesPanelView Grid.Column="1" DataContext="{Binding RightFilesPanelViewModel}" />
+        </Grid>
 
         <main:OperationsView DataContext="{Binding OperationsViewModel}" />
     </StackPanel>

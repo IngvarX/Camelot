@@ -10,12 +10,22 @@
         <mainWindow:FilesPanelViewModel />
     </Design.DataContext>
 
-    <ListBox Items="{Binding Files}">
-        <ListBox.ItemTemplate>
-            <DataTemplate DataType="mainWindow:FileViewModel">
-                <TextBlock Text="{Binding FileName}"/>
-            </DataTemplate>
-        </ListBox.ItemTemplate>
-    </ListBox>
+    <StackPanel Orientation="Vertical">
+        <DockPanel>
+            <Button></Button>
+            <Button></Button>
+            <Button></Button>
+            <TextBox Text="{Binding CurrentDirectory, Mode=TwoWay}" />
+        </DockPanel>
+
+        <DataGrid Items="{Binding Files}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name"
+                                    Binding="{Binding FileName}" />
+                <DataGridTextColumn Header="Date"
+                                    Binding="{Binding LastModifiedDateTime}" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </StackPanel>
 
 </UserControl>

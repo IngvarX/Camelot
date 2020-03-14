@@ -10,11 +10,19 @@
         <mainWindow:OperationsViewModel />
     </Design.DataContext>
 
-    <StackPanel Orientation="Horizontal">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
         <Button Content="Edit" Command="{Binding EditCommand}" />
-        <Button Content="Copy" Command="{Binding CopyCommand}" />
-        <Button Content="Move" Command="{Binding MoveCommand}" />
-        <Button Content="New folder" Command="{Binding NewFolderCommand}"  />
-        <Button Content="Remove" Command="{Binding RemoveCommand}" />
-    </StackPanel>
+        <Button Grid.Column="1" Content="Copy" Command="{Binding CopyCommand}" />
+        <Button Grid.Column="2" Content="Move" Command="{Binding MoveCommand}" />
+        <Button Grid.Column="3" Content="New folder" Command="{Binding NewFolderCommand}"  />
+        <Button Grid.Column="4" Content="Remove" Command="{Binding RemoveCommand}" />
+    </Grid>
 </UserControl>
