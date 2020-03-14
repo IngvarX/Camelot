@@ -10,7 +10,12 @@
         <mainWindow:FilesPanelViewModel />
     </Design.DataContext>
 
-    <StackPanel Orientation="Vertical">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
         <DockPanel>
             <Button></Button>
             <Button></Button>
@@ -18,8 +23,9 @@
             <TextBox Text="{Binding CurrentDirectory, Mode=TwoWay}" />
         </DockPanel>
 
-        <DataGrid Items="{Binding Files}" SelectionChanged="OnDataGridSelectionChanged" IsReadOnly="True"
-                  MaxHeight="500">
+        <DataGrid x:Name="FilesDataGrid" Grid.Row="1" Items="{Binding Files}"
+                  CellPointerPressed="OnDataGridCellPointerPressed"
+                  SelectionChanged="OnDataGridSelectionChanged" IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name"
                                     Binding="{Binding FileName}" />
@@ -27,6 +33,6 @@
                                     Binding="{Binding LastModifiedDateTime}" />
             </DataGrid.Columns>
         </DataGrid>
-    </StackPanel>
+    </Grid>
 
 </UserControl>

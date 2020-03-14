@@ -14,7 +14,14 @@
     </Design.DataContext>
 
 
-    <StackPanel Orientation="Vertical">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
         <DockPanel>
             <Menu DockPanel.Dock="Top">
                 <MenuItem Header="_File">
@@ -29,9 +36,9 @@
             </Menu>
         </DockPanel>
 
-        <main:TopSettingsView />
+        <main:TopSettingsView Grid.Row="1" />
 
-        <Grid>
+        <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition />
@@ -41,6 +48,6 @@
             <main:FilesPanelView Grid.Column="1" DataContext="{Binding RightFilesPanelViewModel}" />
         </Grid>
 
-        <main:OperationsView DataContext="{Binding OperationsViewModel}" />
-    </StackPanel>
+        <main:OperationsView Grid.Row="3" DataContext="{Binding OperationsViewModel}" />
+    </Grid>
 </Window>

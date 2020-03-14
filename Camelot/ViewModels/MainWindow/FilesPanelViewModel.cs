@@ -70,9 +70,9 @@ namespace Camelot.ViewModels.MainWindow
             var files = _fileService.GetFiles(CurrentDirectory);
 
             var directoriesModels = directories
-                .Select(d => new FileViewModel(d.FullPath, d.LastModifiedDateTime));
+                .Select(d => new FileViewModel(() => CurrentDirectory = d.FullPath, d.FullPath, d.LastModifiedDateTime));
             var filesModels = files
-                .Select(f => new FileViewModel(f.FullPath, f.LastModifiedDateTime));
+                .Select(f => new FileViewModel(null, f.FullPath, f.LastModifiedDateTime));
 
             _files.Clear();
             _files.AddRange(directoriesModels.Concat(filesModels));
