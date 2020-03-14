@@ -9,18 +9,20 @@ namespace Camelot
 {
     internal class Program
     {
+        private const int TimeoutSeconds = 3;
+
         public static void Main(string[] args)
         {
             var mutex = new Mutex(false, typeof(Program).FullName);
 
             try
             {
-                if (!mutex.WaitOne(TimeSpan.FromSeconds(5), true))
+                if (!mutex.WaitOne(TimeSpan.FromSeconds(TimeoutSeconds), true))
                 {
                     return;
                 }
 
-                Registry.Register(Locator.CurrentMutable, Locator.Current);
+                Bootstrapper.Register(Locator.CurrentMutable, Locator.Current);
 
                 BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
             }

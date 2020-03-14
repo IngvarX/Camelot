@@ -1,5 +1,4 @@
-﻿using Camelot.Services.Interfaces;
-using Camelot.ViewModels.MainWindow;
+﻿using Camelot.ViewModels.MainWindow;
 
 namespace Camelot.ViewModels
 {
@@ -11,10 +10,14 @@ namespace Camelot.ViewModels
 
         public FilesPanelViewModel RightFilesPanelViewModel { get; }
 
-        public MainWindowViewModel(IFileService fileService)
+        public MainWindowViewModel(
+            OperationsViewModel operationsViewModel,
+            FilesPanelViewModel leftFilesPanelViewModel,
+            FilesPanelViewModel rightFilesPanelViewModel)
         {
-            LeftFilesPanelViewModel = new FilesPanelViewModel(fileService);
-            RightFilesPanelViewModel = new FilesPanelViewModel(fileService);
+            OperationsViewModel = operationsViewModel;
+            LeftFilesPanelViewModel = leftFilesPanelViewModel;
+            RightFilesPanelViewModel = rightFilesPanelViewModel;
         }
     }
 }

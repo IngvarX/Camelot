@@ -36,6 +36,6 @@
             <main:FilesPanelView DataContext="{Binding RightFilesPanelViewModel}" />
         </StackPanel>
 
-        <main:OperationsView />
+        <main:OperationsView DataContext="{Binding OperationsViewModel}" />
     </StackPanel>
 </Window>
