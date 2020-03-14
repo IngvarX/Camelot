@@ -1,14 +1,13 @@
 using System.Collections.Generic;
-using Camelot.Services.Models;
 
 namespace Camelot.Services.Interfaces
 {
     public interface IFilesSelectionService
     {
-        IList<FileModel> SelectedFiles { get; }
+        IList<string> SelectedFiles { get; }
 
-        void SelectFiles(IEnumerable<FileModel> files);
+        void SelectFiles(IEnumerable<string> files);
 
-        void UnselectFiles(IEnumerable<FileModel> files);
+        void UnselectFiles(IEnumerable<string> files);
     }
 }

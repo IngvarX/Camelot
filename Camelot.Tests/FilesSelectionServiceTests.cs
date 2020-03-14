@@ -19,30 +19,27 @@ namespace Camelot.Tests
         public void TestFilesSelection()
         {
             const int filesCount = 10;
-            var filesNames = Enumerable
+            var files = Enumerable
                 .Range(0, filesCount)
                 .Select(i => i.ToString())
                 .ToArray();
-            var files = filesNames.Select(n => new FileModel {Name = n});
 
             _filesSelectionService.SelectFiles(files);
 
             var selectedFiles = _filesSelectionService.SelectedFiles;
             Assert.True(selectedFiles.Count == filesCount);
 
-            var selectedFilesNames = selectedFiles.Select(f => f.Name);
-            Assert.True(filesNames.All(fn => selectedFilesNames.Contains(fn)));
+            Assert.True(files.All(fn => selectedFiles.Contains(fn)));
         }
 
         [Fact]
         public void TestFilesUnselection()
         {
             const int filesCount = 10;
-            var filesNames = Enumerable
+            var files = Enumerable
                 .Range(0, filesCount)
                 .Select(i => i.ToString())
                 .ToArray();
-            var files = filesNames.Select(n => new FileModel {Name = n}).ToArray();
 
             _filesSelectionService.SelectFiles(files);
             const int filesToUnselectCount = 3;
@@ -51,8 +48,7 @@ namespace Camelot.Tests
             var selectedFiles = _filesSelectionService.SelectedFiles;
             Assert.True(selectedFiles.Count == filesCount - filesToUnselectCount);
 
-            var selectedFilesNames = selectedFiles.Select(f => f.Name);
-            Assert.True(filesNames.Skip(filesToUnselectCount).All(fn => selectedFilesNames.Contains(fn)));
+            Assert.True(files.Skip(filesToUnselectCount).All(fn => selectedFiles.Contains(fn)));
         }
     }
 }

@@ -18,7 +18,8 @@
             <TextBox Text="{Binding CurrentDirectory, Mode=TwoWay}" />
         </DockPanel>
 
-        <DataGrid Items="{Binding Files}">
+        <DataGrid Items="{Binding Files}" SelectionChanged="OnDataGridSelectionChanged" IsReadOnly="True"
+                  MaxHeight="500">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name"
                                     Binding="{Binding FileName}" />

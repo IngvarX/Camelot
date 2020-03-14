@@ -1,5 +1,8 @@
+using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using Camelot.ViewModels.MainWindow;
+using DynamicData;
 
 namespace Camelot.Views.Main
 {
@@ -13,6 +16,18 @@ namespace Camelot.Views.Main
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
+        }
+
+        private void OnDataGridSelectionChanged(object sender, SelectionChangedEventArgs args)
+        {
+            // TODO: swap RemovedItems and AddedItems after fixing bug in avalonia
+            var viewModel = (FilesPanelViewModel) DataContext;
+
+            var addedItems = args.RemovedItems.Cast<FileViewModel>();
+            viewModel.SelectedFiles.AddRange(addedItems);
+
+            var removedItems = args.AddedItems.Cast<FileViewModel>();
+            viewModel.SelectedFiles.RemoveMany(removedItems);
         }
     }
 }

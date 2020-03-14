@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using ReactiveUI;
 
 namespace Camelot.ViewModels.MainWindow
@@ -6,7 +7,6 @@ namespace Camelot.ViewModels.MainWindow
     public class FileViewModel : ViewModelBase
     {
         private string _lastModifiedDateTime;
-        private string _fileName;
 
         public string LastModifiedDateTime
         {
@@ -14,16 +14,13 @@ namespace Camelot.ViewModels.MainWindow
             set => this.RaiseAndSetIfChanged(ref _lastModifiedDateTime, value);
         }
 
-        public string FileName
-        {
-            get => _fileName;
-            set => this.RaiseAndSetIfChanged(ref _fileName, value);
-        }
+        public string FullPath { get; }
 
-        public FileViewModel(string fileName, DateTime lastModifiedDateTime)
-        {
-            _fileName = fileName;
+        public string FileName => Path.GetFileName(FullPath);
 
+        public FileViewModel(string fullPath, DateTime lastModifiedDateTime)
+        {
+            FullPath = fullPath;
             LastModifiedDateTime = lastModifiedDateTime.ToString();
 
         }

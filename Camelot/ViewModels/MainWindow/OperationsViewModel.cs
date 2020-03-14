@@ -1,6 +1,4 @@
-using System;
 using System.Linq;
-using System.Reactive;
 using System.Threading.Tasks;
 using Camelot.Services.Interfaces;
 using Camelot.Services.Operations.Interfaces;
@@ -62,7 +60,7 @@ namespace Camelot.ViewModels.MainWindow
         {
             var selectedFiles = _filesSelectionService
                 .SelectedFiles
-                .Select(f => new UnaryFileOperationSettings(f.Name))
+                .Select(f => new UnaryFileOperationSettings(f))
                 .ToArray();
             if (!selectedFiles.Any())
             {

@@ -22,15 +22,15 @@ namespace Camelot
 
         private static void RegisterServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
-            services.Register<IFileService>(() => new FileService());
-            services.Register<IFileSystemWatcherWrapperFactory>(() => new FileSystemWatcherWrapperFactory());
-            services.Register<ITaskPool>(() => new TaskPool.Implementations.TaskPool(Environment.ProcessorCount));
+            services.RegisterLazySingleton<IFileService>(() => new FileService());
+            services.RegisterLazySingleton<IFileSystemWatcherWrapperFactory>(() => new FileSystemWatcherWrapperFactory());
+            services.RegisterLazySingleton<ITaskPool>(() => new TaskPool.Implementations.TaskPool(Environment.ProcessorCount));
             services.Register<IOperationsFactory>(() => new OperationsFactory(
                 resolver.GetService<ITaskPool>()));
-            services.Register<IFileSystemWatchingService>(() => new FileSystemWatchingService(
+            services.RegisterLazySingleton<IFileSystemWatchingService>(() => new FileSystemWatchingService(
                 resolver.GetService<IFileSystemWatcherWrapperFactory>()));
-            services.Register<IFilesSelectionService>(() => new FilesSelectionService());
-            services.Register<IDirectoryService>(() => new DirectoryService());
+            services.RegisterLazySingleton<IFilesSelectionService>(() => new FilesSelectionService());
+            services.RegisterLazySingleton<IDirectoryService>(() => new DirectoryService());
         }
 
         private static void RegisterViewModels(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
@@ -40,9 +40,10 @@ namespace Camelot
                 resolver.GetService<IOperationsFactory>()));
             services.Register(() => new FilesPanelViewModel(
                 resolver.GetService<IFileService>(),
-                resolver.GetService<IDirectoryService>()));
+                resolver.GetService<IDirectoryService>(),
+                resolver.GetService<IFilesSelectionService>()));
 
-            services.Register(() => new MainWindowViewModel(
+            services.RegisterLazySingleton(() => new MainWindowViewModel(
                 resolver.GetService<OperationsViewModel>(),
                 resolver.GetService<FilesPanelViewModel>(),
                 resolver.GetService<FilesPanelViewModel>()));
