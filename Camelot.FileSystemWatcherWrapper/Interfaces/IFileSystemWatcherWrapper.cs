@@ -5,13 +5,13 @@ namespace Camelot.FileSystemWatcherWrapper.Interfaces
 {
     public interface IFileSystemWatcherWrapper : IDisposable
     {
-        public event FileSystemEventHandler Created;
+        public event EventHandler<FileSystemEventArgs> Created;
 
-        public event FileSystemEventHandler Changed;
+        public event EventHandler<FileSystemEventArgs> Changed;
 
-        public event FileSystemEventHandler Deleted;
+        public event EventHandler<FileSystemEventArgs> Deleted;
 
-        public event RenamedEventHandler Renamed;
+        public event EventHandler<RenamedEventArgs> Renamed;
 
         public bool EnableRaisingEvents { get; set; }
     }

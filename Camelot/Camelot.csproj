@@ -20,6 +20,7 @@
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.9.4" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Camelot.ApplicationDispatcher\Camelot.ApplicationDispatcher.csproj" />
     <ProjectReference Include="..\Camelot.Services\Camelot.Services.csproj" />
   </ItemGroup>
   <ItemGroup>

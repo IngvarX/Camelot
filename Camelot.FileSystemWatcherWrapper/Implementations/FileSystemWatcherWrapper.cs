@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Camelot.Extensions;
 using Camelot.FileSystemWatcherWrapper.Interfaces;
 
 namespace Camelot.FileSystemWatcherWrapper.Implementations
@@ -8,10 +9,13 @@ namespace Camelot.FileSystemWatcherWrapper.Implementations
     {
         private readonly FileSystemWatcher _fileSystemWatcher;
 
-        public event FileSystemEventHandler Created;
-        public event FileSystemEventHandler Changed;
-        public event FileSystemEventHandler Deleted;
-        public event RenamedEventHandler Renamed;
+        public event EventHandler<FileSystemEventArgs> Created;
+
+        public event EventHandler<FileSystemEventArgs> Changed;
+
+        public event EventHandler<FileSystemEventArgs> Deleted;
+
+        public event EventHandler<RenamedEventArgs> Renamed;
 
         public bool EnableRaisingEvents
         {
@@ -35,18 +39,38 @@ namespace Camelot.FileSystemWatcherWrapper.Implementations
 
         private void SubscribeToEvents()
         {
-            _fileSystemWatcher.Created += Created;
-            _fileSystemWatcher.Changed += Changed;
-            _fileSystemWatcher.Deleted += Deleted;
-            _fileSystemWatcher.Renamed += Renamed;
+            _fileSystemWatcher.Created += FileSystemWatcherOnCreated;
+            _fileSystemWatcher.Changed += FileSystemWatcherOnChanged;
+            _fileSystemWatcher.Deleted += FileSystemWatcherOnDeleted;
+            _fileSystemWatcher.Renamed += FileSystemWatcherOnRenamed;
         }
 
         private void UnsubscribeFromEvents()
         {
-            _fileSystemWatcher.Created -= Created;
-            _fileSystemWatcher.Changed -= Changed;
-            _fileSystemWatcher.Deleted -= Deleted;
-            _fileSystemWatcher.Renamed -= Renamed;
+            _fileSystemWatcher.Created -= FileSystemWatcherOnCreated;
+            _fileSystemWatcher.Changed -= FileSystemWatcherOnChanged;
+            _fileSystemWatcher.Deleted -= FileSystemWatcherOnDeleted;
+            _fileSystemWatcher.Renamed -= FileSystemWatcherOnRenamed;
+        }
+
+        private void FileSystemWatcherOnCreated(object sender, FileSystemEventArgs e)
+        {
+            Created.Raise(sender, e);
+        }
+
+        private void FileSystemWatcherOnChanged(object sender, FileSystemEventArgs e)
+        {
+            Changed.Raise(sender, e);
+        }
+
+        private void FileSystemWatcherOnDeleted(object sender, FileSystemEventArgs e)
+        {
+            Deleted.Raise(sender, e);
+        }
+
+        private void FileSystemWatcherOnRenamed(object sender, RenamedEventArgs e)
+        {
+            Renamed.Raise(sender, e);
         }
     }
 }

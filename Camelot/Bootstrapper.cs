@@ -1,4 +1,6 @@
 using System;
+using ApplicationDispatcher.Implementations;
+using ApplicationDispatcher.Interfaces;
 using Camelot.Factories.Implementations;
 using Camelot.Factories.Interfaces;
 using Camelot.FileSystemWatcherWrapper.Implementations;
@@ -35,10 +37,14 @@ namespace Camelot
             services.RegisterLazySingleton<IFilesSelectionService>(() => new FilesSelectionService());
             services.RegisterLazySingleton<IDirectoryService>(() => new DirectoryService());
             services.RegisterLazySingleton<IFileOpeningService>(() => new FileOpeningService());
+            services.RegisterLazySingleton<IFileSystemWatcherWrapperFactory>(() => new FileSystemWatcherWrapperFactory());
+            services.Register<IFileSystemWatchingService>(() => new FileSystemWatchingService(
+                resolver.GetService<IFileSystemWatcherWrapperFactory>()));
             services.RegisterLazySingleton(() => new FileOpeningBehavior(
                 resolver.GetService<IFileOpeningService>()));
             services.RegisterLazySingleton(() => new DirectoryOpeningBehavior(
                 resolver.GetService<IDirectoryService>()));
+            services.RegisterLazySingleton<IApplicationDispatcher>(() => new AvaloniaDispatcher());
         }
 
         private static void RegisterViewModels(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
@@ -53,7 +59,9 @@ namespace Camelot
                 resolver.GetService<IFileService>(),
                 resolver.GetService<IDirectoryService>(),
                 resolver.GetService<IFilesSelectionService>(),
-                resolver.GetService<IFileViewModelFactory>()
+                resolver.GetService<IFileViewModelFactory>(),
+                resolver.GetService<IFileSystemWatchingService>(),
+                resolver.GetService<IApplicationDispatcher>()
                 ));
             services.RegisterLazySingleton(() => new MainWindowViewModel(
                 resolver.GetService<IDirectoryService>(),

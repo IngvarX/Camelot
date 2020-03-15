@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using Camelot.FileSystemWatcherWrapper.Interfaces;
 
@@ -8,14 +7,9 @@ namespace Camelot.FileSystemWatcherWrapper.Implementations
     {
         public IFileSystemWatcherWrapper Create(string directory)
         {
-            if (string.IsNullOrWhiteSpace(directory))
+            var fileSystemWatcher = new FileSystemWatcher
             {
-                throw new ArgumentNullException(nameof(directory));
-            }
-
-            var fileSystemWatcher = new FileSystemWatcher(directory)
-            {
-                IncludeSubdirectories = true,
+                Path = directory,
                 NotifyFilter = NotifyFilters.Attributes |
                                NotifyFilters.CreationTime |
                                NotifyFilters.DirectoryName |

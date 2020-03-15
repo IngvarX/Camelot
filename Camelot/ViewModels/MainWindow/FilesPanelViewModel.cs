@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Windows.Input;
+using ApplicationDispatcher.Interfaces;
 using Camelot.Extensions;
 using Camelot.Factories.Interfaces;
 using Camelot.Services.Interfaces;
@@ -19,11 +20,12 @@ namespace Camelot.ViewModels.MainWindow
         private readonly IDirectoryService _directoryService;
         private readonly IFilesSelectionService _filesSelectionService;
         private readonly IFileViewModelFactory _fileViewModelFactory;
+        private readonly IFileSystemWatchingService _fileSystemWatchingService;
+        private readonly IApplicationDispatcher _applicationDispatcher;
 
         private readonly ObservableCollection<FileViewModel> _files;
         private readonly ObservableCollection<FileViewModel> _selectedFiles;
 
-        private FileViewModel _selectedFile;
         private string _currentDirectory;
 
         public string CurrentDirectory
@@ -46,12 +48,16 @@ namespace Camelot.ViewModels.MainWindow
             IFileService fileService,
             IDirectoryService directoryService,
             IFilesSelectionService filesSelectionService,
-            IFileViewModelFactory fileViewModelFactory)
+            IFileViewModelFactory fileViewModelFactory,
+            IFileSystemWatchingService fileSystemWatchingService,
+            IApplicationDispatcher applicationDispatcher)
         {
             _fileService = fileService;
             _directoryService = directoryService;
             _filesSelectionService = filesSelectionService;
             _fileViewModelFactory = fileViewModelFactory;
+            _fileSystemWatchingService = fileSystemWatchingService;
+            _applicationDispatcher = applicationDispatcher;
 
             _files = new ObservableCollection<FileViewModel>();
             _selectedFiles = new ObservableCollection<FileViewModel>();
@@ -68,6 +74,18 @@ namespace Camelot.ViewModels.MainWindow
                 .Subscribe(_ => ReloadFiles());
 
             ReloadFiles();
+            SubscribeToEvents();
+        }
+
+        private void SubscribeToEvents()
+        {
+            void ReloadInUiThread() => _applicationDispatcher.Dispatch(ReloadFiles);
+
+            // TODO: don't reload all files, process update properly
+            _fileSystemWatchingService.FileCreated += (sender, args) => ReloadInUiThread();
+            _fileSystemWatchingService.FileChanged += (sender, args) => ReloadInUiThread();
+            _fileSystemWatchingService.FileRenamed += (sender, args) => ReloadInUiThread();
+            _fileSystemWatchingService.FileDeleted += (sender, args) => ReloadInUiThread();
         }
 
         private void Activate()
@@ -82,6 +100,8 @@ namespace Camelot.ViewModels.MainWindow
                 return;
             }
 
+            _fileSystemWatchingService.StopWatching();
+
             var directories = _directoryService.GetDirectories(CurrentDirectory);
             var files = _fileService.GetFiles(CurrentDirectory);
 
@@ -92,6 +112,8 @@ namespace Camelot.ViewModels.MainWindow
 
             _files.Clear();
             _files.AddRange(directoriesModels.Concat(filesModels));
+
+            _fileSystemWatchingService.StartWatching(CurrentDirectory);
         }
 
         private void SelectedFilesOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

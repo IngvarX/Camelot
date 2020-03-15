@@ -2,10 +2,11 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
+        <RootNamespace>ApplicationDispatcher</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Camelot.Extensions\Camelot.Extensions.csproj" />
+      <PackageReference Include="Avalonia" Version="0.9.4" />
     </ItemGroup>
 
 </Project>
