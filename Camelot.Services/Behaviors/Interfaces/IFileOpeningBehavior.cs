@@ -1,4 +1,4 @@
-namespace Camelot.Behaviors.Interfaces
+namespace Camelot.Services.Behaviors.Interfaces
 {
     public interface IFileOpeningBehavior
     {

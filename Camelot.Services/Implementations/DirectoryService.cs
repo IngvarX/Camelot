@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Camelot.Extensions;
+using Camelot.Services.EventArgs;
 using Camelot.Services.Interfaces;
 using Camelot.Services.Models;
 
@@ -21,9 +23,19 @@ namespace Camelot.Services.Implementations
                     throw new ArgumentNullException(nameof(value));
                 }
 
+                if (_directory == value)
+                {
+                    return;
+                }
+
                 _directory = value;
+
+                var args = new SelectedDirectoryChangedEventArgs(_directory);
+                SelectedDirectoryChanged.Raise(this, args);
             }
         }
+
+        public event EventHandler<SelectedDirectoryChangedEventArgs> SelectedDirectoryChanged;
 
         public bool CreateDirectory(string directory)
         {
@@ -52,6 +64,11 @@ namespace Camelot.Services.Implementations
                 .Select(CreateFrom);
 
             return directories.ToArray();
+        }
+
+        public bool DirectoryExists(string directory)
+        {
+            return Directory.Exists(directory);
         }
 
         private static DirectoryModel CreateFrom(string directory)

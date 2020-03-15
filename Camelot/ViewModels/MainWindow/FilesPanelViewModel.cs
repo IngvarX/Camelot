@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Windows.Input;
 using Camelot.Extensions;
 using Camelot.Factories.Interfaces;
-using Camelot.Providers.Interfaces;
 using Camelot.Services.Interfaces;
 using DynamicData;
 using ReactiveUI;
@@ -29,28 +29,16 @@ namespace Camelot.ViewModels.MainWindow
         public string CurrentDirectory
         {
             get => _currentDirectory;
-            set
-            {
-                var directoryChanged = _currentDirectory != value;
-                this.RaiseAndSetIfChanged(ref _currentDirectory, value);
-                if (directoryChanged)
-                {
-                    ReloadFiles();
-                }
-            }
+            set => this.RaiseAndSetIfChanged(ref _currentDirectory, value);
         }
 
         public IEnumerable<FileViewModel> Files => _files;
 
         public IList<FileViewModel> SelectedFiles => _selectedFiles;
 
-        public FileViewModel SelectedFile
-        {
-            get => _selectedFile;
-            set => this.RaiseAndSetIfChanged(ref _selectedFile, value);
-        }
-
         public ICommand ActivateCommand { get; }
+
+        public ICommand RefreshCommand { get; }
 
         public event EventHandler<EventArgs> ActivatedEvent;
 
@@ -72,6 +60,12 @@ namespace Camelot.ViewModels.MainWindow
             // TODO: load directory from settings by key/number
             CurrentDirectory = "/home/";
             ActivateCommand = ReactiveCommand.Create(Activate);
+            RefreshCommand = ReactiveCommand.Create(ReloadFiles);
+
+            this.WhenAnyValue(x => x.CurrentDirectory)
+                .Throttle(TimeSpan.FromMilliseconds(250))
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(_ => ReloadFiles());
 
             ReloadFiles();
         }
@@ -83,6 +77,11 @@ namespace Camelot.ViewModels.MainWindow
 
         private void ReloadFiles()
         {
+            if (!_directoryService.DirectoryExists(CurrentDirectory))
+            {
+                return;
+            }
+
             var directories = _directoryService.GetDirectories(CurrentDirectory);
             var files = _fileService.GetFiles(CurrentDirectory);
 

@@ -22,4 +22,8 @@
   <ItemGroup>
     <ProjectReference Include="..\Camelot.Services\Camelot.Services.csproj" />
   </ItemGroup>
+  <ItemGroup>
+      <EmbeddedResource Include="**\*.ttf" />
+      <EmbeddedResource Include="**\*.otf" />
+  </ItemGroup>
 </Project>

@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using System.Windows.Input;
-using Camelot.Behaviors.Interfaces;
+using Camelot.Services.Behaviors.Interfaces;
 using ReactiveUI;
 
 namespace Camelot.ViewModels.MainWindow

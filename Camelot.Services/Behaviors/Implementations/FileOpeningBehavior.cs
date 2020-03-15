@@ -1,7 +1,7 @@
-using Camelot.Behaviors.Interfaces;
+using Camelot.Services.Behaviors.Interfaces;
 using Camelot.Services.Interfaces;
 
-namespace Camelot.Behaviors.Implementations
+namespace Camelot.Services.Behaviors.Implementations
 {
     public class FileOpeningBehavior : IFileOpeningBehavior
     {

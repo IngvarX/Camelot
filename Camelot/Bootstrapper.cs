@@ -1,12 +1,9 @@
 using System;
-using Camelot.Behaviors.Implementations;
-using Camelot.Behaviors.Interfaces;
 using Camelot.Factories.Implementations;
 using Camelot.Factories.Interfaces;
 using Camelot.FileSystemWatcherWrapper.Implementations;
 using Camelot.FileSystemWatcherWrapper.Interfaces;
-using Camelot.Providers.Implementations;
-using Camelot.Providers.Interfaces;
+using Camelot.Services.Behaviors.Implementations;
 using Camelot.Services.Implementations;
 using Camelot.Services.Interfaces;
 using Camelot.Services.Operations.Implementations;
@@ -41,7 +38,7 @@ namespace Camelot
             services.RegisterLazySingleton(() => new FileOpeningBehavior(
                 resolver.GetService<IFileOpeningService>()));
             services.RegisterLazySingleton(() => new DirectoryOpeningBehavior(
-                resolver.GetService<IMainWindowViewModelProvider>()));
+                resolver.GetService<IDirectoryService>()));
         }
 
         private static void RegisterViewModels(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
@@ -58,9 +55,8 @@ namespace Camelot
                 resolver.GetService<IFilesSelectionService>(),
                 resolver.GetService<IFileViewModelFactory>()
                 ));
-            services.RegisterLazySingleton<IMainWindowViewModelProvider>(
-                () => new MainWindowViewModelProvider());
             services.RegisterLazySingleton(() => new MainWindowViewModel(
+                resolver.GetService<IDirectoryService>(),
                 resolver.GetService<OperationsViewModel>(),
                 resolver.GetService<FilesPanelViewModel>(),
                 resolver.GetService<FilesPanelViewModel>()));

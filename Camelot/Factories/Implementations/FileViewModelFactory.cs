@@ -1,5 +1,5 @@
-using Camelot.Behaviors.Interfaces;
 using Camelot.Factories.Interfaces;
+using Camelot.Services.Behaviors.Interfaces;
 using Camelot.Services.Models;
 using Camelot.ViewModels.MainWindow;
 
