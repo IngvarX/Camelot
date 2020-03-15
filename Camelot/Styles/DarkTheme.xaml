@@ -26,4 +26,12 @@
         <Setter Property="Background" Value="{DynamicResource OperationButtonBackgroundColorBrush}" />
         <Setter Property="Foreground" Value="{DynamicResource OperationButtonForegroundColorBrush}" />
     </Style>
+
+    <Style Selector="Button.iconButton">
+        <Setter Property="Opacity" Value="0.8" />
+    </Style>
+
+    <Style Selector="Button.iconButton:pointerover">
+        <Setter Property="Opacity" Value="0.9" />
+    </Style>
 </Styles>

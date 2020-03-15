@@ -16,6 +16,8 @@
                          Opacity="0.01" />
         <SolidColorBrush x:Key="OperationButtonBackgroundColorBrush" Color="{DynamicResource OperationButtonBackgroundColor}" />
         <SolidColorBrush x:Key="OperationButtonForegroundColorBrush" Color="{DynamicResource WhiteColor}"
-                         Opacity="0.8"/>
+                         Opacity="0.8" />
+        <SolidColorBrush x:Key="IconButtonHoverForegroundColorBrush" Color="{DynamicResource WhiteColor}"
+                         Opacity="0.9" />
     </Style.Resources>
 </Style>

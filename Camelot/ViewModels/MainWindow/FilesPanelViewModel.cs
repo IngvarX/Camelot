@@ -61,7 +61,6 @@ namespace Camelot.ViewModels.MainWindow
 
             _files = new ObservableCollection<FileViewModel>();
             _selectedFiles = new ObservableCollection<FileViewModel>();
-            _selectedFiles.CollectionChanged += SelectedFilesOnCollectionChanged;
 
             // TODO: load directory from settings by key/number
             CurrentDirectory = "/home/";
@@ -79,6 +78,8 @@ namespace Camelot.ViewModels.MainWindow
 
         private void SubscribeToEvents()
         {
+            _selectedFiles.CollectionChanged += SelectedFilesOnCollectionChanged;
+
             void ReloadInUiThread() => _applicationDispatcher.Dispatch(ReloadFiles);
 
             // TODO: don't reload all files, process update properly
