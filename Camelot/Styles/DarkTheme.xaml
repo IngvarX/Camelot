@@ -1,0 +1,29 @@
+<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <StyleInclude Source="/Styles/DarkTheme/Colors.xaml" />
+
+    <Style Selector="DataGridRow">
+        <Setter Property="Foreground" Value="{DynamicResource WhiteBrush}" />
+        <Setter Property="Opacity" Value="0.7" />
+    </Style>
+
+    <Style Selector="DataGridRow:selected /template/ Rectangle#BackgroundRectangle">
+        <Setter Property="Fill" Value="{DynamicResource OrangeBrush}" />
+    </Style>
+
+    <Style Selector="DataGridRow:selected">
+        <Setter Property="Opacity" Value="1" />
+    </Style>
+
+    <Style Selector="DataGrid">
+        <Setter Property="RowBackground" Value="{DynamicResource RowBackgroundColorBrush}" />
+        <Setter Property="AlternatingRowBackground" Value="{DynamicResource AlternativeRowBackgroundColorBrush}" />
+    </Style>
+
+    <Style Selector="Button.operationButton">
+        <Setter Property="Background" Value="{DynamicResource OperationButtonBackgroundColorBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource OperationButtonForegroundColorBrush}" />
+    </Style>
+</Styles>

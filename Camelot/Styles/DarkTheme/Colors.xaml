@@ -1,0 +1,21 @@
+<Style
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Style.Resources>
+        <Color x:Key="OrangeColor">#ce701e</Color>
+        <Color x:Key="WhiteColor">#ffffff</Color>
+        <Color x:Key="RowBackgroundColor">#272521</Color>
+        <Color x:Key="AlternativeRowBackgroundColor">#2a2824</Color>
+        <Color x:Key="OperationButtonBackgroundColor">#3c2b4e</Color>
+
+        <SolidColorBrush x:Key="OrangeBrush" Color="{DynamicResource OrangeColor}" />
+        <SolidColorBrush x:Key="WhiteBrush" Color="{DynamicResource WhiteColor}" />
+        <SolidColorBrush x:Key="RowBackgroundColorBrush" Color="{DynamicResource RowBackgroundColor}" />
+        <SolidColorBrush x:Key="AlternativeRowBackgroundColorBrush" Color="{DynamicResource AlternativeRowBackgroundColor}"
+                         Opacity="0.01" />
+        <SolidColorBrush x:Key="OperationButtonBackgroundColorBrush" Color="{DynamicResource OperationButtonBackgroundColor}" />
+        <SolidColorBrush x:Key="OperationButtonForegroundColorBrush" Color="{DynamicResource WhiteColor}"
+                         Opacity="0.8"/>
+    </Style.Resources>
+</Style>

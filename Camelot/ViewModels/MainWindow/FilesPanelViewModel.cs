@@ -1,9 +1,13 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Windows.Input;
+using Camelot.Extensions;
+using Camelot.Factories.Interfaces;
+using Camelot.Providers.Interfaces;
 using Camelot.Services.Interfaces;
-using Camelot.Services.Models;
 using DynamicData;
 using ReactiveUI;
 
@@ -14,6 +18,7 @@ namespace Camelot.ViewModels.MainWindow
         private readonly IFileService _fileService;
         private readonly IDirectoryService _directoryService;
         private readonly IFilesSelectionService _filesSelectionService;
+        private readonly IFileViewModelFactory _fileViewModelFactory;
 
         private readonly ObservableCollection<FileViewModel> _files;
         private readonly ObservableCollection<FileViewModel> _selectedFiles;
@@ -45,14 +50,20 @@ namespace Camelot.ViewModels.MainWindow
             set => this.RaiseAndSetIfChanged(ref _selectedFile, value);
         }
 
+        public ICommand ActivateCommand { get; }
+
+        public event EventHandler<EventArgs> ActivatedEvent;
+
         public FilesPanelViewModel(
             IFileService fileService,
             IDirectoryService directoryService,
-            IFilesSelectionService filesSelectionService)
+            IFilesSelectionService filesSelectionService,
+            IFileViewModelFactory fileViewModelFactory)
         {
             _fileService = fileService;
             _directoryService = directoryService;
             _filesSelectionService = filesSelectionService;
+            _fileViewModelFactory = fileViewModelFactory;
 
             _files = new ObservableCollection<FileViewModel>();
             _selectedFiles = new ObservableCollection<FileViewModel>();
@@ -60,8 +71,14 @@ namespace Camelot.ViewModels.MainWindow
 
             // TODO: load directory from settings by key/number
             CurrentDirectory = "/home/";
+            ActivateCommand = ReactiveCommand.Create(Activate);
 
             ReloadFiles();
+        }
+
+        private void Activate()
+        {
+            ActivatedEvent.Raise(this, EventArgs.Empty);
         }
 
         private void ReloadFiles()
@@ -70,9 +87,9 @@ namespace Camelot.ViewModels.MainWindow
             var files = _fileService.GetFiles(CurrentDirectory);
 
             var directoriesModels = directories
-                .Select(d => new FileViewModel(() => CurrentDirectory = d.FullPath, d.FullPath, d.LastModifiedDateTime));
+                .Select(_fileViewModelFactory.Create);
             var filesModels = files
-                .Select(f => new FileViewModel(null, f.FullPath, f.LastModifiedDateTime));
+                .Select(_fileViewModelFactory.Create);
 
             _files.Clear();
             _files.AddRange(directoriesModels.Concat(filesModels));

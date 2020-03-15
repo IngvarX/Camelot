@@ -19,10 +19,10 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <Button Content="Edit" Command="{Binding EditCommand}" />
-        <Button Grid.Column="1" Content="Copy" Command="{Binding CopyCommand}" />
-        <Button Grid.Column="2" Content="Move" Command="{Binding MoveCommand}" />
-        <Button Grid.Column="3" Content="New folder" Command="{Binding NewFolderCommand}"  />
-        <Button Grid.Column="4" Content="Remove" Command="{Binding RemoveCommand}" />
+        <Button Classes="operationButton" Content="Edit" Command="{Binding EditCommand}" />
+        <Button Classes="operationButton" Grid.Column="1" Content="Copy" Command="{Binding CopyCommand}" />
+        <Button Classes="operationButton" Grid.Column="2" Content="Move" Command="{Binding MoveCommand}" />
+        <Button Classes="operationButton" Grid.Column="3" Content="New folder" Command="{Binding NewFolderCommand}"  />
+        <Button Classes="operationButton" Grid.Column="4" Content="Remove" Command="{Binding RemoveCommand}" />
     </Grid>
 </UserControl>

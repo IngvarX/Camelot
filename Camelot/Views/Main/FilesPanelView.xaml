@@ -25,6 +25,7 @@
 
         <DataGrid x:Name="FilesDataGrid" Grid.Row="1" Items="{Binding Files}"
                   CellPointerPressed="OnDataGridCellPointerPressed"
+                  PointerReleased="OnDataGridPointerReleased"
                   SelectionChanged="OnDataGridSelectionChanged" IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name"

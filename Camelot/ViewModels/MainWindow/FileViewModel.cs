@@ -1,13 +1,15 @@
 using System;
 using System.IO;
-using Camelot.Services.Interfaces;
+using System.Windows.Input;
+using Camelot.Behaviors.Interfaces;
 using ReactiveUI;
 
 namespace Camelot.ViewModels.MainWindow
 {
     public class FileViewModel : ViewModelBase
     {
-        private readonly Action _onClickedAction;
+        private readonly IFileOpeningBehavior _fileOpeningBehavior;
+
         private string _lastModifiedDateTime;
 
         public string LastModifiedDateTime
@@ -16,20 +18,26 @@ namespace Camelot.ViewModels.MainWindow
             set => this.RaiseAndSetIfChanged(ref _lastModifiedDateTime, value);
         }
 
+        public ICommand OpenCommand { get; }
+
         public string FullPath { get; }
 
         public string FileName => Path.GetFileName(FullPath);
 
-        public FileViewModel(Action onClickedAction, string fullPath, DateTime lastModifiedDateTime)
+        public FileViewModel(
+            IFileOpeningBehavior fileOpeningBehavior,
+            string fullPath,
+            DateTime lastModifiedDateTime)
         {
-            _onClickedAction = onClickedAction;
+            _fileOpeningBehavior = fileOpeningBehavior;
             FullPath = fullPath;
             LastModifiedDateTime = lastModifiedDateTime.ToString();
+            OpenCommand = ReactiveCommand.Create(Open);
         }
 
-        public void Open()
+        private void Open()
         {
-            _onClickedAction?.Invoke();
+            _fileOpeningBehavior.Open(FullPath);
         }
     }
 }
