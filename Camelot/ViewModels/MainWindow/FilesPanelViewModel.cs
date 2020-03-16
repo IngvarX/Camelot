@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Reactive.Linq;
 using System.Windows.Input;
 using ApplicationDispatcher.Interfaces;
 using Camelot.Extensions;
@@ -68,8 +67,6 @@ namespace Camelot.ViewModels.MainWindow
             RefreshCommand = ReactiveCommand.Create(ReloadFiles);
 
             this.WhenAnyValue(x => x.CurrentDirectory)
-                .Throttle(TimeSpan.FromMilliseconds(250))
-                .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(_ => ReloadFiles());
 
             ReloadFiles();

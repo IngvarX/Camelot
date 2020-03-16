@@ -46,8 +46,7 @@ namespace Camelot.Services.Implementations
 
             try
             {
-                var fullPath = Path.Combine(SelectedDirectory, directory);
-                Directory.CreateDirectory(fullPath);
+                Directory.CreateDirectory(directory);
             }
             catch
             {
