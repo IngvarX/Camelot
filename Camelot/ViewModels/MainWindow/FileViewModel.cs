@@ -18,20 +18,21 @@ namespace Camelot.ViewModels.MainWindow
             set => this.RaiseAndSetIfChanged(ref _lastModifiedDateTime, value);
         }
 
+        public string FullPath { get; set; }
+
+        public string FileName { get; set; }
+
+        public string Extension { get; set; }
+
+        public string Size { get; set; }
+
         public ICommand OpenCommand { get; }
 
-        public string FullPath { get; }
-
-        public string FileName => Path.GetFileName(FullPath);
-
         public FileViewModel(
-            IFileOpeningBehavior fileOpeningBehavior,
-            string fullPath,
-            DateTime lastModifiedDateTime)
+            IFileOpeningBehavior fileOpeningBehavior)
         {
             _fileOpeningBehavior = fileOpeningBehavior;
-            FullPath = fullPath;
-            LastModifiedDateTime = lastModifiedDateTime.ToString();
+
             OpenCommand = ReactiveCommand.Create(Open);
         }
 

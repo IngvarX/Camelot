@@ -9,8 +9,13 @@
         <Setter Property="Opacity" Value="0.7" />
     </Style>
 
+    <Style Selector="DataGridRow:pointerover /template/ Rectangle#BackgroundRectangle">
+        <Setter Property="IsVisible" Value="False"/>
+    </Style>
+
     <Style Selector="DataGridRow:selected /template/ Rectangle#BackgroundRectangle">
         <Setter Property="Fill" Value="{DynamicResource OrangeBrush}" />
+        <Setter Property="IsVisible" Value="True"/>
     </Style>
 
     <Style Selector="DataGridRow:selected">

@@ -1,3 +1,4 @@
+using System.IO;
 using Camelot.Factories.Interfaces;
 using Camelot.Services.Behaviors.Interfaces;
 using Camelot.Services.Models;
@@ -7,6 +8,8 @@ namespace Camelot.Factories.Implementations
 {
     public class FileViewModelFactory : IFileViewModelFactory
     {
+        private const string DirectoryFakeSize = "<DIR>";
+
         private readonly IFileOpeningBehavior _fileOpeningBehavior;
         private readonly IFileOpeningBehavior _directoryOpeningBehavior;
 
@@ -20,16 +23,30 @@ namespace Camelot.Factories.Implementations
 
         public FileViewModel Create(FileModel fileModel)
         {
-            var fileViewModel = new FileViewModel(_fileOpeningBehavior,
-                fileModel.FullPath, fileModel.LastModifiedDateTime);
+            var file = new FileInfo(fileModel.FullPath);
+            var fileViewModel = new FileViewModel(_fileOpeningBehavior)
+            {
+                FullPath = file.FullName,
+                Size = file.Length.ToString(),
+                LastModifiedDateTime = file.LastWriteTime.ToString(),
+                FileName = file.Name.StartsWith(".") ? file.Name : Path.GetFileNameWithoutExtension(file.Name),
+                Extension = file.Name.StartsWith(".") ? string.Empty :
+                    file.Extension.Length > 1 ? file.Extension.Substring(1) : file.Extension
+            };
 
             return fileViewModel;
         }
 
         public FileViewModel Create(DirectoryModel fileModel)
         {
-            var fileViewModel = new FileViewModel(_directoryOpeningBehavior,
-                fileModel.FullPath, fileModel.LastModifiedDateTime);
+            var fileViewModel = new FileViewModel(_directoryOpeningBehavior)
+            {
+                FullPath = fileModel.FullPath,
+                Size = DirectoryFakeSize,
+                LastModifiedDateTime = fileModel.LastModifiedDateTime.ToString(),
+                FileName = Path.GetFileName(fileModel.FullPath),
+                Extension = string.Empty
+            };
 
             return fileViewModel;
         }

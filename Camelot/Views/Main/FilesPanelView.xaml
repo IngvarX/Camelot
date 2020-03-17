@@ -43,11 +43,15 @@
 
         <DataGrid x:Name="FilesDataGrid" Grid.Row="1" Items="{Binding Files}"
                   CellPointerPressed="OnDataGridCellPointerPressed"
-                  PointerReleased="OnDataGridPointerReleased"
+                  PointerReleased="OnDataGridPointerReleased" VerticalScrollBarVisibility="Visible"
                   SelectionChanged="OnDataGridSelectionChanged" IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name"
                                     Binding="{Binding FileName}" />
+                <DataGridTextColumn Header="Type"
+                                    Binding="{Binding Extension}" />
+                <DataGridTextColumn Header="Size"
+                                    Binding="{Binding Size}" />
                 <DataGridTextColumn Header="Date"
                                     Binding="{Binding LastModifiedDateTime}" />
             </DataGrid.Columns>

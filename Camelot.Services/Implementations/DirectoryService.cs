@@ -23,11 +23,6 @@ namespace Camelot.Services.Implementations
                     throw new ArgumentNullException(nameof(value));
                 }
 
-                if (_directory == value)
-                {
-                    return;
-                }
-
                 _directory = value;
 
                 var args = new SelectedDirectoryChangedEventArgs(_directory);
