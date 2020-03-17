@@ -5,18 +5,20 @@ namespace Camelot.Services.Implementations
 {
     public class FilesSelectionService : IFilesSelectionService
     {
-        public ISet<string> SelectedFiles { get; }
+        private readonly HashSet<string> _selectedFiles;
+
+        public IReadOnlyCollection<string> SelectedFiles => _selectedFiles;
 
         public FilesSelectionService()
         {
-            SelectedFiles = new HashSet<string>();
+            _selectedFiles = new HashSet<string>();
         }
 
         public void SelectFiles(IEnumerable<string> files)
         {
             foreach (var file in files)
             {
-                SelectedFiles.Add(file);
+                _selectedFiles.Add(file);
             }
         }
 
@@ -24,13 +26,8 @@ namespace Camelot.Services.Implementations
         {
             foreach (var file in files)
             {
-                SelectedFiles.Remove(file);
+                _selectedFiles.Remove(file);
             }
-        }
-
-        public void ClearSelectedFiles()
-        {
-            SelectedFiles.Clear();
         }
     }
 }

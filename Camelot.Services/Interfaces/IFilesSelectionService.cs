@@ -4,12 +4,10 @@ namespace Camelot.Services.Interfaces
 {
     public interface IFilesSelectionService
     {
-        ISet<string> SelectedFiles { get; }
+        IReadOnlyCollection<string> SelectedFiles { get; }
 
         void SelectFiles(IEnumerable<string> files);
 
         void UnselectFiles(IEnumerable<string> files);
-
-        void ClearSelectedFiles();
     }
 }

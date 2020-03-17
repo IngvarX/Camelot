@@ -55,8 +55,7 @@ namespace Camelot
                 resolver.GetService<IFileOpeningService>()
                 ));
             services.RegisterLazySingleton(() => new DirectoryOpeningBehavior(
-                resolver.GetService<IDirectoryService>(),
-                resolver.GetService<IFilesSelectionService>()
+                resolver.GetService<IDirectoryService>()
                 ));
             services.RegisterLazySingleton<IApplicationDispatcher>(() => new AvaloniaDispatcher());
         }
