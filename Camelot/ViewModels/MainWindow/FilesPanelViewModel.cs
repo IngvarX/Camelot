@@ -129,7 +129,7 @@ namespace Camelot.ViewModels.MainWindow
                 .Select(f => f.FullPath);
             if (filesToRemove != null)
             {
-                _filesSelectionService.SelectFiles(filesToRemove);
+                _filesSelectionService.UnselectFiles(filesToRemove);
             }
         }
     }
