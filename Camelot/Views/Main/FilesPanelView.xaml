@@ -13,7 +13,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
-            <RowDefinition />
+            <RowDefinition Height="200" />
         </Grid.RowDefinitions>
 
         <DockPanel>
@@ -44,6 +44,7 @@
         <DataGrid x:Name="FilesDataGrid" Grid.Row="1" Items="{Binding Files}"
                   CellPointerPressed="OnDataGridCellPointerPressed"
                   PointerReleased="OnDataGridPointerReleased" VerticalScrollBarVisibility="Visible"
+                  HorizontalScrollBarVisibility="Disabled"
                   SelectionChanged="OnDataGridSelectionChanged" IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name"

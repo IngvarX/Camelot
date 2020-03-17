@@ -30,7 +30,16 @@ namespace Camelot.ViewModels.MainWindow
         public string CurrentDirectory
         {
             get => _currentDirectory;
-            set => this.RaiseAndSetIfChanged(ref _currentDirectory, value);
+            set
+            {
+                var hasChanged = _currentDirectory != value;
+                this.RaiseAndSetIfChanged(ref _currentDirectory, value);
+
+                if (hasChanged)
+                {
+                    ReloadFiles();
+                }
+            }
         }
 
         public IEnumerable<FileViewModel> Files => _files;
@@ -65,9 +74,6 @@ namespace Camelot.ViewModels.MainWindow
             CurrentDirectory = "/home/";
             ActivateCommand = ReactiveCommand.Create(Activate);
             RefreshCommand = ReactiveCommand.Create(ReloadFiles);
-
-            this.WhenAnyValue(x => x.CurrentDirectory)
-                .Subscribe(_ => ReloadFiles());
 
             ReloadFiles();
             SubscribeToEvents();
@@ -107,9 +113,10 @@ namespace Camelot.ViewModels.MainWindow
                 .Select(_fileViewModelFactory.Create);
             var filesModels = files
                 .Select(_fileViewModelFactory.Create);
+            var models = directoriesModels.Concat(filesModels).ToArray();
 
             _files.Clear();
-            _files.AddRange(directoriesModels.Concat(filesModels));
+            _files.AddRange(models);
 
             _fileSystemWatchingService.StartWatching(CurrentDirectory);
         }

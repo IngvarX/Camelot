@@ -14,8 +14,11 @@ namespace Camelot.Services.Implementations
         private IFileSystemWatcherWrapper _fileSystemWatcher;
 
         public event EventHandler<FileDeletedEventArgs> FileDeleted;
+
         public event EventHandler<FileCreatedEventArgs> FileCreated;
+
         public event EventHandler<FileChangedEventArgs> FileChanged;
+
         public event EventHandler<FileRenamedEventArgs> FileRenamed;
 
         public FileSystemWatchingService(IFileSystemWatcherWrapperFactory fileSystemWatcherWrapperFactory)

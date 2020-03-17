@@ -11,10 +11,8 @@ namespace Camelot.FileSystemWatcherWrapper.Implementations
             {
                 Path = directory,
                 NotifyFilter = NotifyFilters.Attributes |
-                               NotifyFilters.CreationTime |
                                NotifyFilters.DirectoryName |
                                NotifyFilters.FileName |
-                               NotifyFilters.LastAccess |
                                NotifyFilters.LastWrite |
                                NotifyFilters.Security |
                                NotifyFilters.Size
