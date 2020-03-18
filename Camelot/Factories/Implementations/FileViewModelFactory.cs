@@ -1,6 +1,7 @@
 using System.IO;
 using Camelot.Factories.Interfaces;
 using Camelot.Services.Behaviors.Interfaces;
+using Camelot.Services.Interfaces;
 using Camelot.Services.Models;
 using Camelot.ViewModels.MainWindow;
 
@@ -12,13 +13,16 @@ namespace Camelot.Factories.Implementations
 
         private readonly IFileOpeningBehavior _fileOpeningBehavior;
         private readonly IFileOpeningBehavior _directoryOpeningBehavior;
+        private readonly IFileSizeFormatter _fileSizeFormatter;
 
         public FileViewModelFactory(
             IFileOpeningBehavior fileOpeningBehavior,
-            IFileOpeningBehavior directoryOpeningBehavior)
+            IFileOpeningBehavior directoryOpeningBehavior,
+            IFileSizeFormatter fileSizeFormatter)
         {
             _fileOpeningBehavior = fileOpeningBehavior;
             _directoryOpeningBehavior = directoryOpeningBehavior;
+            _fileSizeFormatter = fileSizeFormatter;
         }
 
         public FileViewModel Create(FileModel fileModel)
@@ -26,7 +30,7 @@ namespace Camelot.Factories.Implementations
             var fileViewModel = new FileViewModel(_fileOpeningBehavior)
             {
                 FullPath = fileModel.FullPath,
-                Size = fileModel.SizeBytes.ToString(),
+                Size = _fileSizeFormatter.GetFormattedSize(fileModel.SizeBytes),
                 LastModifiedDateTime = fileModel.LastWriteTime.ToString(),
                 FileName = fileModel.Name.StartsWith(".") ? fileModel.Name : Path.GetFileNameWithoutExtension(fileModel.Name),
                 Extension = fileModel.Name.StartsWith(".") ? string.Empty :

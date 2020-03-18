@@ -61,6 +61,7 @@ namespace Camelot
                 resolver.GetService<IDirectoryService>()
                 ));
             services.RegisterLazySingleton<IApplicationDispatcher>(() => new AvaloniaDispatcher());
+            services.RegisterLazySingleton<IFileSizeFormatter>(() => new FileSizeFormatter());
         }
 
         private static void RegisterViewModels(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
@@ -71,7 +72,9 @@ namespace Camelot
                 ));
             services.RegisterLazySingleton<IFileViewModelFactory>(() => new FileViewModelFactory(
                 resolver.GetService<FileOpeningBehavior>(),
-                resolver.GetService<DirectoryOpeningBehavior>()
+                resolver.GetService<DirectoryOpeningBehavior>(),
+                resolver.GetService<IFileSizeFormatter>()
+
                 ));
             services.Register(() => new OperationsViewModel(
                 resolver.GetService<IFilesOperationsMediator>()
