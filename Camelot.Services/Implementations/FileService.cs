@@ -25,7 +25,9 @@ namespace Camelot.Services.Implementations
                 Name = fileInfo.Name,
                 FullPath = fileInfo.FullName,
                 LastModifiedDateTime = fileInfo.LastWriteTime,
-                Type = GetFileType(fileInfo)
+                Type = GetFileType(fileInfo),
+                SizeBytes = fileInfo.Length,
+                LastWriteTime = fileInfo.LastWriteTime
             };
 
             return fileModel;

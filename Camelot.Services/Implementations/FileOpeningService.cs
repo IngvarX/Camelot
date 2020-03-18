@@ -7,25 +7,26 @@ namespace Camelot.Services.Implementations
 {
     public class FileOpeningService : IFileOpeningService
     {
+        private readonly IProcessService _processService;
+
+        public FileOpeningService(IProcessService processService)
+        {
+            _processService = processService;
+        }
+
         public void Open(string file)
         {
+            // TODO: to service
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                Process.Start(file);
+                _processService.Run(file);
                 return;
             }
 
             var command = GetCommand();
-            var processStartInfo = new ProcessStartInfo(command)
-            {
-                RedirectStandardOutput = true,
-                UseShellExecute = false,
-                CreateNoWindow = false,
-                Arguments = $"\"{file}\""
-            };
-            var process = new Process { StartInfo = processStartInfo };
+            const string arguments = "\"{file}\"";
 
-            process.Start();
+            _processService.Run(command, arguments);
         }
 
         private static string GetCommand()

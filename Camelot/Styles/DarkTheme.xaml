@@ -7,6 +7,7 @@
     <Style Selector="DataGridRow">
         <Setter Property="Foreground" Value="{DynamicResource WhiteBrush}" />
         <Setter Property="Opacity" Value="0.7" />
+        <Setter Property="FontSize" Value="18" />
     </Style>
 
     <Style Selector="DataGridRow:pointerover /template/ Rectangle#BackgroundRectangle">
@@ -32,11 +33,20 @@
         <Setter Property="Foreground" Value="{DynamicResource OperationButtonForegroundColorBrush}" />
     </Style>
 
+    <Style Selector="Button.operationButton:pointerover">
+        <Setter Property="Background" Value="{DynamicResource OperationButtonHoverBackgroundColorBrush}" />
+    </Style>
+
     <Style Selector="Button.iconButton">
         <Setter Property="Opacity" Value="0.8" />
     </Style>
 
     <Style Selector="Button.iconButton:pointerover">
         <Setter Property="Opacity" Value="0.9" />
+    </Style>
+
+    <Style Selector="TextBox.directoryTextBox">
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Background" Value="{DynamicResource DirectoryTextBoxBackgroundColorBrush}" />
     </Style>
 </Styles>

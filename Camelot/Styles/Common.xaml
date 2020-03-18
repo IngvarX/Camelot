@@ -7,4 +7,29 @@
         <Setter Property="Background" Value="Transparent" />
     </Style>
 
+    <Style Selector="Button.operationButton">
+        <Setter Property="Padding" Value="10" />
+    </Style>
+
+    <Style Selector="TextBlock.operationTextBlock">
+        <Setter Property="FontFamily" Value="SansSerif" />
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="Margin" Value="10,0,0,0" />
+    </Style>
+
+    <Style Selector="TextBox.directoryTextBox">
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="Margin" Value="10,0,0,0" />
+    </Style>
+
+    <Style Selector="Button.iconButton">
+        <Setter Property="Margin" Value="3" />
+    </Style>
+
+    <Style Selector="TextBox.directoryTextBox">
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="Margin" Value="10,0,0,0" />
+    </Style>
+
 </Styles>

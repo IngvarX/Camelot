@@ -12,8 +12,8 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30" />
-            <RowDefinition Height="200" />
+            <RowDefinition Height="35" />
+            <RowDefinition />
         </Grid.RowDefinitions>
 
         <DockPanel>
@@ -24,6 +24,7 @@
                     </DrawingPresenter.Drawing>
                 </DrawingPresenter>
             </Button>
+
             <Button Classes="iconButton">
                 <DrawingPresenter Width="20" Height="20">
                     <DrawingPresenter.Drawing>
@@ -31,6 +32,7 @@
                     </DrawingPresenter.Drawing>
                 </DrawingPresenter>
             </Button>
+
             <Button Classes="iconButton" Command="{Binding RefreshCommand}">
                 <DrawingPresenter Width="20" Height="20">
                     <DrawingPresenter.Drawing>
@@ -38,7 +40,8 @@
                     </DrawingPresenter.Drawing>
                 </DrawingPresenter>
             </Button>
-            <TextBox Text="{Binding CurrentDirectory, Mode=TwoWay}" />
+
+            <TextBox Classes="directoryTextBox" Text="{Binding CurrentDirectory, Mode=TwoWay}" />
         </DockPanel>
 
         <DataGrid x:Name="FilesDataGrid" Grid.Row="1" Items="{Binding Files}"

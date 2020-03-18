@@ -46,7 +46,10 @@ namespace Camelot
                 resolver.GetService<IFileOpeningService>()
                 ));
             services.RegisterLazySingleton<IDirectoryService>(() => new DirectoryService());
-            services.RegisterLazySingleton<IFileOpeningService>(() => new FileOpeningService());
+            services.RegisterLazySingleton<IProcessService>(() => new ProcessService());
+            services.RegisterLazySingleton<IFileOpeningService>(() => new FileOpeningService(
+                resolver.GetService<IProcessService>()
+                ));
             services.RegisterLazySingleton<IFileSystemWatcherWrapperFactory>(() => new FileSystemWatcherWrapperFactory());
             services.Register<IFileSystemWatchingService>(() => new FileSystemWatchingService(
                 resolver.GetService<IFileSystemWatcherWrapperFactory>()

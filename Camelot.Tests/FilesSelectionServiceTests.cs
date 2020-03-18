@@ -1,7 +1,6 @@
 using System.Linq;
 using Camelot.Services.Implementations;
 using Camelot.Services.Interfaces;
-using Camelot.Services.Models;
 using Xunit;
 
 namespace Camelot.Tests
@@ -30,6 +29,9 @@ namespace Camelot.Tests
             Assert.True(selectedFiles.Count == filesCount);
 
             Assert.True(files.All(fn => selectedFiles.Contains(fn)));
+
+            _filesSelectionService.SelectFiles(selectedFiles);
+            Assert.True(_filesSelectionService.SelectedFiles.Count == filesCount);
         }
 
         [Fact]

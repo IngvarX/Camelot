@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using Camelot.Services.EventArgs;
 using Camelot.Services.Implementations;
 using Camelot.Services.Interfaces;
 using Xunit;
@@ -45,6 +46,22 @@ namespace Camelot.Tests
 
             Assert.True(_directoryService.CreateDirectory(DirectoryName));
             Assert.True(Directory.Exists(NewDirectory));
+        }
+
+        [Fact]
+        public void TestSelectedDirectoryEventChangedCreation()
+        {
+            var callbackCalled = false;
+            void DirectoryServiceOnSelectedDirectoryChanged(object sender, SelectedDirectoryChangedEventArgs e)
+            {
+                callbackCalled = true;
+                Assert.True(e.NewDirectory == CurrentDirectory);
+            }
+
+            _directoryService.SelectedDirectoryChanged += DirectoryServiceOnSelectedDirectoryChanged;
+            _directoryService.SelectedDirectory = CurrentDirectory;
+
+            Assert.True(callbackCalled);
         }
 
         public void Dispose()

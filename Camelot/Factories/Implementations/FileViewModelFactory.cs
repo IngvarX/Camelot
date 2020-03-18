@@ -23,15 +23,14 @@ namespace Camelot.Factories.Implementations
 
         public FileViewModel Create(FileModel fileModel)
         {
-            var file = new FileInfo(fileModel.FullPath);
             var fileViewModel = new FileViewModel(_fileOpeningBehavior)
             {
-                FullPath = file.FullName,
-                Size = file.Length.ToString(),
-                LastModifiedDateTime = file.LastWriteTime.ToString(),
-                FileName = file.Name.StartsWith(".") ? file.Name : Path.GetFileNameWithoutExtension(file.Name),
-                Extension = file.Name.StartsWith(".") ? string.Empty :
-                    file.Extension.Length > 1 ? file.Extension.Substring(1) : file.Extension
+                FullPath = fileModel.FullPath,
+                Size = fileModel.SizeBytes.ToString(),
+                LastModifiedDateTime = fileModel.LastWriteTime.ToString(),
+                FileName = fileModel.Name.StartsWith(".") ? fileModel.Name : Path.GetFileNameWithoutExtension(fileModel.Name),
+                Extension = fileModel.Name.StartsWith(".") ? string.Empty :
+                    fileModel.Extension.Length > 1 ? fileModel.Extension.Substring(1) : fileModel.Extension
             };
 
             return fileViewModel;

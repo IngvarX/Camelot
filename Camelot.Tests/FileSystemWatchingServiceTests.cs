@@ -10,6 +10,7 @@ namespace Camelot.Tests
     public class FileSystemWatchingServiceTests
     {
         private const string FileName = "File.txt";
+        private const string NewFileName = "NewFile.txt";
 
         private readonly Mock<IFileSystemWatcherWrapper> _fileSystemWatcherMock;
         private readonly IFileSystemWatchingService _fileSystemWatchingService;
@@ -17,6 +18,8 @@ namespace Camelot.Tests
         private static string CurrentDirectory => Directory.GetCurrentDirectory();
 
         private static string FilePath => Path.Combine(CurrentDirectory, FileName);
+
+        private static string NewFilePath => Path.Combine(CurrentDirectory, NewFileName);
 
         public FileSystemWatchingServiceTests()
         {
@@ -92,11 +95,12 @@ namespace Camelot.Tests
             {
                 callbackCalled = true;
                 Assert.True(eventArgs.Node == FilePath);
+                Assert.True(eventArgs.NewName == NewFilePath);
             };
 
             _fileSystemWatchingService.StartWatching(CurrentDirectory);
 
-            var args = new RenamedEventArgs(WatcherChangeTypes.Renamed, CurrentDirectory, FileName, FileName);
+            var args = new RenamedEventArgs(WatcherChangeTypes.Renamed, CurrentDirectory, NewFileName, FileName);
             _fileSystemWatcherMock.Raise(m => m.Renamed += null, args);
 
             Assert.True(callbackCalled);
