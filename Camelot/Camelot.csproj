@@ -21,6 +21,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Camelot.ApplicationDispatcher\Camelot.ApplicationDispatcher.csproj" />
+    <ProjectReference Include="..\Camelot.DataAccess.LiteDb\Camelot.DataAccess.LiteDb.csproj" />
     <ProjectReference Include="..\Camelot.Services\Camelot.Services.csproj" />
   </ItemGroup>
   <ItemGroup>

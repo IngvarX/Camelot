@@ -12,27 +12,25 @@ namespace Camelot.DataAccess.LiteDb
         {
             _collection = collection;
         }
-        
-        public Task<T> GetByIdAsync(string id)
-        {
-            var entity = _collection.FindById(id);
 
-            return Task.FromResult(entity);
+        public T GetById(string id)
+        {
+            return _collection.FindById(id);
         }
 
-        public void Add(T entity)
+        public void Add(string id, T entity)
         {
-            _collection.Insert(entity);
+            _collection.Insert(id, entity);
         }
 
-        public void Update(T entity)
+        public void Update(string id, T entity)
         {
-            _collection.Update(entity);
+            _collection.Update(id, entity);
         }
 
-        public void Remove(string key)
+        public void Remove(string id)
         {
-            _collection.Delete(key);
+            _collection.Delete(id);
         }
     }
 }

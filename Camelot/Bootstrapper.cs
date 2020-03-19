@@ -1,6 +1,8 @@
 using System;
 using ApplicationDispatcher.Implementations;
 using ApplicationDispatcher.Interfaces;
+using Camelot.DataAccess.LiteDb;
+using Camelot.DataAccess.UnitOfWork;
 using Camelot.Factories.Implementations;
 using Camelot.Factories.Interfaces;
 using Camelot.FileSystemWatcherWrapper.Implementations;
@@ -23,8 +25,14 @@ namespace Camelot
     {
         public static void Register(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
+            RegisterDataAccess(services, resolver);
             RegisterServices(services, resolver);
             RegisterViewModels(services, resolver);
+        }
+
+        private static void RegisterDataAccess(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
+        {
+            services.RegisterLazySingleton<IUnitOfWorkFactory>(() => new LiteDbUnitOfWorkFactory());
         }
 
         private static void RegisterServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)

@@ -4,12 +4,12 @@ namespace Camelot.DataAccess.Repositories
 {
     public interface IRepository<T>
     {
-        Task<T> GetByIdAsync(string id);
-        
-        void Add(T entity);
+        T GetById(string id);
 
-        void Update(T entity);
+        void Add(string id, T entity);
 
-        void Remove(string key);
+        void Update(string id, T entity);
+
+        void Remove(string id);
     }
 }

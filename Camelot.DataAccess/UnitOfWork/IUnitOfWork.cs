@@ -8,6 +8,6 @@ namespace Camelot.DataAccess.UnitOfWork
     {
         IRepository<T> GetRepository<T>() where T : class;
 
-        Task SaveChangesAsync();
+        void SaveChanges();
     }
 }
