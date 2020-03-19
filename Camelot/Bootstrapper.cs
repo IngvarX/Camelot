@@ -48,7 +48,8 @@ namespace Camelot
             services.RegisterLazySingleton<IDirectoryService>(() => new DirectoryService());
             services.RegisterLazySingleton<IProcessService>(() => new ProcessService());
             services.RegisterLazySingleton<IFileOpeningService>(() => new FileOpeningService(
-                resolver.GetService<IProcessService>()
+                resolver.GetService<IProcessService>(),
+                resolver.GetService<IPlatformService>()
                 ));
             services.RegisterLazySingleton<IFileSystemWatcherWrapperFactory>(() => new FileSystemWatcherWrapperFactory());
             services.Register<IFileSystemWatchingService>(() => new FileSystemWatchingService(
@@ -62,6 +63,7 @@ namespace Camelot
                 ));
             services.RegisterLazySingleton<IApplicationDispatcher>(() => new AvaloniaDispatcher());
             services.RegisterLazySingleton<IFileSizeFormatter>(() => new FileSizeFormatter());
+            services.RegisterLazySingleton<IPlatformService>(() => new PlatformService());
         }
 
         private static void RegisterViewModels(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)

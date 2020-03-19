@@ -1,5 +1,7 @@
 using System.IO;
 using Camelot.Services.Behaviors.Implementations;
+using Camelot.Services.Enums;
+using Camelot.Services.Implementations;
 using Camelot.Services.Interfaces;
 using Moq;
 using Xunit;
@@ -38,6 +40,60 @@ namespace Camelot.Tests
             fileOpeningBehavior.Open(File);
 
             fileOpeningServiceMock.Verify(m => m.Open(It.IsAny<string>()), Times.Once());
+        }
+
+        [Fact]
+        public void TestFileServiceOpeningWindows()
+        {
+            var processServiceMock = new Mock<IProcessService>();
+            processServiceMock
+                .Setup(m => m.Run(File))
+                .Verifiable();
+            var platformServiceMock = new Mock<IPlatformService>();
+            platformServiceMock
+                .Setup(m => m.GetPlatform())
+                .Returns(Platform.Windows);
+
+            var fileOpeningService = new FileOpeningService(
+                processServiceMock.Object, platformServiceMock.Object);
+
+            fileOpeningService.Open(File);
+        }
+
+        [Fact]
+        public void TestFileServiceOpeningLinux()
+        {
+            var processServiceMock = new Mock<IProcessService>();
+            processServiceMock
+                .Setup(m => m.Run("xdg-open", $"\"{File}\""))
+                .Verifiable();
+            var platformServiceMock = new Mock<IPlatformService>();
+            platformServiceMock
+                .Setup(m => m.GetPlatform())
+                .Returns(Platform.Linux);
+
+            var fileOpeningService = new FileOpeningService(
+                processServiceMock.Object, platformServiceMock.Object);
+
+            fileOpeningService.Open(File);
+        }
+
+        [Fact]
+        public void TestFileServiceOpeningMacOs()
+        {
+            var processServiceMock = new Mock<IProcessService>();
+            processServiceMock
+                .Setup(m => m.Run("open", $"\"{File}\""))
+                .Verifiable();
+            var platformServiceMock = new Mock<IPlatformService>();
+            platformServiceMock
+                .Setup(m => m.GetPlatform())
+                .Returns(Platform.MacOs);
+
+            var fileOpeningService = new FileOpeningService(
+                processServiceMock.Object, platformServiceMock.Object);
+
+            fileOpeningService.Open(File);
         }
     }
 }

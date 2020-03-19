@@ -1,6 +1,5 @@
 using System;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
+using Camelot.Services.Enums;
 using Camelot.Services.Interfaces;
 
 namespace Camelot.Services.Implementations
@@ -8,40 +7,40 @@ namespace Camelot.Services.Implementations
     public class FileOpeningService : IFileOpeningService
     {
         private readonly IProcessService _processService;
+        private readonly IPlatformService _platformService;
 
-        public FileOpeningService(IProcessService processService)
+        public FileOpeningService(
+            IProcessService processService,
+            IPlatformService platformService)
         {
             _processService = processService;
+            _platformService = platformService;
         }
 
         public void Open(string file)
         {
-            // TODO: to service
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            var platform = _platformService.GetPlatform();
+            if (platform is Platform.Windows)
             {
                 _processService.Run(file);
+
                 return;
             }
 
-            var command = GetCommand();
+            var command = GetCommand(platform);
             const string arguments = "\"{file}\"";
 
             _processService.Run(command, arguments);
         }
 
-        private static string GetCommand()
+        private static string GetCommand(Platform platform)
         {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            return platform switch
             {
-                return "xdg-open";
-            }
-
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            {
-                return "open";
-            }
-
-            throw new NotSupportedException("Unsupported platform");
+                Platform.Linux => "xdg-open",
+                Platform.MacOs => "open",
+                _ => throw new NotSupportedException("Unsupported platform")
+            };
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using Camelot.Services.EventArgs;
 using Camelot.Services.Implementations;
 using Camelot.Services.Interfaces;
@@ -10,6 +11,7 @@ namespace Camelot.Tests
     public class DirectoryServiceTests : IDisposable
     {
         private const string DirectoryName = nameof(DirectoryServiceTests);
+        private const string NotExistingDirectoryName = "MissingDirectory";
 
         private readonly IDirectoryService _directoryService;
 
@@ -46,6 +48,9 @@ namespace Camelot.Tests
 
             Assert.True(_directoryService.CreateDirectory(DirectoryName));
             Assert.True(Directory.Exists(NewDirectory));
+
+            var directories = _directoryService.GetDirectories(CurrentDirectory);
+            Assert.Contains(directories, d => d.Name == DirectoryName);
         }
 
         [Fact]
@@ -62,6 +67,15 @@ namespace Camelot.Tests
             _directoryService.SelectedDirectory = CurrentDirectory;
 
             Assert.True(callbackCalled);
+        }
+
+        [Fact]
+        public void TestDirectoryExists()
+        {
+            Assert.True(_directoryService.DirectoryExists(CurrentDirectory));
+            Assert.False(_directoryService.DirectoryExists(NotExistingDirectoryName));
+            Assert.False(_directoryService.DirectoryExists(string.Empty));
+            Assert.False(_directoryService.DirectoryExists(null));
         }
 
         public void Dispose()
