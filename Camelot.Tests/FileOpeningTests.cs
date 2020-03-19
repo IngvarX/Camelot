@@ -58,6 +58,8 @@ namespace Camelot.Tests
                 processServiceMock.Object, platformServiceMock.Object);
 
             fileOpeningService.Open(File);
+
+            processServiceMock.Verify(m => m.Run(File), Times.Once());
         }
 
         [Fact]
@@ -76,6 +78,8 @@ namespace Camelot.Tests
                 processServiceMock.Object, platformServiceMock.Object);
 
             fileOpeningService.Open(File);
+
+            processServiceMock.Verify(m => m.Run("xdg-open", $"\"{File}\""), Times.Once());
         }
 
         [Fact]
@@ -94,6 +98,8 @@ namespace Camelot.Tests
                 processServiceMock.Object, platformServiceMock.Object);
 
             fileOpeningService.Open(File);
+
+            processServiceMock.Verify(m => m.Run("open", $"\"{File}\""), Times.Once());
         }
     }
 }

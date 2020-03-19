@@ -28,7 +28,7 @@ namespace Camelot.Services.Implementations
             }
 
             var command = GetCommand(platform);
-            const string arguments = "\"{file}\"";
+            var arguments = $"\"{file}\"";
 
             _processService.Run(command, arguments);
         }
