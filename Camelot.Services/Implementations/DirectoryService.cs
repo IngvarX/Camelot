@@ -11,6 +11,8 @@ namespace Camelot.Services.Implementations
 {
     public class DirectoryService : IDirectoryService
     {
+        private const string ParentDirectoryName = "[..]";
+
         private string _directory;
 
         public string SelectedDirectory
@@ -53,11 +55,15 @@ namespace Camelot.Services.Implementations
 
         public IReadOnlyCollection<DirectoryModel> GetDirectories(string directory)
         {
+            var parentDirectory = new DirectoryInfo(directory).Parent;
+            var parentDirectories = parentDirectory is null
+                ? Enumerable.Empty<DirectoryModel>()
+                : new[] {CreateParentDirectory(parentDirectory)};
             var directories = Directory
                 .GetDirectories(directory)
                 .Select(CreateFrom);
 
-            return directories.ToArray();
+            return parentDirectories.Concat(directories).ToArray();
         }
 
         public bool DirectoryExists(string directory)
@@ -71,6 +77,18 @@ namespace Camelot.Services.Implementations
             var directoryModel = new DirectoryModel
             {
                 Name = directoryInfo.Name,
+                FullPath = directoryInfo.FullName,
+                LastModifiedDateTime = directoryInfo.LastWriteTime
+            };
+
+            return directoryModel;
+        }
+
+        private static DirectoryModel CreateParentDirectory(FileSystemInfo directoryInfo)
+        {
+            var directoryModel = new DirectoryModel
+            {
+                Name = ParentDirectoryName,
                 FullPath = directoryInfo.FullName,
                 LastModifiedDateTime = directoryInfo.LastWriteTime
             };

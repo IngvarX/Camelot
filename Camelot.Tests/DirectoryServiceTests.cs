@@ -12,6 +12,7 @@ namespace Camelot.Tests
     {
         private const string DirectoryName = nameof(DirectoryServiceTests);
         private const string NotExistingDirectoryName = "MissingDirectory";
+        private const string ParentDirectoryName = "[..]";
 
         private readonly IDirectoryService _directoryService;
 
@@ -51,6 +52,16 @@ namespace Camelot.Tests
 
             var directories = _directoryService.GetDirectories(CurrentDirectory);
             Assert.Contains(directories, d => d.Name == DirectoryName);
+        }
+
+        [Fact]
+        public void TestGetParentDirectory()
+        {
+            var directories = _directoryService.GetDirectories(CurrentDirectory);
+            Assert.Single(directories, d => d.Name == ParentDirectoryName);
+
+            var parentDirectory = directories.First();
+            Assert.True(parentDirectory.Name == ParentDirectoryName);
         }
 
         [Fact]

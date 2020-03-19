@@ -7,6 +7,6 @@ namespace Camelot.Factories.Interfaces
     {
         FileViewModel Create(FileModel fileModel);
 
-        FileViewModel Create(DirectoryModel fileModel);
+        FileViewModel Create(DirectoryModel directoryModel);
     }
 }

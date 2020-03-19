@@ -6,6 +6,7 @@
         xmlns:main="clr-namespace:Camelot.Views.Main"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Camelot.Views.MainWindow"
+        MinWidth="900" MinHeight="480"
         Icon="/Assets/avalonia-logo.ico"
         Title="Camelot">
 

@@ -40,14 +40,14 @@ namespace Camelot.Factories.Implementations
             return fileViewModel;
         }
 
-        public FileViewModel Create(DirectoryModel fileModel)
+        public FileViewModel Create(DirectoryModel directoryModel)
         {
             var fileViewModel = new FileViewModel(_directoryOpeningBehavior)
             {
-                FullPath = fileModel.FullPath,
+                FullPath = directoryModel.FullPath,
                 Size = DirectoryFakeSize,
-                LastModifiedDateTime = fileModel.LastModifiedDateTime.ToString(),
-                FileName = Path.GetFileName(fileModel.FullPath),
+                LastModifiedDateTime = directoryModel.LastModifiedDateTime.ToString(),
+                FileName = directoryModel.Name,
                 Extension = string.Empty
             };
 
