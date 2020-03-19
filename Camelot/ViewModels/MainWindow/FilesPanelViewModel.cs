@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using ApplicationDispatcher.Interfaces;
+using Camelot.DataAccess.Models;
 using Camelot.Extensions;
 using Camelot.Factories.Interfaces;
 using Camelot.Services.Interfaces;
 using DynamicData;
+using DynamicData.Binding;
 using ReactiveUI;
 
 namespace Camelot.ViewModels.MainWindow
@@ -21,6 +25,7 @@ namespace Camelot.ViewModels.MainWindow
         private readonly IFileViewModelFactory _fileViewModelFactory;
         private readonly IFileSystemWatchingService _fileSystemWatchingService;
         private readonly IApplicationDispatcher _applicationDispatcher;
+        private readonly IFilesPanelStateService _filesPanelStateService;
 
         private readonly ObservableCollection<FileViewModel> _files;
         private readonly ObservableCollection<FileViewModel> _selectedFiles;
@@ -38,6 +43,7 @@ namespace Camelot.ViewModels.MainWindow
                 if (hasChanged)
                 {
                     ReloadFiles();
+                    SaveState();
                 }
             }
         }
@@ -58,7 +64,8 @@ namespace Camelot.ViewModels.MainWindow
             IFilesSelectionService filesSelectionService,
             IFileViewModelFactory fileViewModelFactory,
             IFileSystemWatchingService fileSystemWatchingService,
-            IApplicationDispatcher applicationDispatcher)
+            IApplicationDispatcher applicationDispatcher,
+            IFilesPanelStateService filesPanelStateService)
         {
             _fileService = fileService;
             _directoryService = directoryService;
@@ -66,14 +73,21 @@ namespace Camelot.ViewModels.MainWindow
             _fileViewModelFactory = fileViewModelFactory;
             _fileSystemWatchingService = fileSystemWatchingService;
             _applicationDispatcher = applicationDispatcher;
+            _filesPanelStateService = filesPanelStateService;
 
             _files = new ObservableCollection<FileViewModel>();
             _selectedFiles = new ObservableCollection<FileViewModel>();
 
-            // TODO: load directory from settings by key/number
-            CurrentDirectory = "/home/";
             ActivateCommand = ReactiveCommand.Create(Activate);
             RefreshCommand = ReactiveCommand.Create(ReloadFiles);
+
+            var state = _filesPanelStateService.GetPanelState();
+            // TODO: get root dir
+            CurrentDirectory = state.Tabs.SingleOrDefault() ?? "/home/";
+
+            this.WhenAnyValue(x => x.CurrentDirectory)
+                .Throttle(TimeSpan.FromMilliseconds(500))
+                .Subscribe(_ => SaveState());
 
             ReloadFiles();
             SubscribeToEvents();
@@ -138,6 +152,17 @@ namespace Camelot.ViewModels.MainWindow
             {
                 _filesSelectionService.UnselectFiles(filesToRemove);
             }
+        }
+
+        private void SaveState()
+        {
+            Task.Run(() =>
+            {
+                var tabs = new List<string> {CurrentDirectory};
+                var state = new PanelState {Tabs = tabs};
+
+                _filesPanelStateService.SavePanelState(state);
+            });
         }
     }
 }

@@ -53,6 +53,13 @@ namespace Camelot.Tests
             repositoryMock
                 .Setup(m => m.GetById(PanelKey))
                 .Returns(new PanelState {Tabs = collection});
+            repositoryMock
+                .Setup(m => m.Upsert(PanelKey, It.IsAny<PanelState>()))
+                .Callback<string, PanelState>((key, panelState) =>
+                {
+                    collection.Clear();
+                    collection.AddRange(panelState.Tabs);
+                });
 
             var unitOfWorkFactory = GetUnitOfWorkFactory(repositoryMock);
 
@@ -68,11 +75,11 @@ namespace Camelot.Tests
 
             Assert.NotNull(savedState);
             Assert.NotNull(savedState.Tabs);
-            Assert.True(state.Tabs.Count == tabs.Length);
-            Assert.Equal(tabs, state.Tabs);
+            Assert.True(savedState.Tabs.Count == tabs.Length);
+            Assert.Equal(tabs, savedState.Tabs);
         }
 
-        private IUnitOfWorkFactory GetUnitOfWorkFactory(IMock<IRepository<PanelState>> repositoryMock)
+        private static IUnitOfWorkFactory GetUnitOfWorkFactory(IMock<IRepository<PanelState>> repositoryMock)
         {
             var unitOfWorkMock = new Mock<IUnitOfWork>();
             unitOfWorkMock

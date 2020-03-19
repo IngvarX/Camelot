@@ -10,6 +10,8 @@ namespace Camelot.DataAccess.Repositories
 
         void Update(string id, T entity);
 
+        void Upsert(string id, T entity);
+
         void Remove(string id);
     }
 }

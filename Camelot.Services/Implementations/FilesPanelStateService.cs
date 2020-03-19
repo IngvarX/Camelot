@@ -35,7 +35,7 @@ namespace Camelot.Services.Implementations
 
             using var unitOfWork = _unitOfWorkFactory.Create();
             var repository = unitOfWork.GetRepository<PanelState>();
-            repository.Add(_panelKey, state);
+            repository.Upsert(_panelKey, state);
 
             unitOfWork.SaveChanges();
         }

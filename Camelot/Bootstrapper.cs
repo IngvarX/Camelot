@@ -42,33 +42,33 @@ namespace Camelot
             services.RegisterLazySingleton<ITaskPool>(() => new TaskPool.Implementations.TaskPool(Environment.ProcessorCount));
             services.Register<IOperationsFactory>(() => new OperationsFactory(
                 resolver.GetService<ITaskPool>()
-                ));
+            ));
             services.RegisterLazySingleton<IFileSystemWatchingService>(() => new FileSystemWatchingService(
                 resolver.GetService<IFileSystemWatcherWrapperFactory>()
-                ));
+            ));
             services.RegisterLazySingleton<IFilesSelectionService>(() => new FilesSelectionService());
             services.RegisterLazySingleton<IOperationsService>(() => new OperationsService(
                 resolver.GetService<IFilesSelectionService>(),
                 resolver.GetService<IOperationsFactory>(),
                 resolver.GetService<IDirectoryService>(),
                 resolver.GetService<IFileOpeningService>()
-                ));
+            ));
             services.RegisterLazySingleton<IDirectoryService>(() => new DirectoryService());
             services.RegisterLazySingleton<IProcessService>(() => new ProcessService());
             services.RegisterLazySingleton<IFileOpeningService>(() => new FileOpeningService(
                 resolver.GetService<IProcessService>(),
                 resolver.GetService<IPlatformService>()
-                ));
+            ));
             services.RegisterLazySingleton<IFileSystemWatcherWrapperFactory>(() => new FileSystemWatcherWrapperFactory());
             services.Register<IFileSystemWatchingService>(() => new FileSystemWatchingService(
                 resolver.GetService<IFileSystemWatcherWrapperFactory>()
-                ));
+            ));
             services.RegisterLazySingleton(() => new FileOpeningBehavior(
                 resolver.GetService<IFileOpeningService>()
-                ));
+            ));
             services.RegisterLazySingleton(() => new DirectoryOpeningBehavior(
                 resolver.GetService<IDirectoryService>()
-                ));
+            ));
             services.RegisterLazySingleton<IApplicationDispatcher>(() => new AvaloniaDispatcher());
             services.RegisterLazySingleton<IFileSizeFormatter>(() => new FileSizeFormatter());
             services.RegisterLazySingleton<IPlatformService>(() => new PlatformService());
@@ -79,30 +79,43 @@ namespace Camelot
             services.RegisterLazySingleton<IFilesOperationsMediator>(() => new FilesOperationsMediator(
                 resolver.GetService<IDirectoryService>(),
                 resolver.GetService<IOperationsService>()
-                ));
+            ));
             services.RegisterLazySingleton<IFileViewModelFactory>(() => new FileViewModelFactory(
                 resolver.GetService<FileOpeningBehavior>(),
                 resolver.GetService<DirectoryOpeningBehavior>(),
                 resolver.GetService<IFileSizeFormatter>()
 
-                ));
+            ));
             services.Register(() => new OperationsViewModel(
                 resolver.GetService<IFilesOperationsMediator>()
-                ));
-            services.Register(() => new FilesPanelViewModel(
+            ));
+            services.RegisterLazySingleton(() => new MainWindowViewModel(
+                resolver.GetService<IFilesOperationsMediator>(),
+                resolver.GetService<OperationsViewModel>(),
+                CreateFilesPanelViewModel(resolver, "Left"),
+                CreateFilesPanelViewModel(resolver, "Right")
+            ));
+        }
+
+        private static FilesPanelViewModel CreateFilesPanelViewModel(
+            IReadonlyDependencyResolver resolver,
+            string panelKey)
+        {
+            var filesPanelStateService = new FilesPanelStateService(
+                resolver.GetService<IUnitOfWorkFactory>(),
+                panelKey
+            );
+            var filesPanelViewModel = new FilesPanelViewModel(
                 resolver.GetService<IFileService>(),
                 resolver.GetService<IDirectoryService>(),
                 resolver.GetService<IFilesSelectionService>(),
                 resolver.GetService<IFileViewModelFactory>(),
                 resolver.GetService<IFileSystemWatchingService>(),
-                resolver.GetService<IApplicationDispatcher>()
-                ));
-            services.RegisterLazySingleton(() => new MainWindowViewModel(
-                resolver.GetService<IFilesOperationsMediator>(),
-                resolver.GetService<OperationsViewModel>(),
-                resolver.GetService<FilesPanelViewModel>(),
-                resolver.GetService<FilesPanelViewModel>()
-                ));
+                resolver.GetService<IApplicationDispatcher>(),
+                filesPanelStateService
+            );
+
+            return filesPanelViewModel;
         }
     }
 }
