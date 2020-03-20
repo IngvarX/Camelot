@@ -1,5 +1,6 @@
 ﻿using Camelot.Mediator.Interfaces;
 using Camelot.ViewModels.MainWindow;
+using Camelot.ViewModels.Menu;
 
 namespace Camelot.ViewModels
 {
@@ -11,15 +12,19 @@ namespace Camelot.ViewModels
 
         public FilesPanelViewModel RightFilesPanelViewModel { get; }
 
+        public MenuViewModel MenuViewModel { get; }
+
         public MainWindowViewModel(
             IFilesOperationsMediator filesOperationsMediator,
             OperationsViewModel operationsViewModel,
             FilesPanelViewModel leftFilesPanelViewModel,
-            FilesPanelViewModel rightFilesPanelViewModel)
+            FilesPanelViewModel rightFilesPanelViewModel,
+            MenuViewModel menuViewModel)
         {
             OperationsViewModel = operationsViewModel;
             LeftFilesPanelViewModel = leftFilesPanelViewModel;
             RightFilesPanelViewModel = rightFilesPanelViewModel;
+            MenuViewModel = menuViewModel;
 
             // TODO: from settings
             filesOperationsMediator.Register(leftFilesPanelViewModel, rightFilesPanelViewModel);

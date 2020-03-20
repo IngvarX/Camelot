@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.Serialization;
 using ApplicationDispatcher.Implementations;
 using ApplicationDispatcher.Interfaces;
 using Camelot.DataAccess.LiteDb;
@@ -17,6 +18,7 @@ using Camelot.Services.Operations.Interfaces;
 using Camelot.TaskPool.Interfaces;
 using Camelot.ViewModels;
 using Camelot.ViewModels.MainWindow;
+using Camelot.ViewModels.Menu;
 using Splat;
 
 namespace Camelot
@@ -72,6 +74,7 @@ namespace Camelot
             services.RegisterLazySingleton<IApplicationDispatcher>(() => new AvaloniaDispatcher());
             services.RegisterLazySingleton<IFileSizeFormatter>(() => new FileSizeFormatter());
             services.RegisterLazySingleton<IPlatformService>(() => new PlatformService());
+            services.RegisterLazySingleton<IApplicationCloser>(() => new ApplicationCloser());
         }
 
         private static void RegisterViewModels(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
@@ -89,11 +92,15 @@ namespace Camelot
             services.Register(() => new OperationsViewModel(
                 resolver.GetService<IFilesOperationsMediator>()
             ));
+            services.Register(() => new MenuViewModel(
+                resolver.GetService<IApplicationCloser>()
+            ));
             services.RegisterLazySingleton(() => new MainWindowViewModel(
                 resolver.GetService<IFilesOperationsMediator>(),
                 resolver.GetService<OperationsViewModel>(),
                 CreateFilesPanelViewModel(resolver, "Left"),
-                CreateFilesPanelViewModel(resolver, "Right")
+                CreateFilesPanelViewModel(resolver, "Right"),
+                resolver.GetService<MenuViewModel>()
             ));
         }
 

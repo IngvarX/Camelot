@@ -23,16 +23,10 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <DockPanel>
+        <DockPanel DataContext="{Binding MenuViewModel}">
             <Menu DockPanel.Dock="Top">
                 <MenuItem Header="_File">
-                    <MenuItem Header="_Open..."/>
-                    <Separator/>
-                    <MenuItem Header="_Exit"/>
-                </MenuItem>
-                <MenuItem Header="_Edit">
-                    <MenuItem Header="Copy"/>
-                    <MenuItem Header="Paste"/>
+                    <MenuItem Header="_Exit" Command="{Binding ExitCommand}" />
                 </MenuItem>
             </Menu>
         </DockPanel>

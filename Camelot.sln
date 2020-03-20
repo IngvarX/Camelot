@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camelot.FileSystemWatcherWr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camelot.TaskPool", "Camelot.TaskPool\Camelot.TaskPool.csproj", "{D4DE85C4-A15E-4F7A-B0F7-3BA08EA727C5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camelot.ApplicationDispatcher", "Camelot.ApplicationDispatcher\Camelot.ApplicationDispatcher.csproj", "{8C9B96BE-CD2F-4B78-8311-E052BAE4287A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camelot.Avalonia", "Camelot.Avalonia\Camelot.Avalonia.csproj", "{8C9B96BE-CD2F-4B78-8311-E052BAE4287A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camelot.DataAccess.Models", "Camelot.DataAccess.Models\Camelot.DataAccess.Models.csproj", "{DEA39FAA-4627-4EB3-A555-36CAA2665071}"
 EndProject

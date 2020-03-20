@@ -6,6 +6,8 @@ namespace Camelot.DataAccess.Models
     {
         public List<string> Tabs { get; set; }
 
+        public int SelectedTabIndex { get; set; }
+
         public static PanelState Empty => new PanelState();
 
         public PanelState()

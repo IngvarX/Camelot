@@ -12,7 +12,6 @@ using Camelot.Extensions;
 using Camelot.Factories.Interfaces;
 using Camelot.Services.Interfaces;
 using DynamicData;
-using DynamicData.Binding;
 using ReactiveUI;
 
 namespace Camelot.ViewModels.MainWindow
@@ -29,8 +28,10 @@ namespace Camelot.ViewModels.MainWindow
 
         private readonly ObservableCollection<FileViewModel> _files;
         private readonly ObservableCollection<FileViewModel> _selectedFiles;
+        private readonly ObservableCollection<TabViewModel> _tabs;
 
         private string _currentDirectory;
+        private TabViewModel _selectedTab;
 
         public string CurrentDirectory
         {
@@ -43,7 +44,7 @@ namespace Camelot.ViewModels.MainWindow
                 if (hasChanged)
                 {
                     ReloadFiles();
-                    SaveState();
+                    SelectedTab.CurrentDirectory = _currentDirectory;
                 }
             }
         }
@@ -51,6 +52,14 @@ namespace Camelot.ViewModels.MainWindow
         public IEnumerable<FileViewModel> Files => _files;
 
         public IList<FileViewModel> SelectedFiles => _selectedFiles;
+
+        public IEnumerable<TabViewModel> Tabs => _tabs;
+
+        public TabViewModel SelectedTab
+        {
+            get => _selectedTab;
+            set => this.RaiseAndSetIfChanged(ref _selectedTab, value);
+        }
 
         public ICommand ActivateCommand { get; }
 
@@ -82,8 +91,9 @@ namespace Camelot.ViewModels.MainWindow
             RefreshCommand = ReactiveCommand.Create(ReloadFiles);
 
             var state = _filesPanelStateService.GetPanelState();
-            // TODO: get root dir
-            CurrentDirectory = state.Tabs.SingleOrDefault() ?? "/home/";
+            _tabs = new ObservableCollection<TabViewModel>(state.Tabs.Select(Create));
+
+            SelectTab(_tabs[state.SelectedTabIndex]);
 
             this.WhenAnyValue(x => x.CurrentDirectory)
                 .Throttle(TimeSpan.FromMilliseconds(500))
@@ -91,6 +101,63 @@ namespace Camelot.ViewModels.MainWindow
 
             ReloadFiles();
             SubscribeToEvents();
+        }
+
+        private TabViewModel Create(string directory)
+        {
+            var tabViewModel = new TabViewModel(directory);
+            SubscribeToEvents(tabViewModel);
+
+            return tabViewModel;
+        }
+
+        private void Remove(TabViewModel tabViewModel)
+        {
+            UnsubscribeFromEvents(tabViewModel);
+            if (SelectedTab == tabViewModel)
+            {
+                SelectedTab = _tabs.First();
+            }
+
+            _tabs.Remove(tabViewModel);
+        }
+
+        private void SubscribeToEvents(TabViewModel tabViewModel)
+        {
+            tabViewModel.ActivationRequested += TabViewModelOnActivationRequested;
+            tabViewModel.CloseRequested += TabViewModelOnCloseRequested;
+        }
+
+        private void UnsubscribeFromEvents(TabViewModel tabViewModel)
+        {
+            tabViewModel.ActivationRequested -= TabViewModelOnActivationRequested;
+            tabViewModel.CloseRequested -= TabViewModelOnCloseRequested;
+        }
+
+        private void TabViewModelOnCloseRequested(object sender, EventArgs e)
+        {
+            var tabViewModel = (TabViewModel) sender;
+
+            Remove(tabViewModel);
+        }
+
+        private void TabViewModelOnActivationRequested(object sender, EventArgs e)
+        {
+            var tabViewModel = (TabViewModel) sender;
+
+            SelectTab(tabViewModel);
+        }
+
+        private void SelectTab(TabViewModel tabViewModel)
+        {
+            if (SelectedTab != null)
+            {
+                SelectedTab.IsActive = false;
+            }
+
+            tabViewModel.IsActive = true;
+            SelectedTab = tabViewModel;
+            CurrentDirectory = tabViewModel.CurrentDirectory;
         }
 
         private void SubscribeToEvents()

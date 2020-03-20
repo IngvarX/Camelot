@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:mainWindow="clr-namespace:Camelot.ViewModels.MainWindow"
+             xmlns:main="clr-namespace:Camelot.Views.Main"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Camelot.Views.Main.FilesPanelView">
 
@@ -13,6 +14,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="35" />
+            <RowDefinition Height="Auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
 
@@ -44,7 +46,22 @@
             <TextBox Classes="directoryTextBox" Text="{Binding CurrentDirectory, Mode=TwoWay}" />
         </DockPanel>
 
-        <DataGrid x:Name="FilesDataGrid" Grid.Row="1" Items="{Binding Files}"
+        <ItemsControl Grid.Row="1" Items="{Binding Tabs}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <main:TabView />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <!-- <main:TabView DataContext="{Binding SelectedTab}" /> -->
+
+        <DataGrid x:Name="FilesDataGrid" Grid.Row="2" Items="{Binding Files}"
                   CellPointerPressed="OnDataGridCellPointerPressed"
                   PointerReleased="OnDataGridPointerReleased" VerticalScrollBarVisibility="Visible"
                   HorizontalScrollBarVisibility="Disabled"

@@ -49,4 +49,13 @@
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Background" Value="{DynamicResource DirectoryTextBoxBackgroundColorBrush}" />
     </Style>
+
+    <Style Selector="Button.tabButton">
+        <Setter Property="Foreground" Value="{DynamicResource OperationButtonForegroundColorBrush}" />
+    </Style>
+
+    <Style Selector="Rectangle.tabRectangle">
+        <Setter Property="Fill" Value="{DynamicResource OrangeBrush}" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+    </Style>
 </Styles>

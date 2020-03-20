@@ -27,9 +27,20 @@
         <Setter Property="Margin" Value="3" />
     </Style>
 
+    <Style Selector="Button.tabButton">
+        <Setter Property="FontSize" Value="18" />
+    </Style>
+
     <Style Selector="TextBox.directoryTextBox">
         <Setter Property="FontSize" Value="20" />
         <Setter Property="Margin" Value="10,0,0,0" />
     </Style>
 
+    <Style Selector="Rectangle.tabRectangle">
+        <Setter Property="Margin" Value="0,8,0,0" />
+    </Style>
+
+    <Style Selector="MenuItem">
+        <Setter Property="FontSize" Value="20" />
+    </Style>
 </Styles>
