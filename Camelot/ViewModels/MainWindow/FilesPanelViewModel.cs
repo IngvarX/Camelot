@@ -91,6 +91,14 @@ namespace Camelot.ViewModels.MainWindow
             RefreshCommand = ReactiveCommand.Create(ReloadFiles);
 
             var state = _filesPanelStateService.GetPanelState();
+            if (!state.Tabs.Any())
+            {
+                // TODO: find root
+                state.Tabs = new List<string>
+                {
+                    "/home"
+                };
+            }
             _tabs = new ObservableCollection<TabViewModel>(state.Tabs.Select(Create));
 
             SelectTab(_tabs[state.SelectedTabIndex]);
