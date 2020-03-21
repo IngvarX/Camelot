@@ -19,3 +19,7 @@ dotnet restore
 dotnet build
 dotnet run --project Camelot/Camelot.csproj
 ```
+
+## Screenshots
+*Camelot target UI*
+![Camelot](/docs/Camelot.png)
