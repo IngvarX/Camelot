@@ -71,6 +71,11 @@ namespace Camelot.Services.Implementations
             return Directory.Exists(directory);
         }
 
+        public string GetAppRootDirectory()
+        {
+            return Path.GetPathRoot(Directory.GetCurrentDirectory());
+        }
+
         private static DirectoryModel CreateFrom(string directory)
         {
             var directoryInfo = new DirectoryInfo(directory);

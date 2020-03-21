@@ -93,10 +93,10 @@ namespace Camelot.ViewModels.MainWindow
             var state = _filesPanelStateService.GetPanelState();
             if (!state.Tabs.Any())
             {
-                // TODO: find root
+                // TODO: get all roots
                 state.Tabs = new List<string>
                 {
-                    "/home"
+                    _directoryService.GetAppRootDirectory()
                 };
             }
             _tabs = new ObservableCollection<TabViewModel>(state.Tabs.Select(Create));

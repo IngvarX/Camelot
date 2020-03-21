@@ -16,5 +16,7 @@ namespace Camelot.Services.Interfaces
         IReadOnlyCollection<DirectoryModel> GetDirectories(string directory);
 
         bool DirectoryExists(string directory);
+
+        string GetAppRootDirectory();
     }
 }
