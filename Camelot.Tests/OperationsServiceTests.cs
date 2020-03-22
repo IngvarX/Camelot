@@ -18,6 +18,8 @@ namespace Camelot.Tests
         private const string SelectedDirectoryName = "SelectedDirectoryName";
         private const string DirectoryName = "DirectoryName";
 
+        private static string CurrentDirectory => Directory.GetCurrentDirectory();
+
         [Fact]
         public void TestEditSelectedFiles()
         {
@@ -107,6 +109,9 @@ namespace Camelot.Tests
                 .Returns(operationMock.Object);
 
             var directoryServiceMock = new Mock<IDirectoryService>();
+            directoryServiceMock
+                .SetupGet(m => m.SelectedDirectory)
+                .Returns(CurrentDirectory);
             var fileOpeningServiceMock = new Mock<IFileOpeningService>();
             var fileServiceMock = new Mock<IFileService>();
             fileServiceMock
@@ -149,6 +154,9 @@ namespace Camelot.Tests
                 .Returns(operationMock.Object);
 
             var directoryServiceMock = new Mock<IDirectoryService>();
+            directoryServiceMock
+                .SetupGet(m => m.SelectedDirectory)
+                .Returns(CurrentDirectory);
             var fileOpeningServiceMock = new Mock<IFileOpeningService>();
             var fileServiceMock = new Mock<IFileService>();
             fileServiceMock
