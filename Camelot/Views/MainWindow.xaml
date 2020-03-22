@@ -16,6 +16,8 @@
         <KeyBinding Gesture="F6" Command="{Binding OperationsViewModel.MoveCommand}" />
         <KeyBinding Gesture="F7" Command="{Binding OperationsViewModel.NewDirectoryCommand}" />
         <KeyBinding Gesture="F8" Command="{Binding OperationsViewModel.RemoveCommand}" />
+        <KeyBinding Gesture="Delete" Command="{Binding OperationsViewModel.RemoveCommand}" />
+        <KeyBinding Gesture="Shift+Delete" Command="{Binding OperationsViewModel.RemoveCommand}" />
     </Window.KeyBindings>
 
     <Design.DataContext>
