@@ -30,11 +30,49 @@ namespace Camelot.Services.Operations.Implementations
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            File.Copy(_sourceFile, _destinationFile);
+            if (File.Exists(_sourceFile))
+            {
+                CopyFile(_sourceFile, _destinationFile);
+            }
+            else
+            {
+                // TODO: split in operation factory?
+                CopyDirectoryRecursive(_sourceFile, _destinationFile);
+            }
 
             FireOperationFinishedEvent();
 
             return Task.CompletedTask;
+        }
+
+        private static void CopyDirectoryRecursive(string sourceDirectory, string destinationDirectory)
+        {
+            var source = new DirectoryInfo(sourceDirectory);
+            var dirs = source.GetDirectories();
+
+            if (!Directory.Exists(destinationDirectory))
+            {
+                Directory.CreateDirectory(destinationDirectory);
+            }
+
+            var files = source.GetFiles();
+            foreach (var file in files)
+            {
+                var tempPath = Path.Combine(destinationDirectory, file.Name);
+                file.CopyTo(tempPath, false);
+            }
+
+            foreach (var directoryInfo in dirs)
+            {
+                var tempPath = Path.Combine(destinationDirectory, directoryInfo.Name);
+
+                CopyDirectoryRecursive(directoryInfo.FullName, tempPath);
+            }
+        }
+
+        private static void CopyFile(string source, string destination)
+        {
+            File.Copy(source, destination);
         }
     }
 }

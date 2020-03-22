@@ -7,22 +7,30 @@ namespace Camelot.Services.Operations.Implementations
 {
     public class RemovingOperation : OperationBase
     {
-        private readonly string _fileToRemove;
+        private readonly string _pathToRemove;
 
-        public RemovingOperation(string fileToRemove)
+        public RemovingOperation(string pathToRemove)
         {
-            if (string.IsNullOrWhiteSpace(fileToRemove))
+            if (string.IsNullOrWhiteSpace(pathToRemove))
             {
-                throw new ArgumentNullException(nameof(fileToRemove));
+                throw new ArgumentNullException(nameof(pathToRemove));
             }
 
-            _fileToRemove = fileToRemove;
+            _pathToRemove = pathToRemove;
         }
 
         public override Task RunAsync(CancellationToken cancellationToken)
         {
             // TODO: move to trash
-            File.Delete(_fileToRemove);
+            if (File.Exists(_pathToRemove))
+            {
+                File.Delete(_pathToRemove);
+            }
+            else
+            {
+                // TODO: preprocess in operations factory?
+                Directory.Delete(_pathToRemove, true);
+            }
 
             FireOperationFinishedEvent();
 
