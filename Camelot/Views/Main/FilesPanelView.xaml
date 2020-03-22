@@ -59,8 +59,6 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
-        <!-- <main:TabView DataContext="{Binding SelectedTab}" /> -->
-
         <DataGrid x:Name="FilesDataGrid" Grid.Row="2" Items="{Binding Files}"
                   CellPointerPressed="OnDataGridCellPointerPressed"
                   PointerReleased="OnDataGridPointerReleased" VerticalScrollBarVisibility="Visible"

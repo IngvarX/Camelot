@@ -67,6 +67,8 @@ namespace Camelot.ViewModels.MainWindow
 
         public event EventHandler<EventArgs> ActivatedEvent;
 
+        public event EventHandler<EventArgs> DeactivatedEvent;
+
         public FilesPanelViewModel(
             IFileService fileService,
             IDirectoryService directoryService,
@@ -109,6 +111,15 @@ namespace Camelot.ViewModels.MainWindow
 
             ReloadFiles();
             SubscribeToEvents();
+        }
+
+        public void Deactivate()
+        {
+            var selectedFiles = SelectedFiles.Select(f => f.FullPath).ToArray();
+            SelectedFiles.Clear();
+            _filesSelectionService.UnselectFiles(selectedFiles);
+
+            DeactivatedEvent.Raise(this, EventArgs.Empty);
         }
 
         private TabViewModel Create(string directory)
@@ -188,7 +199,7 @@ namespace Camelot.ViewModels.MainWindow
 
         private void ReloadFiles()
         {
-            if (!_directoryService.DirectoryExists(CurrentDirectory))
+            if (!_directoryService.CheckIfDirectoryExists(CurrentDirectory))
             {
                 return;
             }

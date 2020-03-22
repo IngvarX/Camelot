@@ -9,6 +9,8 @@ namespace Camelot.Services.Operations.Interfaces
 
         IOperation CreateCopyOperation(IList<BinaryFileOperationSettings> parameters);
 
-        IOperation CreateDeleteOperation(IList<UnaryFileOperationSettings> files);
+        IOperation CreateDeleteFileOperation(IList<UnaryFileOperationSettings> files);
+
+        IOperation CreateDeleteDirectoryOperation(IList<UnaryFileOperationSettings> directories);
     }
 }

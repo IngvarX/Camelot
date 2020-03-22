@@ -1,14 +1,17 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Camelot.Mediator.Interfaces;
 using Camelot.Services.EventArgs;
 using Camelot.Services.Interfaces;
 using Camelot.ViewModels.MainWindow;
+using DynamicData;
 
 namespace Camelot.Mediator.Implementations
 {
     public class FilesOperationsMediator : IFilesOperationsMediator
     {
+        private readonly IDirectoryService _directoryService;
         private readonly IOperationsService _operationsService;
 
         private FilesPanelViewModel _activeViewModel;
@@ -20,6 +23,7 @@ namespace Camelot.Mediator.Implementations
             IDirectoryService directoryService,
             IOperationsService operationsService)
         {
+            _directoryService = directoryService;
             _operationsService = operationsService;
 
             directoryService.SelectedDirectoryChanged += DirectoryServiceOnSelectedDirectoryChanged;
@@ -31,6 +35,8 @@ namespace Camelot.Mediator.Implementations
 
             SubscribeToEvents(_activeViewModel);
             SubscribeToEvents(_inactiveViewModel);
+
+            UpdateCurrentDirectory();
         }
 
         public void EditSelectedFiles()
@@ -71,12 +77,29 @@ namespace Camelot.Mediator.Implementations
                 return;
             }
 
-            (_inactiveViewModel, _activeViewModel) = (_activeViewModel, _inactiveViewModel);
+            SwapViewModels();
+            UpdateCurrentDirectory();
+            DeactivateInactiveViewModel();
         }
 
         private void DirectoryServiceOnSelectedDirectoryChanged(object sender, SelectedDirectoryChangedEventArgs e)
         {
             _activeViewModel.CurrentDirectory = e.NewDirectory;
+        }
+
+        private void SwapViewModels()
+        {
+            (_inactiveViewModel, _activeViewModel) = (_activeViewModel, _inactiveViewModel);
+        }
+
+        private void UpdateCurrentDirectory()
+        {
+            _directoryService.SelectedDirectory = _activeViewModel.CurrentDirectory;
+        }
+
+        private void DeactivateInactiveViewModel()
+        {
+            _inactiveViewModel.Deactivate();
         }
     }
 }

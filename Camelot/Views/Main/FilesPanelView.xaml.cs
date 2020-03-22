@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -14,11 +15,29 @@ namespace Camelot.Views.Main
         public FilesPanelView()
         {
             InitializeComponent();
+            SubscribeToEvents();
         }
 
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
+        }
+
+        private void SubscribeToEvents()
+        {
+            DataContextChanged += OnDataContextChanged;
+        }
+
+        private void OnDataContextChanged(object sender, EventArgs e)
+        {
+            ViewModel.DeactivatedEvent += ViewModelOnDeactivatedEvent;
+        }
+
+        private void ViewModelOnDeactivatedEvent(object sender, EventArgs e)
+        {
+            var dataGrid = this.FindControl<DataGrid>("FilesDataGrid");
+
+            dataGrid.SelectedItems.Clear();
         }
 
         private void OnDataGridSelectionChanged(object sender, SelectionChangedEventArgs args)
@@ -36,6 +55,7 @@ namespace Camelot.Views.Main
             if (args.PointerPressedEventArgs.ClickCount == 2)
             {
                 var fileViewModel = (FileViewModel)args.Cell.DataContext;
+
                 fileViewModel.OpenCommand.Execute(null);
             }
         }

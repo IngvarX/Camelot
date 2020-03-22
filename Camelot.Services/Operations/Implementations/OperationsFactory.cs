@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Camelot.Services.Interfaces;
 using Camelot.Services.Operations.Interfaces;
 using Camelot.Services.Operations.Settings;
 using Camelot.TaskPool.Interfaces;
@@ -9,10 +10,17 @@ namespace Camelot.Services.Operations.Implementations
     public class OperationsFactory : IOperationsFactory
     {
         private readonly ITaskPool _taskPool;
+        private readonly IDirectoryService _directoryService;
+        private readonly IFileService _fileService;
 
-        public OperationsFactory(ITaskPool taskPool)
+        public OperationsFactory(
+            ITaskPool taskPool,
+            IDirectoryService directoryService,
+            IFileService fileService)
         {
             _taskPool = taskPool;
+            _directoryService = directoryService;
+            _fileService = fileService;
         }
 
         public IOperation CreateMoveOperation(IList<BinaryFileOperationSettings> settings)
@@ -33,36 +41,56 @@ namespace Camelot.Services.Operations.Implementations
             return CreateCompositeOperation(operations);
         }
 
-        public IOperation CreateDeleteOperation(IList<UnaryFileOperationSettings> files)
+        public IOperation CreateDeleteFileOperation(IList<UnaryFileOperationSettings> files)
         {
             var operations = files
-                .Select(CreateDeleteOperation)
+                .Select(CreateDeleteFileOperation)
                 .ToArray();
 
             return CreateCompositeOperation(operations);
         }
 
-        private static IOperation CreateMoveOperation(BinaryFileOperationSettings settings)
+        public IOperation CreateDeleteDirectoryOperation(IList<UnaryFileOperationSettings> directories)
+        {
+            var operations = directories
+                .Select(CreateDeleteDirectoryOperation)
+                .ToArray();
+
+            return CreateCompositeOperation(operations);
+        }
+
+        private IOperation CreateMoveOperation(BinaryFileOperationSettings settings)
         {
             var copyOperation = CreateCopyOperation(settings);
-            var deleteOperation = CreateDeleteOperation(settings.SourceFilePath);
+            // TODO: cleanup folders
+            var deleteOperation = CreateDeleteFileOperation(settings.SourceFilePath);
 
             return new MoveOperation(copyOperation, deleteOperation);
         }
 
-        private static IOperation CreateCopyOperation(BinaryFileOperationSettings settings)
+        private IOperation CreateCopyOperation(BinaryFileOperationSettings settings)
         {
-            return new CopyOperation(settings.SourceFilePath, settings.DestinationFilePath);
+            return new CopyOperation(_directoryService, settings.SourceFilePath, settings.DestinationFilePath);
         }
 
-        private static IOperation CreateDeleteOperation(UnaryFileOperationSettings settings)
+        private IOperation CreateDeleteFileOperation(UnaryFileOperationSettings settings)
         {
-            return CreateDeleteOperation(settings.FilePath);
+            return CreateDeleteFileOperation(settings.FilePath);
         }
 
-        private static IOperation CreateDeleteOperation(string filePath)
+        private IOperation CreateDeleteDirectoryOperation(UnaryFileOperationSettings settings)
         {
-            return new RemovingOperation(filePath);
+            return CreateDeleteDirectoryOperation(settings.FilePath);
+        }
+
+        private IOperation CreateDeleteFileOperation(string filePath)
+        {
+            return new RemovingFileOperation(filePath, _fileService);
+        }
+
+        private IOperation CreateDeleteDirectoryOperation(string filePath)
+        {
+            return new RemovingDirectoryOperation(filePath, _directoryService);
         }
 
         private IOperation CreateCompositeOperation(IList<IOperation> operations)

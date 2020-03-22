@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using Camelot.Services.Interfaces;
 using Camelot.Services.Operations.Implementations;
 using Camelot.Services.Operations.Interfaces;
 using Camelot.Services.Operations.Settings;
@@ -17,9 +18,9 @@ namespace Camelot.Tests
 
         private static string CurrentDirectory => Directory.GetCurrentDirectory();
 
-        private string SourceFile => Path.Combine(CurrentDirectory, SourceFileName);
+        private static string SourceFile => Path.Combine(CurrentDirectory, SourceFileName);
 
-        private string DestinationFile => Path.Combine(CurrentDirectory, DestinationFileName);
+        private static string DestinationFile => Path.Combine(CurrentDirectory, DestinationFileName);
 
         private readonly IOperationsFactory _operationsFactory;
 
@@ -30,7 +31,12 @@ namespace Camelot.Tests
                 .Setup(m => m.ExecuteAsync(It.IsAny<Func<Task>>()))
                 .Returns<Func<Task>>(x => x());
 
-            _operationsFactory = new OperationsFactory(taskPoolMock.Object);
+            var directoryServiceMock = new Mock<IDirectoryService>();
+            var filesServiceMock = new Mock<IFileService>();
+            _operationsFactory = new OperationsFactory(
+                taskPoolMock.Object,
+                directoryServiceMock.Object,
+                filesServiceMock.Object);
 
             CreateSourceFile();
         }
@@ -76,7 +82,7 @@ namespace Camelot.Tests
         [Fact]
         public async Task TestDeleteOperation()
         {
-            var deleteOperation = _operationsFactory.CreateDeleteOperation(
+            var deleteOperation = _operationsFactory.CreateDeleteFileOperation(
                 new[]
                 {
                     new UnaryFileOperationSettings(SourceFile),

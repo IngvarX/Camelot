@@ -28,6 +28,7 @@ namespace Camelot.Tests
 
             var operationsFactoryMock = new Mock<IOperationsFactory>();
             var directoryServiceMock = new Mock<IDirectoryService>();
+            var fileServiceMock = new Mock<IFileService>();
             var fileOpeningServiceMock = new Mock<IFileOpeningService>();
             fileOpeningServiceMock
                 .Setup(m => m.Open(FileName))
@@ -37,7 +38,8 @@ namespace Camelot.Tests
                 filesSelectionServiceMock.Object,
                 operationsFactoryMock.Object,
                 directoryServiceMock.Object,
-                fileOpeningServiceMock.Object);
+                fileOpeningServiceMock.Object,
+                fileServiceMock.Object);
 
             operationsService.EditSelectedFiles();
 
@@ -58,7 +60,7 @@ namespace Camelot.Tests
                 .Setup(m => m.RunAsync(It.IsAny<CancellationToken>()))
                 .Verifiable();
             operationsFactoryMock
-                .Setup(m => m.CreateDeleteOperation(It.IsAny<IList<UnaryFileOperationSettings>>()))
+                .Setup(m => m.CreateDeleteFileOperation(It.IsAny<IList<UnaryFileOperationSettings>>()))
                 .Callback<IList<UnaryFileOperationSettings>>(l =>
                 {
                     Assert.Equal(FileName, l.Single().FilePath);
@@ -67,12 +69,14 @@ namespace Camelot.Tests
 
             var directoryServiceMock = new Mock<IDirectoryService>();
             var fileOpeningServiceMock = new Mock<IFileOpeningService>();
+            var fileServiceMock = new Mock<IFileService>();
 
             IOperationsService operationsService = new OperationsService(
                 filesSelectionServiceMock.Object,
                 operationsFactoryMock.Object,
                 directoryServiceMock.Object,
-                fileOpeningServiceMock.Object);
+                fileOpeningServiceMock.Object,
+                fileServiceMock.Object);
 
             await operationsService.RemoveSelectedFilesAsync();
 
@@ -104,12 +108,17 @@ namespace Camelot.Tests
 
             var directoryServiceMock = new Mock<IDirectoryService>();
             var fileOpeningServiceMock = new Mock<IFileOpeningService>();
+            var fileServiceMock = new Mock<IFileService>();
+            fileServiceMock
+                .Setup(m => m.CheckIfFileExists(FileName))
+                .Returns(true);
 
             IOperationsService operationsService = new OperationsService(
                 filesSelectionServiceMock.Object,
                 operationsFactoryMock.Object,
                 directoryServiceMock.Object,
-                fileOpeningServiceMock.Object);
+                fileOpeningServiceMock.Object,
+                fileServiceMock.Object);
 
             await operationsService.MoveSelectedFilesAsync(DirectoryName);
 
@@ -141,12 +150,17 @@ namespace Camelot.Tests
 
             var directoryServiceMock = new Mock<IDirectoryService>();
             var fileOpeningServiceMock = new Mock<IFileOpeningService>();
+            var fileServiceMock = new Mock<IFileService>();
+            fileServiceMock
+                .Setup(m => m.CheckIfFileExists(FileName))
+                .Returns(true);
 
             IOperationsService operationsService = new OperationsService(
                 filesSelectionServiceMock.Object,
                 operationsFactoryMock.Object,
                 directoryServiceMock.Object,
-                fileOpeningServiceMock.Object);
+                fileOpeningServiceMock.Object,
+                fileServiceMock.Object);
 
             await operationsService.CopySelectedFilesAsync(DirectoryName);
 
@@ -167,12 +181,14 @@ namespace Camelot.Tests
                 .Setup(m => m.CreateDirectory(fullDirectoryPath))
                 .Verifiable();
             var fileOpeningServiceMock = new Mock<IFileOpeningService>();
+            var fileServiceMock = new Mock<IFileService>();
 
             IOperationsService operationsService = new OperationsService(
                 filesSelectionServiceMock.Object,
                 operationsFactoryMock.Object,
                 directoryServiceMock.Object,
-                fileOpeningServiceMock.Object);
+                fileOpeningServiceMock.Object,
+                fileServiceMock.Object);
 
             operationsService.CreateDirectory(DirectoryName);
 

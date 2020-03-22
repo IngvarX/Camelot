@@ -83,10 +83,10 @@ namespace Camelot.Tests
         [Fact]
         public void TestDirectoryExists()
         {
-            Assert.True(_directoryService.DirectoryExists(CurrentDirectory));
-            Assert.False(_directoryService.DirectoryExists(NotExistingDirectoryName));
-            Assert.False(_directoryService.DirectoryExists(string.Empty));
-            Assert.False(_directoryService.DirectoryExists(null));
+            Assert.True(_directoryService.CheckIfDirectoryExists(CurrentDirectory));
+            Assert.False(_directoryService.CheckIfDirectoryExists(NotExistingDirectoryName));
+            Assert.False(_directoryService.CheckIfDirectoryExists(string.Empty));
+            Assert.False(_directoryService.CheckIfDirectoryExists(null));
         }
 
         public void Dispose()

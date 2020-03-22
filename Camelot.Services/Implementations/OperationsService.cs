@@ -13,17 +13,20 @@ namespace Camelot.Services.Implementations
         private readonly IOperationsFactory _operationsFactory;
         private readonly IDirectoryService _directoryService;
         private readonly IFileOpeningService _fileOpeningService;
+        private readonly IFileService _fileService;
 
         public OperationsService(
             IFilesSelectionService filesSelectionService,
             IOperationsFactory operationsFactory,
             IDirectoryService directoryService,
-            IFileOpeningService fileOpeningService)
+            IFileOpeningService fileOpeningService,
+            IFileService fileService)
         {
             _filesSelectionService = filesSelectionService;
             _operationsFactory = operationsFactory;
             _directoryService = directoryService;
             _fileOpeningService = fileOpeningService;
+            _fileService = fileService;
         }
 
         public void EditSelectedFiles()
@@ -36,7 +39,7 @@ namespace Camelot.Services.Implementations
 
         public async Task CopySelectedFilesAsync(string destinationDirectory)
         {
-            var files = GetBinaryFileOperationSettings(destinationDirectory);
+            var files = GetBinaryFileOperationSettings(_directoryService.SelectedDirectory, destinationDirectory);
             if (!files.Any())
             {
                 return;
@@ -49,7 +52,7 @@ namespace Camelot.Services.Implementations
 
         public async Task MoveSelectedFilesAsync(string destinationDirectory)
         {
-            var files = GetBinaryFileOperationSettings(destinationDirectory);
+            var files = GetBinaryFileOperationSettings(_directoryService.SelectedDirectory, destinationDirectory);
             if (!files.Any())
             {
                 return;
@@ -68,7 +71,7 @@ namespace Camelot.Services.Implementations
                 return;
             }
 
-            var deleteOperation = _operationsFactory.CreateDeleteOperation(files);
+            var deleteOperation = _operationsFactory.CreateDeleteFileOperation(files);
 
             await deleteOperation.RunAsync();
         }
@@ -90,20 +93,31 @@ namespace Camelot.Services.Implementations
             return unaryFileOperationSettings;
         }
 
-        private BinaryFileOperationSettings[] GetBinaryFileOperationSettings(string outputDirectory)
+        private BinaryFileOperationSettings[] GetBinaryFileOperationSettings(string sourceDirectory, string outputDirectory)
         {
-            var binaryFileOperationSettings = _filesSelectionService
+            var files = _filesSelectionService
                 .SelectedFiles
-                .Select(sourcePath =>
-                {
-                    var fileName = Path.GetFileName(sourcePath);
-                    var destinationPath = Path.Combine(outputDirectory, fileName);
+                .Where(_fileService.CheckIfFileExists);
 
-                    return new BinaryFileOperationSettings(sourcePath, destinationPath);
-                })
-                .ToArray();
+            var filesInDirectories = _filesSelectionService
+                .SelectedFiles
+                .Where(_directoryService.CheckIfDirectoryExists)
+                .SelectMany(_directoryService.GetFilesRecursively);
 
-            return binaryFileOperationSettings;
+            var allFiles = files
+                .Concat(filesInDirectories)
+                .Select(sourcePath => Create(sourceDirectory, sourcePath, outputDirectory));
+
+            return allFiles.ToArray();
+        }
+
+        private static BinaryFileOperationSettings Create(string sourceDirectory,
+            string sourcePath, string destinationDirectory)
+        {
+            var relativeSourcePath = Path.GetRelativePath(sourceDirectory, sourcePath);
+            var destinationPath = Path.Combine(destinationDirectory, relativeSourcePath);
+
+            return new BinaryFileOperationSettings(sourcePath, destinationPath);
         }
     }
 }

@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.Serialization;
 using ApplicationDispatcher.Implementations;
 using ApplicationDispatcher.Interfaces;
 using Camelot.DataAccess.LiteDb;
@@ -43,7 +42,9 @@ namespace Camelot
             services.RegisterLazySingleton<IFileSystemWatcherWrapperFactory>(() => new FileSystemWatcherWrapperFactory());
             services.RegisterLazySingleton<ITaskPool>(() => new TaskPool.Implementations.TaskPool(Environment.ProcessorCount));
             services.Register<IOperationsFactory>(() => new OperationsFactory(
-                resolver.GetService<ITaskPool>()
+                resolver.GetService<ITaskPool>(),
+                resolver.GetService<IDirectoryService>(),
+                resolver.GetService<IFileService>()
             ));
             services.RegisterLazySingleton<IFileSystemWatchingService>(() => new FileSystemWatchingService(
                 resolver.GetService<IFileSystemWatcherWrapperFactory>()
@@ -53,7 +54,8 @@ namespace Camelot
                 resolver.GetService<IFilesSelectionService>(),
                 resolver.GetService<IOperationsFactory>(),
                 resolver.GetService<IDirectoryService>(),
-                resolver.GetService<IFileOpeningService>()
+                resolver.GetService<IFileOpeningService>(),
+                resolver.GetService<IFileService>()
             ));
             services.RegisterLazySingleton<IDirectoryService>(() => new DirectoryService());
             services.RegisterLazySingleton<IProcessService>(() => new ProcessService());

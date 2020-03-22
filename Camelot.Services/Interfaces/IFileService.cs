@@ -7,5 +7,9 @@ namespace Camelot.Services.Interfaces
     {
         // TODO: pass ISpecification
         IReadOnlyCollection<FileModel> GetFiles(string directory);
+
+        bool CheckIfFileExists(string file);
+
+        void RemoveFile(string file);
     }
 }

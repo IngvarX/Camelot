@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 namespace Camelot.Services.Operations.Implementations
 {
-    public class RemovingOperation : OperationBase
+    public abstract class RemovingOperationBase : OperationBase
     {
         private readonly string _pathToRemove;
 
-        public RemovingOperation(string pathToRemove)
+        protected RemovingOperationBase(string pathToRemove)
         {
             if (string.IsNullOrWhiteSpace(pathToRemove))
             {
@@ -19,7 +19,7 @@ namespace Camelot.Services.Operations.Implementations
             _pathToRemove = pathToRemove;
         }
 
-        public override Task RunAsync(CancellationToken cancellationToken)
+        public override async Task RunAsync(CancellationToken cancellationToken)
         {
             // TODO: move to trash
             if (File.Exists(_pathToRemove))
@@ -32,9 +32,11 @@ namespace Camelot.Services.Operations.Implementations
                 Directory.Delete(_pathToRemove, true);
             }
 
-            FireOperationFinishedEvent();
+            await RemoveAsync(_pathToRemove);
 
-            return Task.CompletedTask;
+            FireOperationFinishedEvent();
         }
+
+        protected abstract Task RemoveAsync(string pathToRemove);
     }
 }

@@ -17,6 +17,16 @@ namespace Camelot.Services.Implementations
             return files.ToArray();
         }
 
+        public bool CheckIfFileExists(string file)
+        {
+            return File.Exists(file);
+        }
+
+        public void RemoveFile(string file)
+        {
+            File.Delete(file);
+        }
+
         private static FileModel CreateFrom(string file)
         {
             var fileInfo = new FileInfo(file);

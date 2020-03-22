@@ -2,15 +2,20 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Camelot.Services.Interfaces;
 
 namespace Camelot.Services.Operations.Implementations
 {
     public class CopyOperation : OperationBase
     {
+        private readonly IDirectoryService _directoryService;
         private readonly string _sourceFile;
         private readonly string _destinationFile;
 
-        public CopyOperation(string sourceFile, string destinationFile)
+        public CopyOperation(
+            IDirectoryService directoryService,
+            string sourceFile,
+            string destinationFile)
         {
             if (string.IsNullOrWhiteSpace(sourceFile))
             {
@@ -22,6 +27,7 @@ namespace Camelot.Services.Operations.Implementations
                 throw new ArgumentNullException(nameof(destinationFile));
             }
 
+            _directoryService = directoryService;
             _sourceFile = sourceFile;
             _destinationFile = destinationFile;
         }
@@ -30,49 +36,29 @@ namespace Camelot.Services.Operations.Implementations
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            if (File.Exists(_sourceFile))
-            {
-                CopyFile(_sourceFile, _destinationFile);
-            }
-            else
-            {
-                // TODO: split in operation factory?
-                CopyDirectoryRecursive(_sourceFile, _destinationFile);
-            }
+            CreateOutputDirectoryIfNeeded(_destinationFile);
+
+            File.Copy(_sourceFile, _destinationFile);
 
             FireOperationFinishedEvent();
 
             return Task.CompletedTask;
         }
 
-        private static void CopyDirectoryRecursive(string sourceDirectory, string destinationDirectory)
+        private void CreateOutputDirectoryIfNeeded(string destinationFile)
         {
-            var source = new DirectoryInfo(sourceDirectory);
-            var dirs = source.GetDirectories();
-
-            if (!Directory.Exists(destinationDirectory))
+            try
             {
-                Directory.CreateDirectory(destinationDirectory);
+                var outputDirectory = Path.GetDirectoryName(destinationFile);
+                if (!_directoryService.CheckIfDirectoryExists(outputDirectory))
+                {
+                    _directoryService.CreateDirectory(outputDirectory);
+                }
             }
-
-            var files = source.GetFiles();
-            foreach (var file in files)
+            catch
             {
-                var tempPath = Path.Combine(destinationDirectory, file.Name);
-                file.CopyTo(tempPath, false);
+                // ignore
             }
-
-            foreach (var directoryInfo in dirs)
-            {
-                var tempPath = Path.Combine(destinationDirectory, directoryInfo.Name);
-
-                CopyDirectoryRecursive(directoryInfo.FullName, tempPath);
-            }
-        }
-
-        private static void CopyFile(string source, string destination)
-        {
-            File.Copy(source, destination);
         }
     }
 }

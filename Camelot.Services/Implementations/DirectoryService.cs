@@ -66,7 +66,7 @@ namespace Camelot.Services.Implementations
             return parentDirectories.Concat(directories).ToArray();
         }
 
-        public bool DirectoryExists(string directory)
+        public bool CheckIfDirectoryExists(string directory)
         {
             return Directory.Exists(directory);
         }
@@ -74,6 +74,18 @@ namespace Camelot.Services.Implementations
         public string GetAppRootDirectory()
         {
             return Path.GetPathRoot(Directory.GetCurrentDirectory());
+        }
+
+        public IReadOnlyCollection<string> GetFilesRecursively(string directory)
+        {
+            return Directory
+                .EnumerateFiles(directory, "*.*", SearchOption.AllDirectories)
+                .ToArray();
+        }
+
+        public void RemoveDirectoryRecursively(string directory)
+        {
+            Directory.Delete(directory, true);
         }
 
         private static DirectoryModel CreateFrom(string directory)
