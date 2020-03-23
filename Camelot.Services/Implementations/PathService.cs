@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Camelot.Services.Interfaces;
 
 namespace Camelot.Services.Implementations
@@ -53,8 +54,19 @@ namespace Camelot.Services.Implementations
 
         public string GetFileNameWithoutExtension(string path)
         {
-            // TODO: extract extension
-            return path.StartsWith(".") ? path : Path.GetFileNameWithoutExtension(path);
+            if (path.StartsWith("."))
+            {
+                if (path.Count(c => c == '.') == 1)
+                {
+                    return path;
+                }
+
+                var lastDot = path.LastIndexOf(".", StringComparison.InvariantCulture);
+
+                return path.Substring(0, lastDot);
+            }
+
+            return Path.GetFileNameWithoutExtension(path);
         }
 
         public string GetFileName(string path)
@@ -64,7 +76,21 @@ namespace Camelot.Services.Implementations
 
         public string GetExtension(string path)
         {
-            return Path.GetExtension(path);
+            if (path.StartsWith("."))
+            {
+                if (path.Count(c => c == '.') == 1)
+                {
+                    return string.Empty;
+                }
+
+                var lastDot = path.LastIndexOf(".", StringComparison.InvariantCulture);
+
+                return path.Substring(lastDot + 1);
+            }
+
+            var extension = Path.GetExtension(path);
+
+            return extension.StartsWith(".") ? extension.Substring(1) : extension;
         }
     }
 }

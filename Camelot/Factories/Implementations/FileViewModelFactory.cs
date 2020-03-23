@@ -36,9 +36,7 @@ namespace Camelot.Factories.Implementations
                 Size = _fileSizeFormatter.GetFormattedSize(fileModel.SizeBytes),
                 LastModifiedDateTime = fileModel.LastWriteTime.ToString(),
                 FileName = _pathService.GetFileNameWithoutExtension(fileModel.Name),
-                // TODO: refactor and fix
-                Extension = fileModel.Name.StartsWith(".") ? string.Empty :
-                    fileModel.Extension.Length > 1 ? fileModel.Extension.Substring(1) : fileModel.Extension
+                Extension = _pathService.GetExtension(fileModel.Name)
             };
 
             return fileViewModel;
