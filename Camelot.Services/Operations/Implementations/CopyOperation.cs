@@ -9,11 +9,15 @@ namespace Camelot.Services.Operations.Implementations
     public class CopyOperation : OperationBase
     {
         private readonly IDirectoryService _directoryService;
+        private readonly IFileService _fileService;
+        private readonly IPathService _pathService;
         private readonly string _sourceFile;
         private readonly string _destinationFile;
 
         public CopyOperation(
             IDirectoryService directoryService,
+            IFileService fileService,
+            IPathService pathService,
             string sourceFile,
             string destinationFile)
         {
@@ -28,28 +32,28 @@ namespace Camelot.Services.Operations.Implementations
             }
 
             _directoryService = directoryService;
+            _fileService = fileService;
+            _pathService = pathService;
             _sourceFile = sourceFile;
             _destinationFile = destinationFile;
         }
 
-        public override Task RunAsync(CancellationToken cancellationToken)
+        public override async Task RunAsync(CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
             CreateOutputDirectoryIfNeeded(_destinationFile);
 
-            File.Copy(_sourceFile, _destinationFile);
+            await _fileService.CopyFileAsync(_sourceFile, _destinationFile);
 
             FireOperationFinishedEvent();
-
-            return Task.CompletedTask;
         }
 
         private void CreateOutputDirectoryIfNeeded(string destinationFile)
         {
             try
             {
-                var outputDirectory = Path.GetDirectoryName(destinationFile);
+                var outputDirectory = _pathService.GetParentDirectory(destinationFile);
                 if (!_directoryService.CheckIfDirectoryExists(outputDirectory))
                 {
                     _directoryService.CreateDirectory(outputDirectory);

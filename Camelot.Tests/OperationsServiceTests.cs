@@ -80,6 +80,7 @@ namespace Camelot.Tests
         [Fact]
         public async Task TestFilesMove()
         {
+            var fullPath = Path.Combine(DirectoryName, FileName);
             var operationsFactoryMock = new Mock<IOperationsFactory>();
             var operationMock = new Mock<IOperation>();
             operationMock
@@ -91,48 +92,7 @@ namespace Camelot.Tests
                 {
                     var settings = l.Single();
                     Assert.Equal(FileName, settings.SourceFilePath);
-                    Assert.Equal(Path.Combine(DirectoryName, FileName), settings.DestinationFilePath);
-                })
-                .Returns(operationMock.Object);
-
-            var directoryServiceMock = new Mock<IDirectoryService>();
-            directoryServiceMock
-                .SetupGet(m => m.SelectedDirectory)
-                .Returns(CurrentDirectory);
-            var fileOpeningServiceMock = new Mock<IFileOpeningService>();
-            var fileServiceMock = new Mock<IFileService>();
-            fileServiceMock
-                .Setup(m => m.CheckIfFileExists(FileName))
-                .Returns(true);
-            var pathService = new PathService();
-
-            IOperationsService operationsService = new OperationsService(
-                operationsFactoryMock.Object,
-                directoryServiceMock.Object,
-                fileOpeningServiceMock.Object,
-                fileServiceMock.Object,
-                pathService);
-
-            await operationsService.MoveFilesAsync(new[] {FileName}, DirectoryName);
-
-            operationMock.Verify(m => m.RunAsync(It.IsAny<CancellationToken>()), Times.Once());
-        }
-
-        [Fact]
-        public async Task TestFilesCopy()
-        {
-            var operationsFactoryMock = new Mock<IOperationsFactory>();
-            var operationMock = new Mock<IOperation>();
-            operationMock
-                .Setup(m => m.RunAsync(It.IsAny<CancellationToken>()))
-                .Verifiable();
-            operationsFactoryMock
-                .Setup(m => m.CreateCopyOperation(It.IsAny<IList<BinaryFileOperationSettings>>()))
-                .Callback<IList<BinaryFileOperationSettings>>(l =>
-                {
-                    var settings = l.Single();
-                    Assert.Equal(FileName, settings.SourceFilePath);
-                    Assert.Equal(Path.Combine(DirectoryName, FileName), settings.DestinationFilePath);
+                    Assert.Equal(fullPath, settings.DestinationFilePath);
                 })
                 .Returns(operationMock.Object);
 
@@ -146,6 +106,66 @@ namespace Camelot.Tests
                 .Setup(m => m.CheckIfFileExists(FileName))
                 .Returns(true);
             var pathServiceMock = new Mock<IPathService>();
+            pathServiceMock
+                .Setup(m => m.GetCommonRootDirectory(It.IsAny<IList<string>>()))
+                .Returns(string.Empty);
+            pathServiceMock
+                .Setup(m => m.Combine(DirectoryName, FileName))
+                .Returns(fullPath);
+            pathServiceMock
+                .Setup(m => m.GetRelativePath(string.Empty, FileName))
+                .Returns(FileName);
+
+            IOperationsService operationsService = new OperationsService(
+                operationsFactoryMock.Object,
+                directoryServiceMock.Object,
+                fileOpeningServiceMock.Object,
+                fileServiceMock.Object,
+                pathServiceMock.Object);
+
+            await operationsService.MoveFilesAsync(new[] {FileName}, DirectoryName);
+
+            operationMock.Verify(m => m.RunAsync(It.IsAny<CancellationToken>()), Times.Once());
+        }
+
+        [Fact]
+        public async Task TestFilesCopy()
+        {
+            var fullPath = Path.Combine(DirectoryName, FileName);
+            var operationsFactoryMock = new Mock<IOperationsFactory>();
+            var operationMock = new Mock<IOperation>();
+            operationMock
+                .Setup(m => m.RunAsync(It.IsAny<CancellationToken>()))
+                .Verifiable();
+            operationsFactoryMock
+                .Setup(m => m.CreateCopyOperation(It.IsAny<IList<BinaryFileOperationSettings>>()))
+                .Callback<IList<BinaryFileOperationSettings>>(l =>
+                {
+                    var settings = l.Single();
+                    Assert.Equal(FileName, settings.SourceFilePath);
+                    Assert.Equal(fullPath, settings.DestinationFilePath);
+                })
+                .Returns(operationMock.Object);
+
+            var directoryServiceMock = new Mock<IDirectoryService>();
+            directoryServiceMock
+                .SetupGet(m => m.SelectedDirectory)
+                .Returns(CurrentDirectory);
+            var fileOpeningServiceMock = new Mock<IFileOpeningService>();
+            var fileServiceMock = new Mock<IFileService>();
+            fileServiceMock
+                .Setup(m => m.CheckIfFileExists(FileName))
+                .Returns(true);
+            var pathServiceMock = new Mock<IPathService>();
+            pathServiceMock
+                .Setup(m => m.GetCommonRootDirectory(It.IsAny<IList<string>>()))
+                .Returns(string.Empty);
+            pathServiceMock
+                .Setup(m => m.Combine(DirectoryName, FileName))
+                .Returns(fullPath);
+            pathServiceMock
+                .Setup(m => m.GetRelativePath(string.Empty, FileName))
+                .Returns(FileName);
 
             IOperationsService operationsService = new OperationsService(
                 operationsFactoryMock.Object,
@@ -174,6 +194,9 @@ namespace Camelot.Tests
             var fileOpeningServiceMock = new Mock<IFileOpeningService>();
             var fileServiceMock = new Mock<IFileService>();
             var pathServiceMock = new Mock<IPathService>();
+            pathServiceMock
+                .Setup(m => m.Combine(SelectedDirectoryName, DirectoryName))
+                .Returns(fullDirectoryPath);
 
             IOperationsService operationsService = new OperationsService(
                 operationsFactoryMock.Object,

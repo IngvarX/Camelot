@@ -11,7 +11,7 @@ using Xunit;
 
 namespace Camelot.Tests
 {
-    public class OperationsTests : IDisposable
+    public class OperationsTests
     {
         private const string SourceFileName = "Source";
         private const string DestinationFileName = "Destination";
@@ -22,7 +22,8 @@ namespace Camelot.Tests
 
         private static string DestinationFile => Path.Combine(CurrentDirectory, DestinationFileName);
 
-        private readonly IOperationsFactory _operationsFactory;
+        private readonly ITaskPool _taskPool;
+        private readonly IPathService _pathService;
 
         public OperationsTests()
         {
@@ -30,21 +31,26 @@ namespace Camelot.Tests
             taskPoolMock
                 .Setup(m => m.ExecuteAsync(It.IsAny<Func<Task>>()))
                 .Returns<Func<Task>>(x => x());
+            _taskPool = taskPoolMock.Object;
 
-            var directoryServiceMock = new Mock<IDirectoryService>();
-            var filesServiceMock = new Mock<IFileService>();
-            _operationsFactory = new OperationsFactory(
-                taskPoolMock.Object,
-                directoryServiceMock.Object,
-                filesServiceMock.Object);
-
-            CreateSourceFile();
+            var pathServiceMock = new Mock<IPathService>();
+            _pathService = pathServiceMock.Object;
         }
 
         [Fact]
         public async Task TestCopyOperation()
         {
-            var copyOperation = _operationsFactory.CreateCopyOperation(
+            var directoryServiceMock = new Mock<IDirectoryService>();
+            var filesServiceMock = new Mock<IFileService>();
+            filesServiceMock
+                .Setup(m => m.CopyFileAsync(SourceFile, DestinationFile))
+                .Verifiable();
+            var operationsFactory = new OperationsFactory(
+                _taskPool,
+                directoryServiceMock.Object,
+                filesServiceMock.Object,
+                _pathService);
+            var copyOperation = operationsFactory.CreateCopyOperation(
                 new[]
                 {
                     new BinaryFileOperationSettings(SourceFile, DestinationFile)
@@ -55,34 +61,59 @@ namespace Camelot.Tests
 
             await copyOperation.RunAsync();
 
-            Assert.True(File.Exists(SourceFileName));
-            Assert.True(File.Exists(DestinationFile));
             Assert.True(callbackCalled);
+            filesServiceMock.Verify(m => m.CopyFileAsync(SourceFile, DestinationFile), Times.Once());
         }
 
         [Fact]
         public async Task TestMoveOperation()
         {
-            var moveOperation = _operationsFactory.CreateMoveOperation(
-                new[]
-                {
-                    new BinaryFileOperationSettings(SourceFile, DestinationFile)
-                });
+         var directoryServiceMock = new Mock<IDirectoryService>();
+         var filesServiceMock = new Mock<IFileService>();
+         filesServiceMock
+             .Setup(m => m.CopyFileAsync(SourceFile, DestinationFile))
+             .Verifiable();
+         filesServiceMock
+             .Setup(m => m.RemoveFile(SourceFile))
+             .Verifiable();
 
-            var callbackCalled = false;
-            moveOperation.OperationFinished += (sender, args) => callbackCalled = true;
+         var operationsFactory = new OperationsFactory(
+             _taskPool,
+             directoryServiceMock.Object,
+             filesServiceMock.Object,
+             _pathService);
+         var moveOperation = operationsFactory.CreateMoveOperation(
+             new[]
+             {
+                 new BinaryFileOperationSettings(SourceFile, DestinationFile)
+             });
 
-            await moveOperation.RunAsync();
+         var callbackCalled = false;
+         moveOperation.OperationFinished += (sender, args) => callbackCalled = true;
 
-            Assert.False(File.Exists(SourceFileName));
-            Assert.True(File.Exists(DestinationFile));
-            Assert.True(callbackCalled);
+         await moveOperation.RunAsync();
+
+         Assert.True(callbackCalled);
+         filesServiceMock.Verify(m => m.CopyFileAsync(SourceFile, DestinationFile), Times.Once());
+         filesServiceMock.Verify(m => m.RemoveFile(SourceFile), Times.Once());
         }
 
         [Fact]
         public async Task TestDeleteOperation()
         {
-            var deleteOperation = _operationsFactory.CreateDeleteFileOperation(
+            var directoryServiceMock = new Mock<IDirectoryService>();
+            var filesServiceMock = new Mock<IFileService>();
+            filesServiceMock
+                .Setup(m => m.RemoveFile(SourceFile))
+                .Verifiable();
+            var pathServiceMock = new Mock<IPathService>();
+
+            var operationsFactory = new OperationsFactory(
+                _taskPool,
+                directoryServiceMock.Object,
+                filesServiceMock.Object,
+                pathServiceMock.Object);
+            var deleteOperation = operationsFactory.CreateDeleteFileOperation(
                 new[]
                 {
                     new UnaryFileOperationSettings(SourceFile),
@@ -93,27 +124,8 @@ namespace Camelot.Tests
 
             await deleteOperation.RunAsync();
 
-            Assert.False(File.Exists(SourceFile));
             Assert.True(callbackCalled);
-        }
-
-        public void Dispose()
-        {
-            if (File.Exists(SourceFile))
-            {
-                File.Delete(SourceFile);
-            }
-
-            if (File.Exists(DestinationFile))
-            {
-                File.Delete(DestinationFile);
-            }
-        }
-
-        private static void CreateSourceFile()
-        {
-            var file = File.Create(SourceFile);
-            file.Close();
+            filesServiceMock.Verify(m => m.RemoveFile(SourceFile), Times.Once());
         }
     }
 }

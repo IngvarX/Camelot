@@ -31,7 +31,7 @@ namespace Camelot.Services.Implementations
             return paths[0].Substring(0, length);
         }
 
-        private static string GetParentDirectory(string path)
+        public string GetParentDirectory(string path)
         {
             return Path.GetDirectoryName(path);
         }

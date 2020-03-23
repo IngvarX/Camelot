@@ -9,5 +9,7 @@ namespace Camelot.Services.Interfaces
         string Combine(string path1, string path2);
 
         string GetRelativePath(string relativeTo, string path);
+
+        string GetParentDirectory(string path);
     }
 }

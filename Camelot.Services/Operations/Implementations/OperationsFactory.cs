@@ -12,15 +12,18 @@ namespace Camelot.Services.Operations.Implementations
         private readonly ITaskPool _taskPool;
         private readonly IDirectoryService _directoryService;
         private readonly IFileService _fileService;
+        private readonly IPathService _pathService;
 
         public OperationsFactory(
             ITaskPool taskPool,
             IDirectoryService directoryService,
-            IFileService fileService)
+            IFileService fileService,
+            IPathService pathService)
         {
             _taskPool = taskPool;
             _directoryService = directoryService;
             _fileService = fileService;
+            _pathService = pathService;
         }
 
         public IOperation CreateMoveOperation(IList<BinaryFileOperationSettings> settings)
@@ -70,7 +73,9 @@ namespace Camelot.Services.Operations.Implementations
 
         private IOperation CreateCopyOperation(BinaryFileOperationSettings settings)
         {
-            return new CopyOperation(_directoryService, settings.SourceFilePath, settings.DestinationFilePath);
+            return new CopyOperation(_directoryService,
+                _fileService, _pathService,
+                settings.SourceFilePath, settings.DestinationFilePath);
         }
 
         private IOperation CreateDeleteFileOperation(UnaryFileOperationSettings settings)

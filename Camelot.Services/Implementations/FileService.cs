@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Camelot.Services.Interfaces;
 using Camelot.Services.Models;
 
@@ -20,6 +21,13 @@ namespace Camelot.Services.Implementations
         public bool CheckIfFileExists(string file)
         {
             return File.Exists(file);
+        }
+
+        public Task CopyFileAsync(string source, string destination)
+        {
+            File.Copy(source, destination);
+
+            return Task.CompletedTask;
         }
 
         public void RemoveFile(string file)
