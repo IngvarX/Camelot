@@ -1,4 +1,4 @@
-using System.IO;
+using System.Globalization;
 using Camelot.Factories.Interfaces;
 using Camelot.Services.Behaviors.Interfaces;
 using Camelot.Services.Interfaces;
@@ -34,7 +34,7 @@ namespace Camelot.Factories.Implementations
             {
                 FullPath = fileModel.FullPath,
                 Size = _fileSizeFormatter.GetFormattedSize(fileModel.SizeBytes),
-                LastModifiedDateTime = fileModel.LastWriteTime.ToString(),
+                LastModifiedDateTime = fileModel.LastWriteTime.ToString(CultureInfo.CurrentCulture),
                 FileName = _pathService.GetFileNameWithoutExtension(fileModel.Name),
                 Extension = _pathService.GetExtension(fileModel.Name)
             };
@@ -48,7 +48,7 @@ namespace Camelot.Factories.Implementations
             {
                 FullPath = directoryModel.FullPath,
                 Size = DirectoryFakeSize,
-                LastModifiedDateTime = directoryModel.LastModifiedDateTime.ToString(),
+                LastModifiedDateTime = directoryModel.LastModifiedDateTime.ToString(CultureInfo.CurrentCulture),
                 FileName = directoryModel.Name,
                 Extension = string.Empty
             };

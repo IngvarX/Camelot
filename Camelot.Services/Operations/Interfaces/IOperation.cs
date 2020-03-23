@@ -7,10 +7,10 @@ namespace Camelot.Services.Operations.Interfaces
 {
     public interface IOperation
     {
-        public event EventHandler<OperationProgressChangedEventArgs> ProgressChanged;
+        event EventHandler<OperationProgressChangedEventArgs> ProgressChanged;
 
-        public event EventHandler<System.EventArgs> OperationFinished;
+        event EventHandler<System.EventArgs> OperationFinished;
 
-        public Task RunAsync(CancellationToken cancellationToken = default);
+        Task RunAsync(CancellationToken cancellationToken = default);
     }
 }

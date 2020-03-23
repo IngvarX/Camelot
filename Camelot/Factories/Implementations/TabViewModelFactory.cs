@@ -13,9 +13,6 @@ namespace Camelot.Factories.Implementations
             _pathService = pathService;
         }
 
-        public TabViewModel Create(string directory)
-        {
-            return new TabViewModel(_pathService, directory);
-        }
+        public TabViewModel Create(string directory) => new TabViewModel(_pathService, directory);
     }
 }

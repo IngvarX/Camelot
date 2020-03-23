@@ -1,3 +1,4 @@
+using System.IO;
 using Camelot.Services.Implementations;
 using Camelot.Services.Interfaces;
 using Xunit;
@@ -6,7 +7,12 @@ namespace Camelot.Tests
 {
     public class PathServiceTests
     {
+        private const string Directory = "Directory";
+        private const string File = "File";
+
         private readonly IPathService _pathService;
+
+        private static string FullPath => $"{Directory}{Path.DirectorySeparatorChar}{File}";
 
         public PathServiceTests()
         {
@@ -37,6 +43,14 @@ namespace Camelot.Tests
             var actualExtension = _pathService.GetExtension(fileName);
 
             Assert.Equal(expectedExtension, actualExtension);
+        }
+
+        [Fact]
+        public void TestPathCombine()
+        {
+            var path = _pathService.Combine(Directory, File);
+
+            Assert.Equal(FullPath, path);
         }
     }
 }

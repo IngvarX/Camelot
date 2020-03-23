@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Camelot.DataAccess.Repositories;
+﻿using Camelot.DataAccess.Repositories;
 using Camelot.DataAccess.UnitOfWork;
 using LiteDB;
 

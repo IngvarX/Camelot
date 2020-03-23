@@ -1,5 +1,3 @@
-using System.Threading.Tasks;
-
 namespace Camelot.DataAccess.Repositories
 {
     public interface IRepository<T>

@@ -6,9 +6,9 @@ namespace Camelot.ViewModels.Menu
 {
     public class MenuViewModel : ViewModelBase
     {
-        public ICommand ExitCommand { get; set; }
+        public ICommand ExitCommand { get; }
 
-        public MenuViewModel( IApplicationCloser applicationCloser)
+        public MenuViewModel(IApplicationCloser applicationCloser)
         {
             ExitCommand = ReactiveCommand.Create(applicationCloser.CloseApp);
         }
