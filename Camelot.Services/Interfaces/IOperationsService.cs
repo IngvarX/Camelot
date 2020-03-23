@@ -1,17 +1,18 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Camelot.Services.Interfaces
 {
     public interface IOperationsService
     {
-        void EditSelectedFiles();
+        void EditFiles(IReadOnlyCollection<string> files);
 
-        Task CopySelectedFilesAsync(string destinationDirectory);
+        Task CopyFilesAsync(IReadOnlyCollection<string> files, string destinationDirectory);
 
-        Task MoveSelectedFilesAsync(string destinationDirectory);
+        Task MoveFilesAsync(IReadOnlyCollection<string> files, string destinationDirectory);
 
         void CreateDirectory(string directoryName);
 
-        Task RemoveSelectedFilesAsync();
+        Task RemoveFilesAsync(IReadOnlyCollection<string> files);
     }
 }

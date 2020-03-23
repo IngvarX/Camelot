@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -22,16 +21,6 @@ namespace Camelot.Services.Operations.Implementations
         public override async Task RunAsync(CancellationToken cancellationToken)
         {
             // TODO: move to trash
-            if (File.Exists(_pathToRemove))
-            {
-                File.Delete(_pathToRemove);
-            }
-            else
-            {
-                // TODO: preprocess in operations factory?
-                Directory.Delete(_pathToRemove, true);
-            }
-
             await RemoveAsync(_pathToRemove);
 
             FireOperationFinishedEvent();

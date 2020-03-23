@@ -1,4 +1,4 @@
-using System.IO;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Camelot.Services.Interfaces;
@@ -9,98 +9,98 @@ namespace Camelot.Services.Implementations
 {
     public class OperationsService : IOperationsService
     {
-        private readonly IFilesSelectionService _filesSelectionService;
         private readonly IOperationsFactory _operationsFactory;
         private readonly IDirectoryService _directoryService;
         private readonly IFileOpeningService _fileOpeningService;
         private readonly IFileService _fileService;
+        private readonly IPathService _pathService;
 
         public OperationsService(
-            IFilesSelectionService filesSelectionService,
             IOperationsFactory operationsFactory,
             IDirectoryService directoryService,
             IFileOpeningService fileOpeningService,
-            IFileService fileService)
+            IFileService fileService,
+            IPathService pathService)
         {
-            _filesSelectionService = filesSelectionService;
             _operationsFactory = operationsFactory;
             _directoryService = directoryService;
             _fileOpeningService = fileOpeningService;
             _fileService = fileService;
+            _pathService = pathService;
         }
 
-        public void EditSelectedFiles()
+        public void EditFiles(IReadOnlyCollection<string> files)
         {
-            foreach (var selectedFile in _filesSelectionService.SelectedFiles)
+            foreach (var selectedFile in files)
             {
                 _fileOpeningService.Open(selectedFile);
             }
         }
 
-        public async Task CopySelectedFilesAsync(string destinationDirectory)
+        public async Task CopyFilesAsync(IReadOnlyCollection<string> files, string destinationDirectory)
         {
-            var files = GetBinaryFileOperationSettings(_directoryService.SelectedDirectory, destinationDirectory);
-            if (!files.Any())
+            var filesSettings = GetBinaryFileOperationSettings(files, destinationDirectory);
+            if (!filesSettings.Any())
             {
                 return;
             }
 
-            var copyOperation = _operationsFactory.CreateCopyOperation(files);
+            var copyOperation = _operationsFactory.CreateCopyOperation(filesSettings);
 
             await copyOperation.RunAsync();
         }
 
-        public async Task MoveSelectedFilesAsync(string destinationDirectory)
+        public async Task MoveFilesAsync(IReadOnlyCollection<string> files, string destinationDirectory)
         {
-            var files = GetBinaryFileOperationSettings(_directoryService.SelectedDirectory, destinationDirectory);
-            if (!files.Any())
+            var filesSettings = GetBinaryFileOperationSettings(files, destinationDirectory);
+            if (!filesSettings.Any())
             {
                 return;
             }
 
-            var moveOperation = _operationsFactory.CreateMoveOperation(files);
+            var moveOperation = _operationsFactory.CreateMoveOperation(filesSettings);
 
             await moveOperation.RunAsync();
         }
 
-        public async Task RemoveSelectedFilesAsync()
+        public async Task RemoveFilesAsync(IReadOnlyCollection<string> files)
         {
-            var files = GetUnaryFileOperationSettings();
-            if (!files.Any())
+            var filesSettings = GetUnaryFileOperationSettings(files);
+            if (!filesSettings.Any())
             {
                 return;
             }
 
-            var deleteOperation = _operationsFactory.CreateDeleteFileOperation(files);
+            var deleteOperation = _operationsFactory.CreateDeleteFileOperation(filesSettings);
 
             await deleteOperation.RunAsync();
         }
 
         public void CreateDirectory(string directoryName)
         {
-            var fullPath = Path.Combine(_directoryService.SelectedDirectory, directoryName);
+            var fullPath = _pathService.Combine(_directoryService.SelectedDirectory, directoryName);
 
             _directoryService.CreateDirectory(fullPath);
         }
 
-        private UnaryFileOperationSettings[] GetUnaryFileOperationSettings()
+        private static UnaryFileOperationSettings[] GetUnaryFileOperationSettings(IReadOnlyCollection<string> files)
         {
-            var unaryFileOperationSettings = _filesSelectionService
-                .SelectedFiles
+            var unaryFileOperationSettings = files
                 .Select(f => new UnaryFileOperationSettings(f))
                 .ToArray();
 
             return unaryFileOperationSettings;
         }
 
-        private BinaryFileOperationSettings[] GetBinaryFileOperationSettings(string sourceDirectory, string outputDirectory)
+        private BinaryFileOperationSettings[] GetBinaryFileOperationSettings(
+            IReadOnlyCollection<string> selectedFiles,
+            string outputDirectory)
         {
-            var files = _filesSelectionService
-                .SelectedFiles
+            var sourceDirectory = GetCommonRootDirectory(selectedFiles);
+            var files = selectedFiles
                 .Where(_fileService.CheckIfFileExists);
 
-            var filesInDirectories = _filesSelectionService
-                .SelectedFiles
+            var filesInDirectories = selectedFiles
                 .Where(_directoryService.CheckIfDirectoryExists)
                 .SelectMany(_directoryService.GetFilesRecursively);
 
@@ -111,11 +111,16 @@ namespace Camelot.Services.Implementations
             return allFiles.ToArray();
         }
 
-        private static BinaryFileOperationSettings Create(string sourceDirectory,
+        private string GetCommonRootDirectory(IEnumerable<string> files)
+        {
+            return _pathService.GetCommonRootDirectory(files.ToArray());
+        }
+
+        private BinaryFileOperationSettings Create(string sourceDirectory,
             string sourcePath, string destinationDirectory)
         {
-            var relativeSourcePath = Path.GetRelativePath(sourceDirectory, sourcePath);
-            var destinationPath = Path.Combine(destinationDirectory, relativeSourcePath);
+            var relativeSourcePath = _pathService.GetRelativePath(sourceDirectory, sourcePath);
+            var destinationPath = _pathService.Combine(destinationDirectory, relativeSourcePath);
 
             return new BinaryFileOperationSettings(sourcePath, destinationPath);
         }

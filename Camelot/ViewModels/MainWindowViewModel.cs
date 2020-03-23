@@ -1,6 +1,7 @@
 ﻿using Camelot.Mediator.Interfaces;
 using Camelot.ViewModels.MainWindow;
 using Camelot.ViewModels.Menu;
+using ReactiveUI;
 
 namespace Camelot.ViewModels
 {

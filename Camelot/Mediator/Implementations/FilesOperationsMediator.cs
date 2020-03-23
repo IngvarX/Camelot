@@ -1,30 +1,24 @@
 using System;
-using System.Linq;
-using System.Threading.Tasks;
 using Camelot.Mediator.Interfaces;
 using Camelot.Services.EventArgs;
 using Camelot.Services.Interfaces;
 using Camelot.ViewModels.MainWindow;
-using DynamicData;
 
 namespace Camelot.Mediator.Implementations
 {
     public class FilesOperationsMediator : IFilesOperationsMediator
     {
         private readonly IDirectoryService _directoryService;
-        private readonly IOperationsService _operationsService;
 
         private FilesPanelViewModel _activeViewModel;
         private FilesPanelViewModel _inactiveViewModel;
 
-        private string OutputDirectory => _inactiveViewModel.CurrentDirectory;
+        public string OutputDirectory => _inactiveViewModel.CurrentDirectory;
 
         public FilesOperationsMediator(
-            IDirectoryService directoryService,
-            IOperationsService operationsService)
+            IDirectoryService directoryService)
         {
             _directoryService = directoryService;
-            _operationsService = operationsService;
 
             directoryService.SelectedDirectoryChanged += DirectoryServiceOnSelectedDirectoryChanged;
         }
@@ -37,31 +31,6 @@ namespace Camelot.Mediator.Implementations
             SubscribeToEvents(_inactiveViewModel);
 
             UpdateCurrentDirectory();
-        }
-
-        public void EditSelectedFiles()
-        {
-            _operationsService.EditSelectedFiles();
-        }
-
-        public async Task CopySelectedFilesAsync()
-        {
-            await _operationsService.CopySelectedFilesAsync(OutputDirectory);
-        }
-
-        public async Task MoveSelectedFilesAsync()
-        {
-            await _operationsService.MoveSelectedFilesAsync(OutputDirectory);
-        }
-
-        public void CreateNewDirectory(string directoryName)
-        {
-            _operationsService.CreateDirectory(directoryName);
-        }
-
-        public Task RemoveSelectedFilesAsync()
-        {
-            return _operationsService.RemoveSelectedFilesAsync();
         }
 
         private void SubscribeToEvents(FilesPanelViewModel filesPanelViewModel)

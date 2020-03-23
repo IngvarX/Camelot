@@ -93,7 +93,7 @@ namespace Camelot.Tests
 
             await deleteOperation.RunAsync();
 
-            Assert.False(File.Exists(SourceFileName));
+            Assert.False(File.Exists(SourceFile));
             Assert.True(callbackCalled);
         }
 
@@ -110,7 +110,7 @@ namespace Camelot.Tests
             }
         }
 
-        private void CreateSourceFile()
+        private static void CreateSourceFile()
         {
             var file = File.Create(SourceFile);
             file.Close();

@@ -51,11 +51,11 @@ namespace Camelot
             ));
             services.RegisterLazySingleton<IFilesSelectionService>(() => new FilesSelectionService());
             services.RegisterLazySingleton<IOperationsService>(() => new OperationsService(
-                resolver.GetService<IFilesSelectionService>(),
                 resolver.GetService<IOperationsFactory>(),
                 resolver.GetService<IDirectoryService>(),
                 resolver.GetService<IFileOpeningService>(),
-                resolver.GetService<IFileService>()
+                resolver.GetService<IFileService>(),
+                resolver.GetService<IPathService>()
             ));
             services.RegisterLazySingleton<IDirectoryService>(() => new DirectoryService());
             services.RegisterLazySingleton<IProcessService>(() => new ProcessService());
@@ -77,13 +77,18 @@ namespace Camelot
             services.RegisterLazySingleton<IFileSizeFormatter>(() => new FileSizeFormatter());
             services.RegisterLazySingleton<IPlatformService>(() => new PlatformService());
             services.RegisterLazySingleton<IApplicationCloser>(() => new ApplicationCloser());
+            services.RegisterLazySingleton<IClipboardService>(() => new ClipboardService());
+            services.RegisterLazySingleton<IPathService>(() => new PathService());
+            services.RegisterLazySingleton<IClipboardOperationsService>(() => new ClipboardOperationsService(
+                resolver.GetService<IClipboardService>(),
+                resolver.GetService<IOperationsService>()
+            ));
         }
 
         private static void RegisterViewModels(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
             services.RegisterLazySingleton<IFilesOperationsMediator>(() => new FilesOperationsMediator(
-                resolver.GetService<IDirectoryService>(),
-                resolver.GetService<IOperationsService>()
+                resolver.GetService<IDirectoryService>()
             ));
             services.RegisterLazySingleton<IFileViewModelFactory>(() => new FileViewModelFactory(
                 resolver.GetService<FileOpeningBehavior>(),
@@ -92,7 +97,10 @@ namespace Camelot
 
             ));
             services.Register(() => new OperationsViewModel(
-                resolver.GetService<IFilesOperationsMediator>()
+                resolver.GetService<IFilesOperationsMediator>(),
+                resolver.GetService<IOperationsService>(),
+                resolver.GetService<IClipboardOperationsService>(),
+                resolver.GetService<IFilesSelectionService>()
             ));
             services.Register(() => new MenuViewModel(
                 resolver.GetService<IApplicationCloser>()
