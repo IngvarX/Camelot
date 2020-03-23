@@ -38,13 +38,16 @@ namespace Camelot
 
         private static void RegisterServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
-            services.RegisterLazySingleton<IFileService>(() => new FileService());
+            services.RegisterLazySingleton<IFileService>(() => new FileService(
+                resolver.GetService<IPathService>()
+            ));
             services.RegisterLazySingleton<IFileSystemWatcherWrapperFactory>(() => new FileSystemWatcherWrapperFactory());
             services.RegisterLazySingleton<ITaskPool>(() => new TaskPool.Implementations.TaskPool(Environment.ProcessorCount));
             services.Register<IOperationsFactory>(() => new OperationsFactory(
                 resolver.GetService<ITaskPool>(),
                 resolver.GetService<IDirectoryService>(),
-                resolver.GetService<IFileService>()
+                resolver.GetService<IFileService>(),
+                resolver.GetService<IPathService>()
             ));
             services.RegisterLazySingleton<IFileSystemWatchingService>(() => new FileSystemWatchingService(
                 resolver.GetService<IFileSystemWatcherWrapperFactory>()
@@ -57,7 +60,9 @@ namespace Camelot
                 resolver.GetService<IFileService>(),
                 resolver.GetService<IPathService>()
             ));
-            services.RegisterLazySingleton<IDirectoryService>(() => new DirectoryService());
+            services.RegisterLazySingleton<IDirectoryService>(() => new DirectoryService(
+                resolver.GetService<IPathService>()
+            ));
             services.RegisterLazySingleton<IProcessService>(() => new ProcessService());
             services.RegisterLazySingleton<IFileOpeningService>(() => new FileOpeningService(
                 resolver.GetService<IProcessService>(),
@@ -90,10 +95,14 @@ namespace Camelot
             services.RegisterLazySingleton<IFilesOperationsMediator>(() => new FilesOperationsMediator(
                 resolver.GetService<IDirectoryService>()
             ));
+            services.RegisterLazySingleton<ITabViewModelFactory>(() => new TabViewModelFactory(
+                resolver.GetService<IPathService>()
+            ));
             services.RegisterLazySingleton<IFileViewModelFactory>(() => new FileViewModelFactory(
                 resolver.GetService<FileOpeningBehavior>(),
                 resolver.GetService<DirectoryOpeningBehavior>(),
-                resolver.GetService<IFileSizeFormatter>()
+                resolver.GetService<IFileSizeFormatter>(),
+                resolver.GetService<IPathService>()
 
             ));
             services.Register(() => new OperationsViewModel(
@@ -129,7 +138,8 @@ namespace Camelot
                 resolver.GetService<IFileViewModelFactory>(),
                 resolver.GetService<IFileSystemWatchingService>(),
                 resolver.GetService<IApplicationDispatcher>(),
-                filesPanelStateService
+                filesPanelStateService,
+                resolver.GetService<ITabViewModelFactory>()
             );
 
             return filesPanelViewModel;

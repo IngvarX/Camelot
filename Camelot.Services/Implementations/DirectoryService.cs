@@ -11,6 +11,7 @@ namespace Camelot.Services.Implementations
 {
     public class DirectoryService : IDirectoryService
     {
+        private readonly IPathService _pathService;
         private const string ParentDirectoryName = "[..]";
 
         private string _directory;
@@ -33,6 +34,11 @@ namespace Camelot.Services.Implementations
         }
 
         public event EventHandler<SelectedDirectoryChangedEventArgs> SelectedDirectoryChanged;
+
+        public DirectoryService(IPathService pathService)
+        {
+            _pathService = pathService;
+        }
 
         public bool CreateDirectory(string directory)
         {
@@ -73,7 +79,7 @@ namespace Camelot.Services.Implementations
 
         public string GetAppRootDirectory()
         {
-            return Path.GetPathRoot(Directory.GetCurrentDirectory());
+            return _pathService.GetPathRoot(Directory.GetCurrentDirectory());
         }
 
         public IReadOnlyCollection<string> GetFilesRecursively(string directory)

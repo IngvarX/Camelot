@@ -9,6 +9,13 @@ namespace Camelot.Services.Implementations
 {
     public class FileService : IFileService
     {
+        private readonly IPathService _pathService;
+
+        public FileService(IPathService pathService)
+        {
+            _pathService = pathService;
+        }
+
         public IReadOnlyCollection<FileModel> GetFiles(string directory)
         {
             var files = Directory
@@ -35,7 +42,7 @@ namespace Camelot.Services.Implementations
             File.Delete(file);
         }
 
-        private static FileModel CreateFrom(string file)
+        private FileModel CreateFrom(string file)
         {
             var fileInfo = new FileInfo(file);
             var fileModel = new FileModel
@@ -45,7 +52,8 @@ namespace Camelot.Services.Implementations
                 LastModifiedDateTime = fileInfo.LastWriteTime,
                 Type = GetFileType(fileInfo),
                 SizeBytes = fileInfo.Length,
-                LastWriteTime = fileInfo.LastWriteTime
+                LastWriteTime = fileInfo.LastWriteTime,
+                Extension = _pathService.GetExtension(fileInfo.Name)
             };
 
             return fileModel;

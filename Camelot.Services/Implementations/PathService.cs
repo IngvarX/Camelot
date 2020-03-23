@@ -45,5 +45,26 @@ namespace Camelot.Services.Implementations
         {
             return Path.GetRelativePath(relativeTo, path);
         }
+
+        public string GetPathRoot(string path)
+        {
+            return Path.GetPathRoot(path);
+        }
+
+        public string GetFileNameWithoutExtension(string path)
+        {
+            // TODO: extract extension
+            return path.StartsWith(".") ? path : Path.GetFileNameWithoutExtension(path);
+        }
+
+        public string GetFileName(string path)
+        {
+            return Path.GetFileName(path);
+        }
+
+        public string GetExtension(string path)
+        {
+            return Path.GetExtension(path);
+        }
     }
 }

@@ -11,5 +11,13 @@ namespace Camelot.Services.Interfaces
         string GetRelativePath(string relativeTo, string path);
 
         string GetParentDirectory(string path);
+
+        string GetPathRoot(string path);
+
+        string GetFileNameWithoutExtension(string path);
+
+        string GetFileName(string path);
+
+        string GetExtension(string path);
     }
 }

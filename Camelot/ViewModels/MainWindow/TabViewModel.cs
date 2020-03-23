@@ -1,13 +1,14 @@
 using System;
-using System.IO;
 using System.Windows.Input;
 using Camelot.Extensions;
+using Camelot.Services.Interfaces;
 using ReactiveUI;
 
 namespace Camelot.ViewModels.MainWindow
 {
     public class TabViewModel : ViewModelBase
     {
+        private readonly IPathService _pathService;
         private bool _isActive;
         private string _currentDirectory;
 
@@ -21,7 +22,7 @@ namespace Camelot.ViewModels.MainWindow
             }
         }
 
-        public string DirectoryName => Path.GetFileName(CurrentDirectory);
+        public string DirectoryName => _pathService.GetFileName(CurrentDirectory);
 
         public bool IsActive
         {
@@ -39,8 +40,10 @@ namespace Camelot.ViewModels.MainWindow
         public ICommand ActivateCommand { get; }
 
         public TabViewModel(
+            IPathService pathService,
             string directory)
         {
+            _pathService = pathService;
             CurrentDirectory = directory;
 
             ActivateCommand = ReactiveCommand.Create(RequestActivation);

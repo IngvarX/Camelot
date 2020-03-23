@@ -4,6 +4,7 @@ using System.Linq;
 using Camelot.Services.EventArgs;
 using Camelot.Services.Implementations;
 using Camelot.Services.Interfaces;
+using Moq;
 using Xunit;
 
 namespace Camelot.Tests
@@ -22,7 +23,8 @@ namespace Camelot.Tests
 
         public DirectoryServiceTests()
         {
-            _directoryService = new DirectoryService();
+            var pathServiceMock = new Mock<IPathService>();
+            _directoryService = new DirectoryService(pathServiceMock.Object);
         }
 
         [Fact]

@@ -4,6 +4,7 @@ using System.Linq;
 using Camelot.Services.Implementations;
 using Camelot.Services.Interfaces;
 using Camelot.Services.Models;
+using Moq;
 using Xunit;
 
 namespace Camelot.Tests
@@ -21,7 +22,12 @@ namespace Camelot.Tests
 
         public FileServiceTests()
         {
-            _fileService = new FileService();
+            var pathServiceMock = new Mock<IPathService>();
+            pathServiceMock
+                .Setup(m => m.GetExtension(FileName))
+                .Returns(FileExtension);
+
+            _fileService = new FileService(pathServiceMock.Object);
 
             CreateFile();
         }

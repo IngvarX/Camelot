@@ -25,6 +25,7 @@ namespace Camelot.ViewModels.MainWindow
         private readonly IFileSystemWatchingService _fileSystemWatchingService;
         private readonly IApplicationDispatcher _applicationDispatcher;
         private readonly IFilesPanelStateService _filesPanelStateService;
+        private readonly ITabViewModelFactory _tabViewModelFactory;
 
         private readonly ObservableCollection<FileViewModel> _files;
         private readonly ObservableCollection<FileViewModel> _selectedFiles;
@@ -76,7 +77,8 @@ namespace Camelot.ViewModels.MainWindow
             IFileViewModelFactory fileViewModelFactory,
             IFileSystemWatchingService fileSystemWatchingService,
             IApplicationDispatcher applicationDispatcher,
-            IFilesPanelStateService filesPanelStateService)
+            IFilesPanelStateService filesPanelStateService,
+            ITabViewModelFactory tabViewModelFactory)
         {
             _fileService = fileService;
             _directoryService = directoryService;
@@ -85,6 +87,7 @@ namespace Camelot.ViewModels.MainWindow
             _fileSystemWatchingService = fileSystemWatchingService;
             _applicationDispatcher = applicationDispatcher;
             _filesPanelStateService = filesPanelStateService;
+            _tabViewModelFactory = tabViewModelFactory;
 
             _files = new ObservableCollection<FileViewModel>();
             _selectedFiles = new ObservableCollection<FileViewModel>();
@@ -124,7 +127,7 @@ namespace Camelot.ViewModels.MainWindow
 
         private TabViewModel Create(string directory)
         {
-            var tabViewModel = new TabViewModel(directory);
+            var tabViewModel = _tabViewModelFactory.Create(directory);
             SubscribeToEvents(tabViewModel);
 
             return tabViewModel;

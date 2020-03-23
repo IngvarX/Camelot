@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 
 namespace Camelot.Services.Models
 {
@@ -9,7 +8,7 @@ namespace Camelot.Services.Models
 
         public FileType Type { get; set; }
 
-        public string Extension => Path.GetExtension(Name);
+        public string Extension { get; set; }
 
         public DateTime LastWriteTime { get; set; }
     }
