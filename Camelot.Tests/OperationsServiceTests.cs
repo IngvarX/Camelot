@@ -184,9 +184,6 @@ namespace Camelot.Tests
         {
             var operationsFactoryMock = new Mock<IOperationsFactory>();
             var directoryServiceMock = new Mock<IDirectoryService>();
-            directoryServiceMock
-                .SetupGet(m => m.SelectedDirectory)
-                .Returns(SelectedDirectoryName);
             var fullDirectoryPath = Path.Combine(SelectedDirectoryName, DirectoryName);
             directoryServiceMock
                 .Setup(m => m.CreateDirectory(fullDirectoryPath))
@@ -205,7 +202,7 @@ namespace Camelot.Tests
                 fileServiceMock.Object,
                 pathServiceMock.Object);
 
-            operationsService.CreateDirectory(DirectoryName);
+            operationsService.CreateDirectory(SelectedDirectoryName, DirectoryName);
 
             directoryServiceMock.Verify(m => m.CreateDirectory(fullDirectoryPath), Times.Once());
         }
