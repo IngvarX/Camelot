@@ -3,8 +3,11 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using ApplicationDispatcher.Interfaces;
+using Avalonia;
+using Avalonia.Controls;
 using Camelot.Service.Interfaces;
 using Camelot.ViewModels.Dialogs;
+using Camelot.Views;
 using Camelot.Views.Main.Dialogs;
 
 namespace Camelot.Service.Implementations
@@ -39,9 +42,19 @@ namespace Camelot.Service.Implementations
             var viewModel = (DialogViewModelBase<T>)Activator.CreateInstance(viewModelType);
             window.DataContext = viewModel;
 
-            var mainWindow = _mainWindowProvider.GetMainWindow();
+            return await ShowDialogAsync(window);
+        }
 
-            return await window.ShowDialog<T>(mainWindow);
+        private async Task<T> ShowDialogAsync<T>(DialogWindowBase<T> window)
+        {
+            var mainWindow = (MainWindow)_mainWindowProvider.GetMainWindow();
+            window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
+            mainWindow.ShowOverlay();
+            var result = await window.ShowDialog<T>(mainWindow);
+            mainWindow.HideOverlay();
+
+            return result;
         }
     }
 }

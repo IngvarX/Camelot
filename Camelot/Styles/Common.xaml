@@ -43,4 +43,10 @@
     <Style Selector="MenuItem">
         <Setter Property="FontSize" Value="20" />
     </Style>
+
+    <Style Selector="Grid#OverlayGrid">
+        <Setter Property="ZIndex" Value="-1" />
+        <Setter Property="Background" Value="Black" />
+        <Setter Property="Opacity" Value="0.2" />
+    </Style>
 </Styles>

@@ -56,5 +56,7 @@
         </Grid>
 
         <main:OperationsView Grid.Row="3" DataContext="{Binding OperationsViewModel}" />
+
+        <Grid x:Name="OverlayGrid" Grid.Row="0" Grid.RowSpan="4" />
     </Grid>
 </Window>
