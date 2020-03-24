@@ -1,0 +1,21 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:dialogs="clr-namespace:Camelot.ViewModels.Dialogs"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="Camelot.Views.Main.Dialogs.CreateDirectoryWindow"
+        Width="400" Height="150"
+        Title="Create directory">
+
+    <Design.DataContext>
+        <dialogs:CreateDirectoryWindowViewModel/>
+    </Design.DataContext>
+
+    <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,Auto">
+        <TextBlock Grid.ColumnSpan="2" Text="Enter directory name:" />
+        <TextBox Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding DirectoryName}" />
+        <Button Grid.Row="2" Content="Create" Command="{Binding CreateCommand}" />
+        <Button Grid.Row="3" Grid.Column="1" Content="Cancel" Command="{Binding CancelCommand}" />
+    </Grid>
+</Window>

@@ -76,9 +76,9 @@ namespace Camelot.Services.Implementations
             await deleteOperation.RunAsync();
         }
 
-        public void CreateDirectory(string directoryName)
+        public void CreateDirectory(string sourceDirectory, string directoryName)
         {
-            var fullPath = _pathService.Combine(_directoryService.SelectedDirectory, directoryName);
+            var fullPath = _pathService.Combine(sourceDirectory, directoryName);
 
             _directoryService.CreateDirectory(fullPath);
         }

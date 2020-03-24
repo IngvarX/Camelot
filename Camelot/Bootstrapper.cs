@@ -9,6 +9,8 @@ using Camelot.FileSystemWatcherWrapper.Implementations;
 using Camelot.FileSystemWatcherWrapper.Interfaces;
 using Camelot.Mediator.Implementations;
 using Camelot.Mediator.Interfaces;
+using Camelot.Service.Implementations;
+using Camelot.Service.Interfaces;
 using Camelot.Services.Behaviors.Implementations;
 using Camelot.Services.Implementations;
 using Camelot.Services.Interfaces;
@@ -84,6 +86,10 @@ namespace Camelot
             services.RegisterLazySingleton<IApplicationCloser>(() => new ApplicationCloser());
             services.RegisterLazySingleton<IClipboardService>(() => new ClipboardService());
             services.RegisterLazySingleton<IPathService>(() => new PathService());
+            services.RegisterLazySingleton<IMainWindowProvider>(() => new MainWindowProvider());
+            services.RegisterLazySingleton<IDialogService>(() => new DialogService(
+                resolver.GetService<IMainWindowProvider>()
+            ));
             services.RegisterLazySingleton<IClipboardOperationsService>(() => new ClipboardOperationsService(
                 resolver.GetService<IClipboardService>(),
                 resolver.GetService<IOperationsService>()
@@ -109,7 +115,9 @@ namespace Camelot
                 resolver.GetService<IFilesOperationsMediator>(),
                 resolver.GetService<IOperationsService>(),
                 resolver.GetService<IClipboardOperationsService>(),
-                resolver.GetService<IFilesSelectionService>()
+                resolver.GetService<IFilesSelectionService>(),
+                resolver.GetService<IDialogService>(),
+                resolver.GetService<IDirectoryService>()
             ));
             services.Register(() => new MenuViewModel(
                 resolver.GetService<IApplicationCloser>()

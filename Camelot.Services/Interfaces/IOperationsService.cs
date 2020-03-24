@@ -11,7 +11,7 @@ namespace Camelot.Services.Interfaces
 
         Task MoveFilesAsync(IReadOnlyCollection<string> files, string destinationDirectory);
 
-        void CreateDirectory(string directoryName);
+        void CreateDirectory(string sourceDirectory, string directoryName);
 
         Task RemoveFilesAsync(IReadOnlyCollection<string> files);
     }

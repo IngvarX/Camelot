@@ -1,7 +1,9 @@
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Camelot.Mediator.Interfaces;
+using Camelot.Service.Interfaces;
 using Camelot.Services.Interfaces;
+using Camelot.ViewModels.Dialogs;
 using ReactiveUI;
 
 namespace Camelot.ViewModels.MainWindow
@@ -12,6 +14,8 @@ namespace Camelot.ViewModels.MainWindow
         private readonly IOperationsService _operationsService;
         private readonly IClipboardOperationsService _clipboardOperationsService;
         private readonly IFilesSelectionService _filesSelectionService;
+        private readonly IDialogService _dialogService;
+        private readonly IDirectoryService _directoryService;
 
         public ICommand EditCommand { get; }
 
@@ -31,17 +35,21 @@ namespace Camelot.ViewModels.MainWindow
             IFilesOperationsMediator filesOperationsMediator,
             IOperationsService operationsService,
             IClipboardOperationsService clipboardOperationsService,
-            IFilesSelectionService filesSelectionService)
+            IFilesSelectionService filesSelectionService,
+            IDialogService dialogService,
+            IDirectoryService directoryService)
         {
             _filesOperationsMediator = filesOperationsMediator;
             _operationsService = operationsService;
             _clipboardOperationsService = clipboardOperationsService;
             _filesSelectionService = filesSelectionService;
+            _dialogService = dialogService;
+            _directoryService = directoryService;
 
             EditCommand = ReactiveCommand.Create(Edit);
             CopyCommand = ReactiveCommand.CreateFromTask(CopyAsync);
             MoveCommand = ReactiveCommand.CreateFromTask(MoveAsync);
-            NewDirectoryCommand = ReactiveCommand.Create(CreateNewDirectory);
+            NewDirectoryCommand = ReactiveCommand.CreateFromTask(CreateNewDirectoryAsync);
             RemoveCommand = ReactiveCommand.CreateFromTask(RemoveAsync);
             CopyToClipboardCommand = ReactiveCommand.CreateFromTask(CopyToClipboardAsync);
             PasteFromClipboardCommand = ReactiveCommand.CreateFromTask(PasteFromClipboardAsync);
@@ -64,9 +72,13 @@ namespace Camelot.ViewModels.MainWindow
                 _filesOperationsMediator.OutputDirectory);
         }
 
-        private void CreateNewDirectory()
+        private async Task CreateNewDirectoryAsync()
         {
-            //_filesOperationsMediator.CreateNewDirectory();
+            var directoryName = await _dialogService.ShowDialogAsync<string>(nameof(CreateDirectoryWindowViewModel));
+            if (!string.IsNullOrEmpty(directoryName))
+            {
+                _operationsService.CreateDirectory(_directoryService.SelectedDirectory, directoryName);
+            }
         }
 
         private Task RemoveAsync()
