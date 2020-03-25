@@ -48,7 +48,7 @@ namespace Camelot.Service.Implementations
         private async Task<T> ShowDialogAsync<T>(DialogWindowBase<T> window)
         {
             var mainWindow = (MainWindow)_mainWindowProvider.GetMainWindow();
-            window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            window.Owner = mainWindow;
 
             mainWindow.ShowOverlay();
             var result = await window.ShowDialog<T>(mainWindow);

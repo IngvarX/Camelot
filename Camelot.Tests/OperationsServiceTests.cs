@@ -63,6 +63,10 @@ namespace Camelot.Tests
             var directoryServiceMock = new Mock<IDirectoryService>();
             var fileOpeningServiceMock = new Mock<IFileOpeningService>();
             var fileServiceMock = new Mock<IFileService>();
+            fileServiceMock
+                .Setup(m => m.CheckIfFileExists(FileName))
+                .Returns(true)
+                .Verifiable();
             var pathServiceMock = new Mock<IPathService>();
 
             IOperationsService operationsService = new OperationsService(
@@ -75,6 +79,7 @@ namespace Camelot.Tests
             await operationsService.RemoveFilesAsync(new[] {FileName});
 
             operationMock.Verify(m => m.RunAsync(It.IsAny<CancellationToken>()), Times.Once());
+            fileServiceMock.Verify(m => m.CheckIfFileExists(FileName), Times.Once());
         }
 
         [Fact]

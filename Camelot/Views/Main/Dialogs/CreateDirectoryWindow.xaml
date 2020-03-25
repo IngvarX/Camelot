@@ -12,7 +12,7 @@
         <dialogs:CreateDirectoryWindowViewModel/>
     </Design.DataContext>
 
-    <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,Auto">
+    <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,Auto" Margin="10">
         <TextBlock Grid.ColumnSpan="2" Text="Enter directory name:" />
         <TextBox Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding DirectoryName}" />
         <Button Grid.Row="2" Content="Create" Command="{Binding CreateCommand}" />

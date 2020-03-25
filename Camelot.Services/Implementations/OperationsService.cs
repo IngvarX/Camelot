@@ -65,15 +65,20 @@ namespace Camelot.Services.Implementations
 
         public async Task RemoveFilesAsync(IReadOnlyCollection<string> files)
         {
-            var filesSettings = GetUnaryFileOperationSettings(files);
-            if (!filesSettings.Any())
+            var (filesSettings, directoriesSettings) = GetUnaryFileOperationSettings(files);
+            if (filesSettings.Any())
             {
-                return;
+                var deleteFilesOperation = _operationsFactory.CreateDeleteFileOperation(filesSettings);
+
+                await deleteFilesOperation.RunAsync();
             }
 
-            var deleteOperation = _operationsFactory.CreateDeleteFileOperation(filesSettings);
+            if (directoriesSettings.Any())
+            {
+                var deleteDirectoriesOperation = _operationsFactory.CreateDeleteDirectoryOperation(directoriesSettings);
 
-            await deleteOperation.RunAsync();
+                await deleteDirectoriesOperation.RunAsync();
+            }
         }
 
         public void CreateDirectory(string sourceDirectory, string directoryName)
@@ -83,13 +88,19 @@ namespace Camelot.Services.Implementations
             _directoryService.CreateDirectory(fullPath);
         }
 
-        private static UnaryFileOperationSettings[] GetUnaryFileOperationSettings(IReadOnlyCollection<string> files)
+        private (UnaryFileOperationSettings[], UnaryFileOperationSettings[]) GetUnaryFileOperationSettings(
+            IReadOnlyCollection<string> files)
         {
             var unaryFileOperationSettings = files
+                .Where(_fileService.CheckIfFileExists)
+                .Select(f => new UnaryFileOperationSettings(f))
+                .ToArray();
+            var unaryDirectoryOperationSettings = files
+                .Where(_directoryService.CheckIfDirectoryExists)
                 .Select(f => new UnaryFileOperationSettings(f))
                 .ToArray();
 
-            return unaryFileOperationSettings;
+            return (unaryFileOperationSettings, unaryDirectoryOperationSettings);
         }
 
         private BinaryFileOperationSettings[] GetBinaryFileOperationSettings(
