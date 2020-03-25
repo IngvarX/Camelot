@@ -13,9 +13,9 @@
     </Design.DataContext>
 
     <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,Auto" Margin="10">
-        <TextBlock Grid.ColumnSpan="2" Text="Enter directory name:" />
-        <TextBox Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding DirectoryName}" />
-        <Button Grid.Row="2" Content="Create" Command="{Binding CreateCommand}" />
-        <Button Grid.Row="3" Grid.Column="1" Content="Cancel" Command="{Binding CancelCommand}" />
+        <TextBlock Grid.ColumnSpan="2" Classes="dialogTextBlock" Text="Enter directory name:" />
+        <TextBox Grid.Row="1" Grid.ColumnSpan="2" x:Name="DirectoryNameTextBox" Text="{Binding DirectoryName}" />
+        <Button Grid.Row="2" Classes="dialogButton" Content="Create" Command="{Binding CreateCommand}" />
+        <Button Grid.Row="3" Grid.Column="1" Classes="dialogButton" Content="Cancel" Command="{Binding CancelCommand}" />
     </Grid>
 </Window>

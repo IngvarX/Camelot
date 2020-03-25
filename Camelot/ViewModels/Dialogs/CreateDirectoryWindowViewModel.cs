@@ -19,13 +19,16 @@ namespace Camelot.ViewModels.Dialogs
 
         public CreateDirectoryWindowViewModel()
         {
-            CreateCommand = ReactiveCommand.Create(CreateDirectory);
+            var canCreate = this.WhenAnyValue(x => x.DirectoryName,
+                name => !string.IsNullOrWhiteSpace(name));
+
+            CreateCommand = ReactiveCommand.Create(CreateDirectory, canCreate);
             CancelCommand = ReactiveCommand.Create(Cancel);
         }
 
         private void Cancel()
         {
-            Close(null);
+            Close();
         }
 
         private void CreateDirectory()

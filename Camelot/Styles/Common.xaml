@@ -52,4 +52,19 @@
         <Setter Property="Background" Value="Black" />
         <Setter Property="Opacity" Value="0.2" />
     </Style>
+
+    <Style Selector="TextBox#DirectoryNameTextBox">
+        <Setter Property="Width" Value="300" />
+        <Setter Property="Margin" Value="0,20,0,0" />
+    </Style>
+
+    <Style Selector="Button.dialogButton">
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="Margin" Value="20" />
+    </Style>
+
+    <Style Selector="TextBlock.dialogTextBlock">
+        <Setter Property="FontFamily" Value="SansSerif" />
+        <Setter Property="FontSize" Value="20" />
+    </Style>
 </Styles>
