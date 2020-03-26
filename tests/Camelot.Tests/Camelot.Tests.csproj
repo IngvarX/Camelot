@@ -15,7 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Camelot.Services\Camelot.Services.csproj" />
+      <ProjectReference Include="..\..\src\Camelot.Services\Camelot.Services.csproj" />
     </ItemGroup>
 
 </Project>
