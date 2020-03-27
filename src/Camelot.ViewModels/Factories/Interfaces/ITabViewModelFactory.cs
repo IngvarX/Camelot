@@ -1,9 +1,9 @@
-using Camelot.ViewModels.Implementations.MainWindow;
+using Camelot.ViewModels.Interfaces.MainWindow;
 
 namespace Camelot.ViewModels.Factories.Interfaces
 {
     public interface ITabViewModelFactory
     {
-        TabViewModel Create(string directory);
+        ITabViewModel Create(string directory);
     }
 }

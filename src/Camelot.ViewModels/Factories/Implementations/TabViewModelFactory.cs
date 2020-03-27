@@ -1,6 +1,7 @@
 using Camelot.Services.Interfaces;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Implementations.MainWindow;
+using Camelot.ViewModels.Interfaces.MainWindow;
 
 namespace Camelot.ViewModels.Factories.Implementations
 {
@@ -13,6 +14,6 @@ namespace Camelot.ViewModels.Factories.Implementations
             _pathService = pathService;
         }
 
-        public TabViewModel Create(string directory) => new TabViewModel(_pathService, directory);
+        public ITabViewModel Create(string directory) => new TabViewModel(_pathService, directory);
     }
 }

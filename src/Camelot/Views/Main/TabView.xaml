@@ -11,9 +11,21 @@
     </Design.DataContext>
 
     <Button Classes="tabButton" Command="{Binding ActivateCommand}">
-        <Grid RowDefinitions="*,Auto">
-            <TextBlock Text="{Binding DirectoryName}" />
-            <Rectangle Classes="tabRectangle" Height="2" Grid.Row="1" IsVisible="{Binding IsActive}" />
-        </Grid>
+        <Button.Content>
+            <Grid RowDefinitions="*,Auto">
+                <TextBlock Text="{Binding DirectoryName}" />
+                <Rectangle Classes="tabRectangle" Height="2" Grid.Row="1" IsVisible="{Binding IsActive}" />
+            </Grid>
+        </Button.Content>
+        
+        <Button.ContextMenu>
+            <ContextMenu>
+                <MenuItem Header="New tab" Command="{Binding NewTabCommand}" />
+                <MenuItem Header="Close tab" Command="{Binding CloseTabCommand}" />
+                <MenuItem Header="Close tabs to the left" Command="{Binding CloseTabsToTheLeftCommand}" />
+                <MenuItem Header="Close tabs to the right" Command="{Binding CloseTabsToTheRightCommand}" />
+                <MenuItem Header="Close all but this" Command="{Binding CloseAllTabsButThisCommand}" />
+            </ContextMenu>
+        </Button.ContextMenu>
     </Button>
 </UserControl>
