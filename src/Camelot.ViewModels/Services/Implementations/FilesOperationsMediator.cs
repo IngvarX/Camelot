@@ -1,7 +1,8 @@
 using System;
 using Camelot.Services.EventArgs;
 using Camelot.Services.Interfaces;
-using Camelot.ViewModels.MainWindow;
+using Camelot.ViewModels.Interfaces;
+using Camelot.ViewModels.Interfaces.MainWindow;
 using Camelot.ViewModels.Services.Interfaces;
 
 namespace Camelot.ViewModels.Services.Implementations
@@ -10,8 +11,8 @@ namespace Camelot.ViewModels.Services.Implementations
     {
         private readonly IDirectoryService _directoryService;
 
-        private FilesPanelViewModel _activeViewModel;
-        private FilesPanelViewModel _inactiveViewModel;
+        private IFilesPanelViewModel _activeViewModel;
+        private IFilesPanelViewModel _inactiveViewModel;
 
         public string OutputDirectory => _inactiveViewModel.CurrentDirectory;
 
@@ -23,7 +24,7 @@ namespace Camelot.ViewModels.Services.Implementations
             directoryService.SelectedDirectoryChanged += DirectoryServiceOnSelectedDirectoryChanged;
         }
 
-        public void Register(FilesPanelViewModel activeFilesPanelViewModel, FilesPanelViewModel inactiveFilesPanelViewModel)
+        public void Register(IFilesPanelViewModel activeFilesPanelViewModel, IFilesPanelViewModel inactiveFilesPanelViewModel)
         {
             (_activeViewModel, _inactiveViewModel) = (activeFilesPanelViewModel, inactiveFilesPanelViewModel);
 
@@ -33,14 +34,14 @@ namespace Camelot.ViewModels.Services.Implementations
             UpdateCurrentDirectory();
         }
 
-        private void SubscribeToEvents(FilesPanelViewModel filesPanelViewModel)
+        private void SubscribeToEvents(IFilesPanelViewModel filesPanelViewModel)
         {
             filesPanelViewModel.ActivatedEvent += FilesPanelViewModelOnActivatedEvent;
         }
 
         private void FilesPanelViewModelOnActivatedEvent(object sender, EventArgs e)
         {
-            var filesPanelViewModel = (FilesPanelViewModel) sender;
+            var filesPanelViewModel = (IFilesPanelViewModel) sender;
             if (filesPanelViewModel == _activeViewModel)
             {
                 return;

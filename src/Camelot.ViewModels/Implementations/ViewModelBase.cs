@@ -1,6 +1,6 @@
 ﻿using ReactiveUI;
 
-namespace Camelot.ViewModels
+namespace Camelot.ViewModels.Implementations
 {
     public class ViewModelBase : ReactiveObject
     {

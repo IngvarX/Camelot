@@ -1,7 +1,7 @@
 using System;
 using Avalonia;
 using Avalonia.Controls;
-using Camelot.ViewModels.Dialogs;
+using Camelot.ViewModels.Implementations.Dialogs;
 
 namespace Camelot.Views.Main.Dialogs
 {
@@ -10,8 +10,7 @@ namespace Camelot.Views.Main.Dialogs
         private Window ParentWindow => (Window) Owner;
 
         protected DialogViewModelBase<T> ViewModel => (DialogViewModelBase<T>) DataContext;
-
-
+        
         protected DialogWindowBase()
         {
             SubscribeToViewEvents();
@@ -68,6 +67,7 @@ namespace Camelot.Views.Main.Dialogs
         {
             UnsubscribeFromViewModelEvents();
             UnsubscribeFromViewEvents();
+            
             Close(args.Result);
         }
     }

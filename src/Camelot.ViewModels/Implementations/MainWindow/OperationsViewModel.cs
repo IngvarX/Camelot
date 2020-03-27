@@ -1,13 +1,15 @@
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Camelot.Services.Interfaces;
-using Camelot.ViewModels.Dialogs;
+using Camelot.ViewModels.Implementations.Dialogs;
+using Camelot.ViewModels.Interfaces;
+using Camelot.ViewModels.Interfaces.MainWindow;
 using Camelot.ViewModels.Services.Interfaces;
 using ReactiveUI;
 
-namespace Camelot.ViewModels.MainWindow
+namespace Camelot.ViewModels.Implementations.MainWindow
 {
-    public class OperationsViewModel : ViewModelBase
+    public class OperationsViewModel : ViewModelBase, IOperationsViewModel
     {
         private readonly IFilesOperationsMediator _filesOperationsMediator;
         private readonly IOperationsService _operationsService;

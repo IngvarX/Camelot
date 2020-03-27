@@ -1,4 +1,4 @@
-using Camelot.ViewModels.MainWindow;
+using Camelot.ViewModels.Implementations.MainWindow;
 
 namespace Camelot.ViewModels.Factories.Interfaces
 {

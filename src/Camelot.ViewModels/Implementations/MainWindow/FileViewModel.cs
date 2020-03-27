@@ -2,7 +2,7 @@ using System.Windows.Input;
 using Camelot.Services.Behaviors.Interfaces;
 using ReactiveUI;
 
-namespace Camelot.ViewModels.MainWindow
+namespace Camelot.ViewModels.Implementations.MainWindow
 {
     public class FileViewModel : ViewModelBase
     {

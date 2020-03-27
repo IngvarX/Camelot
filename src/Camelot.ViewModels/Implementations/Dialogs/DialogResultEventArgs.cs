@@ -1,6 +1,6 @@
 using System;
 
-namespace Camelot.ViewModels.Dialogs
+namespace Camelot.ViewModels.Implementations.Dialogs
 {
     public class DialogResultEventArgs<T> : EventArgs
     {

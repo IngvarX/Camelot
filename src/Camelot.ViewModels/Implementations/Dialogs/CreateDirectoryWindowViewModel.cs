@@ -1,7 +1,7 @@
 using System.Windows.Input;
 using ReactiveUI;
 
-namespace Camelot.ViewModels.Dialogs
+namespace Camelot.ViewModels.Implementations.Dialogs
 {
     public class CreateDirectoryWindowViewModel : DialogViewModelBase<string>
     {

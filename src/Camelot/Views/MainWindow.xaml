@@ -1,9 +1,9 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="clr-namespace:Camelot.ViewModels;assembly=Camelot"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:main="clr-namespace:Camelot.Views.Main"
+        xmlns:implementations="clr-namespace:Camelot.ViewModels.Implementations;assembly=Camelot.ViewModels"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Camelot.Views.MainWindow"
         MinWidth="900" MinHeight="480"
@@ -23,7 +23,7 @@
     </Window.KeyBindings>
 
     <Design.DataContext>
-        <vm:MainWindowViewModel/>
+        <implementations:MainWindowViewModel/>
     </Design.DataContext>
 
 

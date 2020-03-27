@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Camelot.ViewModels;
+using Camelot.ViewModels.Implementations;
 using Camelot.Views;
 using Splat;
 

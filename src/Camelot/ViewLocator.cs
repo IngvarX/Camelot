@@ -2,6 +2,7 @@ using System;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Camelot.ViewModels;
+using Camelot.ViewModels.Implementations;
 
 namespace Camelot
 {

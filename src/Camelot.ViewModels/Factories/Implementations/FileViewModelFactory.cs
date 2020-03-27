@@ -3,7 +3,7 @@ using Camelot.Services.Behaviors.Interfaces;
 using Camelot.Services.Interfaces;
 using Camelot.Services.Models;
 using Camelot.ViewModels.Factories.Interfaces;
-using Camelot.ViewModels.MainWindow;
+using Camelot.ViewModels.Implementations.MainWindow;
 
 namespace Camelot.ViewModels.Factories.Implementations
 {

@@ -11,12 +11,14 @@ using Camelot.DataAccess.Models;
 using Camelot.Extensions;
 using Camelot.Services.Interfaces;
 using Camelot.ViewModels.Factories.Interfaces;
+using Camelot.ViewModels.Interfaces;
+using Camelot.ViewModels.Interfaces.MainWindow;
 using DynamicData;
 using ReactiveUI;
 
-namespace Camelot.ViewModels.MainWindow
+namespace Camelot.ViewModels.Implementations.MainWindow
 {
-    public class FilesPanelViewModel : ViewModelBase
+    public class FilesPanelViewModel : ViewModelBase, IFilesPanelViewModel
     {
         private readonly IFileService _fileService;
         private readonly IDirectoryService _directoryService;

@@ -1,4 +1,5 @@
-using Camelot.ViewModels.MainWindow;
+using Camelot.ViewModels.Interfaces;
+using Camelot.ViewModels.Interfaces.MainWindow;
 
 namespace Camelot.ViewModels.Services.Interfaces
 {
@@ -6,6 +7,6 @@ namespace Camelot.ViewModels.Services.Interfaces
     {
         string OutputDirectory { get; }
 
-        void Register(FilesPanelViewModel activeFilesPanelViewModel, FilesPanelViewModel inactiveFilesPanelViewModel);
+        void Register(IFilesPanelViewModel activeFilesPanelViewModel, IFilesPanelViewModel inactiveFilesPanelViewModel);
     }
 }

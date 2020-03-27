@@ -11,11 +11,13 @@ using Camelot.Services.Interfaces;
 using Camelot.Services.Operations.Implementations;
 using Camelot.Services.Operations.Interfaces;
 using Camelot.TaskPool.Interfaces;
-using Camelot.ViewModels;
 using Camelot.ViewModels.Factories.Implementations;
 using Camelot.ViewModels.Factories.Interfaces;
-using Camelot.ViewModels.MainWindow;
-using Camelot.ViewModels.Menu;
+using Camelot.ViewModels.Implementations;
+using Camelot.ViewModels.Implementations.MainWindow;
+using Camelot.ViewModels.Implementations.Menu;
+using Camelot.ViewModels.Interfaces;
+using Camelot.ViewModels.Interfaces.MainWindow;
 using Camelot.ViewModels.Services.Implementations;
 using Camelot.ViewModels.Services.Interfaces;
 using Splat;
@@ -109,7 +111,7 @@ namespace Camelot
                 resolver.GetService<IPathService>()
 
             ));
-            services.Register(() => new OperationsViewModel(
+            services.Register<IOperationsViewModel>(() => new OperationsViewModel(
                 resolver.GetService<IFilesOperationsMediator>(),
                 resolver.GetService<IOperationsService>(),
                 resolver.GetService<IClipboardOperationsService>(),
@@ -122,14 +124,14 @@ namespace Camelot
             ));
             services.RegisterLazySingleton(() => new MainWindowViewModel(
                 resolver.GetService<IFilesOperationsMediator>(),
-                resolver.GetService<OperationsViewModel>(),
+                resolver.GetService<IOperationsViewModel>(),
                 CreateFilesPanelViewModel(resolver, "Left"),
                 CreateFilesPanelViewModel(resolver, "Right"),
                 resolver.GetService<MenuViewModel>()
             ));
         }
 
-        private static FilesPanelViewModel CreateFilesPanelViewModel(
+        private static IFilesPanelViewModel CreateFilesPanelViewModel(
             IReadonlyDependencyResolver resolver,
             string panelKey)
         {

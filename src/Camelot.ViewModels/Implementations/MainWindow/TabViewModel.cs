@@ -4,7 +4,7 @@ using Camelot.Extensions;
 using Camelot.Services.Interfaces;
 using ReactiveUI;
 
-namespace Camelot.ViewModels.MainWindow
+namespace Camelot.ViewModels.Implementations.MainWindow
 {
     public class TabViewModel : ViewModelBase
     {
@@ -35,8 +35,7 @@ namespace Camelot.ViewModels.MainWindow
         public event EventHandler<EventArgs> CloseRequested;
 
         public event EventHandler<EventArgs> NewTabRequested;
-
-
+        
         public ICommand ActivateCommand { get; }
 
         public TabViewModel(

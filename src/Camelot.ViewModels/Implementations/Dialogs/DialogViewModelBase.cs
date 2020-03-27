@@ -1,7 +1,7 @@
 using System;
 using Camelot.Extensions;
 
-namespace Camelot.ViewModels.Dialogs
+namespace Camelot.ViewModels.Implementations.Dialogs
 {
     public class DialogViewModelBase<T> : ViewModelBase
     {
