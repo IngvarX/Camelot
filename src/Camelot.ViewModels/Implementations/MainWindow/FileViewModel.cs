@@ -1,10 +1,11 @@
 using System.Windows.Input;
 using Camelot.Services.Behaviors.Interfaces;
+using Camelot.ViewModels.Interfaces.MainWindow;
 using ReactiveUI;
 
 namespace Camelot.ViewModels.Implementations.MainWindow
 {
-    public class FileViewModel : ViewModelBase
+    public class FileViewModel : ViewModelBase, IFileViewModel
     {
         private readonly IFileOpeningBehavior _fileOpeningBehavior;
 

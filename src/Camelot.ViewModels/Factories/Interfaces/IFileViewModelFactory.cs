@@ -1,12 +1,13 @@
 using Camelot.Services.Models;
 using Camelot.ViewModels.Implementations.MainWindow;
+using Camelot.ViewModels.Interfaces.MainWindow;
 
 namespace Camelot.ViewModels.Factories.Interfaces
 {
     public interface IFileViewModelFactory
     {
-        FileViewModel Create(FileModel fileModel);
+        IFileViewModel Create(FileModel fileModel);
 
-        FileViewModel Create(DirectoryModel directoryModel);
+        IFileViewModel Create(DirectoryModel directoryModel);
     }
 }

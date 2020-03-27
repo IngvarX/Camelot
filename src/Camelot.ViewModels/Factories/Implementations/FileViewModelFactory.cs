@@ -4,6 +4,7 @@ using Camelot.Services.Interfaces;
 using Camelot.Services.Models;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Implementations.MainWindow;
+using Camelot.ViewModels.Interfaces.MainWindow;
 
 namespace Camelot.ViewModels.Factories.Implementations
 {
@@ -28,7 +29,7 @@ namespace Camelot.ViewModels.Factories.Implementations
             _pathService = pathService;
         }
 
-        public FileViewModel Create(FileModel fileModel)
+        public IFileViewModel Create(FileModel fileModel)
         {
             var fileViewModel = new FileViewModel(_fileOpeningBehavior)
             {
@@ -42,7 +43,7 @@ namespace Camelot.ViewModels.Factories.Implementations
             return fileViewModel;
         }
 
-        public FileViewModel Create(DirectoryModel directoryModel)
+        public IFileViewModel Create(DirectoryModel directoryModel)
         {
             var fileViewModel = new FileViewModel(_directoryOpeningBehavior)
             {

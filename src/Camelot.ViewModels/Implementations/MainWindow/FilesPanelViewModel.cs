@@ -28,8 +28,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow
         private readonly IFilesPanelStateService _filesPanelStateService;
         private readonly ITabViewModelFactory _tabViewModelFactory;
 
-        private readonly ObservableCollection<FileViewModel> _files;
-        private readonly ObservableCollection<FileViewModel> _selectedFiles;
+        private readonly ObservableCollection<IFileViewModel> _files;
+        private readonly ObservableCollection<IFileViewModel> _selectedFiles;
         private readonly ObservableCollection<ITabViewModel> _tabs;
 
         private string _currentDirectory;
@@ -51,9 +51,9 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             }
         }
 
-        public IEnumerable<FileViewModel> Files => _files;
+        public IEnumerable<IFileViewModel> Files => _files;
 
-        public IList<FileViewModel> SelectedFiles => _selectedFiles;
+        public IList<IFileViewModel> SelectedFiles => _selectedFiles;
 
         public IEnumerable<ITabViewModel> Tabs => _tabs;
 
@@ -90,8 +90,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             _filesPanelStateService = filesPanelStateService;
             _tabViewModelFactory = tabViewModelFactory;
 
-            _files = new ObservableCollection<FileViewModel>();
-            _selectedFiles = new ObservableCollection<FileViewModel>();
+            _files = new ObservableCollection<IFileViewModel>();
+            _selectedFiles = new ObservableCollection<IFileViewModel>();
 
             ActivateCommand = ReactiveCommand.Create(Activate);
             RefreshCommand = ReactiveCommand.Create(ReloadFiles);
