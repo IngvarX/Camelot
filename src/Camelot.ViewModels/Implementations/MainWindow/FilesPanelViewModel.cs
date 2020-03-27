@@ -106,10 +106,11 @@ namespace Camelot.ViewModels.Implementations.MainWindow
                 };
             }
             _tabs = new ObservableCollection<ITabViewModel>(state.Tabs.Select(Create));
+            _tabs.CollectionChanged += TabsOnCollectionChanged;
 
             SelectTab(_tabs[state.SelectedTabIndex]);
 
-            this.WhenAnyValue(x => x.CurrentDirectory)
+            this.WhenAnyValue(x => x.CurrentDirectory, x => x.SelectedTab)
                 .Throttle(TimeSpan.FromMilliseconds(500))
                 .Subscribe(_ => SaveState());
 
@@ -125,6 +126,11 @@ namespace Camelot.ViewModels.Implementations.MainWindow
 
             DeactivatedEvent.Raise(this, EventArgs.Empty);
         }
+        
+        private void TabsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            SaveState();
+        }
 
         private ITabViewModel Create(string directory)
         {
@@ -137,12 +143,13 @@ namespace Camelot.ViewModels.Implementations.MainWindow
         private void Remove(ITabViewModel tabViewModel)
         {
             UnsubscribeFromEvents(tabViewModel);
-            if (SelectedTab == tabViewModel)
-            {
-                SelectedTab = _tabs.First();
-            }
 
             _tabs.Remove(tabViewModel);
+            
+            if (SelectedTab == tabViewModel)
+            {
+                SelectTab(_tabs.First());
+            }
         }
 
         private void SubscribeToEvents(ITabViewModel tabViewModel)
@@ -194,22 +201,18 @@ namespace Camelot.ViewModels.Implementations.MainWindow
         {
             var tabViewModel = (ITabViewModel) sender;
             var tabPosition = _tabs.IndexOf(tabViewModel);
-            
-            for (var i = 0; i < tabPosition; i++)
-            {
-                Remove(_tabs[0]);
-            }
+            var tabsToClose = _tabs.Take(tabPosition).ToArray();
+
+            tabsToClose.ForEach(Remove);
         }
         
         private void TabViewModelOnClosingTabsToTheRightRequested(object sender, EventArgs e)
         {
             var tabViewModel = (ITabViewModel) sender;
             var tabPosition = _tabs.IndexOf(tabViewModel);
-            
-            for (var i = tabPosition; i < _tabs.Count; i++)
-            {
-                Remove(_tabs[tabPosition]);
-            }
+            var tabsToClose = _tabs.Skip(tabPosition + 1).ToArray();
+
+            tabsToClose.ForEach(Remove);
         }
 
         private void TabViewModelOnClosingAllTabsButThisRequested(object sender, EventArgs e)
@@ -217,10 +220,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             var tabViewModel = (ITabViewModel) sender;
             var tabsToClose = _tabs.Where(t => t != tabViewModel).ToArray();
 
-            foreach (var tab in tabsToClose)
-            {
-                Remove(tab);
-            }
+            tabsToClose.ForEach(Remove);
         }
         
         private void SelectTab(ITabViewModel tabViewModel)
@@ -300,8 +300,13 @@ namespace Camelot.ViewModels.Implementations.MainWindow
         {
             Task.Run(() =>
             {
-                var tabs = new List<string> {CurrentDirectory};
-                var state = new PanelState {Tabs = tabs};
+                var tabs = _tabs.Select(t => t.CurrentDirectory).ToList();
+                var selectedTabIndex = _tabs.IndexOf(_selectedTab);
+                var state = new PanelState
+                {
+                    Tabs = tabs,
+                    SelectedTabIndex = selectedTabIndex
+                };
 
                 _filesPanelStateService.SavePanelState(state);
             });
