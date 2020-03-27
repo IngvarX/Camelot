@@ -11,7 +11,10 @@ namespace Camelot
 
         public IControl Build(object data)
         {
-            var name = data.GetType().FullName.Replace("ViewModel", "View");
+            var fullName = data.GetType().FullName;
+            var name = fullName
+                .Replace("ViewModel", "View")
+                .Replace("Camelot", "Camelot.ViewModels");
             var type = Type.GetType(name);
 
             if (type != null)
@@ -19,7 +22,7 @@ namespace Camelot
                 return (Control)Activator.CreateInstance(type);
             }
 
-            return new TextBlock { Text = "Not Found: " + name };
+            throw new InvalidOperationException($"Type {name} was not found");
         }
 
         public bool Match(object data)

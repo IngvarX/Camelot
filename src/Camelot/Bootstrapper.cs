@@ -3,14 +3,8 @@ using ApplicationDispatcher.Implementations;
 using ApplicationDispatcher.Interfaces;
 using Camelot.DataAccess.LiteDb;
 using Camelot.DataAccess.UnitOfWork;
-using Camelot.Factories.Implementations;
-using Camelot.Factories.Interfaces;
 using Camelot.FileSystemWatcherWrapper.Implementations;
 using Camelot.FileSystemWatcherWrapper.Interfaces;
-using Camelot.Mediator.Implementations;
-using Camelot.Mediator.Interfaces;
-using Camelot.Service.Implementations;
-using Camelot.Service.Interfaces;
 using Camelot.Services.Behaviors.Implementations;
 using Camelot.Services.Implementations;
 using Camelot.Services.Interfaces;
@@ -18,8 +12,12 @@ using Camelot.Services.Operations.Implementations;
 using Camelot.Services.Operations.Interfaces;
 using Camelot.TaskPool.Interfaces;
 using Camelot.ViewModels;
+using Camelot.ViewModels.Factories.Implementations;
+using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.MainWindow;
 using Camelot.ViewModels.Menu;
+using Camelot.ViewModels.Services.Implementations;
+using Camelot.ViewModels.Services.Interfaces;
 using Splat;
 
 namespace Camelot
