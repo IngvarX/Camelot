@@ -11,6 +11,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow
         
         private string _lastModifiedDateTime;
         private string _fullPath;
+        private string _name;
 
         public string LastModifiedDateTime
         {
@@ -24,12 +25,17 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             set => this.RaiseAndSetIfChanged(ref _fullPath, value);
         }
         
+        public string Name
+        {
+            get => _name;
+            set => this.RaiseAndSetIfChanged(ref _name, value);
+        }
+        
         public ICommand OpenCommand { get; }
 
         protected FileSystemNodeViewModelBase(
             IFileSystemNodeOpeningBehavior fileSystemNodeOpeningBehavior)
         {
-            _fileSystemNodeOpeningBehavior = fileSystemNodeOpeningBehavior;
             _fileSystemNodeOpeningBehavior = fileSystemNodeOpeningBehavior;
 
             OpenCommand = ReactiveCommand.Create(Open);

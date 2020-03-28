@@ -34,7 +34,7 @@ namespace Camelot.ViewModels.Factories.Implementations
                 FullPath = fileModel.FullPath,
                 Size = _fileSizeFormatter.GetFormattedSize(fileModel.SizeBytes),
                 LastModifiedDateTime = fileModel.LastWriteTime.ToString(CultureInfo.CurrentCulture),
-                FileName = _pathService.GetFileNameWithoutExtension(fileModel.Name),
+                Name = _pathService.GetFileNameWithoutExtension(fileModel.Name),
                 Extension = _pathService.GetExtension(fileModel.Name)
             };
 
@@ -46,6 +46,7 @@ namespace Camelot.ViewModels.Factories.Implementations
             var fileViewModel = new DirectoryViewModel(_directorySystemNodeOpeningBehavior)
             {
                 FullPath = directoryModel.FullPath,
+                Name = _pathService.GetFileNameWithoutExtension(directoryModel.Name),
                 LastModifiedDateTime = directoryModel.LastModifiedDateTime.ToString(CultureInfo.CurrentCulture),
             };
 

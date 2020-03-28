@@ -65,18 +65,37 @@
                   HorizontalScrollBarVisibility="Disabled"
                   SelectionChanged="OnDataGridSelectionChanged" IsReadOnly="True">
             <DataGrid.Columns>
-                <!-- <DataGridTemplateColumn> -->
-                <!--     <DataTemplate> -->
-                <!--          -->
-                <!--     </DataTemplate> -->
-                <!-- </DataGridTemplateColumn> -->
                 <DataGridTextColumn Header="Name"
-                                    Binding="{Binding FileName}">
-                    </DataGridTextColumn>
-                <DataGridTextColumn Header="Type"
-                                    Binding="{Binding Extension}" />
-                <DataGridTextColumn Header="Size"
-                                    Binding="{Binding Size}" />
+                                    Binding="{Binding Name}" />
+                
+                <main:DataGridMultipleTemplatesColumn Header="Extension">
+                    <main:DataGridMultipleTemplatesColumn.CellTemplates>
+                        <DataTemplates>
+                            <DataTemplate DataType="{x:Type mainWindow:DirectoryViewModel}">
+                                <TextBlock Text="" />
+                            </DataTemplate>
+                        
+                            <DataTemplate DataType="{x:Type mainWindow:FileViewModel}">
+                                <TextBlock Text="{Binding Extension}" />
+                            </DataTemplate>
+                        </DataTemplates>
+                    </main:DataGridMultipleTemplatesColumn.CellTemplates>
+                </main:DataGridMultipleTemplatesColumn>
+                
+                <main:DataGridMultipleTemplatesColumn Header="Size">
+                    <main:DataGridMultipleTemplatesColumn.CellTemplates>
+                        <DataTemplates>
+                        <DataTemplate DataType="{x:Type mainWindow:DirectoryViewModel}">
+                            <TextBlock Text="&lt;DIR&gt;" />
+                        </DataTemplate>
+                        
+                        <DataTemplate DataType="{x:Type mainWindow:FileViewModel}">
+                            <TextBlock Text="{Binding Size}" />
+                        </DataTemplate>
+                        </DataTemplates>
+                    </main:DataGridMultipleTemplatesColumn.CellTemplates>
+                </main:DataGridMultipleTemplatesColumn>
+                
                 <DataGridTextColumn Header="Date"
                                     Binding="{Binding LastModifiedDateTime}" />
             </DataGrid.Columns>

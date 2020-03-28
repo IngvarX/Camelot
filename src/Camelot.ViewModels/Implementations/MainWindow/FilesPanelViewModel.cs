@@ -19,6 +19,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow
 {
     public class FilesPanelViewModel : ViewModelBase, IFilesPanelViewModel
     {
+        private const string ParentDirectoryName = "[..]";
+        
         private readonly IFileService _fileService;
         private readonly IDirectoryService _directoryService;
         private readonly IFilesSelectionService _filesSelectionService;
@@ -266,7 +268,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             var directories = _directoryService.GetDirectories(CurrentDirectory);
             var files = _fileService.GetFiles(CurrentDirectory);
 
-            var parentDirectoryViewModel = _fileSystemNodeViewModelFactory.Create(parentDirectory);
             var directoriesViewModels = directories
                 .Select(_fileSystemNodeViewModelFactory.Create);
             var filesViewModels = files
@@ -276,8 +277,11 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             _fileSystemNodes.Clear();
             _fileSystemNodes.AddRange(models);
 
-            if (parentDirectoryViewModel != null)
+            if (parentDirectory != null)
             {
+                var parentDirectoryViewModel = _fileSystemNodeViewModelFactory.Create(parentDirectory);
+                parentDirectoryViewModel.Name = ParentDirectoryName; // TODO: FIX
+                
                 _fileSystemNodes.Insert(0, parentDirectoryViewModel);
             }
 
