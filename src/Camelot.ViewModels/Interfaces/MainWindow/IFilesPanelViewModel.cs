@@ -9,5 +9,9 @@ namespace Camelot.ViewModels.Interfaces.MainWindow
         event EventHandler<EventArgs> ActivatedEvent;
 
         void Deactivate();
+
+        void CreateNewTab();
+
+        void CloseActiveTab();
     }
 }

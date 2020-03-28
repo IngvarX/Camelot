@@ -10,11 +10,12 @@ namespace Camelot.ViewModels.Services.Implementations
     public class FilesOperationsMediator : IFilesOperationsMediator
     {
         private readonly IDirectoryService _directoryService;
+        
+        public string OutputDirectory => InactiveFilesPanelViewModel.CurrentDirectory;
 
-        private IFilesPanelViewModel _activeViewModel;
-        private IFilesPanelViewModel _inactiveViewModel;
-
-        public string OutputDirectory => _inactiveViewModel.CurrentDirectory;
+        public IFilesPanelViewModel ActiveFilesPanelViewModel { get; private set; }
+        
+        public IFilesPanelViewModel InactiveFilesPanelViewModel { get; private set; }
 
         public FilesOperationsMediator(
             IDirectoryService directoryService)
@@ -26,10 +27,10 @@ namespace Camelot.ViewModels.Services.Implementations
 
         public void Register(IFilesPanelViewModel activeFilesPanelViewModel, IFilesPanelViewModel inactiveFilesPanelViewModel)
         {
-            (_activeViewModel, _inactiveViewModel) = (activeFilesPanelViewModel, inactiveFilesPanelViewModel);
+            (ActiveFilesPanelViewModel, InactiveFilesPanelViewModel) = (activeFilesPanelViewModel, inactiveFilesPanelViewModel);
 
-            SubscribeToEvents(_activeViewModel);
-            SubscribeToEvents(_inactiveViewModel);
+            SubscribeToEvents(ActiveFilesPanelViewModel);
+            SubscribeToEvents(InactiveFilesPanelViewModel);
 
             UpdateCurrentDirectory();
         }
@@ -42,7 +43,7 @@ namespace Camelot.ViewModels.Services.Implementations
         private void FilesPanelViewModelOnActivatedEvent(object sender, EventArgs e)
         {
             var filesPanelViewModel = (IFilesPanelViewModel) sender;
-            if (filesPanelViewModel == _activeViewModel)
+            if (filesPanelViewModel == ActiveFilesPanelViewModel)
             {
                 return;
             }
@@ -54,22 +55,22 @@ namespace Camelot.ViewModels.Services.Implementations
 
         private void DirectoryServiceOnSelectedDirectoryChanged(object sender, SelectedDirectoryChangedEventArgs e)
         {
-            _activeViewModel.CurrentDirectory = e.NewDirectory;
+            ActiveFilesPanelViewModel.CurrentDirectory = e.NewDirectory;
         }
 
         private void SwapViewModels()
         {
-            (_inactiveViewModel, _activeViewModel) = (_activeViewModel, _inactiveViewModel);
+            (InactiveFilesPanelViewModel, ActiveFilesPanelViewModel) = (ActiveFilesPanelViewModel, InactiveFilesPanelViewModel);
         }
 
         private void UpdateCurrentDirectory()
         {
-            _directoryService.SelectedDirectory = _activeViewModel.CurrentDirectory;
+            _directoryService.SelectedDirectory = ActiveFilesPanelViewModel.CurrentDirectory;
         }
 
         private void DeactivateInactiveViewModel()
         {
-            _inactiveViewModel.Deactivate();
+            InactiveFilesPanelViewModel.Deactivate();
         }
     }
 }

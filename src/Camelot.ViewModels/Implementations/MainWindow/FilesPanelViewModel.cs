@@ -128,7 +128,17 @@ namespace Camelot.ViewModels.Implementations.MainWindow
 
             DeactivatedEvent.Raise(this, EventArgs.Empty);
         }
-        
+
+        public void CreateNewTab()
+        {
+            CreateNewTab(SelectedTab);
+        }
+
+        public void CloseActiveTab()
+        {
+            CloseTab(SelectedTab);
+        }
+
         private void TabsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             SaveState();
@@ -184,19 +194,15 @@ namespace Camelot.ViewModels.Implementations.MainWindow
         private void TabViewModelOnNewTabRequested(object sender, EventArgs e)
         {
             var tabViewModel = (ITabViewModel) sender;
-            var tabPosition = _tabs.IndexOf(tabViewModel);
-            var newTabViewModel = Create(tabViewModel.CurrentDirectory);
             
-            _tabs.Insert(tabPosition, newTabViewModel);
+            CreateNewTab(tabViewModel);
         }
-        
+
         private void TabViewModelOnCloseRequested(object sender, EventArgs e)
         {
             var tabViewModel = (ITabViewModel) sender;
-            if (_tabs.Count > 1)
-            {
-                Remove(tabViewModel);
-            }
+            
+            CloseTab(tabViewModel);
         }
 
         private void TabViewModelOnClosingTabsToTheLeftRequested(object sender, EventArgs e)
@@ -223,6 +229,22 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             var tabsToClose = _tabs.Where(t => t != tabViewModel).ToArray();
 
             tabsToClose.ForEach(Remove);
+        }
+        
+        private void CreateNewTab(ITabViewModel tabViewModel)
+        {
+            var tabPosition = _tabs.IndexOf(tabViewModel);
+            var newTabViewModel = Create(tabViewModel.CurrentDirectory);
+            
+            _tabs.Insert(tabPosition, newTabViewModel);
+        }
+        
+        private void CloseTab(ITabViewModel tabViewModel)
+        {
+            if (_tabs.Count > 1)
+            {
+                Remove(tabViewModel);
+            }
         }
         
         private void SelectTab(ITabViewModel tabViewModel)

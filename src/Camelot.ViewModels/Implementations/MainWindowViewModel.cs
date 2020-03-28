@@ -1,14 +1,17 @@
-﻿using Camelot.ViewModels.Implementations.MainWindow;
+﻿using System.Windows.Input;
+using Camelot.ViewModels.Implementations.MainWindow;
 using Camelot.ViewModels.Implementations.Menu;
 using Camelot.ViewModels.Interfaces;
 using Camelot.ViewModels.Interfaces.MainWindow;
 using Camelot.ViewModels.Interfaces.Menu;
 using Camelot.ViewModels.Services.Interfaces;
+using ReactiveUI;
 
 namespace Camelot.ViewModels.Implementations
 {
     public class MainWindowViewModel : ViewModelBase
     {
+        private readonly IFilesOperationsMediator _filesOperationsMediator;
         public IOperationsViewModel OperationsViewModel { get; }
 
         public IFilesPanelViewModel LeftFilesPanelViewModel { get; }
@@ -16,6 +19,10 @@ namespace Camelot.ViewModels.Implementations
         public IFilesPanelViewModel RightFilesPanelViewModel { get; }
 
         public IMenuViewModel MenuViewModel { get; }
+        
+        public ICommand CreateNewTabCommand { get; }
+        
+        public ICommand CloseCurrentTabCommand { get; }
 
         public MainWindowViewModel(
             IFilesOperationsMediator filesOperationsMediator,
@@ -24,13 +31,28 @@ namespace Camelot.ViewModels.Implementations
             IFilesPanelViewModel rightFilesPanelViewModel,
             IMenuViewModel menuViewModel)
         {
+            _filesOperationsMediator = filesOperationsMediator;
+            
             OperationsViewModel = operationsViewModel;
             LeftFilesPanelViewModel = leftFilesPanelViewModel;
             RightFilesPanelViewModel = rightFilesPanelViewModel;
             MenuViewModel = menuViewModel;
 
+            CreateNewTabCommand = ReactiveCommand.Create(CreateNewTab);
+            CloseCurrentTabCommand = ReactiveCommand.Create(CloseCurrentTab);
+
             // TODO: from settings
             filesOperationsMediator.Register(leftFilesPanelViewModel, rightFilesPanelViewModel);
+        }
+        
+        private void CreateNewTab()
+        {
+            _filesOperationsMediator.ActiveFilesPanelViewModel.CreateNewTab();
+        }
+        
+        private void CloseCurrentTab()
+        {
+            _filesOperationsMediator.ActiveFilesPanelViewModel.CloseActiveTab();
         }
     }
 }

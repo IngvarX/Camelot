@@ -20,6 +20,8 @@
         <KeyBinding Gesture="Shift+Delete" Command="{Binding OperationsViewModel.RemoveCommand}" />
         <KeyBinding Gesture="Ctrl+C" Command="{Binding OperationsViewModel.CopyToClipboardCommand}" />
         <KeyBinding Gesture="Ctrl+V" Command="{Binding OperationsViewModel.PasteFromClipboardCommand}" />
+        <KeyBinding Gesture="Ctrl+T" Command="{Binding CreateNewTabCommand}" />
+        <KeyBinding Gesture="Ctrl+W" Command="{Binding CloseCurrentTabCommand}" />
     </Window.KeyBindings>
 
     <Design.DataContext>
