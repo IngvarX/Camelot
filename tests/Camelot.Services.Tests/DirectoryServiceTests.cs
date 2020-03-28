@@ -13,7 +13,6 @@ namespace Camelot.Services.Tests
     {
         private const string DirectoryName = nameof(DirectoryServiceTests);
         private const string NotExistingDirectoryName = "MissingDirectory";
-        private const string ParentDirectoryName = "[..]";
 
         private readonly IDirectoryService _directoryService;
 
@@ -23,8 +22,8 @@ namespace Camelot.Services.Tests
 
         public DirectoryServiceTests()
         {
-            var pathServiceMock = new Mock<IPathService>();
-            _directoryService = new DirectoryService(pathServiceMock.Object);
+            var pathService = new PathService();
+            _directoryService = new DirectoryService(pathService);
         }
 
         [Fact]
@@ -59,11 +58,21 @@ namespace Camelot.Services.Tests
         [Fact]
         public void TestGetParentDirectory()
         {
-            var directories = _directoryService.GetDirectories(CurrentDirectory);
-            Assert.Single(directories, d => d.Name == ParentDirectoryName);
+            var parentDirectory = _directoryService.GetParentDirectory(CurrentDirectory);
 
-            var parentDirectory = directories.First();
-            Assert.True(parentDirectory.Name == ParentDirectoryName);
+            Assert.NotNull(parentDirectory);
+
+            var children = _directoryService.GetDirectories(parentDirectory.FullPath);
+            Assert.Contains(children, dm => dm.FullPath == CurrentDirectory);
+        }
+        
+        [Fact]
+        public void TestGetRootParentDirectory()
+        {
+            var directory = _directoryService.GetAppRootDirectory();
+            var parentDirectory = _directoryService.GetParentDirectory(directory);
+            
+            Assert.Null(parentDirectory);
         }
 
         [Fact]

@@ -1,6 +1,6 @@
 namespace Camelot.Services.Behaviors.Interfaces
 {
-    public interface IFileOpeningBehavior
+    public interface IFileSystemNodeOpeningBehavior
     {
         void Open(string file);
     }

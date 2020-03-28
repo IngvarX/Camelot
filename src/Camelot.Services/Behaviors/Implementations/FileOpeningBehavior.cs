@@ -3,7 +3,7 @@ using Camelot.Services.Interfaces;
 
 namespace Camelot.Services.Behaviors.Implementations
 {
-    public class FileOpeningBehavior : IFileOpeningBehavior
+    public class FileOpeningBehavior : IFileSystemNodeOpeningBehavior
     {
         private readonly IFileOpeningService _fileOpeningService;
 

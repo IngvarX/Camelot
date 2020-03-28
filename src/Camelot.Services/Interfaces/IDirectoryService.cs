@@ -12,6 +12,8 @@ namespace Camelot.Services.Interfaces
         string SelectedDirectory { get; set; }
 
         bool CreateDirectory(string directory);
+        
+        DirectoryModel GetParentDirectory(string directory);
 
         IReadOnlyCollection<DirectoryModel> GetDirectories(string directory);
 

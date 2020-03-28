@@ -12,7 +12,6 @@ namespace Camelot.Services.Implementations
     public class DirectoryService : IDirectoryService
     {
         private readonly IPathService _pathService;
-        private const string ParentDirectoryName = "[..]";
 
         private string _directory;
 
@@ -59,17 +58,20 @@ namespace Camelot.Services.Implementations
             return true;
         }
 
-        public IReadOnlyCollection<DirectoryModel> GetDirectories(string directory)
+        public DirectoryModel GetParentDirectory(string directory)
         {
             var parentDirectory = new DirectoryInfo(directory).Parent;
-            var parentDirectories = parentDirectory is null
-                ? Enumerable.Empty<DirectoryModel>()
-                : new[] {CreateParentDirectory(parentDirectory)};
+
+            return parentDirectory is null ? null : CreateFrom(parentDirectory);
+        }
+
+        public IReadOnlyCollection<DirectoryModel> GetDirectories(string directory)
+        {
             var directories = Directory
                 .GetDirectories(directory)
                 .Select(CreateFrom);
 
-            return parentDirectories.Concat(directories).ToArray();
+            return directories.ToArray();
         }
 
         public bool CheckIfDirectoryExists(string directory)
@@ -97,21 +99,15 @@ namespace Camelot.Services.Implementations
         private static DirectoryModel CreateFrom(string directory)
         {
             var directoryInfo = new DirectoryInfo(directory);
-            var directoryModel = new DirectoryModel
-            {
-                Name = directoryInfo.Name,
-                FullPath = directoryInfo.FullName,
-                LastModifiedDateTime = directoryInfo.LastWriteTime
-            };
 
-            return directoryModel;
+            return CreateFrom(directoryInfo);
         }
 
-        private static DirectoryModel CreateParentDirectory(FileSystemInfo directoryInfo)
+        private static DirectoryModel CreateFrom(FileSystemInfo directoryInfo)
         {
             var directoryModel = new DirectoryModel
             {
-                Name = ParentDirectoryName,
+                Name = directoryInfo.Name,
                 FullPath = directoryInfo.FullName,
                 LastModifiedDateTime = directoryInfo.LastWriteTime
             };

@@ -4,6 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using Camelot.ViewModels.Implementations.MainWindow;
+using Camelot.ViewModels.Interfaces.MainWindow;
 using DynamicData;
 
 namespace Camelot.Views.Main
@@ -43,18 +44,18 @@ namespace Camelot.Views.Main
         private void OnDataGridSelectionChanged(object sender, SelectionChangedEventArgs args)
         {
             // TODO: swap RemovedItems and AddedItems after fixing bug in avalonia
-            var addedItems = args.RemovedItems.Cast<FileViewModel>();
-            ViewModel.SelectedFiles.AddRange(addedItems);
+            var addedItems = args.RemovedItems.Cast<IFileSystemNodeViewModel>();
+            ViewModel.SelectedFileSystemNodes.AddRange(addedItems);
 
-            var removedItems = args.AddedItems.Cast<FileViewModel>();
-            ViewModel.SelectedFiles.RemoveMany(removedItems);
+            var removedItems = args.AddedItems.Cast<IFileSystemNodeViewModel>();
+            ViewModel.SelectedFileSystemNodes.RemoveMany(removedItems);
         }
 
         private void OnDataGridCellPointerPressed(object sender, DataGridCellPointerPressedEventArgs args)
         {
             if (args.PointerPressedEventArgs.ClickCount == 2)
             {
-                var fileViewModel = (FileViewModel)args.Cell.DataContext;
+                var fileViewModel = (IFileSystemNodeViewModel)args.Cell.DataContext;
 
                 fileViewModel.OpenCommand.Execute(null);
             }

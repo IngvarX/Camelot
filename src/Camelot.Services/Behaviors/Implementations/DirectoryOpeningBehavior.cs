@@ -3,7 +3,7 @@ using Camelot.Services.Interfaces;
 
 namespace Camelot.Services.Behaviors.Implementations
 {
-    public class DirectoryOpeningBehavior : IFileOpeningBehavior
+    public class DirectoryOpeningBehavior : IFileSystemNodeOpeningBehavior
     {
         private readonly IDirectoryService _directoryService;
 

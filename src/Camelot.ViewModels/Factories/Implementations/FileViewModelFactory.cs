@@ -8,30 +8,28 @@ using Camelot.ViewModels.Interfaces.MainWindow;
 
 namespace Camelot.ViewModels.Factories.Implementations
 {
-    public class FileViewModelFactory : IFileViewModelFactory
+    public class FileSystemNodeViewModelFactory : IFileSystemNodeViewModelFactory
     {
-        private const string DirectoryFakeSize = "<DIR>";
-
-        private readonly IFileOpeningBehavior _fileOpeningBehavior;
-        private readonly IFileOpeningBehavior _directoryOpeningBehavior;
+        private readonly IFileSystemNodeOpeningBehavior _fileSystemNodeOpeningBehavior;
+        private readonly IFileSystemNodeOpeningBehavior _directorySystemNodeOpeningBehavior;
         private readonly IFileSizeFormatter _fileSizeFormatter;
         private readonly IPathService _pathService;
 
-        public FileViewModelFactory(
-            IFileOpeningBehavior fileOpeningBehavior,
-            IFileOpeningBehavior directoryOpeningBehavior,
+        public FileSystemNodeViewModelFactory(
+            IFileSystemNodeOpeningBehavior fileSystemNodeOpeningBehavior,
+            IFileSystemNodeOpeningBehavior directorySystemNodeOpeningBehavior,
             IFileSizeFormatter fileSizeFormatter,
             IPathService pathService)
         {
-            _fileOpeningBehavior = fileOpeningBehavior;
-            _directoryOpeningBehavior = directoryOpeningBehavior;
+            _fileSystemNodeOpeningBehavior = fileSystemNodeOpeningBehavior;
+            _directorySystemNodeOpeningBehavior = directorySystemNodeOpeningBehavior;
             _fileSizeFormatter = fileSizeFormatter;
             _pathService = pathService;
         }
 
-        public IFileViewModel Create(FileModel fileModel)
+        public IFileSystemNodeViewModel Create(FileModel fileModel)
         {
-            var fileViewModel = new FileViewModel(_fileOpeningBehavior)
+            var fileViewModel = new FileViewModel(_fileSystemNodeOpeningBehavior)
             {
                 FullPath = fileModel.FullPath,
                 Size = _fileSizeFormatter.GetFormattedSize(fileModel.SizeBytes),
@@ -43,15 +41,12 @@ namespace Camelot.ViewModels.Factories.Implementations
             return fileViewModel;
         }
 
-        public IFileViewModel Create(DirectoryModel directoryModel)
+        public IFileSystemNodeViewModel Create(DirectoryModel directoryModel)
         {
-            var fileViewModel = new FileViewModel(_directoryOpeningBehavior)
+            var fileViewModel = new DirectoryViewModel(_directorySystemNodeOpeningBehavior)
             {
                 FullPath = directoryModel.FullPath,
-                Size = DirectoryFakeSize,
                 LastModifiedDateTime = directoryModel.LastModifiedDateTime.ToString(CultureInfo.CurrentCulture),
-                FileName = directoryModel.Name,
-                Extension = string.Empty
             };
 
             return fileViewModel;

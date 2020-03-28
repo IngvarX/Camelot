@@ -59,14 +59,20 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
-        <DataGrid x:Name="FilesDataGrid" Grid.Row="2" Items="{Binding Files}"
+        <DataGrid x:Name="FilesDataGrid" Grid.Row="2" Items="{Binding FileSystemNodes}"
                   CellPointerPressed="OnDataGridCellPointerPressed"
                   PointerReleased="OnDataGridPointerReleased" VerticalScrollBarVisibility="Visible"
                   HorizontalScrollBarVisibility="Disabled"
                   SelectionChanged="OnDataGridSelectionChanged" IsReadOnly="True">
             <DataGrid.Columns>
+                <!-- <DataGridTemplateColumn> -->
+                <!--     <DataTemplate> -->
+                <!--          -->
+                <!--     </DataTemplate> -->
+                <!-- </DataGridTemplateColumn> -->
                 <DataGridTextColumn Header="Name"
-                                    Binding="{Binding FileName}" />
+                                    Binding="{Binding FileName}">
+                    </DataGridTextColumn>
                 <DataGridTextColumn Header="Type"
                                     Binding="{Binding Extension}" />
                 <DataGridTextColumn Header="Size"

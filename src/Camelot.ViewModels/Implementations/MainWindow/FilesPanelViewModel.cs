@@ -22,14 +22,14 @@ namespace Camelot.ViewModels.Implementations.MainWindow
         private readonly IFileService _fileService;
         private readonly IDirectoryService _directoryService;
         private readonly IFilesSelectionService _filesSelectionService;
-        private readonly IFileViewModelFactory _fileViewModelFactory;
+        private readonly IFileSystemNodeViewModelFactory _fileSystemNodeViewModelFactory;
         private readonly IFileSystemWatchingService _fileSystemWatchingService;
         private readonly IApplicationDispatcher _applicationDispatcher;
         private readonly IFilesPanelStateService _filesPanelStateService;
         private readonly ITabViewModelFactory _tabViewModelFactory;
 
-        private readonly ObservableCollection<IFileViewModel> _files;
-        private readonly ObservableCollection<IFileViewModel> _selectedFiles;
+        private readonly ObservableCollection<IFileSystemNodeViewModel> _fileSystemNodes;
+        private readonly ObservableCollection<IFileSystemNodeViewModel> _selectedFileSystemNodes;
         private readonly ObservableCollection<ITabViewModel> _tabs;
 
         private string _currentDirectory;
@@ -51,9 +51,9 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             }
         }
 
-        public IEnumerable<IFileViewModel> Files => _files;
+        public IEnumerable<IFileSystemNodeViewModel> FileSystemNodes => _fileSystemNodes;
 
-        public IList<IFileViewModel> SelectedFiles => _selectedFiles;
+        public IList<IFileSystemNodeViewModel> SelectedFileSystemNodes => _selectedFileSystemNodes;
 
         public IEnumerable<ITabViewModel> Tabs => _tabs;
 
@@ -75,7 +75,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             IFileService fileService,
             IDirectoryService directoryService,
             IFilesSelectionService filesSelectionService,
-            IFileViewModelFactory fileViewModelFactory,
+            IFileSystemNodeViewModelFactory fileSystemNodeViewModelFactory,
             IFileSystemWatchingService fileSystemWatchingService,
             IApplicationDispatcher applicationDispatcher,
             IFilesPanelStateService filesPanelStateService,
@@ -84,14 +84,14 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             _fileService = fileService;
             _directoryService = directoryService;
             _filesSelectionService = filesSelectionService;
-            _fileViewModelFactory = fileViewModelFactory;
+            _fileSystemNodeViewModelFactory = fileSystemNodeViewModelFactory;
             _fileSystemWatchingService = fileSystemWatchingService;
             _applicationDispatcher = applicationDispatcher;
             _filesPanelStateService = filesPanelStateService;
             _tabViewModelFactory = tabViewModelFactory;
 
-            _files = new ObservableCollection<IFileViewModel>();
-            _selectedFiles = new ObservableCollection<IFileViewModel>();
+            _fileSystemNodes = new ObservableCollection<IFileSystemNodeViewModel>();
+            _selectedFileSystemNodes = new ObservableCollection<IFileSystemNodeViewModel>();
 
             ActivateCommand = ReactiveCommand.Create(Activate);
             RefreshCommand = ReactiveCommand.Create(ReloadFiles);
@@ -120,8 +120,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow
 
         public void Deactivate()
         {
-            var selectedFiles = SelectedFiles.Select(f => f.FullPath).ToArray();
-            SelectedFiles.Clear();
+            var selectedFiles = SelectedFileSystemNodes.Select(f => f.FullPath).ToArray();
+            SelectedFileSystemNodes.Clear();
             _filesSelectionService.UnselectFiles(selectedFiles);
 
             DeactivatedEvent.Raise(this, EventArgs.Empty);
@@ -237,7 +237,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow
 
         private void SubscribeToEvents()
         {
-            _selectedFiles.CollectionChanged += SelectedFilesOnCollectionChanged;
+            _selectedFileSystemNodes.CollectionChanged += SelectedFileSystemNodesOnCollectionChanged;
 
             void ReloadInUiThread() => _applicationDispatcher.Dispatch(ReloadFiles);
 
@@ -262,25 +262,32 @@ namespace Camelot.ViewModels.Implementations.MainWindow
 
             _fileSystemWatchingService.StopWatching();
 
+            var parentDirectory = _directoryService.GetParentDirectory(CurrentDirectory);
             var directories = _directoryService.GetDirectories(CurrentDirectory);
             var files = _fileService.GetFiles(CurrentDirectory);
 
-            var directoriesModels = directories
-                .Select(_fileViewModelFactory.Create);
-            var filesModels = files
-                .Select(_fileViewModelFactory.Create);
-            var models = directoriesModels.Concat(filesModels).ToArray();
+            var parentDirectoryViewModel = _fileSystemNodeViewModelFactory.Create(parentDirectory);
+            var directoriesViewModels = directories
+                .Select(_fileSystemNodeViewModelFactory.Create);
+            var filesViewModels = files
+                .Select(_fileSystemNodeViewModelFactory.Create);
+            var models = directoriesViewModels.Concat(filesViewModels);
 
-            _files.Clear();
-            _files.AddRange(models);
+            _fileSystemNodes.Clear();
+            _fileSystemNodes.AddRange(models);
+
+            if (parentDirectoryViewModel != null)
+            {
+                _fileSystemNodes.Insert(0, parentDirectoryViewModel);
+            }
 
             _fileSystemWatchingService.StartWatching(CurrentDirectory);
         }
 
-        private void SelectedFilesOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void SelectedFileSystemNodesOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             var filesToAdd = e.NewItems?
-                .Cast<FileViewModel>()
+                .Cast<IFileSystemNodeViewModel>()
                 .Select(f => f.FullPath);
             if (filesToAdd != null)
             {
@@ -288,7 +295,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             }
 
             var filesToRemove = e.OldItems?
-                .Cast<FileViewModel>()
+                .Cast<IFileSystemNodeViewModel>()
                 .Select(f => f.FullPath);
             if (filesToRemove != null)
             {

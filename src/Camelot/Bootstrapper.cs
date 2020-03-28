@@ -104,7 +104,7 @@ namespace Camelot
             services.RegisterLazySingleton<ITabViewModelFactory>(() => new TabViewModelFactory(
                 resolver.GetService<IPathService>()
             ));
-            services.RegisterLazySingleton<IFileViewModelFactory>(() => new FileViewModelFactory(
+            services.RegisterLazySingleton<IFileSystemNodeViewModelFactory>(() => new FileSystemNodeViewModelFactory(
                 resolver.GetService<FileOpeningBehavior>(),
                 resolver.GetService<DirectoryOpeningBehavior>(),
                 resolver.GetService<IFileSizeFormatter>(),
@@ -143,7 +143,7 @@ namespace Camelot
                 resolver.GetService<IFileService>(),
                 resolver.GetService<IDirectoryService>(),
                 resolver.GetService<IFilesSelectionService>(),
-                resolver.GetService<IFileViewModelFactory>(),
+                resolver.GetService<IFileSystemNodeViewModelFactory>(),
                 resolver.GetService<IFileSystemWatchingService>(),
                 resolver.GetService<IApplicationDispatcher>(),
                 filesPanelStateService,
