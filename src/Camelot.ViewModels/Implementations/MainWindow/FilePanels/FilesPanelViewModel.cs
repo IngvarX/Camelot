@@ -10,12 +10,14 @@ using ApplicationDispatcher.Interfaces;
 using Camelot.DataAccess.Models;
 using Camelot.Extensions;
 using Camelot.Services.Interfaces;
+using Camelot.Services.Models;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Interfaces.MainWindow;
+using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using DynamicData;
 using ReactiveUI;
 
-namespace Camelot.ViewModels.Implementations.MainWindow
+namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 {
     public class FilesPanelViewModel : ViewModelBase, IFilesPanelViewModel
     {
@@ -36,6 +38,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow
 
         private string _currentDirectory;
         private ITabViewModel _selectedTab;
+        private SortingColumn _sortingColumn;
+        private bool _isSortingByAscendingEnabled;
 
         public string CurrentDirectory
         {
@@ -53,6 +57,18 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             }
         }
 
+        public SortingColumn SortingColumn
+        {
+            get => _sortingColumn;
+            set => this.RaiseAndSetIfChanged(ref _sortingColumn, value);
+        }
+        
+        public bool IsSortingByAscendingEnabled
+        {
+            get => _isSortingByAscendingEnabled;
+            set => this.RaiseAndSetIfChanged(ref _isSortingByAscendingEnabled, value);
+        }
+
         public IEnumerable<IFileSystemNodeViewModel> FileSystemNodes => _fileSystemNodes;
 
         public IList<IFileSystemNodeViewModel> SelectedFileSystemNodes => _selectedFileSystemNodes;
@@ -64,14 +80,16 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             get => _selectedTab;
             set => this.RaiseAndSetIfChanged(ref _selectedTab, value);
         }
+        
+        public event EventHandler<EventArgs> ActivatedEvent;
+
+        public event EventHandler<EventArgs> DeactivatedEvent;
 
         public ICommand ActivateCommand { get; }
 
         public ICommand RefreshCommand { get; }
-
-        public event EventHandler<EventArgs> ActivatedEvent;
-
-        public event EventHandler<EventArgs> DeactivatedEvent;
+        
+        public ICommand SortFilesCommand { get; }
 
         public FilesPanelViewModel(
             IFileService fileService,
@@ -97,6 +115,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow
 
             ActivateCommand = ReactiveCommand.Create(Activate);
             RefreshCommand = ReactiveCommand.Create(ReloadFiles);
+            SortFilesCommand = ReactiveCommand.Create<SortingColumn>(SortFiles);
 
             var state = _filesPanelStateService.GetPanelState();
             if (!state.Tabs.Any())
@@ -137,6 +156,20 @@ namespace Camelot.ViewModels.Implementations.MainWindow
         public void CloseActiveTab()
         {
             CloseTab(SelectedTab);
+        }
+        
+        private void SortFiles(SortingColumn sortingColumn)
+        {
+            if (SortingColumn == sortingColumn)
+            {
+                IsSortingByAscendingEnabled = !IsSortingByAscendingEnabled;
+            }
+            else
+            {
+                SortingColumn = sortingColumn;
+            }
+            
+            ReloadFiles();
         }
 
         private void TabsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -290,9 +323,9 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             var directories = _directoryService.GetDirectories(CurrentDirectory);
             var files = _fileService.GetFiles(CurrentDirectory);
 
-            var directoriesViewModels = directories
+            var directoriesViewModels = OrderDirectories(directories)
                 .Select(_fileSystemNodeViewModelFactory.Create);
-            var filesViewModels = files
+            var filesViewModels = OrderFiles(files)
                 .Select(_fileSystemNodeViewModelFactory.Create);
             var models = directoriesViewModels.Concat(filesViewModels);
 
@@ -310,6 +343,53 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             _fileSystemWatchingService.StartWatching(CurrentDirectory);
         }
 
+        // TODO: to comparer
+        private IEnumerable<DirectoryModel> OrderDirectories(
+            IEnumerable<DirectoryModel> directories)
+        {
+            IEnumerable<DirectoryModel> result; 
+            switch (SortingColumn)
+            {
+                case SortingColumn.Extension:
+                case SortingColumn.Size:
+                case SortingColumn.Name:
+                    result = directories.OrderBy(vm => vm.Name.StartsWith(".") ? vm.Name.Substring(1) : vm.Name);
+                    break;
+                case SortingColumn.Date:
+                    result = directories.OrderBy(vm => vm.LastModifiedDateTime);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(SortingColumn));
+            }
+
+            return IsSortingByAscendingEnabled ? result : result.Reverse();
+        }
+        
+        private IEnumerable<FileModel> OrderFiles(
+            IEnumerable<FileModel> files)
+        {
+            IEnumerable<FileModel> result; 
+            switch (SortingColumn)
+            {
+                case SortingColumn.Extension:
+                    result = files.OrderBy(f => f.Extension);
+                    break;
+                case SortingColumn.Size:
+                    result = files.OrderBy(f => f.SizeBytes);
+                    break;
+                case SortingColumn.Name:
+                    result = files.OrderBy(vm => vm.Name.StartsWith(".") ? vm.Name.Substring(1) : vm.Name);
+                    break;
+                case SortingColumn.Date:
+                    result = files.OrderBy(vm => vm.LastModifiedDateTime);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(SortingColumn));
+            }
+
+            return IsSortingByAscendingEnabled ? result : result.Reverse();
+        }
+        
         private void SelectedFileSystemNodesOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             var filesToAdd = e.NewItems?

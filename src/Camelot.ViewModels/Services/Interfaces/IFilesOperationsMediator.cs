@@ -1,4 +1,5 @@
 using Camelot.ViewModels.Interfaces.MainWindow;
+using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 
 namespace Camelot.ViewModels.Services.Interfaces
 {

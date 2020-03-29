@@ -1,5 +1,6 @@
 using Camelot.ViewModels.Implementations;
 using Camelot.ViewModels.Interfaces.MainWindow;
+using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.Menu;
 using Camelot.ViewModels.Services.Interfaces;
 using Moq;

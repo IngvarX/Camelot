@@ -1,6 +1,6 @@
 using System.Windows.Input;
 
-namespace Camelot.ViewModels.Interfaces.MainWindow
+namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels
 {
     public interface IFileSystemNodeViewModel
     {

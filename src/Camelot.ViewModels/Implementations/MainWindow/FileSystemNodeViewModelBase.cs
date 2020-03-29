@@ -1,6 +1,6 @@
 using System.Windows.Input;
 using Camelot.Services.Behaviors.Interfaces;
-using Camelot.ViewModels.Interfaces.MainWindow;
+using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using ReactiveUI;
 
 namespace Camelot.ViewModels.Implementations.MainWindow

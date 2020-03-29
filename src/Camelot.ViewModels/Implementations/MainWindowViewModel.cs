@@ -3,6 +3,7 @@ using Camelot.ViewModels.Implementations.MainWindow;
 using Camelot.ViewModels.Implementations.Menu;
 using Camelot.ViewModels.Interfaces;
 using Camelot.ViewModels.Interfaces.MainWindow;
+using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.Menu;
 using Camelot.ViewModels.Services.Interfaces;
 using ReactiveUI;

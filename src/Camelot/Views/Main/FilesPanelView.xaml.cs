@@ -3,8 +3,8 @@ using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Markup.Xaml;
-using Camelot.ViewModels.Implementations.MainWindow;
-using Camelot.ViewModels.Interfaces.MainWindow;
+using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
+using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using DynamicData;
 
 namespace Camelot.Views.Main
