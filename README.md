@@ -26,3 +26,7 @@ dotnet run --project src/Camelot/Camelot.csproj
 ## Screenshots
 *Camelot target UI*
 ![Camelot](/docs/Camelot.png)
+
+## Credits
+
+Icon made by [Freepik](https://www.flaticon.com/authors/freepik) from [www.flaticon.com](https://www.flaticon.com/)
