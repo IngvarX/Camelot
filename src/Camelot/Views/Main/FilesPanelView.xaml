@@ -94,12 +94,23 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                
-                <DataGridTextColumn Binding="{Binding Name}">
-                    <DataGridTextColumn.Header>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.Header>
                         <Button Content="Name" Command="{Binding SortFilesCommand}"
                                 CommandParameter="{x:Static filePanels:SortingColumn.Name}" />
-                    </DataGridTextColumn.Header>
-                </DataGridTextColumn>
+                    </DataGridTemplateColumn.Header>
+                    
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <TextBlock Text="{Binding Name}" IsVisible="{Binding !IsEditing}"
+                                           PointerPressed="OnNameTextBlockPointerPressed" />
+                                <TextBox Text="{Binding FullName}" IsVisible="{Binding IsEditing}"
+                                         LostFocus="OnFullNameTextBoxLostFocus" />
+                            </Grid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.Header>
@@ -116,7 +127,8 @@
                                     </DataTemplate>
                                     
                                     <DataTemplate DataType="{x:Type filePanels:FileViewModel}">
-                                        <TextBlock Text="{Binding Extension}" />
+                                        <TextBlock Text="{Binding Extension}"
+                                                   IsVisible="{Binding !IsEditing}" />
                                     </DataTemplate>
                                 </ContentControl.DataTemplates>
                             </ContentControl>

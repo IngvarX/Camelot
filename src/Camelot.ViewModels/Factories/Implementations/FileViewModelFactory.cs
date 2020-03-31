@@ -34,13 +34,15 @@ namespace Camelot.ViewModels.Factories.Implementations
 
         public IFileSystemNodeViewModel Create(FileModel fileModel)
         {
+            var extension = _pathService.GetExtension(fileModel.Name);
             var fileViewModel = new FileViewModel(_fileSystemNodeOpeningBehavior, _operationsService)
             {
                 FullPath = fileModel.FullPath,
                 Size = _fileSizeFormatter.GetFormattedSize(fileModel.SizeBytes),
                 LastModifiedDateTime = fileModel.LastWriteTime.ToString(CultureInfo.CurrentCulture),
                 Name = _pathService.GetFileNameWithoutExtension(fileModel.Name),
-                Extension = _pathService.GetExtension(fileModel.Name)
+                Extension = _pathService.GetExtension(fileModel.Name),
+                FullName = _pathService.GetFileName(fileModel.Name)
             };
 
             return fileViewModel;
@@ -48,11 +50,13 @@ namespace Camelot.ViewModels.Factories.Implementations
 
         public IFileSystemNodeViewModel Create(DirectoryModel directoryModel)
         {
+            var name = _pathService.GetFileNameWithoutExtension(directoryModel.Name);
             var fileViewModel = new DirectoryViewModel(_directorySystemNodeOpeningBehavior, _operationsService)
             {
                 FullPath = directoryModel.FullPath,
-                Name = _pathService.GetFileNameWithoutExtension(directoryModel.Name),
+                Name = name,
                 LastModifiedDateTime = directoryModel.LastModifiedDateTime.ToString(CultureInfo.CurrentCulture),
+                FullName = name
             };
 
             return fileViewModel;

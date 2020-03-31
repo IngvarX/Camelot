@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
@@ -66,16 +67,19 @@ namespace Camelot.Views.Main
             ViewModel.ActivateCommand.Execute(null);
         }
 
-        private void OnDataGridPreparingCellForEdit(object sender, DataGridPreparingCellForEditEventArgs args)
+        private void OnNameTextBlockPointerPressed(object sender, PointerPressedEventArgs args)
         {
-            var viewModel = (IFileSystemNodeViewModel) args.Row.DataContext;
+            var textBlock = (TextBlock) sender;
+            // TODO: check if selected?
+            var viewModel = (IFileSystemNodeViewModel) textBlock.DataContext;
 
             viewModel.IsEditing = true;
         }
 
-        private void OnDataGridCellEditEnded(object sender, DataGridCellEditEndedEventArgs args)
+        private void OnFullNameTextBoxLostFocus(object sender, RoutedEventArgs args)
         {
-            var viewModel = (IFileSystemNodeViewModel) args.Row.DataContext;
+            var textBlock = (TextBox) sender;
+            var viewModel = (IFileSystemNodeViewModel) textBlock.DataContext;
 
             viewModel.IsEditing = false;
         }

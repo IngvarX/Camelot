@@ -1,5 +1,3 @@
-using System;
-using System.Reactive.Linq;
 using System.Windows.Input;
 using Camelot.Services.Behaviors.Interfaces;
 using Camelot.Services.Interfaces;
@@ -46,9 +44,16 @@ namespace Camelot.ViewModels.Implementations.MainWindow
         public bool IsEditing
         {
             get => _isEditing;
-            set => this.RaiseAndSetIfChanged(ref _isEditing, value);
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _isEditing, value);
+                if (!value)
+                {
+                    Rename();
+                }
+            }
         }
-        
+
         public ICommand OpenCommand { get; }
 
         protected FileSystemNodeViewModelBase(
@@ -59,17 +64,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             _operationsService = operationsService;
 
             OpenCommand = ReactiveCommand.Create(Open);
-
-            this
-                .WhenAnyValue(vm => vm.IsEditing)
-                .Throttle(TimeSpan.FromMilliseconds(500))
-                .Subscribe(isEditing =>
-                {
-                    // if (!isEditing)
-                    // {
-                    //     Rename();
-                    // }
-                });
         }
 
         private void Open()
