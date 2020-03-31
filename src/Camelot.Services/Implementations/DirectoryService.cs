@@ -39,7 +39,7 @@ namespace Camelot.Services.Implementations
             _pathService = pathService;
         }
 
-        public bool CreateDirectory(string directory)
+        public bool Create(string directory)
         {
             if (string.IsNullOrWhiteSpace(directory))
             {
@@ -74,7 +74,7 @@ namespace Camelot.Services.Implementations
             return directories.ToArray();
         }
 
-        public bool CheckIfDirectoryExists(string directory)
+        public bool CheckIfExists(string directory)
         {
             return Directory.Exists(directory);
         }
@@ -91,9 +91,17 @@ namespace Camelot.Services.Implementations
                 .ToArray();
         }
 
-        public void RemoveDirectoryRecursively(string directory)
+        public void RemoveRecursively(string directory)
         {
             Directory.Delete(directory, true);
+        }
+
+        public void Rename(string directoryPath, string newName)
+        {
+            var parentDirectory = _pathService.GetParentDirectory(directoryPath);
+            var newDirectoryPath = _pathService.Combine(parentDirectory, newName);
+            
+            Directory.Move(directoryPath, newDirectoryPath);
         }
 
         private static DirectoryModel CreateFrom(string directory)

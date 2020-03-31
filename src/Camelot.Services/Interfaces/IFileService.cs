@@ -9,10 +9,12 @@ namespace Camelot.Services.Interfaces
         // TODO: pass ISpecification
         IReadOnlyCollection<FileModel> GetFiles(string directory);
 
-        bool CheckIfFileExists(string file);
+        bool CheckIfExists(string file);
 
-        Task CopyFileAsync(string source, string destination);
+        Task CopyAsync(string source, string destination);
 
-        void RemoveFile(string file);
+        void Remove(string file);
+
+        void Rename(string filePath, string newName);
     }
 }

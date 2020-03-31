@@ -11,18 +11,20 @@ namespace Camelot.Services.Interfaces
 
         string SelectedDirectory { get; set; }
 
-        bool CreateDirectory(string directory);
+        bool Create(string directory);
         
         DirectoryModel GetParentDirectory(string directory);
 
         IReadOnlyCollection<DirectoryModel> GetDirectories(string directory);
 
-        bool CheckIfDirectoryExists(string directory);
+        bool CheckIfExists(string directory);
 
         string GetAppRootDirectory();
 
         IReadOnlyCollection<string> GetFilesRecursively(string directory);
 
-        void RemoveDirectoryRecursively(string directory);
+        void RemoveRecursively(string directory);
+
+        void Rename(string directoryPath, string newName);
     }
 }

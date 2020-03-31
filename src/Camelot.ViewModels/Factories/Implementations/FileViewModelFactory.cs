@@ -16,22 +16,25 @@ namespace Camelot.ViewModels.Factories.Implementations
         private readonly IFileSystemNodeOpeningBehavior _directorySystemNodeOpeningBehavior;
         private readonly IFileSizeFormatter _fileSizeFormatter;
         private readonly IPathService _pathService;
+        private readonly IOperationsService _operationsService;
 
         public FileSystemNodeViewModelFactory(
             IFileSystemNodeOpeningBehavior fileSystemNodeOpeningBehavior,
             IFileSystemNodeOpeningBehavior directorySystemNodeOpeningBehavior,
             IFileSizeFormatter fileSizeFormatter,
-            IPathService pathService)
+            IPathService pathService,
+            IOperationsService operationsService)
         {
             _fileSystemNodeOpeningBehavior = fileSystemNodeOpeningBehavior;
             _directorySystemNodeOpeningBehavior = directorySystemNodeOpeningBehavior;
             _fileSizeFormatter = fileSizeFormatter;
             _pathService = pathService;
+            _operationsService = operationsService;
         }
 
         public IFileSystemNodeViewModel Create(FileModel fileModel)
         {
-            var fileViewModel = new FileViewModel(_fileSystemNodeOpeningBehavior)
+            var fileViewModel = new FileViewModel(_fileSystemNodeOpeningBehavior, _operationsService)
             {
                 FullPath = fileModel.FullPath,
                 Size = _fileSizeFormatter.GetFormattedSize(fileModel.SizeBytes),
@@ -45,7 +48,7 @@ namespace Camelot.ViewModels.Factories.Implementations
 
         public IFileSystemNodeViewModel Create(DirectoryModel directoryModel)
         {
-            var fileViewModel = new DirectoryViewModel(_directorySystemNodeOpeningBehavior)
+            var fileViewModel = new DirectoryViewModel(_directorySystemNodeOpeningBehavior, _operationsService)
             {
                 FullPath = directoryModel.FullPath,
                 Name = _pathService.GetFileNameWithoutExtension(directoryModel.Name),

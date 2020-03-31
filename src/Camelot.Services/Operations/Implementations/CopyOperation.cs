@@ -43,7 +43,7 @@ namespace Camelot.Services.Operations.Implementations
 
             CreateOutputDirectoryIfNeeded(_destinationFile);
 
-            await _fileService.CopyFileAsync(_sourceFile, _destinationFile);
+            await _fileService.CopyAsync(_sourceFile, _destinationFile);
 
             FireOperationFinishedEvent();
         }
@@ -53,9 +53,9 @@ namespace Camelot.Services.Operations.Implementations
             try
             {
                 var outputDirectory = _pathService.GetParentDirectory(destinationFile);
-                if (!_directoryService.CheckIfDirectoryExists(outputDirectory))
+                if (!_directoryService.CheckIfExists(outputDirectory))
                 {
-                    _directoryService.CreateDirectory(outputDirectory);
+                    _directoryService.Create(outputDirectory);
                 }
             }
             catch

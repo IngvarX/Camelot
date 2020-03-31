@@ -14,5 +14,7 @@ namespace Camelot.Services.Interfaces
         void CreateDirectory(string sourceDirectory, string directoryName);
 
         Task RemoveFilesAsync(IReadOnlyCollection<string> files);
+
+        void Rename(string path, string newName);
     }
 }

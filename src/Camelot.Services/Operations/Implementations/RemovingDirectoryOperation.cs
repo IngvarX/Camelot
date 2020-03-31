@@ -17,7 +17,7 @@ namespace Camelot.Services.Operations.Implementations
 
         protected override Task RemoveAsync(string pathToRemove)
         {
-            _directoryService.RemoveDirectoryRecursively(pathToRemove);
+            _directoryService.RemoveRecursively(pathToRemove);
 
             return Task.CompletedTask;
         }

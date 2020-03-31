@@ -110,7 +110,8 @@ namespace Camelot
                 resolver.GetService<FileOpeningBehavior>(),
                 resolver.GetService<DirectoryOpeningBehavior>(),
                 resolver.GetService<IFileSizeFormatter>(),
-                resolver.GetService<IPathService>()
+                resolver.GetService<IPathService>(),
+                resolver.GetService<IOperationsService>()
 
             ));
             services.Register<IOperationsViewModel>(() => new OperationsViewModel(

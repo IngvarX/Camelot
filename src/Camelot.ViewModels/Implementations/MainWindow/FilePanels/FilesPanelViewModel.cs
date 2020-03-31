@@ -312,7 +312,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         private void ReloadFiles()
         {
-            if (!_directoryService.CheckIfDirectoryExists(CurrentDirectory))
+            if (!_directoryService.CheckIfExists(CurrentDirectory))
             {
                 return;
             }

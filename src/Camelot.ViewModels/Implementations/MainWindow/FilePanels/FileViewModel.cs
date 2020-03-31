@@ -1,4 +1,5 @@
 using Camelot.Services.Behaviors.Interfaces;
+using Camelot.Services.Interfaces;
 
 namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 {
@@ -9,8 +10,9 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         public string Size { get; set; }
 
         public FileViewModel(
-            IFileSystemNodeOpeningBehavior fileSystemNodeOpeningBehavior)
-            : base(fileSystemNodeOpeningBehavior)
+            IFileSystemNodeOpeningBehavior fileSystemNodeOpeningBehavior,
+            IOperationsService operationsService)
+            : base(fileSystemNodeOpeningBehavior, operationsService)
         {
             
         }

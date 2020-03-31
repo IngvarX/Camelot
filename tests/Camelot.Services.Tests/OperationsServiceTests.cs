@@ -64,7 +64,7 @@ namespace Camelot.Services.Tests
             var fileOpeningServiceMock = new Mock<IFileOpeningService>();
             var fileServiceMock = new Mock<IFileService>();
             fileServiceMock
-                .Setup(m => m.CheckIfFileExists(FileName))
+                .Setup(m => m.CheckIfExists(FileName))
                 .Returns(true)
                 .Verifiable();
             var pathServiceMock = new Mock<IPathService>();
@@ -79,7 +79,7 @@ namespace Camelot.Services.Tests
             await operationsService.RemoveFilesAsync(new[] {FileName});
 
             operationMock.Verify(m => m.RunAsync(It.IsAny<CancellationToken>()), Times.Once());
-            fileServiceMock.Verify(m => m.CheckIfFileExists(FileName), Times.Once());
+            fileServiceMock.Verify(m => m.CheckIfExists(FileName), Times.Once());
         }
 
         [Fact]
@@ -108,7 +108,7 @@ namespace Camelot.Services.Tests
             var fileOpeningServiceMock = new Mock<IFileOpeningService>();
             var fileServiceMock = new Mock<IFileService>();
             fileServiceMock
-                .Setup(m => m.CheckIfFileExists(FileName))
+                .Setup(m => m.CheckIfExists(FileName))
                 .Returns(true);
             var pathServiceMock = new Mock<IPathService>();
             pathServiceMock
@@ -159,7 +159,7 @@ namespace Camelot.Services.Tests
             var fileOpeningServiceMock = new Mock<IFileOpeningService>();
             var fileServiceMock = new Mock<IFileService>();
             fileServiceMock
-                .Setup(m => m.CheckIfFileExists(FileName))
+                .Setup(m => m.CheckIfExists(FileName))
                 .Returns(true);
             var pathServiceMock = new Mock<IPathService>();
             pathServiceMock
@@ -191,7 +191,7 @@ namespace Camelot.Services.Tests
             var directoryServiceMock = new Mock<IDirectoryService>();
             var fullDirectoryPath = Path.Combine(SelectedDirectoryName, DirectoryName);
             directoryServiceMock
-                .Setup(m => m.CreateDirectory(fullDirectoryPath))
+                .Setup(m => m.Create(fullDirectoryPath))
                 .Verifiable();
             var fileOpeningServiceMock = new Mock<IFileOpeningService>();
             var fileServiceMock = new Mock<IFileService>();
@@ -209,7 +209,7 @@ namespace Camelot.Services.Tests
 
             operationsService.CreateDirectory(SelectedDirectoryName, DirectoryName);
 
-            directoryServiceMock.Verify(m => m.CreateDirectory(fullDirectoryPath), Times.Once());
+            directoryServiceMock.Verify(m => m.Create(fullDirectoryPath), Times.Once());
         }
     }
 }

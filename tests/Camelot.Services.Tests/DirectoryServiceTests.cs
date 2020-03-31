@@ -29,9 +29,9 @@ namespace Camelot.Services.Tests
         [Fact]
         public void TestDirectoryCreationFailed()
         {
-            Assert.False(_directoryService.CreateDirectory(null));
-            Assert.False(_directoryService.CreateDirectory(string.Empty));
-            Assert.False(_directoryService.CreateDirectory(" "));
+            Assert.False(_directoryService.Create(null));
+            Assert.False(_directoryService.Create(string.Empty));
+            Assert.False(_directoryService.Create(" "));
         }
 
         [Fact]
@@ -48,7 +48,7 @@ namespace Camelot.Services.Tests
             _directoryService.SelectedDirectory = CurrentDirectory;
             Assert.True(_directoryService.SelectedDirectory == CurrentDirectory);
 
-            Assert.True(_directoryService.CreateDirectory(DirectoryName));
+            Assert.True(_directoryService.Create(DirectoryName));
             Assert.True(Directory.Exists(NewDirectory));
 
             var directories = _directoryService.GetDirectories(CurrentDirectory);
@@ -94,10 +94,10 @@ namespace Camelot.Services.Tests
         [Fact]
         public void TestDirectoryExists()
         {
-            Assert.True(_directoryService.CheckIfDirectoryExists(CurrentDirectory));
-            Assert.False(_directoryService.CheckIfDirectoryExists(NotExistingDirectoryName));
-            Assert.False(_directoryService.CheckIfDirectoryExists(string.Empty));
-            Assert.False(_directoryService.CheckIfDirectoryExists(null));
+            Assert.True(_directoryService.CheckIfExists(CurrentDirectory));
+            Assert.False(_directoryService.CheckIfExists(NotExistingDirectoryName));
+            Assert.False(_directoryService.CheckIfExists(string.Empty));
+            Assert.False(_directoryService.CheckIfExists(null));
         }
 
         public void Dispose()

@@ -17,7 +17,7 @@ namespace Camelot.Services.Operations.Implementations
 
         protected override Task RemoveAsync(string pathToRemove)
         {
-            _fileService.RemoveFile(pathToRemove);
+            _fileService.Remove(pathToRemove);
 
             return Task.CompletedTask;
         }

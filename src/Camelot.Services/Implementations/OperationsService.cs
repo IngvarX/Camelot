@@ -81,22 +81,34 @@ namespace Camelot.Services.Implementations
             }
         }
 
+        public void Rename(string path, string newName)
+        {
+            if (_fileService.CheckIfExists(path))
+            {
+                _fileService.Rename(path, newName);
+            }
+            else if (_directoryService.CheckIfExists(path))
+            {
+                _directoryService.Rename(path, newName);
+            }
+        }
+
         public void CreateDirectory(string sourceDirectory, string directoryName)
         {
             var fullPath = _pathService.Combine(sourceDirectory, directoryName);
 
-            _directoryService.CreateDirectory(fullPath);
+            _directoryService.Create(fullPath);
         }
 
         private (UnaryFileOperationSettings[], UnaryFileOperationSettings[]) GetUnaryFileOperationSettings(
             IReadOnlyCollection<string> files)
         {
             var unaryFileOperationSettings = files
-                .Where(_fileService.CheckIfFileExists)
+                .Where(_fileService.CheckIfExists)
                 .Select(f => new UnaryFileOperationSettings(f))
                 .ToArray();
             var unaryDirectoryOperationSettings = files
-                .Where(_directoryService.CheckIfDirectoryExists)
+                .Where(_directoryService.CheckIfExists)
                 .Select(f => new UnaryFileOperationSettings(f))
                 .ToArray();
 
@@ -109,10 +121,10 @@ namespace Camelot.Services.Implementations
         {
             var sourceDirectory = GetCommonRootDirectory(selectedFiles);
             var files = selectedFiles
-                .Where(_fileService.CheckIfFileExists);
+                .Where(_fileService.CheckIfExists);
 
             var filesInDirectories = selectedFiles
-                .Where(_directoryService.CheckIfDirectoryExists)
+                .Where(_directoryService.CheckIfExists)
                 .SelectMany(_directoryService.GetFilesRecursively);
 
             var allFiles = files

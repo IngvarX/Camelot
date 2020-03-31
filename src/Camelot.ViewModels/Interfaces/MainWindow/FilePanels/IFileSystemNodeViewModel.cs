@@ -8,6 +8,8 @@ namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels
         
         string Name { get; set; }
         
+        bool IsEditing { get; set; }
+        
         ICommand OpenCommand { get; }
     }
 }

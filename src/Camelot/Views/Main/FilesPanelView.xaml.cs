@@ -65,5 +65,19 @@ namespace Camelot.Views.Main
         {
             ViewModel.ActivateCommand.Execute(null);
         }
+
+        private void OnDataGridPreparingCellForEdit(object sender, DataGridPreparingCellForEditEventArgs args)
+        {
+            var viewModel = (IFileSystemNodeViewModel) args.Row.DataContext;
+
+            viewModel.IsEditing = true;
+        }
+
+        private void OnDataGridCellEditEnded(object sender, DataGridCellEditEndedEventArgs args)
+        {
+            var viewModel = (IFileSystemNodeViewModel) args.Row.DataContext;
+
+            viewModel.IsEditing = false;
+        }
     }
 }

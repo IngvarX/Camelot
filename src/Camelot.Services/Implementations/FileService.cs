@@ -25,21 +25,29 @@ namespace Camelot.Services.Implementations
             return files.ToArray();
         }
 
-        public bool CheckIfFileExists(string file)
+        public bool CheckIfExists(string file)
         {
             return File.Exists(file);
         }
 
-        public Task CopyFileAsync(string source, string destination)
+        public Task CopyAsync(string source, string destination)
         {
             File.Copy(source, destination);
 
             return Task.CompletedTask;
         }
 
-        public void RemoveFile(string file)
+        public void Remove(string file)
         {
             File.Delete(file);
+        }
+
+        public void Rename(string filePath, string newName)
+        {
+            var parentDirectory = _pathService.GetParentDirectory(filePath);
+            var newFilePath = _pathService.Combine(parentDirectory, newName);
+            
+            File.Move(filePath, newFilePath);
         }
 
         private FileModel CreateFrom(string file)
