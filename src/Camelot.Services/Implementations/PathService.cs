@@ -95,7 +95,7 @@ namespace Camelot.Services.Implementations
 
         public string TrimPathSeparators(string path)
         {
-            return Path.TrimEndingDirectorySeparator(path);
+            return path.TrimEnd('/').TrimEnd('\\');
         }
     }
 }

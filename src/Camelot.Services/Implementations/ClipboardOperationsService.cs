@@ -29,12 +29,13 @@ namespace Camelot.Services.Implementations
             await _clipboardService.SetTextAsync(selectedFilesString);
         }
 
-        public async Task PasteSelectedFilesAsync(string destinationDirectory)
+        public async Task PasteFilesAsync(string destinationDirectory)
         {
             var selectedFilesString = await _clipboardService.GetTextAsync();
             var startIndex = UrlPrefix.Length;
             var files = selectedFilesString
                 .Split()
+                .Where(t => t.StartsWith(UrlPrefix))
                 .Select(f => f.Substring(startIndex))
                 .ToArray();
 

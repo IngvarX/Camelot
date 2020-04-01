@@ -3,7 +3,6 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using ApplicationDispatcher.Interfaces;
-using Camelot.ViewModels;
 using Camelot.ViewModels.Implementations;
 using Camelot.ViewModels.Implementations.Dialogs;
 using Camelot.ViewModels.Services.Interfaces;

@@ -52,5 +52,16 @@ namespace Camelot.Services.Tests
 
             Assert.Equal(FullPath, path);
         }
+        
+        [Theory]
+        [InlineData("Directory", "Directory")]
+        [InlineData("Directory/", "Directory")]
+        [InlineData("Directory\\", "Directory")]
+        public void TestTrimPathSeparators(string directory, string expectedResult)
+        {
+            var path = _pathService.TrimPathSeparators(directory);
+
+            Assert.Equal(path, expectedResult);
+        }
     }
 }

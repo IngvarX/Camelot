@@ -32,7 +32,6 @@ namespace Camelot.ViewModels.Factories.Implementations
 
         public IFileSystemNodeViewModel Create(FileModel fileModel)
         {
-            var extension = _pathService.GetExtension(fileModel.Name);
             var fileViewModel = new FileViewModel(_fileSystemNodeOpeningBehavior, _operationsService)
             {
                 FullPath = fileModel.FullPath,

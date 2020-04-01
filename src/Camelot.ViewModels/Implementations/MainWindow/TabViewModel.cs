@@ -10,6 +10,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow
     public class TabViewModel : ViewModelBase, ITabViewModel
     {
         private readonly IPathService _pathService;
+        
         private bool _isActive;
         private string _currentDirectory;
 

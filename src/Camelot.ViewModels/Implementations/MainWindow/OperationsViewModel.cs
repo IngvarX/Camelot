@@ -93,7 +93,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow
 
         private Task PasteFromClipboardAsync()
         {
-            return _clipboardOperationsService.PasteSelectedFilesAsync(_filesOperationsMediator.OutputDirectory);
+            return _clipboardOperationsService.PasteFilesAsync(_filesOperationsMediator.OutputDirectory);
         }
     }
 }

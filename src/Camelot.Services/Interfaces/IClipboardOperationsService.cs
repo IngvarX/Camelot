@@ -7,6 +7,6 @@ namespace Camelot.Services.Interfaces
     {
         Task CopyFilesAsync(IReadOnlyCollection<string> files);
 
-        Task PasteSelectedFilesAsync(string destinationDirectory);
+        Task PasteFilesAsync(string destinationDirectory);
     }
 }
