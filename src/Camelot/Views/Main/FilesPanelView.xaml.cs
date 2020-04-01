@@ -4,6 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using Camelot.Extensions;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using DynamicData;
@@ -45,11 +46,20 @@ namespace Camelot.Views.Main
         private void OnDataGridSelectionChanged(object sender, SelectionChangedEventArgs args)
         {
             // TODO: swap RemovedItems and AddedItems after fixing bug in avalonia
-            var addedItems = args.RemovedItems.Cast<IFileSystemNodeViewModel>();
+            var addedItems = args
+                .RemovedItems
+                .Cast<IFileSystemNodeViewModel>()
+                .ToArray();
             ViewModel.SelectedFileSystemNodes.AddRange(addedItems);
+            addedItems.ForEach(vm => vm.IsSelected = true);
 
-            var removedItems = args.AddedItems.Cast<IFileSystemNodeViewModel>();
+            var removedItems = args
+                .AddedItems
+                .Cast<IFileSystemNodeViewModel>()
+                .ToArray();
             ViewModel.SelectedFileSystemNodes.RemoveMany(removedItems);
+            
+            addedItems.Concat(removedItems).ForEach(vm => { vm.IsEditing = false; });
         }
 
         private void OnDataGridCellPointerPressed(object sender, DataGridCellPointerPressedEventArgs args)
@@ -70,10 +80,12 @@ namespace Camelot.Views.Main
         private void OnNameTextBlockPointerPressed(object sender, PointerPressedEventArgs args)
         {
             var textBlock = (TextBlock) sender;
-            // TODO: check if selected?
             var viewModel = (IFileSystemNodeViewModel) textBlock.DataContext;
 
-            viewModel.IsEditing = true;
+            if (viewModel.IsSelected)
+            {
+                viewModel.IsEditing = true;
+            }
         }
 
         private void OnFullNameTextBoxLostFocus(object sender, RoutedEventArgs args)

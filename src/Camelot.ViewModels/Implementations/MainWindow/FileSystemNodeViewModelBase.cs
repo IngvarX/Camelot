@@ -44,17 +44,14 @@ namespace Camelot.ViewModels.Implementations.MainWindow
         public bool IsEditing
         {
             get => _isEditing;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _isEditing, value);
-                if (!value)
-                {
-                    Rename();
-                }
-            }
+            set => this.RaiseAndSetIfChanged(ref _isEditing, value);
         }
+        
+        public bool IsSelected { get; set; }
 
         public ICommand OpenCommand { get; }
+        
+        public ICommand RenameCommand { get; }
 
         protected FileSystemNodeViewModelBase(
             IFileSystemNodeOpeningBehavior fileSystemNodeOpeningBehavior,
@@ -64,6 +61,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             _operationsService = operationsService;
 
             OpenCommand = ReactiveCommand.Create(Open);
+            RenameCommand = ReactiveCommand.Create(Rename);
         }
 
         private void Open()
@@ -73,7 +71,12 @@ namespace Camelot.ViewModels.Implementations.MainWindow
         
         private void Rename()
         {
-            _operationsService.Rename(_fullPath, _fullName);
+            IsEditing = false;
+            
+            if (!string.IsNullOrEmpty(_fullName))
+            {
+                _operationsService.Rename(_fullPath, _fullName);
+            }
         }
     }
 }

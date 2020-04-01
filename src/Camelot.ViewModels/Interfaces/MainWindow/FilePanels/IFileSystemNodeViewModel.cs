@@ -1,3 +1,4 @@
+using System.Reactive.Disposables;
 using System.Windows.Input;
 
 namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels
@@ -9,6 +10,8 @@ namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels
         string Name { get; set; }
         
         bool IsEditing { get; set; }
+        
+        bool IsSelected { get; set; }
         
         ICommand OpenCommand { get; }
     }

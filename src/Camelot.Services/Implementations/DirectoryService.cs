@@ -100,6 +100,10 @@ namespace Camelot.Services.Implementations
         {
             var parentDirectory = _pathService.GetParentDirectory(directoryPath);
             var newDirectoryPath = _pathService.Combine(parentDirectory, newName);
+            if (directoryPath == newDirectoryPath)
+            {
+                return;
+            }
             
             Directory.Move(directoryPath, newDirectoryPath);
         }

@@ -106,7 +106,11 @@
                                 <TextBlock Text="{Binding Name}" IsVisible="{Binding !IsEditing}"
                                            PointerPressed="OnNameTextBlockPointerPressed" />
                                 <TextBox Text="{Binding FullName}" IsVisible="{Binding IsEditing}"
-                                         LostFocus="OnFullNameTextBoxLostFocus" />
+                                         LostFocus="OnFullNameTextBoxLostFocus">
+                                    <TextBox.KeyBindings>
+                                        <KeyBinding Gesture="Enter" Command="{Binding RenameCommand}" />
+                                    </TextBox.KeyBindings>
+                                </TextBox>
                             </Grid>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
