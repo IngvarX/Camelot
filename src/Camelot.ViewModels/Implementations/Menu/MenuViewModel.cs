@@ -1,6 +1,5 @@
 using System.Windows.Input;
 using ApplicationDispatcher.Interfaces;
-using Camelot.ViewModels.Interfaces.MainWindow;
 using Camelot.ViewModels.Interfaces.Menu;
 using ReactiveUI;
 

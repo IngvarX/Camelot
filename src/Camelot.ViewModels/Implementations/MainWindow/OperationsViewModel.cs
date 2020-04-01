@@ -2,7 +2,6 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Camelot.Services.Interfaces;
 using Camelot.ViewModels.Implementations.Dialogs;
-using Camelot.ViewModels.Interfaces;
 using Camelot.ViewModels.Interfaces.MainWindow;
 using Camelot.ViewModels.Services.Interfaces;
 using ReactiveUI;

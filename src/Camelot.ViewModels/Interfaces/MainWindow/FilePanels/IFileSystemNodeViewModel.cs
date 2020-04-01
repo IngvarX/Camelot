@@ -1,4 +1,3 @@
-using System.Reactive.Disposables;
 using System.Windows.Input;
 
 namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels

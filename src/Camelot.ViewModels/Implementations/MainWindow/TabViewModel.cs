@@ -18,7 +18,9 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             get => _currentDirectory;
             set
             {
-                this.RaiseAndSetIfChanged(ref _currentDirectory, value);
+                var directory = _pathService.TrimPathSeparators(value);
+                
+                this.RaiseAndSetIfChanged(ref _currentDirectory, directory);
                 this.RaisePropertyChanged(nameof(DirectoryName));
             }
         }

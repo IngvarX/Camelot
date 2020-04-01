@@ -58,7 +58,7 @@ namespace Camelot.Views.Main
                 .Cast<IFileSystemNodeViewModel>()
                 .ToArray();
             ViewModel.SelectedFileSystemNodes.RemoveMany(removedItems);
-            
+
             addedItems.Concat(removedItems).ForEach(vm => { vm.IsEditing = false; });
         }
 

@@ -1,8 +1,6 @@
 using System;
 using Camelot.Services.EventArgs;
 using Camelot.Services.Interfaces;
-using Camelot.ViewModels.Interfaces;
-using Camelot.ViewModels.Interfaces.MainWindow;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Services.Interfaces;
 

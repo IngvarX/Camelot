@@ -19,5 +19,7 @@ namespace Camelot.Services.Interfaces
         string GetFileName(string path);
 
         string GetExtension(string path);
+
+        string TrimPathSeparators(string path);
     }
 }

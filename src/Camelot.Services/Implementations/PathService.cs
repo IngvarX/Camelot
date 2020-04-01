@@ -92,5 +92,10 @@ namespace Camelot.Services.Implementations
 
             return extension.StartsWith(".") ? extension.Substring(1) : extension;
         }
+
+        public string TrimPathSeparators(string path)
+        {
+            return Path.TrimEndingDirectorySeparator(path);
+        }
     }
 }
