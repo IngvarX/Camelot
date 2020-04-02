@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:main="clr-namespace:Camelot.Views.Main"
              xmlns:filePanels="clr-namespace:Camelot.ViewModels.Implementations.MainWindow.FilePanels;assembly=Camelot.ViewModels"
+             xmlns:filePanelsInterfaces="clr-namespace:Camelot.ViewModels.Interfaces.MainWindow.FilePanels;assembly=Camelot.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Camelot.Views.Main.FilesPanelView">
 
@@ -66,6 +67,25 @@
                   PointerReleased="OnDataGridPointerReleased" VerticalScrollBarVisibility="Visible"
                   HorizontalScrollBarVisibility="Disabled"
                   SelectionChanged="OnDataGridSelectionChanged" IsReadOnly="True">
+            
+            <DataGrid.Resources>
+                <Template x:Key="RowContextMenu">
+                    <ContextMenu>
+                        <MenuItem Header="Open" Command="{Binding OpenCommand}"/>
+                        <MenuItem Header="Rename" Command="{Binding StartRenamingCommand}"/>
+                        <MenuItem Header="Copy" Command="{Binding CopyCommand}"/>
+                        <MenuItem Header="Move" Command="{Binding MoveCommand}"/>
+                        <MenuItem Header="Delete" Command="{Binding DeleteCommand}"/>
+                        <MenuItem Header="Copy to clipboard" Command="{Binding CopyToClipboardCommand}"/>
+                    </ContextMenu>
+                </Template>
+            </DataGrid.Resources>
+            
+            <DataGrid.Styles>
+                <Style Selector="DataGridRow">
+                    <Setter Property="ContextMenu" Value="{StaticResource RowContextMenu}" />
+                </Style>
+            </DataGrid.Styles>
             
             <DataGrid.Columns>
                 <DataGridTemplateColumn>

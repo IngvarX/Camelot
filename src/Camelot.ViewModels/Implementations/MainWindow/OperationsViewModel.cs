@@ -91,9 +91,11 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             return _clipboardOperationsService.CopyFilesAsync(_filesSelectionService.SelectedFiles);
         }
 
-        private Task PasteFromClipboardAsync()
+        private async Task PasteFromClipboardAsync()
         {
-            return _clipboardOperationsService.PasteFilesAsync(_filesOperationsMediator.OutputDirectory);
+            var activeDirectory = _filesOperationsMediator.ActiveFilesPanelViewModel.CurrentDirectory;
+            
+            await _clipboardOperationsService.PasteFilesAsync(activeDirectory);
         }
     }
 }

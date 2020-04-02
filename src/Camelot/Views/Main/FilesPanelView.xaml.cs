@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
@@ -79,6 +80,11 @@ namespace Camelot.Views.Main
 
         private void OnNameTextBlockPointerPressed(object sender, PointerPressedEventArgs args)
         {
+            if (args.MouseButton != MouseButton.Left)
+            {
+                return;
+            }
+            
             var textBlock = (TextBlock) sender;
             var viewModel = (IFileSystemNodeViewModel) textBlock.DataContext;
 
@@ -90,8 +96,8 @@ namespace Camelot.Views.Main
 
         private void OnFullNameTextBoxLostFocus(object sender, RoutedEventArgs args)
         {
-            var textBlock = (TextBox) sender;
-            var viewModel = (IFileSystemNodeViewModel) textBlock.DataContext;
+            var textBox = (TextBox) sender;
+            var viewModel = (IFileSystemNodeViewModel) textBox.DataContext;
 
             viewModel.IsEditing = false;
         }

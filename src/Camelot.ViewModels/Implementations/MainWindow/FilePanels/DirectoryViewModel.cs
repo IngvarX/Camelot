@@ -1,5 +1,6 @@
 using Camelot.Services.Behaviors.Interfaces;
 using Camelot.Services.Interfaces;
+using Camelot.ViewModels.Services.Interfaces;
 
 namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 {
@@ -7,8 +8,14 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
     {
         public DirectoryViewModel(
             IFileSystemNodeOpeningBehavior fileSystemNodeOpeningBehavior,
-            IOperationsService operationsService) 
-            : base(fileSystemNodeOpeningBehavior, operationsService)
+            IOperationsService operationsService,
+            IClipboardOperationsService clipboardOperationsService,
+            IFilesOperationsMediator filesOperationsMediator) 
+            : base(
+                fileSystemNodeOpeningBehavior,
+                operationsService,
+                clipboardOperationsService,
+                filesOperationsMediator)
         {
             
         }
