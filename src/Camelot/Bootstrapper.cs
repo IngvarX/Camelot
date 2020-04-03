@@ -11,6 +11,7 @@ using Camelot.Services.Interfaces;
 using Camelot.Services.Operations.Implementations;
 using Camelot.Services.Operations.Interfaces;
 using Camelot.TaskPool.Interfaces;
+using Camelot.ViewModels.Configuration;
 using Camelot.ViewModels.Factories.Implementations;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Implementations;
@@ -22,6 +23,7 @@ using Camelot.ViewModels.Interfaces.MainWindow;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Services.Implementations;
 using Camelot.ViewModels.Services.Interfaces;
+using Microsoft.Extensions.Configuration;
 using Splat;
 
 namespace Camelot
@@ -30,9 +32,22 @@ namespace Camelot
     {
         public static void Register(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
+            RegisterConfiguration(services);
             RegisterDataAccess(services, resolver);
             RegisterServices(services, resolver);
             RegisterViewModels(services, resolver);
+        }
+
+        private static void RegisterConfiguration(IMutableDependencyResolver services)
+        {
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .Build();
+            
+            var aboutDialogConfiguration = new AboutDialogConfiguration();
+            configuration.GetSection("About").Bind(aboutDialogConfiguration);
+            
+            services.RegisterConstant(aboutDialogConfiguration);
         }
 
         private static void RegisterDataAccess(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
@@ -119,7 +134,8 @@ namespace Camelot
             ));
             services.Register(() => new AboutDialogViewModel(
                 resolver.GetService<IApplicationVersionProvider>(),
-                resolver.GetService<IResourceOpeningService>()
+                resolver.GetService<IResourceOpeningService>(),
+                resolver.GetService<AboutDialogConfiguration>()
             ));
             services.Register(() => new CreateDirectoryDialogViewModel());
             services.Register<IOperationsViewModel>(() => new OperationsViewModel(

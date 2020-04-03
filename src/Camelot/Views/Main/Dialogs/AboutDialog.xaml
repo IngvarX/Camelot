@@ -26,7 +26,11 @@
         </TextBlock>
         
         <TextBlock Classes="aboutPageTextBlock">
-            Developer: Ingvar
+            <TextBlock.Text>    
+                <MultiBinding StringFormat="{}Maintainers: {0}">
+                    <Binding Path="Maintainers" />
+                </MultiBinding>
+            </TextBlock.Text>
         </TextBlock>
         
         <Button Classes="dialogButton" Command="{Binding OpenRepositoryCommand}">Github</Button>

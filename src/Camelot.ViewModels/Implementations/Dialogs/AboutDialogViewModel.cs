@@ -1,26 +1,29 @@
 using System.Windows.Input;
 using ApplicationDispatcher.Interfaces;
 using Camelot.Services.Interfaces;
+using Camelot.ViewModels.Configuration;
 using ReactiveUI;
 
 namespace Camelot.ViewModels.Implementations.Dialogs
 {
     public class AboutDialogViewModel : DialogViewModelBase
     {
-        // TODO: to appsettings.json
-        private const string RepositoryUrl = "https://github.com/ingvar1995/Camelot";
-        
         private readonly IResourceOpeningService _resourceOpeningService;
+        private readonly AboutDialogConfiguration _aboutDialogConfiguration;
 
         public string ApplicationVersion { get; }
+
+        public string Maintainers => string.Join(", ", _aboutDialogConfiguration.Maintainers);
         
         public ICommand OpenRepositoryCommand { get; }
 
         public AboutDialogViewModel(
             IApplicationVersionProvider applicationVersionProvider,
-            IResourceOpeningService resourceOpeningService)
+            IResourceOpeningService resourceOpeningService,
+            AboutDialogConfiguration aboutDialogConfiguration)
         {
             _resourceOpeningService = resourceOpeningService;
+            _aboutDialogConfiguration = aboutDialogConfiguration;
 
             ApplicationVersion = applicationVersionProvider.Version;
             OpenRepositoryCommand = ReactiveCommand.Create(OpenRepository);
@@ -28,7 +31,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 
         private void OpenRepository()
         {
-            _resourceOpeningService.Open(RepositoryUrl);
+            _resourceOpeningService.Open(_aboutDialogConfiguration.RepositoryUrl);
         }
     }
 }
