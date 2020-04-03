@@ -27,8 +27,7 @@
     <Design.DataContext>
         <implementations:MainWindowViewModel/>
     </Design.DataContext>
-
-
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -41,6 +40,9 @@
             <Menu DockPanel.Dock="Top">
                 <MenuItem Header="_File">
                     <MenuItem Header="_Exit" Command="{Binding ExitCommand}" />
+                </MenuItem>
+                <MenuItem Header="_Help">
+                    <MenuItem Header="_About" Command="{Binding AboutCommand}" />
                 </MenuItem>
             </Menu>
         </DockPanel>

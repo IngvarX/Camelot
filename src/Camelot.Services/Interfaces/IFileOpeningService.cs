@@ -1,7 +1,7 @@
 namespace Camelot.Services.Interfaces
 {
-    public interface IFileOpeningService
+    public interface IResourceOpeningService
     {
-        void Open(string file);
+        void Open(string resource);
     }
 }

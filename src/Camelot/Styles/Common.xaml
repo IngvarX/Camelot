@@ -72,4 +72,9 @@
         <Setter Property="FontFamily" Value="SansSerif" />
         <Setter Property="FontSize" Value="20" />
     </Style>
+    
+    <Style Selector="TextBlock.aboutPageTextBlock">
+        <Setter Property="FontFamily" Value="SansSerif" />
+        <Setter Property="FontSize" Value="16" />
+    </Style>
 </Styles>

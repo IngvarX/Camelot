@@ -4,12 +4,12 @@ using Camelot.Services.Interfaces;
 
 namespace Camelot.Services.Implementations
 {
-    public class FileOpeningService : IFileOpeningService
+    public class ResourceOpeningService : IResourceOpeningService
     {
         private readonly IProcessService _processService;
         private readonly IPlatformService _platformService;
 
-        public FileOpeningService(
+        public ResourceOpeningService(
             IProcessService processService,
             IPlatformService platformService)
         {
@@ -17,18 +17,18 @@ namespace Camelot.Services.Implementations
             _platformService = platformService;
         }
 
-        public void Open(string file)
+        public void Open(string resource)
         {
             var platform = _platformService.GetPlatform();
             if (platform is Platform.Windows)
             {
-                _processService.Run(file);
+                _processService.Run(resource);
 
                 return;
             }
 
             var command = GetCommand(platform);
-            var arguments = $"\"{file}\"";
+            var arguments = $"\"{resource}\"";
 
             _processService.Run(command, arguments);
         }

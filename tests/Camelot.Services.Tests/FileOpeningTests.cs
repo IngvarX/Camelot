@@ -8,7 +8,7 @@ using Xunit;
 
 namespace Camelot.Services.Tests
 {
-    public class FileOpeningTests
+    public class ResourcesOpeningTests
     {
         private const string File = "File.txt";
 
@@ -31,7 +31,7 @@ namespace Camelot.Services.Tests
         [Fact]
         public void TestFileOpening()
         {
-            var fileOpeningServiceMock = new Mock<IFileOpeningService>();
+            var fileOpeningServiceMock = new Mock<IResourceOpeningService>();
             fileOpeningServiceMock
                 .Setup(m => m.Open(File))
                 .Verifiable();
@@ -54,7 +54,7 @@ namespace Camelot.Services.Tests
                 .Setup(m => m.GetPlatform())
                 .Returns(Platform.Windows);
 
-            var fileOpeningService = new FileOpeningService(
+            var fileOpeningService = new ResourceOpeningService(
                 processServiceMock.Object, platformServiceMock.Object);
 
             fileOpeningService.Open(File);
@@ -74,7 +74,7 @@ namespace Camelot.Services.Tests
                 .Setup(m => m.GetPlatform())
                 .Returns(Platform.Linux);
 
-            var fileOpeningService = new FileOpeningService(
+            var fileOpeningService = new ResourceOpeningService(
                 processServiceMock.Object, platformServiceMock.Object);
 
             fileOpeningService.Open(File);
@@ -94,7 +94,7 @@ namespace Camelot.Services.Tests
                 .Setup(m => m.GetPlatform())
                 .Returns(Platform.MacOs);
 
-            var fileOpeningService = new FileOpeningService(
+            var fileOpeningService = new ResourceOpeningService(
                 processServiceMock.Object, platformServiceMock.Object);
 
             fileOpeningService.Open(File);

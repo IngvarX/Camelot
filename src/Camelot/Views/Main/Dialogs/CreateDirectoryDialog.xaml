@@ -4,12 +4,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:dialogs="clr-namespace:Camelot.ViewModels.Implementations.Dialogs;assembly=Camelot.ViewModels"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="Camelot.Views.Main.Dialogs.CreateDirectoryWindow"
+        x:Class="Camelot.Views.Main.Dialogs.CreateDirectoryDialog"
         Width="400" Height="150"
         Title="Create directory">
 
     <Design.DataContext>
-        <dialogs:CreateDirectoryWindowViewModel/>
+        <dialogs:CreateDirectoryDialogViewModel />
     </Design.DataContext>
 
     <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,Auto" Margin="10">

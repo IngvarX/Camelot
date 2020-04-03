@@ -74,7 +74,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow
 
         private async Task CreateNewDirectoryAsync()
         {
-            var directoryName = await _dialogService.ShowDialogAsync<string>(nameof(CreateDirectoryWindowViewModel));
+            var directoryName = await _dialogService.ShowDialogAsync<string>(nameof(CreateDirectoryDialogViewModel));
             if (!string.IsNullOrEmpty(directoryName))
             {
                 _operationsService.CreateDirectory(_directoryService.SelectedDirectory, directoryName);

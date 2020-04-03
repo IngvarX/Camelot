@@ -5,16 +5,16 @@ namespace Camelot.Services.Behaviors.Implementations
 {
     public class FileOpeningBehavior : IFileSystemNodeOpeningBehavior
     {
-        private readonly IFileOpeningService _fileOpeningService;
+        private readonly IResourceOpeningService _resourceOpeningService;
 
-        public FileOpeningBehavior(IFileOpeningService fileOpeningService)
+        public FileOpeningBehavior(IResourceOpeningService resourceOpeningService)
         {
-            _fileOpeningService = fileOpeningService;
+            _resourceOpeningService = resourceOpeningService;
         }
 
         public void Open(string file)
         {
-            _fileOpeningService.Open(file);
+            _resourceOpeningService.Open(file);
         }
     }
 }

@@ -2,9 +2,9 @@ using Avalonia.Markup.Xaml;
 
 namespace Camelot.Views.Main.Dialogs
 {
-    public class CreateDirectoryWindow : DialogWindowBase<string>
+    public class CreateDirectoryDialog : DialogWindowBase<string>
     {
-        public CreateDirectoryWindow()
+        public CreateDirectoryDialog()
         {
             InitializeComponent();
         }

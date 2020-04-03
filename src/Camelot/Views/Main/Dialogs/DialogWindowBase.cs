@@ -71,4 +71,9 @@ namespace Camelot.Views.Main.Dialogs
             Close(args.Result);
         }
     }
+
+    public class DialogWindowBase : DialogWindowBase<object>
+    {
+        
+    }
 }

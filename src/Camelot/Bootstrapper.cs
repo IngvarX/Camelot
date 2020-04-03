@@ -14,6 +14,7 @@ using Camelot.TaskPool.Interfaces;
 using Camelot.ViewModels.Factories.Implementations;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Implementations;
+using Camelot.ViewModels.Implementations.Dialogs;
 using Camelot.ViewModels.Implementations.MainWindow;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
 using Camelot.ViewModels.Implementations.Menu;
@@ -59,7 +60,7 @@ namespace Camelot
             services.RegisterLazySingleton<IOperationsService>(() => new OperationsService(
                 resolver.GetService<IOperationsFactory>(),
                 resolver.GetService<IDirectoryService>(),
-                resolver.GetService<IFileOpeningService>(),
+                resolver.GetService<IResourceOpeningService>(),
                 resolver.GetService<IFileService>(),
                 resolver.GetService<IPathService>()
             ));
@@ -67,7 +68,7 @@ namespace Camelot
                 resolver.GetService<IPathService>()
             ));
             services.RegisterLazySingleton<IProcessService>(() => new ProcessService());
-            services.RegisterLazySingleton<IFileOpeningService>(() => new FileOpeningService(
+            services.RegisterLazySingleton<IResourceOpeningService>(() => new ResourceOpeningService(
                 resolver.GetService<IProcessService>(),
                 resolver.GetService<IPlatformService>()
             ));
@@ -76,7 +77,7 @@ namespace Camelot
                 resolver.GetService<IFileSystemWatcherWrapperFactory>()
             ));
             services.RegisterLazySingleton(() => new FileOpeningBehavior(
-                resolver.GetService<IFileOpeningService>()
+                resolver.GetService<IResourceOpeningService>()
             ));
             services.RegisterLazySingleton(() => new DirectoryOpeningBehavior(
                 resolver.GetService<IDirectoryService>()
@@ -95,6 +96,7 @@ namespace Camelot
                 resolver.GetService<IClipboardService>(),
                 resolver.GetService<IOperationsService>()
             ));
+            services.RegisterLazySingleton<IApplicationVersionProvider>(() => new ApplicationVersionProvider());
         }
 
         private static void RegisterViewModels(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
@@ -115,6 +117,11 @@ namespace Camelot
                 resolver.GetService<IFilesOperationsMediator>()
 
             ));
+            services.Register(() => new AboutDialogViewModel(
+                resolver.GetService<IApplicationVersionProvider>(),
+                resolver.GetService<IResourceOpeningService>()
+            ));
+            services.Register(() => new CreateDirectoryDialogViewModel());
             services.Register<IOperationsViewModel>(() => new OperationsViewModel(
                 resolver.GetService<IFilesOperationsMediator>(),
                 resolver.GetService<IOperationsService>(),
@@ -124,7 +131,8 @@ namespace Camelot
                 resolver.GetService<IDirectoryService>()
             ));
             services.Register(() => new MenuViewModel(
-                resolver.GetService<IApplicationCloser>()
+                resolver.GetService<IApplicationCloser>(),
+                resolver.GetService<IDialogService>()
             ));
             services.RegisterLazySingleton(() => new MainWindowViewModel(
                 resolver.GetService<IFilesOperationsMediator>(),

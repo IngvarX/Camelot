@@ -8,6 +8,7 @@ using Camelot.ViewModels.Implementations.Dialogs;
 using Camelot.ViewModels.Services.Interfaces;
 using Camelot.Views;
 using Camelot.Views.Main.Dialogs;
+using Splat;
 
 namespace Camelot.Services.Implementations
 {
@@ -34,11 +35,16 @@ namespace Camelot.Services.Implementations
                 throw new InvalidOperationException($"View for {viewModelName} was not found!");
             }
 
-            var window = (DialogWindowBase<T>)Activator.CreateInstance(viewType);
-            var viewModel = (DialogViewModelBase<T>)Activator.CreateInstance(viewModelType);
+            var window = (DialogWindowBase<T>)GetView(viewType);
+            var viewModel = (DialogViewModelBase<T>)GetViewModel(viewModelType);
             window.DataContext = viewModel;
 
             return await ShowDialogAsync(window);
+        }
+
+        public async Task ShowDialogAsync(string viewModelName)
+        {
+            await ShowDialogAsync<object>(viewModelName);
         }
 
         private static Type GetViewModelType(string viewModelName)
@@ -48,6 +54,10 @@ namespace Camelot.Services.Implementations
             
             return viewModelTypes.SingleOrDefault(t => t.Name == viewModelName);
         }
+        
+        private static object GetView(Type type) => Activator.CreateInstance(type);
+        
+        private static object GetViewModel(Type type) => Locator.Current.GetService(type);
         
         private static Type GetViewType(string viewModelName)
         {

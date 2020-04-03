@@ -3,7 +3,7 @@ using ReactiveUI;
 
 namespace Camelot.ViewModels.Implementations.Dialogs
 {
-    public class CreateDirectoryWindowViewModel : DialogViewModelBase<string>
+    public class CreateDirectoryDialogViewModel : DialogViewModelBase<string>
     {
         private string _directoryName;
 
@@ -17,7 +17,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 
         public ICommand CancelCommand { get; }
 
-        public CreateDirectoryWindowViewModel()
+        public CreateDirectoryDialogViewModel()
         {
             var canCreate = this.WhenAnyValue(x => x.DirectoryName,
                 name => !string.IsNullOrWhiteSpace(name));

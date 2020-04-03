@@ -11,20 +11,20 @@ namespace Camelot.Services.Implementations
     {
         private readonly IOperationsFactory _operationsFactory;
         private readonly IDirectoryService _directoryService;
-        private readonly IFileOpeningService _fileOpeningService;
+        private readonly IResourceOpeningService _resourceOpeningService;
         private readonly IFileService _fileService;
         private readonly IPathService _pathService;
 
         public OperationsService(
             IOperationsFactory operationsFactory,
             IDirectoryService directoryService,
-            IFileOpeningService fileOpeningService,
+            IResourceOpeningService resourceOpeningService,
             IFileService fileService,
             IPathService pathService)
         {
             _operationsFactory = operationsFactory;
             _directoryService = directoryService;
-            _fileOpeningService = fileOpeningService;
+            _resourceOpeningService = resourceOpeningService;
             _fileService = fileService;
             _pathService = pathService;
         }
@@ -33,7 +33,7 @@ namespace Camelot.Services.Implementations
         {
             foreach (var selectedFile in files)
             {
-                _fileOpeningService.Open(selectedFile);
+                _resourceOpeningService.Open(selectedFile);
             }
         }
 

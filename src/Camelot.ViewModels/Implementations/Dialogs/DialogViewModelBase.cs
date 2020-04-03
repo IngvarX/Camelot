@@ -14,4 +14,9 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             CloseRequested.Raise(this, args);
         }
     }
+
+    public class DialogViewModelBase : DialogViewModelBase<object>
+    {
+        
+    }
 }

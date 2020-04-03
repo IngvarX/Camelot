@@ -26,7 +26,7 @@ namespace Camelot.Services.Tests
             var operationsFactoryMock = new Mock<IOperationsFactory>();
             var directoryServiceMock = new Mock<IDirectoryService>();
             var fileServiceMock = new Mock<IFileService>();
-            var fileOpeningServiceMock = new Mock<IFileOpeningService>();
+            var fileOpeningServiceMock = new Mock<IResourceOpeningService>();
             fileOpeningServiceMock
                 .Setup(m => m.Open(FileName))
                 .Verifiable();
@@ -61,7 +61,7 @@ namespace Camelot.Services.Tests
                 .Returns(operationMock.Object);
 
             var directoryServiceMock = new Mock<IDirectoryService>();
-            var fileOpeningServiceMock = new Mock<IFileOpeningService>();
+            var fileOpeningServiceMock = new Mock<IResourceOpeningService>();
             var fileServiceMock = new Mock<IFileService>();
             fileServiceMock
                 .Setup(m => m.CheckIfExists(FileName))
@@ -105,7 +105,7 @@ namespace Camelot.Services.Tests
             directoryServiceMock
                 .SetupGet(m => m.SelectedDirectory)
                 .Returns(CurrentDirectory);
-            var fileOpeningServiceMock = new Mock<IFileOpeningService>();
+            var fileOpeningServiceMock = new Mock<IResourceOpeningService>();
             var fileServiceMock = new Mock<IFileService>();
             fileServiceMock
                 .Setup(m => m.CheckIfExists(FileName))
@@ -156,7 +156,7 @@ namespace Camelot.Services.Tests
             directoryServiceMock
                 .SetupGet(m => m.SelectedDirectory)
                 .Returns(CurrentDirectory);
-            var fileOpeningServiceMock = new Mock<IFileOpeningService>();
+            var fileOpeningServiceMock = new Mock<IResourceOpeningService>();
             var fileServiceMock = new Mock<IFileService>();
             fileServiceMock
                 .Setup(m => m.CheckIfExists(FileName))
@@ -193,7 +193,7 @@ namespace Camelot.Services.Tests
             directoryServiceMock
                 .Setup(m => m.Create(fullDirectoryPath))
                 .Verifiable();
-            var fileOpeningServiceMock = new Mock<IFileOpeningService>();
+            var fileOpeningServiceMock = new Mock<IResourceOpeningService>();
             var fileServiceMock = new Mock<IFileService>();
             var pathServiceMock = new Mock<IPathService>();
             pathServiceMock
