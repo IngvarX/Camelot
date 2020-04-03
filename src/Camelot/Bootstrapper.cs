@@ -151,7 +151,8 @@ namespace Camelot
                 resolver.GetService<IFileSystemWatchingService>(),
                 resolver.GetService<IApplicationDispatcher>(),
                 filesPanelStateService,
-                resolver.GetService<ITabViewModelFactory>()
+                resolver.GetService<ITabViewModelFactory>(),
+                resolver.GetService<IFileSizeFormatter>()
             );
 
             return filesPanelViewModel;

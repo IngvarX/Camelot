@@ -58,4 +58,8 @@
         <Setter Property="Fill" Value="{DynamicResource OrangeBrush}" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
     </Style>
+    
+    <Style Selector="TextBlock.selectionInfoTextBlock">
+        <Setter Property="Background" Value="{DynamicResource OrangeBrush}" />
+    </Style>
 </Styles>

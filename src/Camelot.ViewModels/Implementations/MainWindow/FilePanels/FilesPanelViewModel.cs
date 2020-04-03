@@ -21,8 +21,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 {
     public class FilesPanelViewModel : ViewModelBase, IFilesPanelViewModel
     {
-        private const string ParentDirectoryName = "[..]";
-        
         private readonly IFileService _fileService;
         private readonly IDirectoryService _directoryService;
         private readonly IFilesSelectionService _filesSelectionService;
@@ -31,6 +29,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private readonly IApplicationDispatcher _applicationDispatcher;
         private readonly IFilesPanelStateService _filesPanelStateService;
         private readonly ITabViewModelFactory _tabViewModelFactory;
+        private readonly IFileSizeFormatter _fileSizeFormatter;
 
         private readonly ObservableCollection<IFileSystemNodeViewModel> _fileSystemNodes;
         private readonly ObservableCollection<IFileSystemNodeViewModel> _selectedFileSystemNodes;
@@ -40,6 +39,10 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private ITabViewModel _selectedTab;
         private SortingColumn _sortingColumn;
         private bool _isSortingByAscendingEnabled;
+
+        private IEnumerable<FileViewModel> SelectedFiles => _selectedFileSystemNodes.OfType<FileViewModel>();
+        
+        private IEnumerable<DirectoryViewModel> SelectedDirectories => _selectedFileSystemNodes.OfType<DirectoryViewModel>();
 
         public string CurrentDirectory
         {
@@ -73,6 +76,13 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         public IList<IFileSystemNodeViewModel> SelectedFileSystemNodes => _selectedFileSystemNodes;
 
+
+        public int SelectedFilesCount => SelectedFiles.Count();
+        
+        public int SelectedDirectoriesCount => SelectedDirectories.Count();
+
+        public string SelectedFilesSize => _fileSizeFormatter.GetFormattedSize(SelectedFiles.Sum(f => f.Size));
+
         public IEnumerable<ITabViewModel> Tabs => _tabs;
 
         public ITabViewModel SelectedTab
@@ -99,7 +109,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             IFileSystemWatchingService fileSystemWatchingService,
             IApplicationDispatcher applicationDispatcher,
             IFilesPanelStateService filesPanelStateService,
-            ITabViewModelFactory tabViewModelFactory)
+            ITabViewModelFactory tabViewModelFactory,
+            IFileSizeFormatter fileSizeFormatter)
         {
             _fileService = fileService;
             _directoryService = directoryService;
@@ -109,6 +120,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             _applicationDispatcher = applicationDispatcher;
             _filesPanelStateService = filesPanelStateService;
             _tabViewModelFactory = tabViewModelFactory;
+            _fileSizeFormatter = fileSizeFormatter;
 
             _fileSystemNodes = new ObservableCollection<IFileSystemNodeViewModel>();
             _selectedFileSystemNodes = new ObservableCollection<IFileSystemNodeViewModel>();
@@ -324,7 +336,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             var files = _fileService.GetFiles(CurrentDirectory);
 
             var directoriesViewModels = OrderDirectories(directories)
-                .Select(_fileSystemNodeViewModelFactory.Create);
+                .Select(d => _fileSystemNodeViewModelFactory.Create(d));
             var filesViewModels = OrderFiles(files)
                 .Select(_fileSystemNodeViewModelFactory.Create);
             var models = directoriesViewModels.Concat(filesViewModels);
@@ -334,8 +346,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
             if (parentDirectory != null)
             {
-                var parentDirectoryViewModel = _fileSystemNodeViewModelFactory.Create(parentDirectory);
-                parentDirectoryViewModel.Name = ParentDirectoryName; // TODO: FIX
+                var parentDirectoryViewModel = _fileSystemNodeViewModelFactory.Create(parentDirectory, true);
                 
                 _fileSystemNodes.Insert(0, parentDirectoryViewModel);
             }
@@ -407,6 +418,10 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             {
                 _filesSelectionService.UnselectFiles(filesToRemove);
             }
+            
+            this.RaisePropertyChanged(nameof(SelectedFilesCount));
+            this.RaisePropertyChanged(nameof(SelectedFilesSize));
+            this.RaisePropertyChanged(nameof(SelectedDirectoriesCount));
         }
 
         private void SaveState()

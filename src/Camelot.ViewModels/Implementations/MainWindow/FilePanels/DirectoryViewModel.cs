@@ -6,6 +6,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 {
     public class DirectoryViewModel : FileSystemNodeViewModelBase
     {
+        public bool IsParentDirectory { get; set; }
+        
         public DirectoryViewModel(
             IFileSystemNodeOpeningBehavior fileSystemNodeOpeningBehavior,
             IOperationsService operationsService,

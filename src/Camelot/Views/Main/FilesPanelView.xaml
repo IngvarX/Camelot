@@ -17,6 +17,7 @@
             <RowDefinition Height="35" />
             <RowDefinition Height="Auto" />
             <RowDefinition />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <DockPanel>
@@ -122,16 +123,40 @@
                     
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Grid>
-                                <TextBlock Text="{Binding Name}" IsVisible="{Binding !IsEditing}"
-                                           PointerPressed="OnNameTextBlockPointerPressed" />
-                                <TextBox Text="{Binding FullName}" IsVisible="{Binding IsEditing}"
-                                         LostFocus="OnFullNameTextBoxLostFocus">
-                                    <TextBox.KeyBindings>
-                                        <KeyBinding Gesture="Enter" Command="{Binding RenameCommand}" />
-                                    </TextBox.KeyBindings>
-                                </TextBox>
-                            </Grid>
+                            <ContentControl Content="{Binding DataContext, RelativeSource={RelativeSource AncestorType=DataGridCell}}">
+                                <ContentControl.DataTemplates>
+                                    <DataTemplate DataType="{x:Type filePanels:DirectoryViewModel}">
+                                        <Grid>
+                                            <Grid IsVisible="{Binding !IsParentDirectory}">
+                                                <TextBlock Text="{Binding Name}" IsVisible="{Binding !IsEditing}"
+                                                           PointerPressed="OnNameTextBlockPointerPressed" />
+                                                <TextBox Text="{Binding FullName}" IsVisible="{Binding IsEditing}"
+                                                         LostFocus="OnFullNameTextBoxLostFocus">
+                                                    <TextBox.KeyBindings>
+                                                        <KeyBinding Gesture="Enter" Command="{Binding RenameCommand}" />
+                                                    </TextBox.KeyBindings>
+                                                </TextBox>
+                                            </Grid>
+                                            <Grid IsVisible="{Binding IsParentDirectory}">
+                                                <TextBlock Text="[..]" PointerPressed="OnNameTextBlockPointerPressed" />
+                                            </Grid>
+                                        </Grid>
+                                    </DataTemplate>
+                                    
+                                    <DataTemplate DataType="{x:Type filePanels:FileViewModel}">
+                                        <Grid>
+                                            <TextBlock Text="{Binding Name}" IsVisible="{Binding !IsEditing}"
+                                                       PointerPressed="OnNameTextBlockPointerPressed" />
+                                            <TextBox Text="{Binding FullName}" IsVisible="{Binding IsEditing}"
+                                                     LostFocus="OnFullNameTextBoxLostFocus">
+                                                <TextBox.KeyBindings>
+                                                    <KeyBinding Gesture="Enter" Command="{Binding RenameCommand}" />
+                                                </TextBox.KeyBindings>
+                                            </TextBox>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ContentControl.DataTemplates>
+                            </ContentControl>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -175,7 +200,7 @@
                                     </DataTemplate>
                                     
                                     <DataTemplate DataType="{x:Type filePanels:FileViewModel}">
-                                        <TextBlock Text="{Binding Size}" />
+                                        <TextBlock Text="{Binding FormattedSize}" />
                                     </DataTemplate>
                                 </ContentControl.DataTemplates>
                             </ContentControl>
@@ -191,6 +216,18 @@
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
+        
+        <Grid Grid.Row="3" ColumnDefinitions="Auto,*">
+            <TextBlock Classes="selectionInfoTextBlock" Margin="5">
+                <TextBlock.Text>    
+                    <MultiBinding StringFormat="{}{0} files ({1}) and {2} directories">
+                        <Binding Path="SelectedFilesCount" />
+                        <Binding Path="SelectedFilesSize" />
+                        <Binding Path="SelectedDirectoriesCount" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+        </Grid>
     </Grid>
 
 </UserControl>

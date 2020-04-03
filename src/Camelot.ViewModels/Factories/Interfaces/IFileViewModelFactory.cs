@@ -7,6 +7,6 @@ namespace Camelot.ViewModels.Factories.Interfaces
     {
         IFileSystemNodeViewModel Create(FileModel fileModel);
 
-        IFileSystemNodeViewModel Create(DirectoryModel directoryModel);
+        IFileSystemNodeViewModel Create(DirectoryModel directoryModel, bool isParentDirectory = false);
     }
 }

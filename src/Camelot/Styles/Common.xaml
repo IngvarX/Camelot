@@ -67,4 +67,9 @@
         <Setter Property="FontFamily" Value="SansSerif" />
         <Setter Property="FontSize" Value="20" />
     </Style>
+    
+    <Style Selector="TextBlock.selectionInfoTextBlock">
+        <Setter Property="FontFamily" Value="SansSerif" />
+        <Setter Property="FontSize" Value="20" />
+    </Style>
 </Styles>
