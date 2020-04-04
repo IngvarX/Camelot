@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using ApplicationDispatcher.Implementations;
 using ApplicationDispatcher.Interfaces;
 using Camelot.DataAccess.LiteDb;
@@ -41,6 +42,7 @@ namespace Camelot
         private static void RegisterConfiguration(IMutableDependencyResolver services)
         {
             var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
                 .Build();
             

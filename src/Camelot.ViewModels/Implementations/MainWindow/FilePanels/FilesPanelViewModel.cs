@@ -147,7 +147,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
                 .Throttle(TimeSpan.FromMilliseconds(500))
                 .Subscribe(_ => SaveState());
 
-            ReloadFiles();
             SubscribeToEvents();
         }
 
