@@ -13,6 +13,8 @@ namespace Camelot.FileSystemWatcherWrapper.Interfaces
 
         public event EventHandler<RenamedEventArgs> Renamed;
 
-        public bool EnableRaisingEvents { get; set; }
+        void StartRaisingEvents();
+
+        void StopRaisingEvents();
     }
 }

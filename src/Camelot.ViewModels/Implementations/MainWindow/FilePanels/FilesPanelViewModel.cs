@@ -157,6 +157,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             _filesSelectionService.UnselectFiles(selectedFiles);
 
             DeactivatedEvent.Raise(this, EventArgs.Empty);
+
+            SelectedTab.IsGloballyActive = false;
         }
 
         public void CreateNewTab()
@@ -295,12 +297,14 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         {
             if (SelectedTab != null)
             {
-                SelectedTab.IsActive = false;
+                SelectedTab.IsActive = SelectedTab.IsGloballyActive = false;
             }
 
-            tabViewModel.IsActive = true;
+            tabViewModel.IsActive = tabViewModel.IsGloballyActive = true;
             SelectedTab = tabViewModel;
             CurrentDirectory = tabViewModel.CurrentDirectory;
+            
+            Activate();
         }
 
         private void SubscribeToEvents()
@@ -319,6 +323,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private void Activate()
         {
             ActivatedEvent.Raise(this, EventArgs.Empty);
+
+            SelectedTab.IsGloballyActive = true;
         }
 
         private void ReloadFiles()

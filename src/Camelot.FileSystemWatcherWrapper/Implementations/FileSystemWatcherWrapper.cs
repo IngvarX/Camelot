@@ -17,17 +17,21 @@ namespace Camelot.FileSystemWatcherWrapper.Implementations
 
         public event EventHandler<RenamedEventArgs> Renamed;
 
-        public bool EnableRaisingEvents
-        {
-            get => _fileSystemWatcher.EnableRaisingEvents;
-            set => _fileSystemWatcher.EnableRaisingEvents = value;
-        }
-
         public FileSystemWatcherWrapper(FileSystemWatcher fileSystemWatcher)
         {
             _fileSystemWatcher = fileSystemWatcher;
 
             SubscribeToEvents();
+        }
+        
+        public void StartRaisingEvents()
+        {
+            _fileSystemWatcher.EnableRaisingEvents = true;
+        }
+
+        public void StopRaisingEvents()
+        {
+            _fileSystemWatcher.EnableRaisingEvents = false;
         }
 
         public void Dispose()

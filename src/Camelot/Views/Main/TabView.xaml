@@ -14,7 +14,12 @@
         <Button.Content>
             <Grid RowDefinitions="*,Auto">
                 <TextBlock Text="{Binding DirectoryName}" />
-                <Rectangle Classes="tabRectangle" Height="2" Grid.Row="1" IsVisible="{Binding IsActive}" />
+                <Grid Grid.Row="1">
+                    <Rectangle Classes="tabRectangle tabRectangleActive"
+                               Height="2" IsVisible="{Binding IsActive}" />
+                    <Rectangle Classes="tabRectangle tabRectangleGloballyActive"
+                               Height="2" IsVisible="{Binding IsGloballyActive}" />
+                </Grid>
             </Grid>
         </Button.Content>
         

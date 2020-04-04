@@ -41,6 +41,7 @@
 
     <Style Selector="Rectangle.tabRectangle">
         <Setter Property="Margin" Value="0,8,0,0" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
     </Style>
 
     <Style Selector="MenuItem">
@@ -76,5 +77,10 @@
     <Style Selector="TextBlock.aboutPageTextBlock">
         <Setter Property="FontFamily" Value="SansSerif" />
         <Setter Property="FontSize" Value="16" />
+    </Style>
+    
+    <Style Selector="TextBlock.filePanelTextBlock">
+        <Setter Property="FontFamily" Value="SansSerif" />
+        <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
 </Styles>

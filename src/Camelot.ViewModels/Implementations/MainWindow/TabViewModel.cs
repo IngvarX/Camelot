@@ -12,6 +12,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow
         private readonly IPathService _pathService;
         
         private bool _isActive;
+        private bool _isGloballyActive;
         private string _currentDirectory;
 
         public string CurrentDirectory
@@ -30,6 +31,12 @@ namespace Camelot.ViewModels.Implementations.MainWindow
         {
             get => _isActive;
             set => this.RaiseAndSetIfChanged(ref _isActive, value);
+        }
+        
+        public bool IsGloballyActive
+        {
+            get => _isGloballyActive;
+            set => this.RaiseAndSetIfChanged(ref _isGloballyActive, value);
         }
 
         public event EventHandler<EventArgs> ActivationRequested;

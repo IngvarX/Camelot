@@ -54,9 +54,12 @@
         <Setter Property="Foreground" Value="{DynamicResource OperationButtonForegroundColorBrush}" />
     </Style>
 
-    <Style Selector="Rectangle.tabRectangle">
+    <Style Selector="Rectangle.tabRectangleGloballyActive">
         <Setter Property="Fill" Value="{DynamicResource OrangeBrush}" />
-        <Setter Property="HorizontalAlignment" Value="Stretch" />
+    </Style>
+    
+    <Style Selector="Rectangle.tabRectangleActive">
+        <Setter Property="Fill" Value="{DynamicResource LightGreyBrush}" />
     </Style>
     
     <Style Selector="TextBlock.selectionInfoTextBlock">

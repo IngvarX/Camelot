@@ -6,6 +6,8 @@ namespace Camelot.ViewModels.Interfaces.MainWindow
     {
         bool IsActive { get; set; }
         
+        bool IsGloballyActive { get; set; }
+        
         string CurrentDirectory { get; set; }
         
         event EventHandler<EventArgs> ActivationRequested;

@@ -5,10 +5,10 @@ namespace Camelot.Extensions
 {
     public static class EventExtensions
     {
-        public static void Raise<TArgs>(
-            this EventHandler<TArgs> eventHandler,
+        public static void Raise<TEventArgs>(
+            this EventHandler<TEventArgs> eventHandler,
             object sender,
-            TArgs args) where TArgs : EventArgs
+            TEventArgs args) where TEventArgs : EventArgs
         {
             var handler = Volatile.Read(ref eventHandler);
 

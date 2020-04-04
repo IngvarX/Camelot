@@ -63,12 +63,12 @@ namespace Camelot.Services.Implementations
             _fileSystemWatcher.Deleted += FileSystemWatcherOnDeleted;
             _fileSystemWatcher.Renamed += FileSystemWatcherOnRenamed;
 
-            _fileSystemWatcher.EnableRaisingEvents = true;
+            _fileSystemWatcher.StartRaisingEvents();
         }
 
         private void UnsubscribeFromEvents()
         {
-            _fileSystemWatcher.EnableRaisingEvents = false;
+            _fileSystemWatcher.StopRaisingEvents();
 
             _fileSystemWatcher.Changed -= FileSystemWatcherOnChanged;
             _fileSystemWatcher.Created -= FileSystemWatcherOnCreated;
