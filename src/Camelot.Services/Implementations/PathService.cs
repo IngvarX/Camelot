@@ -71,7 +71,9 @@ namespace Camelot.Services.Implementations
 
         public string GetFileName(string path)
         {
-            return Path.GetFileName(path);
+            var fileName = Path.GetFileName(path);
+            
+            return string.IsNullOrEmpty(fileName) ? path : fileName;
         }
 
         public string GetExtension(string path)
@@ -95,7 +97,7 @@ namespace Camelot.Services.Implementations
 
         public string TrimPathSeparators(string path)
         {
-            return path.TrimEnd('/').TrimEnd('\\');
+            return path == "/" ? path : path.TrimEnd('/').TrimEnd('\\');
         }
     }
 }

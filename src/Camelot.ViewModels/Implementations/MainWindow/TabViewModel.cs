@@ -19,14 +19,12 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             get => _currentDirectory;
             set
             {
-                var directory = _pathService.TrimPathSeparators(value);
-                
-                this.RaiseAndSetIfChanged(ref _currentDirectory, directory);
+                this.RaiseAndSetIfChanged(ref _currentDirectory, value);
                 this.RaisePropertyChanged(nameof(DirectoryName));
             }
         }
 
-        public string DirectoryName => _pathService.GetFileName(CurrentDirectory);
+        public string DirectoryName => _pathService.GetFileName(_pathService.TrimPathSeparators(CurrentDirectory));
 
         public bool IsActive
         {
