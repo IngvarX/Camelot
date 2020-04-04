@@ -32,6 +32,9 @@ namespace Camelot.ViewModels.Services.Implementations
             SubscribeToEvents(InactiveFilesPanelViewModel);
 
             UpdateCurrentDirectory();
+            
+            ActiveFilesPanelViewModel.Activate();
+            InactiveFilesPanelViewModel.Deactivate();
         }
 
         private void SubscribeToEvents(IFilesPanelViewModel filesPanelViewModel)

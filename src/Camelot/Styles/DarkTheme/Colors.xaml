@@ -25,6 +25,6 @@
         <SolidColorBrush x:Key="DirectoryTextBoxBackgroundColorBrush" Color="{DynamicResource BlackColor}"
                          Opacity="0.2" />
         <SolidColorBrush x:Key="LightGreyBrush" Color="{DynamicResource WhiteColor}"
-                         Opacity="0.2" />
+                         Opacity="0.3" />
     </Style.Resources>
 </Style>

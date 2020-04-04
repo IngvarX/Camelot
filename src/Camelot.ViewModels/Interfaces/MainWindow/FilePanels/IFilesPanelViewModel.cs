@@ -8,6 +8,8 @@ namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels
         
         event EventHandler<EventArgs> ActivatedEvent;
 
+        void Activate();
+        
         void Deactivate();
 
         void CreateNewTab();

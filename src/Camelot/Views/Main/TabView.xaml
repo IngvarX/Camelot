@@ -15,6 +15,7 @@
             <Grid RowDefinitions="*,Auto">
                 <TextBlock Text="{Binding DirectoryName}" />
                 <Grid Grid.Row="1">
+                    <Rectangle Classes="tabRectangle" Height="2" />
                     <Rectangle Classes="tabRectangle tabRectangleActive"
                                Height="2" IsVisible="{Binding IsActive}" />
                     <Rectangle Classes="tabRectangle tabRectangleGloballyActive"

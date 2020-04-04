@@ -149,6 +149,13 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
             SubscribeToEvents();
         }
+        
+        public void Activate()
+        {
+            ActivatedEvent.Raise(this, EventArgs.Empty);
+
+            SelectedTab.IsGloballyActive = true;
+        }
 
         public void Deactivate()
         {
@@ -318,13 +325,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             _fileSystemWatchingService.FileChanged += (sender, args) => ReloadInUiThread();
             _fileSystemWatchingService.FileRenamed += (sender, args) => ReloadInUiThread();
             _fileSystemWatchingService.FileDeleted += (sender, args) => ReloadInUiThread();
-        }
-
-        private void Activate()
-        {
-            ActivatedEvent.Raise(this, EventArgs.Empty);
-
-            SelectedTab.IsGloballyActive = true;
         }
 
         private void ReloadFiles()
