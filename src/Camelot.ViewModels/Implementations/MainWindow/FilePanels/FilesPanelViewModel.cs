@@ -10,8 +10,8 @@ using ApplicationDispatcher.Interfaces;
 using Camelot.DataAccess.Models;
 using Camelot.Extensions;
 using Camelot.Services.Interfaces;
-using Camelot.Services.Models;
 using Camelot.ViewModels.Factories.Interfaces;
+using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Comparers;
 using Camelot.ViewModels.Interfaces.MainWindow;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using DynamicData;
@@ -334,10 +334,16 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             var directories = _directoryService.GetDirectories(CurrentDirectory);
             var files = _fileService.GetFiles(CurrentDirectory);
 
-            var directoriesViewModels = OrderDirectories(directories)
+            var directoriesComparer = new DirectoryModelsFileSystemNodesComparer(IsSortingByAscendingEnabled, SortingColumn);
+            var directoriesViewModels = directories
+                .OrderBy(d => d, directoriesComparer)
                 .Select(d => _fileSystemNodeViewModelFactory.Create(d));
-            var filesViewModels = OrderFiles(files)
+            
+            var filesComparer = new FileModelsFileSystemNodesComparer(IsSortingByAscendingEnabled, SortingColumn);
+            var filesViewModels = files
+                .OrderBy(f => f, filesComparer)
                 .Select(_fileSystemNodeViewModelFactory.Create);
+            
             var models = directoriesViewModels.Concat(filesViewModels);
 
             _fileSystemNodes.Clear();
@@ -353,53 +359,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             _fileSystemWatchingService.StartWatching(CurrentDirectory);
         }
 
-        // TODO: to comparer
-        private IEnumerable<DirectoryModel> OrderDirectories(
-            IEnumerable<DirectoryModel> directories)
-        {
-            IEnumerable<DirectoryModel> result; 
-            switch (SortingColumn)
-            {
-                case SortingColumn.Extension:
-                case SortingColumn.Size:
-                case SortingColumn.Name:
-                    result = directories.OrderBy(vm => vm.Name.StartsWith(".") ? vm.Name.Substring(1) : vm.Name);
-                    break;
-                case SortingColumn.Date:
-                    result = directories.OrderBy(vm => vm.LastModifiedDateTime);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(SortingColumn));
-            }
-
-            return IsSortingByAscendingEnabled ? result : result.Reverse();
-        }
-        
-        private IEnumerable<FileModel> OrderFiles(
-            IEnumerable<FileModel> files)
-        {
-            IEnumerable<FileModel> result; 
-            switch (SortingColumn)
-            {
-                case SortingColumn.Extension:
-                    result = files.OrderBy(f => f.Extension);
-                    break;
-                case SortingColumn.Size:
-                    result = files.OrderBy(f => f.SizeBytes);
-                    break;
-                case SortingColumn.Name:
-                    result = files.OrderBy(vm => vm.Name.StartsWith(".") ? vm.Name.Substring(1) : vm.Name);
-                    break;
-                case SortingColumn.Date:
-                    result = files.OrderBy(vm => vm.LastModifiedDateTime);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(SortingColumn));
-            }
-
-            return IsSortingByAscendingEnabled ? result : result.Reverse();
-        }
-        
         private void SelectedFileSystemNodesOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             var filesToAdd = e.NewItems?
@@ -425,7 +384,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         private void SaveState()
         {
-            Task.Run(() =>
+            Task.Factory.StartNew(() =>
             {
                 var tabs = _tabs.Select(t => t.CurrentDirectory).ToList();
                 var selectedTabIndex = _tabs.IndexOf(_selectedTab);
@@ -436,7 +395,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
                 };
 
                 _filesPanelStateService.SavePanelState(state);
-            });
+            }, TaskCreationOptions.LongRunning);
         }
     }
 }
