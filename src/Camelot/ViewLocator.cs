@@ -15,8 +15,8 @@ namespace Camelot
             var name = fullName
                 .Replace("ViewModel", "View")
                 .Replace("Camelot", "Camelot.ViewModels");
+            
             var type = Type.GetType(name);
-
             if (type != null)
             {
                 return (Control)Activator.CreateInstance(type);

@@ -1,7 +1,6 @@
 using System.IO;
 using Camelot.Services.Interfaces;
 using Camelot.ViewModels.Factories.Implementations;
-using Camelot.ViewModels.Factories.Interfaces;
 using Moq;
 using Xunit;
 

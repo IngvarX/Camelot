@@ -1,6 +1,5 @@
 using Camelot.Services.Interfaces;
 using Camelot.ViewModels.Implementations.MainWindow;
-using Camelot.ViewModels.Interfaces.MainWindow;
 using Moq;
 using Xunit;
 

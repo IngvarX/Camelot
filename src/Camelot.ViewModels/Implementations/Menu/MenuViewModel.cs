@@ -11,6 +11,7 @@ namespace Camelot.ViewModels.Implementations.Menu
     public class MenuViewModel : ViewModelBase, IMenuViewModel
     {
         private readonly IDialogService _dialogService;
+        
         public ICommand ExitCommand { get; }
         
         public ICommand AboutCommand { get; }

@@ -10,7 +10,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private readonly IFileSizeFormatter _fileSizeFormatter;
         private long _size;
         
-        
         public string Extension { get; set; }
 
         public long Size
