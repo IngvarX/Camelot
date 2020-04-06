@@ -53,6 +53,10 @@
     <Style Selector="Button.tabButton">
         <Setter Property="Foreground" Value="{DynamicResource OperationButtonForegroundColorBrush}" />
     </Style>
+    
+    <Style Selector="Border.tabBorder">
+        <Setter Property="BorderBrush" Value="{DynamicResource TabButtonBorderColorBrush}" />
+    </Style>
 
     <Style Selector="Rectangle.tabRectangleGloballyActive">
         <Setter Property="Fill" Value="{DynamicResource OrangeBrush}" />
@@ -64,5 +68,13 @@
     
     <Style Selector="TextBlock.selectionInfoTextBlock">
         <Setter Property="Background" Value="{DynamicResource OrangeBrush}" />
+    </Style>
+    
+    <Style Selector="StackPanel.inactiveTabStackPanel">
+        <Setter Property="Background" Value="{DynamicResource DirectoryTextBoxBackgroundColorBrush}" />
+    </Style>
+    
+    <Style Selector="StackPanel.activeTabStackPanel">
+        <Setter Property="Background" Value="{DynamicResource RowBackgroundColorBrush}" />
     </Style>
 </Styles>

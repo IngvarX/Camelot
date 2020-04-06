@@ -13,6 +13,7 @@
 
         <SolidColorBrush x:Key="OrangeBrush" Color="{DynamicResource OrangeColor}" />
         <SolidColorBrush x:Key="WhiteBrush" Color="{DynamicResource WhiteColor}" />
+        <SolidColorBrush x:Key="BlackBrush" Color="{DynamicResource BlackColor}" />
         <SolidColorBrush x:Key="RowBackgroundColorBrush" Color="{DynamicResource RowBackgroundColor}" />
         <SolidColorBrush x:Key="AlternativeRowBackgroundColorBrush" Color="{DynamicResource AlternativeRowBackgroundColor}"
                          Opacity="0.01" />
@@ -24,6 +25,8 @@
                          Opacity="0.9" />
         <SolidColorBrush x:Key="DirectoryTextBoxBackgroundColorBrush" Color="{DynamicResource BlackColor}"
                          Opacity="0.2" />
+        <SolidColorBrush x:Key="TabButtonBorderColorBrush" Color="{DynamicResource BlackColor}"
+                         Opacity="0.4" />
         <SolidColorBrush x:Key="LightGreyBrush" Color="{DynamicResource WhiteColor}"
                          Opacity="0.3" />
     </Style.Resources>

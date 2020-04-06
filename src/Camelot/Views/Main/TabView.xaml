@@ -10,28 +10,42 @@
         <mainWindow:TabViewModel />
     </Design.DataContext>
 
-    <Button Classes="tabButton" Command="{Binding ActivateCommand}">
-        <Button.Content>
-            <Grid RowDefinitions="*,Auto">
-                <TextBlock Text="{Binding DirectoryName}" />
-                <Grid Grid.Row="1">
-                    <Rectangle Classes="tabRectangle" Height="2" />
-                    <Rectangle Classes="tabRectangle tabRectangleActive"
-                               Height="2" IsVisible="{Binding IsActive}" />
-                    <Rectangle Classes="tabRectangle tabRectangleGloballyActive"
-                               Height="2" IsVisible="{Binding IsGloballyActive}" />
+    <Border Classes="tabBorder">
+        <Button Classes="tabButton" Command="{Binding ActivateCommand}">
+            <Button.Content>
+                <Grid>
+                    <StackPanel Orientation="Vertical" IsVisible="{Binding IsActive}"
+                                Classes="activeTabStackPanel">
+                        <Grid Height="33">
+                            <TextBlock Classes="tabNameTextBlock" Text="{Binding DirectoryName}" />
+                        </Grid>
+                        <Grid Height="2">
+                            <Rectangle Classes="tabRectangle tabRectangleActive"
+                                       Height="2" IsVisible="{Binding IsActive}" />
+                            <Rectangle Classes="tabRectangle tabRectangleGloballyActive"
+                                       Height="2" IsVisible="{Binding IsGloballyActive}" />
+                        </Grid>
+                    </StackPanel>
+                    
+                    <StackPanel Orientation="Vertical" IsVisible="{Binding !IsActive}"
+                                Classes="inactiveTabStackPanel">
+                        <Grid Height="33">
+                            <TextBlock Classes="tabNameTextBlock" Text="{Binding DirectoryName}" />
+                        </Grid>
+                        <Rectangle Classes="tabRectangle" Height="2" />
+                    </StackPanel>
                 </Grid>
-            </Grid>
-        </Button.Content>
-        
-        <Button.ContextMenu>
-            <ContextMenu>
-                <MenuItem Header="New tab" Command="{Binding NewTabCommand}" />
-                <MenuItem Header="Close tab" Command="{Binding CloseTabCommand}" />
-                <MenuItem Header="Close tabs to the left" Command="{Binding CloseTabsToTheLeftCommand}" />
-                <MenuItem Header="Close tabs to the right" Command="{Binding CloseTabsToTheRightCommand}" />
-                <MenuItem Header="Close all but this" Command="{Binding CloseAllTabsButThisCommand}" />
-            </ContextMenu>
-        </Button.ContextMenu>
-    </Button>
+            </Button.Content>
+            
+            <Button.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="New tab" Command="{Binding NewTabCommand}" />
+                    <MenuItem Header="Close tab" Command="{Binding CloseTabCommand}" />
+                    <MenuItem Header="Close tabs to the left" Command="{Binding CloseTabsToTheLeftCommand}" />
+                    <MenuItem Header="Close tabs to the right" Command="{Binding CloseTabsToTheRightCommand}" />
+                    <MenuItem Header="Close all but this" Command="{Binding CloseAllTabsButThisCommand}" />
+                </ContextMenu>
+            </Button.ContextMenu>
+        </Button>
+    </Border>
 </UserControl>
