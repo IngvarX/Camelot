@@ -77,4 +77,8 @@
     <Style Selector="StackPanel.activeTabStackPanel">
         <Setter Property="Background" Value="{DynamicResource RowBackgroundColorBrush}" />
     </Style>
+    
+    <Style Selector="Grid#MainGrid">
+        <Setter Property="Background" Value="{DynamicResource RowBackgroundColorBrush}" />
+    </Style>
 </Styles>

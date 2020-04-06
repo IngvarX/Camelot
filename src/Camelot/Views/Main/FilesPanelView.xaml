@@ -47,7 +47,7 @@
             <TextBox Classes="directoryTextBox" Text="{Binding CurrentDirectory, Mode=TwoWay}" />
         </DockPanel>
 
-        <ItemsControl Grid.Row="1" Margin="10,0,0,0" Items="{Binding Tabs}">
+        <ItemsControl Grid.Row="1" Margin="10,10,0,0" Items="{Binding Tabs}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel Orientation="Horizontal"/>

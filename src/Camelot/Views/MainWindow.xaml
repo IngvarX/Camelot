@@ -28,7 +28,7 @@
         <implementations:MainWindowViewModel/>
     </Design.DataContext>
     
-    <Grid>
+    <Grid x:Name="MainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
