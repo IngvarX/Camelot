@@ -70,11 +70,11 @@
         <Setter Property="Background" Value="{DynamicResource OrangeBrush}" />
     </Style>
     
-    <Style Selector="StackPanel.inactiveTabStackPanel">
+    <Style Selector="Grid.inactiveTabGrid">
         <Setter Property="Background" Value="{DynamicResource DirectoryTextBoxBackgroundColorBrush}" />
     </Style>
     
-    <Style Selector="StackPanel.activeTabStackPanel">
+    <Style Selector="Grid.activeTabGrid">
         <Setter Property="Background" Value="{DynamicResource RowBackgroundColorBrush}" />
     </Style>
     

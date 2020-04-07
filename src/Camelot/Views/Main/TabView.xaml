@@ -10,42 +10,38 @@
         <mainWindow:TabViewModel />
     </Design.DataContext>
 
-    <Border Classes="tabBorder">
-        <Button Classes="tabButton" Command="{Binding ActivateCommand}">
-            <Button.Content>
-                <Grid>
-                    <StackPanel Orientation="Vertical" IsVisible="{Binding IsActive}"
-                                Classes="activeTabStackPanel">
-                        <Grid Height="33">
+    <StackPanel Orientation="Vertical">
+        <Border Classes="tabBorder">
+            <Button Classes="tabButton" Command="{Binding ActivateCommand}">
+                <Button.Content>
+                    <Grid>
+                        <Grid Classes="activeTabGrid" Height="33" IsVisible="{Binding IsActive}">
                             <TextBlock Classes="tabNameTextBlock" Text="{Binding DirectoryName}" />
                         </Grid>
-                        <Grid Height="2">
-                            <Rectangle Classes="tabRectangle tabRectangleActive"
-                                       Height="2" IsVisible="{Binding IsActive}" />
-                            <Rectangle Classes="tabRectangle tabRectangleGloballyActive"
-                                       Height="2" IsVisible="{Binding IsGloballyActive}" />
-                        </Grid>
-                    </StackPanel>
-                    
-                    <StackPanel Orientation="Vertical" IsVisible="{Binding !IsActive}"
-                                Classes="inactiveTabStackPanel">
-                        <Grid Height="33">
+                        <Grid Classes="inactiveTabGrid" Height="33" IsVisible="{Binding !IsActive}">
                             <TextBlock Classes="tabNameTextBlock" Text="{Binding DirectoryName}" />
                         </Grid>
-                        <Rectangle Classes="tabRectangle" Height="2" />
-                    </StackPanel>
-                </Grid>
-            </Button.Content>
-            
-            <Button.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Header="New tab" Command="{Binding NewTabCommand}" />
-                    <MenuItem Header="Close tab" Command="{Binding CloseTabCommand}" />
-                    <MenuItem Header="Close tabs to the left" Command="{Binding CloseTabsToTheLeftCommand}" />
-                    <MenuItem Header="Close tabs to the right" Command="{Binding CloseTabsToTheRightCommand}" />
-                    <MenuItem Header="Close all but this" Command="{Binding CloseAllTabsButThisCommand}" />
-                </ContextMenu>
-            </Button.ContextMenu>
-        </Button>
-    </Border>
+                    </Grid>
+                </Button.Content>
+                
+                <Button.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="New tab" Command="{Binding NewTabCommand}" />
+                        <MenuItem Header="Close tab" Command="{Binding CloseTabCommand}" />
+                        <MenuItem Header="Close tabs to the left" Command="{Binding CloseTabsToTheLeftCommand}" />
+                        <MenuItem Header="Close tabs to the right" Command="{Binding CloseTabsToTheRightCommand}" />
+                        <MenuItem Header="Close all but this" Command="{Binding CloseAllTabsButThisCommand}" />
+                    </ContextMenu>
+                </Button.ContextMenu>
+            </Button>
+        </Border>
+        
+        <Grid>
+            <Rectangle Classes="tabRectangle" Height="2" />
+            <Rectangle Classes="tabRectangle tabRectangleActive"
+                       Height="2" IsVisible="{Binding IsActive}" />
+            <Rectangle Classes="tabRectangle tabRectangleGloballyActive"
+                       Height="2" IsVisible="{Binding IsGloballyActive}" />
+        </Grid>
+    </StackPanel>
 </UserControl>
