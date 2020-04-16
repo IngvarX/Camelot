@@ -121,8 +121,7 @@
                             <Grid ColumnDefinitions="*,Auto,Auto,*">
                                 <main:DataGridHeaderArrowView IsVisible="{Binding IsSortingByNameEnabled}" />
                                 
-                                <Button Grid.Column="2" Content="Name" Command="{Binding SortFilesCommand}"
-                                        CommandParameter="{x:Static filePanels:SortingColumn.Name}" />
+                                <TextBlock Grid.Column="2" Text="Name" />
                             </Grid>
                         </Button>
                     </DataGridTemplateColumn.Header>
@@ -175,8 +174,7 @@
                             <Grid ColumnDefinitions="*,Auto,Auto,*">
                                 <main:DataGridHeaderArrowView IsVisible="{Binding IsSortingByExtensionEnabled}" />
                                 
-                                <Button Grid.Column="2" Content="Extension" Command="{Binding SortFilesCommand}"
-                                        CommandParameter="{x:Static filePanels:SortingColumn.Extension}" />
+                                <TextBlock Grid.Column="2" Text="Extension" />
                             </Grid>
                         </Button>
                     </DataGridTemplateColumn.Header>
@@ -206,8 +204,7 @@
                             <Grid ColumnDefinitions="*,Auto,Auto,*">
                                 <main:DataGridHeaderArrowView IsVisible="{Binding IsSortingBySizeEnabled}" />
                                 
-                                <Button Grid.Column="2" Content="Size" Command="{Binding SortFilesCommand}"
-                                        CommandParameter="{x:Static filePanels:SortingColumn.Size}" />
+                                <TextBlock Grid.Column="2" Text="Size" />
                             </Grid>
                         </Button>
                     </DataGridTemplateColumn.Header>
@@ -236,8 +233,7 @@
                             <Grid ColumnDefinitions="*,Auto,Auto,*">
                                 <main:DataGridHeaderArrowView IsVisible="{Binding IsSortingByDateEnabled}" />
                                 
-                                <Button Grid.Column="2" Content="Date" Command="{Binding SortFilesCommand}"
-                                        CommandParameter="{x:Static filePanels:SortingColumn.Date}" />
+                                <TextBlock Grid.Column="2" Text="Date" />
                             </Grid>
                         </Button>
                     </DataGridTextColumn.Header>
