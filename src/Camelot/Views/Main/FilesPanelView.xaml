@@ -116,8 +116,15 @@
                
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.Header>
-                        <Button Content="Name" Command="{Binding SortFilesCommand}"
-                                CommandParameter="{x:Static filePanels:SortingColumn.Name}" />
+                        <Button Command="{Binding SortFilesCommand}"
+                                CommandParameter="{x:Static filePanels:SortingColumn.Name}">
+                            <Grid ColumnDefinitions="*,Auto,Auto,*">
+                                <main:DataGridHeaderArrowView IsVisible="{Binding IsSortingByNameEnabled}" />
+                                
+                                <Button Grid.Column="2" Content="Name" Command="{Binding SortFilesCommand}"
+                                        CommandParameter="{x:Static filePanels:SortingColumn.Name}" />
+                            </Grid>
+                        </Button>
                     </DataGridTemplateColumn.Header>
                     
                     <DataGridTemplateColumn.CellTemplate>
@@ -163,8 +170,15 @@
                 
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.Header>
-                        <Button Content="Extension" Command="{Binding SortFilesCommand}"
-                                CommandParameter="{x:Static filePanels:SortingColumn.Extension}" />
+                        <Button Command="{Binding SortFilesCommand}"
+                                CommandParameter="{x:Static filePanels:SortingColumn.Extension}">
+                            <Grid ColumnDefinitions="*,Auto,Auto,*">
+                                <main:DataGridHeaderArrowView IsVisible="{Binding IsSortingByExtensionEnabled}" />
+                                
+                                <Button Grid.Column="2" Content="Extension" Command="{Binding SortFilesCommand}"
+                                        CommandParameter="{x:Static filePanels:SortingColumn.Extension}" />
+                            </Grid>
+                        </Button>
                     </DataGridTemplateColumn.Header>
                     
                     <DataGridTemplateColumn.CellTemplate>
@@ -187,8 +201,15 @@
                 
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.Header>
-                        <Button Content="Size" Command="{Binding SortFilesCommand}"
-                                CommandParameter="{x:Static filePanels:SortingColumn.Size}" />
+                        <Button Command="{Binding SortFilesCommand}"
+                                CommandParameter="{x:Static filePanels:SortingColumn.Size}">
+                            <Grid ColumnDefinitions="*,Auto,Auto,*">
+                                <main:DataGridHeaderArrowView IsVisible="{Binding IsSortingBySizeEnabled}" />
+                                
+                                <Button Grid.Column="2" Content="Size" Command="{Binding SortFilesCommand}"
+                                        CommandParameter="{x:Static filePanels:SortingColumn.Size}" />
+                            </Grid>
+                        </Button>
                     </DataGridTemplateColumn.Header>
                     
                     <DataGridTemplateColumn.CellTemplate>
@@ -210,8 +231,15 @@
                 
                 <DataGridTextColumn Binding="{Binding LastModifiedDateTime}">
                     <DataGridTextColumn.Header>
-                        <Button Content="Date" Command="{Binding SortFilesCommand}"
-                                CommandParameter="{x:Static filePanels:SortingColumn.Date}" />
+                        <Button Command="{Binding SortFilesCommand}"
+                                CommandParameter="{x:Static filePanels:SortingColumn.Date}">
+                            <Grid ColumnDefinitions="*,Auto,Auto,*">
+                                <main:DataGridHeaderArrowView IsVisible="{Binding IsSortingByDateEnabled}" />
+                                
+                                <Button Grid.Column="2" Content="Date" Command="{Binding SortFilesCommand}"
+                                        CommandParameter="{x:Static filePanels:SortingColumn.Date}" />
+                            </Grid>
+                        </Button>
                     </DataGridTextColumn.Header>
                 </DataGridTextColumn>
             </DataGrid.Columns>
