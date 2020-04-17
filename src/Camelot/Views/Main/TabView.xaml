@@ -16,10 +16,12 @@
                 <Button.Content>
                     <Grid>
                         <Grid Classes="activeTabGrid" Height="33" IsVisible="{Binding IsActive}">
-                            <TextBlock Classes="tabNameTextBlock" Text="{Binding DirectoryName}" />
+                            <TextBlock Classes="tabNameTextBlock" 
+                                       Text="{Binding DirectoryName}" />
                         </Grid>
                         <Grid Classes="inactiveTabGrid" Height="33" IsVisible="{Binding !IsActive}">
-                            <TextBlock Classes="tabNameTextBlock" Text="{Binding DirectoryName}" />
+                            <TextBlock Classes="tabNameTextBlock inactiveTabNameTextBlock"
+                                       Text="{Binding DirectoryName}" />
                         </Grid>
                     </Grid>
                 </Button.Content>

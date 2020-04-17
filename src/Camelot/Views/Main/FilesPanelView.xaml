@@ -88,6 +88,11 @@
                 </Style>
             </DataGrid.Styles>
             
+            <DataGrid.KeyBindings>
+                <KeyBinding Gesture="Ctrl+C" Command="{Binding CopyToClipboardCommand}" />
+                <KeyBinding Gesture="Ctrl+V" Command="{Binding PasteFromClipboardCommand}" />
+            </DataGrid.KeyBindings>
+            
             <DataGrid.Columns>
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>

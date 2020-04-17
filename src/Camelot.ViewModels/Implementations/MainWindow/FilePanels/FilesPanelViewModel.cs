@@ -30,6 +30,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private readonly IFilesPanelStateService _filesPanelStateService;
         private readonly ITabViewModelFactory _tabViewModelFactory;
         private readonly IFileSizeFormatter _fileSizeFormatter;
+        private readonly IClipboardOperationsService _clipboardOperationsService;
 
         private readonly ObservableCollection<IFileSystemNodeViewModel> _fileSystemNodes;
         private readonly ObservableCollection<IFileSystemNodeViewModel> _selectedFileSystemNodes;
@@ -115,6 +116,10 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         public ICommand RefreshCommand { get; }
         
         public ICommand SortFilesCommand { get; }
+        
+        public ICommand CopyToClipboardCommand { get; }
+
+        public ICommand PasteFromClipboardCommand { get; }
 
         public FilesPanelViewModel(
             IFileService fileService,
@@ -125,7 +130,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             IApplicationDispatcher applicationDispatcher,
             IFilesPanelStateService filesPanelStateService,
             ITabViewModelFactory tabViewModelFactory,
-            IFileSizeFormatter fileSizeFormatter)
+            IFileSizeFormatter fileSizeFormatter,
+            IClipboardOperationsService clipboardOperationsService)
         {
             _fileService = fileService;
             _directoryService = directoryService;
@@ -136,6 +142,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             _filesPanelStateService = filesPanelStateService;
             _tabViewModelFactory = tabViewModelFactory;
             _fileSizeFormatter = fileSizeFormatter;
+            _clipboardOperationsService = clipboardOperationsService;
 
             _fileSystemNodes = new ObservableCollection<IFileSystemNodeViewModel>();
             _selectedFileSystemNodes = new ObservableCollection<IFileSystemNodeViewModel>();
@@ -143,6 +150,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             ActivateCommand = ReactiveCommand.Create(Activate);
             RefreshCommand = ReactiveCommand.Create(ReloadFiles);
             SortFilesCommand = ReactiveCommand.Create<SortingColumn>(SortFiles);
+            CopyToClipboardCommand = ReactiveCommand.CreateFromTask(CopyToClipboardAsync);
+            PasteFromClipboardCommand = ReactiveCommand.CreateFromTask(PasteFromClipboardAsync);
 
             var state = _filesPanelStateService.GetPanelState();
             if (!state.Tabs.Any())
@@ -417,6 +426,17 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
                 _filesPanelStateService.SavePanelState(state);
             }, TaskCreationOptions.LongRunning);
+        }
+        
+        
+        private Task CopyToClipboardAsync()
+        {
+            return _clipboardOperationsService.CopyFilesAsync(_filesSelectionService.SelectedFiles);
+        }
+
+        private Task PasteFromClipboardAsync()
+        {
+            return _clipboardOperationsService.PasteFilesAsync(CurrentDirectory);
         }
     }
 }

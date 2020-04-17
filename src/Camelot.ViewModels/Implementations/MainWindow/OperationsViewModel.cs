@@ -12,7 +12,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow
     {
         private readonly IFilesOperationsMediator _filesOperationsMediator;
         private readonly IOperationsService _operationsService;
-        private readonly IClipboardOperationsService _clipboardOperationsService;
         private readonly IFilesSelectionService _filesSelectionService;
         private readonly IDialogService _dialogService;
         private readonly IDirectoryService _directoryService;
@@ -27,21 +26,15 @@ namespace Camelot.ViewModels.Implementations.MainWindow
 
         public ICommand RemoveCommand { get; }
 
-        public ICommand CopyToClipboardCommand { get; }
-
-        public ICommand PasteFromClipboardCommand { get; }
-
         public OperationsViewModel(
             IFilesOperationsMediator filesOperationsMediator,
             IOperationsService operationsService,
-            IClipboardOperationsService clipboardOperationsService,
             IFilesSelectionService filesSelectionService,
             IDialogService dialogService,
             IDirectoryService directoryService)
         {
             _filesOperationsMediator = filesOperationsMediator;
             _operationsService = operationsService;
-            _clipboardOperationsService = clipboardOperationsService;
             _filesSelectionService = filesSelectionService;
             _dialogService = dialogService;
             _directoryService = directoryService;
@@ -51,8 +44,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             MoveCommand = ReactiveCommand.CreateFromTask(MoveAsync);
             NewDirectoryCommand = ReactiveCommand.CreateFromTask(CreateNewDirectoryAsync);
             RemoveCommand = ReactiveCommand.CreateFromTask(RemoveAsync);
-            CopyToClipboardCommand = ReactiveCommand.CreateFromTask(CopyToClipboardAsync);
-            PasteFromClipboardCommand = ReactiveCommand.CreateFromTask(PasteFromClipboardAsync);
         }
 
         private void Edit()
@@ -84,18 +75,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow
         private Task RemoveAsync()
         {
             return _operationsService.RemoveFilesAsync(_filesSelectionService.SelectedFiles);
-        }
-
-        private Task CopyToClipboardAsync()
-        {
-            return _clipboardOperationsService.CopyFilesAsync(_filesSelectionService.SelectedFiles);
-        }
-
-        private async Task PasteFromClipboardAsync()
-        {
-            var activeDirectory = _filesOperationsMediator.ActiveFilesPanelViewModel.CurrentDirectory;
-            
-            await _clipboardOperationsService.PasteFilesAsync(activeDirectory);
         }
     }
 }

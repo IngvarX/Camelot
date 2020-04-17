@@ -81,6 +81,10 @@
         <Setter Property="Background" Value="{DynamicResource MainBackgroundColorBrush}" />
     </Style>
     
+    <Style Selector="TextBlock.inactiveTabNameTextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource InactiveTabForegroundBrush}" />
+    </Style>
+    
     <Style Selector="DockPanel#MenuDockPanel">
         <Setter Property="Background" Value="{DynamicResource MenuBackgroundColorBrush}" />
     </Style>

@@ -143,7 +143,6 @@ namespace Camelot
             services.Register<IOperationsViewModel>(() => new OperationsViewModel(
                 resolver.GetService<IFilesOperationsMediator>(),
                 resolver.GetService<IOperationsService>(),
-                resolver.GetService<IClipboardOperationsService>(),
                 resolver.GetService<IFilesSelectionService>(),
                 resolver.GetService<IDialogService>(),
                 resolver.GetService<IDirectoryService>()
@@ -178,7 +177,8 @@ namespace Camelot
                 resolver.GetService<IApplicationDispatcher>(),
                 filesPanelStateService,
                 resolver.GetService<ITabViewModelFactory>(),
-                resolver.GetService<IFileSizeFormatter>()
+                resolver.GetService<IFileSizeFormatter>(),
+                resolver.GetService<IClipboardOperationsService>()
             );
 
             return filesPanelViewModel;
