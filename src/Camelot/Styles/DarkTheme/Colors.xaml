@@ -6,17 +6,17 @@
         <Color x:Key="OrangeColor">#ce701e</Color>
         <Color x:Key="WhiteColor">#ffffff</Color>
         <Color x:Key="BlackColor">#000000</Color>
-        <Color x:Key="RowBackgroundColor">#272521</Color>
-        <Color x:Key="AlternativeRowBackgroundColor">#2a2824</Color>
+        <Color x:Key="MenuBackgroundColor">#1b1a17</Color>
+        <Color x:Key="MainBackgroundColor">#272521</Color>
+        <Color x:Key="AlternativeMainBackgroundColor">#2a2824</Color>
         <Color x:Key="OperationButtonBackgroundColor">#3c2b4e</Color>
         <Color x:Key="OperationButtonHoverBackgroundColor">#45325a</Color>
 
         <SolidColorBrush x:Key="OrangeBrush" Color="{DynamicResource OrangeColor}" />
         <SolidColorBrush x:Key="WhiteBrush" Color="{DynamicResource WhiteColor}" />
         <SolidColorBrush x:Key="BlackBrush" Color="{DynamicResource BlackColor}" />
-        <SolidColorBrush x:Key="RowBackgroundColorBrush" Color="{DynamicResource RowBackgroundColor}" />
-        <SolidColorBrush x:Key="AlternativeRowBackgroundColorBrush" Color="{DynamicResource AlternativeRowBackgroundColor}"
-                         Opacity="0.01" />
+        <SolidColorBrush x:Key="MainBackgroundColorBrush" Color="{DynamicResource MainBackgroundColor}" />
+        <SolidColorBrush x:Key="AlternativeMainBackgroundColorBrush" Color="{DynamicResource AlternativeMainBackgroundColor}" />
         <SolidColorBrush x:Key="OperationButtonBackgroundColorBrush" Color="{DynamicResource OperationButtonBackgroundColor}" />
         <SolidColorBrush x:Key="OperationButtonHoverBackgroundColorBrush" Color="{DynamicResource OperationButtonHoverBackgroundColor}" />
         <SolidColorBrush x:Key="OperationButtonForegroundColorBrush" Color="{DynamicResource WhiteColor}"
@@ -25,9 +25,13 @@
                          Opacity="0.9" />
         <SolidColorBrush x:Key="DirectoryTextBoxBackgroundColorBrush" Color="{DynamicResource BlackColor}"
                          Opacity="0.2" />
+        <SolidColorBrush x:Key="MenuBackgroundColorBrush" Color="{DynamicResource MenuBackgroundColor}" />
         <SolidColorBrush x:Key="TabButtonBorderColorBrush" Color="{DynamicResource BlackColor}"
                          Opacity="0.4" />
         <SolidColorBrush x:Key="LightGreyBrush" Color="{DynamicResource WhiteColor}"
                          Opacity="0.3" />
+        <SolidColorBrush x:Key="DataGridHeaderArrowBrush" Color="{DynamicResource WhiteColor}"
+                         Opacity="0.3" />
+        <SolidColorBrush x:Key="ThemeControlMidBrush" Color="{DynamicResource MainBackgroundColor}" />
     </Style.Resources>
 </Style>

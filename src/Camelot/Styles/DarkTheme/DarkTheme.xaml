@@ -4,6 +4,10 @@
 
     <StyleInclude Source="/Styles/DarkTheme/Colors.xaml" />
 
+    <Style Selector="Grid.defaultBackgroundColor">
+        <Setter Property="Background" Value="{DynamicResource MainBackgroundColorBrush}" />
+    </Style>
+    
     <Style Selector="DataGridRow">
         <Setter Property="Foreground" Value="{DynamicResource WhiteBrush}" />
         <Setter Property="Opacity" Value="0.7" />
@@ -23,9 +27,8 @@
         <Setter Property="Opacity" Value="1" />
     </Style>
 
-    <Style Selector="DataGrid">
-        <Setter Property="RowBackground" Value="{DynamicResource RowBackgroundColorBrush}" />
-        <Setter Property="AlternatingRowBackground" Value="{DynamicResource AlternativeRowBackgroundColorBrush}" />
+    <Style Selector="DataGrid#FilesDataGrid">
+        <Setter Property="RowBackground" Value="{DynamicResource MainBackgroundColorBrush}" />
     </Style>
 
     <Style Selector="Button.operationButton">
@@ -75,15 +78,15 @@
     </Style>
     
     <Style Selector="Grid.activeTabGrid">
-        <Setter Property="Background" Value="{DynamicResource RowBackgroundColorBrush}" />
+        <Setter Property="Background" Value="{DynamicResource MainBackgroundColorBrush}" />
     </Style>
     
-    <Style Selector="Grid#MainGrid">
-        <Setter Property="Background" Value="{DynamicResource RowBackgroundColorBrush}" />
+    <Style Selector="DockPanel#MenuDockPanel">
+        <Setter Property="Background" Value="{DynamicResource MenuBackgroundColorBrush}" />
     </Style>
     
     <Style Selector="DataGridColumnHeader">
-        <Setter Property="Background" Value="{DynamicResource RowBackgroundColorBrush}" />
+        <Setter Property="Background" Value="{DynamicResource MainBackgroundColorBrush}" />
         <Setter Property="Foreground" Value="{DynamicResource OperationButtonForegroundColorBrush}" />
     </Style>
 </Styles>

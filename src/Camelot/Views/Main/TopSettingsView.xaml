@@ -5,7 +5,7 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Camelot.Views.Main.TopSettingsView">
 
-    <Grid Height="10">
+    <Grid Classes="defaultBackgroundColor" Height="10">
 
     </Grid>
 

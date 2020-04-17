@@ -10,7 +10,7 @@
         <menu:MenuViewModel />
     </Design.DataContext>
     
-    <DockPanel>
+    <DockPanel Name="MenuDockPanel">
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
                 <MenuItem Header="_Exit" Command="{Binding ExitCommand}" />
