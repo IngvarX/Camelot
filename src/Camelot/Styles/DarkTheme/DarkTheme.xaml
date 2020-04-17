@@ -81,4 +81,9 @@
     <Style Selector="Grid#MainGrid">
         <Setter Property="Background" Value="{DynamicResource RowBackgroundColorBrush}" />
     </Style>
+    
+    <Style Selector="DataGridColumnHeader">
+        <Setter Property="Background" Value="{DynamicResource RowBackgroundColorBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource OperationButtonForegroundColorBrush}" />
+    </Style>
 </Styles>

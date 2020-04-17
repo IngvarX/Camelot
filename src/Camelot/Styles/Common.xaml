@@ -90,4 +90,10 @@
         <Setter Property="Margin" Value="4,0" />
         <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
+    
+    <Style Selector="DataGridColumnHeader">
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Stretch" />
+        <Setter Property="Padding" Value="0" />
+    </Style>
 </Styles>
