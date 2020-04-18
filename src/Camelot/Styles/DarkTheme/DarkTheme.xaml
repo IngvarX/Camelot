@@ -69,8 +69,11 @@
         <Setter Property="Fill" Value="{DynamicResource LightGreyBrush}" />
     </Style>
     
-    <Style Selector="TextBlock.selectionInfoTextBlock">
+    <Style Selector="Border.selectionBorder">
         <Setter Property="Background" Value="{DynamicResource OrangeBrush}" />
+        <Setter Property="Margin" Value="5" />
+        <Setter Property="Padding" Value="5,2" />
+        <Setter Property="CornerRadius" Value="5" />
     </Style>
     
     <Style Selector="Grid.inactiveTabGrid">
@@ -89,8 +92,7 @@
         <Setter Property="Background" Value="{DynamicResource MenuBackgroundColorBrush}" />
     </Style>
     
-    <Style Selector="DataGridColumnHeader">
-        <Setter Property="Background" Value="{DynamicResource MainBackgroundColorBrush}" />
-        <Setter Property="Foreground" Value="{DynamicResource OperationButtonForegroundColorBrush}" />
+    <Style Selector="TextBlock.dataGridColumnHeaderTextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource InactiveTabForegroundBrush}" />
     </Style>
 </Styles>

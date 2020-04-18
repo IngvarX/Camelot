@@ -80,7 +80,7 @@
     
     <Style Selector="TextBlock.selectionInfoTextBlock">
         <Setter Property="FontFamily" Value="SansSerif" />
-        <Setter Property="FontSize" Value="20" />
+        <Setter Property="FontSize" Value="18" />
     </Style>
     
     <Style Selector="TextBlock.aboutPageTextBlock">

@@ -2,7 +2,6 @@
 
 Camelot is light cross-platform twin-panel file manager written in C#
 
-
 [![Stars](https://img.shields.io/github/stars/ingvar1995/Camelot.svg?style=for-the-badge)](https://github.com/ingvar1995/Camelot/stargazers)
 [![Open issues](https://img.shields.io/github/issues/ingvar1995/Camelot.svg?style=for-the-badge)](https://github.com/ingvar1995/Camelot/issues)
 [![Forks](https://img.shields.io/github/forks/ingvar1995/Camelot.svg?style=for-the-badge)](https://github.com/ingvar1995/Camelot/forks)
@@ -24,8 +23,8 @@ dotnet run --project src/Camelot/Camelot.csproj
 ```
 
 ## Screenshots
-*Camelot target UI*
 ![Camelot](/docs/Camelot.png)
+*Camelot on Ubuntu*
 
 ## Credits
 

@@ -62,12 +62,14 @@
         </ItemsControl>
 
         <DataGrid x:Name="FilesDataGrid" Grid.Row="2" Items="{Binding FileSystemNodes}"
-                  CanUserSortColumns="False"
-                  CellPointerPressed="OnDataGridCellPointerPressed"
-                  PointerReleased="OnDataGridPointerReleased" VerticalScrollBarVisibility="Visible"
+                  CanUserSortColumns="False" IsReadOnly="True"
                   HorizontalScrollBarVisibility="Disabled"
+                  CanUserResizeColumns="True"
                   AlternatingRowBackground="{DynamicResource AlternativeMainBackgroundColorBrush}"
-                  SelectionChanged="OnDataGridSelectionChanged" IsReadOnly="True">
+                  VerticalScrollBarVisibility="Visible"
+                  CellPointerPressed="OnDataGridCellPointerPressed"
+                  PointerReleased="OnDataGridPointerReleased"
+                  SelectionChanged="OnDataGridSelectionChanged">
             
             <DataGrid.Resources>
                 <Template x:Key="RowContextMenu">
@@ -127,7 +129,7 @@
                             <Grid ColumnDefinitions="*,Auto,Auto,*">
                                 <main:DataGridHeaderArrowView IsVisible="{Binding IsSortingByNameEnabled}" />
                                 
-                                <TextBlock Grid.Column="2" Text="Name" />
+                                <TextBlock Grid.Column="2" Classes="dataGridColumnHeaderTextBlock" Text="Name" />
                             </Grid>
                         </Button>
                     </DataGridTemplateColumn.Header>
@@ -180,7 +182,7 @@
                             <Grid ColumnDefinitions="*,Auto,Auto,*">
                                 <main:DataGridHeaderArrowView IsVisible="{Binding IsSortingByExtensionEnabled}" />
                                 
-                                <TextBlock Grid.Column="2" Text="Extension" />
+                                <TextBlock Grid.Column="2" Classes="dataGridColumnHeaderTextBlock" Text="Extension" />
                             </Grid>
                         </Button>
                     </DataGridTemplateColumn.Header>
@@ -210,7 +212,7 @@
                             <Grid ColumnDefinitions="*,Auto,Auto,*">
                                 <main:DataGridHeaderArrowView IsVisible="{Binding IsSortingBySizeEnabled}" />
                                 
-                                <TextBlock Grid.Column="2" Text="Size" />
+                                <TextBlock Grid.Column="2" Classes="dataGridColumnHeaderTextBlock" Text="Size" />
                             </Grid>
                         </Button>
                     </DataGridTemplateColumn.Header>
@@ -239,7 +241,7 @@
                             <Grid ColumnDefinitions="*,Auto,Auto,*">
                                 <main:DataGridHeaderArrowView IsVisible="{Binding IsSortingByDateEnabled}" />
                                 
-                                <TextBlock Grid.Column="2" Text="Date" />
+                                <TextBlock Grid.Column="2" Classes="dataGridColumnHeaderTextBlock" Text="Date" />
                             </Grid>
                         </Button>
                     </DataGridTextColumn.Header>
@@ -248,15 +250,17 @@
         </DataGrid>
         
         <Grid Grid.Row="3" ColumnDefinitions="Auto,*">
-            <TextBlock Classes="selectionInfoTextBlock" Margin="5">
-                <TextBlock.Text>    
-                    <MultiBinding StringFormat="{}{0} files ({1}) and {2} directories">
-                        <Binding Path="SelectedFilesCount" />
-                        <Binding Path="SelectedFilesSize" />
-                        <Binding Path="SelectedDirectoriesCount" />
-                    </MultiBinding>
-                </TextBlock.Text>
-            </TextBlock>
+            <Border Classes="selectionBorder">
+                <TextBlock Classes="selectionInfoTextBlock">
+                    <TextBlock.Text>    
+                        <MultiBinding StringFormat="{}{0} files ({1}) and {2} directories">
+                            <Binding Path="SelectedFilesCount" />
+                            <Binding Path="SelectedFilesSize" />
+                            <Binding Path="SelectedDirectoriesCount" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </Border>
         </Grid>
     </Grid>
 
