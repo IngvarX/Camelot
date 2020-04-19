@@ -64,7 +64,6 @@
         <DataGrid x:Name="FilesDataGrid" Grid.Row="2" Items="{Binding FileSystemNodes}"
                   CanUserSortColumns="False" IsReadOnly="True"
                   HorizontalScrollBarVisibility="Disabled"
-                  CanUserResizeColumns="True"
                   AlternatingRowBackground="{DynamicResource AlternativeMainBackgroundColorBrush}"
                   VerticalScrollBarVisibility="Visible"
                   CellPointerPressed="OnDataGridCellPointerPressed"
@@ -96,7 +95,7 @@
             </DataGrid.KeyBindings>
             
             <DataGrid.Columns>
-                <DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="Auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <ContentControl Content="{Binding DataContext, RelativeSource={RelativeSource AncestorType=DataGridCell}}">
@@ -122,7 +121,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                
-                <DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="5*">
                     <DataGridTemplateColumn.Header>
                         <Button Command="{Binding SortFilesCommand}"
                                 CommandParameter="{x:Static filePanels:SortingColumn.Name}">
@@ -175,7 +174,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 
-                <DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="1*">
                     <DataGridTemplateColumn.Header>
                         <Button Command="{Binding SortFilesCommand}"
                                 CommandParameter="{x:Static filePanels:SortingColumn.Extension}">
@@ -205,7 +204,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 
-                <DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="1*">
                     <DataGridTemplateColumn.Header>
                         <Button Command="{Binding SortFilesCommand}"
                                 CommandParameter="{x:Static filePanels:SortingColumn.Size}">
@@ -234,7 +233,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 
-                <DataGridTextColumn Binding="{Binding LastModifiedDateTime}">
+                <DataGridTextColumn Binding="{Binding LastModifiedDateTime}" Width="2*">
                     <DataGridTextColumn.Header>
                         <Button Command="{Binding SortFilesCommand}"
                                 CommandParameter="{x:Static filePanels:SortingColumn.Date}">

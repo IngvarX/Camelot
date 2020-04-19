@@ -7,12 +7,15 @@ namespace Camelot.DataAccess.Models
         public List<string> Tabs { get; set; }
 
         public int SelectedTabIndex { get; set; }
+        
+        public SortingSettings SortingSettings { get; set; }
 
         public static PanelState Empty => new PanelState();
 
         public PanelState()
         {
             Tabs = new List<string>();
+            SortingSettings = new SortingSettings();
         }
     }
 }

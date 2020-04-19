@@ -91,8 +91,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         public IEnumerable<IFileSystemNodeViewModel> FileSystemNodes => _fileSystemNodes;
 
         public IList<IFileSystemNodeViewModel> SelectedFileSystemNodes => _selectedFileSystemNodes;
-
-
+        
         public int SelectedFilesCount => SelectedFiles.Count();
         
         public int SelectedDirectoriesCount => SelectedDirectories.Count();
@@ -162,6 +161,10 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
                     _directoryService.GetAppRootDirectory()
                 };
             }
+
+            IsSortingByAscendingEnabled = state.SortingSettings.IsAscending;
+            SortingColumn = (SortingColumn) state.SortingSettings.SortingMode;
+            
             _tabs = new ObservableCollection<ITabViewModel>(state.Tabs.Select(Create));
             _tabs.CollectionChanged += TabsOnCollectionChanged;
 
@@ -214,6 +217,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             }
             
             ReloadFiles();
+            SaveState();
         }
 
         private void TabsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -421,13 +425,17 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
                 var state = new PanelState
                 {
                     Tabs = tabs,
-                    SelectedTabIndex = selectedTabIndex
+                    SelectedTabIndex = selectedTabIndex,
+                    SortingSettings = new SortingSettings
+                    {
+                        SortingMode = (int)SortingColumn,
+                        IsAscending = IsSortingByAscendingEnabled
+                    }
                 };
 
                 _filesPanelStateService.SavePanelState(state);
             }, TaskCreationOptions.LongRunning);
         }
-        
         
         private Task CopyToClipboardAsync()
         {
