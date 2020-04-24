@@ -4,8 +4,8 @@ namespace Camelot.Services.Interfaces
 {
     public interface IFilesPanelStateService
     {
-        PanelState GetPanelState();
+        PanelModel GetPanelState();
 
-        void SavePanelState(PanelState state);
+        void SavePanelState(PanelModel model);
     }
 }

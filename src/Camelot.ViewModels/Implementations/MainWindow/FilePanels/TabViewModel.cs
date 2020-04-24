@@ -2,10 +2,10 @@ using System;
 using System.Windows.Input;
 using Camelot.Extensions;
 using Camelot.Services.Interfaces;
-using Camelot.ViewModels.Interfaces.MainWindow;
+using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using ReactiveUI;
 
-namespace Camelot.ViewModels.Implementations.MainWindow
+namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 {
     public class TabViewModel : ViewModelBase, ITabViewModel
     {
@@ -14,6 +14,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow
         private bool _isActive;
         private bool _isGloballyActive;
         private string _currentDirectory;
+        
+        public IFileSystemNodesSortingViewModel SortingViewModel { get; }
 
         public string CurrentDirectory
         {
@@ -24,7 +26,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow
                 this.RaisePropertyChanged(nameof(DirectoryName));
             }
         }
-
+        
         public string DirectoryName => _pathService.GetFileName(_pathService.TrimPathSeparators(CurrentDirectory));
 
         public bool IsActive
@@ -65,9 +67,11 @@ namespace Camelot.ViewModels.Implementations.MainWindow
 
         public TabViewModel(
             IPathService pathService,
+            IFileSystemNodesSortingViewModel fileSystemNodesSortingViewModel,
             string directory)
         {
             _pathService = pathService;
+            SortingViewModel = fileSystemNodesSortingViewModel;
             CurrentDirectory = directory;
 
             ActivateCommand = ReactiveCommand.Create(RequestActivation);

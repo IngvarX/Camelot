@@ -2,12 +2,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:mainWindow="clr-namespace:Camelot.ViewModels.Implementations.MainWindow;assembly=Camelot.ViewModels"
+             xmlns:filePanels="clr-namespace:Camelot.ViewModels.Implementations.MainWindow.FilePanels;assembly=Camelot.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Camelot.Views.Main.TabView">
 
     <Design.DataContext>
-        <mainWindow:TabViewModel />
+        <filePanels:TabViewModel />
     </Design.DataContext>
 
     <StackPanel Orientation="Vertical">

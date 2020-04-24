@@ -67,6 +67,7 @@ namespace Camelot.Views.Main
         {
             if (args.PointerPressedEventArgs.ClickCount == 2)
             {
+                args.PointerPressedEventArgs.Handled = true;
                 var fileViewModel = (IFileSystemNodeViewModel)args.Cell.DataContext;
 
                 fileViewModel.OpenCommand.Execute(null);

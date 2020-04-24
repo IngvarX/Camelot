@@ -18,10 +18,10 @@ namespace Camelot.Services.Tests
         [Fact]
         public void TestEmptyState()
         {
-            var repositoryMock = new Mock<IRepository<PanelState>>();
+            var repositoryMock = new Mock<IRepository<PanelModel>>();
             repositoryMock
                 .Setup(m => m.GetById(PanelKey))
-                .Returns((PanelState)null);
+                .Returns((PanelModel)null);
 
             var unitOfWorkFactory = GetUnitOfWorkFactory(repositoryMock);
 
@@ -48,14 +48,14 @@ namespace Camelot.Services.Tests
         [Fact]
         public void TestSettingsPersistence()
         {
-            var collection = new List<string>();
-            var repositoryMock = new Mock<IRepository<PanelState>>();
+            var collection = new List<TabModel>();
+            var repositoryMock = new Mock<IRepository<PanelModel>>();
             repositoryMock
                 .Setup(m => m.GetById(PanelKey))
-                .Returns(new PanelState {Tabs = collection});
+                .Returns(new PanelModel {Tabs = collection});
             repositoryMock
-                .Setup(m => m.Upsert(PanelKey, It.IsAny<PanelState>()))
-                .Callback<string, PanelState>((key, panelState) =>
+                .Setup(m => m.Upsert(PanelKey, It.IsAny<PanelModel>()))
+                .Callback<string, PanelModel>((key, panelState) =>
                 {
                     collection.Clear();
                     collection.AddRange(panelState.Tabs);
@@ -66,8 +66,11 @@ namespace Camelot.Services.Tests
             IFilesPanelStateService filesPanelStateService = new FilesPanelStateService(
                 unitOfWorkFactory, PanelKey);
 
-            var tabs = Enumerable.Range(0, 10).Select(n => n.ToString()).ToArray();
-            var state = new PanelState {Tabs = tabs.ToList()};
+            var tabs = Enumerable
+                .Range(0, 10)
+                .Select(_ => new TabModel())
+                .ToList();
+            var state = new PanelModel {Tabs = tabs};
 
             filesPanelStateService.SavePanelState(state);
 
@@ -75,15 +78,15 @@ namespace Camelot.Services.Tests
 
             Assert.NotNull(savedState);
             Assert.NotNull(savedState.Tabs);
-            Assert.True(savedState.Tabs.Count == tabs.Length);
+            Assert.True(savedState.Tabs.Count == tabs.Count);
             Assert.Equal(tabs, savedState.Tabs);
         }
 
-        private static IUnitOfWorkFactory GetUnitOfWorkFactory(IMock<IRepository<PanelState>> repositoryMock)
+        private static IUnitOfWorkFactory GetUnitOfWorkFactory(IMock<IRepository<PanelModel>> repositoryMock)
         {
             var unitOfWorkMock = new Mock<IUnitOfWork>();
             unitOfWorkMock
-                .Setup(m => m.GetRepository<PanelState>())
+                .Setup(m => m.GetRepository<PanelModel>())
                 .Returns(repositoryMock.Object);
             var unitOfWorkFactoryMock = new Mock<IUnitOfWorkFactory>();
             unitOfWorkFactoryMock

@@ -12,7 +12,6 @@ using Camelot.Extensions;
 using Camelot.Services.Interfaces;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Comparers;
-using Camelot.ViewModels.Interfaces.MainWindow;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using DynamicData;
 using ReactiveUI;
@@ -38,8 +37,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         private string _currentDirectory;
         private ITabViewModel _selectedTab;
-        private SortingColumn _sortingColumn;
-        private bool _isSortingByAscendingEnabled;
 
         private IEnumerable<FileViewModel> SelectedFiles => _selectedFileSystemNodes.OfType<FileViewModel>();
         
@@ -60,34 +57,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
                 }
             }
         }
-
-        public SortingColumn SortingColumn
-        {
-            get => _sortingColumn;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _sortingColumn, value);
-                this.RaisePropertyChanged(nameof(IsSortingByNameEnabled));
-                this.RaisePropertyChanged(nameof(IsSortingByDateEnabled));
-                this.RaisePropertyChanged(nameof(IsSortingByExtensionEnabled));
-                this.RaisePropertyChanged(nameof(IsSortingBySizeEnabled));
-            }
-        }
-
-        public bool IsSortingByAscendingEnabled
-        {
-            get => _isSortingByAscendingEnabled;
-            set => this.RaiseAndSetIfChanged(ref _isSortingByAscendingEnabled, value);
-        }
-
-        public bool IsSortingByNameEnabled => SortingColumn == SortingColumn.Name;
         
-        public bool IsSortingByDateEnabled => SortingColumn == SortingColumn.Date;
-        
-        public bool IsSortingByExtensionEnabled => SortingColumn == SortingColumn.Extension;
-        
-        public bool IsSortingBySizeEnabled => SortingColumn == SortingColumn.Size;
-
         public IEnumerable<IFileSystemNodeViewModel> FileSystemNodes => _fileSystemNodes;
 
         public IList<IFileSystemNodeViewModel> SelectedFileSystemNodes => _selectedFileSystemNodes;
@@ -156,14 +126,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             if (!state.Tabs.Any())
             {
                 // TODO: get all roots
-                state.Tabs = new List<string>
-                {
-                    _directoryService.GetAppRootDirectory()
-                };
+                state.Tabs = GetDefaultTabs();
             }
-
-            IsSortingByAscendingEnabled = state.SortingSettings.IsAscending;
-            SortingColumn = (SortingColumn) state.SortingSettings.SortingMode;
             
             _tabs = new ObservableCollection<ITabViewModel>(state.Tabs.Select(Create));
             _tabs.CollectionChanged += TabsOnCollectionChanged;
@@ -176,7 +140,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
             SubscribeToEvents();
         }
-        
+
         public void Activate()
         {
             ActivatedEvent.Raise(this, EventArgs.Empty);
@@ -207,13 +171,13 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         
         private void SortFiles(SortingColumn sortingColumn)
         {
-            if (SortingColumn == sortingColumn)
+            if (SelectedTab.SortingViewModel.SortingColumn == sortingColumn)
             {
-                IsSortingByAscendingEnabled = !IsSortingByAscendingEnabled;
+                SelectedTab.SortingViewModel.ToggleSortingDirection();
             }
             else
             {
-                SortingColumn = sortingColumn;
+                SelectedTab.SortingViewModel.SortingColumn = sortingColumn;
             }
             
             ReloadFiles();
@@ -227,7 +191,18 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         private ITabViewModel Create(string directory)
         {
-            var tabViewModel = _tabViewModelFactory.Create(directory);
+            var tabModel = new TabModel
+            {
+                Directory = directory,
+                SortingSettings = GetSortingSettings(SelectedTab)
+            };
+
+            return Create(tabModel);
+        }
+        
+        private ITabViewModel Create(TabModel tabModel)
+        {
+            var tabViewModel = _tabViewModelFactory.Create(tabModel);
             SubscribeToEvents(tabViewModel);
 
             return tabViewModel;
@@ -337,7 +312,14 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
             tabViewModel.IsActive = tabViewModel.IsGloballyActive = true;
             SelectedTab = tabViewModel;
-            CurrentDirectory = tabViewModel.CurrentDirectory;
+            if (CurrentDirectory == tabViewModel.CurrentDirectory)
+            {
+                ReloadFiles();
+            }
+            else
+            {
+                CurrentDirectory = tabViewModel.CurrentDirectory;
+            }
             
             Activate();
         }
@@ -368,12 +350,15 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             var directories = _directoryService.GetDirectories(CurrentDirectory);
             var files = _fileService.GetFiles(CurrentDirectory);
 
-            var directoriesComparer = new DirectoryModelsFileSystemNodesComparer(IsSortingByAscendingEnabled, SortingColumn);
+            var sortingViewModel = SelectedTab.SortingViewModel;
+            var directoriesComparer = new DirectoryModelsFileSystemNodesComparer(
+                sortingViewModel.IsSortingByAscendingEnabled, sortingViewModel.SortingColumn);
             var directoriesViewModels = directories
                 .OrderBy(d => d, directoriesComparer)
                 .Select(d => _fileSystemNodeViewModelFactory.Create(d));
             
-            var filesComparer = new FileModelsFileSystemNodesComparer(IsSortingByAscendingEnabled, SortingColumn);
+            var filesComparer = new FileModelsFileSystemNodesComparer(
+                sortingViewModel.IsSortingByAscendingEnabled, sortingViewModel.SortingColumn);
             var filesViewModels = files
                 .OrderBy(f => f, filesComparer)
                 .Select(_fileSystemNodeViewModelFactory.Create);
@@ -420,23 +405,28 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         {
             Task.Factory.StartNew(() =>
             {
-                var tabs = _tabs.Select(t => t.CurrentDirectory).ToList();
+                var tabs = _tabs.Select(CreateFrom).ToList();
                 var selectedTabIndex = _tabs.IndexOf(_selectedTab);
-                var state = new PanelState
+                var state = new PanelModel
                 {
                     Tabs = tabs,
-                    SelectedTabIndex = selectedTabIndex,
-                    SortingSettings = new SortingSettings
-                    {
-                        SortingMode = (int)SortingColumn,
-                        IsAscending = IsSortingByAscendingEnabled
-                    }
+                    SelectedTabIndex = selectedTabIndex
                 };
 
                 _filesPanelStateService.SavePanelState(state);
             }, TaskCreationOptions.LongRunning);
         }
-        
+
+        private static TabModel CreateFrom(ITabViewModel tabViewModel) =>
+            new TabModel {Directory = tabViewModel.CurrentDirectory, SortingSettings = GetSortingSettings(tabViewModel)};
+
+        private static SortingSettings GetSortingSettings(ITabViewModel tabViewModel) =>
+            new SortingSettings
+            {
+                IsAscending = tabViewModel.SortingViewModel.IsSortingByAscendingEnabled,
+                SortingMode = (int) tabViewModel.SortingViewModel.SortingColumn
+            };
+
         private Task CopyToClipboardAsync()
         {
             return _clipboardOperationsService.CopyFilesAsync(_filesSelectionService.SelectedFiles);
@@ -445,6 +435,16 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private Task PasteFromClipboardAsync()
         {
             return _clipboardOperationsService.PasteFilesAsync(CurrentDirectory);
+        }
+        
+        private List<TabModel> GetDefaultTabs()
+        {
+            var rootDirectoryTab = new TabModel
+            {
+                Directory = _directoryService.GetAppRootDirectory()
+            };
+
+            return new List<TabModel> {rootDirectoryTab};
         }
     }
 }

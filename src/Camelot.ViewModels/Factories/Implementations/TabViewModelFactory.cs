@@ -1,7 +1,8 @@
+using Camelot.DataAccess.Models;
 using Camelot.Services.Interfaces;
 using Camelot.ViewModels.Factories.Interfaces;
-using Camelot.ViewModels.Implementations.MainWindow;
-using Camelot.ViewModels.Interfaces.MainWindow;
+using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
+using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 
 namespace Camelot.ViewModels.Factories.Implementations
 {
@@ -14,6 +15,15 @@ namespace Camelot.ViewModels.Factories.Implementations
             _pathService = pathService;
         }
 
-        public ITabViewModel Create(string directory) => new TabViewModel(_pathService, directory);
+        public ITabViewModel Create(TabModel tabModel)
+        {
+            var fileSystemNodeViewModel = Create(tabModel.SortingSettings);
+            
+            return new TabViewModel(_pathService, fileSystemNodeViewModel, tabModel.Directory);
+        }
+
+        private static IFileSystemNodesSortingViewModel Create(SortingSettings sortingSettings) =>
+            new FileSystemNodesSortingViewModel((SortingColumn) sortingSettings.SortingMode,
+                sortingSettings.IsAscending);
     }
 }

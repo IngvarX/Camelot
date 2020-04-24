@@ -2,20 +2,17 @@ using System.Collections.Generic;
 
 namespace Camelot.DataAccess.Models
 {
-    public class PanelState
+    public class PanelModel
     {
-        public List<string> Tabs { get; set; }
+        public List<TabModel> Tabs { get; set; }
 
         public int SelectedTabIndex { get; set; }
-        
-        public SortingSettings SortingSettings { get; set; }
 
-        public static PanelState Empty => new PanelState();
+        public static PanelModel Empty => new PanelModel();
 
-        public PanelState()
+        public PanelModel()
         {
-            Tabs = new List<string>();
-            SortingSettings = new SortingSettings();
+            Tabs = new List<TabModel>();
         }
     }
 }

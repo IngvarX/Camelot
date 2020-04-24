@@ -1,5 +1,6 @@
 using Camelot.Services.Interfaces;
-using Camelot.ViewModels.Implementations.MainWindow;
+using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
+using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Moq;
 using Xunit;
 
@@ -12,8 +13,9 @@ namespace Camelot.ViewModels.Tests
         public TabViewModelTests()
         {
             var pathServiceMock = new Mock<IPathService>();
+            var sortingViewModel = new Mock<IFileSystemNodesSortingViewModel>();
             
-            _tabViewModel = new TabViewModel(pathServiceMock.Object, string.Empty);
+            _tabViewModel = new TabViewModel(pathServiceMock.Object, sortingViewModel.Object, string.Empty);
         }
         
         [Fact]

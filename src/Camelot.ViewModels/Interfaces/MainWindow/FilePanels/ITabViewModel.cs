@@ -1,6 +1,6 @@
 using System;
 
-namespace Camelot.ViewModels.Interfaces.MainWindow
+namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels
 {
     public interface ITabViewModel
     {
@@ -9,6 +9,8 @@ namespace Camelot.ViewModels.Interfaces.MainWindow
         bool IsGloballyActive { get; set; }
         
         string CurrentDirectory { get; set; }
+        
+        IFileSystemNodesSortingViewModel SortingViewModel { get; }
         
         event EventHandler<EventArgs> ActivationRequested;
         

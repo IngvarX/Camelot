@@ -18,24 +18,24 @@ namespace Camelot.Services.Implementations
             _panelKey = panelKey;
         }
 
-        public PanelState GetPanelState()
+        public PanelModel GetPanelState()
         {
             using var unitOfWork = _unitOfWorkFactory.Create();
-            var repository = unitOfWork.GetRepository<PanelState>();
+            var repository = unitOfWork.GetRepository<PanelModel>();
 
-            return repository.GetById(_panelKey) ?? PanelState.Empty;
+            return repository.GetById(_panelKey) ?? PanelModel.Empty;
         }
 
-        public void SavePanelState(PanelState state)
+        public void SavePanelState(PanelModel model)
         {
-            if (state is null)
+            if (model is null)
             {
-                throw new ArgumentNullException(nameof(state));
+                throw new ArgumentNullException(nameof(model));
             }
 
             using var unitOfWork = _unitOfWorkFactory.Create();
-            var repository = unitOfWork.GetRepository<PanelState>();
-            repository.Upsert(_panelKey, state);
+            var repository = unitOfWork.GetRepository<PanelModel>();
+            repository.Upsert(_panelKey, model);
 
             unitOfWork.SaveChanges();
         }
