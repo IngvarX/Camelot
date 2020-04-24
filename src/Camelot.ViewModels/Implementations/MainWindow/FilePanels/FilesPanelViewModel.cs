@@ -125,7 +125,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             var state = _filesPanelStateService.GetPanelState();
             if (!state.Tabs.Any())
             {
-                // TODO: get all roots
                 state.Tabs = GetDefaultTabs();
             }
             

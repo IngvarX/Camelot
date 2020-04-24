@@ -1,10 +1,8 @@
 using System;
 using System.IO;
-using System.Linq;
 using Camelot.Services.EventArgs;
 using Camelot.Services.Implementations;
 using Camelot.Services.Interfaces;
-using Moq;
 using Xunit;
 
 namespace Camelot.Services.Tests

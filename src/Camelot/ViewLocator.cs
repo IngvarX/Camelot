@@ -17,12 +17,12 @@ namespace Camelot
                 .Replace("Camelot", "Camelot.ViewModels");
             
             var type = Type.GetType(name);
-            if (type != null)
+            if (type is null)
             {
-                return (Control)Activator.CreateInstance(type);
+                throw new InvalidOperationException($"Type {name} was not found");
             }
 
-            throw new InvalidOperationException($"Type {name} was not found");
+            return (Control)Activator.CreateInstance(type);
         }
 
         public bool Match(object data)
