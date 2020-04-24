@@ -25,10 +25,7 @@ namespace Camelot.Services.Implementations
             return files.ToArray();
         }
 
-        public bool CheckIfExists(string file)
-        {
-            return File.Exists(file);
-        }
+        public bool CheckIfExists(string file) => File.Exists(file);
 
         public Task CopyAsync(string source, string destination)
         {
@@ -37,10 +34,7 @@ namespace Camelot.Services.Implementations
             return Task.CompletedTask;
         }
 
-        public void Remove(string file)
-        {
-            File.Delete(file);
-        }
+        public void Remove(string file) => File.Delete(file);
 
         public void Rename(string filePath, string newName)
         {

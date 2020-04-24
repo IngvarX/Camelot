@@ -22,8 +22,11 @@ namespace Camelot.ViewModels.Factories.Implementations
             return new TabViewModel(_pathService, fileSystemNodeViewModel, tabModel.Directory);
         }
 
-        private static IFileSystemNodesSortingViewModel Create(SortingSettings sortingSettings) =>
-            new FileSystemNodesSortingViewModel((SortingColumn) sortingSettings.SortingMode,
-                sortingSettings.IsAscending);
+        private static IFileSystemNodesSortingViewModel Create(SortingSettings sortingSettings)
+        {
+            var sortingColumn = (SortingColumn) sortingSettings.SortingMode;
+            
+            return new FileSystemNodesSortingViewModel(sortingColumn, sortingSettings.IsAscending);
+        }
     }
 }

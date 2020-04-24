@@ -26,14 +26,8 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             CancelCommand = ReactiveCommand.Create(Cancel);
         }
 
-        private void Cancel()
-        {
-            Close();
-        }
+        private void Cancel() => Close();
 
-        private void CreateDirectory()
-        {
-            Close(_directoryName);
-        }
+        private void CreateDirectory() => Close(_directoryName);
     }
 }

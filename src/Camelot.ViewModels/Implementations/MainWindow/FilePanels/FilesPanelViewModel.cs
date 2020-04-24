@@ -158,15 +158,9 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             SelectedTab.IsGloballyActive = false;
         }
 
-        public void CreateNewTab()
-        {
-            CreateNewTab(SelectedTab);
-        }
+        public void CreateNewTab() => CreateNewTab(SelectedTab);
 
-        public void CloseActiveTab()
-        {
-            CloseTab(SelectedTab);
-        }
+        public void CloseActiveTab() => CloseTab(SelectedTab);
         
         private void SortFiles(SortingColumn sortingColumn)
         {
@@ -183,10 +177,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             SaveState();
         }
 
-        private void TabsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            SaveState();
-        }
+        private void TabsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e) => SaveState();
 
         private ITabViewModel Create(string directory)
         {
@@ -426,15 +417,11 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
                 SortingMode = (int) tabViewModel.SortingViewModel.SortingColumn
             };
 
-        private Task CopyToClipboardAsync()
-        {
-            return _clipboardOperationsService.CopyFilesAsync(_filesSelectionService.SelectedFiles);
-        }
+        private Task CopyToClipboardAsync() =>
+            _clipboardOperationsService.CopyFilesAsync(_filesSelectionService.SelectedFiles);
 
-        private Task PasteFromClipboardAsync()
-        {
-            return _clipboardOperationsService.PasteFilesAsync(CurrentDirectory);
-        }
+        private Task PasteFromClipboardAsync() =>
+            _clipboardOperationsService.PasteFilesAsync(CurrentDirectory);
         
         private List<TabModel> GetDefaultTabs()
         {

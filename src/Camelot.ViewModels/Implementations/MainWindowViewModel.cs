@@ -43,14 +43,8 @@ namespace Camelot.ViewModels.Implementations
             filesOperationsMediator.Register(leftFilesPanelViewModel, rightFilesPanelViewModel);
         }
         
-        private void CreateNewTab()
-        {
-            _filesOperationsMediator.ActiveFilesPanelViewModel.CreateNewTab();
-        }
+        private void CreateNewTab() => _filesOperationsMediator.ActiveFilesPanelViewModel.CreateNewTab();
         
-        private void CloseCurrentTab()
-        {
-            _filesOperationsMediator.ActiveFilesPanelViewModel.CloseActiveTab();
-        }
+        private void CloseCurrentTab() => _filesOperationsMediator.ActiveFilesPanelViewModel.CloseActiveTab();
     }
 }

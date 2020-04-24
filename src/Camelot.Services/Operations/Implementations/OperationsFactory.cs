@@ -78,29 +78,19 @@ namespace Camelot.Services.Operations.Implementations
                 settings.SourceFilePath, settings.DestinationFilePath);
         }
 
-        private IOperation CreateDeleteFileOperation(UnaryFileOperationSettings settings)
-        {
-            return CreateDeleteFileOperation(settings.FilePath);
-        }
+        private IOperation CreateDeleteFileOperation(UnaryFileOperationSettings settings) =>
+            CreateDeleteFileOperation(settings.FilePath);
 
-        private IOperation CreateDeleteDirectoryOperation(UnaryFileOperationSettings settings)
-        {
-            return CreateDeleteDirectoryOperation(settings.FilePath);
-        }
+        private IOperation CreateDeleteDirectoryOperation(UnaryFileOperationSettings settings) =>
+            CreateDeleteDirectoryOperation(settings.FilePath);
 
-        private IOperation CreateDeleteFileOperation(string filePath)
-        {
-            return new RemovingFileOperation(filePath, _fileService);
-        }
+        private IOperation CreateDeleteFileOperation(string filePath) =>
+            new RemovingFileOperation(filePath, _fileService);
 
-        private IOperation CreateDeleteDirectoryOperation(string filePath)
-        {
-            return new RemovingDirectoryOperation(filePath, _directoryService);
-        }
+        private IOperation CreateDeleteDirectoryOperation(string filePath) =>
+            new RemovingDirectoryOperation(filePath, _directoryService);
 
-        private IOperation CreateCompositeOperation(IList<IOperation> operations)
-        {
-            return new CompositeOperation(_taskPool, operations);
-        }
+        private IOperation CreateCompositeOperation(IList<IOperation> operations) =>
+            new CompositeOperation(_taskPool, operations);
     }
 }

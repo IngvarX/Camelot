@@ -32,25 +32,13 @@ namespace Camelot.Services.Implementations
             return paths[0].Substring(0, length);
         }
 
-        public string GetParentDirectory(string path)
-        {
-            return Path.GetDirectoryName(path);
-        }
+        public string GetParentDirectory(string path) => Path.GetDirectoryName(path);
 
-        public string Combine(string path1, string path2)
-        {
-            return Path.Combine(path1, path2);
-        }
+        public string Combine(string path1, string path2) => Path.Combine(path1, path2);
 
-        public string GetRelativePath(string relativeTo, string path)
-        {
-            return Path.GetRelativePath(relativeTo, path);
-        }
+        public string GetRelativePath(string relativeTo, string path) => Path.GetRelativePath(relativeTo, path);
 
-        public string GetPathRoot(string path)
-        {
-            return Path.GetPathRoot(path);
-        }
+        public string GetPathRoot(string path) => Path.GetPathRoot(path);
 
         public string GetFileNameWithoutExtension(string path)
         {

@@ -26,9 +26,6 @@ namespace Camelot.ViewModels.Implementations.Menu
             AboutCommand = ReactiveCommand.CreateFromTask(ShowAboutDialogAsync);
         }
 
-        private async Task ShowAboutDialogAsync()
-        {
-            await _dialogService.ShowDialogAsync(nameof(AboutDialogViewModel));
-        }
+        private Task ShowAboutDialogAsync() => _dialogService.ShowDialogAsync(nameof(AboutDialogViewModel));
     }
 }

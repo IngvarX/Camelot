@@ -46,22 +46,13 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             RemoveCommand = ReactiveCommand.CreateFromTask(RemoveAsync);
         }
 
-        private void Edit()
-        {
-            _operationsService.EditFiles(_filesSelectionService.SelectedFiles);
-        }
+        private void Edit() => _operationsService.EditFiles(_filesSelectionService.SelectedFiles);
 
-        private Task CopyAsync()
-        {
-            return _operationsService.CopyFilesAsync(_filesSelectionService.SelectedFiles,
-                _filesOperationsMediator.OutputDirectory);
-        }
+        private Task CopyAsync() => _operationsService.CopyFilesAsync(_filesSelectionService.SelectedFiles,
+            _filesOperationsMediator.OutputDirectory);
 
-        private Task MoveAsync()
-        {
-            return _operationsService.MoveFilesAsync(_filesSelectionService.SelectedFiles,
-                _filesOperationsMediator.OutputDirectory);
-        }
+        private Task MoveAsync() => _operationsService.MoveFilesAsync(_filesSelectionService.SelectedFiles,
+            _filesOperationsMediator.OutputDirectory);
 
         private async Task CreateNewDirectoryAsync()
         {
@@ -72,9 +63,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             }
         }
 
-        private Task RemoveAsync()
-        {
-            return _operationsService.RemoveFilesAsync(_filesSelectionService.SelectedFiles);
-        }
+        private Task RemoveAsync() =>  _operationsService.RemoveFilesAsync(_filesSelectionService.SelectedFiles);
     }
 }

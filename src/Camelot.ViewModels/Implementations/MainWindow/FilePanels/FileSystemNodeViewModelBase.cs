@@ -35,39 +35,39 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             get => _fullPath;
             set => this.RaiseAndSetIfChanged(ref _fullPath, value);
         }
-        
+
         public string Name
         {
             get => _name;
             set => this.RaiseAndSetIfChanged(ref _name, value);
         }
-        
+
         public string FullName
         {
             get => _fullName;
             set => this.RaiseAndSetIfChanged(ref _fullName, value);
         }
-        
+
         public bool IsEditing
         {
             get => _isEditing;
             set => this.RaiseAndSetIfChanged(ref _isEditing, value);
         }
-        
+
         public bool IsSelected { get; set; }
 
         public ICommand OpenCommand { get; }
-        
+
         public ICommand StartRenamingCommand { get; }
-        
+
         public ICommand RenameCommand { get; }
-        
+
         public ICommand CopyToClipboardCommand { get; }
-        
+
         public ICommand DeleteCommand { get; }
-        
+
         public ICommand CopyCommand { get; }
-        
+
         public ICommand MoveCommand { get; }
 
         protected FileSystemNodeViewModelBase(
@@ -90,44 +90,26 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             MoveCommand = ReactiveCommand.CreateFromTask(MoveAsync);
         }
 
-        private void Open()
-        {
-            _fileSystemNodeOpeningBehavior.Open(FullPath);
-        }
-        
-        private void StartRenaming()
-        {
-            IsEditing = true;
-        }
-        
+        private void Open() => _fileSystemNodeOpeningBehavior.Open(FullPath);
+
+        private void StartRenaming() => IsEditing = true;
+
         private void Rename()
         {
             IsEditing = false;
-            
+
             if (!string.IsNullOrEmpty(_fullName))
             {
                 _operationsService.Rename(_fullPath, _fullName);
             }
         }
-        
-        private Task CopyToClipboardAsync()
-        {
-            return _clipboardOperationsService.CopyFilesAsync(Files);
-        }
-        
-        private Task DeleteAsync()
-        {
-            return _operationsService.RemoveFilesAsync(Files);
-        }
-        
-        private Task CopyAsync()
-        {
-            return _operationsService.CopyFilesAsync(Files, _filesOperationsMediator.OutputDirectory);
-        }
-        
-        private Task MoveAsync()
-        {
-            return _operationsService.MoveFilesAsync(Files, _filesOperationsMediator.OutputDirectory);
-        }
+
+        private Task CopyToClipboardAsync() => _clipboardOperationsService.CopyFilesAsync(Files);
+
+        private Task DeleteAsync() => _operationsService.RemoveFilesAsync(Files);
+
+        private Task CopyAsync() => _operationsService.CopyFilesAsync(Files, _filesOperationsMediator.OutputDirectory);
+
+        private Task MoveAsync() => _operationsService.MoveFilesAsync(Files, _filesOperationsMediator.OutputDirectory);
     }
 }

@@ -43,9 +43,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             _isSortingByAscendingEnabled = isSortingByAscendingEnabled;
         }
         
-        public void ToggleSortingDirection()
-        {
-            IsSortingByAscendingEnabled = !IsSortingByAscendingEnabled;
-        }
+        public void ToggleSortingDirection() => IsSortingByAscendingEnabled = !IsSortingByAscendingEnabled;
     }
 }

@@ -134,10 +134,8 @@ namespace Camelot.Services.Implementations
             return allFiles.ToArray();
         }
 
-        private string GetCommonRootDirectory(IEnumerable<string> files)
-        {
-            return _pathService.GetCommonRootDirectory(files.ToArray());
-        }
+        private string GetCommonRootDirectory(IEnumerable<string> files) =>
+            _pathService.GetCommonRootDirectory(files.ToArray());
 
         private BinaryFileOperationSettings Create(string sourceDirectory,
             string sourcePath, string destinationDirectory)

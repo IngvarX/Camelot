@@ -74,27 +74,15 @@ namespace Camelot.Services.Implementations
             return directories.ToArray();
         }
 
-        public bool CheckIfExists(string directory)
-        {
-            return Directory.Exists(directory);
-        }
+        public bool CheckIfExists(string directory) => Directory.Exists(directory);
+        
+        public string GetAppRootDirectory() => _pathService.GetPathRoot(Directory.GetCurrentDirectory());
 
-        public string GetAppRootDirectory()
-        {
-            return _pathService.GetPathRoot(Directory.GetCurrentDirectory());
-        }
-
-        public IReadOnlyCollection<string> GetFilesRecursively(string directory)
-        {
-            return Directory
+        public IReadOnlyCollection<string> GetFilesRecursively(string directory) => Directory
                 .EnumerateFiles(directory, "*.*", SearchOption.AllDirectories)
                 .ToArray();
-        }
 
-        public void RemoveRecursively(string directory)
-        {
-            Directory.Delete(directory, true);
-        }
+        public void RemoveRecursively(string directory) => Directory.Delete(directory, true);
 
         public void Rename(string directoryPath, string newName)
         {

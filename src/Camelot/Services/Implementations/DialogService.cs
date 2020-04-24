@@ -42,10 +42,7 @@ namespace Camelot.Services.Implementations
             return await ShowDialogAsync(window);
         }
 
-        public async Task ShowDialogAsync(string viewModelName)
-        {
-            await ShowDialogAsync<object>(viewModelName);
-        }
+        public Task ShowDialogAsync(string viewModelName) => ShowDialogAsync<object>(viewModelName);
 
         private static Type GetViewModelType(string viewModelName)
         {
