@@ -81,7 +81,7 @@ namespace Camelot.Views.Main
 
         private void OnNameTextBlockPointerPressed(object sender, PointerPressedEventArgs args)
         {
-            if (args.MouseButton != MouseButton.Left)
+            if (args.MouseButton != MouseButton.Left || args.ClickCount == 2)
             {
                 return;
             }

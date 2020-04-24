@@ -150,8 +150,7 @@
                                                 </TextBox>
                                             </Grid>
                                             <Grid IsVisible="{Binding IsParentDirectory}">
-                                                <TextBlock  Classes="filePanelTextBlock" Text="[..]" 
-                                                            PointerPressed="OnNameTextBlockPointerPressed" />
+                                                <TextBlock  Classes="filePanelTextBlock" Text="[..]" />
                                             </Grid>
                                         </Grid>
                                     </DataTemplate>
