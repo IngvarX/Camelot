@@ -71,9 +71,6 @@ namespace Camelot.ViewModels.Tests
             var fileSystemNodeOpeningBehaviorMock = new Mock<IFileSystemNodeOpeningBehavior>();
             var fileSizeFormatterMock = new Mock<IFileSizeFormatter>();
             var pathServiceMock = new Mock<IPathService>();
-            pathServiceMock
-                .Setup(m => m.GetFileNameWithoutExtension(directoryModel.Name))
-                .Returns(name);
             var operationsServiceMock = new Mock<IOperationsService>();
             var clipboardOperationsServiceMock = new Mock<IClipboardOperationsService>();
             var filesOperationsMediator = new Mock<IFilesOperationsMediator>();

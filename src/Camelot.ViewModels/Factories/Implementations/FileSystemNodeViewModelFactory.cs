@@ -59,7 +59,6 @@ namespace Camelot.ViewModels.Factories.Implementations
 
         public IFileSystemNodeViewModel Create(DirectoryModel directoryModel, bool isParentDirectory)
         {
-            var name = _pathService.GetFileNameWithoutExtension(directoryModel.Name);
             var fileViewModel = new DirectoryViewModel(
                 _directoryOpeningBehavior,
                 _operationsService,
@@ -67,9 +66,9 @@ namespace Camelot.ViewModels.Factories.Implementations
                 _filesOperationsMediator)
             {
                 FullPath = directoryModel.FullPath,
-                Name = name,
+                Name = directoryModel.Name,
                 LastModifiedDateTime = directoryModel.LastModifiedDateTime.ToString(CultureInfo.CurrentCulture),
-                FullName = name,
+                FullName = directoryModel.Name,
                 IsParentDirectory = isParentDirectory
             };
 
