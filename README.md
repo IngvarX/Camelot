@@ -23,7 +23,7 @@ dotnet run --project src/Camelot/Camelot.csproj
 ```
 
 ## Screenshots
-![Camelot](/docs/Camelot.png)
+![Camelot on Ubuntu](/docs/Ubuntu.png)
 *Camelot on Ubuntu*
 
 ## Credits
