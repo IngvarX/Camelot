@@ -26,6 +26,9 @@ dotnet run --project src/Camelot/Camelot.csproj
 ![Camelot on Ubuntu](/docs/Ubuntu.png)
 *Camelot on Ubuntu*
 
+![Camelot on Windows](/docs/Windows.png)
+*Camelot on Windows*
+
 ## Credits
 
 Icon made by [Freepik](https://www.flaticon.com/authors/freepik) from [www.flaticon.com](https://www.flaticon.com/)
