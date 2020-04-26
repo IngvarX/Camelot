@@ -12,16 +12,19 @@
         <dialogs:RemoveNodesConfirmationDialogViewModel />
     </Design.DataContext>
 
-    <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,Auto">
-        <TextBlock Grid.ColumnSpan="2" Classes="dialogTextBlock" Text="{Binding FilesCount, StringFormat=Do you want to permanently remove these {0} files?}" />
-        <ItemsControl Grid.Row="1" Items="{Binding Files}" IsVisible="{Binding ShouldShowFilesList}" Height="120">
+    <Grid RowDefinitions="Auto,Auto,Auto"
+          HorizontalAlignment="Center" VerticalAlignment="Center">
+        <TextBlock Classes="dialogTextBlock" Margin="0,0,0,10" Text="{Binding FilesCount, StringFormat=Do you want to permanently remove these {0} files?}" />
+        <ItemsControl Grid.Row="1" Items="{Binding Files}" IsVisible="{Binding ShouldShowFilesList}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Classes="dialogTextBlock" Text="{Binding .}" />
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-        <Button Grid.Row="2" Grid.Column="0" Classes="dialogButton" Content="Cancel" Command="{Binding CancelCommand}" />
-        <Button Grid.Row="2" Grid.Column="1" Classes="dialogButton" Content="Delete" Command="{Binding OkCommand}" />
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Classes="dialogButton" Content="Cancel" Command="{Binding CancelCommand}" />
+            <Button Classes="dialogButton" Content="Delete" Command="{Binding OkCommand}" />
+        </StackPanel>
     </Grid>
 </Window>

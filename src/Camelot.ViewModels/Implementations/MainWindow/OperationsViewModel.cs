@@ -74,6 +74,11 @@ namespace Camelot.ViewModels.Implementations.MainWindow
                 .SelectedFiles
                 .Select(_pathService.GetFileName)
                 .ToArray();
+            if (!filesToRemove.Any())
+            {
+                return;
+            }
+            
             var navigationParameter = new NodesRemovingNavigationParameter(filesToRemove);
             var isConfirmed = await _dialogService.ShowDialogAsync<bool, NodesRemovingNavigationParameter>(
                 nameof(RemoveNodesConfirmationDialogViewModel), navigationParameter);

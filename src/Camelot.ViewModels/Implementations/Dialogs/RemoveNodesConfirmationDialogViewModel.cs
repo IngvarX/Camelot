@@ -8,7 +8,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 {
     public class RemoveNodesConfirmationDialogViewModel : ParameterizedDialogViewModelBase<bool, NodesRemovingNavigationParameter>
     {
-        private const int ShowedFilesLimit = 5;
+        private const int ShowedFilesLimit = 4;
         
         private IEnumerable<string> _files;
         

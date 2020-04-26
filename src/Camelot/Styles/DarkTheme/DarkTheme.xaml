@@ -95,4 +95,8 @@
     <Style Selector="TextBlock.dataGridColumnHeaderTextBlock">
         <Setter Property="Foreground" Value="{DynamicResource InactiveTabForegroundBrush}" />
     </Style>
+    
+    <Style Selector="Button.dialogButton">
+        <Setter Property="Background" Value="{DynamicResource OrangeBrush}" />
+    </Style>
 </Styles>

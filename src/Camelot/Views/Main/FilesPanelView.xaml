@@ -248,7 +248,7 @@
         </DataGrid>
         
         <Grid Grid.Row="3" ColumnDefinitions="Auto,*">
-            <Border Classes="selectionBorder">
+            <Border Classes="selectionBorder" IsVisible="{Binding SelectedFilesCount}">
                 <TextBlock Classes="selectionInfoTextBlock">
                     <TextBlock.Text>    
                         <MultiBinding StringFormat="{}{0} files ({1}) and {2} directories">
