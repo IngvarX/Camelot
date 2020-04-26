@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using ApplicationDispatcher.Interfaces;
+using Avalonia;
 using Camelot.ViewModels.Implementations;
 using Camelot.ViewModels.Implementations.Dialogs;
 using Camelot.ViewModels.Services.Interfaces;
@@ -21,28 +22,64 @@ namespace Camelot.Services.Implementations
             _mainWindowProvider = mainWindowProvider;
         }
 
-        public async Task<T> ShowDialogAsync<T>(string viewModelName)
+        public async Task<TResult> ShowDialogAsync<TResult>(string viewModelName)
+        {
+            var window = CreateView<TResult>(viewModelName);
+            var viewModel = CreateViewModel<TResult>(viewModelName);
+            Bind(window, viewModel);
+            
+            return await ShowDialogAsync(window);
+        }
+
+        public async Task<TResult> ShowDialogAsync<TResult, TParameter>(string viewModelName, TParameter parameter)
+        {
+            var window = CreateView<TResult>(viewModelName);
+            var viewModel = CreateViewModel<TResult>(viewModelName);
+            Bind(window, viewModel);
+            if (viewModel is ParameterizedDialogViewModelBase<TResult, TParameter> parameterizedDialogViewModelBase)
+            {
+                parameterizedDialogViewModelBase.Activate(parameter);
+            }
+            else
+            {
+                throw new InvalidOperationException(
+                    $"{viewModel.GetType().FullName} doesn't support passing parameters!");
+            }
+            
+            return await ShowDialogAsync(window);
+        }
+
+        public Task ShowDialogAsync(string viewModelName) => ShowDialogAsync<object>(viewModelName);
+
+        public Task ShowDialogAsync<TParameter>(string viewModelName, TParameter parameter) =>
+            ShowDialogAsync<object, TParameter>(viewModelName, parameter);
+
+        private static void Bind(IDataContextProvider window, object viewModel)
+        {
+            window.DataContext = viewModel;
+        }
+        
+        private static DialogWindowBase<TResult> CreateView<TResult>(string viewModelName)
+        {
+            var viewType = GetViewType(viewModelName);
+            if (viewType is null)
+            {
+                throw new InvalidOperationException($"View for {viewModelName} was not found!");
+            }
+            
+            return (DialogWindowBase<TResult>) GetView(viewType);
+        }
+        
+        private static DialogViewModelBase<TResult> CreateViewModel<TResult>(string viewModelName)
         {
             var viewModelType = GetViewModelType(viewModelName);
             if (viewModelType is null)
             {
                 throw new InvalidOperationException($"View model {viewModelName} was not found!");
             }
-
-            var viewType = GetViewType(viewModelName);
-            if (viewType is null)
-            {
-                throw new InvalidOperationException($"View for {viewModelName} was not found!");
-            }
-
-            var window = (DialogWindowBase<T>)GetView(viewType);
-            var viewModel = (DialogViewModelBase<T>)GetViewModel(viewModelType);
-            window.DataContext = viewModel;
-
-            return await ShowDialogAsync(window);
+            
+            return (DialogViewModelBase<TResult>) GetViewModel(viewModelType);
         }
-
-        public Task ShowDialogAsync(string viewModelName) => ShowDialogAsync<object>(viewModelName);
 
         private static Type GetViewModelType(string viewModelName)
         {

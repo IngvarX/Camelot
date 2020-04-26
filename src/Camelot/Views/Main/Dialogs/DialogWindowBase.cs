@@ -5,11 +5,11 @@ using Camelot.ViewModels.Implementations.Dialogs;
 
 namespace Camelot.Views.Main.Dialogs
 {
-    public class DialogWindowBase<T> : Window
+    public class DialogWindowBase<TResult> : Window
     {
         private Window ParentWindow => (Window) Owner;
 
-        protected DialogViewModelBase<T> ViewModel => (DialogViewModelBase<T>) DataContext;
+        protected DialogViewModelBase<TResult> ViewModel => (DialogViewModelBase<TResult>) DataContext;
         
         protected DialogWindowBase()
         {
@@ -63,7 +63,7 @@ namespace Camelot.Views.Main.Dialogs
             SubscribeToViewModelEvents();
         }
 
-        private void ViewModelOnCloseRequested(object sender, DialogResultEventArgs<T> args)
+        private void ViewModelOnCloseRequested(object sender, DialogResultEventArgs<TResult> args)
         {
             UnsubscribeFromViewModelEvents();
             UnsubscribeFromViewEvents();

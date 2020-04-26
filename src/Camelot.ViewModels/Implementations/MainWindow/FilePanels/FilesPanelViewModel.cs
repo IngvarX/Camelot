@@ -310,6 +310,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             {
                 CurrentDirectory = tabViewModel.CurrentDirectory;
             }
+
+            _directoryService.SelectedDirectory = CurrentDirectory;
             
             Activate();
         }

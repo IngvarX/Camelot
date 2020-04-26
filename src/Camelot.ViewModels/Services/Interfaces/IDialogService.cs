@@ -4,8 +4,12 @@ namespace Camelot.ViewModels.Services.Interfaces
 {
     public interface IDialogService
     {
-        Task<T> ShowDialogAsync<T>(string viewModelName);
+        Task<TResult> ShowDialogAsync<TResult>(string viewModelName);
         
         Task ShowDialogAsync(string viewModelName);
+        
+        Task ShowDialogAsync<TParameter>(string viewModelName, TParameter parameter);
+        
+        Task<TResult> ShowDialogAsync<TResult, TParameter>(string viewModelName, TParameter parameter);
     }
 }

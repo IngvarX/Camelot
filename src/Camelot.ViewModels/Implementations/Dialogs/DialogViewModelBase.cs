@@ -3,13 +3,13 @@ using Camelot.Extensions;
 
 namespace Camelot.ViewModels.Implementations.Dialogs
 {
-    public class DialogViewModelBase<T> : ViewModelBase
+    public class DialogViewModelBase<TResult> : ViewModelBase
     {
-        public event EventHandler<DialogResultEventArgs<T>> CloseRequested;
+        public event EventHandler<DialogResultEventArgs<TResult>> CloseRequested;
 
-        protected void Close(T result = default)
+        protected void Close(TResult result = default)
         {
-            var args = new DialogResultEventArgs<T>(result);
+            var args = new DialogResultEventArgs<TResult>(result);
 
             CloseRequested.Raise(this, args);
         }
