@@ -19,6 +19,12 @@
     <Compile Update="Views\Main\DataGridHeaderArrowView.xaml.cs">
       <DependentUpon>DataGridHeaderArrowView.xaml</DependentUpon>
     </Compile>
+    <AvaloniaResource Update="Views\Main\Dialogs\RemoveNodesConfirmationDialog .xaml">
+      <SubType>Designer</SubType>
+    </AvaloniaResource>
+    <Compile Update="Views\Main\Dialogs\RemoveNodesConfirmationDialog.xaml.cs">
+      <DependentUpon>RemoveNodesConfirmationDialog.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.9.9" />

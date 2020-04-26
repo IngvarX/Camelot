@@ -13,8 +13,4 @@
       <ProjectReference Include="..\Camelot.Services\Camelot.Services.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Services" />
-    </ItemGroup>
-
 </Project>

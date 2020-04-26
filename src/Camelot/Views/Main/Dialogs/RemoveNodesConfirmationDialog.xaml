@@ -1,0 +1,27 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:dialogs="clr-namespace:Camelot.ViewModels.Implementations.Dialogs;assembly=Camelot.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="Camelot.Views.Main.Dialogs.RemoveNodesConfirmationDialog"
+        Width="600" Height="200"
+        Title="Files removing confirmation">
+
+    <Design.DataContext>
+        <dialogs:RemoveNodesConfirmationDialogViewModel />
+    </Design.DataContext>
+
+    <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,Auto">
+        <TextBlock Grid.ColumnSpan="2" Classes="dialogTextBlock" Text="{Binding FilesCount, StringFormat=Do you want to permanently remove these {0} files?}" />
+        <ItemsControl Grid.Row="1" Items="{Binding Files}" IsVisible="{Binding ShouldShowFilesList}" Height="120">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Classes="dialogTextBlock" Text="{Binding .}" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <Button Grid.Row="2" Grid.Column="0" Classes="dialogButton" Content="Cancel" Command="{Binding CancelCommand}" />
+        <Button Grid.Row="2" Grid.Column="1" Classes="dialogButton" Content="Delete" Command="{Binding OkCommand}" />
+    </Grid>
+</Window>

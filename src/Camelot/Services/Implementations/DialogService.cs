@@ -6,6 +6,7 @@ using ApplicationDispatcher.Interfaces;
 using Avalonia;
 using Camelot.ViewModels.Implementations;
 using Camelot.ViewModels.Implementations.Dialogs;
+using Camelot.ViewModels.Services;
 using Camelot.ViewModels.Services.Interfaces;
 using Camelot.Views;
 using Camelot.Views.Main.Dialogs;
@@ -32,6 +33,7 @@ namespace Camelot.Services.Implementations
         }
 
         public async Task<TResult> ShowDialogAsync<TResult, TParameter>(string viewModelName, TParameter parameter)
+            where TParameter : NavigationParameter
         {
             var window = CreateView<TResult>(viewModelName);
             var viewModel = CreateViewModel<TResult>(viewModelName);
@@ -51,8 +53,9 @@ namespace Camelot.Services.Implementations
 
         public Task ShowDialogAsync(string viewModelName) => ShowDialogAsync<object>(viewModelName);
 
-        public Task ShowDialogAsync<TParameter>(string viewModelName, TParameter parameter) =>
-            ShowDialogAsync<object, TParameter>(viewModelName, parameter);
+        public Task ShowDialogAsync<TParameter>(string viewModelName, TParameter parameter)
+            where TParameter : NavigationParameter =>
+                ShowDialogAsync<object, TParameter>(viewModelName, parameter);
 
         private static void Bind(IDataContextProvider window, object viewModel)
         {
@@ -84,6 +87,11 @@ namespace Camelot.Services.Implementations
         private static Type GetViewModelType(string viewModelName)
         {
             var viewModelsAssembly = Assembly.GetAssembly(typeof(ViewModelBase));
+            if (viewModelsAssembly is null)
+            {
+                throw new InvalidOperationException("Broken installation!");
+            }
+            
             var viewModelTypes = viewModelsAssembly.GetTypes();
             
             return viewModelTypes.SingleOrDefault(t => t.Name == viewModelName);

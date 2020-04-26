@@ -1,7 +1,9 @@
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Camelot.Services.Interfaces;
 using Camelot.ViewModels.Implementations.Dialogs;
+using Camelot.ViewModels.Implementations.NavigationParameters;
 using Camelot.ViewModels.Interfaces.MainWindow;
 using Camelot.ViewModels.Services.Interfaces;
 using ReactiveUI;
@@ -15,6 +17,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow
         private readonly IFilesSelectionService _filesSelectionService;
         private readonly IDialogService _dialogService;
         private readonly IDirectoryService _directoryService;
+        private readonly IPathService _pathService;
 
         public ICommand EditCommand { get; }
 
@@ -31,13 +34,15 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             IOperationsService operationsService,
             IFilesSelectionService filesSelectionService,
             IDialogService dialogService,
-            IDirectoryService directoryService)
+            IDirectoryService directoryService,
+            IPathService pathService)
         {
             _filesOperationsMediator = filesOperationsMediator;
             _operationsService = operationsService;
             _filesSelectionService = filesSelectionService;
             _dialogService = dialogService;
             _directoryService = directoryService;
+            _pathService = pathService;
 
             EditCommand = ReactiveCommand.Create(Edit);
             CopyCommand = ReactiveCommand.CreateFromTask(CopyAsync);
@@ -63,6 +68,19 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             }
         }
 
-        private Task RemoveAsync() =>  _operationsService.RemoveFilesAsync(_filesSelectionService.SelectedFiles);
+        private async Task RemoveAsync()
+        {
+            var filesToRemove = _filesSelectionService
+                .SelectedFiles
+                .Select(_pathService.GetFileName)
+                .ToArray();
+            var navigationParameter = new NodesRemovingNavigationParameter(filesToRemove);
+            var isConfirmed = await _dialogService.ShowDialogAsync<bool, NodesRemovingNavigationParameter>(
+                nameof(RemoveNodesConfirmationDialogViewModel), navigationParameter);
+            if (isConfirmed)
+            {
+                await _operationsService.RemoveFilesAsync(_filesSelectionService.SelectedFiles);
+            }
+        }
     }
 }

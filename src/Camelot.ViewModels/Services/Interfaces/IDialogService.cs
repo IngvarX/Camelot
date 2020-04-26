@@ -8,8 +8,10 @@ namespace Camelot.ViewModels.Services.Interfaces
         
         Task ShowDialogAsync(string viewModelName);
         
-        Task ShowDialogAsync<TParameter>(string viewModelName, TParameter parameter);
+        Task ShowDialogAsync<TParameter>(string viewModelName, TParameter parameter)
+            where TParameter : NavigationParameter;
         
-        Task<TResult> ShowDialogAsync<TResult, TParameter>(string viewModelName, TParameter parameter);
+        Task<TResult> ShowDialogAsync<TResult, TParameter>(string viewModelName, TParameter parameter)
+            where TParameter : NavigationParameter;
     }
 }

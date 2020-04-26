@@ -165,12 +165,14 @@ namespace Camelot
                 resolver.GetService<AboutDialogConfiguration>()
             ));
             services.Register(() => new CreateDirectoryDialogViewModel());
+            services.Register(() => new RemoveNodesConfirmationDialogViewModel());
             services.Register<IOperationsViewModel>(() => new OperationsViewModel(
                 resolver.GetService<IFilesOperationsMediator>(),
                 resolver.GetService<IOperationsService>(),
                 resolver.GetService<IFilesSelectionService>(),
                 resolver.GetService<IDialogService>(),
-                resolver.GetService<IDirectoryService>()
+                resolver.GetService<IDirectoryService>(),
+                resolver.GetService<IPathService>()
             ));
             services.Register(() => new MenuViewModel(
                 resolver.GetService<IApplicationCloser>(),
