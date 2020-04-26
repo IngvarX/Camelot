@@ -12,29 +12,14 @@ namespace Camelot.DataAccess.LiteDb
             _collection = collection;
         }
 
-        public T GetById(string id)
-        {
-            return _collection.FindById(id);
-        }
+        public T GetById(string id) => _collection.FindById(id);
 
-        public void Add(string id, T entity)
-        {
-            _collection.Insert(id, entity);
-        }
+        public void Add(string id, T entity) => _collection.Insert(id, entity);
 
-        public void Update(string id, T entity)
-        {
-            _collection.Update(id, entity);
-        }
+        public void Update(string id, T entity) => _collection.Update(id, entity);
 
-        public void Upsert(string id, T entity)
-        {
-            _collection.Upsert(id, entity);
-        }
+        public void Upsert(string id, T entity) => _collection.Upsert(id, entity);
 
-        public void Remove(string id)
-        {
-            _collection.Delete(id);
-        }
+        public void Remove(string id) => _collection.Delete(id);
     }
 }

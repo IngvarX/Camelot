@@ -42,19 +42,19 @@ namespace Camelot.Services.Implementations
 
         public string GetFileNameWithoutExtension(string path)
         {
-            if (path.StartsWith("."))
+            if (!path.StartsWith("."))
             {
-                if (path.Count(c => c == '.') == 1)
-                {
-                    return path;
-                }
-
-                var lastDot = path.LastIndexOf(".", StringComparison.InvariantCulture);
-
-                return path.Substring(0, lastDot);
+                return Path.GetFileNameWithoutExtension(path);
+            }
+            
+            if (path.Count(c => c == '.') == 1)
+            {
+                return path;
             }
 
-            return Path.GetFileNameWithoutExtension(path);
+            var lastDot = path.LastIndexOf(".", StringComparison.InvariantCulture);
+
+            return path.Substring(0, lastDot);
         }
 
         public string GetFileName(string path)
@@ -83,9 +83,6 @@ namespace Camelot.Services.Implementations
             return extension.StartsWith(".") ? extension.Substring(1) : extension;
         }
 
-        public string TrimPathSeparators(string path)
-        {
-            return path == "/" ? path : path.TrimEnd('/').TrimEnd('\\');
-        }
+        public string TrimPathSeparators(string path) => path == "/" ? path : path.TrimEnd('/').TrimEnd('\\');
     }
 }

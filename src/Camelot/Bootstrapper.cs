@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using ApplicationDispatcher.Implementations;
 using ApplicationDispatcher.Interfaces;
@@ -36,6 +35,10 @@ namespace Camelot
         public static void Register(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
             RegisterConfiguration(services);
+            RegisterEnvironmentServices(services, resolver);
+            RegisterAvaloniaServices(services, resolver);
+            RegisterFileSystemWatcherServices(services, resolver);
+            RegisterTaskPool(services, resolver);
             RegisterDataAccess(services, resolver);
             RegisterServices(services, resolver);
             RegisterViewModels(services, resolver);
@@ -54,19 +57,43 @@ namespace Camelot
             services.RegisterConstant(aboutDialogConfiguration);
         }
 
+        private static void RegisterEnvironmentServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
+        {
+            services.RegisterLazySingleton<IEnvironmentService>(() => new EnvironmentService());
+            services.RegisterLazySingleton<IProcessService>(() => new ProcessService());
+            services.RegisterLazySingleton<IPlatformService>(() => new PlatformService());
+        }
+        
+        private static void RegisterAvaloniaServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
+        {
+            services.RegisterLazySingleton<IApplicationCloser>(() => new ApplicationCloser());
+            services.RegisterLazySingleton<IApplicationDispatcher>(() => new AvaloniaDispatcher());
+            services.RegisterLazySingleton<IApplicationVersionProvider>(() => new ApplicationVersionProvider());
+        }
+        
+        private static void RegisterFileSystemWatcherServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
+        {
+            services.RegisterLazySingleton<IFileSystemWatcherWrapperFactory>(() => new FileSystemWatcherWrapperFactory());
+        }
+        
+        private static void RegisterTaskPool(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
+        {
+            services.RegisterLazySingleton<ITaskPool>(() => new TaskPool.Implementations.TaskPool(
+                resolver.GetService<IEnvironmentService>()
+            ));
+        }
+
         private static void RegisterDataAccess(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
             services.RegisterLazySingleton<IUnitOfWorkFactory>(() => new LiteDbUnitOfWorkFactory());
+            services.RegisterLazySingleton<IClipboardService>(() => new ClipboardService());
+            services.RegisterLazySingleton<IMainWindowProvider>(() => new MainWindowProvider());
         }
 
         private static void RegisterServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
             services.RegisterLazySingleton<IFileService>(() => new FileService(
                 resolver.GetService<IPathService>()
-            ));
-            services.RegisterLazySingleton<IFileSystemWatcherWrapperFactory>(() => new FileSystemWatcherWrapperFactory());
-            services.RegisterLazySingleton<ITaskPool>(() => new TaskPool.Implementations.TaskPool(
-                resolver.GetService<IEnvironmentService>()
             ));
             services.Register<IOperationsFactory>(() => new OperationsFactory(
                 resolver.GetService<ITaskPool>(),
@@ -88,7 +115,6 @@ namespace Camelot
             services.RegisterLazySingleton<IDirectoryService>(() => new DirectoryService(
                 resolver.GetService<IPathService>()
             ));
-            services.RegisterLazySingleton<IProcessService>(() => new ProcessService());
             services.RegisterLazySingleton<IResourceOpeningService>(() => new ResourceOpeningService(
                 resolver.GetService<IProcessService>(),
                 resolver.GetService<IPlatformService>()
@@ -103,23 +129,16 @@ namespace Camelot
             services.RegisterLazySingleton(() => new DirectoryOpeningBehavior(
                 resolver.GetService<IDirectoryService>()
             ));
-            services.RegisterLazySingleton<IApplicationDispatcher>(() => new AvaloniaDispatcher());
             services.RegisterLazySingleton<IFileSizeFormatter>(() => new FileSizeFormatter());
-            services.RegisterLazySingleton<IPlatformService>(() => new PlatformService());
-            services.RegisterLazySingleton<IApplicationCloser>(() => new ApplicationCloser());
-            services.RegisterLazySingleton<IClipboardService>(() => new ClipboardService());
             services.RegisterLazySingleton<IPathService>(() => new PathService());
-            services.RegisterLazySingleton<IMainWindowProvider>(() => new MainWindowProvider());
             services.RegisterLazySingleton<IDialogService>(() => new DialogService(
                 resolver.GetService<IMainWindowProvider>()
             ));
-            services.RegisterLazySingleton<IEnvironmentService>(() => new EnvironmentService());
             services.RegisterLazySingleton<IClipboardOperationsService>(() => new ClipboardOperationsService(
                 resolver.GetService<IClipboardService>(),
                 resolver.GetService<IOperationsService>(),
                 resolver.GetService<IEnvironmentService>()
             ));
-            services.RegisterLazySingleton<IApplicationVersionProvider>(() => new ApplicationVersionProvider());
         }
 
         private static void RegisterViewModels(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)

@@ -9,14 +9,8 @@ namespace ApplicationDispatcher.Implementations
     {
         private static IClipboard AvaloniaClipboard => Application.Current.Clipboard;
 
-        public Task<string> GetTextAsync()
-        {
-            return AvaloniaClipboard.GetTextAsync();
-        }
+        public Task<string> GetTextAsync() => AvaloniaClipboard.GetTextAsync();
 
-        public Task SetTextAsync(string text)
-        {
-            return AvaloniaClipboard.SetTextAsync(text);
-        }
+        public Task SetTextAsync(string text) => AvaloniaClipboard.SetTextAsync(text);
     }
 }

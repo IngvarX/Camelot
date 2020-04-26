@@ -20,14 +20,8 @@ namespace Camelot.DataAccess.LiteDb
             return new Repository<T>(collection);
         }
 
-        public void SaveChanges()
-        {
-            _database.Commit();
-        }
+        public void SaveChanges() => _database.Commit();
 
-        public void Dispose()
-        {
-            _database.Dispose();
-        }
+        public void Dispose() => _database.Dispose();
     }
 }
