@@ -5,8 +5,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Camelot.Services.Environment\Camelot.Services.Environment.csproj" />
       <ProjectReference Include="..\Camelot.Extensions\Camelot.Extensions.csproj" />
+      <ProjectReference Include="..\Camelot.Services.Environment\Camelot.Services.Environment.csproj" />
     </ItemGroup>
 
 </Project>
