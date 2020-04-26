@@ -1,7 +1,7 @@
 using System.Diagnostics;
-using Camelot.Services.Interfaces;
+using Camelot.Services.Environment.Interfaces;
 
-namespace Camelot.Services.Implementations
+namespace Camelot.Services.Environment.Implementations
 {
     public class ProcessService : IProcessService
     {

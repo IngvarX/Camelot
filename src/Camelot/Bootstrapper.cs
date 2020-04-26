@@ -7,6 +7,8 @@ using Camelot.DataAccess.UnitOfWork;
 using Camelot.FileSystemWatcherWrapper.Implementations;
 using Camelot.FileSystemWatcherWrapper.Interfaces;
 using Camelot.Services.Behaviors.Implementations;
+using Camelot.Services.Environment.Implementations;
+using Camelot.Services.Environment.Interfaces;
 using Camelot.Services.Implementations;
 using Camelot.Services.Interfaces;
 using Camelot.Services.Operations.Implementations;
@@ -63,7 +65,9 @@ namespace Camelot
                 resolver.GetService<IPathService>()
             ));
             services.RegisterLazySingleton<IFileSystemWatcherWrapperFactory>(() => new FileSystemWatcherWrapperFactory());
-            services.RegisterLazySingleton<ITaskPool>(() => new TaskPool.Implementations.TaskPool(Environment.ProcessorCount));
+            services.RegisterLazySingleton<ITaskPool>(() => new TaskPool.Implementations.TaskPool(
+                resolver.GetService<IEnvironmentService>()
+            ));
             services.Register<IOperationsFactory>(() => new OperationsFactory(
                 resolver.GetService<ITaskPool>(),
                 resolver.GetService<IDirectoryService>(),
@@ -109,9 +113,11 @@ namespace Camelot
             services.RegisterLazySingleton<IDialogService>(() => new DialogService(
                 resolver.GetService<IMainWindowProvider>()
             ));
+            services.RegisterLazySingleton<IEnvironmentService>(() => new EnvironmentService());
             services.RegisterLazySingleton<IClipboardOperationsService>(() => new ClipboardOperationsService(
                 resolver.GetService<IClipboardService>(),
-                resolver.GetService<IOperationsService>()
+                resolver.GetService<IOperationsService>(),
+                resolver.GetService<IEnvironmentService>()
             ));
             services.RegisterLazySingleton<IApplicationVersionProvider>(() => new ApplicationVersionProvider());
         }

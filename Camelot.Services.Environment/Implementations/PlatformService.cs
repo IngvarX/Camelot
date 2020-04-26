@@ -1,9 +1,9 @@
 using System;
 using System.Runtime.InteropServices;
-using Camelot.Services.Enums;
-using Camelot.Services.Interfaces;
+using Camelot.Services.Environment.Enums;
+using Camelot.Services.Environment.Interfaces;
 
-namespace Camelot.Services.Implementations
+namespace Camelot.Services.Environment.Implementations
 {
     public class PlatformService : IPlatformService
     {

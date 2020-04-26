@@ -1,4 +1,4 @@
-namespace Camelot.Services.Enums
+namespace Camelot.Services.Environment.Enums
 {
     public enum Platform : byte
     {

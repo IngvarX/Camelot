@@ -1,4 +1,4 @@
-namespace Camelot.Services.Interfaces
+namespace Camelot.Services.Environment.Interfaces
 {
     public interface IProcessService
     {

@@ -1,8 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ApplicationDispatcher.Interfaces;
+using Camelot.Services.Environment.Interfaces;
 using Camelot.Services.Interfaces;
 
 namespace Camelot.Services.Implementations
@@ -13,18 +13,22 @@ namespace Camelot.Services.Implementations
 
         private readonly IClipboardService _clipboardService;
         private readonly IOperationsService _operationsService;
+        private readonly IEnvironmentService _environmentService;
 
         public ClipboardOperationsService(
             IClipboardService clipboardService,
-            IOperationsService operationsService)
+            IOperationsService operationsService,
+            IEnvironmentService environmentService)
         {
             _clipboardService = clipboardService;
             _operationsService = operationsService;
+            _environmentService = environmentService;
         }
 
         public async Task CopyFilesAsync(IReadOnlyCollection<string> files)
         {
-            var selectedFilesString = string.Join(Environment.NewLine, files.Select(f => UrlPrefix + f));
+            var selectedFilesString = string.Join(_environmentService.NewLine, 
+                files.Select(f => UrlPrefix + f));
 
             await _clipboardService.SetTextAsync(selectedFilesString);
         }

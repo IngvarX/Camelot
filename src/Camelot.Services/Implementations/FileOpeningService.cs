@@ -1,5 +1,6 @@
 using System;
-using Camelot.Services.Enums;
+using Camelot.Services.Environment.Enums;
+using Camelot.Services.Environment.Interfaces;
 using Camelot.Services.Interfaces;
 
 namespace Camelot.Services.Implementations

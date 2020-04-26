@@ -1,6 +1,7 @@
 using System.IO;
 using Camelot.Services.Behaviors.Implementations;
-using Camelot.Services.Enums;
+using Camelot.Services.Environment.Enums;
+using Camelot.Services.Environment.Interfaces;
 using Camelot.Services.Implementations;
 using Camelot.Services.Interfaces;
 using Moq;

@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Camelot.Extensions;
+using Camelot.Services.Environment.Interfaces;
 using Camelot.TaskPool.Interfaces;
 
 namespace Camelot.TaskPool.Implementations
@@ -10,9 +11,9 @@ namespace Camelot.TaskPool.Implementations
     {
         private readonly SemaphoreSlim _semaphoreSlim;
 
-        public TaskPool(int tasksCount)
+        public TaskPool(IEnvironmentService environmentService)
         {
-            _semaphoreSlim = new SemaphoreSlim(tasksCount);
+            _semaphoreSlim = new SemaphoreSlim(environmentService.ProcessorsCount);
         }
 
         public async Task ExecuteAsync(Func<Task> taskFactory)

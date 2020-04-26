@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camelot.ViewModels", "src\C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camelot.ViewModels.Tests", "tests\Camelot.ViewModels.Tests\Camelot.ViewModels.Tests.csproj", "{E5B60907-7712-47AA-AD12-03D8C6B89290}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camelot.Services.Environment", "Camelot.Services.Environment\Camelot.Services.Environment.csproj", "{14D214DF-BA70-4221-BE63-6B72B7292AEF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -85,6 +87,10 @@ Global
 		{E5B60907-7712-47AA-AD12-03D8C6B89290}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E5B60907-7712-47AA-AD12-03D8C6B89290}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E5B60907-7712-47AA-AD12-03D8C6B89290}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14D214DF-BA70-4221-BE63-6B72B7292AEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14D214DF-BA70-4221-BE63-6B72B7292AEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14D214DF-BA70-4221-BE63-6B72B7292AEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14D214DF-BA70-4221-BE63-6B72B7292AEF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(AvalonStudioProperties) = preSolution
 		StartupItem = {DBB08575-833E-4079-86F8-45EF9C550021}
@@ -102,5 +108,6 @@ Global
 		{99522543-CBAD-44ED-BF9C-17FFE38A8A29} = {3E7B6E0B-F769-48DF-B269-43B747D4A964}
 		{DFADAC4D-BE3D-4975-B0B5-125C7CABB2B2} = {3E7B6E0B-F769-48DF-B269-43B747D4A964}
 		{E5B60907-7712-47AA-AD12-03D8C6B89290} = {6E54E223-60FD-418C-B6E0-0EB9095C34D0}
+		{14D214DF-BA70-4221-BE63-6B72B7292AEF} = {3E7B6E0B-F769-48DF-B269-43B747D4A964}
 	EndGlobalSection
 EndGlobal
