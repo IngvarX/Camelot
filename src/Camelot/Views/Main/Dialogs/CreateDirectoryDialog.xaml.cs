@@ -1,3 +1,4 @@
+using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
 namespace Camelot.Views.Main.Dialogs
@@ -7,6 +8,14 @@ namespace Camelot.Views.Main.Dialogs
         public CreateDirectoryDialog()
         {
             InitializeComponent();
+        }
+
+        protected override void OnOpened()
+        {
+            var textBox = this.FindControl<TextBox>("DirectoryNameTextBox");
+            textBox.Focus();
+            
+            base.OnOpened();
         }
 
         private void InitializeComponent()

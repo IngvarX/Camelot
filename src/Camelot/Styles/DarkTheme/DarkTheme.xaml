@@ -52,10 +52,6 @@
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Background" Value="{DynamicResource DirectoryTextBoxBackgroundColorBrush}" />
     </Style>
-
-    <Style Selector="Button.tabButton">
-        <Setter Property="Foreground" Value="{DynamicResource OperationButtonForegroundColorBrush}" />
-    </Style>
     
     <Style Selector="Border.tabBorder">
         <Setter Property="BorderBrush" Value="{DynamicResource TabButtonBorderColorBrush}" />
@@ -98,5 +94,9 @@
     
     <Style Selector="Button.dialogButton">
         <Setter Property="Background" Value="{DynamicResource OrangeBrush}" />
+    </Style>
+    
+    <Style Selector="Button.tabButton:pointerover TextBlock.inactiveTabNameTextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource IconButtonHoverForegroundColorBrush}" />
     </Style>
 </Styles>

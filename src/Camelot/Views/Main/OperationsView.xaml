@@ -20,19 +20,19 @@
         </Grid.ColumnDefinitions>
 
         <Button Classes="operationButton" Command="{Binding EditCommand}">
-            <Grid ColumnDefinitions="Auto,Auto">
+            <StackPanel Orientation="Horizontal">
                 <DrawingPresenter Width="25" Height="25">
                     <DrawingPresenter.Drawing>
                         <GeometryDrawing Brush="#FFFFFF" Geometry="M572.52 241.4C518.29 135.59 410.93 64 288 64S57.68 135.64 3.48 241.41a32.35 32.35 0 0 0 0 29.19C57.71 376.41 165.07 448 288 448s230.32-71.64 284.52-177.41a32.35 32.35 0 0 0 0-29.19zM288 400a144 144 0 1 1 144-144 143.93 143.93 0 0 1-144 144zm0-240a95.31 95.31 0 0 0-25.31 3.79 47.85 47.85 0 0 1-66.9 66.9A95.78 95.78 0 1 0 288 160z"/>
                     </DrawingPresenter.Drawing>
                 </DrawingPresenter>
-                <TextBlock Grid.Column="1" Classes="operationTextBlock" Text="Edit [F4]" />
-            </Grid>
+                <TextBlock Classes="operationTextBlock" Text="Edit [F4]" />
+            </StackPanel>
         </Button>
 
         <Button Classes="operationButton" Grid.Column="1" Command="{Binding CopyCommand}">
             <StackPanel Orientation="Horizontal">
-                <DrawingPresenter Width="20" Height="20">
+                <DrawingPresenter Width="25" Height="25">
                     <DrawingPresenter.Drawing>
                         <GeometryDrawing Brush="#FFFFFF" Geometry="M320 448v40c0 13.255-10.745 24-24 24H24c-13.255 0-24-10.745-24-24V120c0-13.255 10.745-24 24-24h72v296c0 30.879 25.121 56 56 56h168zm0-344V0H152c-13.255 0-24 10.745-24 24v368c0 13.255 10.745 24 24 24h272c13.255 0 24-10.745 24-24V128H344c-13.2 0-24-10.8-24-24zm120.971-31.029L375.029 7.029A24 24 0 0 0 358.059 0H352v96h96v-6.059a24 24 0 0 0-7.029-16.97z"/>
                     </DrawingPresenter.Drawing>
@@ -43,7 +43,7 @@
 
         <Button Classes="operationButton" Grid.Column="2" Command="{Binding MoveCommand}">
             <StackPanel Orientation="Horizontal">
-                <DrawingPresenter Width="20" Height="20">
+                <DrawingPresenter Width="25" Height="25">
                     <DrawingPresenter.Drawing>
                         <GeometryDrawing Brush="#FFFFFF" Geometry="M352.201 425.775l-79.196 79.196c-9.373 9.373-24.568 9.373-33.941 0l-79.196-79.196c-15.119-15.119-4.411-40.971 16.971-40.97h51.162L228 284H127.196v51.162c0 21.382-25.851 32.09-40.971 16.971L7.029 272.937c-9.373-9.373-9.373-24.569 0-33.941L86.225 159.8c15.119-15.119 40.971-4.411 40.971 16.971V228H228V127.196h-51.23c-21.382 0-32.09-25.851-16.971-40.971l79.196-79.196c9.373-9.373 24.568-9.373 33.941 0l79.196 79.196c15.119 15.119 4.411 40.971-16.971 40.971h-51.162V228h100.804v-51.162c0-21.382 25.851-32.09 40.97-16.971l79.196 79.196c9.373 9.373 9.373 24.569 0 33.941L425.773 352.2c-15.119 15.119-40.971 4.411-40.97-16.971V284H284v100.804h51.23c21.382 0 32.09 25.851 16.971 40.971z"/>
                     </DrawingPresenter.Drawing>
@@ -54,7 +54,7 @@
 
         <Button Classes="operationButton" Grid.Column="3" Command="{Binding NewDirectoryCommand}">
             <StackPanel Orientation="Horizontal">
-                <DrawingPresenter Width="20" Height="20">
+                <DrawingPresenter Width="25" Height="25">
                     <DrawingPresenter.Drawing>
                         <GeometryDrawing Brush="#FFFFFF" Geometry="M464 128H272l-64-64H48C21.49 64 0 85.49 0 112v288c0 26.51 21.49 48 48 48h416c26.51 0 48-21.49 48-48V176c0-26.51-21.49-48-48-48zm-96 168c0 8.84-7.16 16-16 16h-72v72c0 8.84-7.16 16-16 16h-16c-8.84 0-16-7.16-16-16v-72h-72c-8.84 0-16-7.16-16-16v-16c0-8.84 7.16-16 16-16h72v-72c0-8.84 7.16-16 16-16h16c8.84 0 16 7.16 16 16v72h72c8.84 0 16 7.16 16 16v16z"/>
                     </DrawingPresenter.Drawing>
@@ -65,7 +65,7 @@
 
         <Button Classes="operationButton" Grid.Column="4" Command="{Binding RemoveCommand}">
             <StackPanel Orientation="Horizontal">
-                <DrawingPresenter Width="20" Height="20">
+                <DrawingPresenter Width="25" Height="25">
                     <DrawingPresenter.Drawing>
                         <GeometryDrawing Brush="#FFFFFF" Geometry="M432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16zM53.2 467a48 48 0 0 0 47.9 45h245.8a48 48 0 0 0 47.9-45L416 128H32z"/>
                     </DrawingPresenter.Drawing>

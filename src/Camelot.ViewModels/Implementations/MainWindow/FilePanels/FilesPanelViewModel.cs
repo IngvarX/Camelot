@@ -61,6 +61,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         public IEnumerable<IFileSystemNodeViewModel> FileSystemNodes => _fileSystemNodes;
 
         public IList<IFileSystemNodeViewModel> SelectedFileSystemNodes => _selectedFileSystemNodes;
+
+        public bool AreAnyFileSystemNodesSelected => _selectedFileSystemNodes.Any();
         
         public int SelectedFilesCount => SelectedFiles.Count();
         
@@ -310,8 +312,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             {
                 CurrentDirectory = tabViewModel.CurrentDirectory;
             }
-
-            _directoryService.SelectedDirectory = CurrentDirectory;
             
             Activate();
         }
@@ -391,6 +391,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             this.RaisePropertyChanged(nameof(SelectedFilesCount));
             this.RaisePropertyChanged(nameof(SelectedFilesSize));
             this.RaisePropertyChanged(nameof(SelectedDirectoriesCount));
+            this.RaisePropertyChanged(nameof(AreAnyFileSystemNodesSelected));
         }
 
         private void SaveState()

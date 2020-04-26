@@ -16,10 +16,17 @@ namespace Camelot.Views.Main.Dialogs
             SubscribeToViewEvents();
         }
 
+        protected virtual void OnOpened()
+        {
+            
+        }
+
         private void OnOpened(object sender, EventArgs e)
         {
             LockSize();
             CenterDialog();
+            
+            OnOpened();
         }
 
         private void CenterDialog()
@@ -27,7 +34,7 @@ namespace Camelot.Views.Main.Dialogs
             var x = ParentWindow.Position.X + (ParentWindow.Bounds.Width - Width) / 2;
             var y = ParentWindow.Position.Y + (ParentWindow.Bounds.Height - Height) / 2;
 
-            Position = new PixelPoint((int)x, (int)y);
+            Position = new PixelPoint((int) x, (int) y);
         }
 
         private void LockSize()

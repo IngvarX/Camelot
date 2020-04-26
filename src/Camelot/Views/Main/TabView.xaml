@@ -15,11 +15,11 @@
             <Button Classes="tabButton" Command="{Binding ActivateCommand}">
                 <Button.Content>
                     <Grid>
-                        <Grid Classes="activeTabGrid" Height="33" IsVisible="{Binding IsActive}">
+                        <Grid Classes="activeTabGrid" Height="40" IsVisible="{Binding IsActive}">
                             <TextBlock Classes="tabNameTextBlock" 
                                        Text="{Binding DirectoryName}" />
                         </Grid>
-                        <Grid Classes="inactiveTabGrid" Height="33" IsVisible="{Binding !IsActive}">
+                        <Grid Classes="inactiveTabGrid" Height="40" IsVisible="{Binding !IsActive}">
                             <TextBlock Classes="tabNameTextBlock inactiveTabNameTextBlock"
                                        Text="{Binding DirectoryName}" />
                         </Grid>

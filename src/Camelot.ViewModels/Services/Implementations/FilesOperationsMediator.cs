@@ -53,13 +53,8 @@ namespace Camelot.ViewModels.Services.Implementations
             DeactivateInactiveViewModel();
         }
 
-        private void DirectoryServiceOnSelectedDirectoryChanged(object sender, SelectedDirectoryChangedEventArgs e)
-        {
-            if (ActiveFilesPanelViewModel != null)
-            {
-                ActiveFilesPanelViewModel.CurrentDirectory = e.NewDirectory;
-            }
-        }
+        private void DirectoryServiceOnSelectedDirectoryChanged(object sender, SelectedDirectoryChangedEventArgs e) =>
+            ActiveFilesPanelViewModel.CurrentDirectory = e.NewDirectory;
 
         private void SwapViewModels() =>
             (InactiveFilesPanelViewModel, ActiveFilesPanelViewModel) =
