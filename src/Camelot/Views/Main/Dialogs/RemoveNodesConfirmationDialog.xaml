@@ -14,7 +14,10 @@
 
     <Grid RowDefinitions="Auto,Auto,Auto"
           HorizontalAlignment="Center" VerticalAlignment="Center">
-        <TextBlock Classes="dialogTextBlock" Margin="0,0,0,10" Text="{Binding FilesCount, StringFormat=Do you want to permanently remove these {0} files?}" />
+        <TextBlock Classes="dialogTextBlock" Margin="0,0,0,10"  IsVisible="{Binding IsRemovingToTrash}"
+                   Text="{Binding FilesCount, StringFormat=Do you want to remove these {0} files to trash?}" />
+        <TextBlock Classes="dialogTextBlock" Margin="0,0,0,10" IsVisible="{Binding !IsRemovingToTrash}"
+                   Text="{Binding FilesCount, StringFormat=Do you want to permanently remove these {0} files?}" />
         <ItemsControl Grid.Row="1" Items="{Binding Files}" IsVisible="{Binding ShouldShowFilesList}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>

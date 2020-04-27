@@ -11,16 +11,28 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         private const int ShowedFilesLimit = 4;
         
         private IEnumerable<string> _files;
+        private bool _isRemovingToTrash;
         
         public IEnumerable<string> Files
         {
             get => _files;
-            set => this.RaiseAndSetIfChanged(ref _files, value);
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _files, value);
+                this.RaisePropertyChanged(nameof(FilesCount));
+                this.RaisePropertyChanged(nameof(ShouldShowFilesList));
+            }
         }
 
         public int FilesCount => Files.Count();
 
         public bool ShouldShowFilesList => FilesCount <= ShowedFilesLimit;
+
+        public bool IsRemovingToTrash
+        {
+            get => _isRemovingToTrash;
+            set => this.RaiseAndSetIfChanged(ref _isRemovingToTrash, value);
+        }
         
         public ICommand OkCommand { get; }
 
@@ -35,8 +47,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         public override void Activate(NodesRemovingNavigationParameter parameter)
         {
             Files = parameter.Files;
-            this.RaisePropertyChanged(nameof(FilesCount));
-            this.RaisePropertyChanged(nameof(ShouldShowFilesList));
+            IsRemovingToTrash = parameter.IsRemovingToTrash;
         }
     }
 }

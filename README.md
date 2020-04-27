@@ -32,4 +32,5 @@ dotnet run --project src/Camelot/Camelot.csproj
 ## Credits
 
 UI designed by [pkrasicki](https://github.com/pkrasicki)
+
 Icon made by [Freepik](https://www.flaticon.com/authors/freepik) from [www.flaticon.com](https://www.flaticon.com/)

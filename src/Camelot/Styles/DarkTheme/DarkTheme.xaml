@@ -96,6 +96,10 @@
         <Setter Property="Background" Value="{DynamicResource OrangeBrush}" />
     </Style>
     
+    <Style Selector="Button.dialogButton:pointerover">
+        <Setter Property="Foreground" Value="{DynamicResource IconButtonHoverForegroundColorBrush}" />
+    </Style>
+    
     <Style Selector="Button.tabButton:pointerover TextBlock.inactiveTabNameTextBlock">
         <Setter Property="Foreground" Value="{DynamicResource IconButtonHoverForegroundColorBrush}" />
     </Style>
