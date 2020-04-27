@@ -31,13 +31,17 @@ namespace Camelot.Services.Tests
                 .Setup(m => m.Open(FileName))
                 .Verifiable();
             var pathServiceMock = new Mock<IPathService>();
+            var driveServiceMock = new Mock<IDriveService>();
+            var trashCanLocatorMock = new Mock<ITrashCanLocator>();
 
             IOperationsService operationsService = new OperationsService(
                 operationsFactoryMock.Object,
                 directoryServiceMock.Object,
                 fileOpeningServiceMock.Object,
                 fileServiceMock.Object,
-                pathServiceMock.Object);
+                pathServiceMock.Object,
+                driveServiceMock.Object,
+                trashCanLocatorMock.Object);
 
             operationsService.EditFiles(new[] {FileName});
 
@@ -68,13 +72,17 @@ namespace Camelot.Services.Tests
                 .Returns(true)
                 .Verifiable();
             var pathServiceMock = new Mock<IPathService>();
+            var driveServiceMock = new Mock<IDriveService>();
+            var trashCanLocatorMock = new Mock<ITrashCanLocator>();
 
             IOperationsService operationsService = new OperationsService(
                 operationsFactoryMock.Object,
                 directoryServiceMock.Object,
                 fileOpeningServiceMock.Object,
                 fileServiceMock.Object,
-                pathServiceMock.Object);
+                pathServiceMock.Object,
+                driveServiceMock.Object,
+                trashCanLocatorMock.Object);
 
             await operationsService.RemoveFilesAsync(new[] {FileName});
 
@@ -120,13 +128,17 @@ namespace Camelot.Services.Tests
             pathServiceMock
                 .Setup(m => m.GetRelativePath(string.Empty, FileName))
                 .Returns(FileName);
+            var driveServiceMock = new Mock<IDriveService>();
+            var trashCanLocatorMock = new Mock<ITrashCanLocator>();
 
             IOperationsService operationsService = new OperationsService(
                 operationsFactoryMock.Object,
                 directoryServiceMock.Object,
                 fileOpeningServiceMock.Object,
                 fileServiceMock.Object,
-                pathServiceMock.Object);
+                pathServiceMock.Object,
+                driveServiceMock.Object,
+                trashCanLocatorMock.Object);
 
             await operationsService.MoveFilesAsync(new[] {FileName}, DirectoryName);
 
@@ -171,13 +183,17 @@ namespace Camelot.Services.Tests
             pathServiceMock
                 .Setup(m => m.GetRelativePath(string.Empty, FileName))
                 .Returns(FileName);
+            var driveServiceMock = new Mock<IDriveService>();
+            var trashCanLocatorMock = new Mock<ITrashCanLocator>();
 
             IOperationsService operationsService = new OperationsService(
                 operationsFactoryMock.Object,
                 directoryServiceMock.Object,
                 fileOpeningServiceMock.Object,
                 fileServiceMock.Object,
-                pathServiceMock.Object);
+                pathServiceMock.Object,
+                driveServiceMock.Object,
+                trashCanLocatorMock.Object);
 
             await operationsService.CopyFilesAsync(new[] {FileName}, DirectoryName);
 
@@ -199,13 +215,17 @@ namespace Camelot.Services.Tests
             pathServiceMock
                 .Setup(m => m.Combine(SelectedDirectoryName, DirectoryName))
                 .Returns(fullDirectoryPath);
+            var driveServiceMock = new Mock<IDriveService>();
+            var trashCanLocatorMock = new Mock<ITrashCanLocator>();
 
             IOperationsService operationsService = new OperationsService(
                 operationsFactoryMock.Object,
                 directoryServiceMock.Object,
                 fileOpeningServiceMock.Object,
                 fileServiceMock.Object,
-                pathServiceMock.Object);
+                pathServiceMock.Object,
+                driveServiceMock.Object,
+                trashCanLocatorMock.Object);
 
             operationsService.CreateDirectory(SelectedDirectoryName, DirectoryName);
 
