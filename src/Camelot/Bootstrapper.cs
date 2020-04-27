@@ -1,6 +1,8 @@
 using System.IO;
+using System.Reflection;
 using ApplicationDispatcher.Implementations;
 using ApplicationDispatcher.Interfaces;
+using Camelot.DataAccess.Configuration;
 using Camelot.DataAccess.LiteDb;
 using Camelot.DataAccess.UnitOfWork;
 using Camelot.FileSystemWatcherWrapper.Implementations;
@@ -35,9 +37,9 @@ namespace Camelot
         public static void Register(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
             RegisterConfiguration(services);
-            RegisterEnvironmentServices(services, resolver);
-            RegisterAvaloniaServices(services, resolver);
-            RegisterFileSystemWatcherServices(services, resolver);
+            RegisterEnvironmentServices(services);
+            RegisterAvaloniaServices(services);
+            RegisterFileSystemWatcherServices(services);
             RegisterTaskPool(services, resolver);
             RegisterDataAccess(services, resolver);
             RegisterServices(services, resolver);
@@ -47,7 +49,6 @@ namespace Camelot
         private static void RegisterConfiguration(IMutableDependencyResolver services)
         {
             var configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
                 .Build();
             
@@ -55,23 +56,33 @@ namespace Camelot
             configuration.GetSection("About").Bind(aboutDialogConfiguration);
             
             services.RegisterConstant(aboutDialogConfiguration);
+
+            var databaseName = configuration["DataAccess:DatabaseName"];
+            var assemblyLocation = Assembly.GetEntryAssembly()?.Location;
+            var assemblyDirectory = Path.GetDirectoryName(assemblyLocation);
+            var databaseConfiguration = new DatabaseConfiguration
+            {
+                ConnectionString = Path.Combine(assemblyDirectory, databaseName)
+            };
+            
+            services.RegisterConstant(databaseConfiguration);
         }
 
-        private static void RegisterEnvironmentServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
+        private static void RegisterEnvironmentServices(IMutableDependencyResolver services)
         {
             services.RegisterLazySingleton<IEnvironmentService>(() => new EnvironmentService());
             services.RegisterLazySingleton<IProcessService>(() => new ProcessService());
             services.RegisterLazySingleton<IPlatformService>(() => new PlatformService());
         }
         
-        private static void RegisterAvaloniaServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
+        private static void RegisterAvaloniaServices(IMutableDependencyResolver services)
         {
             services.RegisterLazySingleton<IApplicationCloser>(() => new ApplicationCloser());
             services.RegisterLazySingleton<IApplicationDispatcher>(() => new AvaloniaDispatcher());
             services.RegisterLazySingleton<IApplicationVersionProvider>(() => new ApplicationVersionProvider());
         }
         
-        private static void RegisterFileSystemWatcherServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
+        private static void RegisterFileSystemWatcherServices(IMutableDependencyResolver services)
         {
             services.RegisterLazySingleton<IFileSystemWatcherWrapperFactory>(() => new FileSystemWatcherWrapperFactory());
         }
@@ -85,7 +96,9 @@ namespace Camelot
 
         private static void RegisterDataAccess(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
-            services.RegisterLazySingleton<IUnitOfWorkFactory>(() => new LiteDbUnitOfWorkFactory());
+            services.RegisterLazySingleton<IUnitOfWorkFactory>(() => new LiteDbUnitOfWorkFactory(
+                resolver.GetService<DatabaseConfiguration>()
+            ));
             services.RegisterLazySingleton<IClipboardService>(() => new ClipboardService());
             services.RegisterLazySingleton<IMainWindowProvider>(() => new MainWindowProvider());
         }
