@@ -20,7 +20,6 @@ namespace Camelot.Services.Operations.Implementations
 
         public override async Task RunAsync(CancellationToken cancellationToken)
         {
-            // TODO: move to trash
             await RemoveAsync(_pathToRemove);
 
             FireOperationFinishedEvent();

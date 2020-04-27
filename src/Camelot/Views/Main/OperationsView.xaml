@@ -63,7 +63,7 @@
             </StackPanel>
         </Button>
 
-        <Button Classes="operationButton" Grid.Column="4" Command="{Binding RemoveCommand}">
+        <Button Classes="operationButton" Grid.Column="4" Command="{Binding RemoveToTrashCommand}">
             <StackPanel Orientation="Horizontal">
                 <DrawingPresenter Width="25" Height="25">
                     <DrawingPresenter.Drawing>

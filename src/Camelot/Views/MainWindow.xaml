@@ -15,8 +15,8 @@
         <KeyBinding Gesture="F5" Command="{Binding OperationsViewModel.CopyCommand}" />
         <KeyBinding Gesture="F6" Command="{Binding OperationsViewModel.MoveCommand}" />
         <KeyBinding Gesture="F7" Command="{Binding OperationsViewModel.NewDirectoryCommand}" />
-        <KeyBinding Gesture="F8" Command="{Binding OperationsViewModel.RemoveCommand}" />
-        <KeyBinding Gesture="Delete" Command="{Binding OperationsViewModel.RemoveCommand}" />
+        <KeyBinding Gesture="F8" Command="{Binding OperationsViewModel.RemoveToTrashCommand}" />
+        <KeyBinding Gesture="Delete" Command="{Binding OperationsViewModel.RemoveToTrashCommand}" />
         <KeyBinding Gesture="Shift+Delete" Command="{Binding OperationsViewModel.RemoveCommand}" />
         <KeyBinding Gesture="Ctrl+T" Command="{Binding CreateNewTabCommand}" />
         <KeyBinding Gesture="Ctrl+W" Command="{Binding CloseCurrentTabCommand}" />

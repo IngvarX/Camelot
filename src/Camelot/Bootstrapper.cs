@@ -108,6 +108,11 @@ namespace Camelot
             services.RegisterLazySingleton<IFileService>(() => new FileService(
                 resolver.GetService<IPathService>()
             ));
+            services.RegisterLazySingleton<IDriveService>(() => new DriveService());
+            services.RegisterLazySingleton<ITrashCanLocator>(() => new UnixTrashCanLocator(
+                resolver.GetService<IEnvironmentService>(),
+                resolver.GetService<IDriveService>()
+            ));
             services.Register<IOperationsFactory>(() => new OperationsFactory(
                 resolver.GetService<ITaskPool>(),
                 resolver.GetService<IDirectoryService>(),
@@ -123,7 +128,9 @@ namespace Camelot
                 resolver.GetService<IDirectoryService>(),
                 resolver.GetService<IResourceOpeningService>(),
                 resolver.GetService<IFileService>(),
-                resolver.GetService<IPathService>()
+                resolver.GetService<IPathService>(),
+                resolver.GetService<IDriveService>(),
+                resolver.GetService<ITrashCanLocator>()
             ));
             services.RegisterLazySingleton<IDirectoryService>(() => new DirectoryService(
                 resolver.GetService<IPathService>()

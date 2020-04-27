@@ -28,7 +28,9 @@ namespace Camelot.ViewModels.Implementations.MainWindow
         public ICommand NewDirectoryCommand { get; }
 
         public ICommand RemoveCommand { get; }
-
+        
+        public ICommand RemoveToTrashCommand { get; }
+        
         public OperationsViewModel(
             IFilesOperationsMediator filesOperationsMediator,
             IOperationsService operationsService,
@@ -49,6 +51,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             MoveCommand = ReactiveCommand.CreateFromTask(MoveAsync);
             NewDirectoryCommand = ReactiveCommand.CreateFromTask(CreateNewDirectoryAsync);
             RemoveCommand = ReactiveCommand.CreateFromTask(RemoveAsync);
+            RemoveToTrashCommand = ReactiveCommand.CreateFromTask(RemoveToTrashAsync);
         }
 
         private void Edit() => _operationsService.EditFiles(_filesSelectionService.SelectedFiles);
@@ -85,6 +88,26 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             if (isConfirmed)
             {
                 await _operationsService.RemoveFilesAsync(_filesSelectionService.SelectedFiles);
+            }
+        }
+        
+        private async Task RemoveToTrashAsync()
+        {
+            var filesToRemove = _filesSelectionService
+                .SelectedFiles
+                .Select(_pathService.GetFileName)
+                .ToArray();
+            if (!filesToRemove.Any())
+            {
+                return;
+            }
+            
+            var navigationParameter = new NodesRemovingNavigationParameter(filesToRemove);
+            var isConfirmed = await _dialogService.ShowDialogAsync<bool, NodesRemovingNavigationParameter>(
+                nameof(RemoveNodesConfirmationDialogViewModel), navigationParameter);
+            if (isConfirmed)
+            {
+                await _operationsService.RemoveFilesToTrashAsync(_filesSelectionService.SelectedFiles);
             }
         }
     }
