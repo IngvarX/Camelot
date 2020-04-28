@@ -17,7 +17,7 @@ namespace Camelot.Services.Implementations
 
         public DriveModel GetFileDrive(string filePath) =>
             GetDrives()
-                .OrderBy(d => d.RootDirectory.Length)
+                .OrderByDescending(d => d.RootDirectory.Length)
                 .First(d => filePath.StartsWith(d.RootDirectory));
 
         private static DriveModel CreateFrom(DriveInfo driveInfo) =>

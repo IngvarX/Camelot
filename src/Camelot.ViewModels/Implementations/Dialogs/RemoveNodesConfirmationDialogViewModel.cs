@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
+using Camelot.Services.Interfaces;
 using Camelot.ViewModels.Implementations.NavigationParameters;
 using ReactiveUI;
 
@@ -8,6 +9,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 {
     public class RemoveNodesConfirmationDialogViewModel : ParameterizedDialogViewModelBase<bool, NodesRemovingNavigationParameter>
     {
+        private readonly IPathService _pathService;
         private const int ShowedFilesLimit = 4;
         
         private IEnumerable<string> _files;
@@ -38,15 +40,18 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 
         public ICommand CancelCommand { get; }
         
-        public RemoveNodesConfirmationDialogViewModel()
+        public RemoveNodesConfirmationDialogViewModel(
+            IPathService pathService)
         {
+            _pathService = pathService;
+            
             OkCommand = ReactiveCommand.Create(() => Close(true));
             CancelCommand = ReactiveCommand.Create(() => Close());
         }
         
         public override void Activate(NodesRemovingNavigationParameter parameter)
         {
-            Files = parameter.Files;
+            Files = parameter.Files.Select(_pathService.GetFileName);
             IsRemovingToTrash = parameter.IsRemovingToTrash;
         }
     }

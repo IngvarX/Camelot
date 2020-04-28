@@ -16,5 +16,7 @@ namespace Camelot.Services.Interfaces
         void Remove(string file);
 
         void Rename(string filePath, string newName);
+
+        Task WriteTextAsync(string filePath, string text);
     }
 }

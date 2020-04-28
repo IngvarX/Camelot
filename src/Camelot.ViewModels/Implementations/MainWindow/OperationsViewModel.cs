@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Camelot.Extensions;
 using Camelot.Services.Interfaces;
 using Camelot.ViewModels.Implementations.Dialogs;
 using Camelot.ViewModels.Implementations.NavigationParameters;
@@ -19,8 +18,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow
         private readonly IFilesSelectionService _filesSelectionService;
         private readonly IDialogService _dialogService;
         private readonly IDirectoryService _directoryService;
-        private readonly IPathService _pathService;
-        
+        private readonly ITrashCanServiceFactory _trashCanServiceFactory;
+
         public ICommand OpenCommand { get; }
         
         public ICommand OpenInDefaultEditorCommand { get; }
@@ -41,14 +40,14 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             IFilesSelectionService filesSelectionService,
             IDialogService dialogService,
             IDirectoryService directoryService,
-            IPathService pathService)
+            ITrashCanServiceFactory trashCanServiceFactory)
         {
             _filesOperationsMediator = filesOperationsMediator;
             _operationsService = operationsService;
             _filesSelectionService = filesSelectionService;
             _dialogService = dialogService;
             _directoryService = directoryService;
-            _pathService = pathService;
+            _trashCanServiceFactory = trashCanServiceFactory;
 
             OpenCommand = ReactiveCommand.Create(Open);
             OpenInDefaultEditorCommand = ReactiveCommand.Create(OpenInDefaultEditor);
@@ -90,7 +89,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             var isConfirmed = await ShowRemoveConfirmationDialogAsync(navigationParameter);
             if (isConfirmed)
             {
-                await _operationsService.RemoveFilesAsync(_filesSelectionService.SelectedFiles);
+                await _operationsService.RemoveFilesAsync(filesToRemove);
             }
         }
         
@@ -101,12 +100,14 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             {
                 return;
             }
-            
+
             var navigationParameter = new NodesRemovingNavigationParameter(filesToRemove, true);
             var isConfirmed = await ShowRemoveConfirmationDialogAsync(navigationParameter);
             if (isConfirmed)
             {
-                await _operationsService.RemoveFilesToTrashAsync(_filesSelectionService.SelectedFiles);
+                var trashCanService = _trashCanServiceFactory.Create();
+                
+                await trashCanService.MoveToTrashAsync(filesToRemove);
             }
         }
         
@@ -117,7 +118,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow
         private IReadOnlyCollection<string> GetFilesToRemove() =>
             _filesSelectionService
                 .SelectedFiles
-                .Select(_pathService.GetFileName)
                 .ToArray();
     }
 }

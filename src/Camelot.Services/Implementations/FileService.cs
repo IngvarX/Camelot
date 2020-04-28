@@ -48,6 +48,9 @@ namespace Camelot.Services.Implementations
             File.Move(filePath, newFilePath);
         }
 
+        public Task WriteTextAsync(string filePath, string text) =>
+            File.WriteAllTextAsync(filePath, text);
+
         private FileModel CreateFrom(string file)
         {
             var fileInfo = new FileInfo(file);

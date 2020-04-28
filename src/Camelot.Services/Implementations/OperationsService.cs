@@ -14,25 +14,19 @@ namespace Camelot.Services.Implementations
         private readonly IResourceOpeningService _resourceOpeningService;
         private readonly IFileService _fileService;
         private readonly IPathService _pathService;
-        private readonly IDriveService _driveService;
-        private readonly ITrashCanLocator _trashCanLocator;
 
         public OperationsService(
             IOperationsFactory operationsFactory,
             IDirectoryService directoryService,
             IResourceOpeningService resourceOpeningService,
             IFileService fileService,
-            IPathService pathService,
-            IDriveService driveService,
-            ITrashCanLocator trashCanLocator)
+            IPathService pathService)
         {
             _operationsFactory = operationsFactory;
             _directoryService = directoryService;
             _resourceOpeningService = resourceOpeningService;
             _fileService = fileService;
             _pathService = pathService;
-            _driveService = driveService;
-            _trashCanLocator = trashCanLocator;
         }
 
         public void OpenFiles(IReadOnlyCollection<string> files)
@@ -85,15 +79,6 @@ namespace Camelot.Services.Implementations
 
                 await deleteDirectoriesOperation.RunAsync();
             }
-        }
-
-        public async Task RemoveFilesToTrashAsync(IReadOnlyCollection<string> files)
-        {
-            var driveInfo = _driveService.GetFileDrive(files.First());
-            var trashCanDirectories = _trashCanLocator.GetTrashCanDirectories(driveInfo.RootDirectory);
-
-            // TODO: foreach - and probably move to factory
-            await MoveFilesAsync(files, _pathService.Combine(trashCanDirectories.First(), "files"));
         }
 
         public void Rename(string path, string newName)

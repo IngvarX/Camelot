@@ -109,9 +109,13 @@ namespace Camelot
                 resolver.GetService<IPathService>()
             ));
             services.RegisterLazySingleton<IDriveService>(() => new DriveService());
-            services.RegisterLazySingleton<ITrashCanLocator>(() => new UnixTrashCanLocator(
+            services.RegisterLazySingleton<ITrashCanServiceFactory>(() => new TrashCanServiceFactory(
+                resolver.GetService<IPlatformService>(),
+                resolver.GetService<IDriveService>(),
+                resolver.GetService<IOperationsService>(),
                 resolver.GetService<IEnvironmentService>(),
-                resolver.GetService<IDriveService>()
+                resolver.GetService<IPathService>(),
+                resolver.GetService<IFileService>()
             ));
             services.Register<IOperationsFactory>(() => new OperationsFactory(
                 resolver.GetService<ITaskPool>(),
@@ -128,9 +132,7 @@ namespace Camelot
                 resolver.GetService<IDirectoryService>(),
                 resolver.GetService<IResourceOpeningService>(),
                 resolver.GetService<IFileService>(),
-                resolver.GetService<IPathService>(),
-                resolver.GetService<IDriveService>(),
-                resolver.GetService<ITrashCanLocator>()
+                resolver.GetService<IPathService>()
             ));
             services.RegisterLazySingleton<IDirectoryService>(() => new DirectoryService(
                 resolver.GetService<IPathService>()
@@ -185,14 +187,16 @@ namespace Camelot
                 resolver.GetService<AboutDialogConfiguration>()
             ));
             services.Register(() => new CreateDirectoryDialogViewModel());
-            services.Register(() => new RemoveNodesConfirmationDialogViewModel());
+            services.Register(() => new RemoveNodesConfirmationDialogViewModel(
+                resolver.GetService<IPathService>()
+            ));
             services.Register<IOperationsViewModel>(() => new OperationsViewModel(
                 resolver.GetService<IFilesOperationsMediator>(),
                 resolver.GetService<IOperationsService>(),
                 resolver.GetService<IFilesSelectionService>(),
                 resolver.GetService<IDialogService>(),
                 resolver.GetService<IDirectoryService>(),
-                resolver.GetService<IPathService>()
+                resolver.GetService<ITrashCanServiceFactory>()
             ));
             services.Register(() => new MenuViewModel(
                 resolver.GetService<IApplicationCloser>(),
