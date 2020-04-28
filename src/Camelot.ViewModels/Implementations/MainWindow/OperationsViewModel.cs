@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Camelot.Extensions;
 using Camelot.Services.Interfaces;
 using Camelot.ViewModels.Implementations.Dialogs;
 using Camelot.ViewModels.Implementations.NavigationParameters;
@@ -19,8 +20,10 @@ namespace Camelot.ViewModels.Implementations.MainWindow
         private readonly IDialogService _dialogService;
         private readonly IDirectoryService _directoryService;
         private readonly IPathService _pathService;
-
-        public ICommand EditCommand { get; }
+        
+        public ICommand OpenCommand { get; }
+        
+        public ICommand OpenInDefaultEditorCommand { get; }
 
         public ICommand CopyCommand { get; }
 
@@ -47,7 +50,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             _directoryService = directoryService;
             _pathService = pathService;
 
-            EditCommand = ReactiveCommand.Create(Edit);
+            OpenCommand = ReactiveCommand.Create(Open);
+            OpenInDefaultEditorCommand = ReactiveCommand.Create(OpenInDefaultEditor);
             CopyCommand = ReactiveCommand.CreateFromTask(CopyAsync);
             MoveCommand = ReactiveCommand.CreateFromTask(MoveAsync);
             NewDirectoryCommand = ReactiveCommand.CreateFromTask(CreateNewDirectoryAsync);
@@ -55,7 +59,9 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             RemoveToTrashCommand = ReactiveCommand.CreateFromTask(RemoveToTrashAsync);
         }
 
-        private void Edit() => _operationsService.EditFiles(_filesSelectionService.SelectedFiles);
+        private void Open() => _filesOperationsMediator.ActiveFilesPanelViewModel.OpenLastSelectedFile();
+        
+        private void OpenInDefaultEditor() => _operationsService.OpenFiles(_filesSelectionService.SelectedFiles);
 
         private Task CopyAsync() => _operationsService.CopyFilesAsync(_filesSelectionService.SelectedFiles,
             _filesOperationsMediator.OutputDirectory);

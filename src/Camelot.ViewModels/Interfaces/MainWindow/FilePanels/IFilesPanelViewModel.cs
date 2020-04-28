@@ -15,5 +15,7 @@ namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels
         void CreateNewTab();
 
         void CloseActiveTab();
+
+        void OpenLastSelectedFile();
     }
 }

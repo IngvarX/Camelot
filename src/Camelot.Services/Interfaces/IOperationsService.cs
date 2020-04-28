@@ -5,7 +5,7 @@ namespace Camelot.Services.Interfaces
 {
     public interface IOperationsService
     {
-        void EditFiles(IReadOnlyCollection<string> files);
+        void OpenFiles(IReadOnlyCollection<string> files);
 
         Task CopyFilesAsync(IReadOnlyCollection<string> files, string destinationDirectory);
 

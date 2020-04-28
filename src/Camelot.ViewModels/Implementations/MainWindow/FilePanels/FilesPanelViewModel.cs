@@ -164,6 +164,13 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         public void CloseActiveTab() => CloseTab(SelectedTab);
         
+        public void OpenLastSelectedFile()
+        {
+            var lastSelected = _selectedFileSystemNodes.Last();
+            
+            lastSelected.OpenCommand.Execute(null);
+        }
+
         private void SortFiles(SortingColumn sortingColumn)
         {
             if (SelectedTab.SortingViewModel.SortingColumn == sortingColumn)

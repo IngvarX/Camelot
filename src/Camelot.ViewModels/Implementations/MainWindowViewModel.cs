@@ -10,6 +10,7 @@ namespace Camelot.ViewModels.Implementations
     public class MainWindowViewModel : ViewModelBase
     {
         private readonly IFilesOperationsMediator _filesOperationsMediator;
+        
         public IOperationsViewModel OperationsViewModel { get; }
 
         public IFilesPanelViewModel LeftFilesPanelViewModel { get; }

@@ -43,7 +43,7 @@ namespace Camelot.Services.Tests
                 driveServiceMock.Object,
                 trashCanLocatorMock.Object);
 
-            operationsService.EditFiles(new[] {FileName});
+            operationsService.OpenFiles(new[] {FileName});
 
             fileOpeningServiceMock.Verify(m => m.Open(FileName), Times.Once());
         }

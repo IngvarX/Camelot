@@ -35,7 +35,7 @@ namespace Camelot.Services.Implementations
             _trashCanLocator = trashCanLocator;
         }
 
-        public void EditFiles(IReadOnlyCollection<string> files)
+        public void OpenFiles(IReadOnlyCollection<string> files)
         {
             foreach (var selectedFile in files)
             {

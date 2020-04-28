@@ -19,7 +19,7 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <Button Classes="operationButton" Command="{Binding EditCommand}">
+        <Button Classes="operationButton" Command="{Binding OpenCommand}">
             <StackPanel Orientation="Horizontal">
                 <DrawingPresenter Width="25" Height="25">
                     <DrawingPresenter.Drawing>
