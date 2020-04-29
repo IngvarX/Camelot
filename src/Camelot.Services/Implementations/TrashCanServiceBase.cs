@@ -20,7 +20,7 @@ namespace Camelot.Services.Implementations
             _operationsService = operationsService;
             _pathService = pathService;
         }
-        
+
         public async Task<bool> MoveToTrashAsync(IReadOnlyCollection<string> files)
         {
             var volume = GetVolume(files);
@@ -34,7 +34,7 @@ namespace Camelot.Services.Implementations
                 if (isRemoved)
                 {
                     await WriteMetaDataAsync(destinationPaths, trashCanLocation);
-                    
+
                     return true;
                 }
             }
@@ -43,13 +43,13 @@ namespace Camelot.Services.Implementations
         }
 
         protected abstract IReadOnlyCollection<string> GetTrashCanLocations(string volume);
-        
+
         protected abstract string GetFilesTrashCanLocation(string trashCanLocation);
 
         protected abstract Task WriteMetaDataAsync(IDictionary<string, string> files, string trashCanLocation);
 
         protected abstract string GetUniqueFilePath(string file, HashSet<string> filesSet, string directory);
-        
+
         private async Task<bool> TryMoveToTrashAsync(IDictionary<string, string> files)
         {
             try
@@ -60,12 +60,12 @@ namespace Camelot.Services.Implementations
             {
                 return false;
             }
-            
+
             // TODO: check results in future
             return true;
         }
-        
-        private IDictionary<string, string> GetFilesTrashCanPathsMapping(IReadOnlyCollection<string> files, 
+
+        private IDictionary<string, string> GetFilesTrashCanPathsMapping(IReadOnlyCollection<string> files,
             string filesTrashCanLocation)
         {
             var fileNames = new HashSet<string>();
@@ -73,13 +73,12 @@ namespace Camelot.Services.Implementations
             foreach (var file in files)
             {
                 var fileName = _pathService.GetFileName(file);
-                fileNames.Add( GetUniqueFilePath(fileName, fileNames, filesTrashCanLocation));
-                
-                var fullPath = _pathService.Combine(filesTrashCanLocation, fileName);
-                
-                dictionary.Add(file, fullPath);
+                var newFilePath = GetUniqueFilePath(fileName, fileNames, filesTrashCanLocation);
+                fileNames.Add(newFilePath);
+
+                dictionary.Add(file, newFilePath);
             }
-            
+
             return dictionary;
         }
 

@@ -19,42 +19,41 @@ namespace Camelot.Services.Implementations
         private readonly IPathService _pathService;
         private readonly IFileService _fileService;
         private readonly IEnvironmentService _environmentService;
-        private string _sid;
+        private readonly string _sid;
         private readonly Random _random;
 
         public WindowsTrashCanService(
             IDriveService driveService,
             IOperationsService operationsService,
             IPathService pathService,
-            IProcessService processService,
             IFileService fileService,
-            IEnvironmentService environmentService) 
+            IEnvironmentService environmentService,
+            string sid)
             : base(driveService, operationsService, pathService)
         {
             _pathService = pathService;
             _fileService = fileService;
             _environmentService = environmentService;
+            _sid = sid;
 
             _random = new Random();
-            
-            LoadSidAsync(processService).Forget();
         }
 
         protected override IReadOnlyCollection<string> GetTrashCanLocations(string volume) =>
-            new[] {$"{volume}\\$Recycle.Bin\\{_sid}"};
+            new[] {$"{volume}$Recycle.Bin\\{_sid}"};
 
         protected override string GetFilesTrashCanLocation(string trashCanLocation) => trashCanLocation;
-        
+
         protected override async Task WriteMetaDataAsync(IDictionary<string, string> files, string trashCanLocation)
         {
             var deleteTime = _environmentService.Now;
-            
+
             foreach (var (originalFilePath, trashCanFilePath) in files)
             {
                 var metadataBytes = GetMetadataBytes(originalFilePath, trashCanFilePath, deleteTime);
                 var metadataFileName = _pathService.GetFileName(trashCanFilePath).Replace(FilePrefix, MetadataPrefix);
                 var metadataPath = _pathService.Combine(trashCanLocation, metadataFileName);
-                
+
                 await _fileService.WriteBytesAsync(metadataPath, metadataBytes);
             }
         }
@@ -67,7 +66,7 @@ namespace Camelot.Services.Implementations
 
             return _pathService.Combine(directory, fileName);
         }
-        
+
         private byte[] GetMetadataBytes(string originalFilePath, string trashCanFilePath, DateTime removingDate)
         {
             var fileModel = _fileService.GetFile(trashCanFilePath);
@@ -85,12 +84,5 @@ namespace Camelot.Services.Implementations
                 .Select(s => s[_random.Next(s.Length)])
                 .ToArray()
         );
-        
-        private async Task LoadSidAsync(IProcessService processService)
-        {
-            var userInfo = await processService.ExecuteAndGetOutputAsync("whoami", "/user");
-
-            _sid = userInfo.Split(" ", StringSplitOptions.RemoveEmptyEntries).Last();
-        }
     }
 }
