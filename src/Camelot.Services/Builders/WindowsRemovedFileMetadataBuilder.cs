@@ -7,10 +7,10 @@ namespace Camelot.Services.Builders
 {
     public class WindowsRemovedFileMetadataBuilder
     {
-        private const int MetadataHeader = 2;
+        private const long MetadataHeader = 2;
 
         private long _deletedFileSize;
-        private DateTime _removingDate;
+        private DateTime _removingDateTime;
         private string _filePath;
 
         public WindowsRemovedFileMetadataBuilder WithFileSize(long deletedFileSize)
@@ -20,9 +20,9 @@ namespace Camelot.Services.Builders
             return this;
         }
         
-        public WindowsRemovedFileMetadataBuilder WithRemovingDate(DateTime removingDate)
+        public WindowsRemovedFileMetadataBuilder WithRemovingDate(DateTime removingDateTime)
         {
-            _removingDate = removingDate;
+            _removingDateTime = removingDateTime;
 
             return this;
         }
@@ -54,17 +54,7 @@ namespace Camelot.Services.Builders
         
         private IEnumerable<byte> GetFileSizeAsBytes() => BitConverter.GetBytes(_deletedFileSize);
 
-        private IEnumerable<byte> GetRemovingDateTimeAsBytes()
-        {
-            var result = new byte[4];
-            var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            var timeSpan = _removingDate - epoch;
-            var passedSeconds = (int)timeSpan.TotalSeconds;
-            var copyBytes = BitConverter.GetBytes(passedSeconds);
-            Array.Copy(copyBytes, 0, result, 0, 4);
-
-            return result;
-        }
+        private IEnumerable<byte> GetRemovingDateTimeAsBytes() => BitConverter.GetBytes(_removingDateTime.ToBinary());
         
         private IEnumerable<byte> GetFilePathLengthAsBytes() => BitConverter.GetBytes(_filePath.Length);
 
