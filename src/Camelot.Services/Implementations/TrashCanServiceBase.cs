@@ -9,13 +9,16 @@ namespace Camelot.Services.Implementations
     {
         private readonly IDriveService _driveService;
         private readonly IOperationsService _operationsService;
+        private readonly IPathService _pathService;
 
         protected TrashCanServiceBase(
             IDriveService driveService,
-            IOperationsService operationsService)
+            IOperationsService operationsService,
+            IPathService pathService)
         {
             _driveService = driveService;
             _operationsService = operationsService;
+            _pathService = pathService;
         }
         
         public async Task<bool> MoveToTrashAsync(IReadOnlyCollection<string> files)
@@ -26,10 +29,11 @@ namespace Camelot.Services.Implementations
             foreach (var trashCanLocation in trashCanLocations)
             {
                 var filesTrashCanLocation = GetFilesTrashCanLocation(trashCanLocation);
-                var isRemoved = await TryMoveToTrashAsync(files, filesTrashCanLocation);
+                var destinationPaths = GetFilesTrashCanPathsMapping(files, filesTrashCanLocation);
+                var isRemoved = await TryMoveToTrashAsync(destinationPaths);
                 if (isRemoved)
                 {
-                    await WriteMetaDataAsync(files, trashCanLocation);
+                    await WriteMetaDataAsync(destinationPaths, trashCanLocation);
                     
                     return true;
                 }
@@ -37,18 +41,46 @@ namespace Camelot.Services.Implementations
 
             return false;
         }
-        
+
         protected abstract IReadOnlyCollection<string> GetTrashCanLocations(string volume);
         
         protected abstract string GetFilesTrashCanLocation(string trashCanLocation);
 
-        protected abstract Task WriteMetaDataAsync(IReadOnlyCollection<string> files, string trashCanLocation);
+        protected abstract Task WriteMetaDataAsync(IDictionary<string, string> files, string trashCanLocation);
+
+        protected abstract string GetUniqueFilePath(string file, HashSet<string> filesSet, string directory);
         
-        private async Task<bool> TryMoveToTrashAsync(IReadOnlyCollection<string> files, string trashCanLocation)
+        private async Task<bool> TryMoveToTrashAsync(IDictionary<string, string> files)
         {
-            await _operationsService.MoveFilesAsync(files, trashCanLocation);
+            try
+            {
+                await _operationsService.MoveFilesAsync(files);
+            }
+            catch
+            {
+                return false;
+            }
+            
             // TODO: check results in future
             return true;
+        }
+        
+        private IDictionary<string, string> GetFilesTrashCanPathsMapping(IReadOnlyCollection<string> files, 
+            string filesTrashCanLocation)
+        {
+            var fileNames = new HashSet<string>();
+            var dictionary = new Dictionary<string, string>();
+            foreach (var file in files)
+            {
+                var fileName = _pathService.GetFileName(file);
+                fileNames.Add( GetUniqueFilePath(fileName, fileNames, filesTrashCanLocation));
+                
+                var fullPath = _pathService.Combine(filesTrashCanLocation, fileName);
+                
+                dictionary.Add(file, fullPath);
+            }
+            
+            return dictionary;
         }
 
         private string GetVolume(IEnumerable<string> files) =>

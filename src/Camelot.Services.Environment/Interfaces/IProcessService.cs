@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+
 namespace Camelot.Services.Environment.Interfaces
 {
     public interface IProcessService
@@ -5,5 +7,7 @@ namespace Camelot.Services.Environment.Interfaces
         void Run(string command);
 
         void Run(string command, string arguments);
+
+        Task<string> ExecuteAndGetOutputAsync(string command, string arguments);
     }
 }

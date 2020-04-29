@@ -8,6 +8,8 @@ namespace Camelot.Services.Interfaces
     {
         // TODO: pass ISpecification
         IReadOnlyCollection<FileModel> GetFiles(string directory);
+        
+        FileModel GetFile(string file);
 
         bool CheckIfExists(string file);
 
@@ -18,5 +20,7 @@ namespace Camelot.Services.Interfaces
         void Rename(string filePath, string newName);
 
         Task WriteTextAsync(string filePath, string text);
+        
+        Task WriteBytesAsync(string filePath, byte[] bytes);
     }
 }

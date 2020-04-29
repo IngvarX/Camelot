@@ -115,7 +115,9 @@ namespace Camelot
                 resolver.GetService<IOperationsService>(),
                 resolver.GetService<IEnvironmentService>(),
                 resolver.GetService<IPathService>(),
-                resolver.GetService<IFileService>()
+                resolver.GetService<IFileService>(),
+                resolver.GetService<IProcessService>(),
+                resolver.GetService<IDirectoryService>()
             ));
             services.Register<IOperationsFactory>(() => new OperationsFactory(
                 resolver.GetService<ITaskPool>(),

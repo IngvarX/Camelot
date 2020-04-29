@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Camelot.Services.Environment.Interfaces;
 
 namespace Camelot.Services.Environment.Implementations
@@ -9,6 +10,27 @@ namespace Camelot.Services.Environment.Implementations
 
         public void Run(string command, string arguments)
         {
+            var process = GetProcess(command, arguments);
+
+            process.Start();
+        }
+
+        public async Task<string> ExecuteAndGetOutputAsync(string command, string arguments)
+        {
+            var process = GetProcess(command, arguments);
+
+            var taskCompletionSource = new TaskCompletionSource<Task<object>>();
+            process.EnableRaisingEvents = true;
+            process.Exited += (sender, args) => taskCompletionSource.TrySetResult(null);
+            process.Start();
+
+            await taskCompletionSource.Task;
+
+            return await process.StandardOutput.ReadToEndAsync();
+        }
+
+        private static Process GetProcess(string command, string arguments)
+        {
             var processStartInfo = new ProcessStartInfo(command)
             {
                 RedirectStandardOutput = true,
@@ -17,9 +39,7 @@ namespace Camelot.Services.Environment.Implementations
                 Arguments = arguments
             };
 
-            var process = new Process { StartInfo = processStartInfo };
-
-            process.Start();
+            return new Process {StartInfo = processStartInfo};
         }
     }
 }

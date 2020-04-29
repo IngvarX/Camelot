@@ -13,6 +13,8 @@ namespace Camelot.Services.Implementations
         private readonly IEnvironmentService _environmentService;
         private readonly IPathService _pathService;
         private readonly IFileService _fileService;
+        private readonly IProcessService _processService;
+        private readonly IDirectoryService _directoryService;
 
         public TrashCanServiceFactory(
             IPlatformService platformService,
@@ -20,7 +22,9 @@ namespace Camelot.Services.Implementations
             IOperationsService operationsService,
             IEnvironmentService environmentService,
             IPathService pathService,
-            IFileService fileService)
+            IFileService fileService,
+            IProcessService processService,
+            IDirectoryService directoryService)
         {
             _platformService = platformService;
             _driveService = driveService;
@@ -28,6 +32,8 @@ namespace Camelot.Services.Implementations
             _environmentService = environmentService;
             _pathService = pathService;
             _fileService = fileService;
+            _processService = processService;
+            _directoryService = directoryService;
         }
 
         public ITrashCanService Create()
@@ -36,10 +42,12 @@ namespace Camelot.Services.Implementations
             switch (platform)
             {
                 case Platform.Linux:
-                    return new LinuxTrashCanService(_driveService, _operationsService, _environmentService,
-                        _pathService, _fileService);
-                case Platform.MacOs:
+                    return new LinuxTrashCanService(_driveService, _operationsService,
+                        _pathService, _environmentService, _fileService, _directoryService);
                 case Platform.Windows:
+                    return new WindowsTrashCanService(_driveService, _operationsService, _pathService, _processService,
+                        _fileService, _environmentService);
+                case Platform.MacOs:
                 default:
                     throw new ArgumentOutOfRangeException(nameof(platform));
             }

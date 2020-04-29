@@ -25,6 +25,8 @@ namespace Camelot.Services.Implementations
             return files.ToArray();
         }
 
+        public FileModel GetFile(string file) => CreateFrom(file);
+
         public bool CheckIfExists(string file) => File.Exists(file);
 
         public Task CopyAsync(string source, string destination)
@@ -50,6 +52,9 @@ namespace Camelot.Services.Implementations
 
         public Task WriteTextAsync(string filePath, string text) =>
             File.WriteAllTextAsync(filePath, text);
+
+        public Task WriteBytesAsync(string filePath, byte[] bytes) =>
+            File.WriteAllBytesAsync(filePath, bytes);
 
         private FileModel CreateFrom(string file)
         {
