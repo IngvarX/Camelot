@@ -20,7 +20,7 @@ namespace Camelot.Services.Builders
             return this;
         }
         
-        public WindowsRemovedFileMetadataBuilder WithRemovingDate(DateTime removingDateTime)
+        public WindowsRemovedFileMetadataBuilder WithRemovingDateTime(DateTime removingDateTime)
         {
             _removingDateTime = removingDateTime;
 

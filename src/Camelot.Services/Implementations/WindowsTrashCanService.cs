@@ -72,7 +72,7 @@ namespace Camelot.Services.Implementations
             var fileModel = _fileService.GetFile(trashCanFilePath);
             var builder = new WindowsRemovedFileMetadataBuilder()
                 .WithFileSize(fileModel.SizeBytes)
-                .WithRemovingDate(removingDate)
+                .WithRemovingDateTime(removingDate)
                 .WithFilePath(originalFilePath);
 
             return builder.Build();
