@@ -46,18 +46,17 @@ namespace Camelot.Services.Implementations
         public ITrashCanService Create()
         {
             var platform = _platformService.GetPlatform();
-            switch (platform)
+            
+            return platform switch
             {
-                case Platform.Linux:
-                    return new LinuxTrashCanService(_driveService, _operationsService,
-                        _pathService, _fileService, _environmentService, _directoryService);
-                case Platform.Windows:
-                    return new WindowsTrashCanService(_driveService, _operationsService, _pathService,
-                        _fileService, _environmentService, _sid);
-                case Platform.MacOs:
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(platform));
-            }
+                Platform.Linux => new LinuxTrashCanService(_driveService, _operationsService, _pathService,
+                    _fileService, _environmentService, _directoryService),
+                Platform.Windows => new WindowsTrashCanService(_driveService, _operationsService, _pathService,
+                    _fileService, _environmentService, _sid),
+                Platform.MacOs => new MacTrashCanService(_driveService, _operationsService, _pathService, _fileService,
+                    _environmentService),
+                _ => throw new ArgumentOutOfRangeException(nameof(platform))
+            };
         }
 
         private async Task InitializeAsync()
