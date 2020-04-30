@@ -18,7 +18,7 @@ namespace Camelot.Services.Tests
             var metadata = builder.Build();
             
             Assert.NotNull(metadata);
-            Assert.Equal(metadata.Length, 28 + filePath.Length * 2);
+            Assert.Equal(30 + filePath.Length * 2, metadata.Length);
         }
         
         [Fact]

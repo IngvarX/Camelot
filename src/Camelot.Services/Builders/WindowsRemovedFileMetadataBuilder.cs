@@ -8,6 +8,7 @@ namespace Camelot.Services.Builders
     public class WindowsRemovedFileMetadataBuilder
     {
         private const long MetadataHeader = 2;
+        private const short EndOfLine = 0;
 
         private long _deletedFileSize;
         private DateTime _removingDateTime;
@@ -41,12 +42,14 @@ namespace Camelot.Services.Builders
             var removingDateTimeBytes = GetRemovingDateTimeAsBytes();
             var filePathLengthBytes = GetFilePathLengthAsBytes();
             var filePathBytes = GetFilePathAsBytes();
+            var endOfLineBytes = GetEndOfLineAsBytes();
 
             return headerBytes
                 .Concat(fileSizeBytes)
                 .Concat(removingDateTimeBytes)
                 .Concat(filePathLengthBytes)
                 .Concat(filePathBytes)
+                .Concat(endOfLineBytes)
                 .ToArray();
         }
         
@@ -54,10 +57,14 @@ namespace Camelot.Services.Builders
         
         private IEnumerable<byte> GetFileSizeAsBytes() => BitConverter.GetBytes(_deletedFileSize);
 
-        private IEnumerable<byte> GetRemovingDateTimeAsBytes() => BitConverter.GetBytes(_removingDateTime.ToBinary());
+        private IEnumerable<byte> GetRemovingDateTimeAsBytes() => BitConverter.GetBytes(_removingDateTime.ToFileTime());
         
-        private IEnumerable<byte> GetFilePathLengthAsBytes() => BitConverter.GetBytes(_filePath.Length);
+        private IEnumerable<byte> GetFilePathLengthAsBytes() => BitConverter.GetBytes(GetFileLength());
 
         private IEnumerable<byte> GetFilePathAsBytes() => Encoding.Unicode.GetBytes(_filePath);
+        
+        private static IEnumerable<byte> GetEndOfLineAsBytes() => BitConverter.GetBytes(EndOfLine);
+
+        private int GetFileLength() => _filePath.Length + 1;
     }
 }
