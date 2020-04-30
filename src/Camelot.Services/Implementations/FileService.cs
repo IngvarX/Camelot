@@ -25,6 +25,9 @@ namespace Camelot.Services.Implementations
             return files.ToArray();
         }
 
+        public IReadOnlyCollection<FileModel> GetFiles(IReadOnlyCollection<string> files) =>
+            files.Select(CreateFrom).ToArray();
+        
         public FileModel GetFile(string file) => CreateFrom(file);
 
         public bool CheckIfExists(string file) => File.Exists(file);

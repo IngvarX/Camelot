@@ -50,7 +50,7 @@ namespace Camelot.Services.Implementations
             {
                 case Platform.Linux:
                     return new LinuxTrashCanService(_driveService, _operationsService,
-                        _pathService, _environmentService, _fileService, _directoryService);
+                        _pathService, _fileService, _environmentService, _directoryService);
                 case Platform.Windows:
                     return new WindowsTrashCanService(_driveService, _operationsService, _pathService,
                         _fileService, _environmentService, _sid);

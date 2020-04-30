@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Camelot.Extensions;
 using Camelot.Services.Builders;
@@ -12,22 +11,22 @@ namespace Camelot.Services.Implementations
     public class LinuxTrashCanService : TrashCanServiceBase
     {
         private readonly IPathService _pathService;
-        private readonly IEnvironmentService _environmentService;
         private readonly IFileService _fileService;
+        private readonly IEnvironmentService _environmentService;
         private readonly IDirectoryService _directoryService;
 
         public LinuxTrashCanService(
             IDriveService driveService,
             IOperationsService operationsService,
             IPathService pathService,
-            IEnvironmentService environmentService,
             IFileService fileService,
+            IEnvironmentService environmentService,
             IDirectoryService directoryService)
-            : base(driveService, operationsService, pathService)
+            : base(driveService, operationsService, pathService, fileService)
         {
             _pathService = pathService;
-            _environmentService = environmentService;
             _fileService = fileService;
+            _environmentService = environmentService;
             _directoryService = directoryService;
         }
 
@@ -47,7 +46,8 @@ namespace Camelot.Services.Implementations
         protected override string GetFilesTrashCanLocation(string trashCanLocation) =>
             $"{trashCanLocation}/files";
 
-        protected override async Task WriteMetaDataAsync(IDictionary<string, string> files, string trashCanLocation)
+        protected override async Task WriteMetaDataAsync(IDictionary<string, string> filePathsDictionary,
+            IDictionary<string, long> fileSizesDictionary, string trashCanLocation)
         {
             var infoTrashCanLocation = GetInfoTrashCanLocation(trashCanLocation);
             if (!_directoryService.CheckIfExists(infoTrashCanLocation))
@@ -57,7 +57,7 @@ namespace Camelot.Services.Implementations
             
             var deleteTime = _environmentService.Now;
 
-            await files.Values.ForEachAsync(f => WriteMetaDataAsync(f, infoTrashCanLocation, deleteTime));
+            await filePathsDictionary.Values.ForEachAsync(f => WriteMetaDataAsync(f, infoTrashCanLocation, deleteTime));
         }
 
         protected override string GetUniqueFilePath(string file, HashSet<string> filesSet, string directory)

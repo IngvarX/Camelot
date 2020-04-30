@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Camelot.Extensions;
 using Camelot.Services.Builders;
 using Camelot.Services.Environment.Interfaces;
 using Camelot.Services.Interfaces;
@@ -29,7 +28,7 @@ namespace Camelot.Services.Implementations
             IFileService fileService,
             IEnvironmentService environmentService,
             string sid)
-            : base(driveService, operationsService, pathService)
+            : base(driveService, operationsService, pathService, fileService)
         {
             _pathService = pathService;
             _fileService = fileService;
@@ -44,13 +43,15 @@ namespace Camelot.Services.Implementations
 
         protected override string GetFilesTrashCanLocation(string trashCanLocation) => trashCanLocation;
 
-        protected override async Task WriteMetaDataAsync(IDictionary<string, string> files, string trashCanLocation)
+        protected override async Task WriteMetaDataAsync(IDictionary<string, string> filePathsDictionary,
+            IDictionary<string, long> fileSizesDictionary, string trashCanLocation)
         {
             var deleteTime = _environmentService.Now;
 
-            foreach (var (originalFilePath, trashCanFilePath) in files)
+            foreach (var (originalFilePath, trashCanFilePath) in filePathsDictionary)
             {
-                var metadataBytes = GetMetadataBytes(originalFilePath, trashCanFilePath, deleteTime);
+                var fileSize = fileSizesDictionary[originalFilePath];
+                var metadataBytes = GetMetadataBytes(originalFilePath, fileSize, deleteTime);
                 var metadataFileName = _pathService.GetFileName(trashCanFilePath).Replace(FilePrefix, MetadataPrefix);
                 var metadataPath = _pathService.Combine(trashCanLocation, metadataFileName);
 
@@ -67,11 +68,11 @@ namespace Camelot.Services.Implementations
             return _pathService.Combine(directory, fileName);
         }
 
-        private byte[] GetMetadataBytes(string originalFilePath, string trashCanFilePath, DateTime removingDate)
+        private static byte[] GetMetadataBytes(string originalFilePath, long fileSize,
+            DateTime removingDate)
         {
-            var fileModel = _fileService.GetFile(trashCanFilePath);
             var builder = new WindowsRemovedFileMetadataBuilder()
-                .WithFileSize(fileModel.SizeBytes)
+                .WithFileSize(fileSize)
                 .WithRemovingDateTime(removingDate)
                 .WithFilePath(originalFilePath);
 

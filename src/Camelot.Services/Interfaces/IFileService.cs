@@ -8,6 +8,8 @@ namespace Camelot.Services.Interfaces
     {
         // TODO: pass ISpecification
         IReadOnlyCollection<FileModel> GetFiles(string directory);
+
+        IReadOnlyCollection<FileModel> GetFiles(IReadOnlyCollection<string> files);
         
         FileModel GetFile(string file);
 

@@ -10,30 +10,36 @@ namespace Camelot.Services.Implementations
         private readonly IDriveService _driveService;
         private readonly IOperationsService _operationsService;
         private readonly IPathService _pathService;
+        private readonly IFileService _fileService;
 
         protected TrashCanServiceBase(
             IDriveService driveService,
             IOperationsService operationsService,
-            IPathService pathService)
+            IPathService pathService,
+            IFileService fileService)
         {
             _driveService = driveService;
             _operationsService = operationsService;
             _pathService = pathService;
+            _fileService = fileService;
         }
 
         public async Task<bool> MoveToTrashAsync(IReadOnlyCollection<string> files)
         {
             var volume = GetVolume(files);
+            var filesSizeDictionary = _fileService
+                .GetFiles(files)
+                .ToDictionary(f => f.FullPath, f => f.SizeBytes);
             var trashCanLocations = GetTrashCanLocations(volume);
 
             foreach (var trashCanLocation in trashCanLocations)
             {
                 var filesTrashCanLocation = GetFilesTrashCanLocation(trashCanLocation);
-                var destinationPaths = GetFilesTrashCanPathsMapping(files, filesTrashCanLocation);
-                var isRemoved = await TryMoveToTrashAsync(destinationPaths);
+                var destinationPathsDictionary = GetFilesTrashCanPathsMapping(files, filesTrashCanLocation);
+                var isRemoved = await TryMoveToTrashAsync(destinationPathsDictionary);
                 if (isRemoved)
                 {
-                    await WriteMetaDataAsync(destinationPaths, trashCanLocation);
+                    await WriteMetaDataAsync(destinationPathsDictionary, filesSizeDictionary, trashCanLocation);
 
                     return true;
                 }
@@ -46,7 +52,8 @@ namespace Camelot.Services.Implementations
 
         protected abstract string GetFilesTrashCanLocation(string trashCanLocation);
 
-        protected abstract Task WriteMetaDataAsync(IDictionary<string, string> files, string trashCanLocation);
+        protected abstract Task WriteMetaDataAsync(IDictionary<string, string> filePathsDictionary,
+            IDictionary<string, long> fileSizesDictionary, string trashCanLocation);
 
         protected abstract string GetUniqueFilePath(string file, HashSet<string> filesSet, string directory);
 
