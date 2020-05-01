@@ -50,11 +50,11 @@ namespace Camelot.Services.Implementations
             return platform switch
             {
                 Platform.Linux => new LinuxTrashCanService(_driveService, _operationsService, _pathService,
-                    _fileService, _directoryService, _environmentService),
+                    _fileService, _environmentService, _directoryService),
                 Platform.Windows => new WindowsTrashCanService(_driveService, _operationsService, _pathService,
-                    _fileService,_directoryService, _environmentService, _sid),
-                Platform.MacOs => new MacTrashCanService(_driveService, _operationsService, _pathService, _fileService,
-                   _directoryService,  _environmentService),
+                    _fileService, _environmentService, _sid),
+                Platform.MacOs => new MacTrashCanService(_driveService, _operationsService, _pathService,
+                    _fileService, _environmentService),
                 _ => throw new ArgumentOutOfRangeException(nameof(platform))
             };
         }

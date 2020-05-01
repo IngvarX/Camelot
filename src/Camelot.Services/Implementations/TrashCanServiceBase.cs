@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Camelot.Extensions;
 using Camelot.Services.Interfaces;
 
 namespace Camelot.Services.Implementations
@@ -12,20 +11,17 @@ namespace Camelot.Services.Implementations
         private readonly IOperationsService _operationsService;
         private readonly IPathService _pathService;
         private readonly IFileService _fileService;
-        private readonly IDirectoryService _directoryService;
 
         protected TrashCanServiceBase(
             IDriveService driveService,
             IOperationsService operationsService,
             IPathService pathService,
-            IFileService fileService,
-            IDirectoryService directoryService)
+            IFileService fileService)
         {
             _driveService = driveService;
             _operationsService = operationsService;
             _pathService = pathService;
             _fileService = fileService;
-            _directoryService = directoryService;
         }
 
         public async Task<bool> MoveToTrashAsync(IReadOnlyCollection<string> nodes)
@@ -33,14 +29,10 @@ namespace Camelot.Services.Implementations
             var volume = GetVolume(nodes);
 
             var files = nodes.Where(_fileService.CheckIfExists).ToArray();
-            var directories = nodes.Where(_directoryService.CheckIfExists).ToArray();
 
             var sizesDictionary = _fileService
                 .GetFiles(files)
                 .ToDictionary(f => f.FullPath, f => f.SizeBytes);
-            _directoryService
-                .GetDirectories(directories)
-                .ForEach(f => sizesDictionary.Add(f.FullPath, 0));
 
             var trashCanLocations = GetTrashCanLocations(volume);
             foreach (var trashCanLocation in trashCanLocations)
@@ -72,6 +64,7 @@ namespace Camelot.Services.Implementations
         {
             try
             {
+                // TODO: fix
                 await _operationsService.MoveFilesAsync(files.Keys.ToArray(), directory);
                 foreach (var (oldFilePath, newFilePath) in files)
                 {

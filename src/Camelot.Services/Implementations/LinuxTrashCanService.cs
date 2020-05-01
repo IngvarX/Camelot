@@ -12,17 +12,17 @@ namespace Camelot.Services.Implementations
     {
         private readonly IPathService _pathService;
         private readonly IFileService _fileService;
-        private readonly IEnvironmentService _environmentService;
         private readonly IDirectoryService _directoryService;
+        private readonly IEnvironmentService _environmentService;
 
         public LinuxTrashCanService(
             IDriveService driveService,
             IOperationsService operationsService,
             IPathService pathService,
             IFileService fileService,
-            IDirectoryService directoryService,
-            IEnvironmentService environmentService)
-            : base(driveService, operationsService, pathService, fileService, directoryService)
+            IEnvironmentService environmentService,
+            IDirectoryService directoryService)
+            : base(driveService, operationsService, pathService, fileService)
         {
             _pathService = pathService;
             _fileService = fileService;

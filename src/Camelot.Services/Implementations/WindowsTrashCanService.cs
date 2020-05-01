@@ -26,10 +26,9 @@ namespace Camelot.Services.Implementations
             IOperationsService operationsService,
             IPathService pathService,
             IFileService fileService,
-            IDirectoryService directoryService,
             IEnvironmentService environmentService,
             string sid)
-            : base(driveService, operationsService, pathService, fileService, directoryService)
+            : base(driveService, operationsService, pathService, fileService)
         {
             _pathService = pathService;
             _fileService = fileService;
@@ -51,7 +50,9 @@ namespace Camelot.Services.Implementations
 
             foreach (var (originalFilePath, trashCanFilePath) in filePathsDictionary)
             {
-                var fileSize = fileSizesDictionary[originalFilePath];
+                var fileSize = fileSizesDictionary.ContainsKey(originalFilePath)
+                    ? fileSizesDictionary[originalFilePath]
+                    : 0;
                 var metadataBytes = GetMetadataBytes(originalFilePath, fileSize, deleteTime);
                 var metadataFileName = _pathService.GetFileName(trashCanFilePath).Replace(FilePrefix, MetadataPrefix);
                 var metadataPath = _pathService.Combine(trashCanLocation, metadataFileName);
