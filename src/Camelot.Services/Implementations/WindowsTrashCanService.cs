@@ -26,9 +26,10 @@ namespace Camelot.Services.Implementations
             IOperationsService operationsService,
             IPathService pathService,
             IFileService fileService,
+            IDirectoryService directoryService,
             IEnvironmentService environmentService,
             string sid)
-            : base(driveService, operationsService, pathService, fileService)
+            : base(driveService, operationsService, pathService, fileService, directoryService)
         {
             _pathService = pathService;
             _fileService = fileService;

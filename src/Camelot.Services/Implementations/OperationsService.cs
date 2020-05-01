@@ -63,19 +63,6 @@ namespace Camelot.Services.Implementations
             await moveOperation.RunAsync();
         }
 
-        public async Task MoveFilesAsync(IDictionary<string, string> files)
-        {
-            var filesSettings = GetBinaryFileOperationSettings(files);
-            if (!filesSettings.Any())
-            {
-                return;
-            }
-
-            var moveOperation = _operationsFactory.CreateMoveOperation(filesSettings);
-
-            await moveOperation.RunAsync();
-        }
-
         public async Task RemoveFilesAsync(IReadOnlyCollection<string> files)
         {
             var (filesSettings, directoriesSettings) = GetUnaryFileOperationSettings(files);
@@ -146,12 +133,6 @@ namespace Camelot.Services.Implementations
 
             return allFiles.ToArray();
         }
-
-        private static BinaryFileOperationSettings[] GetBinaryFileOperationSettings(
-            IDictionary<string, string> selectedFiles) =>
-            selectedFiles
-                .Select(kvp => Create(kvp.Key, kvp.Value))
-                .ToArray();
         
         private string GetCommonRootDirectory(IEnumerable<string> files) =>
             _pathService.GetCommonRootDirectory(files.ToArray());

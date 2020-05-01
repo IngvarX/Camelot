@@ -20,9 +20,9 @@ namespace Camelot.Services.Implementations
             IOperationsService operationsService,
             IPathService pathService,
             IFileService fileService,
-            IEnvironmentService environmentService,
-            IDirectoryService directoryService)
-            : base(driveService, operationsService, pathService, fileService)
+            IDirectoryService directoryService,
+            IEnvironmentService environmentService)
+            : base(driveService, operationsService, pathService, fileService, directoryService)
         {
             _pathService = pathService;
             _fileService = fileService;
@@ -57,7 +57,7 @@ namespace Camelot.Services.Implementations
             
             var deleteTime = _environmentService.Now;
 
-            await filePathsDictionary.Values.ForEachAsync(f => WriteMetaDataAsync(f, infoTrashCanLocation, deleteTime));
+            await filePathsDictionary.Keys.ForEachAsync(f => WriteMetaDataAsync(f, infoTrashCanLocation, deleteTime));
         }
 
         protected override string GetUniqueFilePath(string file, HashSet<string> filesSet, string directory)

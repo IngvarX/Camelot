@@ -5,6 +5,6 @@ namespace Camelot.Services.Interfaces
 {
     public interface ITrashCanService
     {
-        Task<bool> MoveToTrashAsync(IReadOnlyCollection<string> files);
+        Task<bool> MoveToTrashAsync(IReadOnlyCollection<string> nodes);
     }
 }

@@ -49,7 +49,7 @@ namespace Camelot.Services.Tests
             Assert.True(_directoryService.Create(DirectoryName));
             Assert.True(Directory.Exists(NewDirectory));
 
-            var directories = _directoryService.GetDirectories(CurrentDirectory);
+            var directories = _directoryService.GetChildDirectories(CurrentDirectory);
             Assert.Contains(directories, d => d.Name == DirectoryName);
         }
 
@@ -60,7 +60,7 @@ namespace Camelot.Services.Tests
 
             Assert.NotNull(parentDirectory);
 
-            var children = _directoryService.GetDirectories(parentDirectory.FullPath);
+            var children = _directoryService.GetChildDirectories(parentDirectory.FullPath);
             Assert.Contains(children, dm => dm.FullPath == CurrentDirectory);
         }
         

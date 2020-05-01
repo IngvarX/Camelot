@@ -65,7 +65,10 @@ namespace Camelot.Services.Implementations
             return parentDirectory is null ? null : CreateFrom(parentDirectory);
         }
 
-        public IReadOnlyCollection<DirectoryModel> GetDirectories(string directory)
+        public IReadOnlyCollection<DirectoryModel> GetDirectories(IReadOnlyCollection<string> directories) =>
+            directories.Select(CreateFrom).ToArray();
+
+        public IReadOnlyCollection<DirectoryModel> GetChildDirectories(string directory)
         {
             var directories = Directory
                 .GetDirectories(directory)

@@ -14,8 +14,10 @@ namespace Camelot.Services.Interfaces
         bool Create(string directory);
         
         DirectoryModel GetParentDirectory(string directory);
+        
+        IReadOnlyCollection<DirectoryModel> GetDirectories(IReadOnlyCollection<string> directories);
 
-        IReadOnlyCollection<DirectoryModel> GetDirectories(string directory);
+        IReadOnlyCollection<DirectoryModel> GetChildDirectories(string directory);
 
         bool CheckIfExists(string directory);
 

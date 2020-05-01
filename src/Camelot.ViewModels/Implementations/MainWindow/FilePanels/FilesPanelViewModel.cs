@@ -346,7 +346,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             _fileSystemWatchingService.StopWatching();
 
             var parentDirectory = _directoryService.GetParentDirectory(CurrentDirectory);
-            var directories = _directoryService.GetDirectories(CurrentDirectory);
+            var directories = _directoryService.GetChildDirectories(CurrentDirectory);
             var files = _fileService.GetFiles(CurrentDirectory);
 
             var sortingViewModel = SelectedTab.SortingViewModel;

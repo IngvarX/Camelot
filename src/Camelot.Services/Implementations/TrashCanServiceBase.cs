@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Camelot.Extensions;
 using Camelot.Services.Interfaces;
 
 namespace Camelot.Services.Implementations
@@ -11,35 +12,45 @@ namespace Camelot.Services.Implementations
         private readonly IOperationsService _operationsService;
         private readonly IPathService _pathService;
         private readonly IFileService _fileService;
+        private readonly IDirectoryService _directoryService;
 
         protected TrashCanServiceBase(
             IDriveService driveService,
             IOperationsService operationsService,
             IPathService pathService,
-            IFileService fileService)
+            IFileService fileService,
+            IDirectoryService directoryService)
         {
             _driveService = driveService;
             _operationsService = operationsService;
             _pathService = pathService;
             _fileService = fileService;
+            _directoryService = directoryService;
         }
 
-        public async Task<bool> MoveToTrashAsync(IReadOnlyCollection<string> files)
+        public async Task<bool> MoveToTrashAsync(IReadOnlyCollection<string> nodes)
         {
-            var volume = GetVolume(files);
-            var filesSizeDictionary = _fileService
+            var volume = GetVolume(nodes);
+
+            var files = nodes.Where(_fileService.CheckIfExists).ToArray();
+            var directories = nodes.Where(_directoryService.CheckIfExists).ToArray();
+
+            var sizesDictionary = _fileService
                 .GetFiles(files)
                 .ToDictionary(f => f.FullPath, f => f.SizeBytes);
-            var trashCanLocations = GetTrashCanLocations(volume);
+            _directoryService
+                .GetDirectories(directories)
+                .ForEach(f => sizesDictionary.Add(f.FullPath, 0));
 
+            var trashCanLocations = GetTrashCanLocations(volume);
             foreach (var trashCanLocation in trashCanLocations)
             {
                 var filesTrashCanLocation = GetFilesTrashCanLocation(trashCanLocation);
-                var destinationPathsDictionary = GetFilesTrashCanPathsMapping(files, filesTrashCanLocation);
-                var isRemoved = await TryMoveToTrashAsync(destinationPathsDictionary);
+                var destinationPathsDictionary = GetFilesTrashCanPathsMapping(nodes, filesTrashCanLocation);
+                var isRemoved = await TryMoveToTrashAsync(destinationPathsDictionary, filesTrashCanLocation);
                 if (isRemoved)
                 {
-                    await WriteMetaDataAsync(destinationPathsDictionary, filesSizeDictionary, trashCanLocation);
+                    await WriteMetaDataAsync(destinationPathsDictionary, sizesDictionary, trashCanLocation);
 
                     return true;
                 }
@@ -57,11 +68,20 @@ namespace Camelot.Services.Implementations
 
         protected abstract string GetUniqueFilePath(string file, HashSet<string> filesSet, string directory);
 
-        private async Task<bool> TryMoveToTrashAsync(IDictionary<string, string> files)
+        private async Task<bool> TryMoveToTrashAsync(IDictionary<string, string> files, string directory)
         {
             try
             {
-                await _operationsService.MoveFilesAsync(files);
+                await _operationsService.MoveFilesAsync(files.Keys.ToArray(), directory);
+                foreach (var (oldFilePath, newFilePath) in files)
+                {
+                    var oldFileName = _pathService.GetFileName(oldFilePath);
+                    var newFileName = _pathService.GetFileName(newFilePath);
+                    if (oldFileName != newFileName)
+                    {
+                        _operationsService.Rename(_pathService.Combine(directory, oldFileName), newFileName);
+                    }
+                }
             }
             catch
             {
