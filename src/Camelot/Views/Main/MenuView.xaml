@@ -15,9 +15,11 @@
             <MenuItem Header="_File">
                 <MenuItem Header="_Exit" Command="{Binding ExitCommand}" />
             </MenuItem>
+            
             <MenuItem Header="_Configuration">
                 <MenuItem Header="_Settings" />
             </MenuItem>
+            
             <MenuItem Header="_Help">
                 <MenuItem Header="_About" Command="{Binding AboutCommand}" />
             </MenuItem>
