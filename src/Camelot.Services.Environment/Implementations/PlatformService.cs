@@ -1,4 +1,3 @@
-using System;
 using System.Runtime.InteropServices;
 using Camelot.Services.Environment.Enums;
 using Camelot.Services.Environment.Interfaces;
@@ -24,7 +23,7 @@ namespace Camelot.Services.Environment.Implementations
                 return Platform.Windows;
             }
 
-            throw new NotSupportedException("Unsupported platform");
+            return Platform.Unknown;
         }
     }
 }

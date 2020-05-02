@@ -4,6 +4,7 @@ namespace Camelot.Services.Environment.Enums
     {
         Linux,
         MacOs,
-        Windows
+        Windows,
+        Unknown
     }
 }

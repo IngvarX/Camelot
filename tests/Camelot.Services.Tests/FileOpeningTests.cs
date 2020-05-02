@@ -1,8 +1,10 @@
 using System.IO;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Behaviors;
-using Camelot.Services.Environment.Enums;
 using Camelot.Services.Environment.Interfaces;
+using Camelot.Services.Linux;
+using Camelot.Services.Mac;
+using Camelot.Services.Windows;
 using Moq;
 using Xunit;
 
@@ -57,13 +59,8 @@ namespace Camelot.Services.Tests
             processServiceMock
                 .Setup(m => m.Run(FileName))
                 .Verifiable();
-            var platformServiceMock = new Mock<IPlatformService>();
-            platformServiceMock
-                .Setup(m => m.GetPlatform())
-                .Returns(Platform.Windows);
 
-            var fileOpeningService = new ResourceOpeningService(
-                processServiceMock.Object, platformServiceMock.Object);
+            var fileOpeningService = new WindowsResourceOpeningService(processServiceMock.Object);
 
             fileOpeningService.Open(FileName);
 
@@ -77,13 +74,8 @@ namespace Camelot.Services.Tests
             processServiceMock
                 .Setup(m => m.Run("xdg-open", $"\"{FileName}\""))
                 .Verifiable();
-            var platformServiceMock = new Mock<IPlatformService>();
-            platformServiceMock
-                .Setup(m => m.GetPlatform())
-                .Returns(Platform.Linux);
 
-            var fileOpeningService = new ResourceOpeningService(
-                processServiceMock.Object, platformServiceMock.Object);
+            var fileOpeningService = new LinuxResourceOpeningService(processServiceMock.Object);
 
             fileOpeningService.Open(FileName);
 
@@ -97,13 +89,8 @@ namespace Camelot.Services.Tests
             processServiceMock
                 .Setup(m => m.Run("open", $"\"{FileName}\""))
                 .Verifiable();
-            var platformServiceMock = new Mock<IPlatformService>();
-            platformServiceMock
-                .Setup(m => m.GetPlatform())
-                .Returns(Platform.MacOs);
 
-            var fileOpeningService = new ResourceOpeningService(
-                processServiceMock.Object, platformServiceMock.Object);
+            var fileOpeningService = new MacResourceOpeningService(processServiceMock.Object);
 
             fileOpeningService.Open(FileName);
 

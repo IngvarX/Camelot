@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Camelot.Extensions;
 using Camelot.Services.Abstractions;
 using Camelot.Services.AllPlatforms;
 using Camelot.Services.Environment.Interfaces;
@@ -19,10 +20,10 @@ namespace Camelot.Services.Windows
         private readonly IPathService _pathService;
         private readonly IFileService _fileService;
         private readonly IEnvironmentService _environmentService;
-        private readonly string _sid;
         private readonly Random _random;
         
         private IDictionary<string, long> _fileSizesDictionary;
+        private string _sid;
 
         public WindowsTrashCanService(
             IDriveService driveService,
@@ -30,15 +31,23 @@ namespace Camelot.Services.Windows
             IPathService pathService,
             IFileService fileService,
             IEnvironmentService environmentService,
-            string sid)
+            IProcessService processService)
             : base(driveService, operationsService, pathService, fileService)
         {
             _pathService = pathService;
             _fileService = fileService;
             _environmentService = environmentService;
-            _sid = sid;
 
             _random = new Random();
+
+            InitializeAsync(processService).Forget();
+        }
+
+        private async Task InitializeAsync(IProcessService processService)
+        {
+            var userInfo = await processService.ExecuteAndGetOutputAsync("whoami", "/user");
+
+            _sid = userInfo.Split(" ", StringSplitOptions.RemoveEmptyEntries).Last().TrimEnd();
         }
 
         protected override async Task PrepareAsync(string[] files)

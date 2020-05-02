@@ -18,7 +18,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow
         private readonly IFilesSelectionService _filesSelectionService;
         private readonly IDialogService _dialogService;
         private readonly IDirectoryService _directoryService;
-        private readonly ITrashCanServiceFactory _trashCanServiceFactory;
+        private readonly ITrashCanService _trashCanService;
 
         public ICommand OpenCommand { get; }
         
@@ -40,14 +40,14 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             IFilesSelectionService filesSelectionService,
             IDialogService dialogService,
             IDirectoryService directoryService,
-            ITrashCanServiceFactory trashCanServiceFactory)
+            ITrashCanService trashCanService)
         {
             _filesOperationsMediator = filesOperationsMediator;
             _operationsService = operationsService;
             _filesSelectionService = filesSelectionService;
             _dialogService = dialogService;
             _directoryService = directoryService;
-            _trashCanServiceFactory = trashCanServiceFactory;
+            _trashCanService = trashCanService;
 
             OpenCommand = ReactiveCommand.Create(Open);
             OpenInDefaultEditorCommand = ReactiveCommand.Create(OpenInDefaultEditor);
@@ -105,9 +105,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             var isConfirmed = await ShowRemoveConfirmationDialogAsync(navigationParameter);
             if (isConfirmed)
             {
-                var trashCanService = _trashCanServiceFactory.Create();
-                
-                await trashCanService.MoveToTrashAsync(filesToRemove);
+                await _trashCanService.MoveToTrashAsync(filesToRemove);
             }
         }
         

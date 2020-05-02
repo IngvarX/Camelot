@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Reflection;
 using ApplicationDispatcher.Implementations;
@@ -11,10 +12,14 @@ using Camelot.Services;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Operations;
 using Camelot.Services.Behaviors;
+using Camelot.Services.Environment.Enums;
 using Camelot.Services.Environment.Implementations;
 using Camelot.Services.Environment.Interfaces;
 using Camelot.Services.Implementations;
+using Camelot.Services.Linux;
+using Camelot.Services.Mac;
 using Camelot.Services.Operations;
+using Camelot.Services.Windows;
 using Camelot.TaskPool.Interfaces;
 using Camelot.ViewModels.Configuration;
 using Camelot.ViewModels.Factories.Implementations;
@@ -44,6 +49,7 @@ namespace Camelot
             RegisterTaskPool(services, resolver);
             RegisterDataAccess(services, resolver);
             RegisterServices(services, resolver);
+            RegisterPlatformSpecificServices(services, resolver);
             RegisterViewModels(services, resolver);
         }
 
@@ -52,10 +58,10 @@ namespace Camelot
             var configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .Build();
-            
+
             var aboutDialogConfiguration = new AboutDialogConfiguration();
             configuration.GetSection("About").Bind(aboutDialogConfiguration);
-            
+
             services.RegisterConstant(aboutDialogConfiguration);
 
             var databaseName = configuration["DataAccess:DatabaseName"];
@@ -65,7 +71,7 @@ namespace Camelot
             {
                 ConnectionString = Path.Combine(assemblyDirectory, databaseName)
             };
-            
+
             services.RegisterConstant(databaseConfiguration);
         }
 
@@ -73,21 +79,21 @@ namespace Camelot
         {
             services.RegisterLazySingleton<IEnvironmentService>(() => new EnvironmentService());
             services.RegisterLazySingleton<IProcessService>(() => new ProcessService());
-            services.RegisterLazySingleton<IPlatformService>(() => new PlatformService());
+            services.Register<IPlatformService>(() => new PlatformService());
         }
-        
+
         private static void RegisterAvaloniaServices(IMutableDependencyResolver services)
         {
             services.RegisterLazySingleton<IApplicationCloser>(() => new ApplicationCloser());
             services.RegisterLazySingleton<IApplicationDispatcher>(() => new AvaloniaDispatcher());
             services.RegisterLazySingleton<IApplicationVersionProvider>(() => new ApplicationVersionProvider());
         }
-        
+
         private static void RegisterFileSystemWatcherServices(IMutableDependencyResolver services)
         {
             services.RegisterLazySingleton<IFileSystemWatcherWrapperFactory>(() => new FileSystemWatcherWrapperFactory());
         }
-        
+
         private static void RegisterTaskPool(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
             services.RegisterLazySingleton<ITaskPool>(() => new TaskPool.Implementations.TaskPool(
@@ -110,16 +116,6 @@ namespace Camelot
                 resolver.GetService<IPathService>()
             ));
             services.RegisterLazySingleton<IDriveService>(() => new DriveService());
-            services.RegisterLazySingleton<ITrashCanServiceFactory>(() => new TrashCanServiceFactory(
-                resolver.GetService<IPlatformService>(),
-                resolver.GetService<IDriveService>(),
-                resolver.GetService<IOperationsService>(),
-                resolver.GetService<IEnvironmentService>(),
-                resolver.GetService<IPathService>(),
-                resolver.GetService<IFileService>(),
-                resolver.GetService<IProcessService>(),
-                resolver.GetService<IDirectoryService>()
-            ));
             services.Register<IOperationsFactory>(() => new OperationsFactory(
                 resolver.GetService<ITaskPool>(),
                 resolver.GetService<IDirectoryService>(),
@@ -140,10 +136,6 @@ namespace Camelot
             services.RegisterLazySingleton<IDirectoryService>(() => new DirectoryService(
                 resolver.GetService<IPathService>()
             ));
-            services.RegisterLazySingleton<IResourceOpeningService>(() => new ResourceOpeningService(
-                resolver.GetService<IProcessService>(),
-                resolver.GetService<IPlatformService>()
-            ));
             services.RegisterLazySingleton<IFileSystemWatcherWrapperFactory>(() => new FileSystemWatcherWrapperFactory());
             services.Register<IFileSystemWatchingService>(() => new FileSystemWatchingService(
                 resolver.GetService<IFileSystemWatcherWrapperFactory>()
@@ -163,6 +155,73 @@ namespace Camelot
                 resolver.GetService<IClipboardService>(),
                 resolver.GetService<IOperationsService>(),
                 resolver.GetService<IEnvironmentService>()
+            ));
+        }
+
+        private static void RegisterPlatformSpecificServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
+        {
+            var platformService = resolver.GetService<IPlatformService>();
+            var platform = platformService.GetPlatform();
+
+            switch (platform)
+            {
+                case Platform.Linux:
+                    RegisterLinuxServices(services, resolver);
+                    break;
+                case Platform.MacOs:
+                    RegisterMacServices(services, resolver);
+                    break;
+                case Platform.Windows:
+                    RegisterWindowsServices(services, resolver);
+                    break;
+                case Platform.Unknown:
+                    throw new InvalidOperationException("Unsupported platform");
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(platform));
+            }
+        }
+
+        private static void RegisterLinuxServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
+        {
+            services.RegisterLazySingleton<ITrashCanService>(() => new LinuxTrashCanService(
+                resolver.GetService<IDriveService>(),
+                resolver.GetService<IOperationsService>(),
+                resolver.GetService<IPathService>(),
+                resolver.GetService<IFileService>(),
+                resolver.GetService<IEnvironmentService>(),
+                resolver.GetService<IDirectoryService>()
+            ));
+            services.RegisterLazySingleton<IResourceOpeningService>(() => new LinuxResourceOpeningService(
+                resolver.GetService<IProcessService>()
+            ));
+        }
+
+        private static void RegisterMacServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
+        {
+            services.RegisterLazySingleton<ITrashCanService>(() => new MacTrashCanService(
+                resolver.GetService<IDriveService>(),
+                resolver.GetService<IOperationsService>(),
+                resolver.GetService<IPathService>(),
+                resolver.GetService<IFileService>(),
+                resolver.GetService<IEnvironmentService>()
+            ));
+            services.RegisterLazySingleton<IResourceOpeningService>(() => new MacResourceOpeningService(
+                resolver.GetService<IProcessService>()
+            ));
+        }
+
+        private static void RegisterWindowsServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
+        {
+            services.RegisterLazySingleton<ITrashCanService>(() => new WindowsTrashCanService(
+                resolver.GetService<IDriveService>(),
+                resolver.GetService<IOperationsService>(),
+                resolver.GetService<IPathService>(),
+                resolver.GetService<IFileService>(),
+                resolver.GetService<IEnvironmentService>(),
+                resolver.GetService<IProcessService>()
+            ));
+            services.RegisterLazySingleton<IResourceOpeningService>(() => new WindowsResourceOpeningService(
+                resolver.GetService<IProcessService>()
             ));
         }
 
@@ -199,7 +258,7 @@ namespace Camelot
                 resolver.GetService<IFilesSelectionService>(),
                 resolver.GetService<IDialogService>(),
                 resolver.GetService<IDirectoryService>(),
-                resolver.GetService<ITrashCanServiceFactory>()
+                resolver.GetService<ITrashCanService>()
             ));
             services.Register(() => new MenuViewModel(
                 resolver.GetService<IApplicationCloser>(),

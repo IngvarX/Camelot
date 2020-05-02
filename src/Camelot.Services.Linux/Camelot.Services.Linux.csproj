@@ -11,4 +11,8 @@
       <ProjectReference Include="..\Camelot.Services.Environment\Camelot.Services.Environment.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Mono.Posix.NETStandard" Version="1.0.0" />
+    </ItemGroup>
+
 </Project>
