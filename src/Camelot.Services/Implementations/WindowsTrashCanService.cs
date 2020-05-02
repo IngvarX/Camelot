@@ -20,6 +20,8 @@ namespace Camelot.Services.Implementations
         private readonly IEnvironmentService _environmentService;
         private readonly string _sid;
         private readonly Random _random;
+        
+        private IDictionary<string, long> _fileSizesDictionary;
 
         public WindowsTrashCanService(
             IDriveService driveService,
@@ -38,20 +40,29 @@ namespace Camelot.Services.Implementations
             _random = new Random();
         }
 
+        protected override async Task PrepareAsync(string[] files)
+        {
+            _fileSizesDictionary = _fileService
+                .GetFiles(files)
+                .ToDictionary(f => f.FullPath, f => f.SizeBytes);
+
+            await base.PrepareAsync(files);
+        }
+
         protected override IReadOnlyCollection<string> GetTrashCanLocations(string volume) =>
             new[] {$"{volume}$Recycle.Bin\\{_sid}"};
 
         protected override string GetFilesTrashCanLocation(string trashCanLocation) => trashCanLocation;
 
         protected override async Task WriteMetaDataAsync(IDictionary<string, string> filePathsDictionary,
-            IDictionary<string, long> fileSizesDictionary, string trashCanLocation)
+            string trashCanLocation)
         {
             var deleteTime = _environmentService.Now;
 
             foreach (var (originalFilePath, trashCanFilePath) in filePathsDictionary)
             {
-                var fileSize = fileSizesDictionary.ContainsKey(originalFilePath)
-                    ? fileSizesDictionary[originalFilePath]
+                var fileSize = _fileSizesDictionary.ContainsKey(originalFilePath)
+                    ? _fileSizesDictionary[originalFilePath]
                     : 0;
                 var metadataBytes = GetMetadataBytes(originalFilePath, fileSize, deleteTime);
                 var metadataFileName = _pathService.GetFileName(trashCanFilePath).Replace(FilePrefix, MetadataPrefix);

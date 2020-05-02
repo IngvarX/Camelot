@@ -39,8 +39,8 @@ namespace Camelot.Services.Implementations
 
         protected override string GetFilesTrashCanLocation(string trashCanLocation) => trashCanLocation;
 
-        protected override Task WriteMetaDataAsync(IDictionary<string, string> filePathsDictionary, 
-            IDictionary<string, long> fileSizesDictionary, string trashCanLocation) => Task.CompletedTask;
+        protected override Task WriteMetaDataAsync(IDictionary<string, string> filePathsDictionary,
+            string trashCanLocation) => Task.CompletedTask;
 
         protected override string GetUniqueFilePath(string file, HashSet<string> filesSet, string directory)
         {

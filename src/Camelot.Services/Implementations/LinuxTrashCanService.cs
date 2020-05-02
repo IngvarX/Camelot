@@ -47,7 +47,7 @@ namespace Camelot.Services.Implementations
             $"{trashCanLocation}/files";
 
         protected override async Task WriteMetaDataAsync(IDictionary<string, string> filePathsDictionary,
-            IDictionary<string, long> fileSizesDictionary, string trashCanLocation)
+            string trashCanLocation)
         {
             var infoTrashCanLocation = GetInfoTrashCanLocation(trashCanLocation);
             if (!_directoryService.CheckIfExists(infoTrashCanLocation))

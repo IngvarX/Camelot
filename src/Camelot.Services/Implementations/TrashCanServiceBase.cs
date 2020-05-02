@@ -27,22 +27,19 @@ namespace Camelot.Services.Implementations
         public async Task<bool> MoveToTrashAsync(IReadOnlyCollection<string> nodes)
         {
             var volume = GetVolume(nodes);
-
             var files = nodes.Where(_fileService.CheckIfExists).ToArray();
 
-            var sizesDictionary = _fileService
-                .GetFiles(files)
-                .ToDictionary(f => f.FullPath, f => f.SizeBytes);
+            await PrepareAsync(files);
 
             var trashCanLocations = GetTrashCanLocations(volume);
             foreach (var trashCanLocation in trashCanLocations)
             {
                 var filesTrashCanLocation = GetFilesTrashCanLocation(trashCanLocation);
                 var destinationPathsDictionary = GetFilesTrashCanPathsMapping(nodes, filesTrashCanLocation);
-                var isRemoved = await TryMoveToTrashAsync(destinationPathsDictionary, filesTrashCanLocation);
+                var isRemoved = await TryMoveToTrashAsync(destinationPathsDictionary);
                 if (isRemoved)
                 {
-                    await WriteMetaDataAsync(destinationPathsDictionary, sizesDictionary, trashCanLocation);
+                    await WriteMetaDataAsync(destinationPathsDictionary, trashCanLocation);
 
                     return true;
                 }
@@ -51,30 +48,22 @@ namespace Camelot.Services.Implementations
             return false;
         }
 
+        protected virtual Task PrepareAsync(string[] files) => Task.CompletedTask;
+
         protected abstract IReadOnlyCollection<string> GetTrashCanLocations(string volume);
 
         protected abstract string GetFilesTrashCanLocation(string trashCanLocation);
 
         protected abstract Task WriteMetaDataAsync(IDictionary<string, string> filePathsDictionary,
-            IDictionary<string, long> fileSizesDictionary, string trashCanLocation);
+            string trashCanLocation);
 
         protected abstract string GetUniqueFilePath(string file, HashSet<string> filesSet, string directory);
 
-        private async Task<bool> TryMoveToTrashAsync(IDictionary<string, string> files, string directory)
+        private async Task<bool> TryMoveToTrashAsync(IDictionary<string, string> files)
         {
             try
             {
-                // TODO: fix
-                await _operationsService.MoveFilesAsync(files.Keys.ToArray(), directory);
-                foreach (var (oldFilePath, newFilePath) in files)
-                {
-                    var oldFileName = _pathService.GetFileName(oldFilePath);
-                    var newFileName = _pathService.GetFileName(newFilePath);
-                    if (oldFileName != newFileName)
-                    {
-                        _operationsService.Rename(_pathService.Combine(directory, oldFileName), newFileName);
-                    }
-                }
+                await _operationsService.MoveFilesAsync(files);
             }
             catch
             {
