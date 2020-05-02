@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Camelot.Services.Behaviors.Interfaces;
-using Camelot.Services.Interfaces;
+using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Behaviors;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Services.Interfaces;
 using ReactiveUI;

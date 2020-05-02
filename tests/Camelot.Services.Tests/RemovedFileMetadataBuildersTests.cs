@@ -1,5 +1,6 @@
 using System;
-using Camelot.Services.Builders;
+using Camelot.Services.Linux.Builders;
+using Camelot.Services.Windows.Builders;
 using Xunit;
 
 namespace Camelot.Services.Tests

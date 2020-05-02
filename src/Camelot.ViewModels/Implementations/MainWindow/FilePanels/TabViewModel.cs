@@ -1,7 +1,7 @@
 using System;
 using System.Windows.Input;
 using Camelot.Extensions;
-using Camelot.Services.Interfaces;
+using Camelot.Services.Abstractions;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using ReactiveUI;
 

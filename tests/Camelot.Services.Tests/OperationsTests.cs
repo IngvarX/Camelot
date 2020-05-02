@@ -1,9 +1,9 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using Camelot.Services.Interfaces;
-using Camelot.Services.Operations.Implementations;
-using Camelot.Services.Operations.Settings;
+using Camelot.Services.Abstractions;
+using Camelot.Services.Models.Operations;
+using Camelot.Services.Operations;
 using Camelot.TaskPool.Interfaces;
 using Moq;
 using Xunit;

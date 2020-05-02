@@ -1,6 +1,5 @@
 using System.Linq;
-using Camelot.Services.Implementations;
-using Camelot.Services.Interfaces;
+using Camelot.Services.Abstractions;
 using Xunit;
 
 namespace Camelot.Services.Tests

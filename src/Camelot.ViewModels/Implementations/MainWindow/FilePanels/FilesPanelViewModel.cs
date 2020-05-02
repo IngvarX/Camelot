@@ -9,7 +9,7 @@ using System.Windows.Input;
 using ApplicationDispatcher.Interfaces;
 using Camelot.DataAccess.Models;
 using Camelot.Extensions;
-using Camelot.Services.Interfaces;
+using Camelot.Services.Abstractions;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Comparers;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;

@@ -1,9 +1,8 @@
 using System.IO;
-using Camelot.Services.Behaviors.Implementations;
+using Camelot.Services.Abstractions;
+using Camelot.Services.Behaviors;
 using Camelot.Services.Environment.Enums;
 using Camelot.Services.Environment.Interfaces;
-using Camelot.Services.Implementations;
-using Camelot.Services.Interfaces;
 using Moq;
 using Xunit;
 

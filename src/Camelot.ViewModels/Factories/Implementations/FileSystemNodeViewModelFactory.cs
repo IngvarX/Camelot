@@ -1,6 +1,6 @@
 using System.Globalization;
-using Camelot.Services.Behaviors.Interfaces;
-using Camelot.Services.Interfaces;
+using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Behaviors;
 using Camelot.Services.Models;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels;

@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Camelot.Extensions\Camelot.Extensions.csproj" />
+      <ProjectReference Include="..\Camelot.Services.Abstractions\Camelot.Services.Abstractions.csproj" />
+      <ProjectReference Include="..\Camelot.Services.AllPlatforms\Camelot.Services.AllPlatforms.csproj" />
+      <ProjectReference Include="..\Camelot.Services.Environment\Camelot.Services.Environment.csproj" />
+    </ItemGroup>
+
+</Project>

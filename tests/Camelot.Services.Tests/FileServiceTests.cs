@@ -1,8 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
-using Camelot.Services.Implementations;
-using Camelot.Services.Interfaces;
+using Camelot.Services.Abstractions;
 using Camelot.Services.Models;
 using Moq;
 using Xunit;

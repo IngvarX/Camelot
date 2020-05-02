@@ -1,6 +1,6 @@
 using System.Windows.Input;
 using ApplicationDispatcher.Interfaces;
-using Camelot.Services.Interfaces;
+using Camelot.Services.Abstractions;
 using Camelot.ViewModels.Configuration;
 using ReactiveUI;
 

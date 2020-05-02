@@ -4,8 +4,7 @@ using System.Linq;
 using Camelot.DataAccess.Models;
 using Camelot.DataAccess.Repositories;
 using Camelot.DataAccess.UnitOfWork;
-using Camelot.Services.Implementations;
-using Camelot.Services.Interfaces;
+using Camelot.Services.Abstractions;
 using Moq;
 using Xunit;
 

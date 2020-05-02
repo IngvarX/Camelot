@@ -1,8 +1,7 @@
 using System;
 using System.IO;
-using Camelot.Services.EventArgs;
-using Camelot.Services.Implementations;
-using Camelot.Services.Interfaces;
+using Camelot.Services.Abstractions;
+using Camelot.Services.Models.EventArgs;
 using Xunit;
 
 namespace Camelot.Services.Tests

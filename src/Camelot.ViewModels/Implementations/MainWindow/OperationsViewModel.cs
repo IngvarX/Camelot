@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Camelot.Services.Interfaces;
+using Camelot.Services.Abstractions;
 using Camelot.ViewModels.Implementations.Dialogs;
 using Camelot.ViewModels.Implementations.NavigationParameters;
 using Camelot.ViewModels.Interfaces.MainWindow;
