@@ -16,7 +16,7 @@ namespace Camelot.Services.Mac
         public void Open(string resource)
         {
             const string command = "open";
-            var arguments = $"\"{resource}\"";
+            var arguments = resource.EndsWith(".app") ? $"-a \"{resource}\"" : $"\"{resource}\"";
 
             _processService.Run(command, arguments);
         }
