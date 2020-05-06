@@ -1,45 +1,61 @@
 using Camelot.Services.Abstractions;
 using Camelot.Services.Environment.Interfaces;
-using Mono.Unix;
 
 namespace Camelot.Services.Linux
 {
     public class LinuxResourceOpeningService : IResourceOpeningService
     {
         private readonly IProcessService _processService;
+        private readonly string _openCommand;
+        private readonly string _openCommandArguments;
 
         public LinuxResourceOpeningService(
-            IProcessService processService)
+            IProcessService processService,
+            IEnvironmentService environmentService)
         {
             _processService = processService;
+
+            (_openCommand, _openCommandArguments) = GetOpenCommandAndArguments(environmentService);
         }
 
         public void Open(string resource)
         {
-            if (CheckIfExecutable(resource))
-            {
-                _processService.Run(resource);
+            var arguments = string.Format(_openCommandArguments, resource);
 
-                return;
-            }
-
-            const string command = "xdg-open";
-            var arguments = $"\"{resource}\"";
-
-            _processService.Run(command, arguments);
+            _processService.Run(_openCommand, arguments);
         }
 
-        private static bool CheckIfExecutable(string resource)
+        // TODO: refactor
+        private static (string, string) GetOpenCommandAndArguments(IEnvironmentService environmentService)
         {
-            var fileInfo = new UnixFileInfo(resource);
-            var permissions = fileInfo.FileAccessPermissions;
-
-            return CheckIfFlagIsSet(permissions, FileAccessPermissions.GroupExecute)
-                   || CheckIfFlagIsSet(permissions, FileAccessPermissions.UserExecute)
-                   || CheckIfFlagIsSet(permissions, FileAccessPermissions.OtherExecute);
+            var desktopEnvironmentName = GetDesktopEnvironmentName(environmentService);
+            switch (desktopEnvironmentName)
+            {
+                case "kde":
+                    return WrapWithNohup("kioclient", "exec '{0}'");
+                case "gnome":
+                case "lxde":
+                case "lxqt":
+                case "mate":
+                case "unity":
+                case "cinnamon":
+                    return WrapWithNohup("gio", "open '{0}'");
+                default:
+                    return ("xdg-open", "'{0}'");
+            }
         }
 
-        private static bool CheckIfFlagIsSet(FileAccessPermissions permissions, FileAccessPermissions flag) =>
-            (permissions & flag) == flag;
+        private static (string, string) WrapWithNohup(string command, string arguments) =>
+            ("bash", $"-c \"nohup {command} {arguments} >/dev/null 2>&1\"");
+
+        private static string GetDesktopEnvironmentName(IEnvironmentService environmentService)
+        {
+            var xdgCurrentDesktop = environmentService.GetEnvironmentVariable("XDG_CURRENT_DESKTOP");
+            var desktopSession = environmentService.GetEnvironmentVariable("DESKTOP_SESSION");
+            var desktopEnvironmentName =
+                string.IsNullOrWhiteSpace(xdgCurrentDesktop) ? desktopSession : xdgCurrentDesktop;
+
+            return desktopEnvironmentName.ToLower();
+        }
     }
 }

@@ -17,7 +17,7 @@ namespace Camelot.Services.Environment.Implementations
 
         public async Task<string> ExecuteAndGetOutputAsync(string command, string arguments)
         {
-            var process = GetProcess(command, arguments);
+            var process = GetProcess(command, arguments, true);
 
             var taskCompletionSource = new TaskCompletionSource<Task<object>>();
             process.EnableRaisingEvents = true;
@@ -29,11 +29,11 @@ namespace Camelot.Services.Environment.Implementations
             return await process.StandardOutput.ReadToEndAsync();
         }
 
-        private static Process GetProcess(string command, string arguments)
+        private static Process GetProcess(string command, string arguments, bool redirectOutput = false)
         {
             var processStartInfo = new ProcessStartInfo(command)
             {
-                RedirectStandardOutput = true,
+                RedirectStandardOutput = redirectOutput,
                 UseShellExecute = false,
                 CreateNoWindow = false,
                 Arguments = arguments

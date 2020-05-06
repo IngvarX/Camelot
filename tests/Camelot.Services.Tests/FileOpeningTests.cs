@@ -68,18 +68,22 @@ namespace Camelot.Services.Tests
         }
 
         [Fact]
-        public void TestFileServiceOpeningLinux()
+        public void TestFileServiceOpeningLinuxDefault()
         {
             var processServiceMock = new Mock<IProcessService>();
             processServiceMock
                 .Setup(m => m.Run("xdg-open", $"\"{FileName}\""))
                 .Verifiable();
+            var environmentServiceMock = new Mock<IEnvironmentService>();
+            environmentServiceMock
+                .Setup(m => m.GetEnvironmentVariable("DESKTOP_SESSION"))
+                .Returns("Unknown");
 
-            var fileOpeningService = new LinuxResourceOpeningService(processServiceMock.Object);
+            var fileOpeningService = new LinuxResourceOpeningService(processServiceMock.Object, environmentServiceMock.Object);
 
             fileOpeningService.Open(FileName);
 
-            processServiceMock.Verify(m => m.Run("xdg-open", $"\"{FileName}\""), Times.Once());
+            processServiceMock.Verify(m => m.Run("xdg-open", $"'{FileName}'"), Times.Once());
         }
 
         [Fact]

@@ -192,7 +192,8 @@ namespace Camelot
                 resolver.GetService<IDirectoryService>()
             ));
             services.RegisterLazySingleton<IResourceOpeningService>(() => new LinuxResourceOpeningService(
-                resolver.GetService<IProcessService>()
+                resolver.GetService<IProcessService>(),
+                resolver.GetService<IEnvironmentService>()
             ));
         }
 
