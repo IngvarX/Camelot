@@ -20,10 +20,12 @@ namespace Camelot.Services.Linux
 
         public void Open(string resource)
         {
-            var arguments = string.Format(_openCommandArguments, resource);
+            var arguments = GetArguments(resource);
 
             _processService.Run(_openCommand, arguments);
         }
+
+        private string GetArguments(string resource) => string.Format(_openCommandArguments, resource);
 
         // TODO: refactor
         private static (string, string) GetOpenCommandAndArguments(IEnvironmentService environmentService)
@@ -32,14 +34,14 @@ namespace Camelot.Services.Linux
             switch (desktopEnvironmentName)
             {
                 case "kde":
-                    return WrapWithNohup("kioclient", "exec '{0}'");
+                    return WrapWithNohup("kioclient", "exec \\\"{0}\\\"");
                 case "gnome":
                 case "lxde":
                 case "lxqt":
                 case "mate":
                 case "unity":
                 case "cinnamon":
-                    return WrapWithNohup("gio", "open '{0}'");
+                    return WrapWithNohup("gio", "open \\\"{0}\\\"");
                 default:
                     return ("xdg-open", "'{0}'");
             }
