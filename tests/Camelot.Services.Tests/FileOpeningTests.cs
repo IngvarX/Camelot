@@ -70,9 +70,12 @@ namespace Camelot.Services.Tests
         [Fact]
         public void TestFileServiceOpeningLinuxDefault()
         {
+            const string command = "xdg-open";
+            var arguments = $"\"{FileName}\"";
+
             var processServiceMock = new Mock<IProcessService>();
             processServiceMock
-                .Setup(m => m.Run("xdg-open", $"\"{FileName}\""))
+                .Setup(m => m.Run(command, arguments))
                 .Verifiable();
             var environmentServiceMock = new Mock<IEnvironmentService>();
             environmentServiceMock
@@ -83,22 +86,25 @@ namespace Camelot.Services.Tests
 
             fileOpeningService.Open(FileName);
 
-            processServiceMock.Verify(m => m.Run("xdg-open", $"'{FileName}'"), Times.Once());
+            processServiceMock.Verify(m => m.Run(command, arguments), Times.Once());
         }
 
         [Fact]
         public void TestFileServiceOpeningMacOs()
         {
+            const string command = "open";
+            var arguments = $"\"{FileName}\"";
+
             var processServiceMock = new Mock<IProcessService>();
             processServiceMock
-                .Setup(m => m.Run("open", $"\"{FileName}\""))
+                .Setup(m => m.Run(command, arguments))
                 .Verifiable();
 
             var fileOpeningService = new MacResourceOpeningService(processServiceMock.Object);
 
             fileOpeningService.Open(FileName);
 
-            processServiceMock.Verify(m => m.Run("open", $"\"{FileName}\""), Times.Once());
+            processServiceMock.Verify(m => m.Run(command, arguments), Times.Once());
         }
     }
 }
