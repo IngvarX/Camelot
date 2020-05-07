@@ -18,6 +18,7 @@
                    Text="{Binding FilesCount, StringFormat=Do you want to remove these {0} files to trash?}" />
         <TextBlock Classes="dialogTextBlock" Margin="0,0,0,10" IsVisible="{Binding !IsRemovingToTrash}"
                    Text="{Binding FilesCount, StringFormat=Do you want to permanently remove these {0} files?}" />
+
         <ItemsControl Grid.Row="1" Items="{Binding Files}" IsVisible="{Binding ShouldShowFilesList}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
@@ -25,9 +26,10 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
+
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Classes="dialogButton" Content="Cancel" Command="{Binding CancelCommand}" />
-            <Button Classes="dialogButton" Content="Delete" Command="{Binding OkCommand}" />
+            <Button Name="RemoveButton" Classes="dialogButton" Content="Delete" Command="{Binding OkCommand}" />
         </StackPanel>
     </Grid>
 </Window>

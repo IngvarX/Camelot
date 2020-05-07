@@ -1,3 +1,4 @@
+using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
 namespace Camelot.Views.Main.Dialogs
@@ -7,6 +8,14 @@ namespace Camelot.Views.Main.Dialogs
         public RemoveNodesConfirmationDialog()
         {
             InitializeComponent();
+        }
+
+        protected override void OnOpened()
+        {
+            var button = this.FindControl<Button>("RemoveButton");
+            button.Focus();
+
+            base.OnOpened();
         }
 
         private void InitializeComponent()
