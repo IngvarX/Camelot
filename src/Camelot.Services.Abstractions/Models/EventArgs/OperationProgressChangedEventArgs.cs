@@ -1,4 +1,4 @@
-namespace Camelot.Services.Models.EventArgs
+namespace Camelot.Services.Abstractions.Models.EventArgs
 {
     public class OperationProgressChangedEventArgs : System.EventArgs
     {

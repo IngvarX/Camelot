@@ -1,6 +1,6 @@
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Behaviors;
-using Camelot.Services.Models;
+using Camelot.Services.Abstractions.Models;
 using Camelot.ViewModels.Factories.Implementations;
 using Camelot.ViewModels.Services.Interfaces;
 using Moq;

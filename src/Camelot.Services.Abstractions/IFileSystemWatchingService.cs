@@ -1,5 +1,5 @@
 using System;
-using Camelot.Services.Models.EventArgs;
+using Camelot.Services.Abstractions.Models.EventArgs;
 
 namespace Camelot.Services.Abstractions
 {

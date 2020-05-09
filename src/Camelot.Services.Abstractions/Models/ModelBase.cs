@@ -1,6 +1,6 @@
 using System;
 
-namespace Camelot.Services.Models
+namespace Camelot.Services.Abstractions.Models
 {
     public class ModelBase
     {

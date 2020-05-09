@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Camelot.Services.Models;
+using Camelot.Services.Abstractions.Models;
 
 namespace Camelot.Services.Abstractions
 {

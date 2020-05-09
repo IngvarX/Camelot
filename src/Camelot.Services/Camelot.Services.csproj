@@ -13,7 +13,6 @@
       <ProjectReference Include="..\Camelot.Services.Abstractions\Camelot.Services.Abstractions.csproj" />
       <ProjectReference Include="..\Camelot.Services.Linux\Camelot.Services.Linux.csproj" />
       <ProjectReference Include="..\Camelot.Services.Mac\Camelot.Services.Mac.csproj" />
-      <ProjectReference Include="..\Camelot.Services.Models\Camelot.Services.Models.csproj" />
       <ProjectReference Include="..\Camelot.Services.Windows\Camelot.Services.Windows.csproj" />
       <ProjectReference Include="..\Camelot.TaskPool\Camelot.TaskPool.csproj" />
     </ItemGroup>

@@ -1,4 +1,4 @@
-using Camelot.Services.Models;
+using Camelot.Services.Abstractions.Models;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 
 namespace Camelot.ViewModels.Factories.Interfaces

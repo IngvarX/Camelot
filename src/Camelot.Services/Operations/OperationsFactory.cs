@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Models.Operations;
 using Camelot.Services.Abstractions.Operations;
-using Camelot.Services.Models.Operations;
 using Camelot.TaskPool.Interfaces;
 
 namespace Camelot.Services.Operations

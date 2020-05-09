@@ -1,5 +1,5 @@
 using System;
-using Camelot.Services.Models;
+using Camelot.Services.Abstractions.Models;
 
 namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Comparers
 {

@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using Camelot.Services.Abstractions;
-using Camelot.Services.Models;
+using Camelot.Services.Abstractions.Models;
 using Moq;
 using Xunit;
 

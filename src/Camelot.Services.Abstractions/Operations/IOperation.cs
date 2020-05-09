@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Camelot.Services.Models.EventArgs;
+using Camelot.Services.Abstractions.Models.EventArgs;
 
 namespace Camelot.Services.Abstractions.Operations
 {
@@ -9,7 +9,9 @@ namespace Camelot.Services.Abstractions.Operations
     {
         event EventHandler<OperationProgressChangedEventArgs> ProgressChanged;
 
-        event EventHandler<System.EventArgs> OperationFinished;
+        event EventHandler<EventArgs> OperationFinished;
+
+        event EventHandler<EventArgs> OperationCancelled;
 
         Task RunAsync(CancellationToken cancellationToken = default);
     }

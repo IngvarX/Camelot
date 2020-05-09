@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
-using Camelot.Services.Models.Operations;
+using Camelot.Services.Abstractions.Models.Operations;
 using Camelot.Services.Operations;
 using Camelot.TaskPool.Interfaces;
 using Moq;

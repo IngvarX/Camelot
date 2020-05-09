@@ -1,6 +1,6 @@
 using System;
 using Camelot.Services.Abstractions;
-using Camelot.Services.Models.EventArgs;
+using Camelot.Services.Abstractions.Models.EventArgs;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Services.Interfaces;
 

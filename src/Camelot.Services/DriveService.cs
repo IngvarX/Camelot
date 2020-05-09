@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Camelot.Services.Abstractions;
-using Camelot.Services.Models;
+using Camelot.Services.Abstractions.Models;
 
 namespace Camelot.Services
 {

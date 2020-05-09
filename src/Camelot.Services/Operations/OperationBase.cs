@@ -2,8 +2,8 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Camelot.Extensions;
+using Camelot.Services.Abstractions.Models.EventArgs;
 using Camelot.Services.Abstractions.Operations;
-using Camelot.Services.Models.EventArgs;
 
 namespace Camelot.Services.Operations
 {
@@ -12,6 +12,8 @@ namespace Camelot.Services.Operations
         public event EventHandler<OperationProgressChangedEventArgs> ProgressChanged;
 
         public event EventHandler<System.EventArgs> OperationFinished;
+
+        public event EventHandler<System.EventArgs> OperationCancelled;
 
         public abstract Task RunAsync(CancellationToken cancellationToken);
 

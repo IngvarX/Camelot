@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Camelot.Services.Models.Operations;
+using Camelot.Services.Abstractions.Models.Operations;
 
 namespace Camelot.Services.Abstractions.Operations
 {

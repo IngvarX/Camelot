@@ -1,4 +1,4 @@
-namespace Camelot.Services.Models.Operations
+namespace Camelot.Services.Abstractions.Models.Operations
 {
     public class UnaryFileOperationSettings
     {

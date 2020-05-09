@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Camelot.Services.Models;
-using Camelot.Services.Models.EventArgs;
+using Camelot.Services.Abstractions.Models;
+using Camelot.Services.Abstractions.Models.EventArgs;
 
 namespace Camelot.Services.Abstractions
 {

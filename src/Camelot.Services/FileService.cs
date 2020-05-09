@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
-using Camelot.Services.Models;
+using Camelot.Services.Abstractions.Models;
 
 namespace Camelot.Services
 {
