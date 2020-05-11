@@ -5,7 +5,7 @@ using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models.Operations;
 using Camelot.Services.Abstractions.Operations;
 
-namespace Camelot.Services
+namespace Camelot.Services.Operations
 {
     public class OperationsService : IOperationsService
     {
@@ -79,19 +79,14 @@ namespace Camelot.Services
         public async Task RemoveFilesAsync(IReadOnlyCollection<string> files)
         {
             var (filesSettings, directoriesSettings) = GetUnaryFileOperationSettings(files);
-            if (filesSettings.Any())
-            {
-                var deleteFilesOperation = _operationsFactory.CreateDeleteFileOperation(filesSettings);
+            var deleteDirectoriesOperation = _operationsFactory.CreateDeleteOperation(filesSettings, directoriesSettings);
 
-                await deleteFilesOperation.RunAsync();
-            }
+            await deleteDirectoriesOperation.RunAsync();
+        }
 
-            if (directoriesSettings.Any())
-            {
-                var deleteDirectoriesOperation = _operationsFactory.CreateDeleteDirectoryOperation(directoriesSettings);
-
-                await deleteDirectoriesOperation.RunAsync();
-            }
+        public Task RemoveFilesToTrashAsync(IReadOnlyCollection<string> files)
+        {
+            throw new System.NotImplementedException();
         }
 
         public void Rename(string path, string newName)
@@ -146,7 +141,7 @@ namespace Camelot.Services
 
             return allFiles.ToArray();
         }
-        
+
         private BinaryFileOperationSettings[] GetBinaryFileOperationSettings(
             IDictionary<string, string> selectedFiles)
         {
@@ -159,10 +154,10 @@ namespace Camelot.Services
                 .Select(d => new {Dir = d, Files = _directoryService.GetFilesRecursively(d)})
                 .SelectMany(info => info.Files.Select(f =>
                     Create(f, _pathService.Combine(selectedFiles[info.Dir], f.Substring(info.Dir.Length + 1)))));
-            
+
             return files.Concat(filesInDirectories).ToArray();
         }
-        
+
         private string GetCommonRootDirectory(IEnumerable<string> files) =>
             _pathService.GetCommonRootDirectory(files.ToArray());
 

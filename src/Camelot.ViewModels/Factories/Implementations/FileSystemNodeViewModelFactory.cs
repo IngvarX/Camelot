@@ -2,6 +2,7 @@ using System.Globalization;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Behaviors;
 using Camelot.Services.Abstractions.Models;
+using Camelot.Services.Abstractions.Operations;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;

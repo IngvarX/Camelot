@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models.Operations;
 using Camelot.Services.Abstractions.Operations;
+using Camelot.Services.Operations;
 using Moq;
 using Xunit;
 

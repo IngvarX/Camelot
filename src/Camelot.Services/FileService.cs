@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
+using Camelot.Services.Abstractions.Models.Enums;
 
 namespace Camelot.Services
 {

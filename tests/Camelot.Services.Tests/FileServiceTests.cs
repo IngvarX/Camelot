@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
+using Camelot.Services.Abstractions.Models.Enums;
 using Moq;
 using Xunit;
 

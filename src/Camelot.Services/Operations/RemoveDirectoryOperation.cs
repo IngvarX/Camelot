@@ -1,23 +1,26 @@
+using System.Threading;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 
 namespace Camelot.Services.Operations
 {
-    public class RemovingDirectoryOperation : RemovingOperationBase
+    public class RemoveDirectoryOperation : OperationBase
     {
+        private readonly string _pathToRemove;
         private readonly IDirectoryService _directoryService;
 
-        public RemovingDirectoryOperation(
+        public RemoveDirectoryOperation(
             string pathToRemove,
             IDirectoryService directoryService)
-            : base(pathToRemove)
         {
+            _pathToRemove = pathToRemove;
             _directoryService = directoryService;
         }
 
-        protected override Task RemoveAsync(string pathToRemove)
+        public override Task RunAsync(CancellationToken cancellationToken)
         {
-            _directoryService.RemoveRecursively(pathToRemove);
+            _directoryService.RemoveRecursively(_pathToRemove);
+            FireOperationFinishedEvent();
 
             return Task.CompletedTask;
         }

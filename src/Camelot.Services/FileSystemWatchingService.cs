@@ -28,6 +28,7 @@ namespace Camelot.Services
 
         public void StartWatching(string directory)
         {
+            // TODO: Change dir instead of creation new?
             _fileSystemWatcher = _fileSystemWatcherWrapperFactory.Create(directory);
 
             SubscribeToEvents();

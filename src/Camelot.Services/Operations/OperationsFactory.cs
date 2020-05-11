@@ -44,13 +44,22 @@ namespace Camelot.Services.Operations
             return CreateCompositeOperation(operations);
         }
 
-        public IOperation CreateDeleteFileOperation(IList<UnaryFileOperationSettings> files)
+        public IOperation CreateDeleteOperation(
+            IList<UnaryFileOperationSettings> directories,
+            IList<UnaryFileOperationSettings> files)
         {
-            var operations = files
-                .Select(CreateDeleteFileOperation)
-                .ToArray();
+            var fileOperations = files
+                .Select(CreateDeleteFileOperation);
+            var directoryOperations = directories
+                .Select(CreateDeleteDirectoryOperation);
+            var operations = fileOperations.Concat(directoryOperations).ToArray();
 
             return CreateCompositeOperation(operations);
+        }
+
+        public IOperation CreateDeleteToTrashOperation(IList<UnaryFileOperationSettings> parameters)
+        {
+            return ?
         }
 
         public IOperation CreateDeleteDirectoryOperation(IList<UnaryFileOperationSettings> directories)
@@ -71,26 +80,23 @@ namespace Camelot.Services.Operations
             return new MoveOperation(copyOperation, deleteOperation);
         }
 
-        private IOperation CreateCopyOperation(BinaryFileOperationSettings settings)
-        {
-            return new CopyOperation(_directoryService,
-                _fileService, _pathService,
+        private IInternalOperation CreateCopyOperation(BinaryFileOperationSettings settings) =>
+            new CopyOperation(_directoryService, _fileService, _pathService,
                 settings.SourceFilePath, settings.DestinationFilePath);
-        }
 
-        private IOperation CreateDeleteFileOperation(UnaryFileOperationSettings settings) =>
+        private IInternalOperation CreateDeleteFileOperation(UnaryFileOperationSettings settings) =>
             CreateDeleteFileOperation(settings.FilePath);
 
-        private IOperation CreateDeleteDirectoryOperation(UnaryFileOperationSettings settings) =>
+        private IInternalOperation CreateDeleteDirectoryOperation(UnaryFileOperationSettings settings) =>
             CreateDeleteDirectoryOperation(settings.FilePath);
 
-        private IOperation CreateDeleteFileOperation(string filePath) =>
-            new RemovingFileOperation(filePath, _fileService);
+        private IInternalOperation CreateDeleteFileOperation(string filePath) =>
+            new RemoveFileOperation(filePath, _fileService);
 
-        private IOperation CreateDeleteDirectoryOperation(string filePath) =>
-            new RemovingDirectoryOperation(filePath, _directoryService);
+        private IInternalOperation CreateDeleteDirectoryOperation(string filePath) =>
+            new RemoveDirectoryOperation(filePath, _directoryService);
 
-        private IOperation CreateCompositeOperation(IList<IOperation> operations) =>
+        private IOperation CreateCompositeOperation(IList<IInternalOperation> operations) =>
             new CompositeOperation(_taskPool, operations);
     }
 }

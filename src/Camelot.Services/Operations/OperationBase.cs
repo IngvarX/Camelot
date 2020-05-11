@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Camelot.Extensions;
@@ -7,13 +8,11 @@ using Camelot.Services.Abstractions.Operations;
 
 namespace Camelot.Services.Operations
 {
-    public abstract class OperationBase : IOperation
+    public abstract class OperationBase : IInternalOperation
     {
         public event EventHandler<OperationProgressChangedEventArgs> ProgressChanged;
 
-        public event EventHandler<System.EventArgs> OperationFinished;
-
-        public event EventHandler<System.EventArgs> OperationCancelled;
+        public event EventHandler<EventArgs> OperationFinished;
 
         public abstract Task RunAsync(CancellationToken cancellationToken);
 
@@ -24,9 +23,6 @@ namespace Camelot.Services.Operations
             ProgressChanged.Raise(this, args);
         }
 
-        protected void FireOperationFinishedEvent()
-        {
-            OperationFinished.Raise(this, System.EventArgs.Empty);
-        }
+        protected void FireOperationFinishedEvent() => OperationFinished.Raise(this, EventArgs.Empty);
     }
 }

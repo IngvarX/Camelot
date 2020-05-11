@@ -1,4 +1,5 @@
 using System;
+using Camelot.Services.Abstractions.Models.Enums;
 
 namespace Camelot.Services.Abstractions.Models
 {

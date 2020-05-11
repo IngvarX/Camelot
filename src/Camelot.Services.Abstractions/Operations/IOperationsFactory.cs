@@ -9,8 +9,11 @@ namespace Camelot.Services.Abstractions.Operations
 
         IOperation CreateCopyOperation(IList<BinaryFileOperationSettings> parameters);
 
-        IOperation CreateDeleteFileOperation(IList<UnaryFileOperationSettings> files);
+        IOperation CreateDeleteOperation(
+            IList<UnaryFileOperationSettings> directories,
+            IList<UnaryFileOperationSettings> files);
 
-        IOperation CreateDeleteDirectoryOperation(IList<UnaryFileOperationSettings> directories);
+        // TODO: ???
+        IOperation CreateDeleteToTrashOperation(IList<UnaryFileOperationSettings> parameters);
     }
 }

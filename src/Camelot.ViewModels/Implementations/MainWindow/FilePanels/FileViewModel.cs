@@ -1,5 +1,6 @@
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Behaviors;
+using Camelot.Services.Abstractions.Operations;
 using Camelot.ViewModels.Services.Interfaces;
 using ReactiveUI;
 

@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Camelot.Services.Abstractions.Models.EventArgs;
-using Camelot.Services.Abstractions.Operations;
 
-namespace Camelot.Services.Abstractions
+namespace Camelot.Services.Abstractions.Operations
 {
     public interface IFileOperationsStateService
     {

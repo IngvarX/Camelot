@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
 using Camelot.Extensions;
-using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models.EventArgs;
 using Camelot.Services.Abstractions.Operations;
 
-namespace Camelot.Services
+namespace Camelot.Services.Operations
 {
     public class FileOperationsStateService : IFileOperationsStateService
     {

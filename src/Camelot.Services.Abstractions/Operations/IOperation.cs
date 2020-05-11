@@ -1,18 +1,15 @@
 using System;
-using System.Threading;
 using System.Threading.Tasks;
-using Camelot.Services.Abstractions.Models.EventArgs;
+using Camelot.Services.Abstractions.Models.Operations;
 
 namespace Camelot.Services.Abstractions.Operations
 {
-    public interface IOperation
+    public interface IOperation : IInternalOperation
     {
-        event EventHandler<OperationProgressChangedEventArgs> ProgressChanged;
-
-        event EventHandler<EventArgs> OperationFinished;
+        OperationInfo OperationInfo { get; }
 
         event EventHandler<EventArgs> OperationCancelled;
 
-        Task RunAsync(CancellationToken cancellationToken = default);
+        Task CancelAsync();
     }
 }

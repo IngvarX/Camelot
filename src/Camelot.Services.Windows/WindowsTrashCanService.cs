@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Camelot.Extensions;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Operations;
 using Camelot.Services.AllPlatforms;
 using Camelot.Services.Environment.Interfaces;
 using Camelot.Services.Windows.Builders;

@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Operations;
 
 namespace Camelot.Services.AllPlatforms
 {
@@ -24,7 +26,7 @@ namespace Camelot.Services.AllPlatforms
             _fileService = fileService;
         }
 
-        public async Task<bool> MoveToTrashAsync(IReadOnlyCollection<string> nodes)
+        public async Task<bool> MoveToTrashAsync(IReadOnlyCollection<string> nodes, CancellationToken cancellationToken)
         {
             var volume = GetVolume(nodes);
             var files = nodes.Where(_fileService.CheckIfExists).ToArray();
@@ -34,6 +36,8 @@ namespace Camelot.Services.AllPlatforms
             var trashCanLocations = GetTrashCanLocations(volume);
             foreach (var trashCanLocation in trashCanLocations)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 var filesTrashCanLocation = GetFilesTrashCanLocation(trashCanLocation);
                 var destinationPathsDictionary = GetFilesTrashCanPathsMapping(nodes, filesTrashCanLocation);
                 var isRemoved = await TryMoveToTrashAsync(destinationPathsDictionary);
