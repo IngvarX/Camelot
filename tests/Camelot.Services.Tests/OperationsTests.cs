@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
@@ -12,14 +13,8 @@ namespace Camelot.Services.Tests
 {
     public class OperationsTests
     {
-        private const string SourceFileName = "Source";
-        private const string DestinationFileName = "Destination";
-
-        private static string CurrentDirectory => Directory.GetCurrentDirectory();
-
-        private static string SourceFile => Path.Combine(CurrentDirectory, SourceFileName);
-
-        private static string DestinationFile => Path.Combine(CurrentDirectory, DestinationFileName);
+        private const string SourceName = "Source";
+        private const string DestinationName = "Destination";
 
         private readonly ITaskPool _taskPool;
         private readonly IPathService _pathService;
@@ -42,18 +37,21 @@ namespace Camelot.Services.Tests
             var directoryServiceMock = new Mock<IDirectoryService>();
             var filesServiceMock = new Mock<IFileService>();
             filesServiceMock
-                .Setup(m => m.CopyAsync(SourceFile, DestinationFile))
+                .Setup(m => m.CopyAsync(SourceName, DestinationName))
                 .Verifiable();
             var operationsFactory = new OperationsFactory(
                 _taskPool,
                 directoryServiceMock.Object,
                 filesServiceMock.Object,
                 _pathService);
-            var copyOperation = operationsFactory.CreateCopyOperation(
-                new[]
-                {
-                    new BinaryFileOperationSettings(SourceFile, DestinationFile)
-                });
+            var settings = new BinaryFileSystemOperationSettings(
+                new string[] { },
+                new[] {SourceName},
+                new string[] { },
+                new[] {SourceName},
+                new Dictionary<string, string> {[SourceName] = DestinationName}
+            );
+            var copyOperation = operationsFactory.CreateCopyOperation(settings);
 
             var callbackCalled = false;
             copyOperation.OperationFinished += (sender, args) => callbackCalled = true;
@@ -61,7 +59,7 @@ namespace Camelot.Services.Tests
             await copyOperation.RunAsync();
 
             Assert.True(callbackCalled);
-            filesServiceMock.Verify(m => m.CopyAsync(SourceFile, DestinationFile), Times.Once());
+            filesServiceMock.Verify(m => m.CopyAsync(SourceName, DestinationName), Times.Once());
         }
 
         [Fact]
@@ -70,10 +68,10 @@ namespace Camelot.Services.Tests
          var directoryServiceMock = new Mock<IDirectoryService>();
          var filesServiceMock = new Mock<IFileService>();
          filesServiceMock
-             .Setup(m => m.CopyAsync(SourceFile, DestinationFile))
+             .Setup(m => m.CopyAsync(SourceName, DestinationName))
              .Verifiable();
          filesServiceMock
-             .Setup(m => m.Remove(SourceFile))
+             .Setup(m => m.Remove(SourceName))
              .Verifiable();
 
          var operationsFactory = new OperationsFactory(
@@ -81,11 +79,14 @@ namespace Camelot.Services.Tests
              directoryServiceMock.Object,
              filesServiceMock.Object,
              _pathService);
-         var moveOperation = operationsFactory.CreateMoveOperation(
-             new[]
-             {
-                 new BinaryFileOperationSettings(SourceFile, DestinationFile)
-             });
+         var settings = new BinaryFileSystemOperationSettings(
+             new string[] { },
+             new[] {SourceName},
+             new string[] { },
+             new[] {SourceName},
+             new Dictionary<string, string> {[SourceName] = DestinationName}
+         );
+         var moveOperation = operationsFactory.CreateMoveOperation(settings);
 
          var callbackCalled = false;
          moveOperation.OperationFinished += (sender, args) => callbackCalled = true;
@@ -93,17 +94,17 @@ namespace Camelot.Services.Tests
          await moveOperation.RunAsync();
 
          Assert.True(callbackCalled);
-         filesServiceMock.Verify(m => m.CopyAsync(SourceFile, DestinationFile), Times.Once());
-         filesServiceMock.Verify(m => m.Remove(SourceFile), Times.Once());
+         filesServiceMock.Verify(m => m.CopyAsync(SourceName, DestinationName), Times.Once());
+         filesServiceMock.Verify(m => m.Remove(SourceName), Times.Once());
         }
 
         [Fact]
-        public async Task TestDeleteOperation()
+        public async Task TestDeleteFileOperation()
         {
             var directoryServiceMock = new Mock<IDirectoryService>();
             var filesServiceMock = new Mock<IFileService>();
             filesServiceMock
-                .Setup(m => m.Remove(SourceFile))
+                .Setup(m => m.Remove(SourceName))
                 .Verifiable();
             var pathServiceMock = new Mock<IPathService>();
 
@@ -112,11 +113,8 @@ namespace Camelot.Services.Tests
                 directoryServiceMock.Object,
                 filesServiceMock.Object,
                 pathServiceMock.Object);
-            var deleteOperation = operationsFactory.CreateDeleteFileOperation(
-                new[]
-                {
-                    new UnaryFileOperationSettings(SourceFile),
-                });
+            var deleteOperation = operationsFactory.CreateDeleteOperation(
+                new UnaryFileSystemOperationSettings(new string[] {}, new[] {SourceName}));
 
             var callbackCalled = false;
             deleteOperation.OperationFinished += (sender, args) => callbackCalled = true;
@@ -124,7 +122,34 @@ namespace Camelot.Services.Tests
             await deleteOperation.RunAsync();
 
             Assert.True(callbackCalled);
-            filesServiceMock.Verify(m => m.Remove(SourceFile), Times.Once());
+            filesServiceMock.Verify(m => m.Remove(SourceName), Times.Once());
+        }
+
+        [Fact]
+        public async Task TestDeleteDirectoryOperation()
+        {
+            var directoryServiceMock = new Mock<IDirectoryService>();
+            directoryServiceMock
+                .Setup(m => m.RemoveRecursively(SourceName))
+                .Verifiable();
+            var filesServiceMock = new Mock<IFileService>();
+            var pathServiceMock = new Mock<IPathService>();
+
+            var operationsFactory = new OperationsFactory(
+                _taskPool,
+                directoryServiceMock.Object,
+                filesServiceMock.Object,
+                pathServiceMock.Object);
+            var deleteOperation = operationsFactory.CreateDeleteOperation(
+                new UnaryFileSystemOperationSettings(new[] {SourceName}, new string[] {}));
+
+            var callbackCalled = false;
+            deleteOperation.OperationFinished += (sender, args) => callbackCalled = true;
+
+            await deleteOperation.RunAsync();
+
+            Assert.True(callbackCalled);
+            directoryServiceMock.Verify(m => m.RemoveRecursively(SourceName), Times.Once());
         }
     }
 }

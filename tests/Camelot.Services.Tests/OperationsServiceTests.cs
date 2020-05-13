@@ -53,10 +53,10 @@ namespace Camelot.Services.Tests
                 .Setup(m => m.RunAsync(It.IsAny<CancellationToken>()))
                 .Verifiable();
             operationsFactoryMock
-                .Setup(m => m.CreateDeleteFileOperation(It.IsAny<IList<UnaryFileOperationSettings>>()))
-                .Callback<IList<UnaryFileOperationSettings>>(l =>
+                .Setup(m => m.CreateDeleteOperation(It.IsAny<UnaryFileSystemOperationSettings>()))
+                .Callback<UnaryFileSystemOperationSettings>(s =>
                 {
-                    Assert.Equal(FileName, l.Single().FilePath);
+                    Assert.Equal(FileName, s.TopLevelFiles.Single());
                 })
                 .Returns(operationMock.Object);
 
@@ -92,12 +92,13 @@ namespace Camelot.Services.Tests
                 .Setup(m => m.RunAsync(It.IsAny<CancellationToken>()))
                 .Verifiable();
             operationsFactoryMock
-                .Setup(m => m.CreateMoveOperation(It.IsAny<IList<BinaryFileOperationSettings>>()))
-                .Callback<IList<BinaryFileOperationSettings>>(l =>
+                .Setup(m => m.CreateMoveOperation(It.IsAny<BinaryFileSystemOperationSettings>()))
+                .Callback<BinaryFileSystemOperationSettings>(s =>
                 {
-                    var settings = l.Single();
-                    Assert.Equal(FileName, settings.SourceFilePath);
-                    Assert.Equal(fullPath, settings.DestinationFilePath);
+                    var (key, value) = s.FilesDictionary.Single();
+
+                    Assert.Equal(FileName, key);
+                    Assert.Equal(fullPath, value);
                 })
                 .Returns(operationMock.Object);
 
@@ -143,12 +144,13 @@ namespace Camelot.Services.Tests
                 .Setup(m => m.RunAsync(It.IsAny<CancellationToken>()))
                 .Verifiable();
             operationsFactoryMock
-                .Setup(m => m.CreateCopyOperation(It.IsAny<IList<BinaryFileOperationSettings>>()))
-                .Callback<IList<BinaryFileOperationSettings>>(l =>
+                .Setup(m => m.CreateCopyOperation(It.IsAny<BinaryFileSystemOperationSettings>()))
+                .Callback<BinaryFileSystemOperationSettings>(s =>
                 {
-                    var settings = l.Single();
-                    Assert.Equal(FileName, settings.SourceFilePath);
-                    Assert.Equal(fullPath, settings.DestinationFilePath);
+                    var (key, value) = s.FilesDictionary.Single();
+
+                    Assert.Equal(FileName,key);
+                    Assert.Equal(fullPath, value);
                 })
                 .Returns(operationMock.Object);
 
