@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Camelot.Services.Abstractions;
 
 namespace Camelot.Services
@@ -7,7 +8,7 @@ namespace Camelot.Services
     {
         private readonly HashSet<string> _selectedFiles;
 
-        public IReadOnlyCollection<string> SelectedFiles => _selectedFiles;
+        public IReadOnlyList<string> SelectedFiles => _selectedFiles.ToArray();
 
         public FilesSelectionService()
         {

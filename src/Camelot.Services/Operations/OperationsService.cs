@@ -29,7 +29,7 @@ namespace Camelot.Services.Operations
             _pathService = pathService;
         }
 
-        public void OpenFiles(IReadOnlyCollection<string> files)
+        public void OpenFiles(IReadOnlyList<string> files)
         {
             foreach (var selectedFile in files)
             {
@@ -37,7 +37,7 @@ namespace Camelot.Services.Operations
             }
         }
 
-        public async Task CopyAsync(IReadOnlyCollection<string> nodes, string destinationDirectory)
+        public async Task CopyAsync(IReadOnlyList<string> nodes, string destinationDirectory)
         {
             var settings = GetBinaryFileSystemOperationSettings(nodes, destinationDirectory);
             var copyOperation = _operationsFactory.CreateCopyOperation(settings);
@@ -45,7 +45,7 @@ namespace Camelot.Services.Operations
             await copyOperation.RunAsync();
         }
 
-        public async Task MoveAsync(IReadOnlyCollection<string> nodes, string destinationDirectory)
+        public async Task MoveAsync(IReadOnlyList<string> nodes, string destinationDirectory)
         {
             var settings = GetBinaryFileSystemOperationSettings(nodes, destinationDirectory);
             var moveOperation = _operationsFactory.CreateMoveOperation(settings);
@@ -61,7 +61,7 @@ namespace Camelot.Services.Operations
             await moveOperation.RunAsync();
         }
 
-        public async Task RemoveAsync(IReadOnlyCollection<string> nodes)
+        public async Task RemoveAsync(IReadOnlyList<string> nodes)
         {
             var (files, directories) = Split(nodes);
             var settings = Create(files, directories);
@@ -89,7 +89,7 @@ namespace Camelot.Services.Operations
             _directoryService.Create(fullPath);
         }
 
-        private (string[] Files, string[] Directories) Split(IReadOnlyCollection<string> nodes)
+        private (string[] Files, string[] Directories) Split(IReadOnlyList<string> nodes)
         {
             var files = nodes
                 .Where(_fileService.CheckIfExists)
@@ -102,11 +102,11 @@ namespace Camelot.Services.Operations
         }
 
         private BinaryFileSystemOperationSettings GetBinaryFileSystemOperationSettings(
-            IReadOnlyCollection<string> nodes,
+            IReadOnlyList<string> nodes,
             string outputDirectory)
         {
             var (files, directories) = Split(nodes);
-            var sourceDirectory = GetCommonRootDirectory(files) ?? GetCommonRootDirectory(directories);
+            var sourceDirectory = GetCommonRootDirectory(nodes);
             var filesInDirectories = directories.SelectMany(_directoryService.GetFilesRecursively);
             var filePathsDictionary = filesInDirectories
                 .Concat(files)

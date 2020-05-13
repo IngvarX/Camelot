@@ -4,7 +4,7 @@ namespace Camelot.Services.Abstractions
 {
     public interface IFilesSelectionService
     {
-        IReadOnlyCollection<string> SelectedFiles { get; }
+        IReadOnlyList<string> SelectedFiles { get; }
 
         void SelectFiles(IEnumerable<string> files);
 

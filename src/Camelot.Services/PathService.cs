@@ -8,8 +8,13 @@ namespace Camelot.Services
 {
     public class PathService : IPathService
     {
-        public string GetCommonRootDirectory(IList<string> paths)
+        public string GetCommonRootDirectory(IReadOnlyList<string> paths)
         {
+            if (!paths.Any())
+            {
+                return null;
+            }
+
             if (paths.Count == 1)
             {
                 return GetParentDirectory(paths[0]);
@@ -46,7 +51,7 @@ namespace Camelot.Services
             {
                 return Path.GetFileNameWithoutExtension(path);
             }
-            
+
             if (path.Count(c => c == '.') == 1)
             {
                 return path;
@@ -60,7 +65,7 @@ namespace Camelot.Services
         public string GetFileName(string path)
         {
             var fileName = Path.GetFileName(path);
-            
+
             return string.IsNullOrEmpty(fileName) ? path : fileName;
         }
 

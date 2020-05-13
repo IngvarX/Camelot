@@ -113,7 +113,7 @@ namespace Camelot.Services.Tests
                 .Returns(true);
             var pathServiceMock = new Mock<IPathService>();
             pathServiceMock
-                .Setup(m => m.GetCommonRootDirectory(It.IsAny<IList<string>>()))
+                .Setup(m => m.GetCommonRootDirectory(It.IsAny<IReadOnlyList<string>>()))
                 .Returns(string.Empty);
             pathServiceMock
                 .Setup(m => m.Combine(DirectoryName, FileName))
@@ -165,7 +165,7 @@ namespace Camelot.Services.Tests
                 .Returns(true);
             var pathServiceMock = new Mock<IPathService>();
             pathServiceMock
-                .Setup(m => m.GetCommonRootDirectory(It.IsAny<IList<string>>()))
+                .Setup(m => m.GetCommonRootDirectory(It.IsAny<IReadOnlyList<string>>()))
                 .Returns(string.Empty);
             pathServiceMock
                 .Setup(m => m.Combine(DirectoryName, FileName))

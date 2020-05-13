@@ -22,7 +22,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow
         private readonly ITrashCanService _trashCanService;
 
         public ICommand OpenCommand { get; }
-        
+
         public ICommand OpenInDefaultEditorCommand { get; }
 
         public ICommand CopyCommand { get; }
@@ -32,9 +32,9 @@ namespace Camelot.ViewModels.Implementations.MainWindow
         public ICommand NewDirectoryCommand { get; }
 
         public ICommand RemoveCommand { get; }
-        
+
         public ICommand RemoveToTrashCommand { get; }
-        
+
         public OperationsViewModel(
             IFilesOperationsMediator filesOperationsMediator,
             IOperationsService operationsService,
@@ -60,7 +60,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow
         }
 
         private void Open() => _filesOperationsMediator.ActiveFilesPanelViewModel.OpenLastSelectedFile();
-        
+
         private void OpenInDefaultEditor() => _operationsService.OpenFiles(_filesSelectionService.SelectedFiles);
 
         private Task CopyAsync() => _operationsService.CopyAsync(_filesSelectionService.SelectedFiles,
@@ -85,7 +85,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             {
                 return;
             }
-            
+
             var navigationParameter = new NodesRemovingNavigationParameter(filesToRemove, false);
             var isConfirmed = await ShowRemoveConfirmationDialogAsync(navigationParameter);
             if (isConfirmed)
@@ -93,7 +93,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow
                 await _operationsService.RemoveAsync(filesToRemove);
             }
         }
-        
+
         private async Task RemoveToTrashAsync()
         {
             var filesToRemove = GetFilesToRemove();
@@ -109,12 +109,12 @@ namespace Camelot.ViewModels.Implementations.MainWindow
                 await _trashCanService.MoveToTrashAsync(filesToRemove);
             }
         }
-        
+
         private Task<bool> ShowRemoveConfirmationDialogAsync(NodesRemovingNavigationParameter navigationParameter) =>
             _dialogService.ShowDialogAsync<bool, NodesRemovingNavigationParameter>(
                 nameof(RemoveNodesConfirmationDialogViewModel), navigationParameter);
 
-        private IReadOnlyCollection<string> GetFilesToRemove() =>
+        private IReadOnlyList<string> GetFilesToRemove() =>
             _filesSelectionService
                 .SelectedFiles
                 .ToArray();

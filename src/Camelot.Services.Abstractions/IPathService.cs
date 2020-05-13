@@ -4,7 +4,7 @@ namespace Camelot.Services.Abstractions
 {
     public interface IPathService
     {
-        string GetCommonRootDirectory(IList<string> paths);
+        string GetCommonRootDirectory(IReadOnlyList<string> paths);
 
         string Combine(string path1, string path2);
 

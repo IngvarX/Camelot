@@ -23,7 +23,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private string _fullName;
         private bool _isEditing;
 
-        private IReadOnlyCollection<string> Files => new[] {FullPath};
+        private IReadOnlyList<string> Files => new[] {FullPath};
 
         public string LastModifiedDateTime
         {
