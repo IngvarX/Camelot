@@ -58,12 +58,12 @@ namespace Camelot.Services.AllPlatforms
 
         protected abstract string GetFilesTrashCanLocation(string trashCanLocation);
 
-        protected abstract Task WriteMetaDataAsync(IDictionary<string, string> filePathsDictionary,
+        protected abstract Task WriteMetaDataAsync(IReadOnlyDictionary<string, string> filePathsDictionary,
             string trashCanLocation);
 
         protected abstract string GetUniqueFilePath(string file, HashSet<string> filesSet, string directory);
 
-        private async Task<bool> TryMoveToTrashAsync(IDictionary<string, string> files)
+        private async Task<bool> TryMoveToTrashAsync(IReadOnlyDictionary<string, string> files)
         {
             try
             {
@@ -78,7 +78,7 @@ namespace Camelot.Services.AllPlatforms
             return true;
         }
 
-        private IDictionary<string, string> GetFilesTrashCanPathsMapping(IReadOnlyCollection<string> files,
+        private IReadOnlyDictionary<string, string> GetFilesTrashCanPathsMapping(IReadOnlyCollection<string> files,
             string filesTrashCanLocation)
         {
             var fileNames = new HashSet<string>();

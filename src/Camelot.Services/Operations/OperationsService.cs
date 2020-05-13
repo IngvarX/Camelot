@@ -47,41 +47,27 @@ namespace Camelot.Services.Operations
 
         public async Task MoveAsync(IReadOnlyCollection<string> nodes, string destinationDirectory)
         {
-            var filesSettings = GetBinaryFileSystemOperationSettings(nodes, destinationDirectory);
-            var moveOperation = _operationsFactory.CreateMoveOperation(filesSettings);
+            var settings = GetBinaryFileSystemOperationSettings(nodes, destinationDirectory);
+            var moveOperation = _operationsFactory.CreateMoveOperation(settings);
 
             await moveOperation.RunAsync();
         }
 
-        public async Task MoveAsync(IDictionary<string, string> nodes)
+        public async Task MoveAsync(IReadOnlyDictionary<string, string> nodes)
         {
-            // var filesSettings = GetBinaryFileOperationSettings(nodes);
-            // if (!filesSettings.Any())
-            // {
-            //     return;
-            // }
-            //
-            // var moveOperation = _operationsFactory.CreateMoveOperation(filesSettings);
-            //
-            // await moveOperation.RunAsync();
+            var settings = GetBinaryFileSystemOperationSettings(nodes);
+            var moveOperation = _operationsFactory.CreateMoveOperation(settings);
+
+            await moveOperation.RunAsync();
         }
 
-        public async Task RemoveAsync(IReadOnlyCollection<string> files)
+        public async Task RemoveAsync(IReadOnlyCollection<string> nodes)
         {
-            var (filesSettings, directoriesSettings) = Split(files);
-            var deleteOperation =
-                _operationsFactory.CreateDeleteOperation(filesSettings, directoriesSettings);
+            var (files, directories) = Split(nodes);
+            var settings = Create(files, directories);
+            var deleteOperation = _operationsFactory.CreateDeleteOperation(settings);
 
             await deleteOperation.RunAsync();
-        }
-
-        public async Task RemoveToTrashAsync(IReadOnlyCollection<string> files)
-        {
-            var (filesSettings, directoriesSettings) = Split(files);
-            var deleteToTrashOperation =
-                _operationsFactory.CreateDeleteToTrashOperation(filesSettings, directoriesSettings);
-
-            await deleteToTrashOperation.RunAsync();
         }
 
         public void Rename(string path, string newName)
@@ -122,9 +108,11 @@ namespace Camelot.Services.Operations
             var (files, directories) = Split(nodes);
             var sourceDirectory = GetCommonRootDirectory(files) ?? GetCommonRootDirectory(directories);
             var filesInDirectories = directories.SelectMany(_directoryService.GetFilesRecursively);
-            var filePathsDictionary = filesInDirectories.ToDictionary(
-                f => f,
-                f => GetDestinationPath(sourceDirectory, f, outputDirectory));
+            var filePathsDictionary = filesInDirectories
+                .Concat(files)
+                .ToDictionary(
+                    f => f,
+                    f => GetDestinationPath(sourceDirectory, f, outputDirectory));
             var outputTopLevelFiles = files
                 .Select(f => GetDestinationPath(sourceDirectory, f, outputDirectory))
                 .ToArray();
@@ -136,21 +124,20 @@ namespace Camelot.Services.Operations
                 outputTopLevelFiles, filePathsDictionary);
         }
 
-        // private BinaryFileOperationSettings GetBinaryFileOperationSettings(
-        //     IDictionary<string, string> selectedFiles)
-        // {
-        //     var files = selectedFiles.Keys
-        //         .Where(_fileService.CheckIfExists)
-        //         .Select(sourcePath => Create(sourcePath, selectedFiles[sourcePath]));
-        //
-        //     var filesInDirectories = selectedFiles.Keys
-        //         .Where(_directoryService.CheckIfExists)
-        //         .Select(d => new {Dir = d, Files = _directoryService.GetFilesRecursively(d)})
-        //         .SelectMany(info => info.Files.Select(f =>
-        //             Create(f, _pathService.Combine(selectedFiles[info.Dir], f.Substring(info.Dir.Length + 1)))));
-        //
-        //     return files.Concat(filesInDirectories).ToArray();
-        // }
+        private BinaryFileSystemOperationSettings GetBinaryFileSystemOperationSettings(
+            IReadOnlyDictionary<string, string> nodes)
+        {
+            var (files, directories) = Split(nodes.Keys.ToArray());
+            var outputTopLevelFiles = files
+                .Select(f => nodes[f])
+                .ToArray();
+            var outputTopLevelDirectories = directories
+                .Select(f => nodes[f])
+                .ToArray();
+
+            return new BinaryFileSystemOperationSettings(directories, files, outputTopLevelDirectories,
+                outputTopLevelFiles, nodes);
+        }
 
         private string GetCommonRootDirectory(IEnumerable<string> nodes) =>
             _pathService.GetCommonRootDirectory(nodes.ToArray());
@@ -162,5 +149,9 @@ namespace Camelot.Services.Operations
 
             return _pathService.Combine(destinationDirectory, relativeSourcePath);
         }
+
+        private UnaryFileSystemOperationSettings Create(
+            IReadOnlyList<string> files, IReadOnlyList<string> directories) =>
+            new UnaryFileSystemOperationSettings(directories, files);
     }
 }

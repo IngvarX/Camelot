@@ -18,7 +18,7 @@ namespace Camelot.Services.Mac
             IOperationsService operationsService,
             IPathService pathService,
             IFileService fileService,
-            IEnvironmentService environmentService) 
+            IEnvironmentService environmentService)
             : base(driveService, operationsService, pathService, fileService)
         {
             _pathService = pathService;
@@ -33,7 +33,7 @@ namespace Camelot.Services.Mac
             {
                 directories.Add(GetVolumeTrashCanPath(volume));
             }
-            
+
             directories.Add(GetHomeTrashCanPath());
 
             return directories;
@@ -41,7 +41,7 @@ namespace Camelot.Services.Mac
 
         protected override string GetFilesTrashCanLocation(string trashCanLocation) => trashCanLocation;
 
-        protected override Task WriteMetaDataAsync(IDictionary<string, string> filePathsDictionary,
+        protected override Task WriteMetaDataAsync(IReadOnlyDictionary<string, string> filePathsDictionary,
             string trashCanLocation) => Task.CompletedTask;
 
         protected override string GetUniqueFilePath(string file, HashSet<string> filesSet, string directory)
@@ -66,7 +66,7 @@ namespace Camelot.Services.Mac
 
             return result;
         }
-        
+
         private string GetHomeTrashCanPath()
         {
             var home = _environmentService.GetEnvironmentVariable("HOME");

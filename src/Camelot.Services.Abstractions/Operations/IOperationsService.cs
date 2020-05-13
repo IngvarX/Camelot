@@ -11,13 +11,11 @@ namespace Camelot.Services.Abstractions.Operations
 
         Task MoveAsync(IReadOnlyCollection<string> nodes, string destinationDirectory);
 
-        Task MoveAsync(IDictionary<string, string> nodes);
+        Task MoveAsync(IReadOnlyDictionary<string, string> nodes);
 
         void CreateDirectory(string sourceDirectory, string directoryName);
 
         Task RemoveAsync(IReadOnlyCollection<string> nodes);
-
-        Task RemoveToTrashAsync(IReadOnlyCollection<string> nodes);
 
         void Rename(string path, string newName);
     }

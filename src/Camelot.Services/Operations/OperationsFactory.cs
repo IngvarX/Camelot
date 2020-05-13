@@ -14,20 +14,17 @@ namespace Camelot.Services.Operations
         private readonly IDirectoryService _directoryService;
         private readonly IFileService _fileService;
         private readonly IPathService _pathService;
-        private readonly ITrashCanService _trashCanService;
 
         public OperationsFactory(
             ITaskPool taskPool,
             IDirectoryService directoryService,
             IFileService fileService,
-            IPathService pathService,
-            ITrashCanService trashCanService)
+            IPathService pathService)
         {
             _taskPool = taskPool;
             _directoryService = directoryService;
             _fileService = fileService;
             _pathService = pathService;
-            _trashCanService = trashCanService;
         }
 
         public IOperation CreateCopyOperation(BinaryFileSystemOperationSettings settings)
@@ -57,33 +54,14 @@ namespace Camelot.Services.Operations
             return CreateCompositeOperation(operations, cancelOperations, operationInfo);
         }
 
-        public IOperation CreateDeleteOperation(
-            IReadOnlyList<string> topLevelDirectories,
-            IReadOnlyList<string> topLevelFiles)
+        public IOperation CreateDeleteOperation(UnaryFileSystemOperationSettings settings)
         {
-            var deleteOperations = CreateDeleteOperations(topLevelDirectories, topLevelFiles);
+            var deleteOperations = CreateDeleteOperations(settings.TopLevelDirectories, settings.TopLevelFiles);
             var operations = CreateOperationsGroupsList(deleteOperations);
 
             var cancelOperations = CreateOperationsGroupsList();
 
-            var operationInfo = Create(OperationType.Delete, topLevelFiles, topLevelDirectories);
-
-            return CreateCompositeOperation(operations, cancelOperations, operationInfo);
-        }
-
-        public IOperation CreateDeleteToTrashOperation(
-            IReadOnlyList<string> topLevelDirectories,
-            IReadOnlyList<string> topLevelFiles)
-        {
-            var filePaths = topLevelDirectories
-                .Concat(topLevelFiles)
-                .ToArray();
-            var removeToTrashOperation = new RemoveToTrashOperation(_trashCanService, filePaths);
-            var operations = CreateOperationsGroupsList(new[] {removeToTrashOperation});
-
-            var cancelOperations = CreateOperationsGroupsList();
-
-            var operationInfo = Create(OperationType.DeleteToTrash, topLevelFiles, topLevelDirectories);
+            var operationInfo = Create(OperationType.Delete, settings.TopLevelFiles, settings.TopLevelDirectories);
 
             return CreateCompositeOperation(operations, cancelOperations, operationInfo);
         }

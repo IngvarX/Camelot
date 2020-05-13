@@ -120,8 +120,7 @@ namespace Camelot
                 resolver.GetService<ITaskPool>(),
                 resolver.GetService<IDirectoryService>(),
                 resolver.GetService<IFileService>(),
-                resolver.GetService<IPathService>(),
-                resolver.GetService<ITrashCanService>()
+                resolver.GetService<IPathService>()
             ));
             services.RegisterLazySingleton<IFileSystemWatchingService>(() => new FileSystemWatchingService(
                 resolver.GetService<IFileSystemWatcherWrapperFactory>()

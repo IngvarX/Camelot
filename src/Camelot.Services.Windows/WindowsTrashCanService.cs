@@ -22,7 +22,7 @@ namespace Camelot.Services.Windows
         private readonly IFileService _fileService;
         private readonly IEnvironmentService _environmentService;
         private readonly Random _random;
-        
+
         private IDictionary<string, long> _fileSizesDictionary;
         private string _sid;
 
@@ -65,7 +65,7 @@ namespace Camelot.Services.Windows
 
         protected override string GetFilesTrashCanLocation(string trashCanLocation) => trashCanLocation;
 
-        protected override async Task WriteMetaDataAsync(IDictionary<string, string> filePathsDictionary,
+        protected override async Task WriteMetaDataAsync(IReadOnlyDictionary<string, string> filePathsDictionary,
             string trashCanLocation)
         {
             var deleteTime = _environmentService.Now;

@@ -39,7 +39,7 @@ namespace Camelot.Services.Linux
             {
                 directories.AddRange(GetVolumeTrashCanPaths(volume));
             }
-            
+
             directories.Add(GetHomeTrashCanPath());
 
             return directories;
@@ -48,7 +48,7 @@ namespace Camelot.Services.Linux
         protected override string GetFilesTrashCanLocation(string trashCanLocation) =>
             $"{trashCanLocation}/files";
 
-        protected override async Task WriteMetaDataAsync(IDictionary<string, string> filePathsDictionary,
+        protected override async Task WriteMetaDataAsync(IReadOnlyDictionary<string, string> filePathsDictionary,
             string trashCanLocation)
         {
             var infoTrashCanLocation = GetInfoTrashCanLocation(trashCanLocation);
@@ -56,7 +56,7 @@ namespace Camelot.Services.Linux
             {
                 _directoryService.Create(infoTrashCanLocation);
             }
-            
+
             var deleteTime = _environmentService.Now;
 
             await filePathsDictionary.Keys.ForEachAsync(f => WriteMetaDataAsync(f, infoTrashCanLocation, deleteTime));
@@ -101,7 +101,7 @@ namespace Camelot.Services.Linux
 
             return builder.Build();
         }
-        
+
         private static string GetInfoTrashCanLocation(string trashCanLocation) =>
             $"{trashCanLocation}/info";
 
@@ -112,7 +112,7 @@ namespace Camelot.Services.Linux
             {
                 return $"{xdgDataHome}/Trash/";
             }
-            
+
             var home = _environmentService.GetEnvironmentVariable("HOME");
 
             return $"{home}/.local/share/Trash";

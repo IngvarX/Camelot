@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Camelot.Services.Abstractions.Models.Operations;
 
 namespace Camelot.Services.Abstractions.Operations
@@ -9,12 +8,6 @@ namespace Camelot.Services.Abstractions.Operations
 
         IOperation CreateCopyOperation(BinaryFileSystemOperationSettings settings);
 
-        IOperation CreateDeleteOperation(
-            IReadOnlyList<string> topLevelDirectories,
-            IReadOnlyList<string> topLevelFiles);
-
-        IOperation CreateDeleteToTrashOperation(
-            IReadOnlyList<string> topLevelDirectories,
-            IReadOnlyList<string> topLevelFiles);
+        IOperation CreateDeleteOperation(UnaryFileSystemOperationSettings settings);
     }
 }
