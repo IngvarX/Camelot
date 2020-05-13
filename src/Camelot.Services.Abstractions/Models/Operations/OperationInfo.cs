@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Camelot.Services.Abstractions.Models.Enums;
 
 namespace Camelot.Services.Abstractions.Models.Operations
@@ -6,25 +7,21 @@ namespace Camelot.Services.Abstractions.Models.Operations
     {
         public OperationType OperationType { get; }
 
-        public int FilesCount { get; }
+        public IReadOnlyList<string> Files { get; }
 
-        public int DirectoriesCount { get; }
-
-        public string SourceDirectory { get; }
+        public IReadOnlyList<string> Directories { get; }
 
         public string TargetDirectory { get; }
 
         public OperationInfo(
             OperationType operationType,
-            int filesCount,
-            int directoriesCount,
-            string sourceDirectory,
+            IReadOnlyList<string> files,
+            IReadOnlyList<string> directories,
             string targetDirectory = null)
         {
             OperationType = operationType;
-            FilesCount = filesCount;
-            DirectoriesCount = directoriesCount;
-            SourceDirectory = sourceDirectory;
+            Files = files;
+            Directories = directories;
             TargetDirectory = targetDirectory;
         }
     }

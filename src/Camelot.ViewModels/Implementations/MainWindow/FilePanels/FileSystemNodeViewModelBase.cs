@@ -107,10 +107,10 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         private Task CopyToClipboardAsync() => _clipboardOperationsService.CopyFilesAsync(Files);
 
-        private Task DeleteAsync() => _operationsService.RemoveFilesAsync(Files);
+        private Task DeleteAsync() => _operationsService.RemoveAsync(Files);
 
-        private Task CopyAsync() => _operationsService.CopyFilesAsync(Files, _filesOperationsMediator.OutputDirectory);
+        private Task CopyAsync() => _operationsService.CopyAsync(Files, _filesOperationsMediator.OutputDirectory);
 
-        private Task MoveAsync() => _operationsService.MoveFilesAsync(Files, _filesOperationsMediator.OutputDirectory);
+        private Task MoveAsync() => _operationsService.MoveAsync(Files, _filesOperationsMediator.OutputDirectory);
     }
 }

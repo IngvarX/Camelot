@@ -67,7 +67,7 @@ namespace Camelot.Services.AllPlatforms
         {
             try
             {
-                await _operationsService.MoveFilesAsync(files);
+                await _operationsService.MoveAsync(files);
             }
             catch
             {

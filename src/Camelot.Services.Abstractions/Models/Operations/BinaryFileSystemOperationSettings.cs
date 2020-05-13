@@ -1,0 +1,31 @@
+using System.Collections.Generic;
+
+namespace Camelot.Services.Abstractions.Models.Operations
+{
+    public class BinaryFileSystemOperationSettings
+    {
+        public IReadOnlyList<string> InputTopLevelDirectories { get; }
+
+        public IReadOnlyList<string> InputTopLevelFiles { get; }
+
+        public IReadOnlyList<string> OutputTopLevelDirectories { get; }
+
+        public IReadOnlyList<string> OutputTopLevelFiles { get; }
+
+        public IReadOnlyDictionary<string, string> FilesDictionary { get; }
+
+        public BinaryFileSystemOperationSettings(
+            IReadOnlyList<string> inputTopLevelDirectories,
+            IReadOnlyList<string> inputTopLevelFiles,
+            IReadOnlyList<string> outputTopLevelDirectories,
+            IReadOnlyList<string> outputTopLevelFiles,
+            IReadOnlyDictionary<string, string> filesDictionary)
+        {
+            InputTopLevelDirectories = inputTopLevelDirectories;
+            InputTopLevelFiles = inputTopLevelFiles;
+            OutputTopLevelDirectories = outputTopLevelDirectories;
+            OutputTopLevelFiles = outputTopLevelFiles;
+            FilesDictionary = filesDictionary;
+        }
+    }
+}

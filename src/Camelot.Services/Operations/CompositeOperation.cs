@@ -13,10 +13,10 @@ namespace Camelot.Services.Operations
     public class CompositeOperation : OperationBase, IOperation
     {
         private readonly ITaskPool _taskPool;
-        private readonly IList<IList<IInternalOperation>> _groupedOperationsToExecute;
-        private readonly IList<IList<IInternalOperation>> _groupedOperationsToCancel;
+        private readonly IReadOnlyList<IReadOnlyList<IInternalOperation>> _groupedOperationsToExecute;
+        private readonly IReadOnlyList<IReadOnlyList<IInternalOperation>> _groupedOperationsToCancel;
 
-        private IList<IList<IInternalOperation>> _currentOperations;
+        private IReadOnlyList<IReadOnlyList<IInternalOperation>> _currentOperations;
         private int _finishedOperationsCount;
         private CancellationToken _cancellationToken;
 
@@ -25,8 +25,8 @@ namespace Camelot.Services.Operations
         public event EventHandler<EventArgs> OperationCancelled;
 
         public CompositeOperation(ITaskPool taskPool,
-            IList<IList<IInternalOperation>> groupedOperationsToExecute,
-            IList<IList<IInternalOperation>> groupedOperationsToCancel,
+            IReadOnlyList<IReadOnlyList<IInternalOperation>> groupedOperationsToExecute,
+            IReadOnlyList<IReadOnlyList<IInternalOperation>> groupedOperationsToCancel,
             OperationInfo operationInfo)
         {
             _taskPool = taskPool;
@@ -41,13 +41,13 @@ namespace Camelot.Services.Operations
         public async Task CancelAsync()
         {
             // TODO: stop operation
-            await ExecuteOperationsAsync(_groupedOperationsToCancel, cancellationToken);
+            await ExecuteOperationsAsync(_groupedOperationsToCancel, _cancellationToken);
 
             OperationCancelled.Raise(this, EventArgs.Empty);
         }
 
         private async Task ExecuteOperationsAsync(
-            IList<IList<IInternalOperation>> groupedOperationsToExecute,
+            IReadOnlyList<IReadOnlyList<IInternalOperation>> groupedOperationsToExecute,
             CancellationToken cancellationToken)
         {
             _cancellationToken = cancellationToken;

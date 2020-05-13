@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Models.Operations;
 using Camelot.Services.Abstractions.Operations;
 using Camelot.TaskPool.Interfaces;
@@ -13,90 +14,117 @@ namespace Camelot.Services.Operations
         private readonly IDirectoryService _directoryService;
         private readonly IFileService _fileService;
         private readonly IPathService _pathService;
+        private readonly ITrashCanService _trashCanService;
 
         public OperationsFactory(
             ITaskPool taskPool,
             IDirectoryService directoryService,
             IFileService fileService,
-            IPathService pathService)
+            IPathService pathService,
+            ITrashCanService trashCanService)
         {
             _taskPool = taskPool;
             _directoryService = directoryService;
             _fileService = fileService;
             _pathService = pathService;
+            _trashCanService = trashCanService;
         }
 
-        public IOperation CreateMoveOperation(IList<BinaryFileOperationSettings> settings)
+        public IOperation CreateCopyOperation(BinaryFileSystemOperationSettings settings)
         {
-            var operations = settings
-                .Select(CreateMoveOperation)
-                .ToArray();
+            var copyOperations = CreateCopyOperations(settings.FilesDictionary);
+            var operations = CreateOperationsGroupsList(copyOperations);
 
-            return CreateCompositeOperation(operations);
+            var deleteNewFilesOperations = CreateDeleteOperations(settings.OutputTopLevelDirectories, settings.OutputTopLevelFiles);
+            var cancelOperations = CreateOperationsGroupsList(deleteNewFilesOperations);
+
+            var operationInfo = Create(OperationType.Copy, settings.InputTopLevelDirectories, settings.InputTopLevelFiles);
+
+            return CreateCompositeOperation(operations, cancelOperations, operationInfo);
         }
 
-        public IOperation CreateCopyOperation(IList<BinaryFileOperationSettings> settings)
+        public IOperation CreateMoveOperation(BinaryFileSystemOperationSettings settings)
         {
-            var operations = settings
-                .Select(CreateCopyOperation)
-                .ToArray();
+            var copyOperations = CreateCopyOperations(settings.FilesDictionary);
+            var deleteOldFilesOperations = CreateDeleteOperations(settings.InputTopLevelDirectories, settings.InputTopLevelFiles);
+            var operations = CreateOperationsGroupsList(copyOperations, deleteOldFilesOperations);
 
-            return CreateCompositeOperation(operations);
+            var deleteNewFilesOperations = CreateDeleteOperations(settings.OutputTopLevelDirectories, settings.OutputTopLevelFiles);
+            var cancelOperations = CreateOperationsGroupsList(deleteNewFilesOperations);
+
+            var operationInfo = Create(OperationType.Move, settings.InputTopLevelDirectories, settings.InputTopLevelFiles);
+
+            return CreateCompositeOperation(operations, cancelOperations, operationInfo);
         }
 
         public IOperation CreateDeleteOperation(
-            IList<UnaryFileOperationSettings> directories,
-            IList<UnaryFileOperationSettings> files)
+            IReadOnlyList<string> topLevelDirectories,
+            IReadOnlyList<string> topLevelFiles)
         {
-            var fileOperations = files
-                .Select(CreateDeleteFileOperation);
-            var directoryOperations = directories
-                .Select(CreateDeleteDirectoryOperation);
-            var operations = fileOperations.Concat(directoryOperations).ToArray();
+            var deleteOperations = CreateDeleteOperations(topLevelDirectories, topLevelFiles);
+            var operations = CreateOperationsGroupsList(deleteOperations);
 
-            return CreateCompositeOperation(operations);
+            var cancelOperations = CreateOperationsGroupsList();
+
+            var operationInfo = Create(OperationType.Delete, topLevelFiles, topLevelDirectories);
+
+            return CreateCompositeOperation(operations, cancelOperations, operationInfo);
         }
 
-        public IOperation CreateDeleteToTrashOperation(IList<UnaryFileOperationSettings> parameters)
+        public IOperation CreateDeleteToTrashOperation(
+            IReadOnlyList<string> topLevelDirectories,
+            IReadOnlyList<string> topLevelFiles)
         {
-            return ?
+            var filePaths = topLevelDirectories
+                .Concat(topLevelFiles)
+                .ToArray();
+            var removeToTrashOperation = new RemoveToTrashOperation(_trashCanService, filePaths);
+            var operations = CreateOperationsGroupsList(new[] {removeToTrashOperation});
+
+            var cancelOperations = CreateOperationsGroupsList();
+
+            var operationInfo = Create(OperationType.DeleteToTrash, topLevelFiles, topLevelDirectories);
+
+            return CreateCompositeOperation(operations, cancelOperations, operationInfo);
         }
 
-        public IOperation CreateDeleteDirectoryOperation(IList<UnaryFileOperationSettings> directories)
-        {
-            var operations = directories
-                .Select(CreateDeleteDirectoryOperation)
+        private IInternalOperation[] CreateCopyOperations(IReadOnlyDictionary<string, string> filesDictionary) =>
+            filesDictionary
+                .Select(kvp => CreateCopyOperation(kvp.Key, kvp.Value))
                 .ToArray();
 
-            return CreateCompositeOperation(operations);
-        }
-
-        private IOperation CreateMoveOperation(BinaryFileOperationSettings settings)
+        private IInternalOperation[] CreateDeleteOperations(
+            IReadOnlyList<string> topLevelDirectories,
+            IReadOnlyList<string> topLevelFiles)
         {
-            var copyOperation = CreateCopyOperation(settings);
-            // TODO: cleanup folders
-            var deleteOperation = CreateDeleteFileOperation(settings.SourceFilePath);
+            var fileOperations = topLevelFiles
+                .Select(CreateDeleteFileOperation);
+            var directoryOperations = topLevelDirectories
+                .Select(CreateDeleteDirectoryOperation);
 
-            return new MoveOperation(copyOperation, deleteOperation);
+            return fileOperations.Concat(directoryOperations).ToArray();
         }
 
-        private IInternalOperation CreateCopyOperation(BinaryFileOperationSettings settings) =>
-            new CopyOperation(_directoryService, _fileService, _pathService,
-                settings.SourceFilePath, settings.DestinationFilePath);
-
-        private IInternalOperation CreateDeleteFileOperation(UnaryFileOperationSettings settings) =>
-            CreateDeleteFileOperation(settings.FilePath);
-
-        private IInternalOperation CreateDeleteDirectoryOperation(UnaryFileOperationSettings settings) =>
-            CreateDeleteDirectoryOperation(settings.FilePath);
+        private IInternalOperation CreateCopyOperation(string source, string destination) =>
+            new CopyOperation(_directoryService, _fileService, _pathService, source, destination);
 
         private IInternalOperation CreateDeleteFileOperation(string filePath) =>
-            new RemoveFileOperation(filePath, _fileService);
+            new DeleteFileOperation(filePath, _fileService);
 
         private IInternalOperation CreateDeleteDirectoryOperation(string filePath) =>
-            new RemoveDirectoryOperation(filePath, _directoryService);
+            new DeleteDirectoryOperation(filePath, _directoryService);
 
-        private IOperation CreateCompositeOperation(IList<IInternalOperation> operations) =>
-            new CompositeOperation(_taskPool, operations);
+        private IOperation CreateCompositeOperation(
+            IReadOnlyList<IReadOnlyList<IInternalOperation>> operations,
+            IReadOnlyList<IReadOnlyList<IInternalOperation>> cancelOperations,
+            OperationInfo operationInfo) =>
+            new CompositeOperation(_taskPool, operations, cancelOperations, operationInfo);
+
+        private static OperationInfo Create(OperationType operationType,
+            IReadOnlyList<string> directories, IReadOnlyList<string> files) =>
+            new OperationInfo(operationType, files, directories);
+
+        private static IReadOnlyList<IReadOnlyList<IInternalOperation>> CreateOperationsGroupsList(
+            params IReadOnlyList<IInternalOperation>[] operations) => operations;
     }
 }

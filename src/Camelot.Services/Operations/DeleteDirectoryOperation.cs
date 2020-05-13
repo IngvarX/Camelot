@@ -4,22 +4,22 @@ using Camelot.Services.Abstractions;
 
 namespace Camelot.Services.Operations
 {
-    public class RemoveFileOperation : OperationBase
+    public class DeleteDirectoryOperation : OperationBase
     {
         private readonly string _pathToRemove;
-        private readonly IFileService _fileService;
+        private readonly IDirectoryService _directoryService;
 
-        public RemoveFileOperation(
+        public DeleteDirectoryOperation(
             string pathToRemove,
-            IFileService fileService)
+            IDirectoryService directoryService)
         {
             _pathToRemove = pathToRemove;
-            _fileService = fileService;
+            _directoryService = directoryService;
         }
 
         public override Task RunAsync(CancellationToken cancellationToken)
         {
-            _fileService.Remove(_pathToRemove);
+            _directoryService.RemoveRecursively(_pathToRemove);
             FireOperationFinishedEvent();
 
             return Task.CompletedTask;

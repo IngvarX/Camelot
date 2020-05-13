@@ -5,15 +5,16 @@ namespace Camelot.Services.Abstractions.Operations
 {
     public interface IOperationsFactory
     {
-        IOperation CreateMoveOperation(IList<BinaryFileOperationSettings> parameters);
+        IOperation CreateMoveOperation(BinaryFileSystemOperationSettings settings);
 
-        IOperation CreateCopyOperation(IList<BinaryFileOperationSettings> parameters);
+        IOperation CreateCopyOperation(BinaryFileSystemOperationSettings settings);
 
         IOperation CreateDeleteOperation(
-            IList<UnaryFileOperationSettings> directories,
-            IList<UnaryFileOperationSettings> files);
+            IReadOnlyList<string> topLevelDirectories,
+            IReadOnlyList<string> topLevelFiles);
 
-        // TODO: ???
-        IOperation CreateDeleteToTrashOperation(IList<UnaryFileOperationSettings> parameters);
+        IOperation CreateDeleteToTrashOperation(
+            IReadOnlyList<string> topLevelDirectories,
+            IReadOnlyList<string> topLevelFiles);
     }
 }

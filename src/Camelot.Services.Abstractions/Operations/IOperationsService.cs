@@ -5,19 +5,19 @@ namespace Camelot.Services.Abstractions.Operations
 {
     public interface IOperationsService
     {
-        void OpenFiles(IReadOnlyCollection<string> files);
+        void OpenFiles(IReadOnlyCollection<string> nodes);
 
-        Task CopyFilesAsync(IReadOnlyCollection<string> files, string destinationDirectory);
+        Task CopyAsync(IReadOnlyCollection<string> nodes, string destinationDirectory);
 
-        Task MoveFilesAsync(IReadOnlyCollection<string> files, string destinationDirectory);
+        Task MoveAsync(IReadOnlyCollection<string> nodes, string destinationDirectory);
 
-        Task MoveFilesAsync(IDictionary<string, string> files);
+        Task MoveAsync(IDictionary<string, string> nodes);
 
         void CreateDirectory(string sourceDirectory, string directoryName);
 
-        Task RemoveFilesAsync(IReadOnlyCollection<string> files);
+        Task RemoveAsync(IReadOnlyCollection<string> nodes);
 
-        Task RemoveFilesToTrashAsync(IReadOnlyCollection<string> files);
+        Task RemoveToTrashAsync(IReadOnlyCollection<string> nodes);
 
         void Rename(string path, string newName);
     }

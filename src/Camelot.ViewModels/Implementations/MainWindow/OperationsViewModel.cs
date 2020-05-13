@@ -63,10 +63,10 @@ namespace Camelot.ViewModels.Implementations.MainWindow
         
         private void OpenInDefaultEditor() => _operationsService.OpenFiles(_filesSelectionService.SelectedFiles);
 
-        private Task CopyAsync() => _operationsService.CopyFilesAsync(_filesSelectionService.SelectedFiles,
+        private Task CopyAsync() => _operationsService.CopyAsync(_filesSelectionService.SelectedFiles,
             _filesOperationsMediator.OutputDirectory);
 
-        private Task MoveAsync() => _operationsService.MoveFilesAsync(_filesSelectionService.SelectedFiles,
+        private Task MoveAsync() => _operationsService.MoveAsync(_filesSelectionService.SelectedFiles,
             _filesOperationsMediator.OutputDirectory);
 
         private async Task CreateNewDirectoryAsync()
@@ -90,7 +90,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             var isConfirmed = await ShowRemoveConfirmationDialogAsync(navigationParameter);
             if (isConfirmed)
             {
-                await _operationsService.RemoveFilesAsync(filesToRemove);
+                await _operationsService.RemoveAsync(filesToRemove);
             }
         }
         

@@ -44,7 +44,7 @@ namespace Camelot.Services
                 .Select(f => f.Substring(startIndex))
                 .ToArray();
 
-            await _operationsService.CopyFilesAsync(files, destinationDirectory);
+            await _operationsService.CopyAsync(files, destinationDirectory);
         }
     }
 }

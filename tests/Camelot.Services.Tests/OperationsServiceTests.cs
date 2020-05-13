@@ -76,7 +76,7 @@ namespace Camelot.Services.Tests
                 fileServiceMock.Object,
                 pathServiceMock.Object);
 
-            await operationsService.RemoveFilesAsync(new[] {FileName});
+            await operationsService.RemoveAsync(new[] {FileName});
 
             operationMock.Verify(m => m.RunAsync(It.IsAny<CancellationToken>()), Times.Once());
             fileServiceMock.Verify(m => m.CheckIfExists(FileName), Times.Once());
@@ -128,7 +128,7 @@ namespace Camelot.Services.Tests
                 fileServiceMock.Object,
                 pathServiceMock.Object);
 
-            await operationsService.MoveFilesAsync(new[] {FileName}, DirectoryName);
+            await operationsService.MoveAsync(new[] {FileName}, DirectoryName);
 
             operationMock.Verify(m => m.RunAsync(It.IsAny<CancellationToken>()), Times.Once());
         }
@@ -179,7 +179,7 @@ namespace Camelot.Services.Tests
                 fileServiceMock.Object,
                 pathServiceMock.Object);
 
-            await operationsService.CopyFilesAsync(new[] {FileName}, DirectoryName);
+            await operationsService.CopyAsync(new[] {FileName}, DirectoryName);
 
             operationMock.Verify(m => m.RunAsync(It.IsAny<CancellationToken>()), Times.Once());
         }
