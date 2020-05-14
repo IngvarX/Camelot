@@ -6,9 +6,9 @@ namespace Camelot.Services.Abstractions.Operations
 {
     public interface IOperation : IInternalOperation
     {
-        OperationInfo OperationInfo { get; }
+        OperationInfo Info { get; }
 
-        event EventHandler<EventArgs> OperationCancelled;
+        event EventHandler<EventArgs> Cancelled;
 
         Task CancelAsync();
     }

@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Models.Enums;
 
 namespace Camelot.Services.Operations
 {
@@ -37,15 +38,13 @@ namespace Camelot.Services.Operations
             _destinationFile = destinationFile;
         }
 
-        public override async Task RunAsync(CancellationToken cancellationToken)
+        protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
             CreateOutputDirectoryIfNeeded(_destinationFile);
 
             await _fileService.CopyAsync(_sourceFile, _destinationFile);
-
-            FireOperationFinishedEvent();
         }
 
         private void CreateOutputDirectoryIfNeeded(string destinationFile)

@@ -6,7 +6,7 @@ namespace Camelot.Services.Abstractions.Operations
 {
     public interface IFileOperationsStateService
     {
-        IReadOnlyCollection<IOperation> ActiveOperations { get; }
+        IReadOnlyList<IOperation> ActiveOperations { get; }
 
         event EventHandler<OperationStartedEventArgs> OperationStarted;
 

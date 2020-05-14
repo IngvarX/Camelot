@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Camelot.Extensions;
+using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Models.EventArgs;
 using Camelot.Services.Abstractions.Operations;
 
@@ -10,7 +11,7 @@ namespace Camelot.Services.Operations
     {
         private readonly List<IOperation> _activeOperations;
 
-        public IReadOnlyCollection<IOperation> ActiveOperations => _activeOperations;
+        public IReadOnlyList<IOperation> ActiveOperations => _activeOperations;
 
         public event EventHandler<OperationStartedEventArgs> OperationStarted;
 
@@ -32,24 +33,26 @@ namespace Camelot.Services.Operations
 
         private void SubscribeToOperationEvents(IOperation operation)
         {
-            operation.OperationFinished += OperationOnOperationFinished;
-            operation.OperationCancelled += OperationOnOperationCancelled;
+            operation.StateChanged += OperationOnStateChanged;
+            operation.Cancelled += OnCancelled;
         }
 
         private void UnsubscribeFromOperationEvents(IOperation operation)
         {
-            operation.OperationFinished -= OperationOnOperationFinished;
-            operation.OperationCancelled -= OperationOnOperationCancelled;
+            operation.StateChanged -= OperationOnStateChanged;
+            operation.Cancelled -= OnCancelled;
         }
 
-        private void OperationOnOperationFinished(object sender, EventArgs e)
+        private void OperationOnStateChanged(object sender, OperationStateChangedEventArgs e)
         {
             var operation = (IOperation) sender;
-
-            RemoveOperation(operation, OperationResult.Success);
+            if (e.OperationState == OperationState.Finished)
+            {
+                RemoveOperation(operation, OperationResult.Success);
+            }
         }
 
-        private void OperationOnOperationCancelled(object sender, EventArgs e)
+        private void OnCancelled(object sender, EventArgs e)
         {
             var operation = (IOperation) sender;
 

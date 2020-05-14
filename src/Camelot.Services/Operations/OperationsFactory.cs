@@ -30,40 +30,39 @@ namespace Camelot.Services.Operations
         public IOperation CreateCopyOperation(BinaryFileSystemOperationSettings settings)
         {
             var copyOperations = CreateCopyOperations(settings.FilesDictionary);
-            var operations = CreateOperationsGroupsList(copyOperations);
-
             var deleteNewFilesOperations = CreateDeleteOperations(settings.OutputTopLevelDirectories, settings.OutputTopLevelFiles);
-            var cancelOperations = CreateOperationsGroupsList(deleteNewFilesOperations);
+            var operationGroup = CreateOperationGroup(copyOperations, deleteNewFilesOperations);
 
+            var operations = CreateOperationsGroupsList(operationGroup);
             var operationInfo = Create(OperationType.Copy, settings.InputTopLevelDirectories, settings.InputTopLevelFiles);
 
-            return CreateCompositeOperation(operations, cancelOperations, operationInfo);
+            return CreateCompositeOperation(operations, operationInfo);
         }
 
         public IOperation CreateMoveOperation(BinaryFileSystemOperationSettings settings)
         {
             var copyOperations = CreateCopyOperations(settings.FilesDictionary);
-            var deleteOldFilesOperations = CreateDeleteOperations(settings.InputTopLevelDirectories, settings.InputTopLevelFiles);
-            var operations = CreateOperationsGroupsList(copyOperations, deleteOldFilesOperations);
-
             var deleteNewFilesOperations = CreateDeleteOperations(settings.OutputTopLevelDirectories, settings.OutputTopLevelFiles);
-            var cancelOperations = CreateOperationsGroupsList(deleteNewFilesOperations);
+            var copyOperationGroup = CreateOperationGroup(copyOperations, deleteNewFilesOperations);
 
+            var deleteOldFilesOperations = CreateDeleteOperations(settings.InputTopLevelDirectories, settings.InputTopLevelFiles);
+            var deleteOperationGroup = CreateOperationGroup(deleteOldFilesOperations);
+
+            var operations = CreateOperationsGroupsList(copyOperationGroup, deleteOperationGroup);
             var operationInfo = Create(OperationType.Move, settings.InputTopLevelDirectories, settings.InputTopLevelFiles);
 
-            return CreateCompositeOperation(operations, cancelOperations, operationInfo);
+            return CreateCompositeOperation(operations, operationInfo);
         }
 
         public IOperation CreateDeleteOperation(UnaryFileSystemOperationSettings settings)
         {
             var deleteOperations = CreateDeleteOperations(settings.TopLevelDirectories, settings.TopLevelFiles);
-            var operations = CreateOperationsGroupsList(deleteOperations);
+            var deleteOperationGroup = CreateOperationGroup(deleteOperations);
 
-            var cancelOperations = CreateOperationsGroupsList();
-
+            var operations = CreateOperationsGroupsList(deleteOperationGroup);
             var operationInfo = Create(OperationType.Delete, settings.TopLevelFiles, settings.TopLevelDirectories);
 
-            return CreateCompositeOperation(operations, cancelOperations, operationInfo);
+            return CreateCompositeOperation(operations, operationInfo);
         }
 
         private IInternalOperation[] CreateCopyOperations(IReadOnlyDictionary<string, string> filesDictionary) =>
@@ -93,16 +92,19 @@ namespace Camelot.Services.Operations
             new DeleteDirectoryOperation(filePath, _directoryService);
 
         private IOperation CreateCompositeOperation(
-            IReadOnlyList<IReadOnlyList<IInternalOperation>> operations,
-            IReadOnlyList<IReadOnlyList<IInternalOperation>> cancelOperations,
+            IReadOnlyList<OperationGroup> operations,
             OperationInfo operationInfo) =>
-            new CompositeOperation(_taskPool, operations, cancelOperations, operationInfo);
+            new CompositeOperation(_taskPool, operations, operationInfo);
 
         private static OperationInfo Create(OperationType operationType,
             IReadOnlyList<string> directories, IReadOnlyList<string> files) =>
             new OperationInfo(operationType, files, directories);
 
-        private static IReadOnlyList<IReadOnlyList<IInternalOperation>> CreateOperationsGroupsList(
-            params IReadOnlyList<IInternalOperation>[] operations) => operations;
+        private static IReadOnlyList<OperationGroup> CreateOperationsGroupsList(
+            params OperationGroup[] operations) => operations;
+
+        private static OperationGroup CreateOperationGroup(
+            IInternalOperation[] operations, IInternalOperation[] cancelOperations = null) =>
+            new OperationGroup(operations, cancelOperations);
     }
 }

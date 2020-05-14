@@ -17,10 +17,9 @@ namespace Camelot.Services.Operations
             _fileService = fileService;
         }
 
-        public override Task RunAsync(CancellationToken cancellationToken)
+        protected override Task ExecuteAsync(CancellationToken cancellationToken)
         {
             _fileService.Remove(_pathToRemove);
-            FireOperationFinishedEvent();
 
             return Task.CompletedTask;
         }

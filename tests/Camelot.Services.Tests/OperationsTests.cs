@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Models.Operations;
 using Camelot.Services.Operations;
 using Camelot.TaskPool.Interfaces;
@@ -53,10 +53,14 @@ namespace Camelot.Services.Tests
             );
             var copyOperation = operationsFactory.CreateCopyOperation(settings);
 
+            Assert.Equal(OperationState.NotStarted, copyOperation.OperationState);
+
             var callbackCalled = false;
-            copyOperation.OperationFinished += (sender, args) => callbackCalled = true;
+            copyOperation.StateChanged += (sender, args) => callbackCalled = true;
 
             await copyOperation.RunAsync();
+
+            Assert.Equal(OperationState.Finished, copyOperation.OperationState);
 
             Assert.True(callbackCalled);
             filesServiceMock.Verify(m => m.CopyAsync(SourceName, DestinationName), Times.Once());
@@ -88,10 +92,14 @@ namespace Camelot.Services.Tests
          );
          var moveOperation = operationsFactory.CreateMoveOperation(settings);
 
+         Assert.Equal(OperationState.NotStarted, moveOperation.OperationState);
+
          var callbackCalled = false;
-         moveOperation.OperationFinished += (sender, args) => callbackCalled = true;
+         moveOperation.StateChanged += (sender, args) => callbackCalled = true;
 
          await moveOperation.RunAsync();
+
+         Assert.Equal(OperationState.Finished, moveOperation.OperationState);
 
          Assert.True(callbackCalled);
          filesServiceMock.Verify(m => m.CopyAsync(SourceName, DestinationName), Times.Once());
@@ -116,10 +124,13 @@ namespace Camelot.Services.Tests
             var deleteOperation = operationsFactory.CreateDeleteOperation(
                 new UnaryFileSystemOperationSettings(new string[] {}, new[] {SourceName}));
 
+            Assert.Equal(OperationState.NotStarted, deleteOperation.OperationState);
             var callbackCalled = false;
-            deleteOperation.OperationFinished += (sender, args) => callbackCalled = true;
+            deleteOperation.StateChanged += (sender, args) => callbackCalled = true;
 
             await deleteOperation.RunAsync();
+
+            Assert.Equal(OperationState.Finished, deleteOperation.OperationState);
 
             Assert.True(callbackCalled);
             filesServiceMock.Verify(m => m.Remove(SourceName), Times.Once());
@@ -142,11 +153,14 @@ namespace Camelot.Services.Tests
                 pathServiceMock.Object);
             var deleteOperation = operationsFactory.CreateDeleteOperation(
                 new UnaryFileSystemOperationSettings(new[] {SourceName}, new string[] {}));
+            Assert.Equal(OperationState.NotStarted, deleteOperation.OperationState);
 
             var callbackCalled = false;
-            deleteOperation.OperationFinished += (sender, args) => callbackCalled = true;
+            deleteOperation.StateChanged += (sender, args) => callbackCalled = true;
 
             await deleteOperation.RunAsync();
+
+            Assert.Equal(OperationState.Finished, deleteOperation.OperationState);
 
             Assert.True(callbackCalled);
             directoryServiceMock.Verify(m => m.RemoveRecursively(SourceName), Times.Once());

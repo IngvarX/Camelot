@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Camelot.Extensions;
+using Camelot.Services.Abstractions.Models.Enums;
+using Camelot.Services.Abstractions.Models.EventArgs;
 using Camelot.Services.Abstractions.Models.Operations;
 using Camelot.Services.Abstractions.Operations;
 using Camelot.TaskPool.Interfaces;
@@ -13,37 +15,42 @@ namespace Camelot.Services.Operations
     public class CompositeOperation : OperationBase, IOperation
     {
         private readonly ITaskPool _taskPool;
-        private readonly IReadOnlyList<IReadOnlyList<IInternalOperation>> _groupedOperationsToExecute;
-        private readonly IReadOnlyList<IReadOnlyList<IInternalOperation>> _groupedOperationsToCancel;
+        private readonly IReadOnlyList<OperationGroup> _groupedOperationsToExecute;
 
-        private IReadOnlyList<IReadOnlyList<IInternalOperation>> _currentOperations;
         private int _finishedOperationsCount;
+        private int _groupOperationsCount;
+        private int _totalOperationsCount;
         private CancellationToken _cancellationToken;
+        private TaskCompletionSource<bool> _taskCompletionSource;
 
-        public OperationInfo OperationInfo { get; }
+        public OperationInfo Info { get; }
 
-        public event EventHandler<EventArgs> OperationCancelled;
+        public event EventHandler<EventArgs> Cancelled;
 
         public CompositeOperation(ITaskPool taskPool,
-            IReadOnlyList<IReadOnlyList<IInternalOperation>> groupedOperationsToExecute,
-            IReadOnlyList<IReadOnlyList<IInternalOperation>> groupedOperationsToCancel,
+            IReadOnlyList<OperationGroup> groupedOperationsToExecute,
             OperationInfo operationInfo)
         {
             _taskPool = taskPool;
             _groupedOperationsToExecute = groupedOperationsToExecute;
-            _groupedOperationsToCancel = groupedOperationsToCancel;
-            OperationInfo = operationInfo;
+            Info = operationInfo;
         }
 
-        public override Task RunAsync(CancellationToken cancellationToken) =>
-            ExecuteOperationsAsync(_groupedOperationsToExecute, cancellationToken);
+        protected override Task ExecuteAsync(CancellationToken cancellationToken) =>
+            ExecuteOperationsAsync(_groupedOperationsToExecute.Select(g => g.Operations).ToArray(),
+                cancellationToken);
 
         public async Task CancelAsync()
         {
-            // TODO: stop operation
-            await ExecuteOperationsAsync(_groupedOperationsToCancel, _cancellationToken);
+            var cancelOperations = _groupedOperationsToExecute
+                .Reverse()
+                .Where((o, i) => o.Operations[i].OperationState != OperationState.NotStarted)
+                .Select(g => g.CancelOperations)
+                .ToArray();
 
-            OperationCancelled.Raise(this, EventArgs.Empty);
+            await ExecuteOperationsAsync(cancelOperations, _cancellationToken);
+
+            Cancelled.Raise(this, EventArgs.Empty);
         }
 
         private async Task ExecuteOperationsAsync(
@@ -51,13 +58,18 @@ namespace Camelot.Services.Operations
             CancellationToken cancellationToken)
         {
             _cancellationToken = cancellationToken;
-            _finishedOperationsCount = 0;
-            _currentOperations = groupedOperationsToExecute;
+            _totalOperationsCount = groupedOperationsToExecute.Sum(g => g.Count);
 
-            foreach (var operationsGroup in _currentOperations)
+            foreach (var operationsGroup in groupedOperationsToExecute)
             {
-                var operationsCount = operationsGroup.Count;
-                for (var i = 0; i < operationsCount; i++)
+                cancellationToken.ThrowIfCancellationRequested();
+
+                _taskCompletionSource = new TaskCompletionSource<bool>();
+
+                _finishedOperationsCount = 0;
+                _groupOperationsCount = operationsGroup.Count;
+
+                for (var i = 0; i < _groupOperationsCount; i++)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
@@ -66,35 +78,38 @@ namespace Camelot.Services.Operations
 
                     await _taskPool.ExecuteAsync(() => currentOperation.RunAsync(cancellationToken));
                 }
+
+                await _taskCompletionSource.Task;
             }
         }
 
-        private void CurrentOperationOnOperationFinished(object sender, System.EventArgs e)
+        private void CurrentOperationOnStateChanged(object sender, OperationStateChangedEventArgs e)
         {
+            if (e.OperationState != OperationState.Finished)
+            {
+                return;
+            }
+
             var operation = (IInternalOperation) sender;
             UnsubscribeFromEvents(operation);
 
             var finishedOperationsCount = Interlocked.Increment(ref _finishedOperationsCount);
-            var totalOperationsCount = _currentOperations.Sum(g => g.Count);
+            if (finishedOperationsCount == _groupOperationsCount)
+            {
+                _taskCompletionSource.SetResult(true);
+            }
 
-            if (finishedOperationsCount == totalOperationsCount)
-            {
-                FireOperationFinishedEvent();
-            }
-            else
-            {
-                FireProgressChangedEvent((double) finishedOperationsCount / totalOperationsCount);
-            }
+            FireProgressChangedEvent((double) finishedOperationsCount / _totalOperationsCount);
         }
 
         private void SubscribeToEvents(IInternalOperation currentOperation)
         {
-            currentOperation.OperationFinished += CurrentOperationOnOperationFinished;
+            currentOperation.StateChanged += CurrentOperationOnStateChanged;
         }
 
         private void UnsubscribeFromEvents(IInternalOperation currentOperation)
         {
-            currentOperation.OperationFinished -= CurrentOperationOnOperationFinished;
+            currentOperation.StateChanged -= CurrentOperationOnStateChanged;
         }
     }
 }
