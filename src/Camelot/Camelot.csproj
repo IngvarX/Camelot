@@ -25,6 +25,15 @@
     <Compile Update="Views\Main\Dialogs\RemoveNodesConfirmationDialog.xaml.cs">
       <DependentUpon>RemoveNodesConfirmationDialog.xaml</DependentUpon>
     </Compile>
+    <AvaloniaResource Update="Views\Controls\MainWindow.xaml">
+      <SubType>Designer</SubType>
+    </AvaloniaResource>
+    <AvaloniaResource Update="Views\Main\OperationsStateView.xaml">
+      <SubType>Designer</SubType>
+    </AvaloniaResource>
+    <Compile Update="Views\Main\OperationsStateView.xaml.cs">
+      <DependentUpon>OperationsStateView.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.9.10" />
@@ -48,8 +57,5 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\Controls" />
   </ItemGroup>
 </Project>

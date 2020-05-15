@@ -16,17 +16,19 @@ namespace Camelot.ViewModels.Tests
             var filePanelViewModelMock = new Mock<IFilesPanelViewModel>();
             var operationsViewModelMock = new Mock<IOperationsViewModel>();
             var menuViewModelMock = new Mock<IMenuViewModel>();
+            var operationsStateViewModel = new Mock<IOperationsStateViewModel>();
             var fileOperationsMediatorMock = new Mock<IFilesOperationsMediator>();
             fileOperationsMediatorMock
                 .Setup(m => m.Register(It.IsAny<IFilesPanelViewModel>(), It.IsAny<IFilesPanelViewModel>()))
                 .Verifiable();
-            
+
             var mainWindowViewModel = new MainWindowViewModel(
                 fileOperationsMediatorMock.Object,
                 operationsViewModelMock.Object,
                 filePanelViewModelMock.Object,
                 filePanelViewModelMock.Object,
-                menuViewModelMock.Object);
+                menuViewModelMock.Object,
+                operationsStateViewModel.Object);
 
             Assert.NotNull(mainWindowViewModel.LeftFilesPanelViewModel);
             Assert.NotNull(mainWindowViewModel.RightFilesPanelViewModel);
@@ -37,7 +39,7 @@ namespace Camelot.ViewModels.Tests
                 .Verify(m => m.Register(It.IsAny<IFilesPanelViewModel>(), It.IsAny<IFilesPanelViewModel>()),
                     Times.Once);
         }
-        
+
         [Fact]
         public void TestOpenNewTabCommand()
         {
@@ -48,22 +50,24 @@ namespace Camelot.ViewModels.Tests
             var operationsViewModelMock = new Mock<IOperationsViewModel>();
             var menuViewModelMock = new Mock<IMenuViewModel>();
             var fileOperationsMediatorMock = new Mock<IFilesOperationsMediator>();
+            var operationsStateViewModel = new Mock<IOperationsStateViewModel>();
             fileOperationsMediatorMock
                 .SetupGet(m => m.ActiveFilesPanelViewModel)
                 .Returns(filePanelViewModelMock.Object);
-            
+
             var mainWindowViewModel = new MainWindowViewModel(
                 fileOperationsMediatorMock.Object,
                 operationsViewModelMock.Object,
                 filePanelViewModelMock.Object,
                 filePanelViewModelMock.Object,
-                menuViewModelMock.Object);
+                menuViewModelMock.Object,
+                operationsStateViewModel.Object);
 
             mainWindowViewModel.CreateNewTabCommand.Execute(null);
-            
+
             filePanelViewModelMock.Verify(m => m.CreateNewTab(), Times.Once);
         }
-        
+
         [Fact]
         public void TestCloseCurrentTabCommand()
         {
@@ -73,20 +77,22 @@ namespace Camelot.ViewModels.Tests
                 .Verifiable();
             var operationsViewModelMock = new Mock<IOperationsViewModel>();
             var menuViewModelMock = new Mock<IMenuViewModel>();
+            var operationsStateViewModel = new Mock<IOperationsStateViewModel>();
             var fileOperationsMediatorMock = new Mock<IFilesOperationsMediator>();
             fileOperationsMediatorMock
                 .SetupGet(m => m.ActiveFilesPanelViewModel)
                 .Returns(filePanelViewModelMock.Object);
-            
+
             var mainWindowViewModel = new MainWindowViewModel(
                 fileOperationsMediatorMock.Object,
                 operationsViewModelMock.Object,
                 filePanelViewModelMock.Object,
                 filePanelViewModelMock.Object,
-                menuViewModelMock.Object);
+                menuViewModelMock.Object,
+                operationsStateViewModel.Object);
 
             mainWindowViewModel.CloseCurrentTabCommand.Execute(null);
-            
+
             filePanelViewModelMock.Verify(m => m.CloseActiveTab(), Times.Once);
         }
     }

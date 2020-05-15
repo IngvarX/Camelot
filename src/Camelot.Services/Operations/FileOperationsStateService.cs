@@ -15,8 +15,6 @@ namespace Camelot.Services.Operations
 
         public event EventHandler<OperationStartedEventArgs> OperationStarted;
 
-        public event EventHandler<OperationFinishedEventArgs> OperationFinished;
-
         public FileOperationsStateService()
         {
             _activeOperations = new List<IOperation>();
@@ -48,7 +46,7 @@ namespace Camelot.Services.Operations
             var operation = (IOperation) sender;
             if (e.OperationState == OperationState.Finished)
             {
-                RemoveOperation(operation, OperationResult.Success);
+                RemoveOperation(operation);
             }
         }
 
@@ -56,16 +54,13 @@ namespace Camelot.Services.Operations
         {
             var operation = (IOperation) sender;
 
-            RemoveOperation(operation, OperationResult.Cancelled);
+            RemoveOperation(operation);
         }
 
-        private void RemoveOperation(IOperation operation, OperationResult operationResult)
+        private void RemoveOperation(IOperation operation)
         {
             _activeOperations.Remove(operation);
             UnsubscribeFromOperationEvents(operation);
-
-            var args = new OperationFinishedEventArgs(operation, operationResult);
-            OperationFinished.Raise(this, args);
         }
     }
 }

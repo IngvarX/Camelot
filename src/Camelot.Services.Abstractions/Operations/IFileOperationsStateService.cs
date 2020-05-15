@@ -10,8 +10,6 @@ namespace Camelot.Services.Abstractions.Operations
 
         event EventHandler<OperationStartedEventArgs> OperationStarted;
 
-        event EventHandler<OperationFinishedEventArgs> OperationFinished;
-
         void AddOperation(IOperation operation);
     }
 }

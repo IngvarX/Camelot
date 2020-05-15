@@ -1,0 +1,34 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:mainWindow="clr-namespace:Camelot.ViewModels.Implementations.MainWindow;assembly=Camelot.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Camelot.Views.Main.OperationsStateView">
+
+    <Design.DataContext>
+        <mainWindow:OperationsStateViewModel />
+    </Design.DataContext>
+
+    <Grid>
+        <Path Stroke="#35a335" StrokeThickness="2" Width="36" Height="36">
+            <Path.Data>
+                <PathGeometry>
+                    <PathGeometry.Figures>
+                        <PathFigures>
+                            <PathFigure StartPoint="14,3" IsClosed="False">
+                                <PathFigure.Segments>
+                                    <PathSegments>
+                                        <ArcSegment Point="14,28" SweepDirection="Clockwise"
+                                                    Size="14,14" IsLargeArc="True" />
+                                    </PathSegments>
+                                </PathFigure.Segments>
+                            </PathFigure>
+                        </PathFigures>
+                    </PathGeometry.Figures>
+                </PathGeometry>
+            </Path.Data>
+        </Path>
+        <TextBlock Text="{Binding TotalProgress}" VerticalAlignment="Center" HorizontalAlignment="Center" />
+    </Grid>
+</UserControl>

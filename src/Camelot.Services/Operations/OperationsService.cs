@@ -14,19 +14,22 @@ namespace Camelot.Services.Operations
         private readonly IResourceOpeningService _resourceOpeningService;
         private readonly IFileService _fileService;
         private readonly IPathService _pathService;
+        private readonly IFileOperationsStateService _fileOperationsStateService;
 
         public OperationsService(
             IOperationsFactory operationsFactory,
             IDirectoryService directoryService,
             IResourceOpeningService resourceOpeningService,
             IFileService fileService,
-            IPathService pathService)
+            IPathService pathService,
+            IFileOperationsStateService fileOperationsStateService)
         {
             _operationsFactory = operationsFactory;
             _directoryService = directoryService;
             _resourceOpeningService = resourceOpeningService;
             _fileService = fileService;
             _pathService = pathService;
+            _fileOperationsStateService = fileOperationsStateService;
         }
 
         public void OpenFiles(IReadOnlyList<string> files)
@@ -41,6 +44,7 @@ namespace Camelot.Services.Operations
         {
             var settings = GetBinaryFileSystemOperationSettings(nodes, destinationDirectory);
             var copyOperation = _operationsFactory.CreateCopyOperation(settings);
+            _fileOperationsStateService.AddOperation(copyOperation);
 
             await copyOperation.RunAsync();
         }
@@ -49,6 +53,7 @@ namespace Camelot.Services.Operations
         {
             var settings = GetBinaryFileSystemOperationSettings(nodes, destinationDirectory);
             var moveOperation = _operationsFactory.CreateMoveOperation(settings);
+            _fileOperationsStateService.AddOperation(moveOperation);
 
             await moveOperation.RunAsync();
         }
@@ -57,6 +62,7 @@ namespace Camelot.Services.Operations
         {
             var settings = GetBinaryFileSystemOperationSettings(nodes);
             var moveOperation = _operationsFactory.CreateMoveOperation(settings);
+            _fileOperationsStateService.AddOperation(moveOperation);
 
             await moveOperation.RunAsync();
         }
@@ -66,6 +72,7 @@ namespace Camelot.Services.Operations
             var (files, directories) = Split(nodes);
             var settings = Create(files, directories);
             var deleteOperation = _operationsFactory.CreateDeleteOperation(settings);
+            _fileOperationsStateService.AddOperation(deleteOperation);
 
             await deleteOperation.RunAsync();
         }

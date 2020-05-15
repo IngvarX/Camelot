@@ -27,6 +27,7 @@ namespace Camelot.Services.Tests
             var directoryServiceMock = new Mock<IDirectoryService>();
             var fileServiceMock = new Mock<IFileService>();
             var fileOpeningServiceMock = new Mock<IResourceOpeningService>();
+            var fileOperationsStateServiceMock = new Mock<IFileOperationsStateService>();
             fileOpeningServiceMock
                 .Setup(m => m.Open(FileName))
                 .Verifiable();
@@ -37,7 +38,8 @@ namespace Camelot.Services.Tests
                 directoryServiceMock.Object,
                 fileOpeningServiceMock.Object,
                 fileServiceMock.Object,
-                pathServiceMock.Object);
+                pathServiceMock.Object,
+                fileOperationsStateServiceMock.Object);
 
             operationsService.OpenFiles(new[] {FileName});
 
@@ -68,13 +70,15 @@ namespace Camelot.Services.Tests
                 .Returns(true)
                 .Verifiable();
             var pathServiceMock = new Mock<IPathService>();
+            var fileOperationsStateServiceMock = new Mock<IFileOperationsStateService>();
 
             IOperationsService operationsService = new OperationsService(
                 operationsFactoryMock.Object,
                 directoryServiceMock.Object,
                 fileOpeningServiceMock.Object,
                 fileServiceMock.Object,
-                pathServiceMock.Object);
+                pathServiceMock.Object,
+                fileOperationsStateServiceMock.Object);
 
             await operationsService.RemoveAsync(new[] {FileName});
 
@@ -111,6 +115,7 @@ namespace Camelot.Services.Tests
             fileServiceMock
                 .Setup(m => m.CheckIfExists(FileName))
                 .Returns(true);
+            var fileOperationsStateServiceMock = new Mock<IFileOperationsStateService>();
             var pathServiceMock = new Mock<IPathService>();
             pathServiceMock
                 .Setup(m => m.GetCommonRootDirectory(It.IsAny<IReadOnlyList<string>>()))
@@ -127,7 +132,8 @@ namespace Camelot.Services.Tests
                 directoryServiceMock.Object,
                 fileOpeningServiceMock.Object,
                 fileServiceMock.Object,
-                pathServiceMock.Object);
+                pathServiceMock.Object,
+                fileOperationsStateServiceMock.Object);
 
             await operationsService.MoveAsync(new[] {FileName}, DirectoryName);
 
@@ -163,6 +169,7 @@ namespace Camelot.Services.Tests
             fileServiceMock
                 .Setup(m => m.CheckIfExists(FileName))
                 .Returns(true);
+            var fileOperationsStateServiceMock = new Mock<IFileOperationsStateService>();
             var pathServiceMock = new Mock<IPathService>();
             pathServiceMock
                 .Setup(m => m.GetCommonRootDirectory(It.IsAny<IReadOnlyList<string>>()))
@@ -179,7 +186,8 @@ namespace Camelot.Services.Tests
                 directoryServiceMock.Object,
                 fileOpeningServiceMock.Object,
                 fileServiceMock.Object,
-                pathServiceMock.Object);
+                pathServiceMock.Object,
+                fileOperationsStateServiceMock.Object);
 
             await operationsService.CopyAsync(new[] {FileName}, DirectoryName);
 
@@ -197,6 +205,7 @@ namespace Camelot.Services.Tests
                 .Verifiable();
             var fileOpeningServiceMock = new Mock<IResourceOpeningService>();
             var fileServiceMock = new Mock<IFileService>();
+            var fileOperationsStateServiceMock = new Mock<IFileOperationsStateService>();
             var pathServiceMock = new Mock<IPathService>();
             pathServiceMock
                 .Setup(m => m.Combine(SelectedDirectoryName, DirectoryName))
@@ -207,7 +216,8 @@ namespace Camelot.Services.Tests
                 directoryServiceMock.Object,
                 fileOpeningServiceMock.Object,
                 fileServiceMock.Object,
-                pathServiceMock.Object);
+                pathServiceMock.Object,
+                fileOperationsStateServiceMock.Object);
 
             operationsService.CreateDirectory(SelectedDirectoryName, DirectoryName);
 

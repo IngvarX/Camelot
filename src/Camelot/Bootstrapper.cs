@@ -31,6 +31,7 @@ using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
 using Camelot.ViewModels.Implementations.Menu;
 using Camelot.ViewModels.Interfaces.MainWindow;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
+using Camelot.ViewModels.Interfaces.Menu;
 using Camelot.ViewModels.Services.Implementations;
 using Camelot.ViewModels.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
@@ -131,7 +132,8 @@ namespace Camelot
                 resolver.GetService<IDirectoryService>(),
                 resolver.GetService<IResourceOpeningService>(),
                 resolver.GetService<IFileService>(),
-                resolver.GetService<IPathService>()
+                resolver.GetService<IPathService>(),
+                resolver.GetService<IFileOperationsStateService>()
             ));
             services.RegisterLazySingleton<IDirectoryService>(() => new DirectoryService(
                 resolver.GetService<IPathService>()
@@ -156,6 +158,7 @@ namespace Camelot
                 resolver.GetService<IOperationsService>(),
                 resolver.GetService<IEnvironmentService>()
             ));
+            services.RegisterLazySingleton<IFileOperationsStateService>(() => new FileOperationsStateService());
         }
 
         private static void RegisterPlatformSpecificServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
@@ -250,6 +253,9 @@ namespace Camelot
                 resolver.GetService<AboutDialogConfiguration>()
             ));
             services.Register(() => new CreateDirectoryDialogViewModel());
+            services.Register<IOperationsStateViewModel>(() => new OperationsStateViewModel(
+                resolver.GetService<IFileOperationsStateService>()
+            ));
             services.Register(() => new RemoveNodesConfirmationDialogViewModel(
                 resolver.GetService<IPathService>()
             ));
@@ -261,7 +267,7 @@ namespace Camelot
                 resolver.GetService<IDirectoryService>(),
                 resolver.GetService<ITrashCanService>()
             ));
-            services.Register(() => new MenuViewModel(
+            services.Register<IMenuViewModel>(() => new MenuViewModel(
                 resolver.GetService<IApplicationCloser>(),
                 resolver.GetService<IDialogService>()
             ));
@@ -270,7 +276,8 @@ namespace Camelot
                 resolver.GetService<IOperationsViewModel>(),
                 CreateFilesPanelViewModel(resolver, "Left"),
                 CreateFilesPanelViewModel(resolver, "Right"),
-                resolver.GetService<MenuViewModel>()
+                resolver.GetService<IMenuViewModel>(),
+                resolver.GetService<IOperationsStateViewModel>()
             ));
         }
 
