@@ -28,12 +28,12 @@ namespace Camelot.Services.Implementations
             var window = CreateView<TResult>(viewModelName);
             var viewModel = CreateViewModel<TResult>(viewModelName);
             Bind(window, viewModel);
-            
+
             return await ShowDialogAsync(window);
         }
 
         public async Task<TResult> ShowDialogAsync<TResult, TParameter>(string viewModelName, TParameter parameter)
-            where TParameter : NavigationParameter
+            where TParameter : NavigationParameterBase
         {
             var window = CreateView<TResult>(viewModelName);
             var viewModel = CreateViewModel<TResult>(viewModelName);
@@ -47,21 +47,21 @@ namespace Camelot.Services.Implementations
                 throw new InvalidOperationException(
                     $"{viewModel.GetType().FullName} doesn't support passing parameters!");
             }
-            
+
             return await ShowDialogAsync(window);
         }
 
         public Task ShowDialogAsync(string viewModelName) => ShowDialogAsync<object>(viewModelName);
 
         public Task ShowDialogAsync<TParameter>(string viewModelName, TParameter parameter)
-            where TParameter : NavigationParameter =>
+            where TParameter : NavigationParameterBase =>
                 ShowDialogAsync<object, TParameter>(viewModelName, parameter);
 
         private static void Bind(IDataContextProvider window, object viewModel)
         {
             window.DataContext = viewModel;
         }
-        
+
         private static DialogWindowBase<TResult> CreateView<TResult>(string viewModelName)
         {
             var viewType = GetViewType(viewModelName);
@@ -69,10 +69,10 @@ namespace Camelot.Services.Implementations
             {
                 throw new InvalidOperationException($"View for {viewModelName} was not found!");
             }
-            
+
             return (DialogWindowBase<TResult>) GetView(viewType);
         }
-        
+
         private static DialogViewModelBase<TResult> CreateViewModel<TResult>(string viewModelName)
         {
             var viewModelType = GetViewModelType(viewModelName);
@@ -80,7 +80,7 @@ namespace Camelot.Services.Implementations
             {
                 throw new InvalidOperationException($"View model {viewModelName} was not found!");
             }
-            
+
             return (DialogViewModelBase<TResult>) GetViewModel(viewModelType);
         }
 
@@ -91,22 +91,22 @@ namespace Camelot.Services.Implementations
             {
                 throw new InvalidOperationException("Broken installation!");
             }
-            
+
             var viewModelTypes = viewModelsAssembly.GetTypes();
-            
+
             return viewModelTypes.SingleOrDefault(t => t.Name == viewModelName);
         }
-        
+
         private static object GetView(Type type) => Activator.CreateInstance(type);
-        
+
         private static object GetViewModel(Type type) => Locator.Current.GetService(type);
-        
+
         private static Type GetViewType(string viewModelName)
         {
             var viewsAssembly = Assembly.GetExecutingAssembly();
             var viewTypes = viewsAssembly.GetTypes();
             var viewName = viewModelName.Replace("ViewModel", string.Empty);
-            
+
             return viewTypes.SingleOrDefault(t => t.Name == viewName);
         }
 

@@ -11,10 +11,10 @@ namespace Camelot.ViewModels.Implementations.Dialogs
     {
         private readonly IPathService _pathService;
         private const int ShowedFilesLimit = 4;
-        
+
         private IEnumerable<string> _files;
         private bool _isRemovingToTrash;
-        
+
         public IEnumerable<string> Files
         {
             get => _files;
@@ -35,20 +35,21 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             get => _isRemovingToTrash;
             set => this.RaiseAndSetIfChanged(ref _isRemovingToTrash, value);
         }
-        
+
         public ICommand OkCommand { get; }
 
         public ICommand CancelCommand { get; }
-        
+
         public RemoveNodesConfirmationDialogViewModel(
             IPathService pathService)
         {
             _pathService = pathService;
-            
+            _files = Enumerable.Empty<string>();
+
             OkCommand = ReactiveCommand.Create(() => Close(true));
             CancelCommand = ReactiveCommand.Create(() => Close());
         }
-        
+
         public override void Activate(NodesRemovingNavigationParameter parameter)
         {
             Files = parameter.Files.Select(_pathService.GetFileName);

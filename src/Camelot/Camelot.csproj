@@ -34,6 +34,13 @@
     <Compile Update="Views\Main\OperationsStateView.xaml.cs">
       <DependentUpon>OperationsStateView.xaml</DependentUpon>
     </Compile>
+    <AvaloniaResource Update="Controls\MenuView.xaml">
+      <SubType>Designer</SubType>
+    </AvaloniaResource>
+    <AvaloniaResource Update="Controls\CircularProgressBar.xaml">
+      <SubType>Designer</SubType>
+    </AvaloniaResource>
+    <Compile Remove="Controls\CircularProgressBar.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.9.10" />

@@ -10,6 +10,8 @@ namespace Camelot.Services.Abstractions.Operations
     {
         OperationState OperationState { get; }
 
+        double CurrentProgress { get; }
+
         event EventHandler<OperationProgressChangedEventArgs> ProgressChanged;
 
         event EventHandler<OperationStateChangedEventArgs> StateChanged;

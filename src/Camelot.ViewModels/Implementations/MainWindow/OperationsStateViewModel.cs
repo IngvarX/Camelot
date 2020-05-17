@@ -1,3 +1,7 @@
+using System;
+using System.Linq;
+using Avalonia;
+using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Models.EventArgs;
 using Camelot.Services.Abstractions.Operations;
 using Camelot.ViewModels.Interfaces.MainWindow;
@@ -7,30 +11,32 @@ namespace Camelot.ViewModels.Implementations.MainWindow
 {
     public class OperationsStateViewModel : ViewModelBase, IOperationsStateViewModel
     {
-        private readonly IFileOperationsStateService _fileOperationsStateService;
+        private readonly IOperationsStateService _operationsStateService;
 
-        private string _totalProgress;
+        private int _totalProgress;
 
-        public string TotalProgress
+        public int TotalProgress
         {
             get => _totalProgress;
             set => this.RaiseAndSetIfChanged(ref _totalProgress, value);
         }
 
         public OperationsStateViewModel(
-            IFileOperationsStateService fileOperationsStateService)
+            IOperationsStateService operationsStateService)
         {
-            _fileOperationsStateService = fileOperationsStateService;
+            _operationsStateService = operationsStateService;
 
             SubscribeToEvents();
+
+            TotalProgress = 50;
         }
 
         private void SubscribeToEvents()
         {
-            _fileOperationsStateService.OperationStarted += FileOperationsStateServiceOnOperationStarted;
+            _operationsStateService.OperationStarted += OperationsStateServiceOnOperationStarted;
         }
 
-        private void FileOperationsStateServiceOnOperationStarted(object sender, OperationStartedEventArgs e)
+        private void OperationsStateServiceOnOperationStarted(object sender, OperationStartedEventArgs e)
         {
             SubscribeToEvents(e.Operation);
         }
@@ -41,14 +47,39 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             operation.ProgressChanged += OperationOnProgressChanged;
         }
 
+        private void UnsubscribeFromEvents(IOperation operation)
+        {
+            operation.StateChanged -= OperationOnStateChanged;
+            operation.ProgressChanged -= OperationOnProgressChanged;
+        }
+
         private void OperationOnStateChanged(object sender, OperationStateChangedEventArgs e)
         {
+            var operation = (IOperation) sender;
+            if (e.OperationState == OperationState.Finished)
+            {
+                UnsubscribeFromEvents(operation);
+            }
 
+            // TODO: change status
         }
 
         private void OperationOnProgressChanged(object sender, OperationProgressChangedEventArgs e)
         {
+            TotalProgress = 30;
 
+            var activeOperations = GetActiveOperations();
+            if (!activeOperations.Any())
+            {
+                return;
+            }
+
+            var averageProgress = activeOperations.Average(o => o.CurrentProgress);
+            averageProgress = 0.75;
+            TotalProgress = (int) (averageProgress * 100);
         }
+
+        private IOperation[] GetActiveOperations() =>
+            _operationsStateService.ActiveOperations.ToArray();
     }
 }

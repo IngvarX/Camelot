@@ -4,7 +4,7 @@ using Camelot.Services.Abstractions.Models.EventArgs;
 
 namespace Camelot.Services.Abstractions.Operations
 {
-    public interface IFileOperationsStateService
+    public interface IOperationsStateService
     {
         IReadOnlyList<IOperation> ActiveOperations { get; }
 

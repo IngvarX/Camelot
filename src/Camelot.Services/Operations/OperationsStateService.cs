@@ -7,7 +7,7 @@ using Camelot.Services.Abstractions.Operations;
 
 namespace Camelot.Services.Operations
 {
-    public class FileOperationsStateService : IFileOperationsStateService
+    public class OperationsStateService : IOperationsStateService
     {
         private readonly List<IOperation> _activeOperations;
 
@@ -15,7 +15,7 @@ namespace Camelot.Services.Operations
 
         public event EventHandler<OperationStartedEventArgs> OperationStarted;
 
-        public FileOperationsStateService()
+        public OperationsStateService()
         {
             _activeOperations = new List<IOperation>();
         }

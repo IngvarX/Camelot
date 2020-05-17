@@ -133,7 +133,7 @@ namespace Camelot
                 resolver.GetService<IResourceOpeningService>(),
                 resolver.GetService<IFileService>(),
                 resolver.GetService<IPathService>(),
-                resolver.GetService<IFileOperationsStateService>()
+                resolver.GetService<IOperationsStateService>()
             ));
             services.RegisterLazySingleton<IDirectoryService>(() => new DirectoryService(
                 resolver.GetService<IPathService>()
@@ -158,7 +158,7 @@ namespace Camelot
                 resolver.GetService<IOperationsService>(),
                 resolver.GetService<IEnvironmentService>()
             ));
-            services.RegisterLazySingleton<IFileOperationsStateService>(() => new FileOperationsStateService());
+            services.RegisterLazySingleton<IOperationsStateService>(() => new OperationsStateService());
         }
 
         private static void RegisterPlatformSpecificServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
@@ -254,7 +254,7 @@ namespace Camelot
             ));
             services.Register(() => new CreateDirectoryDialogViewModel());
             services.Register<IOperationsStateViewModel>(() => new OperationsStateViewModel(
-                resolver.GetService<IFileOperationsStateService>()
+                resolver.GetService<IOperationsStateService>()
             ));
             services.Register(() => new RemoveNodesConfirmationDialogViewModel(
                 resolver.GetService<IPathService>()

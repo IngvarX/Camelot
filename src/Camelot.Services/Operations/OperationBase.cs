@@ -11,6 +11,7 @@ namespace Camelot.Services.Operations
     public abstract class OperationBase : IInternalOperation
     {
         private OperationState _operationState;
+        private double _progress;
 
         public OperationState OperationState
         {
@@ -28,6 +29,16 @@ namespace Camelot.Services.Operations
             }
         }
 
+        public double CurrentProgress
+        {
+            get => _progress;
+            protected set
+            {
+                _progress = value;
+                var args = new OperationProgressChangedEventArgs(_progress);
+                ProgressChanged.Raise(this, args);
+            }
+        }
         public event EventHandler<OperationProgressChangedEventArgs> ProgressChanged;
 
         public event EventHandler<OperationStateChangedEventArgs> StateChanged;
@@ -40,12 +51,5 @@ namespace Camelot.Services.Operations
         }
 
         protected abstract Task ExecuteAsync(CancellationToken cancellationToken);
-
-        protected void FireProgressChangedEvent(double currentProgress)
-        {
-            var args = new OperationProgressChangedEventArgs(currentProgress);
-
-            ProgressChanged.Raise(this, args);
-        }
     }
 }

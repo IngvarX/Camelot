@@ -27,7 +27,7 @@ namespace Camelot.Services.Tests
             var directoryServiceMock = new Mock<IDirectoryService>();
             var fileServiceMock = new Mock<IFileService>();
             var fileOpeningServiceMock = new Mock<IResourceOpeningService>();
-            var fileOperationsStateServiceMock = new Mock<IFileOperationsStateService>();
+            var fileOperationsStateServiceMock = new Mock<IOperationsStateService>();
             fileOpeningServiceMock
                 .Setup(m => m.Open(FileName))
                 .Verifiable();
@@ -70,7 +70,7 @@ namespace Camelot.Services.Tests
                 .Returns(true)
                 .Verifiable();
             var pathServiceMock = new Mock<IPathService>();
-            var fileOperationsStateServiceMock = new Mock<IFileOperationsStateService>();
+            var fileOperationsStateServiceMock = new Mock<IOperationsStateService>();
 
             IOperationsService operationsService = new OperationsService(
                 operationsFactoryMock.Object,
@@ -115,7 +115,7 @@ namespace Camelot.Services.Tests
             fileServiceMock
                 .Setup(m => m.CheckIfExists(FileName))
                 .Returns(true);
-            var fileOperationsStateServiceMock = new Mock<IFileOperationsStateService>();
+            var fileOperationsStateServiceMock = new Mock<IOperationsStateService>();
             var pathServiceMock = new Mock<IPathService>();
             pathServiceMock
                 .Setup(m => m.GetCommonRootDirectory(It.IsAny<IReadOnlyList<string>>()))
@@ -169,7 +169,7 @@ namespace Camelot.Services.Tests
             fileServiceMock
                 .Setup(m => m.CheckIfExists(FileName))
                 .Returns(true);
-            var fileOperationsStateServiceMock = new Mock<IFileOperationsStateService>();
+            var fileOperationsStateServiceMock = new Mock<IOperationsStateService>();
             var pathServiceMock = new Mock<IPathService>();
             pathServiceMock
                 .Setup(m => m.GetCommonRootDirectory(It.IsAny<IReadOnlyList<string>>()))
@@ -205,7 +205,7 @@ namespace Camelot.Services.Tests
                 .Verifiable();
             var fileOpeningServiceMock = new Mock<IResourceOpeningService>();
             var fileServiceMock = new Mock<IFileService>();
-            var fileOperationsStateServiceMock = new Mock<IFileOperationsStateService>();
+            var fileOperationsStateServiceMock = new Mock<IOperationsStateService>();
             var pathServiceMock = new Mock<IPathService>();
             pathServiceMock
                 .Setup(m => m.Combine(SelectedDirectoryName, DirectoryName))

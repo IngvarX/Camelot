@@ -99,7 +99,7 @@ namespace Camelot.Services.Operations
                 _taskCompletionSource.SetResult(true);
             }
 
-            FireProgressChangedEvent((double) finishedOperationsCount / _totalOperationsCount);
+            CurrentProgress = (double) finishedOperationsCount / _totalOperationsCount;
         }
 
         private void SubscribeToEvents(IInternalOperation currentOperation)

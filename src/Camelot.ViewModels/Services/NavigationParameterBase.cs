@@ -1,7 +1,7 @@
 namespace Camelot.ViewModels.Services
 {
-    public class NavigationParameter
+    public class NavigationParameterBase
     {
-        
+
     }
 }
