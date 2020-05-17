@@ -114,4 +114,8 @@
         <Setter Property="Padding" Value="0" />
     </Style>
 
+    <Style Selector="Popup Border">
+        <Setter Property="Padding" Value="20" />
+    </Style>
+
 </Styles>

@@ -32,29 +32,20 @@ namespace Camelot.Services.Operations
         private void SubscribeToOperationEvents(IOperation operation)
         {
             operation.StateChanged += OperationOnStateChanged;
-            operation.Cancelled += OnCancelled;
         }
 
         private void UnsubscribeFromOperationEvents(IOperation operation)
         {
             operation.StateChanged -= OperationOnStateChanged;
-            operation.Cancelled -= OnCancelled;
         }
 
         private void OperationOnStateChanged(object sender, OperationStateChangedEventArgs e)
         {
             var operation = (IOperation) sender;
-            if (e.OperationState == OperationState.Finished)
+            if (e.OperationState == OperationState.Finished || e.OperationState == OperationState.Cancelled)
             {
                 RemoveOperation(operation);
             }
-        }
-
-        private void OnCancelled(object sender, EventArgs e)
-        {
-            var operation = (IOperation) sender;
-
-            RemoveOperation(operation);
         }
 
         private void RemoveOperation(IOperation operation)

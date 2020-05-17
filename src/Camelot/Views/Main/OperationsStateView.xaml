@@ -4,13 +4,46 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:mainWindow="clr-namespace:Camelot.ViewModels.Implementations.MainWindow;assembly=Camelot.ViewModels"
              xmlns:controls="clr-namespace:Camelot.Controls"
+             xmlns:operationsStates="clr-namespace:Camelot.ViewModels.Implementations.MainWindow.OperationsStates;assembly=Camelot.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Camelot.Views.Main.OperationsStateView">
 
     <Design.DataContext>
-        <mainWindow:OperationsStateViewModel />
+        <operationsStates:OperationsStateViewModel />
     </Design.DataContext>
 
-    <controls:CircularProgressBar Radius="14" MinValue="0" MaxValue="100" Value="{Binding TotalProgress}"
-                                  StrokeThickness="2" />
+    <Grid>
+        <ToggleButton Name="ToggleButton">
+            <TextBlock Margin="0,3,0,0" Text="{Binding TotalProgress}"
+                       VerticalAlignment="Center" HorizontalAlignment="Center" />
+        </ToggleButton>
+
+        <Popup IsOpen="{Binding IsChecked, ElementName=ToggleButton}" StaysOpen="False">
+            <Border>
+                <ItemsControl Items="{Binding Operations}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type operationsStates:OperationViewModel}">
+                            <Grid>
+                                <StackPanel IsVisible="{Binding IsInProgress}">
+                                    <TextBlock>
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0} ">
+                                                <Binding Path="ApplicationVersion" />
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                    <ProgressBar Minimum="0" Maximum="100" Value="{Binding Progress}"
+                                                 IsVisible="{Binding IsInProgress}" />
+                                </StackPanel>
+
+                                <StackPanel IsVisible="{Binding !IsInProgress}">
+
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Border>
+        </Popup>
+    </Grid>
 </UserControl>

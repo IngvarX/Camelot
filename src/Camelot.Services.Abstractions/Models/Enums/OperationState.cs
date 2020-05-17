@@ -4,6 +4,8 @@ namespace Camelot.Services.Abstractions.Models.Enums
     {
         NotStarted,
         InProgress,
-        Finished
+        Finished,
+        Cancelled,
+        Failed
     }
 }

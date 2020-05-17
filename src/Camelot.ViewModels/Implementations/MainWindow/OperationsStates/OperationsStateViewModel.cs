@@ -1,17 +1,21 @@
-using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
-using Avalonia;
 using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Models.EventArgs;
 using Camelot.Services.Abstractions.Operations;
-using Camelot.ViewModels.Interfaces.MainWindow;
+using Camelot.ViewModels.Interfaces.MainWindow.OperationsStates;
 using ReactiveUI;
 
-namespace Camelot.ViewModels.Implementations.MainWindow
+namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
 {
     public class OperationsStateViewModel : ViewModelBase, IOperationsStateViewModel
     {
         private readonly IOperationsStateService _operationsStateService;
+
+        private readonly ObservableCollection<IOperationViewModel> _operations;
+        private readonly IDictionary<IOperation, IOperationViewModel> _operationsViewModelsDictionary;
 
         private int _totalProgress;
 
@@ -21,14 +25,19 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             set => this.RaiseAndSetIfChanged(ref _totalProgress, value);
         }
 
+        public bool ShouldShowTotalProgress => TotalProgress > 0 && TotalProgress < 100;
+
+        public IEnumerable<IOperationViewModel> Operations => _operations;
+
         public OperationsStateViewModel(
             IOperationsStateService operationsStateService)
         {
             _operationsStateService = operationsStateService;
 
-            SubscribeToEvents();
+            _operations = new ObservableCollection<IOperationViewModel>();
+            _operationsViewModelsDictionary = new ConcurrentDictionary<IOperation, IOperationViewModel>();
 
-            TotalProgress = 50;
+            SubscribeToEvents();
         }
 
         private void SubscribeToEvents()
@@ -38,7 +47,25 @@ namespace Camelot.ViewModels.Implementations.MainWindow
 
         private void OperationsStateServiceOnOperationStarted(object sender, OperationStartedEventArgs e)
         {
-            SubscribeToEvents(e.Operation);
+            AddOperation(e.Operation);
+        }
+
+        private void AddOperation(IOperation operation)
+        {
+            SubscribeToEvents(operation);
+
+            var viewModel = CreateFrom(operation);
+            _operations.Add(viewModel);
+            _operationsViewModelsDictionary[operation] = viewModel;
+        }
+
+        private void RemoveOperation(IOperation operation)
+        {
+            UnsubscribeFromEvents(operation);
+
+            var viewModel = _operationsViewModelsDictionary[operation];
+            _operations.Remove(viewModel);
+            _operationsViewModelsDictionary.Remove(operation);
         }
 
         private void SubscribeToEvents(IOperation operation)
@@ -56,9 +83,9 @@ namespace Camelot.ViewModels.Implementations.MainWindow
         private void OperationOnStateChanged(object sender, OperationStateChangedEventArgs e)
         {
             var operation = (IOperation) sender;
-            if (e.OperationState == OperationState.Finished)
+            if (e.OperationState == OperationState.Finished || e.OperationState == OperationState.Cancelled)
             {
-                UnsubscribeFromEvents(operation);
+                RemoveOperation(operation);
             }
 
             // TODO: change status
@@ -66,20 +93,22 @@ namespace Camelot.ViewModels.Implementations.MainWindow
 
         private void OperationOnProgressChanged(object sender, OperationProgressChangedEventArgs e)
         {
-            TotalProgress = 30;
-
             var activeOperations = GetActiveOperations();
             if (!activeOperations.Any())
             {
+                TotalProgress = 100;
+
                 return;
             }
 
             var averageProgress = activeOperations.Average(o => o.CurrentProgress);
-            averageProgress = 0.75;
             TotalProgress = (int) (averageProgress * 100);
         }
 
         private IOperation[] GetActiveOperations() =>
             _operationsStateService.ActiveOperations.ToArray();
+
+        private static IOperationViewModel CreateFrom(IOperation operation) =>
+            new OperationViewModel(operation);
     }
 }

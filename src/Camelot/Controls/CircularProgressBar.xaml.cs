@@ -119,9 +119,6 @@ namespace Camelot.Controls
             var point = new Point(x, y);
 
             _remainingArcSegment.Point = _progressArcSegment.Point = point;
-            // _progressArcSegment.Size = _remainingArcSegment.Size = new Size(1000, Radius);
-            // _progressArcSegment.Size = _remainingArcSegment.Size = new Size(Radius, Radius);
-
         }
 
         private static object GetPropertyValue(object source, string propertyName) =>

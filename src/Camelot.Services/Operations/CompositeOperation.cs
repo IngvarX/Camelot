@@ -25,8 +25,6 @@ namespace Camelot.Services.Operations
 
         public OperationInfo Info { get; }
 
-        public event EventHandler<EventArgs> Cancelled;
-
         public CompositeOperation(ITaskPool taskPool,
             IReadOnlyList<OperationGroup> groupedOperationsToExecute,
             OperationInfo operationInfo)
@@ -50,7 +48,7 @@ namespace Camelot.Services.Operations
 
             await ExecuteOperationsAsync(cancelOperations, _cancellationToken);
 
-            Cancelled.Raise(this, EventArgs.Empty);
+            OperationState = OperationState.Cancelled;
         }
 
         private async Task ExecuteOperationsAsync(
