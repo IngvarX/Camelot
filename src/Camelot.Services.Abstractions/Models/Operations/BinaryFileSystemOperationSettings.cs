@@ -14,18 +14,26 @@ namespace Camelot.Services.Abstractions.Models.Operations
 
         public IReadOnlyDictionary<string, string> FilesDictionary { get; }
 
+        public string SourceDirectory { get; }
+
+        public string TargetDirectory { get; }
+
         public BinaryFileSystemOperationSettings(
             IReadOnlyList<string> inputTopLevelDirectories,
             IReadOnlyList<string> inputTopLevelFiles,
             IReadOnlyList<string> outputTopLevelDirectories,
             IReadOnlyList<string> outputTopLevelFiles,
-            IReadOnlyDictionary<string, string> filesDictionary)
+            IReadOnlyDictionary<string, string> filesDictionary,
+            string sourceDirectory = null,
+            string targetDirectory = null)
         {
             InputTopLevelDirectories = inputTopLevelDirectories;
             InputTopLevelFiles = inputTopLevelFiles;
             OutputTopLevelDirectories = outputTopLevelDirectories;
             OutputTopLevelFiles = outputTopLevelFiles;
             FilesDictionary = filesDictionary;
+            SourceDirectory = sourceDirectory;
+            TargetDirectory = targetDirectory;
         }
     }
 }

@@ -2,9 +2,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:mainWindow="clr-namespace:Camelot.ViewModels.Implementations.MainWindow;assembly=Camelot.ViewModels"
-             xmlns:controls="clr-namespace:Camelot.Controls"
              xmlns:operationsStates="clr-namespace:Camelot.ViewModels.Implementations.MainWindow.OperationsStates;assembly=Camelot.ViewModels"
+             xmlns:enums="clr-namespace:Camelot.Services.Abstractions.Models.Enums;assembly=Camelot.Services.Abstractions"
+             xmlns:converters="clr-namespace:Camelot.Converters"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Camelot.Views.Main.OperationsStateView">
 
@@ -12,32 +12,154 @@
         <operationsStates:OperationsStateViewModel />
     </Design.DataContext>
 
+    <UserControl.Resources>
+        <converters:OperationTypeConverter x:Key="OperationTypeConverter"/>
+    </UserControl.Resources>
+
     <Grid>
         <ToggleButton Name="ToggleButton">
             <TextBlock Margin="0,3,0,0" Text="{Binding TotalProgress}"
+                       IsVisible="{Binding IsInProgress}"
                        VerticalAlignment="Center" HorizontalAlignment="Center" />
         </ToggleButton>
 
         <Popup IsOpen="{Binding IsChecked, ElementName=ToggleButton}" StaysOpen="False">
-            <Border>
+            <Border x:Name="OperationsBorder">
                 <ItemsControl Items="{Binding Operations}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate DataType="{x:Type operationsStates:OperationViewModel}">
                             <Grid>
                                 <StackPanel IsVisible="{Binding IsInProgress}">
-                                    <TextBlock>
-                                        <TextBlock.Text>
-                                            <MultiBinding StringFormat="{}{0} ">
-                                                <Binding Path="ApplicationVersion" />
-                                            </MultiBinding>
-                                        </TextBlock.Text>
-                                    </TextBlock>
+                                    <Grid IsVisible="{Binding OperationType, Converter={StaticResource OperationTypeConverter}, ConverterParameter={x:Static enums:OperationType.Copy}}">
+                                        <TextBlock IsVisible="{Binding IsProcessingSingleFile}">
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}Copying {0} to {1}">
+                                                    <Binding Path="SourceFile" />
+                                                    <Binding Path="TargetDirectory" />
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+
+                                        <TextBlock IsVisible="{Binding !IsProcessingSingleFile}">
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}Copying {0} files and {1} directories to {2}">
+                                                    <Binding Path="SourceFilesCount" />
+                                                    <Binding Path="SourceDirectoriesCount" />
+                                                    <Binding Path="TargetDirectory" />
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </Grid>
+
+                                    <Grid IsVisible="{Binding OperationType, Converter={StaticResource OperationTypeConverter}, ConverterParameter={x:Static enums:OperationType.Move}}">
+                                        <TextBlock IsVisible="{Binding IsProcessingSingleFile}">
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}Moving {0} to {1}">
+                                                    <Binding Path="SourceFile" />
+                                                    <Binding Path="TargetDirectory" />
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+
+                                        <TextBlock IsVisible="{Binding !IsProcessingSingleFile}">
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}Moving {0} files and {1} directories to {2}">
+                                                    <Binding Path="SourceFilesCount" />
+                                                    <Binding Path="SourceDirectoriesCount" />
+                                                    <Binding Path="TargetDirectory" />
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </Grid>
+
+                                    <Grid IsVisible="{Binding OperationType, Converter={StaticResource OperationTypeConverter}, ConverterParameter={x:Static enums:OperationType.Delete}}">
+                                        <TextBlock IsVisible="{Binding IsProcessingSingleFile}">
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}Removing {0} from {1}">
+                                                    <Binding Path="SourceFile" />
+                                                    <Binding Path="SourceDirectory" />
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+
+                                        <TextBlock IsVisible="{Binding !IsProcessingSingleFile}">
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}Removing {0} files and {1} directories from {2}">
+                                                    <Binding Path="SourceFilesCount" />
+                                                    <Binding Path="SourceDirectoriesCount" />
+                                                    <Binding Path="SourceDirectory" />
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </Grid>
+
                                     <ProgressBar Minimum="0" Maximum="100" Value="{Binding Progress}"
                                                  IsVisible="{Binding IsInProgress}" />
                                 </StackPanel>
 
-                                <StackPanel IsVisible="{Binding !IsInProgress}">
+                                <StackPanel Orientation="Horizontal" IsVisible="{Binding !IsInProgress}">
+                                    <Grid IsVisible="{Binding OperationType, Converter={StaticResource OperationTypeConverter}, ConverterParameter={x:Static enums:OperationType.Copy}}">
+                                        <TextBlock IsVisible="{Binding IsProcessingSingleFile}">
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}Copied {0} to {1}">
+                                                    <Binding Path="SourceFile" />
+                                                    <Binding Path="TargetDirectory" />
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
 
+                                        <TextBlock IsVisible="{Binding !IsProcessingSingleFile}">
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}Copied {0} files and {1} directories to {2}">
+                                                    <Binding Path="SourceFilesCount" />
+                                                    <Binding Path="SourceDirectoriesCount" />
+                                                    <Binding Path="TargetDirectory" />
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </Grid>
+
+                                    <Grid IsVisible="{Binding OperationType, Converter={StaticResource OperationTypeConverter}, ConverterParameter={x:Static enums:OperationType.Move}}">
+                                        <TextBlock IsVisible="{Binding IsProcessingSingleFile}">
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}Moved {0} to {1}">
+                                                    <Binding Path="SourceFile" />
+                                                    <Binding Path="TargetDirectory" />
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+
+                                        <TextBlock IsVisible="{Binding !IsProcessingSingleFile}">
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}Moved {0} files and {1} directories to {2}">
+                                                    <Binding Path="SourceFilesCount" />
+                                                    <Binding Path="SourceDirectoriesCount" />
+                                                    <Binding Path="TargetDirectory" />
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </Grid>
+
+                                    <Grid IsVisible="{Binding OperationType, Converter={StaticResource OperationTypeConverter}, ConverterParameter={x:Static enums:OperationType.Delete}}">
+                                        <TextBlock IsVisible="{Binding IsProcessingSingleFile}">
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}Deleted {0} from {1}">
+                                                    <Binding Path="SourceFile" />
+                                                    <Binding Path="SourceDirectory" />
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+
+                                        <TextBlock IsVisible="{Binding !IsProcessingSingleFile}">
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}Deleted {0} files and {1} directories from {2}">
+                                                    <Binding Path="SourceFilesCount" />
+                                                    <Binding Path="SourceDirectoriesCount" />
+                                                    <Binding Path="SourceDirectory" />
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </Grid>
                                 </StackPanel>
                             </Grid>
                         </DataTemplate>

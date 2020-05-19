@@ -5,6 +5,7 @@ using System.Linq;
 using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Models.EventArgs;
 using Camelot.Services.Abstractions.Operations;
+using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Interfaces.MainWindow.OperationsStates;
 using ReactiveUI;
 
@@ -12,9 +13,13 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
 {
     public class OperationsStateViewModel : ViewModelBase, IOperationsStateViewModel
     {
-        private readonly IOperationsStateService _operationsStateService;
+        private const int MaximumFinishedOperationsCount = 10;
 
-        private readonly ObservableCollection<IOperationViewModel> _operations;
+        private readonly IOperationsStateService _operationsStateService;
+        private readonly IOperationViewModelFactory _operationViewModelFactory;
+
+        private readonly ObservableCollection<IOperationViewModel> _activeOperations;
+        private readonly Queue<IOperationViewModel> _finishedOperationsQueue;
         private readonly IDictionary<IOperation, IOperationViewModel> _operationsViewModelsDictionary;
 
         private int _totalProgress;
@@ -22,19 +27,27 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
         public int TotalProgress
         {
             get => _totalProgress;
-            set => this.RaiseAndSetIfChanged(ref _totalProgress, value);
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _totalProgress, value);
+                this.RaisePropertyChanged(nameof(IsInProgress));
+            }
         }
 
-        public bool ShouldShowTotalProgress => TotalProgress > 0 && TotalProgress < 100;
+        public bool IsInProgress => TotalProgress > 0 && TotalProgress < 100;
 
-        public IEnumerable<IOperationViewModel> Operations => _operations;
+        public IEnumerable<IOperationViewModel> Operations =>
+            _activeOperations.Concat(_finishedOperationsQueue.Reverse());
 
         public OperationsStateViewModel(
-            IOperationsStateService operationsStateService)
+            IOperationsStateService operationsStateService,
+            IOperationViewModelFactory operationViewModelFactory)
         {
             _operationsStateService = operationsStateService;
+            _operationViewModelFactory = operationViewModelFactory;
 
-            _operations = new ObservableCollection<IOperationViewModel>();
+            _activeOperations = new ObservableCollection<IOperationViewModel>();
+            _finishedOperationsQueue = new Queue<IOperationViewModel>(MaximumFinishedOperationsCount);
             _operationsViewModelsDictionary = new ConcurrentDictionary<IOperation, IOperationViewModel>();
 
             SubscribeToEvents();
@@ -55,8 +68,10 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
             SubscribeToEvents(operation);
 
             var viewModel = CreateFrom(operation);
-            _operations.Add(viewModel);
+            _activeOperations.Add(viewModel);
             _operationsViewModelsDictionary[operation] = viewModel;
+
+            UpdateOperationsList();
         }
 
         private void RemoveOperation(IOperation operation)
@@ -64,9 +79,25 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
             UnsubscribeFromEvents(operation);
 
             var viewModel = _operationsViewModelsDictionary[operation];
-            _operations.Remove(viewModel);
+            _activeOperations.Remove(viewModel);
             _operationsViewModelsDictionary.Remove(operation);
+
+            AddFinishedOperationViewModel(viewModel);
         }
+
+        private void AddFinishedOperationViewModel(IOperationViewModel viewModel)
+        {
+            if (_finishedOperationsQueue.Count == MaximumFinishedOperationsCount)
+            {
+                _finishedOperationsQueue.Dequeue();
+            }
+
+            _finishedOperationsQueue.Enqueue(viewModel);
+            UpdateOperationsList();
+        }
+
+        private void UpdateOperationsList() =>
+            this.RaisePropertyChanged(nameof(Operations));
 
         private void SubscribeToEvents(IOperation operation)
         {
@@ -96,7 +127,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
             var activeOperations = GetActiveOperations();
             if (!activeOperations.Any())
             {
-                TotalProgress = 100;
+                TotalProgress = default;
 
                 return;
             }
@@ -108,7 +139,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
         private IOperation[] GetActiveOperations() =>
             _operationsStateService.ActiveOperations.ToArray();
 
-        private static IOperationViewModel CreateFrom(IOperation operation) =>
-            new OperationViewModel(operation);
+        private IOperationViewModel CreateFrom(IOperation operation) =>
+            _operationViewModelFactory.Create(operation);
     }
 }

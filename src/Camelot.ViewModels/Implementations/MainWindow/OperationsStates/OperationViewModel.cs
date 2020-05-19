@@ -1,5 +1,7 @@
 using System;
+using System.Linq;
 using System.Windows.Input;
+using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Models.EventArgs;
 using Camelot.Services.Abstractions.Operations;
@@ -10,6 +12,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
 {
     public class OperationViewModel : ViewModelBase, IOperationViewModel
     {
+        private readonly IPathService _pathService;
         private readonly IOperation _operation;
 
         private double _progress;
@@ -33,12 +36,29 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
             }
         }
 
-        public bool IsInProgress => State == OperationState.InProgress || true;
+        public int SourceFilesCount => _operation.Info.Files.Count;
+
+        public int SourceDirectoriesCount => _operation.Info.Directories.Count;
+
+        public bool IsProcessingSingleFile => SourceFilesCount + SourceDirectoriesCount == 1;
+
+        public string SourceFile => IsProcessingSingleFile
+            ? _pathService.GetFileName(_operation.Info.Directories.FirstOrDefault() ?? _operation.Info.Files.FirstOrDefault())
+            : throw new InvalidOperationException();
+
+        public bool IsInProgress => State == OperationState.InProgress;
+
+        public string SourceDirectory => _pathService.GetFileName(_operation.Info.SourceDirectory);
+
+        public string TargetDirectory => _pathService.GetFileName(_operation.Info.TargetDirectory);
 
         public ICommand CancelCommand { get; }
 
-        public OperationViewModel(IOperation operation)
+        public OperationViewModel(
+            IPathService pathService,
+            IOperation operation)
         {
+            _pathService = pathService;
             _operation = operation;
 
             CancelCommand = ReactiveCommand.CreateFromTask(_operation.CancelAsync);

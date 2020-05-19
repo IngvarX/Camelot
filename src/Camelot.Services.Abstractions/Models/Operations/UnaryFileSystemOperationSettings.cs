@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace Camelot.Services.Abstractions.Models.Operations
 {
@@ -8,12 +9,16 @@ namespace Camelot.Services.Abstractions.Models.Operations
 
         public IReadOnlyList<string> TopLevelFiles { get; }
 
+        public string SourceDirectory { get; }
+
         public UnaryFileSystemOperationSettings(
             IReadOnlyList<string> topLevelDirectories,
-            IReadOnlyList<string> topLevelFiles)
+            IReadOnlyList<string> topLevelFiles,
+            string sourceDirectory)
         {
             TopLevelDirectories = topLevelDirectories;
             TopLevelFiles = topLevelFiles;
+            SourceDirectory = sourceDirectory;
         }
     }
 }

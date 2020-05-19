@@ -34,7 +34,8 @@ namespace Camelot.Services.Operations
             var operationGroup = CreateOperationGroup(copyOperations, deleteNewFilesOperations);
 
             var operations = CreateOperationsGroupsList(operationGroup);
-            var operationInfo = Create(OperationType.Copy, settings.InputTopLevelDirectories, settings.InputTopLevelFiles);
+            var operationInfo = Create(OperationType.Copy, settings.InputTopLevelDirectories,
+                settings.InputTopLevelFiles, settings.SourceDirectory, settings.TargetDirectory);
 
             return CreateCompositeOperation(operations, operationInfo);
         }
@@ -49,7 +50,8 @@ namespace Camelot.Services.Operations
             var deleteOperationGroup = CreateOperationGroup(deleteOldFilesOperations);
 
             var operations = CreateOperationsGroupsList(copyOperationGroup, deleteOperationGroup);
-            var operationInfo = Create(OperationType.Move, settings.InputTopLevelDirectories, settings.InputTopLevelFiles);
+            var operationInfo = Create(OperationType.Move, settings.InputTopLevelDirectories,
+                settings.InputTopLevelFiles, settings.TargetDirectory);
 
             return CreateCompositeOperation(operations, operationInfo);
         }
@@ -60,7 +62,8 @@ namespace Camelot.Services.Operations
             var deleteOperationGroup = CreateOperationGroup(deleteOperations);
 
             var operations = CreateOperationsGroupsList(deleteOperationGroup);
-            var operationInfo = Create(OperationType.Delete, settings.TopLevelFiles, settings.TopLevelDirectories);
+            var operationInfo = Create(OperationType.Delete, settings.TopLevelFiles,
+                settings.TopLevelDirectories, settings.SourceDirectory);
 
             return CreateCompositeOperation(operations, operationInfo);
         }
@@ -96,9 +99,9 @@ namespace Camelot.Services.Operations
             OperationInfo operationInfo) =>
             new CompositeOperation(_taskPool, operations, operationInfo);
 
-        private static OperationInfo Create(OperationType operationType,
-            IReadOnlyList<string> directories, IReadOnlyList<string> files) =>
-            new OperationInfo(operationType, files, directories);
+        private static OperationInfo Create(OperationType operationType, IReadOnlyList<string> directories,
+            IReadOnlyList<string> files, string sourceDirectory = null, string targetDirectory = null) =>
+            new OperationInfo(operationType, files, directories, sourceDirectory, targetDirectory);
 
         private static IReadOnlyList<OperationGroup> CreateOperationsGroupsList(
             params OperationGroup[] operations) => operations;

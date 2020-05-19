@@ -70,7 +70,8 @@ namespace Camelot.Services.Operations
         public async Task RemoveAsync(IReadOnlyList<string> nodes)
         {
             var (files, directories) = Split(nodes);
-            var settings = Create(files, directories);
+            var sourceDirectory = GetCommonRootDirectory(nodes);
+            var settings = Create(files, directories, sourceDirectory);
             var deleteOperation = _operationsFactory.CreateDeleteOperation(settings);
             _operationsStateService.AddOperation(deleteOperation);
 
@@ -128,7 +129,7 @@ namespace Camelot.Services.Operations
                 .ToArray();
 
             return new BinaryFileSystemOperationSettings(directories, files, outputTopLevelDirectories,
-                outputTopLevelFiles, filePathsDictionary);
+                outputTopLevelFiles, filePathsDictionary, sourceDirectory, outputDirectory);
         }
 
         private BinaryFileSystemOperationSettings GetBinaryFileSystemOperationSettings(
@@ -157,8 +158,8 @@ namespace Camelot.Services.Operations
             return _pathService.Combine(destinationDirectory, relativeSourcePath);
         }
 
-        private UnaryFileSystemOperationSettings Create(
-            IReadOnlyList<string> files, IReadOnlyList<string> directories) =>
-            new UnaryFileSystemOperationSettings(directories, files);
+        private static UnaryFileSystemOperationSettings Create(
+            IReadOnlyList<string> files, IReadOnlyList<string> directories, string sourceDirectory) =>
+            new UnaryFileSystemOperationSettings(directories, files, sourceDirectory);
     }
 }

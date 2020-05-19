@@ -256,9 +256,13 @@ namespace Camelot
             ));
             services.Register(() => new CreateDirectoryDialogViewModel());
             services.Register<IOperationsStateViewModel>(() => new OperationsStateViewModel(
-                resolver.GetService<IOperationsStateService>()
+                resolver.GetService<IOperationsStateService>(),
+                resolver.GetService<IOperationViewModelFactory>()
             ));
             services.Register(() => new RemoveNodesConfirmationDialogViewModel(
+                resolver.GetService<IPathService>()
+            ));
+            services.Register<IOperationViewModelFactory>(() => new OperationViewModelFactory(
                 resolver.GetService<IPathService>()
             ));
             services.Register<IOperationsViewModel>(() => new OperationsViewModel(
