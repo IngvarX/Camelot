@@ -122,7 +122,7 @@ namespace Camelot.Services.Tests
                 filesServiceMock.Object,
                 pathServiceMock.Object);
             var deleteOperation = operationsFactory.CreateDeleteOperation(
-                new UnaryFileSystemOperationSettings(new string[] {}, new[] {SourceName}));
+                new UnaryFileSystemOperationSettings(new string[] {}, new[] {SourceName}, SourceName));
 
             Assert.Equal(OperationState.NotStarted, deleteOperation.OperationState);
             var callbackCalled = false;
@@ -152,7 +152,7 @@ namespace Camelot.Services.Tests
                 filesServiceMock.Object,
                 pathServiceMock.Object);
             var deleteOperation = operationsFactory.CreateDeleteOperation(
-                new UnaryFileSystemOperationSettings(new[] {SourceName}, new string[] {}));
+                new UnaryFileSystemOperationSettings(new[] {SourceName}, new string[] {}, SourceName));
             Assert.Equal(OperationState.NotStarted, deleteOperation.OperationState);
 
             var callbackCalled = false;
