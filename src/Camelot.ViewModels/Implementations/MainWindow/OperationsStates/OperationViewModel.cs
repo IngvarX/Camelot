@@ -48,6 +48,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
 
         public bool IsInProgress => State == OperationState.InProgress;
 
+        public bool IsSuccessful => State == OperationState.Finished;
+
         public string SourceDirectory => _pathService.GetFileName(_operation.Info.SourceDirectory);
 
         public string TargetDirectory => _pathService.GetFileName(_operation.Info.TargetDirectory);
@@ -87,6 +89,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
         private void OperationOnStateChanged(object sender, OperationStateChangedEventArgs e)
         {
             var state = e.OperationState;
+            State = state;
             switch (state)
             {
                 case OperationState.NotStarted:

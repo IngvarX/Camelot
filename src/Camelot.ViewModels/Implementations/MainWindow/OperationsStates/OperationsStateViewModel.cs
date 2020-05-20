@@ -36,8 +36,9 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
 
         public bool IsInProgress => TotalProgress > 0 && TotalProgress < 100;
 
-        public IEnumerable<IOperationViewModel> Operations =>
-            _activeOperations.Concat(_finishedOperationsQueue.Reverse());
+        public IEnumerable<IOperationViewModel> ActiveOperations => _activeOperations;
+
+        public IEnumerable<IOperationViewModel> InactiveOperations => _finishedOperationsQueue.Reverse();
 
         public OperationsStateViewModel(
             IOperationsStateService operationsStateService,
@@ -70,8 +71,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
             var viewModel = CreateFrom(operation);
             _activeOperations.Add(viewModel);
             _operationsViewModelsDictionary[operation] = viewModel;
-
-            UpdateOperationsList();
         }
 
         private void RemoveOperation(IOperation operation)
@@ -93,11 +92,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
             }
 
             _finishedOperationsQueue.Enqueue(viewModel);
-            UpdateOperationsList();
+            this.RaisePropertyChanged(nameof(InactiveOperations));
         }
-
-        private void UpdateOperationsList() =>
-            this.RaisePropertyChanged(nameof(Operations));
 
         private void SubscribeToEvents(IOperation operation)
         {
