@@ -88,9 +88,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
 
         private void OperationOnStateChanged(object sender, OperationStateChangedEventArgs e)
         {
-            var state = e.OperationState;
-            State = state;
-            switch (state)
+            State = e.OperationState;
+            switch (State)
             {
                 case OperationState.NotStarted:
                 case OperationState.InProgress:
@@ -101,7 +100,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
                     UnsubscribeFromEvents();
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(state), state, null);
+                    throw new ArgumentOutOfRangeException(nameof(State), State, null);
             }
         }
     }
