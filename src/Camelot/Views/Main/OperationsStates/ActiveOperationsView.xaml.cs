@@ -1,11 +1,11 @@
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace Camelot.Views.Main
+namespace Camelot.Views.Main.OperationsStates
 {
-    public class OperationsStateView : UserControl
+    public class ActiveOperationsView :  UserControl
     {
-        public OperationsStateView()
+        public ActiveOperationsView()
         {
             InitializeComponent();
         }

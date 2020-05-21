@@ -31,9 +31,6 @@
     <AvaloniaResource Update="Views\Main\OperationsStateView.xaml">
       <SubType>Designer</SubType>
     </AvaloniaResource>
-    <Compile Update="Views\Main\OperationsStateView.xaml.cs">
-      <DependentUpon>OperationsStateView.xaml</DependentUpon>
-    </Compile>
     <AvaloniaResource Update="Controls\MenuView.xaml">
       <SubType>Designer</SubType>
     </AvaloniaResource>
@@ -41,6 +38,24 @@
       <SubType>Designer</SubType>
     </AvaloniaResource>
     <Compile Remove="Controls\CircularProgressBar.cs" />
+    <AvaloniaResource Update="Views\Main\OperationsStates\DataGridHeaderArrowView.xaml">
+      <SubType>Designer</SubType>
+    </AvaloniaResource>
+    <Compile Update="Views\Main\OperationsStates\ActiveOperationsView.xaml.cs">
+      <DependentUpon>ActiveOperationsView.xaml</DependentUpon>
+    </Compile>
+    <AvaloniaResource Update="Views\Main\OperationsStates\InactiveOperationsView.xaml">
+      <SubType>Designer</SubType>
+    </AvaloniaResource>
+    <Compile Update="Views\Main\OperationsStates\InactiveOperationsView.xaml.cs">
+      <DependentUpon>InactiveOperationsView.xaml</DependentUpon>
+    </Compile>
+    <AvaloniaResource Update="Views\Main\OperationsStates\OperationsStateView.xaml">
+      <SubType>Designer</SubType>
+    </AvaloniaResource>
+    <Compile Update="Views\Main\OperationsStates\OperationsStateView.xaml.cs">
+      <DependentUpon>OperationsStateView.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.9.10" />

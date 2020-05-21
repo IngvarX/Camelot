@@ -4,6 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:main="clr-namespace:Camelot.Views.Main"
         xmlns:implementations="clr-namespace:Camelot.ViewModels.Implementations;assembly=Camelot.ViewModels"
+        xmlns:operationsStates="clr-namespace:Camelot.Views.Main.OperationsStates"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Camelot.Views.MainWindow"
         MinWidth="900" MinHeight="480"
@@ -37,7 +38,7 @@
 
         <StackPanel Orientation="Horizontal">
             <main:MenuView DataContext="{Binding MenuViewModel}" />
-            <main:OperationsStateView DataContext="{Binding OperationsStateViewModel}" />
+            <operationsStates:OperationsStateView DataContext="{Binding OperationsStateViewModel}" />
         </StackPanel>
 
         <main:TopSettingsView Grid.Row="1" />

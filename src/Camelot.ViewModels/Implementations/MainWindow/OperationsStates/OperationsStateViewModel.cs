@@ -23,6 +23,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
         private readonly IDictionary<IOperation, IOperationViewModel> _operationsViewModelsDictionary;
 
         private int _totalProgress;
+        private bool _areAnyOperationsAvailable;
 
         public int TotalProgress
         {
@@ -32,6 +33,12 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
                 this.RaiseAndSetIfChanged(ref _totalProgress, value);
                 this.RaisePropertyChanged(nameof(IsInProgress));
             }
+        }
+
+        public bool AreAnyOperationsAvailable
+        {
+            get => _areAnyOperationsAvailable;
+            set => this.RaiseAndSetIfChanged(ref _areAnyOperationsAvailable, value);
         }
 
         public bool IsInProgress => TotalProgress > 0 && TotalProgress < 100;
@@ -71,6 +78,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
             var viewModel = CreateFrom(operation);
             _activeOperations.Add(viewModel);
             _operationsViewModelsDictionary[operation] = viewModel;
+
+            AreAnyOperationsAvailable = true;
         }
 
         private void RemoveOperation(IOperation operation)

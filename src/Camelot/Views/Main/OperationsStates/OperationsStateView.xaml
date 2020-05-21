@@ -1,0 +1,30 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:operationsStatesViews="clr-namespace:Camelot.Views.Main.OperationsStates"
+             xmlns:operationsStates="clr-namespace:Camelot.ViewModels.Implementations.MainWindow.OperationsStates;assembly=Camelot.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Camelot.Views.Main.OperationsStates.OperationsStateView">
+
+    <Design.DataContext>
+        <operationsStates:OperationsStateViewModel />
+    </Design.DataContext>
+
+    <Grid>
+        <ToggleButton Name="ToggleButton" IsEnabled="{Binding AreAnyOperationsAvailable}">
+            <TextBlock Margin="0,3,0,0" Text="{Binding TotalProgress}"
+                       IsVisible="{Binding IsInProgress}"
+                       VerticalAlignment="Center" HorizontalAlignment="Center" />
+        </ToggleButton>
+
+        <Popup IsOpen="{Binding IsChecked, ElementName=ToggleButton}" StaysOpen="False">
+            <Border x:Name="OperationsBorder">
+                <StackPanel Orientation="Vertical">
+                    <operationsStatesViews:ActiveOperationsView />
+                    <operationsStatesViews:InactiveOperationsView />
+                </StackPanel>
+            </Border>
+        </Popup>
+    </Grid>
+</UserControl>
