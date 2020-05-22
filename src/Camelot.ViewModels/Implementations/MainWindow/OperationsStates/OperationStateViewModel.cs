@@ -10,7 +10,7 @@ using ReactiveUI;
 
 namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
 {
-    public class OperationViewModel : ViewModelBase, IOperationViewModel
+    public class OperationStateViewModel : ViewModelBase, IOperationStateViewModel
     {
         private readonly IPathService _pathService;
         private readonly IOperation _operation;
@@ -48,7 +48,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
 
         public ICommand CancelCommand { get; }
 
-        public OperationViewModel(
+        public OperationStateViewModel(
             IPathService pathService,
             IOperation operation)
         {

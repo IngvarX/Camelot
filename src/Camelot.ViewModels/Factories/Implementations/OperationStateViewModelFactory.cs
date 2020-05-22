@@ -6,16 +6,16 @@ using Camelot.ViewModels.Interfaces.MainWindow.OperationsStates;
 
 namespace Camelot.ViewModels.Factories.Implementations
 {
-    public class OperationViewModelFactory : IOperationViewModelFactory
+    public class OperationStateViewModelFactory : IOperationStateViewModelFactory
     {
         private readonly IPathService _pathService;
 
-        public OperationViewModelFactory(IPathService pathService)
+        public OperationStateViewModelFactory(IPathService pathService)
         {
             _pathService = pathService;
         }
 
-        public IOperationViewModel Create(IOperation operation) =>
-            new OperationViewModel(_pathService, operation);
+        public IOperationStateViewModel Create(IOperation operation) =>
+            new OperationStateViewModel(_pathService, operation);
     }
 }

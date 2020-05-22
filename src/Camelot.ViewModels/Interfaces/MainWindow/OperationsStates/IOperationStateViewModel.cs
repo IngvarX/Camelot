@@ -1,6 +1,6 @@
 namespace Camelot.ViewModels.Interfaces.MainWindow.OperationsStates
 {
-    public interface IOperationViewModel
+    public interface IOperationStateViewModel
     {
 
     }

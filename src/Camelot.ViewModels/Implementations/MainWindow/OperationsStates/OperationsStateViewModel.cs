@@ -17,12 +17,12 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
         private const int MaximumFinishedOperationsCount = 10;
 
         private readonly IOperationsStateService _operationsStateService;
-        private readonly IOperationViewModelFactory _operationViewModelFactory;
+        private readonly IOperationStateViewModelFactory _operationStateViewModelFactory;
         private readonly IApplicationDispatcher _applicationDispatcher;
 
-        private readonly ObservableCollection<IOperationViewModel> _activeOperations;
-        private readonly Queue<IOperationViewModel> _finishedOperationsQueue;
-        private readonly IDictionary<IOperation, IOperationViewModel> _operationsViewModelsDictionary;
+        private readonly ObservableCollection<IOperationStateViewModel> _activeOperations;
+        private readonly Queue<IOperationStateViewModel> _finishedOperationsQueue;
+        private readonly IDictionary<IOperation, IOperationStateViewModel> _operationsViewModelsDictionary;
 
         private int _totalProgress;
         private bool _areAnyOperationsAvailable;
@@ -45,22 +45,22 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
 
         public bool IsInProgress => TotalProgress > 0 && TotalProgress < 100;
 
-        public IEnumerable<IOperationViewModel> ActiveOperations => _activeOperations;
+        public IEnumerable<IOperationStateViewModel> ActiveOperations => _activeOperations;
 
-        public IEnumerable<IOperationViewModel> InactiveOperations => _finishedOperationsQueue.Reverse();
+        public IEnumerable<IOperationStateViewModel> InactiveOperations => _finishedOperationsQueue.Reverse();
 
         public OperationsStateViewModel(
             IOperationsStateService operationsStateService,
-            IOperationViewModelFactory operationViewModelFactory,
+            IOperationStateViewModelFactory operationStateViewModelFactory,
             IApplicationDispatcher applicationDispatcher)
         {
             _operationsStateService = operationsStateService;
-            _operationViewModelFactory = operationViewModelFactory;
+            _operationStateViewModelFactory = operationStateViewModelFactory;
             _applicationDispatcher = applicationDispatcher;
 
-            _activeOperations = new ObservableCollection<IOperationViewModel>();
-            _finishedOperationsQueue = new Queue<IOperationViewModel>(MaximumFinishedOperationsCount);
-            _operationsViewModelsDictionary = new ConcurrentDictionary<IOperation, IOperationViewModel>();
+            _activeOperations = new ObservableCollection<IOperationStateViewModel>();
+            _finishedOperationsQueue = new Queue<IOperationStateViewModel>(MaximumFinishedOperationsCount);
+            _operationsViewModelsDictionary = new ConcurrentDictionary<IOperation, IOperationStateViewModel>();
 
             SubscribeToEvents();
         }
@@ -95,14 +95,14 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
             AddFinishedOperationViewModel(viewModel);
         }
 
-        private void AddFinishedOperationViewModel(IOperationViewModel viewModel)
+        private void AddFinishedOperationViewModel(IOperationStateViewModel stateViewModel)
         {
             if (_finishedOperationsQueue.Count == MaximumFinishedOperationsCount)
             {
                 _finishedOperationsQueue.Dequeue();
             }
 
-            _finishedOperationsQueue.Enqueue(viewModel);
+            _finishedOperationsQueue.Enqueue(stateViewModel);
             this.RaisePropertyChanged(nameof(InactiveOperations));
         }
 
@@ -146,7 +146,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
         private IOperation[] GetActiveOperations() =>
             _operationsStateService.ActiveOperations.ToArray();
 
-        private IOperationViewModel CreateFrom(IOperation operation) =>
-            _operationViewModelFactory.Create(operation);
+        private IOperationStateViewModel CreateFrom(IOperation operation) =>
+            _operationStateViewModelFactory.Create(operation);
     }
 }

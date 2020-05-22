@@ -19,7 +19,7 @@
 
     <ItemsControl Items="{Binding InactiveOperations}">
         <ItemsControl.ItemTemplate>
-            <DataTemplate DataType="{x:Type operationsStates:OperationViewModel}">
+            <DataTemplate DataType="{x:Type operationsStates:OperationStateViewModel}">
                 <Grid>
                     <StackPanel Orientation="Horizontal" IsVisible="{Binding State, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static enums:OperationState.Finished}}">
                         <DrawingPresenter Width="15" Height="15">

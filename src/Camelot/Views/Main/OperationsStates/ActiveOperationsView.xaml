@@ -18,7 +18,7 @@
 
     <ItemsControl Items="{Binding ActiveOperations}">
         <ItemsControl.ItemTemplate>
-            <DataTemplate DataType="{x:Type operationsStates:OperationViewModel}">
+            <DataTemplate DataType="{x:Type operationsStates:OperationStateViewModel}">
                 <Grid>
                     <StackPanel IsVisible="{Binding State, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static enums:OperationState.InProgress}}">
                         <Grid IsVisible="{Binding OperationType, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static enums:OperationType.Copy}}">

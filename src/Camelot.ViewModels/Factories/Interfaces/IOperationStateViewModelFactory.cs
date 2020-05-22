@@ -3,8 +3,8 @@ using Camelot.ViewModels.Interfaces.MainWindow.OperationsStates;
 
 namespace Camelot.ViewModels.Factories.Interfaces
 {
-    public interface IOperationViewModelFactory
+    public interface IOperationStateViewModelFactory
     {
-        IOperationViewModel Create(IOperation operation);
+        IOperationStateViewModel Create(IOperation operation);
     }
 }
