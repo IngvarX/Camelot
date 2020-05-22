@@ -29,11 +29,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
         public OperationState State
         {
             get => _state;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _state, value);
-                this.RaisePropertyChanged(nameof(IsInProgress));
-            }
+            set => this.RaiseAndSetIfChanged(ref _state, value);
         }
 
         public int SourceFilesCount => _operation.Info.Files.Count;
@@ -45,10 +41,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
         public string SourceFile => IsProcessingSingleFile
             ? _pathService.GetFileName(_operation.Info.Directories.FirstOrDefault() ?? _operation.Info.Files.FirstOrDefault())
             : throw new InvalidOperationException();
-
-        public bool IsInProgress => State == OperationState.InProgress;
-
-        public bool IsSuccessful => State == OperationState.Finished;
 
         public string SourceDirectory => _pathService.GetFileName(_operation.Info.SourceDirectory);
 

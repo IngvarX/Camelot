@@ -13,23 +13,24 @@
     </Design.DataContext>
 
     <UserControl.Resources>
-        <converters:OperationTypeConverter x:Key="OperationTypeConverter"/>
+        <converters:EnumConverter x:Key="EnumConverter"/>
+        <converters:InverseEnumConverter x:Key="InverseEnumConverter"/>
     </UserControl.Resources>
 
     <ItemsControl Items="{Binding InactiveOperations}">
         <ItemsControl.ItemTemplate>
             <DataTemplate DataType="{x:Type operationsStates:OperationViewModel}">
                 <Grid>
-                    <Grid
-                        IsVisible="{Binding OperationType, Converter={StaticResource OperationTypeConverter}, ConverterParameter={x:Static enums:OperationType.Copy}}">
-                        <StackPanel Orientation="Horizontal" IsVisible="{Binding IsSuccessful}">
-                            <DrawingPresenter Width="10" Height="10">
-                                <DrawingPresenter.Drawing>
-                                    <GeometryDrawing Brush="#ffffff"
-                                                     Geometry="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z" />
-                                </DrawingPresenter.Drawing>
-                            </DrawingPresenter>
-                            <TextBlock IsVisible="{Binding IsProcessingSingleFile}">
+                    <StackPanel Orientation="Horizontal" IsVisible="{Binding State, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static enums:OperationState.Finished}}">
+                        <DrawingPresenter Width="15" Height="15">
+                            <DrawingPresenter.Drawing>
+                                <GeometryDrawing Brush="{DynamicResource SuccessBrush}"
+                                                 Geometry="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z" />
+                            </DrawingPresenter.Drawing>
+                        </DrawingPresenter>
+
+                        <Grid IsVisible="{Binding OperationType, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static enums:OperationType.Copy}}">
+                            <TextBlock Classes="operationStatusTextBlock successTextBlock" IsVisible="{Binding IsProcessingSingleFile}">
                                 <TextBlock.Text>
                                     <MultiBinding StringFormat="{}Copied {0} to {1}">
                                         <Binding Path="SourceFile" />
@@ -38,7 +39,7 @@
                                 </TextBlock.Text>
                             </TextBlock>
 
-                            <TextBlock IsVisible="{Binding !IsProcessingSingleFile}">
+                            <TextBlock Classes="operationStatusTextBlock successTextBlock" IsVisible="{Binding !IsProcessingSingleFile}">
                                 <TextBlock.Text>
                                     <MultiBinding StringFormat="{}Copied {0} files and {1} directories to {2}">
                                         <Binding Path="SourceFilesCount" />
@@ -47,46 +48,10 @@
                                     </MultiBinding>
                                 </TextBlock.Text>
                             </TextBlock>
-                        </StackPanel>
+                        </Grid>
 
-                        <StackPanel Orientation="Horizontal" IsVisible="{Binding !IsSuccessful}">
-                            <DrawingPresenter Width="10" Height="10">
-                                <DrawingPresenter.Drawing>
-                                    <GeometryDrawing Brush="#ffffff"
-                                                     Geometry="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z" />
-                                </DrawingPresenter.Drawing>
-                            </DrawingPresenter>
-                            <TextBlock IsVisible="{Binding IsProcessingSingleFile}">
-                                <TextBlock.Text>
-                                    <MultiBinding StringFormat="{}Failed to copy {0} to {1}">
-                                        <Binding Path="SourceFile" />
-                                        <Binding Path="TargetDirectory" />
-                                    </MultiBinding>
-                                </TextBlock.Text>
-                            </TextBlock>
-
-                            <TextBlock IsVisible="{Binding !IsProcessingSingleFile}">
-                                <TextBlock.Text>
-                                    <MultiBinding StringFormat="{}Failed to copy {0} files and {1} directories to {2}">
-                                        <Binding Path="SourceFilesCount" />
-                                        <Binding Path="SourceDirectoriesCount" />
-                                        <Binding Path="TargetDirectory" />
-                                    </MultiBinding>
-                                </TextBlock.Text>
-                            </TextBlock>
-                        </StackPanel>
-                    </Grid>
-
-                    <Grid
-                        IsVisible="{Binding OperationType, Converter={StaticResource OperationTypeConverter}, ConverterParameter={x:Static enums:OperationType.Move}}">
-                        <StackPanel Orientation="Horizontal" IsVisible="{Binding IsSuccessful}">
-                            <DrawingPresenter Width="10" Height="10">
-                                <DrawingPresenter.Drawing>
-                                    <GeometryDrawing Brush="#ffffff"
-                                                     Geometry="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z" />
-                                </DrawingPresenter.Drawing>
-                            </DrawingPresenter>
-                            <TextBlock IsVisible="{Binding IsProcessingSingleFile}">
+                        <Grid IsVisible="{Binding OperationType, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static enums:OperationType.Move}}">
+                            <TextBlock Classes="successTextBlock" IsVisible="{Binding IsProcessingSingleFile}">
                                 <TextBlock.Text>
                                     <MultiBinding StringFormat="{}Moved {0} to {1}">
                                         <Binding Path="SourceFile" />
@@ -95,7 +60,7 @@
                                 </TextBlock.Text>
                             </TextBlock>
 
-                            <TextBlock IsVisible="{Binding !IsProcessingSingleFile}">
+                            <TextBlock Classes="operationStatusTextBlock successTextBlock" IsVisible="{Binding !IsProcessingSingleFile}">
                                 <TextBlock.Text>
                                     <MultiBinding StringFormat="{}Moved {0} files and {1} directories to {2}">
                                         <Binding Path="SourceFilesCount" />
@@ -104,47 +69,10 @@
                                     </MultiBinding>
                                 </TextBlock.Text>
                             </TextBlock>
-                        </StackPanel>
+                        </Grid>
 
-                        <StackPanel Orientation="Horizontal" IsVisible="{Binding !IsSuccessful}">
-                            <DrawingPresenter Width="10" Height="10">
-                                <DrawingPresenter.Drawing>
-                                    <GeometryDrawing Brush="#ffffff"
-                                                     Geometry="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z" />
-                                </DrawingPresenter.Drawing>
-                            </DrawingPresenter>
-                            <TextBlock IsVisible="{Binding IsProcessingSingleFile}">
-                                <TextBlock.Text>
-                                    <MultiBinding StringFormat="{}Failed to move {0} to {1}">
-                                        <Binding Path="SourceFile" />
-                                        <Binding Path="TargetDirectory" />
-                                    </MultiBinding>
-                                </TextBlock.Text>
-                            </TextBlock>
-
-                            <TextBlock IsVisible="{Binding !IsProcessingSingleFile}">
-                                <TextBlock.Text>
-                                    <MultiBinding StringFormat="{}Failed to move {0} files and {1} directories to {2}">
-                                        <Binding Path="SourceFilesCount" />
-                                        <Binding Path="SourceDirectoriesCount" />
-                                        <Binding Path="TargetDirectory" />
-                                    </MultiBinding>
-                                </TextBlock.Text>
-                            </TextBlock>
-                        </StackPanel>
-                    </Grid>
-
-
-                    <Grid
-                        IsVisible="{Binding OperationType, Converter={StaticResource OperationTypeConverter}, ConverterParameter={x:Static enums:OperationType.Delete}}">
-                        <StackPanel Orientation="Horizontal" IsVisible="{Binding IsSuccessful}">
-                            <DrawingPresenter Width="10" Height="10">
-                                <DrawingPresenter.Drawing>
-                                    <GeometryDrawing Brush="#ffffff"
-                                                     Geometry="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z" />
-                                </DrawingPresenter.Drawing>
-                            </DrawingPresenter>
-                            <TextBlock IsVisible="{Binding IsProcessingSingleFile}">
+                        <Grid IsVisible="{Binding OperationType, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static enums:OperationType.Delete}}">
+                            <TextBlock Classes="operationStatusTextBlock successTextBlock" IsVisible="{Binding IsProcessingSingleFile}">
                                 <TextBlock.Text>
                                     <MultiBinding StringFormat="{}Deleted {0} from {1}">
                                         <Binding Path="SourceFile" />
@@ -153,7 +81,7 @@
                                 </TextBlock.Text>
                             </TextBlock>
 
-                            <TextBlock IsVisible="{Binding !IsProcessingSingleFile}">
+                            <TextBlock Classes="successTextBlock" IsVisible="{Binding !IsProcessingSingleFile}">
                                 <TextBlock.Text>
                                     <MultiBinding StringFormat="{}Deleted {0} files and {1} directories from {2}">
                                         <Binding Path="SourceFilesCount" />
@@ -162,16 +90,61 @@
                                     </MultiBinding>
                                 </TextBlock.Text>
                             </TextBlock>
-                        </StackPanel>
+                        </Grid>
+                    </StackPanel>
 
-                        <StackPanel Orientation="Horizontal" IsVisible="{Binding !IsSuccessful}">
-                            <DrawingPresenter Width="10" Height="10">
-                                <DrawingPresenter.Drawing>
-                                    <GeometryDrawing Brush="#ffffff"
-                                                     Geometry="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z" />
-                                </DrawingPresenter.Drawing>
-                            </DrawingPresenter>
-                            <TextBlock IsVisible="{Binding IsProcessingSingleFile}">
+                    <StackPanel Orientation="Horizontal" IsVisible="{Binding State, Converter={StaticResource InverseEnumConverter}, ConverterParameter={x:Static enums:OperationState.Finished}}">
+                        <DrawingPresenter Width="15" Height="15">
+                            <DrawingPresenter.Drawing>
+                                <GeometryDrawing Brush="{DynamicResource ErrorBrush}"
+                                                 Geometry="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z" />
+                            </DrawingPresenter.Drawing>
+                        </DrawingPresenter>
+
+                        <Grid IsVisible="{Binding OperationType, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static enums:OperationType.Copy}}">
+                            <TextBlock Classes="operationStatusTextBlock errorTextBlock" IsVisible="{Binding IsProcessingSingleFile}">
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat="{}Failed to copy {0} to {1}">
+                                        <Binding Path="SourceFile" />
+                                        <Binding Path="TargetDirectory" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+
+                            <TextBlock Classes="operationStatusTextBlock errorTextBlock" IsVisible="{Binding !IsProcessingSingleFile}">
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat="{}Failed to copy {0} files and {1} directories to {2}">
+                                        <Binding Path="SourceFilesCount" />
+                                        <Binding Path="SourceDirectoriesCount" />
+                                        <Binding Path="TargetDirectory" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </Grid>
+
+                        <Grid IsVisible="{Binding OperationType, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static enums:OperationType.Move}}">
+                            <TextBlock Classes="operationStatusTextBlock errorTextBlock" IsVisible="{Binding IsProcessingSingleFile}">
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat="{}Failed to move {0} to {1}">
+                                        <Binding Path="SourceFile" />
+                                        <Binding Path="TargetDirectory" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+
+                            <TextBlock Classes="operationStatusTextBlock errorTextBlock" IsVisible="{Binding !IsProcessingSingleFile}">
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat="{}Failed to move {0} files and {1} directories to {2}">
+                                        <Binding Path="SourceFilesCount" />
+                                        <Binding Path="SourceDirectoriesCount" />
+                                        <Binding Path="TargetDirectory" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </Grid>
+
+                        <Grid IsVisible="{Binding OperationType, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static enums:OperationType.Delete}}">
+                            <TextBlock Classes="operationStatusTextBlock errorTextBlock" IsVisible="{Binding IsProcessingSingleFile}">
                                 <TextBlock.Text>
                                     <MultiBinding StringFormat="{}Failed to delete {0} from {1}">
                                         <Binding Path="SourceFile" />
@@ -180,7 +153,7 @@
                                 </TextBlock.Text>
                             </TextBlock>
 
-                            <TextBlock IsVisible="{Binding !IsProcessingSingleFile}">
+                            <TextBlock Classes="operationStatusTextBlock errorTextBlock" IsVisible="{Binding !IsProcessingSingleFile}">
                                 <TextBlock.Text>
                                     <MultiBinding
                                         StringFormat="{}Failed to delete {0} files and {1} directories from {2}">
@@ -190,8 +163,8 @@
                                     </MultiBinding>
                                 </TextBlock.Text>
                             </TextBlock>
-                        </StackPanel>
-                    </Grid>
+                        </Grid>
+                    </StackPanel>
                 </Grid>
             </DataTemplate>
         </ItemsControl.ItemTemplate>

@@ -11,6 +11,8 @@
         <Color x:Key="AlternativeMainBackgroundColor">#2a2824</Color>
         <Color x:Key="OperationButtonBackgroundColor">#3c2b4e</Color>
         <Color x:Key="OperationButtonHoverBackgroundColor">#45325a</Color>
+        <Color x:Key="SuccessColor">#bcffbc</Color>
+        <Color x:Key="ErrorColor">#ffbcbc</Color>
 
         <SolidColorBrush x:Key="OrangeBrush" Color="{DynamicResource OrangeColor}" />
         <SolidColorBrush x:Key="WhiteBrush" Color="{DynamicResource WhiteColor}" />
@@ -35,5 +37,7 @@
         <SolidColorBrush x:Key="DataGridHeaderArrowBrush" Color="{DynamicResource WhiteColor}"
                          Opacity="0.3" />
         <SolidColorBrush x:Key="ThemeControlMidBrush" Color="{DynamicResource MainBackgroundColor}" />
+        <SolidColorBrush x:Key="SuccessBrush" Color="{DynamicResource SuccessColor}" />
+        <SolidColorBrush x:Key="ErrorBrush" Color="{DynamicResource ErrorColor}" />
     </Style.Resources>
 </Style>

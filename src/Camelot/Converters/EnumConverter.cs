@@ -1,16 +1,15 @@
 using System;
 using System.Globalization;
 using Avalonia.Data.Converters;
-using Camelot.Services.Abstractions.Models.Enums;
 
 namespace Camelot.Converters
 {
-    public class OperationTypeConverter : IValueConverter
+    public class EnumConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var actualOperationType = (OperationType) value;
-            var expectedOperationType = (OperationType) parameter;
+            var actualOperationType = System.Convert.ToInt32(value);
+            var expectedOperationType = System.Convert.ToInt32(parameter);
 
             return actualOperationType == expectedOperationType;
         }

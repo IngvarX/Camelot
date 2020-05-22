@@ -13,16 +13,15 @@
     </Design.DataContext>
 
     <UserControl.Resources>
-        <converters:OperationTypeConverter x:Key="OperationTypeConverter"/>
+        <converters:EnumConverter x:Key="EnumConverter"/>
     </UserControl.Resources>
 
     <ItemsControl Items="{Binding ActiveOperations}">
         <ItemsControl.ItemTemplate>
             <DataTemplate DataType="{x:Type operationsStates:OperationViewModel}">
                 <Grid>
-                    <StackPanel IsVisible="{Binding IsInProgress}">
-                        <Grid
-                            IsVisible="{Binding OperationType, Converter={StaticResource OperationTypeConverter}, ConverterParameter={x:Static enums:OperationType.Copy}}">
+                    <StackPanel IsVisible="{Binding State, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static enums:OperationState.InProgress}}">
+                        <Grid IsVisible="{Binding OperationType, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static enums:OperationType.Copy}}">
                             <TextBlock IsVisible="{Binding IsProcessingSingleFile}">
                                 <TextBlock.Text>
                                     <MultiBinding StringFormat="{}Copying {0} to {1}">
@@ -43,8 +42,7 @@
                             </TextBlock>
                         </Grid>
 
-                        <Grid
-                            IsVisible="{Binding OperationType, Converter={StaticResource OperationTypeConverter}, ConverterParameter={x:Static enums:OperationType.Move}}">
+                        <Grid IsVisible="{Binding OperationType, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static enums:OperationType.Move}}">
                             <TextBlock IsVisible="{Binding IsProcessingSingleFile}">
                                 <TextBlock.Text>
                                     <MultiBinding StringFormat="{}Moving {0} to {1}">
@@ -65,8 +63,7 @@
                             </TextBlock>
                         </Grid>
 
-                        <Grid
-                            IsVisible="{Binding OperationType, Converter={StaticResource OperationTypeConverter}, ConverterParameter={x:Static enums:OperationType.Delete}}">
+                        <Grid IsVisible="{Binding OperationType, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static enums:OperationType.Delete}}">
                             <TextBlock IsVisible="{Binding IsProcessingSingleFile}">
                                 <TextBlock.Text>
                                     <MultiBinding StringFormat="{}Removing {0} from {1}">
@@ -88,8 +85,7 @@
                         </Grid>
 
                         <StackPanel Orientation="Horizontal">
-                            <ProgressBar Minimum="0" Maximum="100" Value="{Binding Progress}"
-                                         IsVisible="{Binding IsInProgress}" />
+                            <ProgressBar Minimum="0" Maximum="100" Value="{Binding Progress}" />
                             <Button Command="{Binding CancelCommand}">
                                 <DrawingPresenter Width="10" Height="10">
                                     <DrawingPresenter.Drawing>
