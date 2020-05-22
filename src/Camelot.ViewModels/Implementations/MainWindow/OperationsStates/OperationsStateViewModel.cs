@@ -2,6 +2,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using ApplicationDispatcher.Interfaces;
 using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Models.EventArgs;
 using Camelot.Services.Abstractions.Operations;
@@ -17,6 +18,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
 
         private readonly IOperationsStateService _operationsStateService;
         private readonly IOperationViewModelFactory _operationViewModelFactory;
+        private readonly IApplicationDispatcher _applicationDispatcher;
 
         private readonly ObservableCollection<IOperationViewModel> _activeOperations;
         private readonly Queue<IOperationViewModel> _finishedOperationsQueue;
@@ -49,10 +51,12 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
 
         public OperationsStateViewModel(
             IOperationsStateService operationsStateService,
-            IOperationViewModelFactory operationViewModelFactory)
+            IOperationViewModelFactory operationViewModelFactory,
+            IApplicationDispatcher applicationDispatcher)
         {
             _operationsStateService = operationsStateService;
             _operationViewModelFactory = operationViewModelFactory;
+            _applicationDispatcher = applicationDispatcher;
 
             _activeOperations = new ObservableCollection<IOperationViewModel>();
             _finishedOperationsQueue = new Queue<IOperationViewModel>(MaximumFinishedOperationsCount);
@@ -66,10 +70,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
             _operationsStateService.OperationStarted += OperationsStateServiceOnOperationStarted;
         }
 
-        private void OperationsStateServiceOnOperationStarted(object sender, OperationStartedEventArgs e)
-        {
-            AddOperation(e.Operation);
-        }
+        private void OperationsStateServiceOnOperationStarted(object sender, OperationStartedEventArgs e) =>
+            _applicationDispatcher.Dispatch(() => AddOperation(e.Operation));
 
         private void AddOperation(IOperation operation)
         {
@@ -121,7 +123,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
             var operation = (IOperation) sender;
             if (e.OperationState == OperationState.Finished || e.OperationState == OperationState.Cancelled)
             {
-                RemoveOperation(operation);
+                _applicationDispatcher.Dispatch(() => RemoveOperation(operation));
             }
 
             // TODO: change status

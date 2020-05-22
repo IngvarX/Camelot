@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Camelot.Extensions;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Operations;
 using Camelot.ViewModels.Implementations.Dialogs;
@@ -52,8 +53,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow
 
             OpenCommand = ReactiveCommand.Create(Open);
             OpenInDefaultEditorCommand = ReactiveCommand.Create(OpenInDefaultEditor);
-            CopyCommand = ReactiveCommand.CreateFromTask(CopyAsync);
-            MoveCommand = ReactiveCommand.CreateFromTask(MoveAsync);
+            CopyCommand = ReactiveCommand.Create(() => Task.Run(CopyAsync));
+            MoveCommand = ReactiveCommand.Create(() => Task.Run(MoveAsync));
             NewDirectoryCommand = ReactiveCommand.CreateFromTask(CreateNewDirectoryAsync);
             RemoveCommand = ReactiveCommand.CreateFromTask(RemoveAsync);
             RemoveToTrashCommand = ReactiveCommand.CreateFromTask(RemoveToTrashAsync);
@@ -61,12 +62,12 @@ namespace Camelot.ViewModels.Implementations.MainWindow
 
         private void Open() => _filesOperationsMediator.ActiveFilesPanelViewModel.OpenLastSelectedFile();
 
-        private void OpenInDefaultEditor() => _operationsService.OpenFiles(_filesSelectionService.SelectedFiles);
+        private void OpenInDefaultEditor() => _operationsService.OpenFiles(GetSelectedFiles());
 
-        private Task CopyAsync() => _operationsService.CopyAsync(_filesSelectionService.SelectedFiles,
+        private Task CopyAsync() => _operationsService.CopyAsync(GetSelectedFiles(),
             _filesOperationsMediator.OutputDirectory);
 
-        private Task MoveAsync() => _operationsService.MoveAsync(_filesSelectionService.SelectedFiles,
+        private Task MoveAsync() => _operationsService.MoveAsync(GetSelectedFiles(),
             _filesOperationsMediator.OutputDirectory);
 
         private async Task CreateNewDirectoryAsync()
@@ -80,7 +81,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow
 
         private async Task RemoveAsync()
         {
-            var filesToRemove = GetFilesToRemove();
+            var filesToRemove = GetSelectedFiles();
             if (!filesToRemove.Any())
             {
                 return;
@@ -90,13 +91,13 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             var isConfirmed = await ShowRemoveConfirmationDialogAsync(navigationParameter);
             if (isConfirmed)
             {
-                await _operationsService.RemoveAsync(filesToRemove);
+                 _operationsService.RemoveAsync(filesToRemove).Forget();
             }
         }
 
         private async Task RemoveToTrashAsync()
         {
-            var filesToRemove = GetFilesToRemove();
+            var filesToRemove = GetSelectedFiles();
             if (!filesToRemove.Any())
             {
                 return;
@@ -106,7 +107,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             var isConfirmed = await ShowRemoveConfirmationDialogAsync(navigationParameter);
             if (isConfirmed)
             {
-                await _trashCanService.MoveToTrashAsync(filesToRemove);
+                _trashCanService.MoveToTrashAsync(filesToRemove).Forget();
             }
         }
 
@@ -114,7 +115,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             _dialogService.ShowDialogAsync<bool, NodesRemovingNavigationParameter>(
                 nameof(RemoveNodesConfirmationDialogViewModel), navigationParameter);
 
-        private IReadOnlyList<string> GetFilesToRemove() =>
+        private IReadOnlyList<string> GetSelectedFiles() =>
             _filesSelectionService
                 .SelectedFiles
                 .ToArray();
