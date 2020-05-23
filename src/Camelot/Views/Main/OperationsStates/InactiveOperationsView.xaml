@@ -51,7 +51,7 @@
                         </Grid>
 
                         <Grid IsVisible="{Binding OperationType, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static enums:OperationType.Move}}">
-                            <TextBlock Classes="successTextBlock" IsVisible="{Binding IsProcessingSingleFile}">
+                            <TextBlock Classes="operationStatusTextBlock successTextBlock" IsVisible="{Binding IsProcessingSingleFile}">
                                 <TextBlock.Text>
                                     <MultiBinding StringFormat="{}Moved {0} to {1}">
                                         <Binding Path="SourceFile" />
@@ -81,7 +81,7 @@
                                 </TextBlock.Text>
                             </TextBlock>
 
-                            <TextBlock Classes="successTextBlock" IsVisible="{Binding !IsProcessingSingleFile}">
+                            <TextBlock Classes="operationStatusTextBlock successTextBlock" IsVisible="{Binding !IsProcessingSingleFile}">
                                 <TextBlock.Text>
                                     <MultiBinding StringFormat="{}Deleted {0} files and {1} directories from {2}">
                                         <Binding Path="SourceFilesCount" />

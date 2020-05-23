@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using ApplicationDispatcher.Interfaces;
+using Camelot.Services.Abstractions.Extensions;
 using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Models.EventArgs;
 using Camelot.Services.Abstractions.Operations;
@@ -82,13 +83,23 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
             _operationsViewModelsDictionary[operation] = viewModel;
 
             AreAnyOperationsAvailable = true;
+            if (operation.OperationState.IsCompleted())
+            {
+                RemoveOperation(operation);
+            }
         }
 
         private void RemoveOperation(IOperation operation)
         {
             UnsubscribeFromEvents(operation);
 
-            var viewModel = _operationsViewModelsDictionary[operation];
+
+            var isKeyAvailable = _operationsViewModelsDictionary.TryGetValue(operation, out var viewModel);
+            if (!isKeyAvailable)
+            {
+                return;
+            }
+
             _activeOperations.Remove(viewModel);
             _operationsViewModelsDictionary.Remove(operation);
 

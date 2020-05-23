@@ -51,7 +51,7 @@ namespace Camelot.Services.Operations
 
             var operations = CreateOperationsGroupsList(copyOperationGroup, deleteOperationGroup);
             var operationInfo = Create(OperationType.Move, settings.InputTopLevelDirectories,
-                settings.InputTopLevelFiles, settings.TargetDirectory);
+                settings.InputTopLevelFiles, settings.SourceDirectory, settings.TargetDirectory);
 
             return CreateCompositeOperation(operations, operationInfo);
         }
