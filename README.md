@@ -1,4 +1,4 @@
-# Camelot
+# Camelot <img align="left" src="/src/Camelot/Assets/logo.png" alt="Camelot" width="100" height="100">
 
 Camelot is light cross-platform twin-panel file manager written in C#
 
@@ -9,6 +9,10 @@ Camelot is light cross-platform twin-panel file manager written in C#
 ![Build Status](https://img.shields.io/travis/ingvar1995/Camelot?style=for-the-badge)
 
 ## Supported OS: Linux, macOS, Windows
+
+## Install
+
+Download release from [releases page](https://github.com/ingvar1995/Camelot/releases)
 
 ## Build
 
