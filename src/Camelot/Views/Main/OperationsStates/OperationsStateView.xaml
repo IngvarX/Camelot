@@ -27,7 +27,7 @@
             </Grid>
         </ToggleButton>
 
-        <Popup IsOpen="{Binding IsChecked, ElementName=ToggleButton}" StaysOpen="False">
+        <Popup  IsOpen="{Binding IsChecked, ElementName=ToggleButton}" StaysOpen="False">
             <Border x:Name="OperationsBorder">
                 <StackPanel Orientation="Vertical">
                     <operationsStatesViews:ActiveOperationsView />

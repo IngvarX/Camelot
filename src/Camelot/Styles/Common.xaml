@@ -116,6 +116,7 @@
 
     <Style Selector="Border#OperationsBorder">
         <Setter Property="Padding" Value="20" />
+        <Setter Property="Background" Value="{DynamicResource OperationsStateBackgroundBrush}" />
     </Style>
 
     <Style Selector="TextBlock.operationStatusTextBlock">
@@ -135,6 +136,10 @@
     <Style Selector="ProgressBar.operationProgressBar">
         <Setter Property="Foreground" Value="{DynamicResource ProgressBarForegroundBrush}" />
         <Setter Property="Background" Value="{DynamicResource ProgressBarBackgroundBrush}" />
+    </Style>
+
+    <Style Selector="TextBlock.activeOperationTextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource InactiveTabForegroundBrush}" />
     </Style>
 
 </Styles>

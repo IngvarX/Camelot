@@ -14,6 +14,7 @@
         <Color x:Key="SuccessColor">#bcffbc</Color>
         <Color x:Key="ErrorColor">#ffbcbc</Color>
         <Color x:Key="ProgressBarForegroundColor">#35a335</Color>
+        <Color x:Key="OperationsStateBackgroundColor">#1f1e1a</Color>
 
         <SolidColorBrush x:Key="OrangeBrush" Color="{DynamicResource OrangeColor}" />
         <SolidColorBrush x:Key="WhiteBrush" Color="{DynamicResource WhiteColor}" />
@@ -41,7 +42,10 @@
         <SolidColorBrush x:Key="SuccessBrush" Color="{DynamicResource SuccessColor}" />
         <SolidColorBrush x:Key="ErrorBrush" Color="{DynamicResource ErrorColor}" />
         <SolidColorBrush x:Key="ProgressBarForegroundBrush" Color="{DynamicResource ProgressBarForegroundColor}" />
+        <SolidColorBrush x:Key="OperationsStateBackgroundBrush" Color="{DynamicResource OperationsStateBackgroundColor}" />
         <SolidColorBrush x:Key="ProgressBarBackgroundBrush" Color="{DynamicResource WhiteColor}"
                          Opacity="0.1" />
+        <SolidColorBrush x:Key="CancelOperationButtonBrush" Color="{DynamicResource WhiteColor}"
+                         Opacity="0.7" />
     </Style.Resources>
 </Style>
