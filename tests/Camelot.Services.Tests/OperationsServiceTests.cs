@@ -52,7 +52,7 @@ namespace Camelot.Services.Tests
             var operationsFactoryMock = new Mock<IOperationsFactory>();
             var operationMock = new Mock<IOperation>();
             operationMock
-                .Setup(m => m.RunAsync(It.IsAny<CancellationToken>()))
+                .Setup(m => m.RunAsync())
                 .Verifiable();
             operationsFactoryMock
                 .Setup(m => m.CreateDeleteOperation(It.IsAny<UnaryFileSystemOperationSettings>()))
@@ -82,7 +82,7 @@ namespace Camelot.Services.Tests
 
             await operationsService.RemoveAsync(new[] {FileName});
 
-            operationMock.Verify(m => m.RunAsync(It.IsAny<CancellationToken>()), Times.Once());
+            operationMock.Verify(m => m.RunAsync(), Times.Once());
             fileServiceMock.Verify(m => m.CheckIfExists(FileName), Times.Once());
         }
 
@@ -93,7 +93,7 @@ namespace Camelot.Services.Tests
             var operationsFactoryMock = new Mock<IOperationsFactory>();
             var operationMock = new Mock<IOperation>();
             operationMock
-                .Setup(m => m.RunAsync(It.IsAny<CancellationToken>()))
+                .Setup(m => m.RunAsync())
                 .Verifiable();
             operationsFactoryMock
                 .Setup(m => m.CreateMoveOperation(It.IsAny<BinaryFileSystemOperationSettings>()))
@@ -137,7 +137,7 @@ namespace Camelot.Services.Tests
 
             await operationsService.MoveAsync(new[] {FileName}, DirectoryName);
 
-            operationMock.Verify(m => m.RunAsync(It.IsAny<CancellationToken>()), Times.Once());
+            operationMock.Verify(m => m.RunAsync(), Times.Once());
         }
 
         [Fact]
@@ -147,7 +147,7 @@ namespace Camelot.Services.Tests
             var operationsFactoryMock = new Mock<IOperationsFactory>();
             var operationMock = new Mock<IOperation>();
             operationMock
-                .Setup(m => m.RunAsync(It.IsAny<CancellationToken>()))
+                .Setup(m => m.RunAsync())
                 .Verifiable();
             operationsFactoryMock
                 .Setup(m => m.CreateCopyOperation(It.IsAny<BinaryFileSystemOperationSettings>()))
@@ -191,7 +191,7 @@ namespace Camelot.Services.Tests
 
             await operationsService.CopyAsync(new[] {FileName}, DirectoryName);
 
-            operationMock.Verify(m => m.RunAsync(It.IsAny<CancellationToken>()), Times.Once());
+            operationMock.Verify(m => m.RunAsync(), Times.Once());
         }
 
         [Fact]

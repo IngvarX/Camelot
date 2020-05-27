@@ -37,7 +37,7 @@ namespace Camelot.Services.Tests
             var directoryServiceMock = new Mock<IDirectoryService>();
             var filesServiceMock = new Mock<IFileService>();
             filesServiceMock
-                .Setup(m => m.CopyAsync(SourceName, DestinationName))
+                .Setup(m => m.CopyAsync(SourceName, DestinationName, false))
                 .Verifiable();
             var operationsFactory = new OperationsFactory(
                 _taskPool,
@@ -63,7 +63,7 @@ namespace Camelot.Services.Tests
             Assert.Equal(OperationState.Finished, copyOperation.OperationState);
 
             Assert.True(callbackCalled);
-            filesServiceMock.Verify(m => m.CopyAsync(SourceName, DestinationName), Times.Once());
+            filesServiceMock.Verify(m => m.CopyAsync(SourceName, DestinationName, false), Times.Once());
         }
 
         [Fact]
@@ -72,7 +72,7 @@ namespace Camelot.Services.Tests
          var directoryServiceMock = new Mock<IDirectoryService>();
          var filesServiceMock = new Mock<IFileService>();
          filesServiceMock
-             .Setup(m => m.CopyAsync(SourceName, DestinationName))
+             .Setup(m => m.CopyAsync(SourceName, DestinationName, false))
              .Verifiable();
          filesServiceMock
              .Setup(m => m.Remove(SourceName))
@@ -102,7 +102,7 @@ namespace Camelot.Services.Tests
          Assert.Equal(OperationState.Finished, moveOperation.OperationState);
 
          Assert.True(callbackCalled);
-         filesServiceMock.Verify(m => m.CopyAsync(SourceName, DestinationName), Times.Once());
+         filesServiceMock.Verify(m => m.CopyAsync(SourceName, DestinationName, false), Times.Once());
          filesServiceMock.Verify(m => m.Remove(SourceName), Times.Once());
         }
 

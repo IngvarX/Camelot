@@ -10,19 +10,19 @@ namespace Camelot.Services.Abstractions
         IReadOnlyCollection<FileModel> GetFiles(string directory);
 
         IReadOnlyCollection<FileModel> GetFiles(IReadOnlyCollection<string> files);
-        
+
         FileModel GetFile(string file);
 
         bool CheckIfExists(string file);
 
-        Task CopyAsync(string source, string destination);
+        Task CopyAsync(string source, string destination, bool overwrite = false);
 
         void Remove(string file);
 
         void Rename(string filePath, string newName);
 
         Task WriteTextAsync(string filePath, string text);
-        
+
         Task WriteBytesAsync(string filePath, byte[] bytes);
     }
 }

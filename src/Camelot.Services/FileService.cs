@@ -28,14 +28,14 @@ namespace Camelot.Services
 
         public IReadOnlyCollection<FileModel> GetFiles(IReadOnlyCollection<string> files) =>
             files.Select(CreateFrom).ToArray();
-        
+
         public FileModel GetFile(string file) => CreateFrom(file);
 
         public bool CheckIfExists(string file) => File.Exists(file);
 
-        public Task CopyAsync(string source, string destination)
+        public Task CopyAsync(string source, string destination, bool overwrite)
         {
-            File.Copy(source, destination);
+            File.Copy(source, destination, overwrite);
 
             return Task.CompletedTask;
         }
@@ -50,7 +50,7 @@ namespace Camelot.Services
             {
                 return;
             }
-            
+
             File.Move(filePath, newFilePath);
         }
 

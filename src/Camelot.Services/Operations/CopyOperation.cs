@@ -1,12 +1,12 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models.Enums;
+using Camelot.Services.Abstractions.Operations;
 
 namespace Camelot.Services.Operations
 {
-    public class CopyOperation : OperationBase
+    public class CopyOperation : OperationBase, IInternalOperation
     {
         private readonly IDirectoryService _directoryService;
         private readonly IFileService _fileService;
@@ -21,16 +21,6 @@ namespace Camelot.Services.Operations
             string sourceFile,
             string destinationFile)
         {
-            if (string.IsNullOrWhiteSpace(sourceFile))
-            {
-                throw new ArgumentNullException(nameof(sourceFile));
-            }
-
-            if (string.IsNullOrWhiteSpace(destinationFile))
-            {
-                throw new ArgumentNullException(nameof(destinationFile));
-            }
-
             _directoryService = directoryService;
             _fileService = fileService;
             _pathService = pathService;
@@ -38,13 +28,22 @@ namespace Camelot.Services.Operations
             _destinationFile = destinationFile;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken cancellationToken)
+        public async Task RunAsync(CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
             CreateOutputDirectoryIfNeeded(_destinationFile);
 
-            await _fileService.CopyAsync(_sourceFile, _destinationFile);
+            if (_fileService.CheckIfExists(_destinationFile))
+            {
+                OperationState = OperationState.Blocked;
+                // TODO: raise event
+                await CopyFileAsync();
+            }
+            else
+            {
+                await CopyFileAsync();
+            }
         }
 
         private void CreateOutputDirectoryIfNeeded(string destinationFile)
@@ -60,6 +59,21 @@ namespace Camelot.Services.Operations
             catch
             {
                 // ignore
+            }
+        }
+
+        private async Task CopyFileAsync()
+        {
+            try
+            {
+                OperationState = OperationState.InProgress;
+                await _fileService.CopyAsync(_sourceFile, _destinationFile);
+                OperationState = OperationState.Finished;
+            }
+            catch
+            {
+                // TODO: process
+                OperationState = OperationState.Failed;
             }
         }
     }

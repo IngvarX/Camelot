@@ -1,10 +1,12 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Models.Enums;
+using Camelot.Services.Abstractions.Operations;
 
 namespace Camelot.Services.Operations
 {
-    public class DeleteFileOperation : OperationBase
+    public class DeleteFileOperation : OperationBase, IInternalOperation
     {
         private readonly string _pathToRemove;
         private readonly IFileService _fileService;
@@ -17,9 +19,19 @@ namespace Camelot.Services.Operations
             _fileService = fileService;
         }
 
-        protected override Task ExecuteAsync(CancellationToken cancellationToken)
+        public Task RunAsync(CancellationToken cancellationToken)
         {
-            _fileService.Remove(_pathToRemove);
+            try
+            {
+                OperationState = OperationState.InProgress;
+                _fileService.Remove(_pathToRemove);
+                OperationState = OperationState.Finished;
+            }
+            catch
+            {
+                // TODO: process exception
+                OperationState = OperationState.Cancelled;
+            }
 
             return Task.CompletedTask;
         }

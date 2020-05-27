@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Camelot.Extensions;
 using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Models.EventArgs;
 using Camelot.Services.Abstractions.Models.Operations;
@@ -20,12 +19,13 @@ namespace Camelot.Services.Operations
         private int _finishedOperationsCount;
         private int _groupOperationsCount;
         private int _totalOperationsCount;
-        private CancellationToken _cancellationToken;
+        private CancellationTokenSource _cancellationTokenSource;
         private TaskCompletionSource<bool> _taskCompletionSource;
 
         public OperationInfo Info { get; }
 
-        public CompositeOperation(ITaskPool taskPool,
+        public CompositeOperation(
+            ITaskPool taskPool,
             IReadOnlyList<OperationGroup> groupedOperationsToExecute,
             OperationInfo operationInfo)
         {
@@ -34,28 +34,51 @@ namespace Camelot.Services.Operations
             Info = operationInfo;
         }
 
-        protected override Task ExecuteAsync(CancellationToken cancellationToken) =>
-            ExecuteOperationsAsync(_groupedOperationsToExecute.Select(g => g.Operations).ToArray(),
-                cancellationToken);
+        public async Task RunAsync()
+        {
+            if (OperationState != OperationState.NotStarted)
+            {
+                throw new InvalidOperationException();
+            }
+
+            OperationState = OperationState.InProgress;
+            var operations = _groupedOperationsToExecute.Select(g => g.Operations).ToArray();
+
+            await ExecuteOperationsAsync(operations);
+        }
+
+        public Task ContinueAsync(OperationContinuationOptions options)
+        {
+            if (OperationState != OperationState.Blocked)
+            {
+                throw new InvalidOperationException();
+            }
+
+            // TODO: add continue
+            return Task.CompletedTask;
+        }
 
         public async Task CancelAsync()
         {
+            _cancellationTokenSource.Cancel();
+
             var cancelOperations = _groupedOperationsToExecute
-                .Reverse()
+                .Reverse() // TODO: skip blocked operations
                 .Where((o, i) => o.Operations[i].OperationState != OperationState.NotStarted)
                 .Select(g => g.CancelOperations)
                 .ToArray();
 
-            await ExecuteOperationsAsync(cancelOperations, _cancellationToken);
+            await ExecuteOperationsAsync(cancelOperations);
 
             OperationState = OperationState.Cancelled;
         }
 
         private async Task ExecuteOperationsAsync(
-            IReadOnlyList<IReadOnlyList<IInternalOperation>> groupedOperationsToExecute,
-            CancellationToken cancellationToken)
+            IReadOnlyList<IReadOnlyList<IInternalOperation>> groupedOperationsToExecute)
         {
-            _cancellationToken = cancellationToken;
+            _cancellationTokenSource = new CancellationTokenSource();
+            var cancellationToken = _cancellationTokenSource.Token;
+
             _totalOperationsCount = groupedOperationsToExecute.Sum(g => g.Count);
 
             foreach (var operationsGroup in groupedOperationsToExecute)
@@ -79,6 +102,8 @@ namespace Camelot.Services.Operations
 
                 await _taskCompletionSource.Task;
             }
+
+            OperationState = OperationState.Finished;
         }
 
         private void CurrentOperationOnStateChanged(object sender, OperationStateChangedEventArgs e)
@@ -97,6 +122,7 @@ namespace Camelot.Services.Operations
                 _taskCompletionSource.SetResult(true);
             }
 
+            // TODO: fix
             CurrentProgress = (double) finishedOperationsCount / _totalOperationsCount;
         }
 
