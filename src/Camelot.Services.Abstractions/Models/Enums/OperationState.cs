@@ -7,6 +7,7 @@ namespace Camelot.Services.Abstractions.Models.Enums
         Paused,
         Blocked,
         Finished,
+        Cancelling,
         Cancelled,
         Failed
     }

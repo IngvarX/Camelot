@@ -37,8 +37,6 @@ namespace Camelot.Services.Operations
             if (_fileService.CheckIfExists(_destinationFile))
             {
                 OperationState = OperationState.Blocked;
-                // TODO: raise event
-                await CopyFileAsync();
             }
             else
             {

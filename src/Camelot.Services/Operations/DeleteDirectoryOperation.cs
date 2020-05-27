@@ -8,14 +8,14 @@ namespace Camelot.Services.Operations
 {
     public class DeleteDirectoryOperation : OperationBase, IInternalOperation
     {
-        private readonly string _pathToRemove;
+        private readonly string _directoryToRemove;
         private readonly IDirectoryService _directoryService;
 
         public DeleteDirectoryOperation(
-            string pathToRemove,
+            string directoryToRemove,
             IDirectoryService directoryService)
         {
-            _pathToRemove = pathToRemove;
+            _directoryToRemove = directoryToRemove;
             _directoryService = directoryService;
         }
 
@@ -24,7 +24,7 @@ namespace Camelot.Services.Operations
             try
             {
                 OperationState = OperationState.InProgress;
-                _directoryService.RemoveRecursively(_pathToRemove);
+                _directoryService.RemoveRecursively(_directoryToRemove);
                 OperationState = OperationState.Finished;
             }
             catch

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Camelot.Services.Abstractions.Extensions;
 using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Models.EventArgs;
 using Camelot.Services.Abstractions.Models.Operations;
@@ -61,10 +62,11 @@ namespace Camelot.Services.Operations
         public async Task CancelAsync()
         {
             _cancellationTokenSource.Cancel();
+            // TODO: wait?
 
             var cancelOperations = _groupedOperationsToExecute
-                .Reverse() // TODO: skip blocked operations
-                .Where((o, i) => o.Operations[i].OperationState != OperationState.NotStarted)
+                .Reverse()
+                .Where((o, i) => o.Operations[i].OperationState.IsCancellationAvailable())
                 .Select(g => g.CancelOperations)
                 .ToArray();
 
@@ -108,6 +110,7 @@ namespace Camelot.Services.Operations
 
         private void CurrentOperationOnStateChanged(object sender, OperationStateChangedEventArgs e)
         {
+            // TODO: failed?
             if (e.OperationState != OperationState.Finished)
             {
                 return;

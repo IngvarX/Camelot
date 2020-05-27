@@ -8,14 +8,14 @@ namespace Camelot.Services.Operations
 {
     public class DeleteFileOperation : OperationBase, IInternalOperation
     {
-        private readonly string _pathToRemove;
+        private readonly string _fileToRemove;
         private readonly IFileService _fileService;
 
         public DeleteFileOperation(
-            string pathToRemove,
+            string fileToRemove,
             IFileService fileService)
         {
-            _pathToRemove = pathToRemove;
+            _fileToRemove = fileToRemove;
             _fileService = fileService;
         }
 
@@ -24,7 +24,7 @@ namespace Camelot.Services.Operations
             try
             {
                 OperationState = OperationState.InProgress;
-                _fileService.Remove(_pathToRemove);
+                _fileService.Remove(_fileToRemove);
                 OperationState = OperationState.Finished;
             }
             catch
