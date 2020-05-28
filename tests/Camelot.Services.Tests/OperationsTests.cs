@@ -69,41 +69,41 @@ namespace Camelot.Services.Tests
         [Fact]
         public async Task TestMoveOperation()
         {
-         var directoryServiceMock = new Mock<IDirectoryService>();
-         var filesServiceMock = new Mock<IFileService>();
-         filesServiceMock
+            var directoryServiceMock = new Mock<IDirectoryService>();
+            var filesServiceMock = new Mock<IFileService>();
+            filesServiceMock
              .Setup(m => m.CopyAsync(SourceName, DestinationName, false))
              .Verifiable();
-         filesServiceMock
+            filesServiceMock
              .Setup(m => m.Remove(SourceName))
              .Verifiable();
 
-         var operationsFactory = new OperationsFactory(
+            var operationsFactory = new OperationsFactory(
              _taskPool,
              directoryServiceMock.Object,
              filesServiceMock.Object,
              _pathService);
-         var settings = new BinaryFileSystemOperationSettings(
+            var settings = new BinaryFileSystemOperationSettings(
              new string[] { },
              new[] {SourceName},
              new string[] { },
              new[] {SourceName},
              new Dictionary<string, string> {[SourceName] = DestinationName}
-         );
-         var moveOperation = operationsFactory.CreateMoveOperation(settings);
+            );
+            var moveOperation = operationsFactory.CreateMoveOperation(settings);
 
-         Assert.Equal(OperationState.NotStarted, moveOperation.State);
+            Assert.Equal(OperationState.NotStarted, moveOperation.State);
 
-         var callbackCalled = false;
-         moveOperation.StateChanged += (sender, args) => callbackCalled = true;
+            var callbackCalled = false;
+            moveOperation.StateChanged += (sender, args) => callbackCalled = true;
 
-         await moveOperation.RunAsync();
+            await moveOperation.RunAsync();
 
-         Assert.Equal(OperationState.Finished, moveOperation.State);
+            Assert.Equal(OperationState.Finished, moveOperation.State);
 
-         Assert.True(callbackCalled);
-         filesServiceMock.Verify(m => m.CopyAsync(SourceName, DestinationName, false), Times.Once());
-         filesServiceMock.Verify(m => m.Remove(SourceName), Times.Once());
+            Assert.True(callbackCalled);
+            filesServiceMock.Verify(m => m.CopyAsync(SourceName, DestinationName, false), Times.Once());
+            filesServiceMock.Verify(m => m.Remove(SourceName), Times.Once());
         }
 
         [Fact]

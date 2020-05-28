@@ -191,8 +191,8 @@ namespace Camelot.Services.Operations
             await task;
         }
 
+        // TODO: change if successful?
         private Task WrapAsync(Func<Task> taskFactory, OperationState expected, OperationState requested) =>
             taskFactory().ContinueWith(t => ChangeStateAsync(expected, requested));
-
     }
 }
