@@ -1,7 +1,5 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Camelot.Services.Abstractions.Models.EventArgs;
 
 namespace Camelot.Services.Abstractions.Operations
 {

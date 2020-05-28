@@ -4,7 +4,7 @@ namespace Camelot.Services.Abstractions.Models.EventArgs
     {
         public string Node { get; }
 
-        public FileEventArgsBase(string node)
+        protected FileEventArgsBase(string node)
         {
             Node = node;
         }

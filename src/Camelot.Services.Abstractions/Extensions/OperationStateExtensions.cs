@@ -5,15 +5,24 @@ namespace Camelot.Services.Abstractions.Extensions
 {
     public static class OperationStateExtensions
     {
-        public static bool IsCompleted(this OperationState operationState) =>
-            operationState != OperationState.NotStarted && operationState != OperationState.InProgress;
+        public static bool IsCompleted(this OperationState operationState)
+        {
+            var completedOperationStates = new[]
+            {
+                OperationState.Failed, OperationState.Cancelled, OperationState.Finished
+            };
+
+            return completedOperationStates.Contains(operationState);
+        }
 
         public static bool IsCancellationAvailable(this OperationState operationState)
         {
-            var operationWithoutCancellation = new[]
-                {OperationState.NotStarted, OperationState.Blocked, OperationState.Failed};
+            var operationStatesWithoutCancellation = new[]
+            {
+                OperationState.NotStarted, OperationState.Blocked, OperationState.Failed
+            };
 
-            return !operationWithoutCancellation.Contains(operationState);
+            return !operationStatesWithoutCancellation.Contains(operationState);
         }
     }
 }

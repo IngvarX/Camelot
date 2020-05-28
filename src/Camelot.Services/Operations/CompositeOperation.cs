@@ -18,7 +18,7 @@ namespace Camelot.Services.Operations
         private readonly IReadOnlyList<OperationGroup> _groupedOperationsToExecute;
 
         private int _finishedOperationsCount;
-        private int _groupOperationsCount;
+        private IReadOnlyList<IInternalOperation> _currentOperationsGroup;
         private int _totalOperationsCount;
         private CancellationTokenSource _cancellationTokenSource;
         private TaskCompletionSource<bool> _taskCompletionSource;
@@ -90,9 +90,9 @@ namespace Camelot.Services.Operations
                 _taskCompletionSource = new TaskCompletionSource<bool>();
 
                 _finishedOperationsCount = 0;
-                _groupOperationsCount = operationsGroup.Count;
+                _currentOperationsGroup = operationsGroup;
 
-                for (var i = 0; i < _groupOperationsCount; i++)
+                for (var i = 0; i < _currentOperationsGroup.Count; i++)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
@@ -110,33 +110,41 @@ namespace Camelot.Services.Operations
 
         private void CurrentOperationOnStateChanged(object sender, OperationStateChangedEventArgs e)
         {
-            // TODO: failed?
-            if (e.OperationState != OperationState.Finished)
+            if (e.OperationState.IsCompleted())
             {
-                return;
+                var operation = (IInternalOperation) sender;
+                UnsubscribeFromEvents(operation);
+
+                var finishedOperationsCount = Interlocked.Increment(ref _finishedOperationsCount);
+                if (finishedOperationsCount == _currentOperationsGroup.Count)
+                {
+                    _taskCompletionSource.SetResult(true);
+                }
             }
 
-            var operation = (IInternalOperation) sender;
-            UnsubscribeFromEvents(operation);
-
-            var finishedOperationsCount = Interlocked.Increment(ref _finishedOperationsCount);
-            if (finishedOperationsCount == _groupOperationsCount)
-            {
-                _taskCompletionSource.SetResult(true);
-            }
-
-            // TODO: fix
-            CurrentProgress = (double) finishedOperationsCount / _totalOperationsCount;
+            UpdateProgress();
         }
 
         private void SubscribeToEvents(IInternalOperation currentOperation)
         {
             currentOperation.StateChanged += CurrentOperationOnStateChanged;
+            currentOperation.ProgressChanged += CurrentOperationOnProgressChanged;
         }
+
 
         private void UnsubscribeFromEvents(IInternalOperation currentOperation)
         {
             currentOperation.StateChanged -= CurrentOperationOnStateChanged;
+            currentOperation.ProgressChanged += CurrentOperationOnProgressChanged;
+        }
+
+        private void CurrentOperationOnProgressChanged(object sender, OperationProgressChangedEventArgs e) =>
+            UpdateProgress();
+
+        private void UpdateProgress()
+        {
+            // TODO: prev group?
+            CurrentProgress = _currentOperationsGroup.Sum(o => o.CurrentProgress) / _totalOperationsCount;
         }
     }
 }
