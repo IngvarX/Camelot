@@ -83,7 +83,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
             _operationsViewModelsDictionary[operation] = viewModel;
 
             AreAnyOperationsAvailable = true;
-            if (operation.OperationState.IsCompleted())
+            if (operation.State.IsCompleted())
             {
                 RemoveOperation(operation);
             }

@@ -8,20 +8,20 @@ namespace Camelot.Services.Operations
 {
     public abstract class OperationBase : IOperationBase
     {
-        private OperationState _operationState;
+        private OperationState _state;
         private double _progress;
 
-        public OperationState OperationState
+        public OperationState State
         {
-            get => _operationState;
+            get => _state;
             protected set
             {
-                if (_operationState == value)
+                if (_state == value)
                 {
                     return;
                 }
 
-                _operationState = value;
+                _state = value;
                 var args = new OperationStateChangedEventArgs(value);
                 StateChanged.Raise(this, args);
             }

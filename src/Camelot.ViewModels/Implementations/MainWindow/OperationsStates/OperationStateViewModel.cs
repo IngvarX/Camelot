@@ -58,7 +58,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
             CancelCommand = ReactiveCommand.CreateFromTask(_operation.CancelAsync);
 
             SubscribeToEvents();
-            State = operation.OperationState;
+            State = operation.State;
         }
 
         private void SubscribeToEvents()

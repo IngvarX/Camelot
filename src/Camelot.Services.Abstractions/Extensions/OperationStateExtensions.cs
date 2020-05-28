@@ -17,12 +17,14 @@ namespace Camelot.Services.Abstractions.Extensions
 
         public static bool IsCancellationAvailable(this OperationState operationState)
         {
-            var operationStatesWithoutCancellation = new[]
+            var cancellableOperationStates = new[]
             {
-                OperationState.NotStarted, OperationState.Blocked, OperationState.Failed
+                OperationState.InProgress,
+                OperationState.Paused,
+                OperationState.Blocked
             };
 
-            return !operationStatesWithoutCancellation.Contains(operationState);
+            return cancellableOperationStates.Contains(operationState);
         }
     }
 }

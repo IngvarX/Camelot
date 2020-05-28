@@ -6,7 +6,7 @@ namespace Camelot.Services.Abstractions.Operations
 {
     public interface IOperationBase
     {
-        OperationState OperationState { get; }
+        OperationState State { get; }
 
         double CurrentProgress { get; }
 

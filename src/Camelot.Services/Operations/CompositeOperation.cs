@@ -35,44 +35,49 @@ namespace Camelot.Services.Operations
             Info = operationInfo;
         }
 
-        public async Task RunAsync()
-        {
-            if (OperationState != OperationState.NotStarted)
-            {
-                throw new InvalidOperationException();
-            }
+        public Task RunAsync() =>
+            ChangeStateAsync(OperationState.NotStarted, OperationState.InProgress);
 
-            OperationState = OperationState.InProgress;
+        public Task ContinueAsync(OperationContinuationOptions options) =>
+            ChangeStateAsync(OperationState.Blocked, OperationState.InProgress, options);
+
+        public Task CancelAsync() =>
+            ChangeStateAsync(State, OperationState.Cancelling);
+
+        private async Task StartAsync()
+        {
             var operations = _groupedOperationsToExecute.Select(g => g.Operations).ToArray();
 
             await ExecuteOperationsAsync(operations);
         }
 
-        public Task ContinueAsync(OperationContinuationOptions options)
+        private async Task UnblockAsync(OperationContinuationOptions options)
         {
-            if (OperationState != OperationState.Blocked)
-            {
-                throw new InvalidOperationException();
-            }
 
-            // TODO: add continue
-            return Task.CompletedTask;
         }
 
-        public async Task CancelAsync()
+        private async Task PauseAsync()
+        {
+
+        }
+
+        private async Task UnpauseAsync()
+        {
+
+        }
+
+        private async Task StopAsync()
         {
             _cancellationTokenSource.Cancel();
             // TODO: wait?
 
             var cancelOperations = _groupedOperationsToExecute
                 .Reverse()
-                .Where((o, i) => o.Operations[i].OperationState.IsCancellationAvailable())
+                .Where((o, i) => o.Operations[i].State.IsCancellationAvailable())
                 .Select(g => g.CancelOperations)
                 .ToArray();
 
             await ExecuteOperationsAsync(cancelOperations);
-
-            OperationState = OperationState.Cancelled;
         }
 
         private async Task ExecuteOperationsAsync(
@@ -104,8 +109,6 @@ namespace Camelot.Services.Operations
 
                 await _taskCompletionSource.Task;
             }
-
-            OperationState = OperationState.Finished;
         }
 
         private void CurrentOperationOnStateChanged(object sender, OperationStateChangedEventArgs e)
@@ -146,5 +149,50 @@ namespace Camelot.Services.Operations
             // TODO: prev group?
             CurrentProgress = _currentOperationsGroup.Sum(o => o.CurrentProgress) / _totalOperationsCount;
         }
+
+        private async Task ChangeStateAsync(
+            OperationState expectedState,
+            OperationState requestedState,
+            OperationContinuationOptions options = null)
+        {
+            var task = (State, requestedState) switch
+            {
+                _ when State != expectedState =>
+                    throw new InvalidOperationException($"Inner state {State} is not {expectedState}"),
+
+                (OperationState.NotStarted, OperationState.InProgress) =>
+                    WrapAsync(StartAsync, OperationState.InProgress, OperationState.Finished),
+
+                _ when State.IsCancellationAvailable() && requestedState is OperationState.Cancelling =>
+                    WrapAsync(StopAsync, OperationState.Cancelling, OperationState.Cancelled),
+
+                (OperationState.InProgress, OperationState.Failed) => Task.CompletedTask, // TODO: cleanup?
+
+                // (OperationState.InProgress, OperationState.Paused) =>
+                //     WrapAsync(PauseAsync, OperationState.P, OperationState.Cancelled),
+
+                (OperationState.Blocked, OperationState.InProgress) when options is null =>
+                    throw new ArgumentNullException(nameof(options)),
+
+                (OperationState.Blocked, OperationState.InProgress) =>
+                    WrapAsync(() => UnblockAsync(options), OperationState.InProgress, OperationState.Finished),
+
+                (OperationState.Paused, OperationState.InProgress) =>
+                    WrapAsync(UnpauseAsync, OperationState.InProgress, OperationState.Finished),
+
+                (OperationState.Cancelling, OperationState.Cancelled) => Task.CompletedTask,
+                (OperationState.InProgress, OperationState.Finished) => Task.CompletedTask,
+                (OperationState.InProgress, OperationState.Blocked) => Task.CompletedTask,
+
+                _ => throw new InvalidOperationException($"{State} has no transition to {requestedState}")
+            };
+
+            State = requestedState;
+            await task;
+        }
+
+        private Task WrapAsync(Func<Task> taskFactory, OperationState expected, OperationState requested) =>
+            taskFactory().ContinueWith(t => ChangeStateAsync(expected, requested));
+
     }
 }

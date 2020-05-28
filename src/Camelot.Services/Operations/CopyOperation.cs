@@ -36,7 +36,7 @@ namespace Camelot.Services.Operations
 
             if (_fileService.CheckIfExists(_destinationFile))
             {
-                OperationState = OperationState.Blocked;
+                State = OperationState.Blocked;
             }
             else
             {
@@ -64,14 +64,14 @@ namespace Camelot.Services.Operations
         {
             try
             {
-                OperationState = OperationState.InProgress;
+                State = OperationState.InProgress;
                 await _fileService.CopyAsync(_sourceFile, _destinationFile);
-                OperationState = OperationState.Finished;
+                State = OperationState.Finished;
             }
             catch
             {
                 // TODO: process
-                OperationState = OperationState.Failed;
+                State = OperationState.Failed;
             }
         }
     }

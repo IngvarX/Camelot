@@ -23,14 +23,14 @@ namespace Camelot.Services.Operations
         {
             try
             {
-                OperationState = OperationState.InProgress;
+                State = OperationState.InProgress;
                 _fileService.Remove(_fileToRemove);
-                OperationState = OperationState.Finished;
+                State = OperationState.Finished;
             }
             catch
             {
                 // TODO: process exception
-                OperationState = OperationState.Cancelled;
+                State = OperationState.Cancelled;
             }
 
             return Task.CompletedTask;
