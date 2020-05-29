@@ -155,7 +155,7 @@ namespace Camelot.Services.Operations
             OperationState requestedState,
             OperationContinuationOptions options = null)
         {
-            var task = (State, requestedState) switch
+            var taskFactory = (State, requestedState) switch
             {
                 _ when State != expectedState =>
                     throw new InvalidOperationException($"Inner state {State} is not {expectedState}"),
@@ -164,7 +164,7 @@ namespace Camelot.Services.Operations
                     WrapAsync(StartAsync, OperationState.InProgress, OperationState.Finished),
 
                 _ when State.IsCancellationAvailable() && requestedState is OperationState.Cancelling =>
-                WrapAsync(StopAsync, OperationState.Cancelling, OperationState.Cancelled),
+                    WrapAsync(StopAsync, OperationState.Cancelling, OperationState.Cancelled),
 
                 (OperationState.InProgress, OperationState.Failed) => () => Task.CompletedTask, // TODO: cleanup?
 
@@ -175,10 +175,10 @@ namespace Camelot.Services.Operations
                     throw new ArgumentNullException(nameof(options)),
 
                 (OperationState.Blocked, OperationState.InProgress) =>
-                WrapAsync(() => UnblockAsync(options), OperationState.InProgress, OperationState.Finished),
+                    WrapAsync(() => UnblockAsync(options), OperationState.InProgress, OperationState.Finished),
 
                 (OperationState.Paused, OperationState.InProgress) =>
-                WrapAsync(UnpauseAsync, OperationState.InProgress, OperationState.Finished),
+                    WrapAsync(UnpauseAsync, OperationState.InProgress, OperationState.Finished),
 
                 (OperationState.Cancelling, OperationState.Cancelled) => () => Task.CompletedTask,
                 (OperationState.InProgress, OperationState.Finished) => () => Task.CompletedTask,
@@ -187,18 +187,17 @@ namespace Camelot.Services.Operations
                 _ => throw new InvalidOperationException($"{State} has no transition to {requestedState}")
             };
 
-            await Task.Delay(1000);
-
             State = requestedState;
-            await task();
+            await taskFactory();
         }
 
         // TODO: change if successful?
-        private  Func<Task> WrapAsync(Func<Task> taskFactory, OperationState expected, OperationState requested) =>
+        private Func<Task> WrapAsync(Func<Task> taskFactory, OperationState expected, OperationState requested) =>
             async () =>
             {
-                await taskFactory();
+                var task = taskFactory();
 
+                await task;
                 await ChangeStateAsync(expected, requested);
             };
     }
