@@ -6,7 +6,7 @@ using Camelot.Services.Abstractions.Operations;
 
 namespace Camelot.Services.Operations
 {
-    public abstract class OperationWithProgress : IOperationWithProgress
+    public abstract class OperationBase : IOperationWithProgress, IStatefulOperation
     {
         private OperationState _state;
         private double _progress;

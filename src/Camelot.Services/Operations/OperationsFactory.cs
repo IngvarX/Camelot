@@ -37,7 +37,9 @@ namespace Camelot.Services.Operations
             var operationInfo = Create(OperationType.Copy, settings.InputTopLevelDirectories,
                 settings.InputTopLevelFiles, settings.SourceDirectory, settings.TargetDirectory);
 
-            return CreateCompositeOperation(operations, operationInfo);
+            var compositeOperation = CreateCompositeOperation(operations, operationInfo);
+
+            return CreateOperation(compositeOperation);
         }
 
         public IOperation CreateMoveOperation(BinaryFileSystemOperationSettings settings)
@@ -53,7 +55,9 @@ namespace Camelot.Services.Operations
             var operationInfo = Create(OperationType.Move, settings.InputTopLevelDirectories,
                 settings.InputTopLevelFiles, settings.SourceDirectory, settings.TargetDirectory);
 
-            return CreateCompositeOperation(operations, operationInfo);
+            var compositeOperation = CreateCompositeOperation(operations, operationInfo);
+
+            return CreateOperation(compositeOperation);
         }
 
         public IOperation CreateDeleteOperation(UnaryFileSystemOperationSettings settings)
@@ -65,7 +69,9 @@ namespace Camelot.Services.Operations
             var operationInfo = Create(OperationType.Delete, settings.TopLevelFiles,
                 settings.TopLevelDirectories, settings.SourceDirectory);
 
-            return CreateCompositeOperation(operations, operationInfo);
+            var compositeOperation = CreateCompositeOperation(operations, operationInfo);
+
+            return CreateOperation(compositeOperation);
         }
 
         private IInternalOperation[] CreateCopyOperations(IReadOnlyDictionary<string, string> filesDictionary) =>
@@ -94,10 +100,13 @@ namespace Camelot.Services.Operations
         private IInternalOperation CreateDeleteDirectoryOperation(string filePath) =>
             new DeleteDirectoryOperation(filePath, _directoryService);
 
-        private IOperation CreateCompositeOperation(
+        private ICompositeOperation CreateCompositeOperation(
             IReadOnlyList<OperationGroup> operations,
             OperationInfo operationInfo) =>
             new CompositeOperation(_taskPool, operations, operationInfo);
+
+        private IOperation CreateOperation(ICompositeOperation compositeOperation) =>
+            new AsyncOperationStateMachine(compositeOperation);
 
         private static OperationInfo Create(OperationType operationType, IReadOnlyList<string> directories,
             IReadOnlyList<string> files, string sourceDirectory = null, string targetDirectory = null) =>

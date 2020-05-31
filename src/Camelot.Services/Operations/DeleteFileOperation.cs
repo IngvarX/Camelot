@@ -6,7 +6,7 @@ using Camelot.Services.Abstractions.Operations;
 
 namespace Camelot.Services.Operations
 {
-    public class DeleteFileOperation : OperationWithProgress, IInternalOperation
+    public class DeleteFileOperation : OperationBase, IInternalOperation
     {
         private readonly string _fileToRemove;
         private readonly IFileService _fileService;
