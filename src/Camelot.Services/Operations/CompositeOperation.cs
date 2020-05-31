@@ -12,7 +12,7 @@ using Camelot.TaskPool.Interfaces;
 
 namespace Camelot.Services.Operations
 {
-    public class CompositeOperation : OperationBase, IOperation
+    public class CompositeOperation : OperationWithProgress, IOperation
     {
         private readonly ITaskPool _taskPool;
         private readonly IReadOnlyList<OperationGroup> _groupedOperationsToExecute;

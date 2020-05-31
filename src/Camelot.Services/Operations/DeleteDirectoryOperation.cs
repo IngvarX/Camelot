@@ -6,7 +6,7 @@ using Camelot.Services.Abstractions.Operations;
 
 namespace Camelot.Services.Operations
 {
-    public class DeleteDirectoryOperation : OperationBase, IInternalOperation
+    public class DeleteDirectoryOperation : OperationWithProgress, IInternalOperation
     {
         private readonly string _directoryToRemove;
         private readonly IDirectoryService _directoryService;

@@ -6,7 +6,7 @@ using Camelot.Services.Abstractions.Operations;
 
 namespace Camelot.Services.Operations
 {
-    public class CopyOperation : OperationBase, IInternalOperation
+    public class CopyOperation : OperationWithProgress, IInternalOperation
     {
         private readonly IDirectoryService _directoryService;
         private readonly IFileService _fileService;

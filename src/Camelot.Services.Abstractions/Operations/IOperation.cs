@@ -1,16 +1,7 @@
-using System.Threading.Tasks;
-using Camelot.Services.Abstractions.Models.Operations;
-
 namespace Camelot.Services.Abstractions.Operations
 {
-    public interface IOperation : IOperationBase
+    public interface IOperation : ISuspendableOperation, IStatefulOperation, IOperationWithProgress
     {
-        OperationInfo Info { get; }
 
-        Task RunAsync();
-
-        Task ContinueAsync(OperationContinuationOptions options);
-
-        Task CancelAsync();
     }
 }

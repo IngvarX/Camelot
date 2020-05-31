@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Camelot.Services.Abstractions.Operations
 {
-    public interface IInternalOperation : IOperationBase
+    public interface IInternalOperation : IOperationWithProgress, IStatefulOperation
     {
         Task RunAsync(CancellationToken cancellationToken);
     }
