@@ -50,6 +50,12 @@ namespace Camelot.Services.Operations
         public Task ContinueAsync(OperationContinuationOptions options) =>
             ChangeStateAsync(OperationState.Blocked, OperationState.InProgress, options);
 
+        public Task PauseAsync() =>
+            ChangeStateAsync(OperationState.InProgress, OperationState.Pausing);
+
+        public Task UnpauseAsync() =>
+            ChangeStateAsync(OperationState.Paused, OperationState.Unpausing);
+
         public Task CancelAsync() =>
             ChangeStateAsync(State, OperationState.Cancelling);
 
@@ -74,21 +80,23 @@ namespace Camelot.Services.Operations
 
                 (OperationState.InProgress, OperationState.Failed) => GetCompletedTask, // TODO: cleanup?
 
-                // (OperationState.InProgress, OperationState.Paused) =>
-                //     WrapAsync(PauseAsync, OperationState.P, OperationState.Cancelled),
+                (OperationState.InProgress, OperationState.Pausing) =>
+                    WrapAsync(_compositeOperation.PauseAsync, OperationState.Pausing, OperationState.Paused),
 
                 (OperationState.Blocked, OperationState.InProgress) when options is null =>
                     throw new ArgumentNullException(nameof(options)),
 
                 (OperationState.Blocked, OperationState.InProgress) =>
                     WrapAsync(() => _compositeOperation.ContinueAsync(options), OperationState.InProgress, OperationState.Finished),
-                //
-                // (OperationState.Paused, OperationState.InProgress) =>
-                //     WrapAsync(UnpauseAsync, OperationState.InProgress, OperationState.Finished),
+
+                (OperationState.Paused, OperationState.InProgress) =>
+                    WrapAsync(_compositeOperation.UnpauseAsync, OperationState.InProgress, OperationState.Finished),
 
                 (OperationState.Cancelling, OperationState.Cancelled) => GetCompletedTask,
                 (OperationState.InProgress, OperationState.Finished) => GetCompletedTask,
                 (OperationState.InProgress, OperationState.Blocked) => GetCompletedTask,
+                (OperationState.Unpausing, OperationState.InProgress) => GetCompletedTask,
+                (OperationState.Pausing, OperationState.Paused) => GetCompletedTask,
 
                 _ => throw new InvalidOperationException($"{State} has no transition to {requestedState}")
             };

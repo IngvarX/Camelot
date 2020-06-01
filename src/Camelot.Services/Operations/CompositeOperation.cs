@@ -45,6 +45,16 @@ namespace Camelot.Services.Operations
 
         }
 
+        public Task PauseAsync()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task UnpauseAsync()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public async Task CancelAsync()
         {
             _cancellationTokenSource.Cancel();

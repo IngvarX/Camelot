@@ -11,6 +11,10 @@ namespace Camelot.Services.Abstractions.Operations
 
         Task ContinueAsync(OperationContinuationOptions options);
 
+        Task PauseAsync();
+
+        Task UnpauseAsync();
+
         Task CancelAsync();
     }
 }

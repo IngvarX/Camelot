@@ -5,6 +5,8 @@ namespace Camelot.Services.Abstractions.Models.Enums
         NotStarted,
         InProgress,
         Paused,
+        Pausing,
+        Unpausing,
         Blocked,
         Finished,
         Cancelling,
