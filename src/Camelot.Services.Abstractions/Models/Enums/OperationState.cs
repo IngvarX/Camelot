@@ -11,6 +11,7 @@ namespace Camelot.Services.Abstractions.Models.Enums
         Finished,
         Cancelling,
         Cancelled,
-        Failed
+        Failed,
+        Skipped
     }
 }

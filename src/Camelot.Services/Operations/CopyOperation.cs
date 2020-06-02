@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
@@ -16,7 +18,9 @@ namespace Camelot.Services.Operations
         private readonly string _sourceFile;
         private readonly string _destinationFile;
 
-        public IReadOnlyCollection<string> BlockedFiles { get; }
+        private readonly IList<string> _blockedFiles;
+
+        public IReadOnlyCollection<string> BlockedFiles => _blockedFiles.ToArray();
 
         public CopyOperation(
             IDirectoryService directoryService,
@@ -31,7 +35,7 @@ namespace Camelot.Services.Operations
             _sourceFile = sourceFile;
             _destinationFile = destinationFile;
 
-            BlockedFiles = new HashSet<string>();
+            _blockedFiles = new List<string>();
         }
 
         public async Task RunAsync(CancellationToken cancellationToken)
@@ -42,18 +46,43 @@ namespace Camelot.Services.Operations
 
             if (_fileService.CheckIfExists(_destinationFile))
             {
-
+                _blockedFiles.Add(_sourceFile);
                 State = OperationState.Blocked;
             }
             else
             {
-                await CopyFileAsync();
+                await CopyFileAsync(_destinationFile);
             }
         }
 
-        public Task ContinueAsync(OperationContinuationOptions options)
+        public async Task ContinueAsync(OperationContinuationOptions options)
         {
-            throw new System.NotImplementedException();
+            switch (options.Mode)
+            {
+                case OperationContinuationMode.Skip:
+                    State = OperationState.Skipped;
+                    break;
+                case OperationContinuationMode.Overwrite:
+                    await CopyFileAsync(_destinationFile, true);
+                    break;
+                case OperationContinuationMode.OverwriteOlder:
+                    var sourceFileDateTime = _fileService.GetFile(_sourceFile).LastWriteTime;;
+                    var destinationFileDateTime = _fileService.GetFile(_destinationFile).LastWriteTime;
+                    if (sourceFileDateTime > destinationFileDateTime)
+                    {
+                        await CopyFileAsync(_destinationFile, true);
+                    }
+                    else
+                    {
+                        State = OperationState.Skipped;
+                    }
+                    break;
+                case OperationContinuationMode.Rename:
+                    await CopyFileAsync(options.NewFileName);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(options.Mode));
+            }
         }
 
         private void CreateOutputDirectoryIfNeeded(string destinationFile)
@@ -72,12 +101,12 @@ namespace Camelot.Services.Operations
             }
         }
 
-        private async Task CopyFileAsync()
+        private async Task CopyFileAsync(string destinationFile, bool force = false)
         {
             try
             {
                 State = OperationState.InProgress;
-                await _fileService.CopyAsync(_sourceFile, _destinationFile);
+                await _fileService.CopyAsync(_sourceFile, destinationFile, force);
                 State = OperationState.Finished;
             }
             catch

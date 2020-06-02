@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -18,7 +19,7 @@ namespace Camelot.Services.Operations
         private readonly ITaskPool _taskPool;
         private readonly IReadOnlyList<OperationGroup> _groupedOperationsToExecute;
 
-        private readonly ISet<string> _blockedFiles;
+        private readonly IDictionary<string, ISelfBlockingOperation> _blockedOperationsDictionary;
 
         private int _finishedOperationsCount;
         private IReadOnlyList<IInternalOperation> _currentOperationsGroup;
@@ -28,7 +29,7 @@ namespace Camelot.Services.Operations
 
         public OperationInfo Info { get; }
 
-        public IReadOnlyCollection<string> BlockedFiles => _blockedFiles.ToArray();
+        public IReadOnlyCollection<string> BlockedFiles => _blockedOperationsDictionary.Keys.ToArray();
 
         public event EventHandler<EventArgs> Blocked;
 
@@ -39,8 +40,8 @@ namespace Camelot.Services.Operations
         {
             _taskPool = taskPool;
             _groupedOperationsToExecute = groupedOperationsToExecute;
-            _blockedFiles = new HashSet<string>();
 
+            _blockedOperationsDictionary = new ConcurrentDictionary<string, ISelfBlockingOperation>();
             Info = operationInfo;
         }
 
@@ -53,7 +54,9 @@ namespace Camelot.Services.Operations
 
         public async Task ContinueAsync(OperationContinuationOptions options)
         {
+            var operation = _blockedOperationsDictionary[options.FilePath];
 
+            await operation.ContinueAsync(options);
         }
 
         public Task PauseAsync()
@@ -119,7 +122,9 @@ namespace Camelot.Services.Operations
             {
                 var operation = (ISelfBlockingOperation) sender;
 
-                operation.BlockedFiles.ForEach(f =>_blockedFiles.Add(f));
+                operation
+                    .BlockedFiles
+                    .ForEach(f => _blockedOperationsDictionary.Add(f, operation));
                 Blocked.Raise(this, EventArgs.Empty);
 
                 return;

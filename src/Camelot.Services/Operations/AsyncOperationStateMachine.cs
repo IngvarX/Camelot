@@ -113,13 +113,15 @@ namespace Camelot.Services.Operations
         }
 
         // TODO: change if successful?
-        private Func<Task> WrapAsync(Func<Task> taskFactory, OperationState expected, OperationState requested) =>
+        private Func<Task> WrapAsync(Func<Task> taskFactory,
+            OperationState expectedState, OperationState requestedState) =>
             async () =>
             {
-                var task = taskFactory();
-
-                await task;
-                await ChangeStateAsync(expected, requested);
+                await taskFactory();
+                if (State == expectedState)
+                {
+                    await ChangeStateAsync(expectedState, requestedState);
+                }
             };
 
         private static Task GetCompletedTask() => Task.CompletedTask;

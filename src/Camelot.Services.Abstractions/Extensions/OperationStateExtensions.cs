@@ -9,7 +9,10 @@ namespace Camelot.Services.Abstractions.Extensions
         {
             var completedOperationStates = new[]
             {
-                OperationState.Failed, OperationState.Cancelled, OperationState.Finished
+                OperationState.Failed,
+                OperationState.Cancelled,
+                OperationState.Finished,
+                OperationState.Skipped
             };
 
             return completedOperationStates.Contains(operationState);
@@ -21,7 +24,7 @@ namespace Camelot.Services.Abstractions.Extensions
             {
                 OperationState.InProgress,
                 OperationState.Paused,
-                OperationState.Blocked
+                OperationState.Finished
             };
 
             return cancellableOperationStates.Contains(operationState);
