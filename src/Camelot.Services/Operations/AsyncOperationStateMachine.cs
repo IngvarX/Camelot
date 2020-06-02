@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Camelot.Extensions;
 using Camelot.Services.Abstractions.Extensions;
@@ -29,6 +30,8 @@ namespace Camelot.Services.Operations
 
         public OperationInfo Info  => _compositeOperation.Info;
 
+        public IReadOnlyList<string> BlockedFiles => _compositeOperation.BlockedFiles;
+
         public double CurrentProgress => _compositeOperation.CurrentProgress;
 
         public event EventHandler<OperationStateChangedEventArgs> StateChanged;
@@ -46,6 +49,7 @@ namespace Camelot.Services.Operations
 
         public Task RunAsync() =>
             ChangeStateAsync(OperationState.NotStarted, OperationState.InProgress);
+
 
         public Task ContinueAsync(OperationContinuationOptions options) =>
             ChangeStateAsync(OperationState.Blocked, OperationState.InProgress, options);

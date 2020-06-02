@@ -23,6 +23,8 @@ namespace Camelot.Services.Operations
 
         public OperationInfo Info { get; }
 
+        public IReadOnlyList<string> BlockedFiles { get; }
+
         public CompositeOperation(
             ITaskPool taskPool,
             IReadOnlyList<OperationGroup> groupedOperationsToExecute,
@@ -31,6 +33,7 @@ namespace Camelot.Services.Operations
             _taskPool = taskPool;
             _groupedOperationsToExecute = groupedOperationsToExecute;
             Info = operationInfo;
+            BlockedFiles = new List<string>();
         }
 
         public async Task RunAsync()

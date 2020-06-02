@@ -105,7 +105,7 @@ namespace Camelot.Services.Operations
             OperationInfo operationInfo) =>
             new CompositeOperation(_taskPool, operations, operationInfo);
 
-        private IOperation CreateOperation(ICompositeOperation compositeOperation) =>
+        private static IOperation CreateOperation(ICompositeOperation compositeOperation) =>
             new AsyncOperationStateMachine(compositeOperation);
 
         private static OperationInfo Create(OperationType operationType, IReadOnlyList<string> directories,
