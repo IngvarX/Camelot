@@ -1,8 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Camelot.Extensions;
 using Camelot.Services.Abstractions.Extensions;
+using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Models.EventArgs;
 using Camelot.Services.Abstractions.Models.Operations;
 using Camelot.Services.Abstractions.Operations;
@@ -15,6 +18,8 @@ namespace Camelot.Services.Operations
         private readonly ITaskPool _taskPool;
         private readonly IReadOnlyList<OperationGroup> _groupedOperationsToExecute;
 
+        private readonly ISet<string> _blockedFiles;
+
         private int _finishedOperationsCount;
         private IReadOnlyList<IInternalOperation> _currentOperationsGroup;
         private int _totalOperationsCount;
@@ -23,7 +28,9 @@ namespace Camelot.Services.Operations
 
         public OperationInfo Info { get; }
 
-        public IReadOnlyList<string> BlockedFiles { get; }
+        public IReadOnlyCollection<string> BlockedFiles => _blockedFiles.ToArray();
+
+        public event EventHandler<EventArgs> Blocked;
 
         public CompositeOperation(
             ITaskPool taskPool,
@@ -32,8 +39,9 @@ namespace Camelot.Services.Operations
         {
             _taskPool = taskPool;
             _groupedOperationsToExecute = groupedOperationsToExecute;
+            _blockedFiles = new HashSet<string>();
+
             Info = operationInfo;
-            BlockedFiles = new List<string>();
         }
 
         public async Task RunAsync()
@@ -105,7 +113,19 @@ namespace Camelot.Services.Operations
 
         private void CurrentOperationOnStateChanged(object sender, OperationStateChangedEventArgs e)
         {
-            if (e.OperationState.IsCompleted())
+            var state = e.OperationState;
+
+            if (state is OperationState.Blocked)
+            {
+                var operation = (ISelfBlockingOperation) sender;
+
+                operation.BlockedFiles.ForEach(f =>_blockedFiles.Add(f));
+                Blocked.Raise(this, EventArgs.Empty);
+
+                return;
+            }
+
+            if (state.IsCompleted())
             {
                 var operation = (IInternalOperation) sender;
                 UnsubscribeFromEvents(operation);

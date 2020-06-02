@@ -1,18 +1,22 @@
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models.Enums;
+using Camelot.Services.Abstractions.Models.Operations;
 using Camelot.Services.Abstractions.Operations;
 
 namespace Camelot.Services.Operations
 {
-    public class CopyOperation : OperationBase, IInternalOperation
+    public class CopyOperation : OperationBase, IInternalOperation, ISelfBlockingOperation
     {
         private readonly IDirectoryService _directoryService;
         private readonly IFileService _fileService;
         private readonly IPathService _pathService;
         private readonly string _sourceFile;
         private readonly string _destinationFile;
+
+        public IReadOnlyCollection<string> BlockedFiles { get; }
 
         public CopyOperation(
             IDirectoryService directoryService,
@@ -26,6 +30,8 @@ namespace Camelot.Services.Operations
             _pathService = pathService;
             _sourceFile = sourceFile;
             _destinationFile = destinationFile;
+
+            BlockedFiles = new HashSet<string>();
         }
 
         public async Task RunAsync(CancellationToken cancellationToken)
@@ -36,12 +42,18 @@ namespace Camelot.Services.Operations
 
             if (_fileService.CheckIfExists(_destinationFile))
             {
+
                 State = OperationState.Blocked;
             }
             else
             {
                 await CopyFileAsync();
             }
+        }
+
+        public Task ContinueAsync(OperationContinuationOptions options)
+        {
+            throw new System.NotImplementedException();
         }
 
         private void CreateOutputDirectoryIfNeeded(string destinationFile)

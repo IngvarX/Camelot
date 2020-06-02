@@ -1,7 +1,12 @@
+using System.Threading.Tasks;
+
 namespace Camelot.Services.Abstractions.Operations
 {
-    public interface IOperation : ICompositeOperation, IStatefulOperation, ISelfBlockingOperation
+    public interface IOperation : ISuspendableOperation, IOperationWithProgress, IOperationWithInfo,
+        ISelfBlockingOperation, IStatefulOperation
     {
+        Task RunAsync();
 
+        Task CancelAsync();
     }
 }

@@ -30,7 +30,7 @@ namespace Camelot.Services.Operations
 
         public OperationInfo Info  => _compositeOperation.Info;
 
-        public IReadOnlyList<string> BlockedFiles => _compositeOperation.BlockedFiles;
+        public IReadOnlyCollection<string> BlockedFiles => _compositeOperation.BlockedFiles;
 
         public double CurrentProgress => _compositeOperation.CurrentProgress;
 
@@ -45,6 +45,8 @@ namespace Camelot.Services.Operations
         public AsyncOperationStateMachine(ICompositeOperation compositeOperation)
         {
             _compositeOperation = compositeOperation;
+
+            SubscribeToEvents();
         }
 
         public Task RunAsync() =>
@@ -121,5 +123,13 @@ namespace Camelot.Services.Operations
             };
 
         private static Task GetCompletedTask() => Task.CompletedTask;
+
+        private void SubscribeToEvents()
+        {
+            _compositeOperation.Blocked += CompositeOperationOnBlocked;
+        }
+
+        private void CompositeOperationOnBlocked(object sender, EventArgs e) =>
+            ChangeStateAsync(OperationState.InProgress, OperationState.Blocked).Forget();
     }
 }
