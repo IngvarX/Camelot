@@ -20,6 +20,7 @@ namespace Camelot.Services.Operations
         private readonly IReadOnlyList<OperationGroup> _groupedOperationsToExecute;
 
         private readonly IDictionary<string, ISelfBlockingOperation> _blockedOperationsDictionary;
+        private readonly IList<(string SourceFilePath, string DestinationFilePath)> _blockedFiles;
 
         private int _finishedOperationsCount;
         private IReadOnlyList<IInternalOperation> _currentOperationsGroup;
@@ -29,7 +30,7 @@ namespace Camelot.Services.Operations
 
         public OperationInfo Info { get; }
 
-        public IReadOnlyCollection<string> BlockedFiles => _blockedOperationsDictionary.Keys.ToArray();
+        public IReadOnlyList<(string SourceFilePath, string DestinationFilePath)> BlockedFiles => _blockedFiles.ToArray();
 
         public event EventHandler<EventArgs> Blocked;
 
@@ -42,6 +43,7 @@ namespace Camelot.Services.Operations
             _groupedOperationsToExecute = groupedOperationsToExecute;
 
             _blockedOperationsDictionary = new ConcurrentDictionary<string, ISelfBlockingOperation>();
+            _blockedFiles = new List<(string SourceFilePath, string DestinationFilePath)>();
             Info = operationInfo;
         }
 
@@ -124,7 +126,11 @@ namespace Camelot.Services.Operations
 
                 operation
                     .BlockedFiles
-                    .ForEach(f => _blockedOperationsDictionary.Add(f, operation));
+                    .ForEach(f =>
+                    {
+                        _blockedOperationsDictionary.Add(f.SourceFilePath, operation);
+                        _blockedFiles.Add(f);
+                    });
                 Blocked.Raise(this, EventArgs.Empty);
 
                 return;

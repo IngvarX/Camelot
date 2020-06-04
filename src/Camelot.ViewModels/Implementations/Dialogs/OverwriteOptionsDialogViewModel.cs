@@ -12,8 +12,6 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         private FileModel _sourceFileModel;
         private FileModel _destinationFileModel;
 
-
-
         public OverwriteOptionsDialogViewModel(
             IFileService fileService)
         {
@@ -23,7 +21,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         public override void Activate(OverwriteOptionsNavigationParameter parameter)
         {
             _sourceFileModel = _fileService.GetFile(parameter.SourceFilePath);
-            //_destinationFileModel = _fileService.GetFile(parameter.DestinationFilePath);
+            _destinationFileModel = _fileService.GetFile(parameter.DestinationFilePath);
         }
     }
 }

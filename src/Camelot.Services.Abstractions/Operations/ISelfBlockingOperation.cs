@@ -6,7 +6,7 @@ namespace Camelot.Services.Abstractions.Operations
 {
     public interface ISelfBlockingOperation
     {
-        IReadOnlyCollection<string> BlockedFiles { get; }
+        IReadOnlyList<(string SourceFilePath, string DestinationFilePath)> BlockedFiles { get; }
 
         Task ContinueAsync(OperationContinuationOptions options);
     }

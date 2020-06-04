@@ -169,9 +169,9 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
 
         private async Task ProcessBlockedOperationAsync(IOperation operation)
         {
-            var blockedFiles = operation.BlockedFiles.Last();
+            var (sourceFilePath, destinationFilePath) = operation.BlockedFiles.Last();
             var navigationParameter = new OverwriteOptionsNavigationParameter(
-                blockedFiles, null);
+                sourceFilePath, destinationFilePath);
 
             var dialogResult = await _dialogService.ShowDialogAsync<OverwriteOptionsDialogResult, OverwriteOptionsNavigationParameter>(
                 nameof(OverwriteOptionsDialogViewModel), navigationParameter);

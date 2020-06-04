@@ -30,7 +30,8 @@ namespace Camelot.Services.Operations
 
         public OperationInfo Info  => _compositeOperation.Info;
 
-        public IReadOnlyCollection<string> BlockedFiles => _compositeOperation.BlockedFiles;
+        public IReadOnlyList<(string SourceFilePath, string DestinationFilePath)> BlockedFiles =>
+            _compositeOperation.BlockedFiles;
 
         public double CurrentProgress => _compositeOperation.CurrentProgress;
 
