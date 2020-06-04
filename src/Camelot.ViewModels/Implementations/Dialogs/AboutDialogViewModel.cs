@@ -14,7 +14,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         public string ApplicationVersion { get; }
 
         public string Maintainers => string.Join(", ", _aboutDialogConfiguration.Maintainers);
-        
+
         public ICommand OpenRepositoryCommand { get; }
 
         public AboutDialogViewModel(
@@ -29,9 +29,6 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             OpenRepositoryCommand = ReactiveCommand.Create(OpenRepository);
         }
 
-        private void OpenRepository()
-        {
-            _resourceOpeningService.Open(_aboutDialogConfiguration.RepositoryUrl);
-        }
+        private void OpenRepository() => _resourceOpeningService.Open(_aboutDialogConfiguration.RepositoryUrl);
     }
 }

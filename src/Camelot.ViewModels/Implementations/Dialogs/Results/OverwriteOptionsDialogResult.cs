@@ -1,8 +1,9 @@
 using Camelot.Services.Abstractions.Models.Operations;
+using Camelot.ViewModels.Services;
 
 namespace Camelot.ViewModels.Implementations.Dialogs.Results
 {
-    public class OverwriteOptionsDialogResult
+    public class OverwriteOptionsDialogResult : DialogResultBase
     {
         public OperationContinuationOptions Options { get; }
 

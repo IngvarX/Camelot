@@ -24,6 +24,7 @@ namespace Camelot.Services.Implementations
         }
 
         public async Task<TResult> ShowDialogAsync<TResult>(string viewModelName)
+            where TResult : DialogResultBase
         {
             var window = CreateView<TResult>(viewModelName);
             var viewModel = CreateViewModel<TResult>(viewModelName);
@@ -33,6 +34,7 @@ namespace Camelot.Services.Implementations
         }
 
         public async Task<TResult> ShowDialogAsync<TResult, TParameter>(string viewModelName, TParameter parameter)
+            where TResult : DialogResultBase
             where TParameter : NavigationParameterBase
         {
             var window = CreateView<TResult>(viewModelName);
@@ -51,11 +53,11 @@ namespace Camelot.Services.Implementations
             return await ShowDialogAsync(window);
         }
 
-        public Task ShowDialogAsync(string viewModelName) => ShowDialogAsync<object>(viewModelName);
+        public Task ShowDialogAsync(string viewModelName) => ShowDialogAsync<DialogResultBase>(viewModelName);
 
         public Task ShowDialogAsync<TParameter>(string viewModelName, TParameter parameter)
             where TParameter : NavigationParameterBase =>
-                ShowDialogAsync<object, TParameter>(viewModelName, parameter);
+                ShowDialogAsync<DialogResultBase, TParameter>(viewModelName, parameter);
 
         private static void Bind(IDataContextProvider window, object viewModel)
         {
@@ -63,6 +65,7 @@ namespace Camelot.Services.Implementations
         }
 
         private static DialogWindowBase<TResult> CreateView<TResult>(string viewModelName)
+            where TResult : DialogResultBase
         {
             var viewType = GetViewType(viewModelName);
             if (viewType is null)
@@ -74,6 +77,7 @@ namespace Camelot.Services.Implementations
         }
 
         private static DialogViewModelBase<TResult> CreateViewModel<TResult>(string viewModelName)
+            where TResult : DialogResultBase
         {
             var viewModelType = GetViewModelType(viewModelName);
             if (viewModelType is null)
@@ -110,13 +114,14 @@ namespace Camelot.Services.Implementations
             return viewTypes.SingleOrDefault(t => t.Name == viewName);
         }
 
-        private async Task<T> ShowDialogAsync<T>(DialogWindowBase<T> window)
+        private async Task<TResult> ShowDialogAsync<TResult>(DialogWindowBase<TResult> window)
+            where TResult : DialogResultBase
         {
-            var mainWindow = (MainWindow)_mainWindowProvider.GetMainWindow();
+            var mainWindow = (MainWindow) _mainWindowProvider.GetMainWindow();
             window.Owner = mainWindow;
 
             mainWindow.ShowOverlay();
-            var result = await window.ShowDialog<T>(mainWindow);
+            var result = await window.ShowDialog<TResult>(mainWindow);
             mainWindow.HideOverlay();
 
             return result;

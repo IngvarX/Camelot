@@ -2,11 +2,11 @@ using System;
 
 namespace Camelot.ViewModels.Implementations.Dialogs
 {
-    public class DialogResultEventArgs<T> : EventArgs
+    public class DialogResultEventArgs<TResult> : EventArgs
     {
-        public T Result { get; }
+        public TResult Result { get; }
 
-        public DialogResultEventArgs(T result)
+        public DialogResultEventArgs(TResult result)
         {
             Result = result;
         }

@@ -2,15 +2,17 @@ using System;
 using Avalonia;
 using Avalonia.Controls;
 using Camelot.ViewModels.Implementations.Dialogs;
+using Camelot.ViewModels.Services;
 
 namespace Camelot.Views.Main.Dialogs
 {
     public class DialogWindowBase<TResult> : Window
+        where TResult : DialogResultBase
     {
         private Window ParentWindow => (Window) Owner;
 
         protected DialogViewModelBase<TResult> ViewModel => (DialogViewModelBase<TResult>) DataContext;
-        
+
         protected DialogWindowBase()
         {
             SubscribeToViewEvents();
@@ -18,14 +20,13 @@ namespace Camelot.Views.Main.Dialogs
 
         protected virtual void OnOpened()
         {
-            
         }
 
         private void OnOpened(object sender, EventArgs e)
         {
             LockSize();
             CenterDialog();
-            
+
             OnOpened();
         }
 
@@ -74,13 +75,13 @@ namespace Camelot.Views.Main.Dialogs
         {
             UnsubscribeFromViewModelEvents();
             UnsubscribeFromViewEvents();
-            
+
             Close(args.Result);
         }
     }
 
-    public class DialogWindowBase : DialogWindowBase<object>
+    public class DialogWindowBase : DialogWindowBase<DialogResultBase>
     {
-        
+
     }
 }

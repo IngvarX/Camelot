@@ -1,9 +1,11 @@
 using System;
 using Camelot.Extensions;
+using Camelot.ViewModels.Services;
 
 namespace Camelot.ViewModels.Implementations.Dialogs
 {
     public class DialogViewModelBase<TResult> : ViewModelBase
+        where TResult : DialogResultBase
     {
         public event EventHandler<DialogResultEventArgs<TResult>> CloseRequested;
 
@@ -15,8 +17,8 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         }
     }
 
-    public class DialogViewModelBase : DialogViewModelBase<object>
+    public class DialogViewModelBase : DialogViewModelBase<DialogResultBase>
     {
-        
+
     }
 }

@@ -1,9 +1,10 @@
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using Camelot.ViewModels.Implementations.Dialogs.Results;
 
 namespace Camelot.Views.Main.Dialogs
 {
-    public class CreateDirectoryDialog : DialogWindowBase<string>
+    public class CreateDirectoryDialog : DialogWindowBase<CreateDirectoryDialogResult>
     {
         public CreateDirectoryDialog()
         {
@@ -14,7 +15,7 @@ namespace Camelot.Views.Main.Dialogs
         {
             var textBox = this.FindControl<TextBox>("DirectoryNameTextBox");
             textBox.Focus();
-            
+
             base.OnOpened();
         }
 

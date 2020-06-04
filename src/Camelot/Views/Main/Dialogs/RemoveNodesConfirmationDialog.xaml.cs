@@ -1,9 +1,10 @@
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using Camelot.ViewModels.Implementations.Dialogs.Results;
 
 namespace Camelot.Views.Main.Dialogs
 {
-    public class RemoveNodesConfirmationDialog : DialogWindowBase<bool>
+    public class RemoveNodesConfirmationDialog : DialogWindowBase<RemoveNodesConfirmationDialogResult>
     {
         public RemoveNodesConfirmationDialog()
         {

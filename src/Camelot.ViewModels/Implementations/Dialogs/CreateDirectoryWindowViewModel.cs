@@ -1,9 +1,10 @@
 using System.Windows.Input;
+using Camelot.ViewModels.Implementations.Dialogs.Results;
 using ReactiveUI;
 
 namespace Camelot.ViewModels.Implementations.Dialogs
 {
-    public class CreateDirectoryDialogViewModel : DialogViewModelBase<string>
+    public class CreateDirectoryDialogViewModel : DialogViewModelBase<CreateDirectoryDialogResult>
     {
         private string _directoryName;
 
@@ -19,11 +20,19 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 
         public CreateDirectoryDialogViewModel()
         {
+            // TODO: validate if dir exists
             var canCreate = this.WhenAnyValue(x => x.DirectoryName,
                 name => !string.IsNullOrWhiteSpace(name));
 
-            CreateCommand = ReactiveCommand.Create(() => Close(_directoryName), canCreate);
+            CreateCommand = ReactiveCommand.Create(CreateDirectory, canCreate);
             CancelCommand = ReactiveCommand.Create(() => Close());
+        }
+
+        private void CreateDirectory()
+        {
+            var result = new CreateDirectoryDialogResult(_directoryName);
+
+            Close(result);
         }
     }
 }

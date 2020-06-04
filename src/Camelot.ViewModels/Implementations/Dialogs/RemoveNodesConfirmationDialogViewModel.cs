@@ -3,11 +3,12 @@ using System.Linq;
 using System.Windows.Input;
 using Camelot.Services.Abstractions;
 using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
+using Camelot.ViewModels.Implementations.Dialogs.Results;
 using ReactiveUI;
 
 namespace Camelot.ViewModels.Implementations.Dialogs
 {
-    public class RemoveNodesConfirmationDialogViewModel : ParameterizedDialogViewModelBase<bool, NodesRemovingNavigationParameter>
+    public class RemoveNodesConfirmationDialogViewModel : ParameterizedDialogViewModelBase<RemoveNodesConfirmationDialogResult, NodesRemovingNavigationParameter>
     {
         private readonly IPathService _pathService;
         private const int ShowedFilesLimit = 4;
@@ -46,7 +47,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             _pathService = pathService;
             _files = Enumerable.Empty<string>();
 
-            OkCommand = ReactiveCommand.Create(() => Close(true));
+            OkCommand = ReactiveCommand.Create(() => Close(new RemoveNodesConfirmationDialogResult(true)));
             CancelCommand = ReactiveCommand.Create(() => Close());
         }
 

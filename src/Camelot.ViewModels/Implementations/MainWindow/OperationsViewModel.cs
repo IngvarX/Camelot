@@ -7,6 +7,7 @@ using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Operations;
 using Camelot.ViewModels.Implementations.Dialogs;
 using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
+using Camelot.ViewModels.Implementations.Dialogs.Results;
 using Camelot.ViewModels.Interfaces.MainWindow;
 using Camelot.ViewModels.Services.Interfaces;
 using ReactiveUI;
@@ -72,10 +73,10 @@ namespace Camelot.ViewModels.Implementations.MainWindow
 
         private async Task CreateNewDirectoryAsync()
         {
-            var directoryName = await _dialogService.ShowDialogAsync<string>(nameof(CreateDirectoryDialogViewModel));
-            if (!string.IsNullOrEmpty(directoryName))
+            var result = await _dialogService.ShowDialogAsync<CreateDirectoryDialogResult>(nameof(CreateDirectoryDialogViewModel));
+            if (!string.IsNullOrEmpty(result?.DirectoryName))
             {
-                _operationsService.CreateDirectory(_directoryService.SelectedDirectory, directoryName);
+                _operationsService.CreateDirectory(_directoryService.SelectedDirectory, result.DirectoryName);
             }
         }
 
@@ -88,8 +89,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             }
 
             var navigationParameter = new NodesRemovingNavigationParameter(filesToRemove, false);
-            var isConfirmed = await ShowRemoveConfirmationDialogAsync(navigationParameter);
-            if (isConfirmed)
+            var result = await ShowRemoveConfirmationDialogAsync(navigationParameter);
+            if (result.IsConfirmed)
             {
                  _operationsService.RemoveAsync(filesToRemove).Forget();
             }
@@ -104,15 +105,15 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             }
 
             var navigationParameter = new NodesRemovingNavigationParameter(filesToRemove, true);
-            var isConfirmed = await ShowRemoveConfirmationDialogAsync(navigationParameter);
-            if (isConfirmed)
+            var result = await ShowRemoveConfirmationDialogAsync(navigationParameter);
+            if (result.IsConfirmed)
             {
                 _trashCanService.MoveToTrashAsync(filesToRemove).Forget();
             }
         }
 
-        private Task<bool> ShowRemoveConfirmationDialogAsync(NodesRemovingNavigationParameter navigationParameter) =>
-            _dialogService.ShowDialogAsync<bool, NodesRemovingNavigationParameter>(
+        private Task<RemoveNodesConfirmationDialogResult> ShowRemoveConfirmationDialogAsync(NodesRemovingNavigationParameter navigationParameter) =>
+            _dialogService.ShowDialogAsync<RemoveNodesConfirmationDialogResult, NodesRemovingNavigationParameter>(
                 nameof(RemoveNodesConfirmationDialogViewModel), navigationParameter);
 
         private IReadOnlyList<string> GetSelectedFiles() =>
