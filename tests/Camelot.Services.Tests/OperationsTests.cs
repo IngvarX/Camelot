@@ -8,7 +8,6 @@ using Camelot.Services.Abstractions.Models.Operations;
 using Camelot.Services.Abstractions.Operations;
 using Camelot.Services.Operations;
 using Camelot.TaskPool.Interfaces;
-using JetBrains.Annotations;
 using Moq;
 using Xunit;
 

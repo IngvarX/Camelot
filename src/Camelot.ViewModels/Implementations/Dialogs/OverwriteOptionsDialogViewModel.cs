@@ -1,3 +1,4 @@
+using System.Windows.Input;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
 using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
@@ -11,6 +12,12 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 
         private FileModel _sourceFileModel;
         private FileModel _destinationFileModel;
+
+        public ICommand CancelCommand { get; }
+
+        public ICommand SkipCommand { get; }
+
+        public ICommand ReplaceCommand { get; }
 
         public OverwriteOptionsDialogViewModel(
             IFileService fileService)
