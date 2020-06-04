@@ -10,7 +10,7 @@ namespace ApplicationDispatcher.Implementations
         private static Dispatcher Dispatcher => Dispatcher.UIThread;
 
         public void Dispatch(Action action) => Dispatcher.Post(action);
-        
-        public void Dispatch(Func<Task> task) => Dispatcher.InvokeAsync(task);
+
+        public Task DispatchAsync(Func<Task> task) => Dispatcher.InvokeAsync(task);
     }
 }

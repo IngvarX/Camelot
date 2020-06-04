@@ -6,7 +6,7 @@ using Camelot.Extensions;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Operations;
 using Camelot.ViewModels.Implementations.Dialogs;
-using Camelot.ViewModels.Implementations.NavigationParameters;
+using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
 using Camelot.ViewModels.Interfaces.MainWindow;
 using Camelot.ViewModels.Services.Interfaces;
 using ReactiveUI;

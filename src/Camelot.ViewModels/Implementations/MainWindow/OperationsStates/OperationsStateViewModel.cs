@@ -2,17 +2,23 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using ApplicationDispatcher.Interfaces;
 using Camelot.Services.Abstractions.Extensions;
 using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Models.EventArgs;
 using Camelot.Services.Abstractions.Operations;
 using Camelot.ViewModels.Factories.Interfaces;
+using Camelot.ViewModels.Implementations.Dialogs;
+using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
+using Camelot.ViewModels.Implementations.Dialogs.Results;
 using Camelot.ViewModels.Interfaces.MainWindow.OperationsStates;
+using Camelot.ViewModels.Services.Interfaces;
 using ReactiveUI;
 
 namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
 {
+    // TODO: rename
     public class OperationsStateViewModel : ViewModelBase, IOperationsStateViewModel
     {
         private const int MaximumFinishedOperationsCount = 10;
@@ -20,6 +26,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
         private readonly IOperationsStateService _operationsStateService;
         private readonly IOperationStateViewModelFactory _operationStateViewModelFactory;
         private readonly IApplicationDispatcher _applicationDispatcher;
+        private readonly IDialogService _dialogService;
 
         private readonly ObservableCollection<IOperationStateViewModel> _activeOperations;
         private readonly Queue<IOperationStateViewModel> _finishedOperationsQueue;
@@ -53,11 +60,13 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
         public OperationsStateViewModel(
             IOperationsStateService operationsStateService,
             IOperationStateViewModelFactory operationStateViewModelFactory,
-            IApplicationDispatcher applicationDispatcher)
+            IApplicationDispatcher applicationDispatcher,
+            IDialogService dialogService)
         {
             _operationsStateService = operationsStateService;
             _operationStateViewModelFactory = operationStateViewModelFactory;
             _applicationDispatcher = applicationDispatcher;
+            _dialogService = dialogService;
 
             _activeOperations = new ObservableCollection<IOperationStateViewModel>();
             _finishedOperationsQueue = new Queue<IOperationStateViewModel>(MaximumFinishedOperationsCount);
@@ -92,7 +101,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
         private void RemoveOperation(IOperation operation)
         {
             UnsubscribeFromEvents(operation);
-
 
             var isKeyAvailable = _operationsViewModelsDictionary.TryGetValue(operation, out var viewModel);
             if (!isKeyAvailable)
@@ -129,12 +137,17 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
             operation.ProgressChanged -= OperationOnProgressChanged;
         }
 
-        private void OperationOnStateChanged(object sender, OperationStateChangedEventArgs e)
+        private async void OperationOnStateChanged(object sender, OperationStateChangedEventArgs e)
         {
             var operation = (IOperation) sender;
             if (e.OperationState == OperationState.Finished || e.OperationState == OperationState.Cancelled)
             {
                 _applicationDispatcher.Dispatch(() => RemoveOperation(operation));
+            }
+
+            if (e.OperationState == OperationState.Blocked)
+            {
+                await _applicationDispatcher.DispatchAsync(() => ProcessBlockedOperationAsync(operation));
             }
 
             // TODO: change status
@@ -152,6 +165,17 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
 
             var averageProgress = activeOperations.Average(o => o.CurrentProgress);
             TotalProgress = (int) (averageProgress * 100);
+        }
+
+        private async Task ProcessBlockedOperationAsync(IOperation operation)
+        {
+            var blockedFiles = operation.BlockedFiles.Last();
+            var navigationParameter = new OverwriteOptionsNavigationParameter(
+                blockedFiles, null);
+
+            var dialogResult = await _dialogService.ShowDialogAsync<OverwriteOptionsDialogResult, OverwriteOptionsNavigationParameter>(
+                nameof(OverwriteOptionsDialogViewModel), navigationParameter);
+
         }
 
         private IOperation[] GetActiveOperations() =>

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Camelot.ViewModels.Services;
 
-namespace Camelot.ViewModels.Implementations.NavigationParameters
+namespace Camelot.ViewModels.Implementations.Dialogs.NavigationParameters
 {
     public class NodesRemovingNavigationParameter : NavigationParameterBase
     {

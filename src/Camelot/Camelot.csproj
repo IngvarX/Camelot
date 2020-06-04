@@ -56,6 +56,12 @@
     <Compile Update="Views\Main\OperationsStates\OperationsStateView.xaml.cs">
       <DependentUpon>OperationsStateView.xaml</DependentUpon>
     </Compile>
+    <AvaloniaResource Update="Views\Main\Dialogs\OverwriteOptionsDialog.xaml">
+      <SubType>Designer</SubType>
+    </AvaloniaResource>
+    <Compile Update="Views\Main\Dialogs\OverwriteOptionsDialog.xaml.cs">
+      <DependentUpon>OverwriteOptionsDialog.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.9.10" />

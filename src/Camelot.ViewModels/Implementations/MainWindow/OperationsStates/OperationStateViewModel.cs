@@ -85,6 +85,12 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
             {
                 case OperationState.NotStarted:
                 case OperationState.InProgress:
+                case OperationState.Blocked:
+                case OperationState.Paused:
+                case OperationState.Pausing:
+                case OperationState.Unpausing:
+                case OperationState.Cancelling:
+                case OperationState.Skipped:
                     break;
                 case OperationState.Finished:
                 case OperationState.Cancelled:

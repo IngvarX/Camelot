@@ -7,6 +7,6 @@ namespace ApplicationDispatcher.Interfaces
     {
         void Dispatch(Action action);
 
-        void Dispatch(Func<Task> task);
+        Task DispatchAsync(Func<Task> task);
     }
 }
