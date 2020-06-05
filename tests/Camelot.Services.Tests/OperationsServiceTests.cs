@@ -14,8 +14,10 @@ namespace Camelot.Services.Tests
     public class OperationsServiceTests
     {
         private const string FileName = "FileName";
+        private const string NewFileName = "NewFileName";
         private const string SelectedDirectoryName = "SelectedDirectoryName";
         private const string DirectoryName = "DirectoryName";
+        private const string NewDirectoryName = "NewDirectoryName";
 
         private static string CurrentDirectory => Directory.GetCurrentDirectory();
 
@@ -221,6 +223,64 @@ namespace Camelot.Services.Tests
             operationsService.CreateDirectory(SelectedDirectoryName, DirectoryName);
 
             directoryServiceMock.Verify(m => m.Create(fullDirectoryPath), Times.Once());
+        }
+
+        [Fact]
+        public void TestFileRenaming()
+        {
+            var operationsFactoryMock = new Mock<IOperationsFactory>();
+            var directoryServiceMock = new Mock<IDirectoryService>();
+            var fileOpeningServiceMock = new Mock<IResourceOpeningService>();
+            var fileServiceMock = new Mock<IFileService>();
+            fileServiceMock
+                .Setup(m => m.Rename(FileName, NewFileName))
+                .Verifiable();
+            fileServiceMock
+                .Setup(m => m.CheckIfExists(FileName))
+                .Returns(true);
+            var fileOperationsStateServiceMock = new Mock<IOperationsStateService>();
+            var pathServiceMock = new Mock<IPathService>();
+
+            IOperationsService operationsService = new OperationsService(
+                operationsFactoryMock.Object,
+                directoryServiceMock.Object,
+                fileOpeningServiceMock.Object,
+                fileServiceMock.Object,
+                pathServiceMock.Object,
+                fileOperationsStateServiceMock.Object);
+
+            operationsService.Rename(FileName, NewFileName);
+
+            fileServiceMock.Verify(m => m.Rename(FileName, NewFileName), Times.Once());
+        }
+
+        [Fact]
+        public void TestDirectoryRenaming()
+        {
+            var operationsFactoryMock = new Mock<IOperationsFactory>();
+            var directoryServiceMock = new Mock<IDirectoryService>();
+            directoryServiceMock
+                .Setup(m => m.Rename(DirectoryName, NewDirectoryName))
+                .Verifiable();
+            directoryServiceMock
+                .Setup(m => m.CheckIfExists(DirectoryName))
+                .Returns(true);
+            var fileOpeningServiceMock = new Mock<IResourceOpeningService>();
+            var fileServiceMock = new Mock<IFileService>();
+            var fileOperationsStateServiceMock = new Mock<IOperationsStateService>();
+            var pathServiceMock = new Mock<IPathService>();
+
+            IOperationsService operationsService = new OperationsService(
+                operationsFactoryMock.Object,
+                directoryServiceMock.Object,
+                fileOpeningServiceMock.Object,
+                fileServiceMock.Object,
+                pathServiceMock.Object,
+                fileOperationsStateServiceMock.Object);
+
+            operationsService.Rename(DirectoryName, NewDirectoryName);
+
+            directoryServiceMock.Verify(m => m.Rename(DirectoryName, NewDirectoryName), Times.Once());
         }
     }
 }

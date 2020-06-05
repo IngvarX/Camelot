@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Camelot.Extensions;
-using Camelot.Services.Abstractions.Models.Enums;
+using Camelot.Services.Abstractions.Extensions;
 using Camelot.Services.Abstractions.Models.EventArgs;
 using Camelot.Services.Abstractions.Operations;
 
@@ -42,7 +42,7 @@ namespace Camelot.Services.Operations
         private void OperationOnStateChanged(object sender, OperationStateChangedEventArgs e)
         {
             var operation = (IOperation) sender;
-            if (e.OperationState == OperationState.Finished || e.OperationState == OperationState.Cancelled)
+            if (e.OperationState.IsCompleted())
             {
                 RemoveOperation(operation);
             }

@@ -53,7 +53,6 @@ namespace Camelot.Services.Operations
         public Task RunAsync() =>
             ChangeStateAsync(OperationState.NotStarted, OperationState.InProgress);
 
-
         public Task ContinueAsync(OperationContinuationOptions options) =>
             ChangeStateAsync(OperationState.Blocked, OperationState.InProgress, options);
 
@@ -132,7 +131,7 @@ namespace Camelot.Services.Operations
             _compositeOperation.Blocked += CompositeOperationOnBlocked;
         }
 
-        private void CompositeOperationOnBlocked(object sender, EventArgs e) =>
-            ChangeStateAsync(OperationState.InProgress, OperationState.Blocked).Forget();
+        private async void CompositeOperationOnBlocked(object sender, EventArgs e) =>
+            await ChangeStateAsync(OperationState.InProgress, OperationState.Blocked);
     }
 }
