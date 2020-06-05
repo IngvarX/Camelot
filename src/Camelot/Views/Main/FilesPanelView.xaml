@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:main="clr-namespace:Camelot.Views.Main"
              xmlns:filePanels="clr-namespace:Camelot.ViewModels.Implementations.MainWindow.FilePanels;assembly=Camelot.ViewModels"
+             xmlns:controls="clr-namespace:Camelot.Views.Main.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Camelot.Views.Main.FilesPanelView">
 
@@ -56,7 +57,7 @@
             
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <main:TabView />
+                    <controls:TabView />
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
@@ -126,7 +127,7 @@
                         <Button Command="{Binding SortFilesCommand}"
                                 CommandParameter="{x:Static filePanels:SortingColumn.Name}">
                             <Grid ColumnDefinitions="*,Auto,Auto,*">
-                                <main:DataGridHeaderArrowView IsVisible="{Binding SelectedTab.SortingViewModel.IsSortingByNameEnabled}" />
+                                <controls:DataGridHeaderArrowView IsVisible="{Binding SelectedTab.SortingViewModel.IsSortingByNameEnabled}" />
                                 
                                 <TextBlock Grid.Column="2" Classes="dataGridColumnHeaderTextBlock" Text="Name" />
                             </Grid>
@@ -178,7 +179,7 @@
                         <Button Command="{Binding SortFilesCommand}"
                                 CommandParameter="{x:Static filePanels:SortingColumn.Extension}">
                             <Grid ColumnDefinitions="*,Auto,Auto,*">
-                                <main:DataGridHeaderArrowView IsVisible="{Binding SelectedTab.SortingViewModel.IsSortingByExtensionEnabled}" />
+                                <controls:DataGridHeaderArrowView IsVisible="{Binding SelectedTab.SortingViewModel.IsSortingByExtensionEnabled}" />
                                 
                                 <TextBlock Grid.Column="2" Classes="dataGridColumnHeaderTextBlock" Text="Extension" />
                             </Grid>
@@ -208,7 +209,7 @@
                         <Button Command="{Binding SortFilesCommand}"
                                 CommandParameter="{x:Static filePanels:SortingColumn.Size}">
                             <Grid ColumnDefinitions="*,Auto,Auto,*">
-                                <main:DataGridHeaderArrowView IsVisible="{Binding SelectedTab.SortingViewModel.IsSortingBySizeEnabled}" />
+                                <controls:DataGridHeaderArrowView IsVisible="{Binding SelectedTab.SortingViewModel.IsSortingBySizeEnabled}" />
                                 
                                 <TextBlock Grid.Column="2" Classes="dataGridColumnHeaderTextBlock" Text="Size" />
                             </Grid>
@@ -237,7 +238,7 @@
                         <Button Command="{Binding SortFilesCommand}"
                                 CommandParameter="{x:Static filePanels:SortingColumn.Date}">
                             <Grid ColumnDefinitions="*,Auto,Auto,*">
-                                <main:DataGridHeaderArrowView IsVisible="{Binding SelectedTab.SortingViewModel.IsSortingByDateEnabled}" />
+                                <controls:DataGridHeaderArrowView IsVisible="{Binding SelectedTab.SortingViewModel.IsSortingByDateEnabled}" />
                                 
                                 <TextBlock Grid.Column="2" Classes="dataGridColumnHeaderTextBlock" Text="Date" />
                             </Grid>

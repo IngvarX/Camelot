@@ -176,6 +176,14 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
             var dialogResult = await _dialogService.ShowDialogAsync<OverwriteOptionsDialogResult, OverwriteOptionsNavigationParameter>(
                 nameof(OverwriteOptionsDialogViewModel), navigationParameter);
 
+            if (dialogResult is null)
+            {
+                await operation.CancelAsync();
+            }
+            else
+            {
+                await operation.ContinueAsync(dialogResult.Options);
+            }
         }
 
         private IOperation[] GetActiveOperations() =>

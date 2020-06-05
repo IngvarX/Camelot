@@ -1,11 +1,11 @@
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace Camelot.Views.Main
+namespace Camelot.Views.Main.Controls
 {
-    public class DataGridHeaderArrowView :  UserControl
+    public class TabView : UserControl
     {
-        public DataGridHeaderArrowView()
+        public TabView()
         {
             InitializeComponent();
         }

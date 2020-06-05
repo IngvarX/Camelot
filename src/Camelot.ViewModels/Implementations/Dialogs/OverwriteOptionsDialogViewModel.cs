@@ -1,17 +1,57 @@
 using System.Windows.Input;
 using Camelot.Services.Abstractions;
-using Camelot.Services.Abstractions.Models;
+using Camelot.Services.Abstractions.Models.Enums;
+using Camelot.Services.Abstractions.Models.Operations;
+using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
 using Camelot.ViewModels.Implementations.Dialogs.Results;
+using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
+using ReactiveUI;
 
 namespace Camelot.ViewModels.Implementations.Dialogs
 {
     public class OverwriteOptionsDialogViewModel : ParameterizedDialogViewModelBase<OverwriteOptionsDialogResult, OverwriteOptionsNavigationParameter>
     {
         private readonly IFileService _fileService;
+        private readonly IFileSystemNodeViewModelFactory _fileSystemNodeViewModelFactory;
+        private readonly IFileNameGenerationService _fileNameGenerationService;
+        private readonly IPathService _pathService;
 
-        private FileModel _sourceFileModel;
-        private FileModel _destinationFileModel;
+        private IFileSystemNodeViewModel _sourceFileViewModel;
+        private IFileSystemNodeViewModel _destinationFileViewModel;
+        private bool _shouldApplyForAll;
+        private string _newFileName;
+        private string _destinationDirectoryName;
+
+        public bool ShouldApplyForAll
+        {
+            get => _shouldApplyForAll;
+            set => this.RaiseAndSetIfChanged(ref _shouldApplyForAll, value);
+        }
+
+        public string NewFileName
+        {
+            get => _newFileName;
+            set => this.RaiseAndSetIfChanged(ref _newFileName, value);
+        }
+
+        public string DestinationDirectoryName
+        {
+            get => _destinationDirectoryName;
+            set => this.RaiseAndSetIfChanged(ref _destinationDirectoryName, value);
+        }
+
+        public IFileSystemNodeViewModel SourceFileViewModel
+        {
+            get => _sourceFileViewModel;
+            set => this.RaiseAndSetIfChanged(ref _sourceFileViewModel, value);
+        }
+
+        public IFileSystemNodeViewModel DestinationFileViewModel
+        {
+            get => _sourceFileViewModel;
+            set => this.RaiseAndSetIfChanged(ref _destinationFileViewModel, value);
+        }
 
         public ICommand CancelCommand { get; }
 
@@ -19,16 +59,52 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 
         public ICommand ReplaceCommand { get; }
 
+        public ICommand ReplaceIfOlderCommand { get; }
+
         public OverwriteOptionsDialogViewModel(
-            IFileService fileService)
+            IFileService fileService,
+            IFileSystemNodeViewModelFactory fileSystemNodeViewModelFactory,
+            IFileNameGenerationService fileNameGenerationService,
+            IPathService pathService)
         {
             _fileService = fileService;
+            _fileSystemNodeViewModelFactory = fileSystemNodeViewModelFactory;
+            _fileNameGenerationService = fileNameGenerationService;
+            _pathService = pathService;
+
+            CancelCommand = ReactiveCommand.Create(() => Close());
+            SkipCommand = ReactiveCommand.Create(Skip);
+            ReplaceCommand = ReactiveCommand.Create(Replace);
+            ReplaceIfOlderCommand = ReactiveCommand.Create(ReplaceIfOlder);
         }
 
         public override void Activate(OverwriteOptionsNavigationParameter parameter)
         {
-            _sourceFileModel = _fileService.GetFile(parameter.SourceFilePath);
-            _destinationFileModel = _fileService.GetFile(parameter.DestinationFilePath);
+            var sourceFileModel = _fileService.GetFile(parameter.SourceFilePath);
+            SourceFileViewModel = _fileSystemNodeViewModelFactory.Create(sourceFileModel);
+
+            var destinationFileModel = _fileService.GetFile(parameter.DestinationFilePath);
+            DestinationFileViewModel = _fileSystemNodeViewModelFactory.Create(destinationFileModel);
+
+            var destinationDirectory = _pathService.GetParentDirectory(destinationFileModel.FullPath);
+            NewFileName = _fileNameGenerationService.GenerateName(sourceFileModel.Name, destinationDirectory);
+            DestinationDirectoryName = _pathService.GetFileName(destinationDirectory);
         }
+
+        private void Skip() => Close(Create(OperationContinuationMode.Skip));
+
+        private void Replace() => Close(Create(OperationContinuationMode.Overwrite));
+
+        private void ReplaceIfOlder() => Close(Create(OperationContinuationMode.OverwriteOlder));
+
+        private void Close(OperationContinuationOptions options) =>
+            Close(new OverwriteOptionsDialogResult(options));
+
+        private OperationContinuationOptions Create(OperationContinuationMode mode) =>
+            OperationContinuationOptions.CreateContinuationOptions(
+                SourceFileViewModel.FullPath,
+                _shouldApplyForAll,
+                mode
+            );
     }
 }

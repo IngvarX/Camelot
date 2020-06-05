@@ -24,6 +24,8 @@ namespace Camelot.Services.Abstractions.Extensions
             {
                 OperationState.InProgress,
                 OperationState.Paused,
+                OperationState.Pausing,
+                OperationState.Unpausing,
                 OperationState.Finished
             };
 

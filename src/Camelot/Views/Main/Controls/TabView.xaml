@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:filePanels="clr-namespace:Camelot.ViewModels.Implementations.MainWindow.FilePanels;assembly=Camelot.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Camelot.Views.Main.TabView">
+             x:Class="Camelot.Views.Main.Controls.TabView">
 
     <Design.DataContext>
         <filePanels:TabViewModel />
@@ -16,7 +16,7 @@
                 <Button.Content>
                     <Grid>
                         <Grid Classes="activeTabGrid" Height="40" IsVisible="{Binding IsActive}">
-                            <TextBlock Classes="tabNameTextBlock" 
+                            <TextBlock Classes="tabNameTextBlock"
                                        Text="{Binding DirectoryName}" />
                         </Grid>
                         <Grid Classes="inactiveTabGrid" Height="40" IsVisible="{Binding !IsActive}">
@@ -25,7 +25,7 @@
                         </Grid>
                     </Grid>
                 </Button.Content>
-                
+
                 <Button.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="New tab" Command="{Binding NewTabCommand}" />
@@ -37,7 +37,7 @@
                 </Button.ContextMenu>
             </Button>
         </Border>
-        
+
         <Grid>
             <Rectangle Classes="tabRectangle" Height="2" />
             <Rectangle Classes="tabRectangle tabRectangleActive"

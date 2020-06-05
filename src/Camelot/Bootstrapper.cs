@@ -161,6 +161,11 @@ namespace Camelot
                 resolver.GetService<IEnvironmentService>()
             ));
             services.RegisterLazySingleton<IOperationsStateService>(() => new OperationsStateService());
+            services.RegisterLazySingleton<IFileNameGenerationService>(() => new FileNameGenerationService(
+                resolver.GetService<IFileService>(),
+                resolver.GetService<IDirectoryService>(),
+                resolver.GetService<IPathService>()
+            ));
         }
 
         private static void RegisterPlatformSpecificServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
@@ -255,7 +260,10 @@ namespace Camelot
                 resolver.GetService<AboutDialogConfiguration>()
             ));
             services.Register(() => new OverwriteOptionsDialogViewModel(
-                resolver.GetService<IFileService>()
+                resolver.GetService<IFileService>(),
+                resolver.GetService<IFileSystemNodeViewModelFactory>(),
+                resolver.GetService<IFileNameGenerationService>(),
+                resolver.GetService<IPathService>()
             ));
             services.Register(() => new CreateDirectoryDialogViewModel());
             services.Register<IOperationsStateViewModel>(() => new OperationsStateViewModel(
