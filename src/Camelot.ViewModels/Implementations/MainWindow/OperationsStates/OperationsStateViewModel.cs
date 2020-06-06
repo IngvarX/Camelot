@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using ApplicationDispatcher.Interfaces;
+using Camelot.Extensions;
 using Camelot.Services.Abstractions.Extensions;
 using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Models.EventArgs;
@@ -179,11 +180,11 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
 
             if (dialogResult is null)
             {
-                await operation.CancelAsync();
+                Task.Run(operation.CancelAsync).Forget();
             }
             else
             {
-                await operation.ContinueAsync(dialogResult.Options);
+                Task.Run(() => operation.ContinueAsync(dialogResult.Options)).Forget();
             }
         }
 

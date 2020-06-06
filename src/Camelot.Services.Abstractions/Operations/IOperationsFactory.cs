@@ -4,9 +4,9 @@ namespace Camelot.Services.Abstractions.Operations
 {
     public interface IOperationsFactory
     {
-        IOperation CreateMoveOperation(BinaryFileSystemOperationSettings settings);
-
         IOperation CreateCopyOperation(BinaryFileSystemOperationSettings settings);
+
+        IOperation CreateMoveOperation(BinaryFileSystemOperationSettings settings);
 
         IOperation CreateDeleteOperation(UnaryFileSystemOperationSettings settings);
     }

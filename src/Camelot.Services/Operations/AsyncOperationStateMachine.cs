@@ -72,6 +72,8 @@ namespace Camelot.Services.Operations
         {
             var taskFactory = (State, requestedState) switch
             {
+                _ when State == requestedState => GetCompletedTask,
+
                 _ when State != expectedState =>
                     throw new InvalidOperationException($"Inner state {State} is not {expectedState}"),
 

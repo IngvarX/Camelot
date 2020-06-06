@@ -83,7 +83,7 @@
                 </TextBlock>
             </Grid>
 
-            <Expander Grid.Row="3" Grid.ColumnSpan="2" IsVisible="{Binding AreMultipleFilesAvailable}">
+            <Expander Grid.Row="3" Grid.ColumnSpan="2">
                 <Expander.Content>
                     <StackPanel Orientation="Horizontal">
                         <TextBox Text="{Binding NewFileName}" />

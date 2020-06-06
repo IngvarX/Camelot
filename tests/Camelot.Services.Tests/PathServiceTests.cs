@@ -51,7 +51,7 @@ namespace Camelot.Services.Tests
 
             Assert.Equal(FullPath, path);
         }
-        
+
         [Theory]
         [InlineData("Directory", "Directory")]
         [InlineData("Directory/", "Directory")]
@@ -62,6 +62,17 @@ namespace Camelot.Services.Tests
             var path = _pathService.TrimPathSeparators(directory);
 
             Assert.Equal(path, expectedResult);
+        }
+
+        [Theory]
+        [InlineData(new[] {"/home/test/File1", "/home/test/File2"}, "/home/test")]
+        [InlineData(new[] {"/home/test/File1", "/var/test/File2"}, "/")]
+        [InlineData(new[] {"/home/test/1", "/home/test/2"}, "/home/test")]
+        public void TestGetCommonRootDirectory(string[] files, string expectedDirectory)
+        {
+            var actualDirectory = _pathService.GetCommonRootDirectory(files);
+
+            Assert.Equal(expectedDirectory, actualDirectory);
         }
     }
 }

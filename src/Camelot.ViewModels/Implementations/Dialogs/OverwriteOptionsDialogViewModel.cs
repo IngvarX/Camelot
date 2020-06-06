@@ -1,5 +1,6 @@
 using System.Windows.Input;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Models.Operations;
 using Camelot.ViewModels.Factories.Interfaces;
@@ -50,7 +51,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 
         public IFileSystemNodeViewModel DestinationFileViewModel
         {
-            get => _sourceFileViewModel;
+            get => _destinationFileViewModel;
             set => this.RaiseAndSetIfChanged(ref _destinationFileViewModel, value);
         }
 
@@ -91,10 +92,10 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         public override void Activate(OverwriteOptionsNavigationParameter parameter)
         {
             var sourceFileModel = _fileService.GetFile(parameter.SourceFilePath);
-            SourceFileViewModel = _fileSystemNodeViewModelFactory.Create(sourceFileModel);
+            SourceFileViewModel = CreateFrom(sourceFileModel);
 
             var destinationFileModel = _fileService.GetFile(parameter.DestinationFilePath);
-            DestinationFileViewModel = _fileSystemNodeViewModelFactory.Create(destinationFileModel);
+            DestinationFileViewModel = CreateFrom(destinationFileModel);
 
             var destinationDirectory = _pathService.GetParentDirectory(destinationFileModel.FullPath);
             NewFileName = _fileNameGenerationService.GenerateName(sourceFileModel.Name, destinationDirectory);
@@ -103,11 +104,11 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             AreMultipleFilesAvailable = parameter.AreMultipleFilesAvailable;
         }
 
-        private void Skip() => Close(Create(OperationContinuationMode.Skip));
+        private void Skip() => Close(CreateFrom(OperationContinuationMode.Skip));
 
-        private void Replace() => Close(Create(OperationContinuationMode.Overwrite));
+        private void Replace() => Close(CreateFrom(OperationContinuationMode.Overwrite));
 
-        private void ReplaceIfOlder() => Close(Create(OperationContinuationMode.OverwriteOlder));
+        private void ReplaceIfOlder() => Close(CreateFrom(OperationContinuationMode.OverwriteOlder));
 
         private void Rename()
         {
@@ -125,11 +126,14 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         private void Close(OperationContinuationOptions options) =>
             Close(new OverwriteOptionsDialogResult(options));
 
-        private OperationContinuationOptions Create(OperationContinuationMode mode) =>
+        private OperationContinuationOptions CreateFrom(OperationContinuationMode mode) =>
             OperationContinuationOptions.CreateContinuationOptions(
                 SourceFileViewModel.FullPath,
                 _shouldApplyForAll,
                 mode
             );
+
+        private IFileSystemNodeViewModel CreateFrom(FileModel fileModel) =>
+            _fileSystemNodeViewModelFactory.Create(fileModel);
     }
 }

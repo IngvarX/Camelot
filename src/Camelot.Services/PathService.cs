@@ -15,26 +15,16 @@ namespace Camelot.Services
                 return null;
             }
 
-            if (paths.Count == 1)
-            {
-                return GetParentDirectory(paths[0]);
-            }
+            var commonPrefix = new string(
+                paths
+                    .First()
+                    .Substring(0, paths.Min(s => s.Length))
+                    .TakeWhile((c, i) => paths.All(s => s[i] == c)).ToArray()
+            );
 
-            var length = paths[0].Length;
-            for (var i = 1; i < paths.Count; i++)
-            {
-                length = Math.Min(length, paths[i].Length);
-                for (var j = 0; j < length; j++)
-                {
-                    if (paths[i][j] != paths[0][j])
-                    {
-                        length = j;
-                        break;
-                    }
-                }
-            }
-
-            return paths[0].Substring(0, length);
+            return new[] {'/', '\\'}.Contains(commonPrefix[^1])
+                ? TrimPathSeparators(commonPrefix)
+                : GetParentDirectory(commonPrefix);
         }
 
         public string GetParentDirectory(string path) => Path.GetDirectoryName(path);
