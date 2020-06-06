@@ -78,7 +78,7 @@ namespace Camelot.Services.Operations
                     }
                     break;
                 case OperationContinuationMode.Rename:
-                    await CopyFileAsync(options.NewFileName);
+                    await CopyFileAsync(options.NewFilePath);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(options.Mode));

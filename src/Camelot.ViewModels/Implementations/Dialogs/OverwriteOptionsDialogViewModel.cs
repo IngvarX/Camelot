@@ -61,6 +61,8 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 
         public ICommand ReplaceIfOlderCommand { get; }
 
+        public ICommand RenameCommand { get; }
+
         public OverwriteOptionsDialogViewModel(
             IFileService fileService,
             IFileSystemNodeViewModelFactory fileSystemNodeViewModelFactory,
@@ -76,6 +78,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             SkipCommand = ReactiveCommand.Create(Skip);
             ReplaceCommand = ReactiveCommand.Create(Replace);
             ReplaceIfOlderCommand = ReactiveCommand.Create(ReplaceIfOlder);
+            RenameCommand = ReactiveCommand.Create(Rename);
         }
 
         public override void Activate(OverwriteOptionsNavigationParameter parameter)
@@ -96,6 +99,19 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         private void Replace() => Close(Create(OperationContinuationMode.Overwrite));
 
         private void ReplaceIfOlder() => Close(Create(OperationContinuationMode.OverwriteOlder));
+
+        private void Rename()
+        {
+            var destinationDirectory = _pathService.GetParentDirectory(DestinationFileViewModel.FullPath);
+            var destinationFilePath = _pathService.Combine(destinationDirectory, _newFileName);
+            var options = OperationContinuationOptions.CreateRenamingContinuationOptions(
+                SourceFileViewModel.FullPath,
+                _shouldApplyForAll,
+                destinationFilePath
+            );
+
+            Close(options);
+        }
 
         private void Close(OperationContinuationOptions options) =>
             Close(new OverwriteOptionsDialogResult(options));

@@ -1,6 +1,5 @@
 <Styles
     xmlns="https://github.com/avaloniaui"
-    xmlns:controls="clr-namespace:Camelot.Controls"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <Style Selector="Button">
@@ -140,6 +139,19 @@
 
     <Style Selector="TextBlock.activeOperationTextBlock">
         <Setter Property="Foreground" Value="{DynamicResource InactiveTabForegroundBrush}" />
+    </Style>
+
+    <Style Selector="TextBlock#ReplaceTextBlock">
+        <Setter Property="FontSize" Value="22" />
+        <Setter Property="Margin" Value="5,0,0,0" />
+    </Style>
+
+    <Style Selector="TextBlock.overWriteDialogTextBlock">
+        <Setter Property="FontSize" Value="18" />
+    </Style>
+
+    <Style Selector="TextBlock.boldStyleTextBlock">
+        <Setter Property="FontWeight" Value="Bold" />
     </Style>
 
 </Styles>

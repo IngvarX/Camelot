@@ -4,7 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:dialogs="clr-namespace:Camelot.ViewModels.Implementations.Dialogs;assembly=Camelot.ViewModels"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        Width="700" Height="400"
+        Width="850" Height="400"
         x:Class="Camelot.Views.Main.Dialogs.OverwriteOptionsDialog"
         Title="Overwrite options">
 
@@ -12,89 +12,106 @@
         <dialogs:OverwriteOptionsDialogViewModel />
     </Design.DataContext>
 
-    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,*">
-        <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2">
-            <DrawingPresenter Width="15" Height="15">
-                <DrawingPresenter.Drawing>
-                    <GeometryDrawing Brush="{DynamicResource CancelOperationButtonBrush}"
-                                     Geometry="M569.517 440.013C587.975 472.007 564.806 512 527.94 512H48.054c-36.937 0-59.999-40.055-41.577-71.987L246.423 23.985c18.467-32.009 64.72-31.951 83.154 0l239.94 416.028zM288 354c-25.405 0-46 20.595-46 46s20.595 46 46 46 46-20.595 46-46-20.595-46-46-46zm-43.673-165.346l7.418 136c.347 6.364 5.609 11.346 11.982 11.346h48.546c6.373 0 11.635-4.982 11.982-11.346l7.418-136c.375-6.874-5.098-12.654-11.982-12.654h-63.383c-6.884 0-12.356 5.78-11.981 12.654z" />
-                </DrawingPresenter.Drawing>
-            </DrawingPresenter>
-            <TextBlock>
-                <TextBlock.Text>
-                    <MultiBinding StringFormat="{}Replace file &quot;{0}&quot;?">
-                        <Binding Path="SourceFileViewModel.Name" />
-                    </MultiBinding>
-                </TextBlock.Text>
-            </TextBlock>
-        </StackPanel>
-        <TextBlock Grid.Row="1" Grid.ColumnSpan="2">
-            <TextBlock.Text>
-                <MultiBinding StringFormat="{}Another file with the same name already exists in &quot;{0}&quot; Do you want to replace it?">
-                    <Binding Path="DestinationDirectoryName" />
-                </MultiBinding>
-            </TextBlock.Text>
-        </TextBlock>
-
-        <Grid Row="2" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,*">
-            <DrawingPresenter Width="48" Height="48" Grid.RowSpan="3">
-                <DrawingPresenter.Drawing>
-                    <GeometryDrawing Brush="{DynamicResource CancelOperationButtonBrush}"
-                                     Geometry="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm160-14.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z" />                </DrawingPresenter.Drawing>
-            </DrawingPresenter>
-            <TextBlock Grid.Column="2" Text="Original file" />
-            <TextBlock Grid.Row="1" Grid.Column="2">
-                <TextBlock.Text>
-                    <MultiBinding StringFormat="{}Size: {0}">
-                        <Binding Path="SourceFileViewModel.FormattedSize" />
-                    </MultiBinding>
-                </TextBlock.Text>
-            </TextBlock>
-            <TextBlock Grid.Row="2" Grid.Column="2">
-                <TextBlock.Text>
-                    <MultiBinding StringFormat="{}Last modified: {0}">
-                        <Binding Path="SourceFileViewModel.LastModifiedDateTime" />
-                    </MultiBinding>
-                </TextBlock.Text>
-            </TextBlock>
-        </Grid>
-        <Grid Row="2" Column="1"  RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,*">
-            <DrawingPresenter Width="48" Height="48" Grid.RowSpan="3">
-                <DrawingPresenter.Drawing>
-                    <GeometryDrawing Brush="{DynamicResource CancelOperationButtonBrush}"
-                                     Geometry="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm160-14.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z" />                </DrawingPresenter.Drawing>
-            </DrawingPresenter>
-            <TextBlock Grid.Column="2" Text="Replace with" />
-            <TextBlock Grid.Row="1" Grid.Column="2">
-                <TextBlock.Text>
-                    <MultiBinding StringFormat="{}Size: {0}">
-                        <Binding Path="DestinationFileViewModel.FormattedSize" />
-                    </MultiBinding>
-                </TextBlock.Text>
-            </TextBlock>
-            <TextBlock Grid.Row="2" Grid.Column="2">
-                <TextBlock.Text>
-                    <MultiBinding StringFormat="{}Last modified: {0}">
-                        <Binding Path="DestinationFileViewModel.LastModifiedDateTime" />
-                    </MultiBinding>
-                </TextBlock.Text>
-            </TextBlock>
-        </Grid>
-
-        <Expander Grid.Row="3" Grid.ColumnSpan="2" Header="Select a new name for the destination">
-            <StackPanel Orientation="Horizontal">
-                <TextBox Text="{Binding NewFileName}" />
+    <Border Padding="10">
+        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,*">
+            <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2">
+                <DrawingPresenter Width="25" Height="25">
+                    <DrawingPresenter.Drawing>
+                        <GeometryDrawing Brush="{DynamicResource CancelOperationButtonBrush}"
+                                         Geometry="M569.517 440.013C587.975 472.007 564.806 512 527.94 512H48.054c-36.937 0-59.999-40.055-41.577-71.987L246.423 23.985c18.467-32.009 64.72-31.951 83.154 0l239.94 416.028zM288 354c-25.405 0-46 20.595-46 46s20.595 46 46 46 46-20.595 46-46-20.595-46-46-46zm-43.673-165.346l7.418 136c.347 6.364 5.609 11.346 11.982 11.346h48.546c6.373 0 11.635-4.982 11.982-11.346l7.418-136c.375-6.874-5.098-12.654-11.982-12.654h-63.383c-6.884 0-12.356 5.78-11.981 12.654z" />
+                    </DrawingPresenter.Drawing>
+                </DrawingPresenter>
+                <TextBlock Name="ReplaceTextBlock" Classes="boldStyleTextBlock">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}Replace file &quot;{0}&quot;?">
+                            <Binding Path="SourceFileViewModel.Name" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
             </StackPanel>
-        </Expander>
-        <CheckBox Grid.Row="4" Grid.ColumnSpan="2" IsChecked="{Binding ShouldApplyForAll}"
-                  Content="Apply this action to the all files and folders" />
-        <Grid Row="5" ColumnSpan="2" HorizontalAlignment="Center">
-            <StackPanel Orientation="Horizontal">
-                <Button Content="Cancel" Command="{Binding CancelCommand}" />
-                <Button Content="Skip" Command="{Binding SkipCommand}" />
-                <Button Content="Replace" Command="{Binding ReplaceCommand}" />
-            </StackPanel>
+
+            <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Margin="5,10" Classes="overWriteDialogTextBlock">
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="{}Another file with the same name already exists in &quot;{0}&quot; Do you want to replace it?">
+                        <Binding Path="DestinationDirectoryName" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+
+            <Grid Row="2" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,*">
+                <DrawingPresenter Width="64" Height="64" Grid.RowSpan="3">
+                    <DrawingPresenter.Drawing>
+                        <GeometryDrawing Brush="{DynamicResource CancelOperationButtonBrush}"
+                                         Geometry="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm160-14.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z" />                </DrawingPresenter.Drawing>
+                </DrawingPresenter>
+                <TextBlock Grid.Column="2" Text="Original file" Classes="overWriteDialogTextBlock boldStyleTextBlock" />
+                <TextBlock Grid.Row="1" Grid.Column="2" Classes="overWriteDialogTextBlock">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}Size: {0}">
+                            <Binding Path="SourceFileViewModel.FormattedSize" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+                <TextBlock Grid.Row="2" Grid.Column="2" Classes="overWriteDialogTextBlock">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}Last modified: {0}">
+                            <Binding Path="SourceFileViewModel.LastModifiedDateTime" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </Grid>
+            <Grid Row="2" Column="1" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,*">
+                <DrawingPresenter Width="64" Height="64" Grid.RowSpan="3">
+                    <DrawingPresenter.Drawing>
+                        <GeometryDrawing Brush="{DynamicResource CancelOperationButtonBrush}"
+                                         Geometry="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm160-14.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z" />                </DrawingPresenter.Drawing>
+                </DrawingPresenter>
+                <TextBlock Grid.Column="2" Text="Replace with" Classes="overWriteDialogTextBlock boldStyleTextBlock" />
+                <TextBlock Grid.Row="1" Grid.Column="2" Classes="overWriteDialogTextBlock">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}Size: {0}">
+                            <Binding Path="DestinationFileViewModel.FormattedSize" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+                <TextBlock Grid.Row="2" Grid.Column="2" Classes="overWriteDialogTextBlock">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}Last modified: {0}">
+                            <Binding Path="DestinationFileViewModel.LastModifiedDateTime" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </Grid>
+
+            <Expander Grid.Row="3" Grid.ColumnSpan="2">
+                <Expander.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox Text="{Binding NewFileName}" />
+                        <Button Content="Rename" Command="{Binding RenameCommand}" Classes="dialogButton"  />
+                    </StackPanel>
+                </Expander.Content>
+
+                <Expander.Header>
+                    <TextBlock Classes="overWriteDialogTextBlock" Text="Select a new name for the destination" />
+                </Expander.Header>
+            </Expander>
+
+            <CheckBox Grid.Row="4" Grid.ColumnSpan="2" IsChecked="{Binding ShouldApplyForAll}">
+                <CheckBox.Content>
+                    <TextBlock Classes="overWriteDialogTextBlock"
+                               Text="Apply this action to the all files and folders" />
+                </CheckBox.Content>
+            </CheckBox>
+
+            <Grid Row="5" ColumnSpan="2" HorizontalAlignment="Center">
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="Cancel" Command="{Binding CancelCommand}" Classes="dialogButton"  />
+                    <Button Content="Skip" Command="{Binding SkipCommand}" Classes="dialogButton"  />
+                    <Button Content="Replace" Command="{Binding ReplaceCommand}" Classes="dialogButton"  />
+                    <Button Content="Replace if older" Command="{Binding ReplaceIfOlderCommand}" Classes="dialogButton" />
+                </StackPanel>
+            </Grid>
         </Grid>
-    </Grid>
+    </Border>
 
 </Window>
