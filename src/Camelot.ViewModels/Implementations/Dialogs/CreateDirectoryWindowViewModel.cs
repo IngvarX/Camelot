@@ -25,7 +25,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
                 name => !string.IsNullOrWhiteSpace(name));
 
             CreateCommand = ReactiveCommand.Create(CreateDirectory, canCreate);
-            CancelCommand = ReactiveCommand.Create(() => Close());
+            CancelCommand = ReactiveCommand.Create(Close);
         }
 
         private void CreateDirectory()

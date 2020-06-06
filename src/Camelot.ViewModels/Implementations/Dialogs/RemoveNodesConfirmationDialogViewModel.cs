@@ -48,7 +48,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             _files = Enumerable.Empty<string>();
 
             OkCommand = ReactiveCommand.Create(() => Close(new RemoveNodesConfirmationDialogResult(true)));
-            CancelCommand = ReactiveCommand.Create(() => Close());
+            CancelCommand = ReactiveCommand.Create(Close);
         }
 
         public override void Activate(NodesRemovingNavigationParameter parameter)

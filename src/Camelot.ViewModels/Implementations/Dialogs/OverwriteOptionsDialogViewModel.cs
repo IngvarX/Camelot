@@ -81,7 +81,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             _fileNameGenerationService = fileNameGenerationService;
             _pathService = pathService;
 
-            CancelCommand = ReactiveCommand.Create(() => Close());
+            CancelCommand = ReactiveCommand.Create(Close);
             SkipCommand = ReactiveCommand.Create(Skip);
             ReplaceCommand = ReactiveCommand.Create(Replace);
             ReplaceIfOlderCommand = ReactiveCommand.Create(ReplaceIfOlder);

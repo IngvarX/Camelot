@@ -9,7 +9,9 @@ namespace Camelot.ViewModels.Implementations.Dialogs
     {
         public event EventHandler<DialogResultEventArgs<TResult>> CloseRequested;
 
-        protected void Close(TResult result = default)
+        protected void Close() => Close(default);
+
+        protected void Close(TResult result)
         {
             var args = new DialogResultEventArgs<TResult>(result);
 
