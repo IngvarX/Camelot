@@ -11,22 +11,29 @@ namespace Camelot.Services.Abstractions.Models.Operations
 
         public IReadOnlyList<string> Directories { get; }
 
+        public int TotalFilesCount { get; }
+
         public string SourceDirectory { get; }
 
         public string TargetDirectory { get; }
 
-        public OperationInfo(
-            OperationType operationType,
-            IReadOnlyList<string> files,
-            IReadOnlyList<string> directories,
-            string sourceDirectory = null,
-            string targetDirectory = null)
+        public OperationInfo(OperationType operationType, BinaryFileSystemOperationSettings settings)
         {
             OperationType = operationType;
-            Files = files;
-            Directories = directories;
-            SourceDirectory = sourceDirectory;
-            TargetDirectory = targetDirectory;
+            Files = settings.InputTopLevelFiles;
+            Directories = settings.InputTopLevelDirectories;
+            TotalFilesCount = settings.FilesDictionary.Count;
+            SourceDirectory = settings.SourceDirectory;
+            TargetDirectory = settings.TargetDirectory;
+        }
+
+        public OperationInfo(OperationType operationType, UnaryFileSystemOperationSettings settings)
+        {
+            OperationType = operationType;
+            Files = settings.TopLevelFiles;
+            Directories = settings.TopLevelDirectories;
+            TotalFilesCount = Files.Count + Directories.Count;
+            SourceDirectory = settings.SourceDirectory;
         }
     }
 }

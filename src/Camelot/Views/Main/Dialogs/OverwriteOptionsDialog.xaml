@@ -12,7 +12,7 @@
         <dialogs:OverwriteOptionsDialogViewModel />
     </Design.DataContext>
 
-    <Border Padding="10">
+    <Border Padding="20">
         <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,*">
             <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2">
                 <DrawingPresenter Width="25" Height="25">
@@ -30,7 +30,7 @@
                 </TextBlock>
             </StackPanel>
 
-            <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Margin="5,10" Classes="overWriteDialogTextBlock">
+            <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Margin="0,10" Classes="overWriteDialogTextBlock">
                 <TextBlock.Text>
                     <MultiBinding StringFormat="{}Another file with the same name already exists in &quot;{0}&quot; Do you want to replace it?">
                         <Binding Path="DestinationDirectoryName" />
@@ -83,11 +83,12 @@
                 </TextBlock>
             </Grid>
 
-            <Expander Grid.Row="3" Grid.ColumnSpan="2">
+            <Expander Grid.Row="3" Grid.ColumnSpan="2" IsVisible="{Binding AreMultipleFilesAvailable}">
                 <Expander.Content>
                     <StackPanel Orientation="Horizontal">
                         <TextBox Text="{Binding NewFileName}" />
-                        <Button Content="Rename" Command="{Binding RenameCommand}" Classes="dialogButton"  />
+                        <Button Content="Rename" Command="{Binding RenameCommand}"
+                                Classes="dialogButton alternativeColorDialogButton" />
                     </StackPanel>
                 </Expander.Content>
 
@@ -96,18 +97,20 @@
                 </Expander.Header>
             </Expander>
 
-            <CheckBox Grid.Row="4" Grid.ColumnSpan="2" IsChecked="{Binding ShouldApplyForAll}">
+            <CheckBox Grid.Row="4" Grid.ColumnSpan="2" IsChecked="{Binding ShouldApplyForAll}"
+                      IsVisible="{Binding AreMultipleFilesAvailable}">
                 <CheckBox.Content>
                     <TextBlock Classes="overWriteDialogTextBlock"
                                Text="Apply this action to the all files and folders" />
                 </CheckBox.Content>
             </CheckBox>
 
-            <Grid Row="5" ColumnSpan="2" HorizontalAlignment="Center">
+            <Grid Row="5" ColumnSpan="2" HorizontalAlignment="Center" Margin="0,15,0,0">
                 <StackPanel Orientation="Horizontal">
-                    <Button Content="Cancel" Command="{Binding CancelCommand}" Classes="dialogButton"  />
-                    <Button Content="Skip" Command="{Binding SkipCommand}" Classes="dialogButton"  />
-                    <Button Content="Replace" Command="{Binding ReplaceCommand}" Classes="dialogButton"  />
+                    <Button Content="Cancel" Command="{Binding CancelCommand}" Classes="dialogButton transparentColorDialogButton" />
+                    <Button Content="Skip" Command="{Binding SkipCommand}" Classes="dialogButton alternativeColorDialogButton"
+                            IsVisible="{Binding AreMultipleFilesAvailable}" />
+                    <Button Content="Replace" Command="{Binding ReplaceCommand}" Classes="dialogButton" />
                     <Button Content="Replace if older" Command="{Binding ReplaceIfOlderCommand}" Classes="dialogButton" />
                 </StackPanel>
             </Grid>

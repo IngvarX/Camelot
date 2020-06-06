@@ -78,7 +78,7 @@
     </Style>
 
     <Style Selector="Button.dialogButton /template/ ContentPresenter">
-        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="CornerRadius" Value="6" />
     </Style>
 
     <Style Selector="TextBlock.dialogTextBlock">
@@ -144,14 +144,20 @@
     <Style Selector="TextBlock#ReplaceTextBlock">
         <Setter Property="FontSize" Value="22" />
         <Setter Property="Margin" Value="5,0,0,0" />
+        <Setter Property="TextWrapping" Value="Wrap" />
     </Style>
 
     <Style Selector="TextBlock.overWriteDialogTextBlock">
         <Setter Property="FontSize" Value="18" />
+        <Setter Property="TextWrapping" Value="Wrap" />
     </Style>
 
     <Style Selector="TextBlock.boldStyleTextBlock">
         <Setter Property="FontWeight" Value="Bold" />
+    </Style>
+
+    <Style Selector="Button.transparentColorDialogButton">
+        <Setter Property="Background" Value="Transparent" />
     </Style>
 
 </Styles>

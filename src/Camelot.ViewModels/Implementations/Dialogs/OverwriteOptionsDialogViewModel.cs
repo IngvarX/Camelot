@@ -22,6 +22,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         private bool _shouldApplyForAll;
         private string _newFileName;
         private string _destinationDirectoryName;
+        private bool _areMultipleFilesAvailable;
 
         public bool ShouldApplyForAll
         {
@@ -51,6 +52,12 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         {
             get => _sourceFileViewModel;
             set => this.RaiseAndSetIfChanged(ref _destinationFileViewModel, value);
+        }
+
+        public bool AreMultipleFilesAvailable
+        {
+            get => _areMultipleFilesAvailable;
+            set => this.RaiseAndSetIfChanged(ref _areMultipleFilesAvailable, value);
         }
 
         public ICommand CancelCommand { get; }
@@ -92,6 +99,8 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             var destinationDirectory = _pathService.GetParentDirectory(destinationFileModel.FullPath);
             NewFileName = _fileNameGenerationService.GenerateName(sourceFileModel.Name, destinationDirectory);
             DestinationDirectoryName = _pathService.GetFileName(destinationDirectory);
+
+            AreMultipleFilesAvailable = parameter.AreMultipleFilesAvailable;
         }
 
         private void Skip() => Close(Create(OperationContinuationMode.Skip));

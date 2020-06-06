@@ -7,7 +7,7 @@
     <Style Selector="Grid.defaultBackgroundColor">
         <Setter Property="Background" Value="{DynamicResource MainBackgroundColorBrush}" />
     </Style>
-    
+
     <Style Selector="DataGridRow">
         <Setter Property="Foreground" Value="{DynamicResource WhiteBrush}" />
         <Setter Property="Opacity" Value="0.7" />
@@ -52,7 +52,7 @@
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Background" Value="{DynamicResource DirectoryTextBoxBackgroundColorBrush}" />
     </Style>
-    
+
     <Style Selector="Border.tabBorder">
         <Setter Property="BorderBrush" Value="{DynamicResource TabButtonBorderColorBrush}" />
     </Style>
@@ -60,46 +60,50 @@
     <Style Selector="Rectangle.tabRectangleGloballyActive">
         <Setter Property="Fill" Value="{DynamicResource OrangeBrush}" />
     </Style>
-    
+
     <Style Selector="Rectangle.tabRectangleActive">
         <Setter Property="Fill" Value="{DynamicResource LightGreyBrush}" />
     </Style>
-    
+
     <Style Selector="Border.selectionBorder">
         <Setter Property="Background" Value="{DynamicResource OrangeBrush}" />
         <Setter Property="Margin" Value="5" />
         <Setter Property="Padding" Value="5,2" />
         <Setter Property="CornerRadius" Value="5" />
     </Style>
-    
+
     <Style Selector="Grid.inactiveTabGrid">
         <Setter Property="Background" Value="{DynamicResource DirectoryTextBoxBackgroundColorBrush}" />
     </Style>
-    
+
     <Style Selector="Grid.activeTabGrid">
         <Setter Property="Background" Value="{DynamicResource MainBackgroundColorBrush}" />
     </Style>
-    
+
     <Style Selector="TextBlock.inactiveTabNameTextBlock">
         <Setter Property="Foreground" Value="{DynamicResource InactiveTabForegroundBrush}" />
     </Style>
-    
+
     <Style Selector="DockPanel#MenuDockPanel">
         <Setter Property="Background" Value="{DynamicResource MenuBackgroundColorBrush}" />
     </Style>
-    
+
     <Style Selector="TextBlock.dataGridColumnHeaderTextBlock">
         <Setter Property="Foreground" Value="{DynamicResource InactiveTabForegroundBrush}" />
     </Style>
-    
+
     <Style Selector="Button.dialogButton">
         <Setter Property="Background" Value="{DynamicResource OrangeBrush}" />
     </Style>
-    
+
     <Style Selector="Button.dialogButton:pointerover">
         <Setter Property="Foreground" Value="{DynamicResource IconButtonHoverForegroundColorBrush}" />
     </Style>
-    
+
+    <Style Selector="Button.alternativeColorDialogButton">
+        <Setter Property="Background" Value="{DynamicResource OperationButtonBackgroundColorBrush}" />
+    </Style>
+
     <Style Selector="Button.tabButton:pointerover TextBlock.inactiveTabNameTextBlock">
         <Setter Property="Foreground" Value="{DynamicResource IconButtonHoverForegroundColorBrush}" />
     </Style>

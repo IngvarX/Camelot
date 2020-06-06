@@ -8,10 +8,16 @@ namespace Camelot.ViewModels.Implementations.Dialogs.NavigationParameters
 
         public string DestinationFilePath { get; }
 
-        public OverwriteOptionsNavigationParameter(string sourceFilePath, string destinationFilePath)
+        public bool AreMultipleFilesAvailable { get; }
+
+        public OverwriteOptionsNavigationParameter(
+            string sourceFilePath,
+            string destinationFilePath,
+            bool areMultipleFilesAvailable)
         {
             SourceFilePath = sourceFilePath;
             DestinationFilePath = destinationFilePath;
+            AreMultipleFilesAvailable = areMultipleFilesAvailable;
         }
     }
 }
