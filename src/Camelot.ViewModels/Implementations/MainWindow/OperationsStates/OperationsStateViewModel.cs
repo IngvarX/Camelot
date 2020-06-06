@@ -138,7 +138,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
             operation.ProgressChanged -= OperationOnProgressChanged;
         }
 
-        private async void OperationOnStateChanged(object sender, OperationStateChangedEventArgs e)
+        private void OperationOnStateChanged(object sender, OperationStateChangedEventArgs e)
         {
             var operation = (IOperation) sender;
             if (e.OperationState == OperationState.Finished || e.OperationState == OperationState.Cancelled)
@@ -148,7 +148,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
 
             if (e.OperationState == OperationState.Blocked)
             {
-                await _applicationDispatcher.DispatchAsync(() => ProcessBlockedOperationAsync(operation));
+                _applicationDispatcher.DispatchAsync(() => ProcessBlockedOperationAsync(operation)).Forget();
             }
 
             // TODO: change status
