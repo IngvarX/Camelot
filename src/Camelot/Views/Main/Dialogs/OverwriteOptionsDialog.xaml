@@ -107,7 +107,7 @@
 
             <Grid Row="5" ColumnSpan="2" HorizontalAlignment="Center" Margin="0,15,0,0">
                 <StackPanel Orientation="Horizontal">
-                    <Button Content="Cancel" Command="{Binding CancelCommand}" Classes="dialogButton transparentColorDialogButton" />
+                    <Button Content="Cancel" Command="{Binding CancelCommand}" Classes="dialogButton cancelDialogButton" />
                     <Button Content="Skip" Command="{Binding SkipCommand}" Classes="dialogButton alternativeColorDialogButton"
                             IsVisible="{Binding AreMultipleFilesAvailable}" />
                     <Button Content="Replace" Command="{Binding ReplaceCommand}" Classes="dialogButton" />

@@ -107,4 +107,10 @@
     <Style Selector="Button.tabButton:pointerover TextBlock.inactiveTabNameTextBlock">
         <Setter Property="Foreground" Value="{DynamicResource IconButtonHoverForegroundColorBrush}" />
     </Style>
+
+    <Style Selector="Button.cancelDialogButton">
+        <Setter Property="Background" Value="{DynamicResource AlternativeMainBackgroundColorBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderBrush" Value="{DynamicResource IconButtonHoverForegroundColorBrush}" />
+    </Style>
 </Styles>

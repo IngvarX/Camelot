@@ -156,8 +156,4 @@
         <Setter Property="FontWeight" Value="Bold" />
     </Style>
 
-    <Style Selector="Button.transparentColorDialogButton">
-        <Setter Property="Background" Value="Transparent" />
-    </Style>
-
 </Styles>
