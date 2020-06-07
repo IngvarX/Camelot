@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
@@ -18,9 +16,7 @@ namespace Camelot.Services.Operations
         private readonly string _sourceFile;
         private readonly string _destinationFile;
 
-        private readonly IList<(string SourceFilePath, string DestinationFilePath)> _blockedFiles;
-
-        public IReadOnlyList<(string SourceFilePath, string DestinationFilePath)> BlockedFiles => _blockedFiles.ToArray();
+        public (string SourceFilePath, string DestinationFilePath) BlockedFile { get; private set; }
 
         public CopyOperation(
             IDirectoryService directoryService,
@@ -34,8 +30,6 @@ namespace Camelot.Services.Operations
             _pathService = pathService;
             _sourceFile = sourceFile;
             _destinationFile = destinationFile;
-
-            _blockedFiles = new List<(string SourceFilePath, string DestinationFilePath)>();
         }
 
         public async Task RunAsync(CancellationToken cancellationToken)
@@ -46,7 +40,7 @@ namespace Camelot.Services.Operations
 
             if (_fileService.CheckIfExists(_destinationFile))
             {
-                _blockedFiles.Add((_sourceFile, _destinationFile));
+                BlockedFile = (_sourceFile, _destinationFile);
                 State = OperationState.Blocked;
             }
             else

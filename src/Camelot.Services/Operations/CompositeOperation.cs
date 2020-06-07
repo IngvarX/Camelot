@@ -22,7 +22,7 @@ namespace Camelot.Services.Operations
         private readonly IReadOnlyList<OperationGroup> _groupedOperationsToExecute;
 
         private readonly IDictionary<string, ISelfBlockingOperation> _blockedOperationsDictionary;
-        private readonly IList<(string SourceFilePath, string DestinationFilePath)> _blockedFiles;
+        private readonly Queue<(string SourceFilePath, string DestinationFilePath)> _blockedFilesQueue;
 
         private int _finishedOperationsCount;
         private IReadOnlyList<IInternalOperation> _currentOperationsGroup;
@@ -33,7 +33,7 @@ namespace Camelot.Services.Operations
 
         public OperationInfo Info { get; }
 
-        public IReadOnlyList<(string SourceFilePath, string DestinationFilePath)> BlockedFiles => _blockedFiles.ToArray();
+        public (string SourceFilePath, string DestinationFilePath) BlockedFile { get; private set; }
 
         public event EventHandler<EventArgs> Blocked;
 
@@ -48,7 +48,7 @@ namespace Camelot.Services.Operations
             _groupedOperationsToExecute = groupedOperationsToExecute;
 
             _blockedOperationsDictionary = new ConcurrentDictionary<string, ISelfBlockingOperation>();
-            _blockedFiles = new List<(string SourceFilePath, string DestinationFilePath)>();
+            _blockedFilesQueue = new Queue<(string SourceFilePath, string DestinationFilePath)>();
             Info = operationInfo;
         }
 
@@ -66,9 +66,20 @@ namespace Camelot.Services.Operations
                 _continuationMode = options.Mode;
             }
 
+            BlockedFile = default;
+
             var operation = _blockedOperationsDictionary[options.FilePath];
+            _blockedOperationsDictionary.Remove(options.FilePath);
 
             await operation.ContinueAsync(options);
+
+            // TODO: process with default mode?
+            if (_blockedFilesQueue.Any())
+            {
+                BlockedFile = _blockedFilesQueue.Dequeue();
+
+                Blocked.Raise(this, EventArgs.Empty);
+            }
         }
 
         public Task PauseAsync()
@@ -126,6 +137,7 @@ namespace Camelot.Services.Operations
             }
         }
 
+        // TODO: refactor
         private async void CurrentOperationOnStateChanged(object sender, OperationStateChangedEventArgs e)
         {
             var state = e.OperationState;
@@ -136,19 +148,22 @@ namespace Camelot.Services.Operations
 
                 if (_continuationMode is null)
                 {
-                    operation
-                        .BlockedFiles
-                        .ForEach(f =>
-                        {
-                            _blockedOperationsDictionary.Add(f.SourceFilePath, operation);
-                            _blockedFiles.Add(f);
-                        });
-                    // TODO: add to pending list
+                    _blockedOperationsDictionary.Add(operation.BlockedFile.SourceFilePath, operation);
+
+                    if (BlockedFile != default)
+                    {
+                        _blockedFilesQueue.Enqueue(operation.BlockedFile);
+
+                        return;
+                    }
+
+                    BlockedFile = operation.BlockedFile;
+
                     Blocked.Raise(this, EventArgs.Empty);
                 }
                 else
                 {
-                    var (sourceFilePath, destinationFilePath) = operation.BlockedFiles.Last();
+                    var (sourceFilePath, destinationFilePath) = operation.BlockedFile;
                     OperationContinuationOptions options;
                     if (_continuationMode is OperationContinuationMode.Rename)
                     {

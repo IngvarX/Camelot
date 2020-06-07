@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Camelot.Extensions;
 using Camelot.Services.Abstractions.Extensions;
@@ -30,8 +29,8 @@ namespace Camelot.Services.Operations
 
         public OperationInfo Info  => _compositeOperation.Info;
 
-        public IReadOnlyList<(string SourceFilePath, string DestinationFilePath)> BlockedFiles =>
-            _compositeOperation.BlockedFiles;
+        public (string SourceFilePath, string DestinationFilePath) BlockedFile =>
+            _compositeOperation.BlockedFile;
 
         public double CurrentProgress => _compositeOperation.CurrentProgress;
 

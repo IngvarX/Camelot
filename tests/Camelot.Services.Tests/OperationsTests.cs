@@ -114,8 +114,11 @@ namespace Camelot.Services.Tests
                 filesServiceMock.Verify(m => m.CopyAsync(SourceName, DestinationName, false), Times.Never);
 
                 var operation = (IOperation) sender;
-                var (sourceFilePath, _) = operation.BlockedFiles.Single();
+                Assert.NotNull(operation);
+
+                var (sourceFilePath, _) = operation.BlockedFile;
                 var options = OperationContinuationOptions.CreateContinuationOptions(sourceFilePath, false, OperationContinuationMode.Overwrite);
+
                 await copyOperation.ContinueAsync(options);
             };
 
