@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Camelot.Extensions;
+using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Extensions;
 using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Models.EventArgs;
@@ -17,6 +18,7 @@ namespace Camelot.Services.Operations
     public class CompositeOperation : OperationBase, ICompositeOperation
     {
         private readonly ITaskPool _taskPool;
+        private readonly IFileNameGenerationService _fileNameGenerationService;
         private readonly IReadOnlyList<OperationGroup> _groupedOperationsToExecute;
 
         private readonly IDictionary<string, ISelfBlockingOperation> _blockedOperationsDictionary;
@@ -27,7 +29,7 @@ namespace Camelot.Services.Operations
         private int _totalOperationsCount;
         private CancellationTokenSource _cancellationTokenSource;
         private TaskCompletionSource<bool> _taskCompletionSource;
-        private OperationContinuationOptions _options;
+        private OperationContinuationMode? _continuationMode;
 
         public OperationInfo Info { get; }
 
@@ -37,10 +39,12 @@ namespace Camelot.Services.Operations
 
         public CompositeOperation(
             ITaskPool taskPool,
+            IFileNameGenerationService fileNameGenerationService,
             IReadOnlyList<OperationGroup> groupedOperationsToExecute,
             OperationInfo operationInfo)
         {
             _taskPool = taskPool;
+            _fileNameGenerationService = fileNameGenerationService;
             _groupedOperationsToExecute = groupedOperationsToExecute;
 
             _blockedOperationsDictionary = new ConcurrentDictionary<string, ISelfBlockingOperation>();
@@ -57,7 +61,11 @@ namespace Camelot.Services.Operations
 
         public async Task ContinueAsync(OperationContinuationOptions options)
         {
-            _options = options;
+            if (options.ApplyForAll)
+            {
+                _continuationMode = options.Mode;
+            }
+
             var operation = _blockedOperationsDictionary[options.FilePath];
 
             await operation.ContinueAsync(options);
@@ -126,12 +134,7 @@ namespace Camelot.Services.Operations
             {
                 var operation = (ISelfBlockingOperation) sender;
 
-                if (_options?.ApplyForAll == true)
-                {
-                    // TODO: process renaming
-                    await operation.ContinueAsync(_options);
-                }
-                else
+                if (_continuationMode is null)
                 {
                     operation
                         .BlockedFiles
@@ -140,7 +143,32 @@ namespace Camelot.Services.Operations
                             _blockedOperationsDictionary.Add(f.SourceFilePath, operation);
                             _blockedFiles.Add(f);
                         });
+                    // TODO: add to pending list
                     Blocked.Raise(this, EventArgs.Empty);
+                }
+                else
+                {
+                    var (sourceFilePath, destinationFilePath) = operation.BlockedFiles.Last();
+                    OperationContinuationOptions options;
+                    if (_continuationMode is OperationContinuationMode.Rename)
+                    {
+                        var newFilePath = _fileNameGenerationService.GenerateName(destinationFilePath);
+                        options = OperationContinuationOptions.CreateRenamingContinuationOptions(
+                            sourceFilePath,
+                            true,
+                            newFilePath
+                        );
+                    }
+                    else
+                    {
+                        options = OperationContinuationOptions.CreateContinuationOptions(
+                            sourceFilePath,
+                            true,
+                            _continuationMode.Value
+                        );
+                    }
+
+                    await operation.ContinueAsync(options);
                 }
 
                 return;

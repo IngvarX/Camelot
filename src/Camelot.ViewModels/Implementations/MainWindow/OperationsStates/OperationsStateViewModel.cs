@@ -170,6 +170,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
 
         private async Task ProcessBlockedOperationAsync(IOperation operation)
         {
+            // TODO: process multiple blocks
             var (sourceFilePath, destinationFilePath) = operation.BlockedFiles.Last();
             var areMultipleFilesAvailable = operation.Info.TotalFilesCount > 1;
             var navigationParameter = new OverwriteOptionsNavigationParameter(

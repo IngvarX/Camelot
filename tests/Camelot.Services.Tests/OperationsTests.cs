@@ -20,6 +20,7 @@ namespace Camelot.Services.Tests
 
         private readonly ITaskPool _taskPool;
         private readonly IPathService _pathService;
+        private readonly IFileNameGenerationService _fileNameGenerationService;
 
         public OperationsTests()
         {
@@ -31,6 +32,9 @@ namespace Camelot.Services.Tests
 
             var pathServiceMock = new Mock<IPathService>();
             _pathService = pathServiceMock.Object;
+
+            var fileNameGenerationServiceMock = new Mock<IFileNameGenerationService>();
+            _fileNameGenerationService = fileNameGenerationServiceMock.Object;
         }
 
         [Fact]
@@ -45,7 +49,8 @@ namespace Camelot.Services.Tests
                 _taskPool,
                 directoryServiceMock.Object,
                 filesServiceMock.Object,
-                _pathService);
+                _pathService,
+                _fileNameGenerationService);
             var settings = new BinaryFileSystemOperationSettings(
                 new string[] { },
                 new[] {SourceName},
@@ -86,7 +91,8 @@ namespace Camelot.Services.Tests
                 _taskPool,
                 directoryServiceMock.Object,
                 filesServiceMock.Object,
-                _pathService);
+                _pathService,
+                _fileNameGenerationService);
             var settings = new BinaryFileSystemOperationSettings(
                 new string[] { },
                 new[] {SourceName},
@@ -137,7 +143,8 @@ namespace Camelot.Services.Tests
              _taskPool,
              directoryServiceMock.Object,
              filesServiceMock.Object,
-             _pathService);
+             _pathService,
+             _fileNameGenerationService);
             var settings = new BinaryFileSystemOperationSettings(
              new string[] { },
              new[] {SourceName},
@@ -175,7 +182,8 @@ namespace Camelot.Services.Tests
                 _taskPool,
                 directoryServiceMock.Object,
                 filesServiceMock.Object,
-                pathServiceMock.Object);
+                pathServiceMock.Object,
+                _fileNameGenerationService);
             var deleteOperation = operationsFactory.CreateDeleteOperation(
                 new UnaryFileSystemOperationSettings(new string[] {}, new[] {SourceName}, SourceName));
 
@@ -205,7 +213,8 @@ namespace Camelot.Services.Tests
                 _taskPool,
                 directoryServiceMock.Object,
                 filesServiceMock.Object,
-                pathServiceMock.Object);
+                pathServiceMock.Object,
+                _fileNameGenerationService);
             var deleteOperation = operationsFactory.CreateDeleteOperation(
                 new UnaryFileSystemOperationSettings(new[] {SourceName}, new string[] {}, SourceName));
             Assert.Equal(OperationState.NotStarted, deleteOperation.State);

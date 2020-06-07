@@ -20,6 +20,7 @@ namespace Camelot.Views.Main.Dialogs
 
         protected virtual void OnOpened()
         {
+
         }
 
         private void OnOpened(object sender, EventArgs e)

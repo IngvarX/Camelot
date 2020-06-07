@@ -14,17 +14,20 @@ namespace Camelot.Services.Operations
         private readonly IDirectoryService _directoryService;
         private readonly IFileService _fileService;
         private readonly IPathService _pathService;
+        private readonly IFileNameGenerationService _fileNameGenerationService;
 
         public OperationsFactory(
             ITaskPool taskPool,
             IDirectoryService directoryService,
             IFileService fileService,
-            IPathService pathService)
+            IPathService pathService,
+            IFileNameGenerationService fileNameGenerationService)
         {
             _taskPool = taskPool;
             _directoryService = directoryService;
             _fileService = fileService;
             _pathService = pathService;
+            _fileNameGenerationService = fileNameGenerationService;
         }
 
         public IOperation CreateCopyOperation(BinaryFileSystemOperationSettings settings)
@@ -100,7 +103,7 @@ namespace Camelot.Services.Operations
         private ICompositeOperation CreateCompositeOperation(
             IReadOnlyList<OperationGroup> operations,
             OperationInfo operationInfo) =>
-            new CompositeOperation(_taskPool, operations, operationInfo);
+            new CompositeOperation(_taskPool, _fileNameGenerationService, operations, operationInfo);
 
         private static IOperation CreateOperation(ICompositeOperation compositeOperation) =>
             new AsyncOperationStateMachine(compositeOperation);
