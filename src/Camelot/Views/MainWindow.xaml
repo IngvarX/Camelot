@@ -38,7 +38,7 @@
 
         <StackPanel Orientation="Horizontal">
             <main:MenuView DataContext="{Binding MenuViewModel}" />
-            <operationsStates:OperationsStateView DataContext="{Binding OperationsStateViewModel}" />
+            <operationsStates:OperationsStatesListView DataContext="{Binding OperationsStateViewModel}" />
         </StackPanel>
 
         <main:TopSettingsView Grid.Row="1" />

@@ -9,7 +9,7 @@
              x:Class="Camelot.Views.Main.OperationsStates.InactiveOperationsView">
 
     <Design.DataContext>
-        <operationsStates:OperationsStateViewModel />
+        <operationsStates:OperationsStatesListViewModel />
     </Design.DataContext>
 
     <UserControl.Resources>

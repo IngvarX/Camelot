@@ -9,7 +9,7 @@
              x:Class="Camelot.Views.Main.OperationsStates.ActiveOperationsView">
 
     <Design.DataContext>
-        <operationsStates:OperationsStateViewModel />
+        <operationsStates:OperationsStatesListViewModel />
     </Design.DataContext>
 
     <UserControl.Resources>
@@ -20,7 +20,7 @@
         <ItemsControl.ItemTemplate>
             <DataTemplate DataType="{x:Type operationsStates:OperationStateViewModel}">
                 <Grid>
-                    <StackPanel IsVisible="{Binding State, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static enums:OperationState.InProgress}}">
+                    <StackPanel>
                         <Grid IsVisible="{Binding OperationType, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static enums:OperationType.Copy}}">
                             <TextBlock Classes="activeOperationTextBlock operationStatusTextBlock" IsVisible="{Binding IsProcessingSingleFile}">
                                 <TextBlock.Text>

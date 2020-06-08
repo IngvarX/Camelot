@@ -3,9 +3,9 @@ using Avalonia.Markup.Xaml;
 
 namespace Camelot.Views.Main.OperationsStates
 {
-    public class OperationsStateView : UserControl
+    public class OperationsStatesListView : UserControl
     {
-        public OperationsStateView()
+        public OperationsStatesListView()
         {
             InitializeComponent();
         }

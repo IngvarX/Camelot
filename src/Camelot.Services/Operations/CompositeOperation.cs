@@ -31,27 +31,10 @@ namespace Camelot.Services.Operations
         private CancellationTokenSource _cancellationTokenSource;
         private TaskCompletionSource<bool> _taskCompletionSource;
         private OperationContinuationMode? _continuationMode;
-        private (string SourceFilePath, string DestinationFilePath) _currentBlockedFile;
 
         public OperationInfo Info { get; }
 
-        public (string SourceFilePath, string DestinationFilePath) CurrentBlockedFile
-        {
-            get
-            {
-                lock (_blockedFileLocker)
-                {
-                    return _currentBlockedFile;
-                }
-            }
-            private set
-            {
-                lock (_blockedFileLocker)
-                {
-                   _currentBlockedFile = value;
-                }
-            }
-        }
+        public (string SourceFilePath, string DestinationFilePath) CurrentBlockedFile { get; private set; }
 
         public event EventHandler<EventArgs> Blocked;
 
@@ -85,7 +68,10 @@ namespace Camelot.Services.Operations
                 _continuationMode = options.Mode;
             }
 
-            CurrentBlockedFile = default;
+            lock (_blockedFileLocker)
+            {
+                CurrentBlockedFile = default;
+            }
 
             var operation = _blockedOperationsDictionary[options.FilePath];
             _blockedOperationsDictionary.Remove(options.FilePath);
@@ -195,14 +181,17 @@ namespace Camelot.Services.Operations
             {
                 _blockedOperationsDictionary[operation.CurrentBlockedFile.SourceFilePath] = operation;
 
-                if (CurrentBlockedFile != default)
+                lock (_blockedFileLocker)
                 {
-                    _blockedFilesQueue.Enqueue(operation.CurrentBlockedFile);
+                    if (CurrentBlockedFile != default)
+                    {
+                        _blockedFilesQueue.Enqueue(operation.CurrentBlockedFile);
 
-                    return;
+                        return;
+                    }
+
+                    CurrentBlockedFile = operation.CurrentBlockedFile;
                 }
-
-                CurrentBlockedFile = operation.CurrentBlockedFile;
 
                 Blocked.Raise(this, EventArgs.Empty);
             }

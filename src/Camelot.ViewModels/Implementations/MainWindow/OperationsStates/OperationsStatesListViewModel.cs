@@ -19,8 +19,7 @@ using ReactiveUI;
 
 namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
 {
-    // TODO: rename
-    public class OperationsStateViewModel : ViewModelBase, IOperationsStateViewModel
+    public class OperationsStatesListViewModel : ViewModelBase, IOperationsStateViewModel
     {
         private const int MaximumFinishedOperationsCount = 10;
 
@@ -58,7 +57,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
 
         public IEnumerable<IOperationStateViewModel> InactiveOperations => _finishedOperationsQueue.Reverse();
 
-        public OperationsStateViewModel(
+        public OperationsStatesListViewModel(
             IOperationsStateService operationsStateService,
             IOperationStateViewModelFactory operationStateViewModelFactory,
             IApplicationDispatcher applicationDispatcher,
@@ -170,7 +169,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
 
         private async Task ProcessBlockedOperationAsync(IOperation operation)
         {
-            // TODO: process multiple blocks
             var (sourceFilePath, destinationFilePath) = operation.CurrentBlockedFile;
             var areMultipleFilesAvailable = operation.Info.TotalFilesCount > 1;
             var navigationParameter = new OverwriteOptionsNavigationParameter(
