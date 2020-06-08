@@ -25,6 +25,8 @@
         <SolidColorBrush x:Key="OperationButtonHoverBackgroundColorBrush" Color="{DynamicResource OperationButtonHoverBackgroundColor}" />
         <SolidColorBrush x:Key="OperationButtonForegroundColorBrush" Color="{DynamicResource WhiteColor}"
                          Opacity="0.8" />
+        <SolidColorBrush x:Key="HighlightBrush" Color="{DynamicResource WhiteColor}"
+                         Opacity="0.8" />
         <SolidColorBrush x:Key="IconButtonHoverForegroundColorBrush" Color="{DynamicResource WhiteColor}"
                          Opacity="0.9" />
         <SolidColorBrush x:Key="InactiveTabForegroundBrush" Color="{DynamicResource WhiteColor}"

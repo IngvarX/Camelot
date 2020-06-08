@@ -101,7 +101,7 @@
     </Style>
 
     <Style Selector="Button.alternativeColorDialogButton">
-        <Setter Property="Background" Value="{DynamicResource OperationButtonBackgroundColorBrush}" />
+        <Setter Property="Background" Value="{DynamicResource OperationButtonHoverBackgroundColorBrush}" />
     </Style>
 
     <Style Selector="Button.tabButton:pointerover TextBlock.inactiveTabNameTextBlock">
