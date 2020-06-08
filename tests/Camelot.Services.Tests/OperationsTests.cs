@@ -115,7 +115,7 @@ namespace Camelot.Services.Tests
                 var operation = (IOperation) sender;
                 Assert.NotNull(operation);
 
-                var (sourceFilePath, _) = operation.BlockedFile;
+                var (sourceFilePath, _) = operation.CurrentBlockedFile;
                 var options = OperationContinuationOptions.CreateContinuationOptions(sourceFilePath, false, OperationContinuationMode.Overwrite);
 
                 await copyOperation.ContinueAsync(options);

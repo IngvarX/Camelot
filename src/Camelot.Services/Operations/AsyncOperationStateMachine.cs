@@ -29,8 +29,8 @@ namespace Camelot.Services.Operations
 
         public OperationInfo Info  => _compositeOperation.Info;
 
-        public (string SourceFilePath, string DestinationFilePath) BlockedFile =>
-            _compositeOperation.BlockedFile;
+        public (string SourceFilePath, string DestinationFilePath) CurrentBlockedFile =>
+            _compositeOperation.CurrentBlockedFile;
 
         public double CurrentProgress => _compositeOperation.CurrentProgress;
 

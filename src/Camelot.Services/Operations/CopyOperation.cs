@@ -16,7 +16,7 @@ namespace Camelot.Services.Operations
         private readonly string _sourceFile;
         private readonly string _destinationFile;
 
-        public (string SourceFilePath, string DestinationFilePath) BlockedFile { get; private set; }
+        public (string SourceFilePath, string DestinationFilePath) CurrentBlockedFile { get; private set; }
 
         public CopyOperation(
             IDirectoryService directoryService,
@@ -40,7 +40,7 @@ namespace Camelot.Services.Operations
 
             if (_fileService.CheckIfExists(_destinationFile))
             {
-                BlockedFile = (_sourceFile, _destinationFile);
+                CurrentBlockedFile = (_sourceFile, _destinationFile);
                 State = OperationState.Blocked;
             }
             else

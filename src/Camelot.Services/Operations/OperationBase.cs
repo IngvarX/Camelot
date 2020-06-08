@@ -8,21 +8,34 @@ namespace Camelot.Services.Operations
 {
     public abstract class OperationBase : IOperationWithProgress, IStatefulOperation
     {
+        private readonly object _stateLocker;
+
         private OperationState _state;
         private double _progress;
 
         public OperationState State
         {
-            get => _state;
+            get
+            {
+                lock (_stateLocker)
+                {
+                    return _state;
+                }
+            }
             protected set
             {
-                if (_state == value)
+                lock (_stateLocker)
                 {
-                    return;
+                    if (_state == value)
+                    {
+                        return;
+                    }
+
+                    _state = value;
                 }
 
-                _state = value;
                 var args = new OperationStateChangedEventArgs(value);
+
                 StateChanged.Raise(this, args);
             }
         }
@@ -41,5 +54,10 @@ namespace Camelot.Services.Operations
         public event EventHandler<OperationProgressChangedEventArgs> ProgressChanged;
 
         public event EventHandler<OperationStateChangedEventArgs> StateChanged;
+
+        protected OperationBase()
+        {
+            _stateLocker = new object();
+        }
     }
 }

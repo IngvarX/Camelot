@@ -23,6 +23,7 @@ namespace Camelot.Services.Operations
 
         private readonly IDictionary<string, ISelfBlockingOperation> _blockedOperationsDictionary;
         private readonly ConcurrentQueue<(string SourceFilePath, string DestinationFilePath)> _blockedFilesQueue;
+        private readonly object _blockedFileLocker;
 
         private int _finishedOperationsCount;
         private IReadOnlyList<IInternalOperation> _currentOperationsGroup;
@@ -30,10 +31,27 @@ namespace Camelot.Services.Operations
         private CancellationTokenSource _cancellationTokenSource;
         private TaskCompletionSource<bool> _taskCompletionSource;
         private OperationContinuationMode? _continuationMode;
+        private (string SourceFilePath, string DestinationFilePath) _currentBlockedFile;
 
         public OperationInfo Info { get; }
 
-        public (string SourceFilePath, string DestinationFilePath) BlockedFile { get; private set; }
+        public (string SourceFilePath, string DestinationFilePath) CurrentBlockedFile
+        {
+            get
+            {
+                lock (_blockedFileLocker)
+                {
+                    return _currentBlockedFile;
+                }
+            }
+            private set
+            {
+                lock (_blockedFileLocker)
+                {
+                   _currentBlockedFile = value;
+                }
+            }
+        }
 
         public event EventHandler<EventArgs> Blocked;
 
@@ -46,10 +64,11 @@ namespace Camelot.Services.Operations
             _taskPool = taskPool;
             _fileNameGenerationService = fileNameGenerationService;
             _groupedOperationsToExecute = groupedOperationsToExecute;
+            Info = operationInfo;
 
             _blockedOperationsDictionary = new ConcurrentDictionary<string, ISelfBlockingOperation>();
             _blockedFilesQueue = new ConcurrentQueue<(string SourceFilePath, string DestinationFilePath)>();
-            Info = operationInfo;
+            _blockedFileLocker = new object();
         }
 
         public async Task RunAsync()
@@ -66,7 +85,7 @@ namespace Camelot.Services.Operations
                 _continuationMode = options.Mode;
             }
 
-            BlockedFile = default;
+            CurrentBlockedFile = default;
 
             var operation = _blockedOperationsDictionary[options.FilePath];
             _blockedOperationsDictionary.Remove(options.FilePath);
@@ -130,7 +149,7 @@ namespace Camelot.Services.Operations
             }
         }
 
-        private async void CurrentOperationOnStateChanged(object sender, OperationStateChangedEventArgs e)
+        private async void OperationOnStateChanged(object sender, OperationStateChangedEventArgs e)
         {
             var state = e.OperationState;
 
@@ -174,22 +193,22 @@ namespace Camelot.Services.Operations
         {
             if (_continuationMode is null)
             {
-                _blockedOperationsDictionary[operation.BlockedFile.SourceFilePath] = operation;
+                _blockedOperationsDictionary[operation.CurrentBlockedFile.SourceFilePath] = operation;
 
-                if (BlockedFile != default)
+                if (CurrentBlockedFile != default)
                 {
-                    _blockedFilesQueue.Enqueue(operation.BlockedFile);
+                    _blockedFilesQueue.Enqueue(operation.CurrentBlockedFile);
 
                     return;
                 }
 
-                BlockedFile = operation.BlockedFile;
+                CurrentBlockedFile = operation.CurrentBlockedFile;
 
                 Blocked.Raise(this, EventArgs.Empty);
             }
             else
             {
-                var (sourceFilePath, destinationFilePath) = operation.BlockedFile;
+                var (sourceFilePath, destinationFilePath) = operation.CurrentBlockedFile;
                 OperationContinuationOptions options;
                 if (_continuationMode is OperationContinuationMode.Rename)
                 {
@@ -215,17 +234,17 @@ namespace Camelot.Services.Operations
 
         private void SubscribeToEvents(IInternalOperation currentOperation)
         {
-            currentOperation.StateChanged += CurrentOperationOnStateChanged;
-            currentOperation.ProgressChanged += CurrentOperationOnProgressChanged;
+            currentOperation.StateChanged += OperationOnStateChanged;
+            currentOperation.ProgressChanged += OperationOnProgressChanged;
         }
 
         private void UnsubscribeFromEvents(IInternalOperation currentOperation)
         {
-            currentOperation.StateChanged -= CurrentOperationOnStateChanged;
-            currentOperation.ProgressChanged += CurrentOperationOnProgressChanged;
+            currentOperation.StateChanged -= OperationOnStateChanged;
+            currentOperation.ProgressChanged += OperationOnProgressChanged;
         }
 
-        private void CurrentOperationOnProgressChanged(object sender, OperationProgressChangedEventArgs e) =>
+        private void OperationOnProgressChanged(object sender, OperationProgressChangedEventArgs e) =>
             UpdateProgress();
 
         private void UpdateProgress()

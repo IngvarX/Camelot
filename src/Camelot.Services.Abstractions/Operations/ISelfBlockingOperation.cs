@@ -5,7 +5,7 @@ namespace Camelot.Services.Abstractions.Operations
 {
     public interface ISelfBlockingOperation
     {
-        (string SourceFilePath, string DestinationFilePath) BlockedFile { get; }
+        (string SourceFilePath, string DestinationFilePath) CurrentBlockedFile { get; }
 
         Task ContinueAsync(OperationContinuationOptions options);
     }
