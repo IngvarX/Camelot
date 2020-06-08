@@ -40,7 +40,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
 
         public string SourceFile => IsProcessingSingleFile
             ? _pathService.GetFileName(_operation.Info.Directories.FirstOrDefault() ?? _operation.Info.Files.FirstOrDefault())
-            : throw new InvalidOperationException();
+            : null;
 
         public string SourceDirectory => _pathService.GetFileName(_operation.Info.SourceDirectory);
 

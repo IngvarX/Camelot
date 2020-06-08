@@ -77,9 +77,7 @@ namespace Camelot.Services
             return fileModel;
         }
 
-        private static FileType GetFileType(FileSystemInfo fileInfo)
-        {
-            return fileInfo.Attributes.HasFlag(FileAttributes.ReparsePoint) ? FileType.Link : FileType.RegularFile;
-        }
+        private static FileType GetFileType(FileSystemInfo fileInfo) =>
+            fileInfo.Attributes.HasFlag(FileAttributes.ReparsePoint) ? FileType.Link : FileType.RegularFile;
     }
 }
