@@ -22,7 +22,7 @@ namespace Camelot.Services.Operations
         private readonly IReadOnlyList<OperationGroup> _groupedOperationsToExecute;
 
         private readonly IDictionary<string, ISelfBlockingOperation> _blockedOperationsDictionary;
-        private readonly Queue<(string SourceFilePath, string DestinationFilePath)> _blockedFilesQueue;
+        private readonly ConcurrentQueue<(string SourceFilePath, string DestinationFilePath)> _blockedFilesQueue;
 
         private int _finishedOperationsCount;
         private IReadOnlyList<IInternalOperation> _currentOperationsGroup;
@@ -48,7 +48,7 @@ namespace Camelot.Services.Operations
             _groupedOperationsToExecute = groupedOperationsToExecute;
 
             _blockedOperationsDictionary = new ConcurrentDictionary<string, ISelfBlockingOperation>();
-            _blockedFilesQueue = new Queue<(string SourceFilePath, string DestinationFilePath)>();
+            _blockedFilesQueue = new ConcurrentQueue<(string SourceFilePath, string DestinationFilePath)>();
             Info = operationInfo;
         }
 
@@ -72,14 +72,7 @@ namespace Camelot.Services.Operations
             _blockedOperationsDictionary.Remove(options.FilePath);
 
             await operation.ContinueAsync(options);
-
-            // TODO: process with default mode?
-            if (_blockedFilesQueue.Any())
-            {
-                BlockedFile = _blockedFilesQueue.Dequeue();
-
-                Blocked.Raise(this, EventArgs.Empty);
-            }
+            await ProcessNextBlockedTaskAsync();
         }
 
         public Task PauseAsync()
@@ -137,7 +130,6 @@ namespace Camelot.Services.Operations
             }
         }
 
-        // TODO: refactor
         private async void CurrentOperationOnStateChanged(object sender, OperationStateChangedEventArgs e)
         {
             var state = e.OperationState;
@@ -145,46 +137,7 @@ namespace Camelot.Services.Operations
             if (state is OperationState.Blocked)
             {
                 var operation = (ISelfBlockingOperation) sender;
-
-                if (_continuationMode is null)
-                {
-                    _blockedOperationsDictionary.Add(operation.BlockedFile.SourceFilePath, operation);
-
-                    if (BlockedFile != default)
-                    {
-                        _blockedFilesQueue.Enqueue(operation.BlockedFile);
-
-                        return;
-                    }
-
-                    BlockedFile = operation.BlockedFile;
-
-                    Blocked.Raise(this, EventArgs.Empty);
-                }
-                else
-                {
-                    var (sourceFilePath, destinationFilePath) = operation.BlockedFile;
-                    OperationContinuationOptions options;
-                    if (_continuationMode is OperationContinuationMode.Rename)
-                    {
-                        var newFilePath = _fileNameGenerationService.GenerateName(destinationFilePath);
-                        options = OperationContinuationOptions.CreateRenamingContinuationOptions(
-                            sourceFilePath,
-                            true,
-                            newFilePath
-                        );
-                    }
-                    else
-                    {
-                        options = OperationContinuationOptions.CreateContinuationOptions(
-                            sourceFilePath,
-                            true,
-                            _continuationMode.Value
-                        );
-                    }
-
-                    await operation.ContinueAsync(options);
-                }
+                await ProcessBlockedTaskAsync(operation);
 
                 return;
             }
@@ -204,12 +157,67 @@ namespace Camelot.Services.Operations
             UpdateProgress();
         }
 
+        private async Task ProcessNextBlockedTaskAsync()
+        {
+            var isBlockedFileAvailable = _blockedFilesQueue.TryDequeue(out var currentBlockedFile);
+            if (!isBlockedFileAvailable)
+            {
+                return;
+            }
+
+            var operation = _blockedOperationsDictionary[currentBlockedFile.SourceFilePath];
+
+            await ProcessBlockedTaskAsync(operation);
+        }
+
+        private async Task ProcessBlockedTaskAsync(ISelfBlockingOperation operation)
+        {
+            if (_continuationMode is null)
+            {
+                _blockedOperationsDictionary[operation.BlockedFile.SourceFilePath] = operation;
+
+                if (BlockedFile != default)
+                {
+                    _blockedFilesQueue.Enqueue(operation.BlockedFile);
+
+                    return;
+                }
+
+                BlockedFile = operation.BlockedFile;
+
+                Blocked.Raise(this, EventArgs.Empty);
+            }
+            else
+            {
+                var (sourceFilePath, destinationFilePath) = operation.BlockedFile;
+                OperationContinuationOptions options;
+                if (_continuationMode is OperationContinuationMode.Rename)
+                {
+                    var newFilePath = _fileNameGenerationService.GenerateFullName(destinationFilePath);
+                    options = OperationContinuationOptions.CreateRenamingContinuationOptions(
+                        sourceFilePath,
+                        true,
+                        newFilePath
+                    );
+                }
+                else
+                {
+                    options = OperationContinuationOptions.CreateContinuationOptions(
+                        sourceFilePath,
+                        true,
+                        _continuationMode.Value
+                    );
+                }
+
+                await operation.ContinueAsync(options);
+            }
+        }
+
         private void SubscribeToEvents(IInternalOperation currentOperation)
         {
             currentOperation.StateChanged += CurrentOperationOnStateChanged;
             currentOperation.ProgressChanged += CurrentOperationOnProgressChanged;
         }
-
 
         private void UnsubscribeFromEvents(IInternalOperation currentOperation)
         {

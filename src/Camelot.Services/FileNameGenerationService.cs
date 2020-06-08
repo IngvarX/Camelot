@@ -18,12 +18,13 @@ namespace Camelot.Services
             _pathService = pathService;
         }
 
-        public string GenerateName(string filePath)
+        public string GenerateFullName(string filePath)
         {
             var initialName = _pathService.GetFileName(filePath);
             var directory = _pathService.GetParentDirectory(filePath);
+            var newName= GenerateName(initialName, directory);
 
-            return GenerateName(initialName, directory);
+            return _pathService.Combine(directory, newName);
         }
 
         public string GenerateName(string initialName, string directory)
