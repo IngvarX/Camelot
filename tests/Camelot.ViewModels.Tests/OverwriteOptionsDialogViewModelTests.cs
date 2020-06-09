@@ -14,6 +14,27 @@ namespace Camelot.ViewModels.Tests
     {
         private const string SourceFilePath = "Source";
         private const string DestinationFilePath = "Destination";
+        private const string NewFileName = "New";
+        private const string ParentDirectory = "Parent";
+        private const string ParentDirectoryName = "ParentName";
+        private const string NewFilePath = ParentDirectory + NewFileName;
+
+        [Theory]
+        [InlineData(true, true)]
+        [InlineData(true, false)]
+        [InlineData(false, true)]
+        [InlineData(false, false)]
+        public void TestProperties(bool shouldApplyForAll, bool areMultipleFilesAvailable)
+        {
+            var dialog = Create(areMultipleFilesAvailable);
+            dialog.ShouldApplyForAll = shouldApplyForAll;
+            dialog.NewFileName = NewFileName;
+
+            Assert.Equal(shouldApplyForAll, dialog.ShouldApplyForAll);
+            Assert.Equal(areMultipleFilesAvailable, dialog.AreMultipleFilesAvailable);
+            Assert.Equal(ParentDirectoryName, dialog.DestinationDirectoryName);
+            Assert.Equal(NewFileName, dialog.NewFileName);
+        }
 
         [Fact]
         public void TestCanceled()
@@ -52,6 +73,7 @@ namespace Camelot.ViewModels.Tests
                 }
 
                 Assert.Equal(shouldApplyForAll, result.Options.ApplyForAll);
+                Assert.Equal(SourceFilePath, result.Options.FilePath);
             };
 
             dialog.SkipCommand.Execute(null);
@@ -77,6 +99,7 @@ namespace Camelot.ViewModels.Tests
                 }
 
                 Assert.Equal(shouldApplyForAll, result.Options.ApplyForAll);
+                Assert.Equal(SourceFilePath, result.Options.FilePath);
             };
 
             dialog.ReplaceCommand.Execute(null);
@@ -96,12 +119,13 @@ namespace Camelot.ViewModels.Tests
             {
                 var result = args.Result;
                 Assert.NotNull(result);
-                if (result.Options.Mode is OperationContinuationMode.OverwriteOlder)
+                if (result.Options.Mode is OperationContinuationMode.OverwriteIfOlder)
                 {
                     callbackCalled = true;
                 }
 
                 Assert.Equal(shouldApplyForAll, result.Options.ApplyForAll);
+                Assert.Equal(SourceFilePath, result.Options.FilePath);
             };
 
             dialog.ReplaceIfOlderCommand.Execute(null);
@@ -109,7 +133,35 @@ namespace Camelot.ViewModels.Tests
             Assert.True(callbackCalled);
         }
 
-        private static OverwriteOptionsDialogViewModel Create()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void TestRename(bool shouldApplyForAll)
+        {
+            var callbackCalled = false;
+            var dialog = Create();
+            dialog.ShouldApplyForAll = shouldApplyForAll;
+            dialog.NewFileName = NewFileName;
+            dialog.CloseRequested += (sender, args) =>
+            {
+                var result = args.Result;
+                Assert.NotNull(result);
+                if (result.Options.Mode is OperationContinuationMode.Rename)
+                {
+                    callbackCalled = true;
+                }
+
+                Assert.Equal(shouldApplyForAll, result.Options.ApplyForAll);
+                Assert.Equal(SourceFilePath, result.Options.FilePath);
+                Assert.Equal(NewFilePath, result.Options.NewFilePath);
+            };
+
+            dialog.RenameCommand.Execute(null);
+
+            Assert.True(callbackCalled);
+        }
+
+        private static OverwriteOptionsDialogViewModel Create(bool areMultipleFilesAvailable = true)
         {
             var fileServiceMock = new Mock<IFileService>();
             fileServiceMock
@@ -118,13 +170,32 @@ namespace Camelot.ViewModels.Tests
             var fileSystemNodeViewModelFactory = new Mock<IFileSystemNodeViewModelFactory>();
             fileSystemNodeViewModelFactory
                 .Setup(m => m.Create(It.IsAny<FileModel>()))
-                .Returns(new Mock<IFileSystemNodeViewModel>().Object);
+                .Returns<FileModel>(fm =>
+                {
+                    var mock = new Mock<IFileSystemNodeViewModel>();
+                    mock
+                        .SetupGet(m => m.FullPath)
+                        .Returns(fm.FullPath);
+
+                    return mock.Object;
+                });
             var fileNameGenerationService = new Mock<IFileNameGenerationService>();
             var pathService = new Mock<IPathService>();
+            pathService
+                .Setup(m => m.GetParentDirectory(DestinationFilePath))
+                .Returns(ParentDirectory);
+            pathService
+                .Setup(m => m.Combine(ParentDirectory, NewFileName))
+                .Returns(NewFilePath);
+            pathService
+                .Setup(m => m.GetFileName(ParentDirectory))
+                .Returns(ParentDirectoryName);
+
             var dialog = new OverwriteOptionsDialogViewModel(
                 fileServiceMock.Object, fileSystemNodeViewModelFactory.Object,
                 fileNameGenerationService.Object, pathService.Object);
-            var parameter = new OverwriteOptionsNavigationParameter(SourceFilePath, DestinationFilePath, true);
+
+            var parameter = new OverwriteOptionsNavigationParameter(SourceFilePath, DestinationFilePath, areMultipleFilesAvailable);
             dialog.Activate(parameter);
 
             return dialog;

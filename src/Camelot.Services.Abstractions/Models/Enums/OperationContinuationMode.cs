@@ -4,7 +4,7 @@ namespace Camelot.Services.Abstractions.Models.Enums
     {
         Skip,
         Overwrite,
-        OverwriteOlder,
+        OverwriteIfOlder,
         Rename
     }
 }

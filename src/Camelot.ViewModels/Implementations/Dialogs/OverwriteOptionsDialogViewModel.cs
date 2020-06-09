@@ -108,7 +108,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 
         private void Replace() => Close(CreateFrom(OperationContinuationMode.Overwrite));
 
-        private void ReplaceIfOlder() => Close(CreateFrom(OperationContinuationMode.OverwriteOlder));
+        private void ReplaceIfOlder() => Close(CreateFrom(OperationContinuationMode.OverwriteIfOlder));
 
         private void Rename()
         {
