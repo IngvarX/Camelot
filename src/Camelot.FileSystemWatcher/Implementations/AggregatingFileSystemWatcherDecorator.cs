@@ -39,15 +39,9 @@ namespace Camelot.FileSystemWatcherWrapper.Implementations
             StartTimer();
         }
 
-        public void StartRaisingEvents()
-        {
-            _fileSystemWatcher.StartRaisingEvents();
-        }
+        public void StartRaisingEvents() => _fileSystemWatcher.StartRaisingEvents();
 
-        public void StopRaisingEvents()
-        {
-            _fileSystemWatcher.StopRaisingEvents();
-        }
+        public void StopRaisingEvents() => _fileSystemWatcher.StopRaisingEvents();
 
         public void Dispose()
         {
@@ -71,35 +65,63 @@ namespace Camelot.FileSystemWatcherWrapper.Implementations
         private IEnumerable<FileSystemEventArgs> GetEvents()
         {
             var filesDictionary = new Dictionary<string, FileSystemEventArgs>();
-            foreach (var fileSystemEventArgs in _eventsQueue)
+            while (_eventsQueue.TryDequeue(out var fileSystemEventArgs))
             {
                 var file = fileSystemEventArgs.FullPath;
                 if (!filesDictionary.ContainsKey(file))
                 {
-                    filesDictionary[file] = fileSystemEventArgs;
+                    filesDictionary[file] = fileSystemEventArgs; // first event, always add it
 
                     continue;
                 }
 
-                var eventType = fileSystemEventArgs.ChangeType;
-                switch (eventType)
+                var previousEventType = filesDictionary[file].ChangeType;
+                var currentEventType = fileSystemEventArgs.ChangeType;
+                switch (previousEventType, currentEventType)
                 {
-                    case WatcherChangeTypes.Created: // file was deleted and recreated == changed
+                    case (WatcherChangeTypes.Created, WatcherChangeTypes.Changed):
+                    case (WatcherChangeTypes.Changed, WatcherChangeTypes.Changed):
+                    case (WatcherChangeTypes.Renamed, WatcherChangeTypes.Changed):
+                        break; // do nothing
+                    case (WatcherChangeTypes.Created, WatcherChangeTypes.Renamed): // create + rename = create with new name
+                    {
+                        var directory = _pathService.GetParentDirectory(fileSystemEventArgs.FullPath);
+                        var args = new FileSystemEventArgs(WatcherChangeTypes.Created, directory, fileSystemEventArgs.Name);
+                        filesDictionary[file] = args;
+                        break;
+                    }
+                    case (WatcherChangeTypes.Created, WatcherChangeTypes.Deleted): // create + delete = null
+                        filesDictionary.Remove(file);
+                        break;
+                    case (WatcherChangeTypes.Renamed, WatcherChangeTypes.Deleted): // rename + delete = delete with old name
+                    {
+                        var directory = _pathService.GetParentDirectory(file);
+                        var args = new FileSystemEventArgs(WatcherChangeTypes.Deleted, directory, fileSystemEventArgs.Name);
+                        filesDictionary[file] = args;
+                        break;
+                    }
+                    case (WatcherChangeTypes.Changed, WatcherChangeTypes.Deleted): // change + delete = delete
+                    case (WatcherChangeTypes.Changed, WatcherChangeTypes.Renamed): // change + rename = rename
+                        filesDictionary[file] = fileSystemEventArgs;
+                        break;
+                    case (WatcherChangeTypes.Deleted, WatcherChangeTypes.Created): // delete + create = change
+                    {
                         var directory = _pathService.GetParentDirectory(file);
                         var args = new FileSystemEventArgs(WatcherChangeTypes.Changed, directory, fileSystemEventArgs.Name);
                         filesDictionary[file] = args;
                         break;
-                    case WatcherChangeTypes.Deleted: // file was removed, overwrite previous events
-                        filesDictionary[file] = fileSystemEventArgs;
+                    }
+                    case (WatcherChangeTypes.Renamed, WatcherChangeTypes.Renamed): // rename + rename = rename with old and new names
+                    {
+                        var directory = _pathService.GetParentDirectory(file);
+                        var newName = fileSystemEventArgs.Name;
+                        var oldName = filesDictionary[file].Name;
+                        var args = new RenamedEventArgs(WatcherChangeTypes.Renamed, directory, newName, oldName);
+                        filesDictionary[file] = args;
                         break;
-                    case WatcherChangeTypes.Changed: // file was changed
-                        filesDictionary[file] = fileSystemEventArgs;
-                        break;
-                    case WatcherChangeTypes.Renamed: // file was renamed, overwrite previous events
-                        filesDictionary[file] = fileSystemEventArgs;
-                        break;
+                    }
                     default:
-                        throw new ArgumentOutOfRangeException(nameof(eventType));
+                        throw new InvalidOperationException($"Invalid types: {previousEventType} and {currentEventType}");
                 }
             }
 
@@ -150,7 +172,6 @@ namespace Camelot.FileSystemWatcherWrapper.Implementations
             _timer.Elapsed -= TimerOnElapsed;
         }
 
-        private void FileSystemWatcherOnEventFired(object sender, FileSystemEventArgs e) =>
-            _eventsQueue.Enqueue(e);
+        private void FileSystemWatcherOnEventFired(object sender, FileSystemEventArgs e) => _eventsQueue.Enqueue(e);
     }
 }

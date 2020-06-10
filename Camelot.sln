@@ -53,6 +53,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{152EE2
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camelot.FileSystemWatcher", "src\Camelot.FileSystemWatcher\Camelot.FileSystemWatcher.csproj", "{085142E8-BC19-4D07-B5C4-6961156D12B6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camelot.FileSystemWatcherWrapper.Tests", "tests\Camelot.FileSystemWatcherWrapper.Tests\Camelot.FileSystemWatcherWrapper.Tests.csproj", "{66071AF5-601D-41AC-A8B4-8240A21652CF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -131,6 +133,10 @@ Global
 		{085142E8-BC19-4D07-B5C4-6961156D12B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{085142E8-BC19-4D07-B5C4-6961156D12B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{085142E8-BC19-4D07-B5C4-6961156D12B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66071AF5-601D-41AC-A8B4-8240A21652CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66071AF5-601D-41AC-A8B4-8240A21652CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66071AF5-601D-41AC-A8B4-8240A21652CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66071AF5-601D-41AC-A8B4-8240A21652CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(AvalonStudioProperties) = preSolution
 		StartupItem = {DBB08575-833E-4079-86F8-45EF9C550021}
@@ -159,5 +165,6 @@ Global
 		{152EE21C-6799-4717-B96C-0DFB5AFA0FF0} = {3E7B6E0B-F769-48DF-B269-43B747D4A964}
 		{35EEA9C8-B6F4-4AF7-9B2A-A3582273D3A8} = {152EE21C-6799-4717-B96C-0DFB5AFA0FF0}
 		{085142E8-BC19-4D07-B5C4-6961156D12B6} = {A67DE010-431F-4400-9137-0FBF610E2527}
+		{66071AF5-601D-41AC-A8B4-8240A21652CF} = {6E54E223-60FD-418C-B6E0-0EB9095C34D0}
 	EndGlobalSection
 EndGlobal
