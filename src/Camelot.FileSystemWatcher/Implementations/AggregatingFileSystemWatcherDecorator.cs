@@ -96,7 +96,8 @@ namespace Camelot.FileSystemWatcherWrapper.Implementations
                     case (WatcherChangeTypes.Renamed, WatcherChangeTypes.Deleted): // rename + delete = delete with old name
                     {
                         var directory = _pathService.GetParentDirectory(file);
-                        var args = new FileSystemEventArgs(WatcherChangeTypes.Deleted, directory, fileSystemEventArgs.Name);
+                        var renamedArgs = (RenamedEventArgs) filesDictionary[file];
+                        var args = new FileSystemEventArgs(WatcherChangeTypes.Deleted, directory, renamedArgs.OldName);
                         filesDictionary[file] = args;
                         break;
                     }

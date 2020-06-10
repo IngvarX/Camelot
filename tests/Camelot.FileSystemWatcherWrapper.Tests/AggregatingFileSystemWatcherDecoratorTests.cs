@@ -12,7 +12,7 @@ namespace Camelot.FileSystemWatcherWrapper.Tests
     public class AggregatingFileSystemWatcherDecoratorTests
     {
         private const int RefreshIntervalMs = 1_000;
-        private const int DelayIntervalMs = 5 * RefreshIntervalMs;
+        private const int DelayIntervalMs = 3 * RefreshIntervalMs;
         private const string FileName = "File";
         private const string NewFileName = "NewFile";
         private const string DirectoryPath = "Directory";
@@ -48,7 +48,7 @@ namespace Camelot.FileSystemWatcherWrapper.Tests
         }
 
         [Fact]
-        public async Task TestChangedAndDeleteEvents()
+        public async Task TestChangedAndDeletedEvents()
         {
             var fileSystemWatcherWrapperMock = new Mock<IFileSystemWatcher>();
             var pathServiceMock = new Mock<IPathService>();
@@ -158,6 +158,39 @@ namespace Camelot.FileSystemWatcherWrapper.Tests
 
             var createdArgs = new FileSystemEventArgs(WatcherChangeTypes.Created, DirectoryPath, FileName);
             fileSystemWatcherWrapperMock.Raise(m => m.Created += null, createdArgs);
+
+            await Task.Delay(DelayIntervalMs);
+
+            Assert.Equal(1, actualCallsCount);
+        }
+
+        [Fact]
+        public async Task TestRenamedAndDeletedEvents()
+        {
+            var fileSystemWatcherWrapperMock = new Mock<IFileSystemWatcher>();
+            var pathServiceMock = new Mock<IPathService>();
+            pathServiceMock
+                .Setup(m => m.GetParentDirectory(It.IsAny<string>()))
+                .Returns(DirectoryPath);
+            var configuration = GetConfiguration();
+
+            var decorator = new AggregatingFileSystemWatcherDecorator(pathServiceMock.Object,
+                fileSystemWatcherWrapperMock.Object, configuration);
+
+            var actualCallsCount = 0;
+            decorator.Deleted += (sender, args) =>
+            {
+                Assert.Equal(WatcherChangeTypes.Deleted, args.ChangeType);
+                Assert.Equal(FileName, args.Name);
+
+                actualCallsCount++;
+            };
+
+            var renamedArgs = new RenamedEventArgs(WatcherChangeTypes.Renamed, DirectoryPath, NewFileName, FileName);
+            fileSystemWatcherWrapperMock.Raise(m => m.Renamed += null, renamedArgs);
+
+            var deletedArgs = new FileSystemEventArgs(WatcherChangeTypes.Deleted, DirectoryPath, NewFileName);
+            fileSystemWatcherWrapperMock.Raise(m => m.Deleted += null, deletedArgs);
 
             await Task.Delay(DelayIntervalMs);
 
