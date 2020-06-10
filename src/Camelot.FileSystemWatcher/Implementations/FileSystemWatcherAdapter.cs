@@ -5,7 +5,7 @@ using Camelot.FileSystemWatcherWrapper.Interfaces;
 
 namespace Camelot.FileSystemWatcherWrapper.Implementations
 {
-    public class FileSystemWatcherWrapper : IFileSystemWatcherWrapper
+    public class FileSystemWatcherAdapter : IFileSystemWatcher
     {
         private readonly FileSystemWatcher _fileSystemWatcher;
 
@@ -17,13 +17,13 @@ namespace Camelot.FileSystemWatcherWrapper.Implementations
 
         public event EventHandler<RenamedEventArgs> Renamed;
 
-        public FileSystemWatcherWrapper(FileSystemWatcher fileSystemWatcher)
+        public FileSystemWatcherAdapter(FileSystemWatcher fileSystemWatcher)
         {
             _fileSystemWatcher = fileSystemWatcher;
 
             SubscribeToEvents();
         }
-        
+
         public void StartRaisingEvents()
         {
             _fileSystemWatcher.EnableRaisingEvents = true;
@@ -57,24 +57,12 @@ namespace Camelot.FileSystemWatcherWrapper.Implementations
             _fileSystemWatcher.Renamed -= FileSystemWatcherOnRenamed;
         }
 
-        private void FileSystemWatcherOnCreated(object sender, FileSystemEventArgs e)
-        {
-            Created.Raise(sender, e);
-        }
+        private void FileSystemWatcherOnCreated(object sender, FileSystemEventArgs e) => Created.Raise(sender, e);
 
-        private void FileSystemWatcherOnChanged(object sender, FileSystemEventArgs e)
-        {
-            Changed.Raise(sender, e);
-        }
+        private void FileSystemWatcherOnChanged(object sender, FileSystemEventArgs e) => Changed.Raise(sender, e);
 
-        private void FileSystemWatcherOnDeleted(object sender, FileSystemEventArgs e)
-        {
-            Deleted.Raise(sender, e);
-        }
+        private void FileSystemWatcherOnDeleted(object sender, FileSystemEventArgs e) => Deleted.Raise(sender, e);
 
-        private void FileSystemWatcherOnRenamed(object sender, RenamedEventArgs e)
-        {
-            Renamed.Raise(sender, e);
-        }
+        private void FileSystemWatcherOnRenamed(object sender, RenamedEventArgs e) => Renamed.Raise(sender, e);
     }
 }

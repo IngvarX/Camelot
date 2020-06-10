@@ -330,10 +330,10 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             void ReloadInUiThread() => _applicationDispatcher.Dispatch(ReloadFiles);
 
             // TODO: don't reload all files, process update properly
-            _fileSystemWatchingService.FileCreated += (sender, args) => ReloadInUiThread();
-            _fileSystemWatchingService.FileChanged += (sender, args) => ReloadInUiThread();
-            _fileSystemWatchingService.FileRenamed += (sender, args) => ReloadInUiThread();
-            _fileSystemWatchingService.FileDeleted += (sender, args) => ReloadInUiThread();
+            _fileSystemWatchingService.NodeCreated += (sender, args) => ReloadInUiThread();
+            _fileSystemWatchingService.NodeChanged += (sender, args) => ReloadInUiThread();
+            _fileSystemWatchingService.NodeRenamed += (sender, args) => ReloadInUiThread();
+            _fileSystemWatchingService.NodeDeleted += (sender, args) => ReloadInUiThread();
         }
 
         private void ReloadFiles()
@@ -343,7 +343,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
                 return;
             }
 
-            _fileSystemWatchingService.StopWatching();
+            _fileSystemWatchingService.StopWatching(CurrentDirectory);
 
             var parentDirectory = _directoryService.GetParentDirectory(CurrentDirectory);
             var directories = _directoryService.GetChildDirectories(CurrentDirectory);

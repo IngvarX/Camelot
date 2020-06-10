@@ -5,16 +5,16 @@ namespace Camelot.Services.Abstractions
 {
     public interface IFileSystemWatchingService
     {
-        event EventHandler<FileDeletedEventArgs> FileDeleted;
+        event EventHandler<FileDeletedEventArgs> NodeDeleted;
 
-        event EventHandler<FileCreatedEventArgs> FileCreated;
+        event EventHandler<FileCreatedEventArgs> NodeCreated;
 
-        event EventHandler<FileChangedEventArgs> FileChanged;
+        event EventHandler<FileChangedEventArgs> NodeChanged;
 
-        event EventHandler<FileRenamedEventArgs> FileRenamed;
+        event EventHandler<FileRenamedEventArgs> NodeRenamed;
 
         void StartWatching(string directory);
 
-        void StopWatching();
+        void StopWatching(string directory);
     }
 }

@@ -6,6 +6,7 @@ using ApplicationDispatcher.Interfaces;
 using Camelot.DataAccess.Configuration;
 using Camelot.DataAccess.LiteDb;
 using Camelot.DataAccess.UnitOfWork;
+using Camelot.FileSystemWatcherWrapper.Configuration;
 using Camelot.FileSystemWatcherWrapper.Implementations;
 using Camelot.FileSystemWatcherWrapper.Interfaces;
 using Camelot.Services;
@@ -48,7 +49,7 @@ namespace Camelot
             RegisterConfiguration(services);
             RegisterEnvironmentServices(services);
             RegisterAvaloniaServices(services);
-            RegisterFileSystemWatcherServices(services);
+            RegisterFileSystemWatcherServices(services, resolver);
             RegisterTaskPool(services, resolver);
             RegisterDataAccess(services, resolver);
             RegisterServices(services, resolver);
@@ -64,7 +65,6 @@ namespace Camelot
 
             var aboutDialogConfiguration = new AboutDialogConfiguration();
             configuration.GetSection("About").Bind(aboutDialogConfiguration);
-
             services.RegisterConstant(aboutDialogConfiguration);
 
             var databaseName = configuration["DataAccess:DatabaseName"];
@@ -74,8 +74,11 @@ namespace Camelot
             {
                 ConnectionString = Path.Combine(assemblyDirectory, databaseName)
             };
-
             services.RegisterConstant(databaseConfiguration);
+
+            var fileSystemWatcherConfiguration = new FileSystemWatcherConfiguration();
+            configuration.GetSection("FileSystemWatcher").Bind(fileSystemWatcherConfiguration);
+            services.RegisterConstant(fileSystemWatcherConfiguration);
         }
 
         private static void RegisterEnvironmentServices(IMutableDependencyResolver services)
@@ -92,9 +95,12 @@ namespace Camelot
             services.RegisterLazySingleton<IApplicationVersionProvider>(() => new ApplicationVersionProvider());
         }
 
-        private static void RegisterFileSystemWatcherServices(IMutableDependencyResolver services)
+        private static void RegisterFileSystemWatcherServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
-            services.RegisterLazySingleton<IFileSystemWatcherWrapperFactory>(() => new FileSystemWatcherWrapperFactory());
+            services.RegisterLazySingleton<IFileSystemWatcherFactory>(() => new FileSystemWatcherFactory(
+                resolver.GetService<IPathService>(),
+                resolver.GetService<FileSystemWatcherConfiguration>()
+            ));
         }
 
         private static void RegisterTaskPool(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
@@ -126,9 +132,6 @@ namespace Camelot
                 resolver.GetService<IPathService>(),
                 resolver.GetService<IFileNameGenerationService>()
             ));
-            services.RegisterLazySingleton<IFileSystemWatchingService>(() => new FileSystemWatchingService(
-                resolver.GetService<IFileSystemWatcherWrapperFactory>()
-            ));
             services.RegisterLazySingleton<IFilesSelectionService>(() => new FilesSelectionService());
             services.RegisterLazySingleton<IOperationsService>(() => new OperationsService(
                 resolver.GetService<IOperationsFactory>(),
@@ -141,9 +144,8 @@ namespace Camelot
             services.RegisterLazySingleton<IDirectoryService>(() => new DirectoryService(
                 resolver.GetService<IPathService>()
             ));
-            services.RegisterLazySingleton<IFileSystemWatcherWrapperFactory>(() => new FileSystemWatcherWrapperFactory());
             services.Register<IFileSystemWatchingService>(() => new FileSystemWatchingService(
-                resolver.GetService<IFileSystemWatcherWrapperFactory>()
+                resolver.GetService<IFileSystemWatcherFactory>()
             ));
             services.RegisterLazySingleton(() => new FileOpeningBehavior(
                 resolver.GetService<IResourceOpeningService>()

@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Camelot.FileSystemWatcherWrapper.Interfaces
 {
-    public interface IFileSystemWatcherWrapper : IDisposable
+    public interface IFileSystemWatcher : IDisposable
     {
         public event EventHandler<FileSystemEventArgs> Created;
 

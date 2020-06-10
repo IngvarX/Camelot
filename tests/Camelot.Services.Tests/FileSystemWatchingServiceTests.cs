@@ -11,7 +11,7 @@ namespace Camelot.Services.Tests
         private const string FileName = "File.txt";
         private const string NewFileName = "NewFile.txt";
 
-        private readonly Mock<IFileSystemWatcherWrapper> _fileSystemWatcherMock;
+        private readonly Mock<IFileSystemWatcher> _fileSystemWatcherMock;
         private readonly IFileSystemWatchingService _fileSystemWatchingService;
 
         private static string CurrentDirectory => Directory.GetCurrentDirectory();
@@ -22,9 +22,9 @@ namespace Camelot.Services.Tests
 
         public FileSystemWatchingServiceTests()
         {
-            _fileSystemWatcherMock = new Mock<IFileSystemWatcherWrapper>();
+            _fileSystemWatcherMock = new Mock<IFileSystemWatcher>();
 
-            var factoryMock = new Mock<IFileSystemWatcherWrapperFactory>();
+            var factoryMock = new Mock<IFileSystemWatcherFactory>();
             factoryMock
                 .Setup(m => m.Create(CurrentDirectory))
                 .Returns(_fileSystemWatcherMock.Object);
@@ -36,7 +36,7 @@ namespace Camelot.Services.Tests
         public void TestFileRemoved()
         {
             var callbackCalled = false;
-            _fileSystemWatchingService.FileDeleted += (sender, eventArgs) =>
+            _fileSystemWatchingService.NodeDeleted += (sender, eventArgs) =>
             {
                 callbackCalled = true;
                 Assert.True(eventArgs.Node == FilePath);
@@ -54,7 +54,7 @@ namespace Camelot.Services.Tests
         public void TestFileCreated()
         {
             var callbackCalled = false;
-            _fileSystemWatchingService.FileCreated += (sender, eventArgs) =>
+            _fileSystemWatchingService.NodeCreated += (sender, eventArgs) =>
             {
                 callbackCalled = true;
                 Assert.True(eventArgs.Node == FilePath);
@@ -72,7 +72,7 @@ namespace Camelot.Services.Tests
         public void TestFileChanged()
         {
             var callbackCalled = false;
-            _fileSystemWatchingService.FileChanged += (sender, eventArgs) =>
+            _fileSystemWatchingService.NodeChanged += (sender, eventArgs) =>
             {
                 callbackCalled = true;
                 Assert.True(eventArgs.Node == FilePath);
@@ -90,7 +90,7 @@ namespace Camelot.Services.Tests
         public void TestFileRenamed()
         {
             var callbackCalled = false;
-            _fileSystemWatchingService.FileRenamed += (sender, eventArgs) =>
+            _fileSystemWatchingService.NodeRenamed += (sender, eventArgs) =>
             {
                 callbackCalled = true;
                 Assert.True(eventArgs.Node == FilePath);
@@ -108,7 +108,7 @@ namespace Camelot.Services.Tests
         [Fact]
         public void TestCallbackNotCalledWithoutSubscription()
         {
-            _fileSystemWatchingService.FileRenamed += (sender, eventArgs) =>
+            _fileSystemWatchingService.NodeRenamed += (sender, eventArgs) =>
             {
                 AssertExtensions.Fail();
             };
@@ -120,13 +120,13 @@ namespace Camelot.Services.Tests
         [Fact]
         public void TestCallbackNotCalledAfterUnsubscription()
         {
-            _fileSystemWatchingService.FileRenamed += (sender, eventArgs) =>
+            _fileSystemWatchingService.NodeRenamed += (sender, eventArgs) =>
             {
                 AssertExtensions.Fail();
             };
 
             _fileSystemWatchingService.StartWatching(CurrentDirectory);
-            _fileSystemWatchingService.StopWatching();
+            _fileSystemWatchingService.StopWatching(CurrentDirectory);
 
             var args = new RenamedEventArgs(WatcherChangeTypes.Renamed, CurrentDirectory, FileName, FileName);
             _fileSystemWatcherMock.Raise(m => m.Renamed += null, args);

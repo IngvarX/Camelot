@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using Camelot.Extensions;
 using Camelot.FileSystemWatcherWrapper.Interfaces;
@@ -9,100 +10,115 @@ namespace Camelot.Services
 {
     public class FileSystemWatchingService : IFileSystemWatchingService, IDisposable
     {
-        private readonly IFileSystemWatcherWrapperFactory _fileSystemWatcherWrapperFactory;
+        private readonly IFileSystemWatcherFactory _fileSystemWatcherWrapperFactory;
 
-        private IFileSystemWatcherWrapper _fileSystemWatcher;
+        private readonly IDictionary<string, (IFileSystemWatcher, int)> _fileSystemWatchersDictionary;
 
-        public event EventHandler<FileDeletedEventArgs> FileDeleted;
+        public event EventHandler<FileDeletedEventArgs> NodeDeleted;
 
-        public event EventHandler<FileCreatedEventArgs> FileCreated;
+        public event EventHandler<FileCreatedEventArgs> NodeCreated;
 
-        public event EventHandler<FileChangedEventArgs> FileChanged;
+        public event EventHandler<FileChangedEventArgs> NodeChanged;
 
-        public event EventHandler<FileRenamedEventArgs> FileRenamed;
+        public event EventHandler<FileRenamedEventArgs> NodeRenamed;
 
-        public FileSystemWatchingService(IFileSystemWatcherWrapperFactory fileSystemWatcherWrapperFactory)
+        public FileSystemWatchingService(IFileSystemWatcherFactory fileSystemWatcherWrapperFactory)
         {
             _fileSystemWatcherWrapperFactory = fileSystemWatcherWrapperFactory;
+
+            _fileSystemWatchersDictionary = new Dictionary<string, (IFileSystemWatcher, int)>();
         }
 
         public void StartWatching(string directory)
         {
-            // TODO: Change dir instead of creation new?
-            _fileSystemWatcher = _fileSystemWatcherWrapperFactory.Create(directory);
+            if (_fileSystemWatchersDictionary.ContainsKey(directory))
+            {
+                var (watcher, subscriptionsCount) = _fileSystemWatchersDictionary[directory];
+                _fileSystemWatchersDictionary[directory] = (watcher, subscriptionsCount + 1);
+            }
+            else
+            {
+                var fileSystemWatcher = _fileSystemWatcherWrapperFactory.Create(directory);
+                _fileSystemWatchersDictionary[directory] = (fileSystemWatcher, 1);
 
-            SubscribeToEvents();
+                SubscribeToEvents(fileSystemWatcher);
+            }
         }
 
-        public void StopWatching()
+        public void StopWatching(string directory)
         {
-            CleanupFileSystemWatcher();
-        }
-
-        public void Dispose()
-        {
-            CleanupFileSystemWatcher();
-        }
-
-        private void CleanupFileSystemWatcher()
-        {
-            if (_fileSystemWatcher is null)
+            if (!_fileSystemWatchersDictionary.ContainsKey(directory))
             {
                 return;
             }
 
-            UnsubscribeFromEvents();
+            var (watcher, _) = _fileSystemWatchersDictionary[directory];
+            _fileSystemWatchersDictionary.Remove(directory);
 
-            _fileSystemWatcher.Dispose();
-            _fileSystemWatcher = null;
+            CleanupFileSystemWatcher(watcher);
         }
 
-        private void SubscribeToEvents()
+        public void Dispose()
         {
-            _fileSystemWatcher.Changed += FileSystemWatcherOnChanged;
-            _fileSystemWatcher.Created += FileSystemWatcherOnCreated;
-            _fileSystemWatcher.Deleted += FileSystemWatcherOnDeleted;
-            _fileSystemWatcher.Renamed += FileSystemWatcherOnRenamed;
-
-            _fileSystemWatcher.StartRaisingEvents();
+            foreach (var directory in _fileSystemWatchersDictionary.Keys)
+            {
+                StopWatching(directory);
+            }
         }
 
-        private void UnsubscribeFromEvents()
+        private void CleanupFileSystemWatcher(IFileSystemWatcher fileSystemWatcher)
         {
-            _fileSystemWatcher.StopRaisingEvents();
+            UnsubscribeFromEvents(fileSystemWatcher);
 
-            _fileSystemWatcher.Changed -= FileSystemWatcherOnChanged;
-            _fileSystemWatcher.Created -= FileSystemWatcherOnCreated;
-            _fileSystemWatcher.Deleted -= FileSystemWatcherOnDeleted;
-            _fileSystemWatcher.Renamed -= FileSystemWatcherOnRenamed;
+            fileSystemWatcher.Dispose();
+        }
+
+        private void SubscribeToEvents(IFileSystemWatcher fileSystemWatcher)
+        {
+            fileSystemWatcher.Changed += FileSystemWatcherOnChanged;
+            fileSystemWatcher.Created += FileSystemWatcherOnCreated;
+            fileSystemWatcher.Deleted += FileSystemWatcherOnDeleted;
+            fileSystemWatcher.Renamed += FileSystemWatcherOnRenamed;
+
+            fileSystemWatcher.StartRaisingEvents();
+        }
+
+        private void UnsubscribeFromEvents(IFileSystemWatcher fileSystemWatcher)
+        {
+            fileSystemWatcher.StopRaisingEvents();
+
+            fileSystemWatcher.Changed -= FileSystemWatcherOnChanged;
+            fileSystemWatcher.Created -= FileSystemWatcherOnCreated;
+            fileSystemWatcher.Deleted -= FileSystemWatcherOnDeleted;
+            fileSystemWatcher.Renamed -= FileSystemWatcherOnRenamed;
         }
 
         private void FileSystemWatcherOnChanged(object sender, FileSystemEventArgs e)
         {
             var args = new FileChangedEventArgs(e.FullPath);
 
-            FileChanged.Raise(this, args);
+            NodeChanged.Raise(this, args);
         }
 
         private void FileSystemWatcherOnCreated(object sender, FileSystemEventArgs e)
         {
             var args = new FileCreatedEventArgs(e.FullPath);
 
-            FileCreated.Raise(this, args);
+            NodeCreated.Raise(this, args);
         }
 
         private void FileSystemWatcherOnDeleted(object sender, FileSystemEventArgs e)
         {
             var args = new FileDeletedEventArgs(e.FullPath);
 
-            FileDeleted.Raise(this, args);
+            NodeDeleted.Raise(this, args);
         }
 
         private void FileSystemWatcherOnRenamed(object sender, RenamedEventArgs e)
         {
             var args = new FileRenamedEventArgs(e.OldFullPath, e.FullPath);
 
-            FileRenamed.Raise(this, args);
+            NodeRenamed.Raise(this, args);
         }
     }
 }
