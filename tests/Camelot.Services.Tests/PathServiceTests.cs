@@ -72,7 +72,7 @@ namespace Camelot.Services.Tests
         {
             var actualDirectory = _pathService.GetCommonRootDirectory(files);
 
-            Assert.Equal(expectedDirectory, actualDirectory);
+            Assert.Equal(expectedDirectory, actualDirectory.Replace("\\", "/"));
         }
     }
 }
