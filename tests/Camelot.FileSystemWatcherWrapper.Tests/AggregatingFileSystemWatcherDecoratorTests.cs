@@ -15,6 +15,8 @@ namespace Camelot.FileSystemWatcherWrapper.Tests
         private const int DelayIntervalMs = 3 * RefreshIntervalMs;
         private const string FileName = "File";
         private const string NewFileName = "NewFile";
+        private const string IntermediateFileName = "IntermediateFile";
+        private const string UpdatedIntermediateFileName = "UpdatedIntermediateFile";
         private const string DirectoryPath = "Directory";
 
         [Fact]
@@ -106,9 +108,9 @@ namespace Camelot.FileSystemWatcherWrapper.Tests
             {
                 Assert.Equal(WatcherChangeTypes.Changed, args.ChangeType);
                 Assert.Equal(FileName, args.Name);
+                Assert.Equal(0, actualCallsCount);
 
                 changedCallsCount++;
-                Assert.Equal(0, actualCallsCount);
             };
             decorator.Renamed += (sender, args) =>
             {
@@ -178,6 +180,7 @@ namespace Camelot.FileSystemWatcherWrapper.Tests
                 fileSystemWatcherWrapperMock.Object, configuration);
 
             var actualCallsCount = 0;
+            var isCallbackCalled = false;
             decorator.Deleted += (sender, args) =>
             {
                 Assert.Equal(WatcherChangeTypes.Deleted, args.ChangeType);
@@ -185,6 +188,7 @@ namespace Camelot.FileSystemWatcherWrapper.Tests
 
                 actualCallsCount++;
             };
+            decorator.Renamed += (sender, args) => isCallbackCalled = true;
 
             var renamedArgs = new RenamedEventArgs(WatcherChangeTypes.Renamed, DirectoryPath, NewFileName, FileName);
             fileSystemWatcherWrapperMock.Raise(m => m.Renamed += null, renamedArgs);
@@ -195,6 +199,175 @@ namespace Camelot.FileSystemWatcherWrapper.Tests
             await Task.Delay(DelayIntervalMs);
 
             Assert.Equal(1, actualCallsCount);
+            Assert.False(isCallbackCalled);
+        }
+
+        [Fact]
+        public async Task TestRenamedAndChangedEvents()
+        {
+            var fileSystemWatcherWrapperMock = new Mock<IFileSystemWatcher>();
+            var pathServiceMock = new Mock<IPathService>();
+            pathServiceMock
+                .Setup(m => m.GetParentDirectory(It.IsAny<string>()))
+                .Returns(DirectoryPath);
+            var configuration = GetConfiguration();
+
+            var decorator = new AggregatingFileSystemWatcherDecorator(pathServiceMock.Object,
+                fileSystemWatcherWrapperMock.Object, configuration);
+
+            var actualCallsCount = 0;
+            var isCallbackCalled = false;
+            decorator.Renamed += (sender, args) =>
+            {
+                Assert.Equal(WatcherChangeTypes.Renamed, args.ChangeType);
+                Assert.Equal(FileName, args.OldName);
+                Assert.Equal(NewFileName, args.Name);
+
+                actualCallsCount++;
+            };
+            decorator.Changed += (sender, args) => isCallbackCalled = true;
+
+            var renamedArgs = new RenamedEventArgs(WatcherChangeTypes.Renamed, DirectoryPath, NewFileName, FileName);
+            fileSystemWatcherWrapperMock.Raise(m => m.Renamed += null, renamedArgs);
+
+            var changedArgs = new FileSystemEventArgs(WatcherChangeTypes.Changed, DirectoryPath, NewFileName);
+            fileSystemWatcherWrapperMock.Raise(m => m.Deleted += null, changedArgs);
+
+            await Task.Delay(DelayIntervalMs);
+
+            Assert.Equal(1, actualCallsCount);
+            Assert.False(isCallbackCalled);
+        }
+
+        [Fact]
+        public async Task TestRenamedEvents()
+        {
+            var fileSystemWatcherWrapperMock = new Mock<IFileSystemWatcher>();
+            var pathServiceMock = new Mock<IPathService>();
+            pathServiceMock
+                .Setup(m => m.GetParentDirectory(It.IsAny<string>()))
+                .Returns(DirectoryPath);
+            var configuration = GetConfiguration();
+
+            var decorator = new AggregatingFileSystemWatcherDecorator(pathServiceMock.Object,
+                fileSystemWatcherWrapperMock.Object, configuration);
+
+            var actualCallsCount = 0;
+            decorator.Renamed += (sender, args) =>
+            {
+                Assert.Equal(WatcherChangeTypes.Renamed, args.ChangeType);
+                Assert.Equal(FileName, args.OldName);
+                Assert.Equal(NewFileName, args.Name);
+
+                actualCallsCount++;
+            };
+
+            var renamedArgs = new RenamedEventArgs(WatcherChangeTypes.Renamed, DirectoryPath, IntermediateFileName, FileName);
+            fileSystemWatcherWrapperMock.Raise(m => m.Renamed += null, renamedArgs);
+
+            renamedArgs = new RenamedEventArgs(WatcherChangeTypes.Renamed, DirectoryPath, UpdatedIntermediateFileName, IntermediateFileName);
+            fileSystemWatcherWrapperMock.Raise(m => m.Renamed += null, renamedArgs);
+
+            renamedArgs = new RenamedEventArgs(WatcherChangeTypes.Renamed, DirectoryPath, NewFileName, UpdatedIntermediateFileName);
+            fileSystemWatcherWrapperMock.Raise(m => m.Renamed += null, renamedArgs);
+
+            await Task.Delay(DelayIntervalMs);
+
+            Assert.Equal(1, actualCallsCount);
+        }
+
+        [Fact]
+        public async Task TestCreatedAndChangedEvents()
+        {
+            var fileSystemWatcherWrapperMock = new Mock<IFileSystemWatcher>();
+            var pathServiceMock = new Mock<IPathService>();
+            var configuration = GetConfiguration();
+
+            var decorator = new AggregatingFileSystemWatcherDecorator(pathServiceMock.Object,
+                fileSystemWatcherWrapperMock.Object, configuration);
+
+            var actualCallsCount = 0;
+            var isCallbackCalled = false;
+            decorator.Created += (sender, args) =>
+            {
+                Assert.Equal(WatcherChangeTypes.Created, args.ChangeType);
+                Assert.Equal(FileName, args.Name);
+
+                actualCallsCount++;
+            };
+            decorator.Changed += (sender, args) => isCallbackCalled = true;
+
+            var createdArgs = new FileSystemEventArgs(WatcherChangeTypes.Created, DirectoryPath, FileName);
+            fileSystemWatcherWrapperMock.Raise(m => m.Created += null, createdArgs);
+
+            var renamedArgs = new FileSystemEventArgs(WatcherChangeTypes.Changed, DirectoryPath, FileName);
+            fileSystemWatcherWrapperMock.Raise(m => m.Changed += null, renamedArgs);
+
+            await Task.Delay(DelayIntervalMs);
+
+            Assert.Equal(1, actualCallsCount);
+            Assert.False(isCallbackCalled);
+        }
+
+        [Fact]
+        public async Task TestCreatedAndDeletedEvents()
+        {
+            var fileSystemWatcherWrapperMock = new Mock<IFileSystemWatcher>();
+            var pathServiceMock = new Mock<IPathService>();
+            var configuration = GetConfiguration();
+
+            var decorator = new AggregatingFileSystemWatcherDecorator(pathServiceMock.Object,
+                fileSystemWatcherWrapperMock.Object, configuration);
+
+            var isCallbackCalled = false;
+            decorator.Created += (sender, args) => isCallbackCalled = true;
+            decorator.Deleted += (sender, args) => isCallbackCalled = true;
+
+            var createdArgs = new FileSystemEventArgs(WatcherChangeTypes.Created, DirectoryPath, FileName);
+            fileSystemWatcherWrapperMock.Raise(m => m.Created += null, createdArgs);
+
+            var changedArgs = new FileSystemEventArgs(WatcherChangeTypes.Deleted, DirectoryPath, FileName);
+            fileSystemWatcherWrapperMock.Raise(m => m.Deleted += null, changedArgs);
+
+            await Task.Delay(DelayIntervalMs);
+
+            Assert.False(isCallbackCalled);
+        }
+
+        [Fact]
+        public async Task TestCreatedAndRenamedEvents()
+        {
+            var fileSystemWatcherWrapperMock = new Mock<IFileSystemWatcher>();
+            var pathServiceMock = new Mock<IPathService>();
+            pathServiceMock
+                .Setup(m => m.GetParentDirectory(It.IsAny<string>()))
+                .Returns(DirectoryPath);
+            var configuration = GetConfiguration();
+
+            var decorator = new AggregatingFileSystemWatcherDecorator(pathServiceMock.Object,
+                fileSystemWatcherWrapperMock.Object, configuration);
+
+            var actualCallsCount = 0;
+            var isCallbackCalled = false;
+            decorator.Created += (sender, args) =>
+            {
+                Assert.Equal(WatcherChangeTypes.Created, args.ChangeType);
+                Assert.Equal(NewFileName, args.Name);
+
+                actualCallsCount++;
+            };
+            decorator.Renamed += (sender, args) => isCallbackCalled = false;
+
+            var createdArgs = new FileSystemEventArgs(WatcherChangeTypes.Created, DirectoryPath, FileName);
+            fileSystemWatcherWrapperMock.Raise(m => m.Created += null, createdArgs);
+
+            var renamedArgs = new RenamedEventArgs(WatcherChangeTypes.Renamed, DirectoryPath, NewFileName, FileName);
+            fileSystemWatcherWrapperMock.Raise(m => m.Renamed += null, renamedArgs);
+
+            await Task.Delay(DelayIntervalMs);
+
+            Assert.Equal(1, actualCallsCount);
+            Assert.False(isCallbackCalled);
         }
 
         private static FileSystemWatcherConfiguration GetConfiguration() => new FileSystemWatcherConfiguration

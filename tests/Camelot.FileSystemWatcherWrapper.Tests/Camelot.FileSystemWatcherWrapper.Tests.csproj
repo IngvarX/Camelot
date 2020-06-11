@@ -16,6 +16,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\src\Camelot.FileSystemWatcher\Camelot.FileSystemWatcher.csproj" />
+      <ProjectReference Include="..\Camelot.Tests.Common\Camelot.Tests.Common.csproj" />
     </ItemGroup>
 
 </Project>
