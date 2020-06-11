@@ -268,7 +268,11 @@ namespace Camelot
                 resolver.GetService<IFileNameGenerationService>(),
                 resolver.GetService<IPathService>()
             ));
-            services.Register(() => new CreateDirectoryDialogViewModel());
+            services.Register(() => new CreateDirectoryDialogViewModel(
+                resolver.GetService<IDirectoryService>(),
+                resolver.GetService<IFileService>(),
+                resolver.GetService<IPathService>()
+            ));
             services.Register<IOperationsStateViewModel>(() => new OperationsStatesListViewModel(
                 resolver.GetService<IOperationsStateService>(),
                 resolver.GetService<IOperationStateViewModelFactory>(),
