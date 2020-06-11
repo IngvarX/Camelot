@@ -12,7 +12,7 @@ namespace Camelot.FileSystemWatcherWrapper.Tests
     public class AggregatingFileSystemWatcherDecoratorTests
     {
         private const int RefreshIntervalMs = 1_000;
-        private const int DelayIntervalMs = 3 * RefreshIntervalMs;
+        private const int DelayIntervalMs = 1_500;
         private const string FileName = "File";
         private const string NewFileName = "NewFile";
         private const string IntermediateFileName = "IntermediateFile";
@@ -231,7 +231,7 @@ namespace Camelot.FileSystemWatcherWrapper.Tests
             fileSystemWatcherWrapperMock.Raise(m => m.Renamed += null, renamedArgs);
 
             var changedArgs = new FileSystemEventArgs(WatcherChangeTypes.Changed, DirectoryPath, NewFileName);
-            fileSystemWatcherWrapperMock.Raise(m => m.Deleted += null, changedArgs);
+            fileSystemWatcherWrapperMock.Raise(m => m.Changed += null, changedArgs);
 
             await Task.Delay(DelayIntervalMs);
 
