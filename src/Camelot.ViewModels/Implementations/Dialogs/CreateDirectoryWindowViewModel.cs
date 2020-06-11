@@ -35,7 +35,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             _pathService = pathService;
 
             var canCreate = this.WhenAnyValue(x => x.DirectoryName,
-                IsNameValid);
+                CheckIfNameIsValid);
 
             CreateCommand = ReactiveCommand.Create(CreateDirectory, canCreate);
             CancelCommand = ReactiveCommand.Create(Close);
@@ -53,7 +53,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             Close(result);
         }
 
-        private bool IsNameValid(string name)
+        private bool CheckIfNameIsValid(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
             {

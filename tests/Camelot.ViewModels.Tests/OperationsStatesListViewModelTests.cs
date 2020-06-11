@@ -104,6 +104,8 @@ namespace Camelot.ViewModels.Tests
             var result = await taskCompletionSource.Task;
             Assert.True(result);
 
+            await Task.Delay(500);
+
             operationMock.Verify(m => m.ContinueAsync(options), Times.Once());
         }
     }

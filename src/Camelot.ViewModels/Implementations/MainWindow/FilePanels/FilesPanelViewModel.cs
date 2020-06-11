@@ -327,13 +327,37 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         {
             _selectedFileSystemNodes.CollectionChanged += SelectedFileSystemNodesOnCollectionChanged;
 
-            void ReloadInUiThread() => _applicationDispatcher.Dispatch(ReloadFiles);
+            void ExecuteInUiThread(Action action) => _applicationDispatcher.Dispatch(action);
 
             // TODO: don't reload all files, process update properly
-            _fileSystemWatchingService.NodeCreated += (sender, args) => ReloadInUiThread();
-            _fileSystemWatchingService.NodeChanged += (sender, args) => ReloadInUiThread();
-            _fileSystemWatchingService.NodeRenamed += (sender, args) => ReloadInUiThread();
-            _fileSystemWatchingService.NodeDeleted += (sender, args) => ReloadInUiThread();
+            _fileSystemWatchingService.NodeCreated += (sender, args) =>
+                ExecuteInUiThread(ReloadFiles);
+            _fileSystemWatchingService.NodeChanged += (sender, args) =>
+                ExecuteInUiThread(ReloadFiles);
+            _fileSystemWatchingService.NodeRenamed += (sender, args) =>
+                ExecuteInUiThread(ReloadFiles);
+            _fileSystemWatchingService.NodeDeleted += (sender, args) =>
+                ExecuteInUiThread(() => RemoveNode(args.Node));
+        }
+
+        private void RemoveNode(string nodePath)
+        {
+            var node = GetViewModel(nodePath);
+            if (node != null)
+            {
+                _fileSystemNodes.Remove(node);
+            }
+        }
+
+        private void UpdateNode(string nodePath)
+        {
+            var node = GetViewModel(nodePath);
+            if (node is null)
+            {
+                return;
+            }
+
+            // var nodeModel = _fileService.GetFile()
         }
 
         private void ReloadFiles()
@@ -442,5 +466,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
             return new List<TabModel> {rootDirectoryTab};
         }
+
+        private IFileSystemNodeViewModel GetViewModel(string nodePath) =>
+            _fileSystemNodes.SingleOrDefault(n => n.FullPath == nodePath);
     }
 }

@@ -12,7 +12,7 @@ namespace Camelot.FileSystemWatcherWrapper.Tests
     public class AggregatingFileSystemWatcherDecoratorTests
     {
         private const int RefreshIntervalMs = 100;
-        private const int DelayIntervalMs = 500;
+        private const int DelayIntervalMs = 300;
         private const string FileName = "File";
         private const string NewFileName = "NewFile";
         private const string IntermediateFileName = "IntermediateFile";
