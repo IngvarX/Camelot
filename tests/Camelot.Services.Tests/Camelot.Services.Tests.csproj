@@ -16,7 +16,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\src\Camelot.Services\Camelot.Services.csproj" />
-      <ProjectReference Include="..\Camelot.Tests.Common\Camelot.Tests.Common.csproj" />
     </ItemGroup>
 
 </Project>

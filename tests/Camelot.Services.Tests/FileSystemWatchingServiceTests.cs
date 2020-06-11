@@ -1,7 +1,6 @@
 using System.IO;
 using Camelot.FileSystemWatcherWrapper.Interfaces;
 using Camelot.Services.Abstractions;
-using Camelot.Tests.Common;
 using Moq;
 using Xunit;
 
@@ -121,13 +120,16 @@ namespace Camelot.Services.Tests
         [Fact]
         public void TestCallbackNotCalledAfterUnsubscription()
         {
-            _fileSystemWatchingService.NodeRenamed += (sender, eventArgs) => AssertExtensions.Fail();
+            var isCallbackCalled = false;
+            _fileSystemWatchingService.NodeRenamed += (sender, eventArgs) => isCallbackCalled = true;
 
             _fileSystemWatchingService.StartWatching(CurrentDirectory);
             _fileSystemWatchingService.StopWatching(CurrentDirectory);
 
             var args = new RenamedEventArgs(WatcherChangeTypes.Renamed, CurrentDirectory, FileName, FileName);
             _fileSystemWatcherMock.Raise(m => m.Renamed += null, args);
+
+            Assert.False(isCallbackCalled);
         }
     }
 }
