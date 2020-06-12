@@ -1,28 +1,27 @@
 using System;
-using Camelot.Services.Abstractions.Models;
 
 namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Comparers
 {
-    public class DirectoryModelsFileSystemNodesComparer : FileSystemNodesComparerBase<DirectoryModel>
+    public class DirectoryViewModelsComparer : FileSystemNodesComparerBase<DirectoryViewModel>
     {
-        public DirectoryModelsFileSystemNodesComparer(bool isAscending, SortingColumn sortingColumn)
-        : base(isAscending, sortingColumn)
+        public DirectoryViewModelsComparer(bool isAscending, SortingColumn sortingColumn)
+            : base(isAscending, sortingColumn)
         {
-            
+
         }
-        
-        protected override int Compare(DirectoryModel x, DirectoryModel y, SortingColumn sortingColumn)
+
+        protected override int Compare(DirectoryViewModel x, DirectoryViewModel y, SortingColumn sortingColumn)
         {
-            if (x is null)
+            if (x.IsParentDirectory)
             {
-                throw new ArgumentNullException(nameof(x));
+                return -1;
             }
-            
-            if (y is null)
+
+            if (y.IsParentDirectory)
             {
-                throw new ArgumentNullException(nameof(y));
+                return 1;
             }
-            
+
             switch (sortingColumn)
             {
                 case SortingColumn.Extension:

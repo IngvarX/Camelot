@@ -2,10 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using ApplicationDispatcher.Interfaces;
@@ -331,24 +329,32 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
             void ExecuteInUiThread(Action action) => _applicationDispatcher.Dispatch(action);
 
-            // TODO: don't reload all files, process update properly
             _fileSystemWatchingService.NodeCreated += (sender, args) =>
-                ExecuteInUiThread(ReloadFiles);
+                ExecuteInUiThread(() => InsertNode(args.Node));
             _fileSystemWatchingService.NodeChanged += (sender, args) =>
                 ExecuteInUiThread(() => UpdateNode(args.Node));
             _fileSystemWatchingService.NodeRenamed += (sender, args) =>
-                ExecuteInUiThread(ReloadFiles);
+                ExecuteInUiThread(() => RenameNode(args.Node, args.NewName));
             _fileSystemWatchingService.NodeDeleted += (sender, args) =>
                 ExecuteInUiThread(() => RemoveNode(args.Node));
         }
 
-        private void RemoveNode(string nodePath)
+        private void RenameNode(string oldName, string newName)
         {
-            var nodeViewModel = GetViewModel(nodePath);
-            if (nodeViewModel != null)
+            RemoveNode(oldName);
+            InsertNode(newName);
+        }
+
+        private void InsertNode(string nodePath)
+        {
+            var newNodeModel = CreateFrom(nodePath);
+            if (newNodeModel is null)
             {
-                _fileSystemNodes.Remove(nodeViewModel);
+                return;
             }
+
+            var index = GetInsertIndex(newNodeModel);
+            _fileSystemNodes.Insert(index, newNodeModel);
         }
 
         private void UpdateNode(string nodePath)
@@ -368,6 +374,15 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             _fileSystemNodes.Replace(oldNodeViewModel, newNodeModel);
         }
 
+        private void RemoveNode(string nodePath)
+        {
+            var nodeViewModel = GetViewModel(nodePath);
+            if (nodeViewModel != null)
+            {
+                _fileSystemNodes.Remove(nodeViewModel);
+            }
+        }
+
         private void ReloadFiles()
         {
             if (!_directoryService.CheckIfExists(CurrentDirectory))
@@ -381,20 +396,15 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             var directories = _directoryService.GetChildDirectories(CurrentDirectory);
             var files = _fileService.GetFiles(CurrentDirectory);
 
-            var sortingViewModel = SelectedTab.SortingViewModel;
-            var directoriesComparer = new DirectoryModelsFileSystemNodesComparer(
-                sortingViewModel.IsSortingByAscendingEnabled, sortingViewModel.SortingColumn);
             var directoriesViewModels = directories
-                .OrderBy(d => d, directoriesComparer)
                 .Select(d => _fileSystemNodeViewModelFactory.Create(d));
-
-            var filesComparer = new FileModelsFileSystemNodesComparer(
-                sortingViewModel.IsSortingByAscendingEnabled, sortingViewModel.SortingColumn);
             var filesViewModels = files
-                .OrderBy(f => f, filesComparer)
                 .Select(_fileSystemNodeViewModelFactory.Create);
 
-            var models = directoriesViewModels.Concat(filesViewModels);
+            var comparer = GetComparer();
+            var models = directoriesViewModels
+                .Concat(filesViewModels)
+                .OrderBy(x => x, comparer);
 
             _fileSystemNodes.Clear();
             _fileSystemNodes.AddRange(models);
@@ -492,6 +502,30 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             };
 
             return new List<TabModel> {rootDirectoryTab};
+        }
+
+        private int GetInsertIndex(IFileSystemNodeViewModel newNodeModel)
+        {
+            var comparer = GetComparer();
+            var index = 0;
+            for (; index < _fileSystemNodes.Count; index++)
+            {
+                var currentViewModel = _fileSystemNodes[index];
+                if (comparer.Compare(currentViewModel, newNodeModel) > 0)
+                {
+                    break;
+                }
+            }
+
+            return index;
+        }
+
+        private IComparer<IFileSystemNodeViewModel> GetComparer()
+        {
+            var sortingViewModel = SelectedTab.SortingViewModel;
+
+            return new FileSystemNodesComparer(sortingViewModel.IsSortingByAscendingEnabled,
+                sortingViewModel.SortingColumn);
         }
 
         private IFileSystemNodeViewModel GetViewModel(string nodePath) =>

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -17,7 +18,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private readonly IClipboardOperationsService _clipboardOperationsService;
         private readonly IFilesOperationsMediator _filesOperationsMediator;
 
-        private string _lastModifiedDateTime;
+        private DateTime _lastModifiedDateTime;
         private string _fullPath;
         private string _name;
         private string _fullName;
@@ -25,7 +26,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         private IReadOnlyList<string> Files => new[] {FullPath};
 
-        public string LastModifiedDateTime
+        public DateTime LastModifiedDateTime
         {
             get => _lastModifiedDateTime;
             set => this.RaiseAndSetIfChanged(ref _lastModifiedDateTime, value);

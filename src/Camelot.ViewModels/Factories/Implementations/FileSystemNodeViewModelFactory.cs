@@ -1,4 +1,3 @@
-using System.Globalization;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Behaviors;
 using Camelot.Services.Abstractions.Models;
@@ -49,7 +48,7 @@ namespace Camelot.ViewModels.Factories.Implementations
             {
                 FullPath = fileModel.FullPath,
                 Size = fileModel.SizeBytes,
-                LastModifiedDateTime = fileModel.LastWriteTime.ToString(CultureInfo.CurrentCulture),
+                LastModifiedDateTime = fileModel.LastModifiedDateTime,
                 Name = _pathService.GetFileNameWithoutExtension(fileModel.Name),
                 Extension = _pathService.GetExtension(fileModel.Name),
                 FullName = _pathService.GetFileName(fileModel.Name)
@@ -60,7 +59,7 @@ namespace Camelot.ViewModels.Factories.Implementations
 
         public IFileSystemNodeViewModel Create(DirectoryModel directoryModel, bool isParentDirectory)
         {
-            var fileViewModel = new DirectoryViewModel(
+            var directoryViewModel = new DirectoryViewModel(
                 _directoryOpeningBehavior,
                 _operationsService,
                 _clipboardOperationsService,
@@ -68,12 +67,12 @@ namespace Camelot.ViewModels.Factories.Implementations
             {
                 FullPath = directoryModel.FullPath,
                 Name = directoryModel.Name,
-                LastModifiedDateTime = directoryModel.LastModifiedDateTime.ToString(CultureInfo.CurrentCulture),
+                LastModifiedDateTime = directoryModel.LastModifiedDateTime,
                 FullName = directoryModel.Name,
                 IsParentDirectory = isParentDirectory
             };
 
-            return fileViewModel;
+            return directoryViewModel;
         }
     }
 }
