@@ -85,10 +85,6 @@ namespace Camelot.FileSystemWatcherWrapper.Implementations
 
                 switch (previousEventType, currentEventType)
                 {
-                    case (WatcherChangeTypes.Created, WatcherChangeTypes.Changed):
-                    case (WatcherChangeTypes.Changed, WatcherChangeTypes.Changed):
-                    case (WatcherChangeTypes.Renamed, WatcherChangeTypes.Changed):
-                        break; // do nothing
                     case (WatcherChangeTypes.Created, WatcherChangeTypes.Renamed): // create + rename = create with new name
                     {
                         var directory = _pathService.GetParentDirectory(fileSystemEventArgs.FullPath);
@@ -137,8 +133,6 @@ namespace Camelot.FileSystemWatcherWrapper.Implementations
                         filesDictionary[currentRenamedArgs.FullPath] = args;
                         break;
                     }
-                    default:
-                        throw new InvalidOperationException($"Invalid types: {previousEventType} and {currentEventType}");
                 }
             }
 
