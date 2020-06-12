@@ -65,21 +65,20 @@ namespace Camelot.FileSystemWatcherWrapper.Implementations
 
         private IEnumerable<FileSystemEventArgs> GetEvents()
         {
-            // key: current file name, value: current event
+            // key: current file name, value: aggregation event
             var filesDictionary = new Dictionary<string, FileSystemEventArgs>();
 
             while (_eventsQueue.TryDequeue(out var fileSystemEventArgs))
             {
-                var filePath = fileSystemEventArgs is RenamedEventArgs renamedEventArgs
-                    ? renamedEventArgs.OldFullPath
-                    : fileSystemEventArgs.FullPath;
-                if (!filesDictionary.ContainsKey(filePath))
+                var filePath = GetFullPath(fileSystemEventArgs);
+                if (!filesDictionary.ContainsKey(filePath)) // always add first event
                 {
-                    filesDictionary[fileSystemEventArgs.FullPath] = fileSystemEventArgs; // first event, always add it
+                    filesDictionary[fileSystemEventArgs.FullPath] = fileSystemEventArgs;
 
                     continue;
                 }
 
+                // not first event
                 var previousEventType = filesDictionary[filePath].ChangeType;
                 var currentEventType = fileSystemEventArgs.ChangeType;
 
@@ -94,8 +93,10 @@ namespace Camelot.FileSystemWatcherWrapper.Implementations
                         break;
                     }
                     case (WatcherChangeTypes.Created, WatcherChangeTypes.Deleted): // create + delete = null
+                    {
                         filesDictionary.Remove(filePath);
                         break;
+                    }
                     case (WatcherChangeTypes.Renamed, WatcherChangeTypes.Deleted): // rename + delete = delete with old name
                     {
                         var directory = _pathService.GetParentDirectory(filePath);
@@ -106,8 +107,10 @@ namespace Camelot.FileSystemWatcherWrapper.Implementations
                         break;
                     }
                     case (WatcherChangeTypes.Changed, WatcherChangeTypes.Deleted): // change + delete = delete
+                    {
                         filesDictionary[filePath] = fileSystemEventArgs;
                         break;
+                    }
                     case (WatcherChangeTypes.Changed, WatcherChangeTypes.Renamed): // change + rename = rename
                     {
                         filesDictionary.Remove(filePath); // remove events for old path
@@ -183,6 +186,12 @@ namespace Camelot.FileSystemWatcherWrapper.Implementations
             _timer.Elapsed -= TimerOnElapsed;
         }
 
-        private void FileSystemWatcherOnEventFired(object sender, FileSystemEventArgs e) => _eventsQueue.Enqueue(e);
+        private void FileSystemWatcherOnEventFired(object sender, FileSystemEventArgs args) =>
+            _eventsQueue.Enqueue(args);
+
+        private static string GetFullPath(FileSystemEventArgs args) =>
+            args is RenamedEventArgs renamedEventArgs
+                ? renamedEventArgs.OldFullPath
+                : args.FullPath;
     }
 }
