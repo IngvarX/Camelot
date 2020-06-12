@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using ApplicationDispatcher.Interfaces;
@@ -333,7 +335,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             _fileSystemWatchingService.NodeCreated += (sender, args) =>
                 ExecuteInUiThread(ReloadFiles);
             _fileSystemWatchingService.NodeChanged += (sender, args) =>
-                ExecuteInUiThread(ReloadFiles);
+                ExecuteInUiThread(() => UpdateNode(args.Node));
             _fileSystemWatchingService.NodeRenamed += (sender, args) =>
                 ExecuteInUiThread(ReloadFiles);
             _fileSystemWatchingService.NodeDeleted += (sender, args) =>
@@ -342,22 +344,28 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         private void RemoveNode(string nodePath)
         {
-            var node = GetViewModel(nodePath);
-            if (node != null)
+            var nodeViewModel = GetViewModel(nodePath);
+            if (nodeViewModel != null)
             {
-                _fileSystemNodes.Remove(node);
+                _fileSystemNodes.Remove(nodeViewModel);
             }
         }
 
         private void UpdateNode(string nodePath)
         {
-            var node = GetViewModel(nodePath);
-            if (node is null)
+            var oldNodeViewModel = GetViewModel(nodePath);
+            if (oldNodeViewModel is null)
             {
                 return;
             }
 
-            // var nodeModel = _fileService.GetFile()
+            var newNodeModel = CreateFrom(nodePath);
+            if (newNodeModel is null)
+            {
+                return;
+            }
+
+            _fileSystemNodes.Replace(oldNodeViewModel, newNodeModel);
         }
 
         private void ReloadFiles()
@@ -443,6 +451,25 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         private static TabModel CreateFrom(ITabViewModel tabViewModel) =>
             new TabModel {Directory = tabViewModel.CurrentDirectory, SortingSettings = GetSortingSettings(tabViewModel)};
+
+        private IFileSystemNodeViewModel CreateFrom(string path)
+        {
+            if (_fileService.CheckIfExists(path))
+            {
+                var fileModel = _fileService.GetFile(path);
+
+                return _fileSystemNodeViewModelFactory.Create(fileModel);
+            }
+
+            if (_directoryService.CheckIfExists(path))
+            {
+                var directoryModel = _directoryService.GetDirectory(path);
+
+                return _fileSystemNodeViewModelFactory.Create(directoryModel);
+            }
+
+            return null;
+        }
 
         private static SortingSettings GetSortingSettings(ITabViewModel tabViewModel) =>
             new SortingSettings

@@ -58,6 +58,8 @@ namespace Camelot.Services
             return true;
         }
 
+        public DirectoryModel GetDirectory(string directory) => CreateFrom(directory);
+
         public DirectoryModel GetParentDirectory(string directory)
         {
             var parentDirectory = new DirectoryInfo(directory).Parent;
@@ -78,7 +80,7 @@ namespace Camelot.Services
         }
 
         public bool CheckIfExists(string directory) => Directory.Exists(directory);
-        
+
         public string GetAppRootDirectory() => _pathService.GetPathRoot(Directory.GetCurrentDirectory());
 
         public IReadOnlyCollection<string> GetFilesRecursively(string directory) => Directory
@@ -95,7 +97,7 @@ namespace Camelot.Services
             {
                 return;
             }
-            
+
             Directory.Move(directoryPath, newDirectoryPath);
         }
 

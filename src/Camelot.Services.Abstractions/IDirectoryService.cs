@@ -12,9 +12,11 @@ namespace Camelot.Services.Abstractions
         string SelectedDirectory { get; set; }
 
         bool Create(string directory);
-        
+
+        DirectoryModel GetDirectory(string directory);
+
         DirectoryModel GetParentDirectory(string directory);
-        
+
         IReadOnlyCollection<DirectoryModel> GetDirectories(IReadOnlyCollection<string> directories);
 
         IReadOnlyCollection<DirectoryModel> GetChildDirectories(string directory);
