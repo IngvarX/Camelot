@@ -18,6 +18,7 @@ using Camelot.Services.Environment.Implementations;
 using Camelot.Services.Environment.Interfaces;
 using Camelot.Services.Implementations;
 using Camelot.Services.Linux;
+using Camelot.Services.Linux.Interfaces;
 using Camelot.Services.Mac;
 using Camelot.Services.Operations;
 using Camelot.Services.Windows;
@@ -204,9 +205,19 @@ namespace Camelot
                 resolver.GetService<IEnvironmentService>(),
                 resolver.GetService<IDirectoryService>()
             ));
+            services.RegisterLazySingleton<IDesktopEnvironmentService>(() => new DesktopEnvironmentService(
+                resolver.GetService<IEnvironmentService>()
+            ));
+            services.RegisterLazySingleton<IShellCommandWrappingService>(() => new ShellCommandWrappingService());
             services.RegisterLazySingleton<IResourceOpeningService>(() => new LinuxResourceOpeningService(
                 resolver.GetService<IProcessService>(),
-                resolver.GetService<IEnvironmentService>()
+                resolver.GetService<IShellCommandWrappingService>(),
+                resolver.GetService<IDesktopEnvironmentService>()
+            ));
+            services.RegisterLazySingleton<ITerminalService>(() => new LinuxTerminalService(
+                resolver.GetService<IProcessService>(),
+                resolver.GetService<IUnitOfWorkFactory>(),
+                resolver.GetService<IDesktopEnvironmentService>()
             ));
         }
 

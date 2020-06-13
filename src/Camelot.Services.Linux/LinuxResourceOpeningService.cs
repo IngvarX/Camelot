@@ -1,28 +1,46 @@
 using Camelot.Services.Abstractions;
 using Camelot.Services.Environment.Interfaces;
+using Camelot.Services.Linux.Enums;
+using Camelot.Services.Linux.Interfaces;
 
 namespace Camelot.Services.Linux
 {
     public class LinuxResourceOpeningService : IResourceOpeningService
     {
         private readonly IProcessService _processService;
-        private readonly string _openCommand;
-        private readonly string _openCommandArguments;
+        private readonly IShellCommandWrappingService _shellCommandWrappingService;
+        private readonly IDesktopEnvironmentService _desktopEnvironmentService;
+
+        private bool _isInitialized;
+        private string _openCommand;
+        private string _openCommandArguments;
 
         public LinuxResourceOpeningService(
             IProcessService processService,
-            IEnvironmentService environmentService)
+            IShellCommandWrappingService shellCommandWrappingService,
+            IDesktopEnvironmentService desktopEnvironmentService)
         {
             _processService = processService;
-
-            (_openCommand, _openCommandArguments) = GetOpenCommandAndArguments(environmentService);
+            _shellCommandWrappingService = shellCommandWrappingService;
+            _desktopEnvironmentService = desktopEnvironmentService;
         }
 
         public void Open(string resource)
         {
+            if (!_isInitialized)
+            {
+                Initialize();
+            }
+
             var arguments = GetArguments(resource);
 
             _processService.Run(_openCommand, arguments);
+        }
+
+        private void Initialize()
+        {
+            (_openCommand, _openCommandArguments) = GetOpenCommandAndArguments();
+            _isInitialized = true;
         }
 
         private string GetArguments(string resource)
@@ -34,37 +52,29 @@ namespace Camelot.Services.Linux
             return string.Format(_openCommandArguments, escapedResource);
         }
 
-        // TODO: refactor
-        private static (string, string) GetOpenCommandAndArguments(IEnvironmentService environmentService)
+        private (string, string) GetOpenCommandAndArguments()
         {
-            var desktopEnvironmentName = GetDesktopEnvironmentName(environmentService);
-            switch (desktopEnvironmentName)
+            var desktopEnvironment = GetDesktopEnvironment();
+            switch (desktopEnvironment)
             {
-                case "kde":
+                case DesktopEnvironment.Kde:
                     return WrapWithNohup("kioclient", @"exec \""{0}\""");
-                case "gnome":
-                case "lxde":
-                case "lxqt":
-                case "mate":
-                case "unity":
-                case "cinnamon":
+                case DesktopEnvironment.Gnome:
+                case DesktopEnvironment.Lxde:
+                case DesktopEnvironment.Lxqt:
+                case DesktopEnvironment.Mate:
+                case DesktopEnvironment.Unity:
+                case DesktopEnvironment.Cinnamon:
                     return WrapWithNohup("gio", @"open \""{0}\""");
                 default:
                     return ("xdg-open", "\"{0}\"");
             }
         }
 
-        private static (string, string) WrapWithNohup(string command, string arguments) =>
-            ("bash", $"-c \"nohup {command} {arguments} >/dev/null 2>&1\"");
+        private (string, string) WrapWithNohup(string command, string arguments) =>
+            _shellCommandWrappingService.WrapWithNohup(command, arguments);
 
-        private static string GetDesktopEnvironmentName(IEnvironmentService environmentService)
-        {
-            var xdgCurrentDesktop = environmentService.GetEnvironmentVariable("XDG_CURRENT_DESKTOP");
-            var desktopSession = environmentService.GetEnvironmentVariable("DESKTOP_SESSION");
-            var desktopEnvironmentName =
-                string.IsNullOrWhiteSpace(xdgCurrentDesktop) ? desktopSession : xdgCurrentDesktop;
-
-            return desktopEnvironmentName.ToLower();
-        }
+        private DesktopEnvironment GetDesktopEnvironment() =>
+            _desktopEnvironmentService.GetDesktopEnvironment();
     }
 }

@@ -5,7 +5,9 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Camelot.DataAccess\Camelot.DataAccess.csproj" />
       <ProjectReference Include="..\Camelot.Services.Abstractions\Camelot.Services.Abstractions.csproj" />
+      <ProjectReference Include="..\Camelot.Services.Environment\Camelot.Services.Environment.csproj" />
     </ItemGroup>
 
 </Project>

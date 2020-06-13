@@ -3,6 +3,8 @@ using Camelot.Services.Abstractions;
 using Camelot.Services.Behaviors;
 using Camelot.Services.Environment.Interfaces;
 using Camelot.Services.Linux;
+using Camelot.Services.Linux.Enums;
+using Camelot.Services.Linux.Interfaces;
 using Camelot.Services.Mac;
 using Camelot.Services.Windows;
 using Moq;
@@ -77,12 +79,16 @@ namespace Camelot.Services.Tests
             processServiceMock
                 .Setup(m => m.Run(command, arguments))
                 .Verifiable();
-            var environmentServiceMock = new Mock<IEnvironmentService>();
-            environmentServiceMock
-                .Setup(m => m.GetEnvironmentVariable("DESKTOP_SESSION"))
-                .Returns("Unknown");
+            var shellCommandWrappingService = new Mock<IShellCommandWrappingService>();
+            var desktopEnvironmentService = new Mock<IDesktopEnvironmentService>();
+            desktopEnvironmentService
+                .Setup(m => m.GetDesktopEnvironment())
+                .Returns(DesktopEnvironment.Unknown);
 
-            var fileOpeningService = new LinuxResourceOpeningService(processServiceMock.Object, environmentServiceMock.Object);
+            var fileOpeningService = new LinuxResourceOpeningService(
+                processServiceMock.Object,
+                shellCommandWrappingService.Object,
+                desktopEnvironmentService.Object);
 
             fileOpeningService.Open(FileName);
 
