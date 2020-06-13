@@ -21,11 +21,15 @@ namespace Camelot.Services.AllPlatforms
         public void Open(string directory)
         {
             var (command, arguments) = GetSavedCommand() ?? GetDefaultCommand();
+            var (wrappedCommand, wrappedArguments) = Wrap(command, arguments);
 
-            _processService.Run(command, string.Format(arguments, directory));
+            _processService.Run(wrappedCommand, string.Format(wrappedArguments, directory));
         }
 
         protected abstract TerminalSettings GetDefaultCommand();
+
+        protected virtual (string, string) Wrap(string command, string arguments) =>
+            (command, arguments);
 
         private TerminalSettings GetSavedCommand()
         {

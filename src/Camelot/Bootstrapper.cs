@@ -217,7 +217,8 @@ namespace Camelot
             services.RegisterLazySingleton<ITerminalService>(() => new LinuxTerminalService(
                 resolver.GetService<IProcessService>(),
                 resolver.GetService<IUnitOfWorkFactory>(),
-                resolver.GetService<IDesktopEnvironmentService>()
+                resolver.GetService<IDesktopEnvironmentService>(),
+                resolver.GetService<IShellCommandWrappingService>()
             ));
         }
 
@@ -232,6 +233,10 @@ namespace Camelot
             ));
             services.RegisterLazySingleton<IResourceOpeningService>(() => new MacResourceOpeningService(
                 resolver.GetService<IProcessService>()
+            ));
+            services.RegisterLazySingleton<ITerminalService>(() => new MacTerminalService(
+                resolver.GetService<IProcessService>(),
+                resolver.GetService<IUnitOfWorkFactory>()
             ));
         }
 

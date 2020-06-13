@@ -10,14 +10,17 @@ namespace Camelot.Services.Linux
     public class LinuxTerminalService : TerminalServiceBase
     {
         private readonly IDesktopEnvironmentService _desktopEnvironmentService;
+        private readonly IShellCommandWrappingService _shellCommandWrappingService;
 
         public LinuxTerminalService(
             IProcessService processService,
             IUnitOfWorkFactory unitOfWorkFactory,
-            IDesktopEnvironmentService desktopEnvironmentService)
+            IDesktopEnvironmentService desktopEnvironmentService,
+            IShellCommandWrappingService shellCommandWrappingService)
             : base(processService, unitOfWorkFactory)
         {
             _desktopEnvironmentService = desktopEnvironmentService;
+            _shellCommandWrappingService = shellCommandWrappingService;
         }
 
         protected override TerminalSettings GetDefaultCommand()
@@ -31,5 +34,8 @@ namespace Camelot.Services.Linux
 
             return new TerminalSettings {Command = command, Arguments = arguments};
         }
+
+        protected override (string, string) Wrap(string command, string arguments) =>
+            _shellCommandWrappingService.WrapWithNohup(command, arguments);
     }
 }
