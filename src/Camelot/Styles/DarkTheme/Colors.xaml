@@ -33,6 +33,8 @@
                          Opacity="0.65" />
         <SolidColorBrush x:Key="DirectoryTextBoxBackgroundColorBrush" Color="{DynamicResource BlackColor}"
                          Opacity="0.2" />
+        <SolidColorBrush x:Key="TopPanelBackgroundColorBrush" Color="{DynamicResource BlackColor}"
+                         Opacity="0.3" />
         <SolidColorBrush x:Key="MenuBackgroundColorBrush" Color="{DynamicResource MenuBackgroundColor}" />
         <SolidColorBrush x:Key="TabButtonBorderColorBrush" Color="{DynamicResource BlackColor}"
                          Opacity="0.4" />

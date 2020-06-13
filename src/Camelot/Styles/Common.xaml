@@ -51,7 +51,7 @@
     </Style>
 
     <Style Selector="MenuItem">
-        <Setter Property="FontSize" Value="18" />
+        <Setter Property="FontSize" Value="20" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Padding" Value="10,6" />
         <Setter Property="FontFamily" Value="SansSerif" />
@@ -158,6 +158,15 @@
 
     <Style Selector="Border.defaultBackgroundBorder">
         <Setter Property="Background" Value="{DynamicResource MainBackgroundColorBrush}" />
+    </Style>
+
+    <Style Selector="Button.topOperationButton">
+        <Setter Property="Foreground" Value="{DynamicResource HighlightBrush}" />
+        <Setter Property="FontSize" Value="20" />
+    </Style>
+
+    <Style Selector="Button.topOperationButton:pointerover">
+        <Setter Property="Foreground" Value="{DynamicResource IconButtonHoverForegroundColorBrush}" />
     </Style>
 
 </Styles>
