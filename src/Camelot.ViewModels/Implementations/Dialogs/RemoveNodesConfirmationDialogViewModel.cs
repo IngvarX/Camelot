@@ -47,8 +47,8 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             _pathService = pathService;
             _files = Enumerable.Empty<string>();
 
-            OkCommand = ReactiveCommand.Create(() => Close(new RemoveNodesConfirmationDialogResult(true)));
-            CancelCommand = ReactiveCommand.Create(Close);
+            OkCommand = ReactiveCommand.Create(Ok);
+            CancelCommand = ReactiveCommand.Create(Cancel);
         }
 
         public override void Activate(NodesRemovingNavigationParameter parameter)
@@ -56,5 +56,12 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             Files = parameter.Files.Select(_pathService.GetFileName);
             IsRemovingToTrash = parameter.IsRemovingToTrash;
         }
+
+        private void Ok() => Close(CreateResult(true));
+
+        private void Cancel() => Close(CreateResult(false));
+
+        private static RemoveNodesConfirmationDialogResult CreateResult(bool isConfirmed) =>
+            new RemoveNodesConfirmationDialogResult(isConfirmed);
     }
 }

@@ -55,6 +55,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camelot.FileSystemWatcher",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camelot.FileSystemWatcherWrapper.Tests", "tests\Camelot.FileSystemWatcherWrapper.Tests\Camelot.FileSystemWatcherWrapper.Tests.csproj", "{66071AF5-601D-41AC-A8B4-8240A21652CF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camelot.Services.Linux.Tests", "tests\Camelot.Services.Linux.Tests\Camelot.Services.Linux.Tests.csproj", "{88F851D7-C12E-4C4E-AA49-268AC1B9FE18}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camelot.Services.Mac.Tests", "tests\Camelot.Services.Mac.Tests\Camelot.Services.Mac.Tests.csproj", "{8A8B301D-CB87-40AD-A975-14C53CEDBAA0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camelot.Services.Windows.Tests", "tests\Camelot.Services.Windows.Tests\Camelot.Services.Windows.Tests.csproj", "{E31503D3-2EE2-4F8C-ACFD-7D1B3EBBEAE1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -137,6 +143,18 @@ Global
 		{66071AF5-601D-41AC-A8B4-8240A21652CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66071AF5-601D-41AC-A8B4-8240A21652CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66071AF5-601D-41AC-A8B4-8240A21652CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88F851D7-C12E-4C4E-AA49-268AC1B9FE18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88F851D7-C12E-4C4E-AA49-268AC1B9FE18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88F851D7-C12E-4C4E-AA49-268AC1B9FE18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88F851D7-C12E-4C4E-AA49-268AC1B9FE18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A8B301D-CB87-40AD-A975-14C53CEDBAA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A8B301D-CB87-40AD-A975-14C53CEDBAA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A8B301D-CB87-40AD-A975-14C53CEDBAA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A8B301D-CB87-40AD-A975-14C53CEDBAA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E31503D3-2EE2-4F8C-ACFD-7D1B3EBBEAE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E31503D3-2EE2-4F8C-ACFD-7D1B3EBBEAE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E31503D3-2EE2-4F8C-ACFD-7D1B3EBBEAE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E31503D3-2EE2-4F8C-ACFD-7D1B3EBBEAE1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(AvalonStudioProperties) = preSolution
 		StartupItem = {DBB08575-833E-4079-86F8-45EF9C550021}
@@ -166,5 +184,8 @@ Global
 		{35EEA9C8-B6F4-4AF7-9B2A-A3582273D3A8} = {152EE21C-6799-4717-B96C-0DFB5AFA0FF0}
 		{085142E8-BC19-4D07-B5C4-6961156D12B6} = {A67DE010-431F-4400-9137-0FBF610E2527}
 		{66071AF5-601D-41AC-A8B4-8240A21652CF} = {6E54E223-60FD-418C-B6E0-0EB9095C34D0}
+		{88F851D7-C12E-4C4E-AA49-268AC1B9FE18} = {6E54E223-60FD-418C-B6E0-0EB9095C34D0}
+		{8A8B301D-CB87-40AD-A975-14C53CEDBAA0} = {6E54E223-60FD-418C-B6E0-0EB9095C34D0}
+		{E31503D3-2EE2-4F8C-ACFD-7D1B3EBBEAE1} = {6E54E223-60FD-418C-B6E0-0EB9095C34D0}
 	EndGlobalSection
 EndGlobal

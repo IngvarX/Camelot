@@ -1,27 +1,11 @@
 using System;
 using Camelot.Services.Linux.Builders;
-using Camelot.Services.Windows.Builders;
 using Xunit;
 
-namespace Camelot.Services.Tests
+namespace Camelot.Services.Linux.Tests
 {
-    public class RemovedFileMetadataBuildersTests
+    public class LinuxRemovedFileMetadataBuilderTests
     {
-        [Fact]
-        public void TestWindowsMetadataBuilder()
-        {
-            const string filePath = "C://test.txt";
-            var builder = new WindowsRemovedFileMetadataBuilder()
-                .WithFilePath(filePath)
-                .WithRemovingDateTime(DateTime.Now)
-                .WithFileSize(42);
-
-            var metadata = builder.Build();
-            
-            Assert.NotNull(metadata);
-            Assert.Equal(30 + filePath.Length * 2, metadata.Length);
-        }
-        
         [Fact]
         public void TestLinuxMetadataBuilder()
         {
@@ -32,7 +16,7 @@ namespace Camelot.Services.Tests
                 .WithRemovingDateTime(now);
 
             var metadata = builder.Build();
-            
+
             Assert.NotNull(metadata);
             Assert.Equal(4, metadata.Split("\n").Length);
             Assert.Contains(filePath, metadata);
