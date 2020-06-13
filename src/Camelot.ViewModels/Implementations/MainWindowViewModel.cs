@@ -22,6 +22,8 @@ namespace Camelot.ViewModels.Implementations
 
         public IOperationsStateViewModel OperationsStateViewModel { get; }
 
+        public ITopOperationsViewModel TopOperationsViewModel { get; }
+
         public ICommand CreateNewTabCommand { get; }
 
         public ICommand CloseCurrentTabCommand { get; }
@@ -32,7 +34,8 @@ namespace Camelot.ViewModels.Implementations
             IFilesPanelViewModel leftFilesPanelViewModel,
             IFilesPanelViewModel rightFilesPanelViewModel,
             IMenuViewModel menuViewModel,
-            IOperationsStateViewModel operationsStateViewModel)
+            IOperationsStateViewModel operationsStateViewModel,
+            ITopOperationsViewModel topOperationsViewModel)
         {
             _filesOperationsMediator = filesOperationsMediator;
 
@@ -41,6 +44,7 @@ namespace Camelot.ViewModels.Implementations
             RightFilesPanelViewModel = rightFilesPanelViewModel;
             MenuViewModel = menuViewModel;
             OperationsStateViewModel = operationsStateViewModel;
+            TopOperationsViewModel = topOperationsViewModel;
 
             CreateNewTabCommand = ReactiveCommand.Create(CreateNewTab);
             CloseCurrentTabCommand = ReactiveCommand.Create(CloseCurrentTab);

@@ -71,6 +71,12 @@
     <Compile Update="Views\Main\Controls\TabView.xaml.cs">
       <DependentUpon>TabView.xaml</DependentUpon>
     </Compile>
+    <AvaloniaResource Update="Views\Main\TopOperationsView.xaml">
+      <SubType>Designer</SubType>
+    </AvaloniaResource>
+    <Compile Update="Views\Main\TopOperationsView.xaml.cs">
+      <DependentUpon>TopOperationsView.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.9.10" />

@@ -308,13 +308,18 @@ namespace Camelot
                 resolver.GetService<IApplicationCloser>(),
                 resolver.GetService<IDialogService>()
             ));
+            services.Register<ITopOperationsViewModel>(() => new TopOperationsViewModel(
+                resolver.GetService<ITerminalService>(),
+                resolver.GetService<IDirectoryService>()
+            ));
             services.RegisterLazySingleton(() => new MainWindowViewModel(
                 resolver.GetService<IFilesOperationsMediator>(),
                 resolver.GetService<IOperationsViewModel>(),
                 CreateFilesPanelViewModel(resolver, "Left"),
                 CreateFilesPanelViewModel(resolver, "Right"),
                 resolver.GetService<IMenuViewModel>(),
-                resolver.GetService<IOperationsStateViewModel>()
+                resolver.GetService<IOperationsStateViewModel>(),
+                resolver.GetService<ITopOperationsViewModel>()
             ));
         }
 

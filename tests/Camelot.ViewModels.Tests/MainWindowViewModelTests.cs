@@ -18,6 +18,7 @@ namespace Camelot.ViewModels.Tests
             var operationsViewModelMock = new Mock<IOperationsViewModel>();
             var menuViewModelMock = new Mock<IMenuViewModel>();
             var operationsStateViewModel = new Mock<IOperationsStateViewModel>();
+            var topOperationsViewModelMock = new Mock<ITopOperationsViewModel>();
             var fileOperationsMediatorMock = new Mock<IFilesOperationsMediator>();
             fileOperationsMediatorMock
                 .Setup(m => m.Register(It.IsAny<IFilesPanelViewModel>(), It.IsAny<IFilesPanelViewModel>()))
@@ -29,12 +30,14 @@ namespace Camelot.ViewModels.Tests
                 filePanelViewModelMock.Object,
                 filePanelViewModelMock.Object,
                 menuViewModelMock.Object,
-                operationsStateViewModel.Object);
+                operationsStateViewModel.Object,
+                topOperationsViewModelMock.Object);
 
             Assert.NotNull(mainWindowViewModel.LeftFilesPanelViewModel);
             Assert.NotNull(mainWindowViewModel.RightFilesPanelViewModel);
             Assert.NotNull(mainWindowViewModel.MenuViewModel);
             Assert.NotNull(mainWindowViewModel.OperationsViewModel);
+            Assert.NotNull(mainWindowViewModel.TopOperationsViewModel);
 
             fileOperationsMediatorMock
                 .Verify(m => m.Register(It.IsAny<IFilesPanelViewModel>(), It.IsAny<IFilesPanelViewModel>()),
@@ -51,10 +54,11 @@ namespace Camelot.ViewModels.Tests
             var operationsViewModelMock = new Mock<IOperationsViewModel>();
             var menuViewModelMock = new Mock<IMenuViewModel>();
             var fileOperationsMediatorMock = new Mock<IFilesOperationsMediator>();
-            var operationsStateViewModel = new Mock<IOperationsStateViewModel>();
             fileOperationsMediatorMock
                 .SetupGet(m => m.ActiveFilesPanelViewModel)
                 .Returns(filePanelViewModelMock.Object);
+            var operationsStateViewModel = new Mock<IOperationsStateViewModel>();
+            var topOperationsViewModelMock = new Mock<ITopOperationsViewModel>();
 
             var mainWindowViewModel = new MainWindowViewModel(
                 fileOperationsMediatorMock.Object,
@@ -62,7 +66,8 @@ namespace Camelot.ViewModels.Tests
                 filePanelViewModelMock.Object,
                 filePanelViewModelMock.Object,
                 menuViewModelMock.Object,
-                operationsStateViewModel.Object);
+                operationsStateViewModel.Object,
+                topOperationsViewModelMock.Object);
 
             mainWindowViewModel.CreateNewTabCommand.Execute(null);
 
@@ -79,6 +84,7 @@ namespace Camelot.ViewModels.Tests
             var operationsViewModelMock = new Mock<IOperationsViewModel>();
             var menuViewModelMock = new Mock<IMenuViewModel>();
             var operationsStateViewModel = new Mock<IOperationsStateViewModel>();
+            var topOperationsViewModelMock = new Mock<ITopOperationsViewModel>();
             var fileOperationsMediatorMock = new Mock<IFilesOperationsMediator>();
             fileOperationsMediatorMock
                 .SetupGet(m => m.ActiveFilesPanelViewModel)
@@ -90,7 +96,8 @@ namespace Camelot.ViewModels.Tests
                 filePanelViewModelMock.Object,
                 filePanelViewModelMock.Object,
                 menuViewModelMock.Object,
-                operationsStateViewModel.Object);
+                operationsStateViewModel.Object,
+                topOperationsViewModelMock.Object);
 
             mainWindowViewModel.CloseCurrentTabCommand.Execute(null);
 
