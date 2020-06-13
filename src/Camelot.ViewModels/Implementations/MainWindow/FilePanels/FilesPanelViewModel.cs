@@ -34,6 +34,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private readonly ObservableCollection<IFileSystemNodeViewModel> _fileSystemNodes;
         private readonly ObservableCollection<IFileSystemNodeViewModel> _selectedFileSystemNodes;
         private readonly ObservableCollection<ITabViewModel> _tabs;
+        private readonly object _locker;
 
         private string _currentDirectory;
         private ITabViewModel _selectedTab;
@@ -117,6 +118,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
             _fileSystemNodes = new ObservableCollection<IFileSystemNodeViewModel>();
             _selectedFileSystemNodes = new ObservableCollection<IFileSystemNodeViewModel>();
+            _locker = new object();
 
             ActivateCommand = ReactiveCommand.Create(Activate);
             RefreshCommand = ReactiveCommand.Create(ReloadFiles);
@@ -329,14 +331,24 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
             void ExecuteInUiThread(Action action) => _applicationDispatcher.Dispatch(action);
 
+            void Synchronize(Action action)
+            {
+                lock (_locker)
+                {
+                    action();
+                }
+            }
+
+            void ExecuteSynchronized(Action action) => ExecuteInUiThread(() => Synchronize(action));
+
             _fileSystemWatchingService.NodeCreated += (sender, args) =>
-                ExecuteInUiThread(() => InsertNode(args.Node));
+                ExecuteSynchronized(() => InsertNode(args.Node));
             _fileSystemWatchingService.NodeChanged += (sender, args) =>
-                ExecuteInUiThread(() => UpdateNode(args.Node));
+                ExecuteSynchronized(() => UpdateNode(args.Node));
             _fileSystemWatchingService.NodeRenamed += (sender, args) =>
-                ExecuteInUiThread(() => RenameNode(args.Node, args.NewName));
+                ExecuteSynchronized(() => RenameNode(args.Node, args.NewName));
             _fileSystemWatchingService.NodeDeleted += (sender, args) =>
-                ExecuteInUiThread(() => RemoveNode(args.Node));
+                ExecuteSynchronized(() => RemoveNode(args.Node));
         }
 
         private void RenameNode(string oldName, string newName)
@@ -359,19 +371,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         private void UpdateNode(string nodePath)
         {
-            var oldNodeViewModel = GetViewModel(nodePath);
-            if (oldNodeViewModel is null)
-            {
-                return;
-            }
-
-            var newNodeModel = CreateFrom(nodePath);
-            if (newNodeModel is null)
-            {
-                return;
-            }
-
-            _fileSystemNodes.Replace(oldNodeViewModel, newNodeModel);
+            RemoveNode(nodePath);
+            InsertNode(nodePath);
         }
 
         private void RemoveNode(string nodePath)
