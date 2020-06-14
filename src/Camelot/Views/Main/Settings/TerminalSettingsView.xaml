@@ -1,0 +1,21 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:settings="clr-namespace:Camelot.ViewModels.Implementations.Settings;assembly=Camelot.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Camelot.Views.Main.Settings.TerminalSettingsView">
+
+    <Design.DataContext>
+        <settings:TerminalSettingsViewModel />
+    </Design.DataContext>
+
+    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*">
+        <TextBlock Text="Command:" />
+        <TextBox Grid.Column="1" Text="{Binding TerminalCommandText}" />
+
+        <TextBlock Grid.Row="1" Text="Arguments:" />
+        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding TerminalCommandArguments}" />
+    </Grid>
+
+</UserControl>

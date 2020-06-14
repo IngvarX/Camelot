@@ -2,9 +2,9 @@ using Avalonia.Markup.Xaml;
 
 namespace Camelot.Views.Main.Dialogs
 {
-    public class AboutDialog : DialogWindowBase
+    public class SettingsDialog : DialogWindowBase
     {
-        public AboutDialog()
+        public SettingsDialog()
         {
             InitializeComponent();
         }

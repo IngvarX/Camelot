@@ -77,6 +77,18 @@
     <Compile Update="Views\Main\TopOperationsView.xaml.cs">
       <DependentUpon>TopOperationsView.xaml</DependentUpon>
     </Compile>
+    <AvaloniaResource Update="Views\Main\Dialogs\SettingsDialog.xaml">
+      <SubType>Designer</SubType>
+    </AvaloniaResource>
+    <Compile Update="Views\Main\Dialogs\SettingsDialog.xaml.cs">
+      <DependentUpon>SettingsDialog.xaml</DependentUpon>
+    </Compile>
+    <AvaloniaResource Update="Views\Main\Settings\DataGridHeaderArrowView.xaml">
+      <SubType>Designer</SubType>
+    </AvaloniaResource>
+    <Compile Update="Views\Main\Settings\TerminalSettingsView.xaml.cs">
+      <DependentUpon>TerminalSettingsView.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.9.10" />

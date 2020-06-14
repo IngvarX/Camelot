@@ -32,10 +32,12 @@ using Camelot.ViewModels.Implementations.MainWindow;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
 using Camelot.ViewModels.Implementations.MainWindow.OperationsStates;
 using Camelot.ViewModels.Implementations.Menu;
+using Camelot.ViewModels.Implementations.Settings;
 using Camelot.ViewModels.Interfaces.MainWindow;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.MainWindow.OperationsStates;
 using Camelot.ViewModels.Interfaces.Menu;
+using Camelot.ViewModels.Interfaces.Settings;
 using Camelot.ViewModels.Services.Implementations;
 using Camelot.ViewModels.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
@@ -259,6 +261,12 @@ namespace Camelot
         {
             services.RegisterLazySingleton<IFilesOperationsMediator>(() => new FilesOperationsMediator(
                 resolver.GetService<IDirectoryService>()
+            ));
+            services.Register(() => new TerminalSettingsViewModel(
+                resolver.GetService<ITerminalService>()
+            ));
+            services.Register(() => new SettingsDialogViewModel(
+                resolver.GetService<TerminalSettingsViewModel>()
             ));
             services.RegisterLazySingleton<ITabViewModelFactory>(() => new TabViewModelFactory(
                 resolver.GetService<IPathService>()

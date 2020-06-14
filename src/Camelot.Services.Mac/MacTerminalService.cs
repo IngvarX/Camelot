@@ -18,7 +18,7 @@ namespace Camelot.Services.Mac
 
         }
 
-        protected override TerminalSettings GetDefaultCommand() =>
+        protected override TerminalSettings GetDefaultSettings() =>
             new TerminalSettings {Command = Command, Arguments = Arguments};
     }
 }

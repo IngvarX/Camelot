@@ -1,0 +1,38 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:dialogs="clr-namespace:Camelot.ViewModels.Implementations.Dialogs;assembly=Camelot.ViewModels"
+        xmlns:settings="clr-namespace:Camelot.ViewModels.Implementations.Settings;assembly=Camelot.ViewModels"
+        xmlns:settings1="clr-namespace:Camelot.Views.Main.Settings"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        Width="550" Height="400"
+        x:Class="Camelot.Views.Main.Dialogs.SettingsDialog"
+        Title="Settings">
+
+    <Design.DataContext>
+        <dialogs:SettingsDialogViewModel />
+    </Design.DataContext>
+
+    <Grid RowDefinitions="*,Auto" ColumnDefinitions="Auto,*">
+        <StackPanel Orientation="Vertical">
+            <Button>
+                <TextBlock Text="Terminal" />
+            </Button>
+        </StackPanel>
+
+        <Control Grid.Column="1" DataContext="{Binding CurrentSettingsViewModel}">
+            <Control.DataTemplates>
+                <DataTemplate DataType="{x:Type settings:TerminalSettingsViewModel}">
+                    <settings1:TerminalSettingsView />
+                </DataTemplate>
+            </Control.DataTemplates>
+        </Control>
+
+        <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal">
+            <Button Content="Save" Command="{Binding SaveCommand}" />
+            <Button Content="Close" Command="{Binding CloseCommand}" />
+        </StackPanel>
+    </Grid>
+
+</Window>

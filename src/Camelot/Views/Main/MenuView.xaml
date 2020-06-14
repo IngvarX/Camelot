@@ -5,21 +5,21 @@
              xmlns:menu="clr-namespace:Camelot.ViewModels.Implementations.Menu;assembly=Camelot.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Camelot.Views.Main.MenuView">
-    
+
     <Design.DataContext>
         <menu:MenuViewModel />
     </Design.DataContext>
-    
+
     <DockPanel Name="MenuDockPanel">
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
                 <MenuItem Header="_Exit" Command="{Binding ExitCommand}" />
             </MenuItem>
-            
+
             <MenuItem Header="_Configuration">
-                <MenuItem Header="_Settings" />
+                <MenuItem Header="_Settings" Command="{Binding OpenSettingsCommand}" />
             </MenuItem>
-            
+
             <MenuItem Header="_Help">
                 <MenuItem Header="_About" Command="{Binding AboutCommand}" />
             </MenuItem>

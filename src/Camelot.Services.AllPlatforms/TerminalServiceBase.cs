@@ -7,6 +7,8 @@ namespace Camelot.Services.AllPlatforms
 {
     public abstract class TerminalServiceBase : ITerminalService
     {
+        private const string TerminalSettingsId = "TerminalSettings";
+
         private readonly IProcessService _processService;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
@@ -20,24 +22,34 @@ namespace Camelot.Services.AllPlatforms
 
         public void Open(string directory)
         {
-            var (command, arguments) = GetSavedCommand() ?? GetDefaultCommand();
+            var (command, arguments) = GetTerminalSettings();
             var (wrappedCommand, wrappedArguments) = Wrap(command, arguments);
 
             _processService.Run(wrappedCommand, string.Format(wrappedArguments, directory));
         }
 
-        protected abstract TerminalSettings GetDefaultCommand();
+        public TerminalSettings GetTerminalSettings() =>
+            GetSavedSettings() ?? GetDefaultSettings();
+
+        public void SetTerminalSettings(TerminalSettings terminalSettings)
+        {
+            using var uow = _unitOfWorkFactory.Create();
+            var repository = uow.GetRepository<TerminalSettings>();
+
+            repository.Upsert(TerminalSettingsId, terminalSettings);
+        }
+
+        protected abstract TerminalSettings GetDefaultSettings();
 
         protected virtual (string, string) Wrap(string command, string arguments) =>
             (command, arguments);
 
-        private TerminalSettings GetSavedCommand()
+        private TerminalSettings GetSavedSettings()
         {
             using var uow = _unitOfWorkFactory.Create();
             var repository = uow.GetRepository<TerminalSettings>();
-            const string defaultSettingsId = "Default";
 
-            return repository.GetById(defaultSettingsId);
+            return repository.GetById(TerminalSettingsId);
         }
     }
 }

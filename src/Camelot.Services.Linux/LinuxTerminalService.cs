@@ -23,7 +23,7 @@ namespace Camelot.Services.Linux
             _shellCommandWrappingService = shellCommandWrappingService;
         }
 
-        protected override TerminalSettings GetDefaultCommand()
+        protected override TerminalSettings GetDefaultSettings()
         {
             var desktopEnvironment = _desktopEnvironmentService.GetDesktopEnvironment();
             var (command, arguments) = desktopEnvironment switch
