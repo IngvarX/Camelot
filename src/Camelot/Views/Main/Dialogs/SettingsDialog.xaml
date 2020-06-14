@@ -4,7 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:dialogs="clr-namespace:Camelot.ViewModels.Implementations.Dialogs;assembly=Camelot.ViewModels"
         xmlns:settings="clr-namespace:Camelot.ViewModels.Implementations.Settings;assembly=Camelot.ViewModels"
-        xmlns:settings1="clr-namespace:Camelot.Views.Main.Settings"
+        xmlns:settingsViews="clr-namespace:Camelot.Views.Main.Settings"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         Width="550" Height="400"
         x:Class="Camelot.Views.Main.Dialogs.SettingsDialog"
@@ -21,13 +21,13 @@
             </Button>
         </StackPanel>
 
-        <Control Grid.Column="1" DataContext="{Binding CurrentSettingsViewModel}">
-            <Control.DataTemplates>
+        <ContentControl Grid.Column="1" Content="{Binding CurrentSettingsViewModel}">
+            <ContentControl.DataTemplates>
                 <DataTemplate DataType="{x:Type settings:TerminalSettingsViewModel}">
-                    <settings1:TerminalSettingsView />
+                    <settingsViews:TerminalSettingsView />
                 </DataTemplate>
-            </Control.DataTemplates>
-        </Control>
+            </ContentControl.DataTemplates>
+        </ContentControl>
 
         <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal">
             <Button Content="Save" Command="{Binding SaveCommand}" />

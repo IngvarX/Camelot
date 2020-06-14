@@ -36,13 +36,11 @@ namespace Camelot.ViewModels.Implementations.Dialogs
                 terminalSettingsViewModel
             };
 
-            var canSave = this.WhenAnyValue(x => x._settingsViewModels,
-                vms => vms.Any(vm => vm.IsChanged));
-            SaveCommand = ReactiveCommand.Create(Save, canSave);
-            CloseCommand = ReactiveCommand.Create(Close);
-            OpenTerminalSettingsCommand = ReactiveCommand.Create(() => CurrentSettingsViewModel = terminalSettingsViewModel);
+            CurrentSettingsViewModel = _settingsViewModels.First();
 
-            _settingsViewModels.First().Activate();
+            OpenTerminalSettingsCommand = ReactiveCommand.Create(() => CurrentSettingsViewModel = terminalSettingsViewModel);
+            SaveCommand = ReactiveCommand.Create(Save);
+            CloseCommand = ReactiveCommand.Create(Close);
         }
 
         private void Save() =>
