@@ -37,6 +37,7 @@ namespace Camelot.ViewModels.Tests
             Assert.NotNull(mainWindowViewModel.RightFilesPanelViewModel);
             Assert.NotNull(mainWindowViewModel.MenuViewModel);
             Assert.NotNull(mainWindowViewModel.OperationsViewModel);
+            Assert.NotNull(mainWindowViewModel.OperationsStateViewModel);
             Assert.NotNull(mainWindowViewModel.TopOperationsViewModel);
 
             fileOperationsMediatorMock
