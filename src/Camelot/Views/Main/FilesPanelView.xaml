@@ -54,7 +54,7 @@
                     <StackPanel Orientation="Horizontal"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
-            
+
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <controls:TabView />
@@ -70,7 +70,7 @@
                   CellPointerPressed="OnDataGridCellPointerPressed"
                   PointerReleased="OnDataGridPointerReleased"
                   SelectionChanged="OnDataGridSelectionChanged">
-            
+
             <DataGrid.Resources>
                 <Template x:Key="RowContextMenu">
                     <ContextMenu>
@@ -80,21 +80,22 @@
                         <MenuItem Header="Move" Command="{Binding MoveCommand}"/>
                         <MenuItem Header="Delete" Command="{Binding DeleteCommand}"/>
                         <MenuItem Header="Copy to clipboard" Command="{Binding CopyToClipboardCommand}"/>
+                        <MenuItem Header="Show properties" Command="{Binding ShowPropertiesCommand}"/>
                     </ContextMenu>
                 </Template>
             </DataGrid.Resources>
-            
+
             <DataGrid.Styles>
                 <Style Selector="DataGridRow">
                     <Setter Property="ContextMenu" Value="{StaticResource RowContextMenu}" />
                 </Style>
             </DataGrid.Styles>
-            
+
             <DataGrid.KeyBindings>
                 <KeyBinding Gesture="Ctrl+C" Command="{Binding CopyToClipboardCommand}" />
                 <KeyBinding Gesture="Ctrl+V" Command="{Binding PasteFromClipboardCommand}" />
             </DataGrid.KeyBindings>
-            
+
             <DataGrid.Columns>
                 <DataGridTemplateColumn Width="Auto">
                     <DataGridTemplateColumn.CellTemplate>
@@ -108,7 +109,7 @@
                                             </DrawingPresenter.Drawing>
                                         </DrawingPresenter>
                                     </DataTemplate>
-                                    
+
                                     <DataTemplate DataType="{x:Type filePanels:FileViewModel}">
                                         <DrawingPresenter Width="20" Height="20" Margin="3">
                                             <DrawingPresenter.Drawing>
@@ -121,19 +122,19 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-               
+
                 <DataGridTemplateColumn Width="5*">
                     <DataGridTemplateColumn.Header>
                         <Button Command="{Binding SortFilesCommand}"
                                 CommandParameter="{x:Static filePanels:SortingColumn.Name}">
                             <Grid ColumnDefinitions="*,Auto,Auto,*">
                                 <controls:DataGridHeaderArrowView IsVisible="{Binding SelectedTab.SortingViewModel.IsSortingByNameEnabled}" />
-                                
+
                                 <TextBlock Grid.Column="2" Classes="dataGridColumnHeaderTextBlock" Text="Name" />
                             </Grid>
                         </Button>
                     </DataGridTemplateColumn.Header>
-                    
+
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <ContentControl Content="{Binding DataContext, RelativeSource={RelativeSource AncestorType=DataGridCell}}">
@@ -155,7 +156,7 @@
                                             </Grid>
                                         </Grid>
                                     </DataTemplate>
-                                    
+
                                     <DataTemplate DataType="{x:Type filePanels:FileViewModel}">
                                         <Grid>
                                             <TextBlock Classes="filePanelTextBlock" Text="{Binding Name}" IsVisible="{Binding !IsEditing}"
@@ -173,19 +174,19 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                
+
                 <DataGridTemplateColumn Width="1*">
                     <DataGridTemplateColumn.Header>
                         <Button Command="{Binding SortFilesCommand}"
                                 CommandParameter="{x:Static filePanels:SortingColumn.Extension}">
                             <Grid ColumnDefinitions="*,Auto,Auto,*">
                                 <controls:DataGridHeaderArrowView IsVisible="{Binding SelectedTab.SortingViewModel.IsSortingByExtensionEnabled}" />
-                                
+
                                 <TextBlock Grid.Column="2" Classes="dataGridColumnHeaderTextBlock" Text="Extension" />
                             </Grid>
                         </Button>
                     </DataGridTemplateColumn.Header>
-                    
+
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <ContentControl Content="{Binding DataContext, RelativeSource={RelativeSource AncestorType=DataGridCell}}">
@@ -193,7 +194,7 @@
                                     <DataTemplate DataType="{x:Type filePanels:DirectoryViewModel}">
                                         <TextBlock Text="" />
                                     </DataTemplate>
-                                    
+
                                     <DataTemplate DataType="{x:Type filePanels:FileViewModel}">
                                         <TextBlock Classes="filePanelTextBlock" Text="{Binding Extension}"
                                                    IsVisible="{Binding !IsEditing}" />
@@ -203,19 +204,19 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                
+
                 <DataGridTemplateColumn Width="1*">
                     <DataGridTemplateColumn.Header>
                         <Button Command="{Binding SortFilesCommand}"
                                 CommandParameter="{x:Static filePanels:SortingColumn.Size}">
                             <Grid ColumnDefinitions="*,Auto,Auto,*">
                                 <controls:DataGridHeaderArrowView IsVisible="{Binding SelectedTab.SortingViewModel.IsSortingBySizeEnabled}" />
-                                
+
                                 <TextBlock Grid.Column="2" Classes="dataGridColumnHeaderTextBlock" Text="Size" />
                             </Grid>
                         </Button>
                     </DataGridTemplateColumn.Header>
-                    
+
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <ContentControl Content="{Binding DataContext, RelativeSource={RelativeSource AncestorType=DataGridCell}}">
@@ -223,7 +224,7 @@
                                     <DataTemplate DataType="{x:Type filePanels:DirectoryViewModel}">
                                         <TextBlock Classes="filePanelTextBlock" Text="&lt;DIR&gt;" />
                                     </DataTemplate>
-                                    
+
                                     <DataTemplate DataType="{x:Type filePanels:FileViewModel}">
                                         <TextBlock Classes="filePanelTextBlock" Text="{Binding FormattedSize}" />
                                     </DataTemplate>
@@ -232,14 +233,14 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                
+
                 <DataGridTextColumn Binding="{Binding LastModifiedDateTime}" Width="2*">
                     <DataGridTextColumn.Header>
                         <Button Command="{Binding SortFilesCommand}"
                                 CommandParameter="{x:Static filePanels:SortingColumn.Date}">
                             <Grid ColumnDefinitions="*,Auto,Auto,*">
                                 <controls:DataGridHeaderArrowView IsVisible="{Binding SelectedTab.SortingViewModel.IsSortingByDateEnabled}" />
-                                
+
                                 <TextBlock Grid.Column="2" Classes="dataGridColumnHeaderTextBlock" Text="Date" />
                             </Grid>
                         </Button>
@@ -247,11 +248,11 @@
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
-        
+
         <Grid Grid.Row="3" ColumnDefinitions="Auto,*">
             <Border Classes="selectionBorder" IsVisible="{Binding AreAnyFileSystemNodesSelected}">
                 <TextBlock Classes="selectionInfoTextBlock">
-                    <TextBlock.Text>    
+                    <TextBlock.Text>
                         <MultiBinding StringFormat="{}{0} files ({1}) and {2} directories">
                             <Binding Path="SelectedFilesCount" />
                             <Binding Path="SelectedFilesSize" />

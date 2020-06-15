@@ -4,6 +4,7 @@ using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Operations;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
+using Camelot.ViewModels.Interfaces.Behaviors;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Services.Interfaces;
 
@@ -18,6 +19,8 @@ namespace Camelot.ViewModels.Factories.Implementations
         private readonly IOperationsService _operationsService;
         private readonly IClipboardOperationsService _clipboardOperationsService;
         private readonly IFilesOperationsMediator _filesOperationsMediator;
+        private readonly IFileSystemNodePropertiesBehavior _filePropertiesBehavior;
+        private readonly IFileSystemNodePropertiesBehavior _directoryPropertiesBehavior;
 
         public FileSystemNodeViewModelFactory(
             IFileSystemNodeOpeningBehavior fileOpeningBehavior,
@@ -26,7 +29,9 @@ namespace Camelot.ViewModels.Factories.Implementations
             IPathService pathService,
             IOperationsService operationsService,
             IClipboardOperationsService clipboardOperationsService,
-            IFilesOperationsMediator filesOperationsMediator)
+            IFilesOperationsMediator filesOperationsMediator,
+            IFileSystemNodePropertiesBehavior filePropertiesBehavior,
+            IFileSystemNodePropertiesBehavior directoryPropertiesBehavior)
         {
             _fileOpeningBehavior = fileOpeningBehavior;
             _directoryOpeningBehavior = directoryOpeningBehavior;
@@ -35,6 +40,8 @@ namespace Camelot.ViewModels.Factories.Implementations
             _operationsService = operationsService;
             _clipboardOperationsService = clipboardOperationsService;
             _filesOperationsMediator = filesOperationsMediator;
+            _filePropertiesBehavior = filePropertiesBehavior;
+            _directoryPropertiesBehavior = directoryPropertiesBehavior;
         }
 
         public IFileSystemNodeViewModel Create(FileModel fileModel)
@@ -44,7 +51,8 @@ namespace Camelot.ViewModels.Factories.Implementations
                 _operationsService,
                 _clipboardOperationsService,
                 _filesOperationsMediator,
-                _fileSizeFormatter)
+                _fileSizeFormatter,
+                _filePropertiesBehavior)
             {
                 FullPath = fileModel.FullPath,
                 Size = fileModel.SizeBytes,
@@ -63,7 +71,8 @@ namespace Camelot.ViewModels.Factories.Implementations
                 _directoryOpeningBehavior,
                 _operationsService,
                 _clipboardOperationsService,
-                _filesOperationsMediator)
+                _filesOperationsMediator,
+                _directoryPropertiesBehavior)
             {
                 FullPath = directoryModel.FullPath,
                 Name = directoryModel.Name,

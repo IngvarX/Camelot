@@ -13,6 +13,8 @@ namespace Camelot.Services.Abstractions
 
         bool Create(string directory);
 
+        long CalculateSize(string directory);
+
         DirectoryModel GetDirectory(string directory);
 
         DirectoryModel GetParentDirectory(string directory);

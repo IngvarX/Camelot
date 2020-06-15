@@ -5,6 +5,7 @@ using System.Windows.Input;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Behaviors;
 using Camelot.Services.Abstractions.Operations;
+using Camelot.ViewModels.Interfaces.Behaviors;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Services.Interfaces;
 using ReactiveUI;
@@ -17,6 +18,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private readonly IOperationsService _operationsService;
         private readonly IClipboardOperationsService _clipboardOperationsService;
         private readonly IFilesOperationsMediator _filesOperationsMediator;
+        private readonly IFileSystemNodePropertiesBehavior _fileSystemNodePropertiesBehavior;
 
         private DateTime _lastModifiedDateTime;
         private string _fullPath;
@@ -72,16 +74,20 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         public ICommand MoveCommand { get; }
 
+        public ICommand ShowPropertiesCommand { get; }
+
         protected FileSystemNodeViewModelBase(
             IFileSystemNodeOpeningBehavior fileSystemNodeOpeningBehavior,
             IOperationsService operationsService,
             IClipboardOperationsService clipboardOperationsService,
-            IFilesOperationsMediator filesOperationsMediator)
+            IFilesOperationsMediator filesOperationsMediator,
+            IFileSystemNodePropertiesBehavior fileSystemNodePropertiesBehavior)
         {
             _fileSystemNodeOpeningBehavior = fileSystemNodeOpeningBehavior;
             _operationsService = operationsService;
             _clipboardOperationsService = clipboardOperationsService;
             _filesOperationsMediator = filesOperationsMediator;
+            _fileSystemNodePropertiesBehavior = fileSystemNodePropertiesBehavior;
 
             OpenCommand = ReactiveCommand.Create(Open);
             StartRenamingCommand = ReactiveCommand.Create(StartRenaming);
@@ -90,6 +96,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             DeleteCommand = ReactiveCommand.CreateFromTask(DeleteAsync);
             CopyCommand = ReactiveCommand.CreateFromTask(CopyAsync);
             MoveCommand = ReactiveCommand.CreateFromTask(MoveAsync);
+            ShowPropertiesCommand = ReactiveCommand.CreateFromTask(ShowPropertiesAsync);
         }
 
         private void Open() => _fileSystemNodeOpeningBehavior.Open(FullPath);
@@ -113,5 +120,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private Task CopyAsync() => _operationsService.CopyAsync(Files, _filesOperationsMediator.OutputDirectory);
 
         private Task MoveAsync() => _operationsService.MoveAsync(Files, _filesOperationsMediator.OutputDirectory);
+
+        private Task ShowPropertiesAsync() => _fileSystemNodePropertiesBehavior.ShowPropertiesAsync(FullPath);
     }
 }

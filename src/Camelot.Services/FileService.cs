@@ -70,8 +70,9 @@ namespace Camelot.Services
                 LastModifiedDateTime = fileInfo.LastWriteTime,
                 Type = GetFileType(fileInfo),
                 SizeBytes = fileInfo.Length,
-                LastWriteTime = fileInfo.LastWriteTime,
-                Extension = _pathService.GetExtension(fileInfo.Name)
+                Extension = _pathService.GetExtension(fileInfo.Name),
+                LastAccessDateTime = fileInfo.LastAccessTime,
+                CreatedDateTime = fileInfo.CreationTime
             };
 
             return fileModel;

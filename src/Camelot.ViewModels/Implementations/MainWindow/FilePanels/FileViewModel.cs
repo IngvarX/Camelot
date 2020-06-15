@@ -1,6 +1,7 @@
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Behaviors;
 using Camelot.Services.Abstractions.Operations;
+using Camelot.ViewModels.Interfaces.Behaviors;
 using Camelot.ViewModels.Services.Interfaces;
 using ReactiveUI;
 
@@ -10,7 +11,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
     {
         private readonly IFileSizeFormatter _fileSizeFormatter;
         private long _size;
-        
+
         public string Extension { get; set; }
 
         public long Size
@@ -23,19 +24,21 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             }
         }
 
-        public string FormattedSize => _fileSizeFormatter.GetFormattedSize(_size);
+        public string FormattedSize => _fileSizeFormatter.GetFormattedSize(Size);
 
         public FileViewModel(
             IFileSystemNodeOpeningBehavior fileSystemNodeOpeningBehavior,
             IOperationsService operationsService,
             IClipboardOperationsService clipboardOperationsService,
             IFilesOperationsMediator filesOperationsMediator,
-            IFileSizeFormatter fileSizeFormatter)
+            IFileSizeFormatter fileSizeFormatter,
+            IFileSystemNodePropertiesBehavior fileSystemNodePropertiesBehavior)
             : base(
                 fileSystemNodeOpeningBehavior,
                 operationsService,
                 clipboardOperationsService,
-                filesOperationsMediator)
+                filesOperationsMediator,
+                fileSystemNodePropertiesBehavior)
         {
             _fileSizeFormatter = fileSizeFormatter;
         }

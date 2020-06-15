@@ -60,8 +60,8 @@ namespace Camelot.Services.Operations
                     await CopyFileAsync(_destinationFile, true);
                     break;
                 case OperationContinuationMode.OverwriteIfOlder:
-                    var sourceFileDateTime = _fileService.GetFile(_sourceFile).LastWriteTime;;
-                    var destinationFileDateTime = _fileService.GetFile(_destinationFile).LastWriteTime;
+                    var sourceFileDateTime = _fileService.GetFile(_sourceFile).LastModifiedDateTime;;
+                    var destinationFileDateTime = _fileService.GetFile(_destinationFile).LastModifiedDateTime;
                     if (sourceFileDateTime > destinationFileDateTime)
                     {
                         await CopyFileAsync(_destinationFile, true);

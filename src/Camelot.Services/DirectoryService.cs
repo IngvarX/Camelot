@@ -58,6 +58,11 @@ namespace Camelot.Services
             return true;
         }
 
+        public long CalculateSize(string directory) =>
+            Directory
+                .EnumerateFiles(directory, "*.*", SearchOption.AllDirectories)
+                .Sum(f => new FileInfo(f).Length);
+
         public DirectoryModel GetDirectory(string directory) => CreateFrom(directory);
 
         public DirectoryModel GetParentDirectory(string directory)
@@ -108,16 +113,14 @@ namespace Camelot.Services
             return CreateFrom(directoryInfo);
         }
 
-        private static DirectoryModel CreateFrom(FileSystemInfo directoryInfo)
-        {
-            var directoryModel = new DirectoryModel
+        private static DirectoryModel CreateFrom(FileSystemInfo directoryInfo) =>
+            new DirectoryModel
             {
                 Name = directoryInfo.Name,
                 FullPath = directoryInfo.FullName,
-                LastModifiedDateTime = directoryInfo.LastWriteTime
+                LastModifiedDateTime = directoryInfo.LastWriteTime,
+                LastAccessDateTime = directoryInfo.LastAccessTime,
+                CreatedDateTime = directoryInfo.CreationTime
             };
-
-            return directoryModel;
-        }
     }
 }

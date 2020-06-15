@@ -3,6 +3,7 @@ using Camelot.Services.Abstractions.Behaviors;
 using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Operations;
 using Camelot.ViewModels.Factories.Implementations;
+using Camelot.ViewModels.Interfaces.Behaviors;
 using Camelot.ViewModels.Services.Interfaces;
 using Moq;
 using Xunit;
@@ -38,6 +39,8 @@ namespace Camelot.ViewModels.Tests
             var operationsServiceMock = new Mock<IOperationsService>();
             var clipboardOperationsServiceMock = new Mock<IClipboardOperationsService>();
             var filesOperationsMediator = new Mock<IFilesOperationsMediator>();
+            var filesPropertiesBehavior = new Mock<IFileSystemNodePropertiesBehavior>();
+            var directoriesPropertiesBehavior = new Mock<IFileSystemNodePropertiesBehavior>();
             var fileSystemNodeViewModelFactory = new FileSystemNodeViewModelFactory(
                 fileSystemNodeOpeningBehaviorMock.Object,
                 fileSystemNodeOpeningBehaviorMock.Object,
@@ -45,17 +48,19 @@ namespace Camelot.ViewModels.Tests
                 pathServiceMock.Object,
                 operationsServiceMock.Object,
                 clipboardOperationsServiceMock.Object,
-                filesOperationsMediator.Object
+                filesOperationsMediator.Object,
+                filesPropertiesBehavior.Object,
+                directoriesPropertiesBehavior.Object
             );
 
             var node = fileSystemNodeViewModelFactory.Create(fileModel);
-            
+
             Assert.Equal(node.Name, name);
             Assert.Equal(node.FullPath, fullPath);
             Assert.False(node.IsEditing);
             Assert.False(node.IsSelected);
         }
-        
+
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
@@ -75,6 +80,8 @@ namespace Camelot.ViewModels.Tests
             var operationsServiceMock = new Mock<IOperationsService>();
             var clipboardOperationsServiceMock = new Mock<IClipboardOperationsService>();
             var filesOperationsMediator = new Mock<IFilesOperationsMediator>();
+            var filesPropertiesBehavior = new Mock<IFileSystemNodePropertiesBehavior>();
+            var directoriesPropertiesBehavior = new Mock<IFileSystemNodePropertiesBehavior>();
             var fileSystemNodeViewModelFactory = new FileSystemNodeViewModelFactory(
                 fileSystemNodeOpeningBehaviorMock.Object,
                 fileSystemNodeOpeningBehaviorMock.Object,
@@ -82,11 +89,13 @@ namespace Camelot.ViewModels.Tests
                 pathServiceMock.Object,
                 operationsServiceMock.Object,
                 clipboardOperationsServiceMock.Object,
-                filesOperationsMediator.Object
+                filesOperationsMediator.Object,
+                filesPropertiesBehavior.Object,
+                directoriesPropertiesBehavior.Object
             );
 
             var node = fileSystemNodeViewModelFactory.Create(directoryModel, isParentDirectory);
-            
+
             Assert.Equal(node.Name, name);
             Assert.Equal(node.FullPath, fullPath);
             Assert.False(node.IsEditing);

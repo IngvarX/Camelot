@@ -1,4 +1,3 @@
-using System;
 using Camelot.Services.Abstractions.Models.Enums;
 
 namespace Camelot.Services.Abstractions.Models
@@ -10,7 +9,5 @@ namespace Camelot.Services.Abstractions.Models
         public FileType Type { get; set; }
 
         public string Extension { get; set; }
-
-        public DateTime LastWriteTime { get; set; }
     }
 }

@@ -28,6 +28,7 @@ using Camelot.ViewModels.Factories.Implementations;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Implementations;
 using Camelot.ViewModels.Implementations.Dialogs;
+using Camelot.ViewModels.Implementations.Dialogs.Properties;
 using Camelot.ViewModels.Implementations.MainWindow;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
 using Camelot.ViewModels.Implementations.MainWindow.OperationsStates;
@@ -271,6 +272,12 @@ namespace Camelot
             services.RegisterLazySingleton<ITabViewModelFactory>(() => new TabViewModelFactory(
                 resolver.GetService<IPathService>()
             ));
+            services.RegisterLazySingleton(() => new FilePropertiesBehavior(
+                resolver.GetService<IDialogService>()
+            ));
+            services.RegisterLazySingleton(() => new DirectoryPropertiesBehavior(
+                resolver.GetService<IDialogService>()
+            ));
             services.RegisterLazySingleton<IFileSystemNodeViewModelFactory>(() => new FileSystemNodeViewModelFactory(
                 resolver.GetService<FileOpeningBehavior>(),
                 resolver.GetService<DirectoryOpeningBehavior>(),
@@ -278,13 +285,26 @@ namespace Camelot
                 resolver.GetService<IPathService>(),
                 resolver.GetService<IOperationsService>(),
                 resolver.GetService<IClipboardOperationsService>(),
-                resolver.GetService<IFilesOperationsMediator>()
+                resolver.GetService<IFilesOperationsMediator>(),
+                resolver.GetService<FilePropertiesBehavior>(),
+                resolver.GetService<DirectoryPropertiesBehavior>()
 
             ));
             services.Register(() => new AboutDialogViewModel(
                 resolver.GetService<IApplicationVersionProvider>(),
                 resolver.GetService<IResourceOpeningService>(),
                 resolver.GetService<AboutDialogConfiguration>()
+            ));
+            services.Register(() => new DirectoryInformationDialogViewModel(
+                resolver.GetService<IFileSizeFormatter>(),
+                resolver.GetService<IDirectoryService>(),
+                resolver.GetService<IPathService>(),
+                resolver.GetService<IApplicationDispatcher>()
+            ));
+            services.Register(() => new FileInformationDialogViewModel(
+                resolver.GetService<IFileSizeFormatter>(),
+                resolver.GetService<IFileService>(),
+                resolver.GetService<IPathService>()
             ));
             services.Register(() => new OverwriteOptionsDialogViewModel(
                 resolver.GetService<IFileService>(),
