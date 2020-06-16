@@ -15,15 +15,16 @@ namespace Camelot.ViewModels.Implementations.Dialogs.Properties
         public MainNodeInfoTabViewModel MainNodeInfoTabViewModel { get; }
 
         public DirectoryInformationDialogViewModel(
-            MainNodeInfoTabViewModel mainNodeInfoTabViewModel,
             IDirectoryService directoryService,
             IPathService pathService,
-            IApplicationDispatcher applicationDispatcher)
+            IApplicationDispatcher applicationDispatcher,
+            MainNodeInfoTabViewModel mainNodeInfoTabViewModel)
         {
-            MainNodeInfoTabViewModel = mainNodeInfoTabViewModel;
             _directoryService = directoryService;
             _pathService = pathService;
             _applicationDispatcher = applicationDispatcher;
+
+            MainNodeInfoTabViewModel = mainNodeInfoTabViewModel;
         }
 
         public override void Activate(FileSystemNodeNavigationParameter parameter)
@@ -31,12 +32,12 @@ namespace Camelot.ViewModels.Implementations.Dialogs.Properties
             var directoryModel = _directoryService.GetDirectory(parameter.NodePath);
 
             SetupMainTab(directoryModel);
-
-            LoadDirectorySize(directoryModel.FullPath);
         }
 
         private void SetupMainTab(DirectoryModel directoryModel)
         {
+            LoadDirectorySize(directoryModel.FullPath);
+
             MainNodeInfoTabViewModel.Name = directoryModel.Name;
             MainNodeInfoTabViewModel.Path = _pathService.GetParentDirectory(directoryModel.FullPath);
             MainNodeInfoTabViewModel.CreatedDateTime = directoryModel.CreatedDateTime;

@@ -3,6 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:properties="clr-namespace:Camelot.ViewModels.Implementations.Dialogs.Properties;assembly=Camelot.ViewModels"
+        xmlns:controls="clr-namespace:Camelot.Views.Main.Controls"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Camelot.Views.Main.Dialogs.DirectoryInformationDialog"
         Width="600" Height="200"
@@ -13,6 +14,10 @@
     </Design.DataContext>
 
     <Grid>
-
+        <TabControl>
+            <TabItem Header="Properties">
+                <controls:MainNodeInfoTabView DataContext="{Binding MainNodeInfoTabViewModel}" />
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>

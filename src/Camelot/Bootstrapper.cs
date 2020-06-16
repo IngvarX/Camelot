@@ -299,15 +299,15 @@ namespace Camelot
                 resolver.GetService<IFileSizeFormatter>()
             ));
             services.Register(() => new DirectoryInformationDialogViewModel(
-                resolver.GetService<MainNodeInfoTabViewModel>(),
                 resolver.GetService<IDirectoryService>(),
                 resolver.GetService<IPathService>(),
-                resolver.GetService<IApplicationDispatcher>()
+                resolver.GetService<IApplicationDispatcher>(),
+                resolver.GetService<MainNodeInfoTabViewModel>()
             ));
             services.Register(() => new FileInformationDialogViewModel(
-                resolver.GetService<MainNodeInfoTabViewModel>(),
                 resolver.GetService<IFileService>(),
-                resolver.GetService<IPathService>()
+                resolver.GetService<IPathService>(),
+                resolver.GetService<MainNodeInfoTabViewModel>()
             ));
             services.Register(() => new OverwriteOptionsDialogViewModel(
                 resolver.GetService<IFileService>(),

@@ -12,13 +12,14 @@ namespace Camelot.ViewModels.Implementations.Dialogs.Properties
         public MainNodeInfoTabViewModel MainNodeInfoTabViewModel { get; }
 
         public FileInformationDialogViewModel(
-            MainNodeInfoTabViewModel mainNodeInfoTabViewModel,
             IFileService fileService,
-            IPathService pathService)
+            IPathService pathService,
+            MainNodeInfoTabViewModel mainNodeInfoTabViewModel)
         {
-            MainNodeInfoTabViewModel = mainNodeInfoTabViewModel;
             _fileService = fileService;
             _pathService = pathService;
+
+            MainNodeInfoTabViewModel = mainNodeInfoTabViewModel;
         }
 
         public override void Activate(FileSystemNodeNavigationParameter parameter)

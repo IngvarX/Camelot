@@ -10,7 +10,29 @@
         <properties:MainNodeInfoTabViewModel />
     </Design.DataContext>
 
-    <Grid>
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
+        <TextBlock Grid.Column="1" Text="{Binding Name}" />
 
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Path:" />
+        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Path}" />
+
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Size:" />
+        <TextBlock Grid.Row="2" Grid.Column="1">
+            <TextBlock.Text>
+                <MultiBinding StringFormat="{}{0} ({1})">
+                    <Binding Path="Size" />
+                    <Binding Path="FormattedSize" />
+                </MultiBinding>
+            </TextBlock.Text>
+        </TextBlock>
+
+        <TextBlock Grid.Row="3" Grid.Column="0" Text="Last access:" />
+        <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding LastAccessDateTime}" />
+
+        <TextBlock Grid.Row="4" Grid.Column="0" Text="Last modification:" />
+        <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding LastWriteDateTime}" />
+
+        <TextBlock Grid.Row="5" Grid.Column="0" Text="Creation date:" />
+        <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding CreatedDateTime}" />
     </Grid>
 </UserControl>
