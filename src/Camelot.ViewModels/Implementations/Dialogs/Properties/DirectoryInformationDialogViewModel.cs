@@ -1,23 +1,26 @@
 using System.Threading.Tasks;
 using ApplicationDispatcher.Interfaces;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Models;
 using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
 
 namespace Camelot.ViewModels.Implementations.Dialogs.Properties
 {
-    public class DirectoryInformationDialogViewModel : FileSystemNodeInformationDialogViewModelBase
+    public class DirectoryInformationDialogViewModel : ParameterizedDialogViewModelBase<FileSystemNodeNavigationParameter>
     {
         private readonly IDirectoryService _directoryService;
         private readonly IPathService _pathService;
         private readonly IApplicationDispatcher _applicationDispatcher;
 
+        public MainNodeInfoTabViewModel MainNodeInfoTabViewModel { get; }
+
         public DirectoryInformationDialogViewModel(
-            IFileSizeFormatter fileSizeFormatter,
+            MainNodeInfoTabViewModel mainNodeInfoTabViewModel,
             IDirectoryService directoryService,
             IPathService pathService,
             IApplicationDispatcher applicationDispatcher)
-            : base(fileSizeFormatter)
         {
+            MainNodeInfoTabViewModel = mainNodeInfoTabViewModel;
             _directoryService = directoryService;
             _pathService = pathService;
             _applicationDispatcher = applicationDispatcher;
@@ -27,13 +30,18 @@ namespace Camelot.ViewModels.Implementations.Dialogs.Properties
         {
             var directoryModel = _directoryService.GetDirectory(parameter.NodePath);
 
-            Name = directoryModel.Name;
-            Path = _pathService.GetParentDirectory(directoryModel.FullPath);
-            CreatedDateTime = directoryModel.CreatedDateTime;
-            LastWriteDateTime = directoryModel.LastModifiedDateTime;
-            LastAccessDateTime = directoryModel.LastAccessDateTime;
+            SetupMainTab(directoryModel);
 
             LoadDirectorySize(directoryModel.FullPath);
+        }
+
+        private void SetupMainTab(DirectoryModel directoryModel)
+        {
+            MainNodeInfoTabViewModel.Name = directoryModel.Name;
+            MainNodeInfoTabViewModel.Path = _pathService.GetParentDirectory(directoryModel.FullPath);
+            MainNodeInfoTabViewModel.CreatedDateTime = directoryModel.CreatedDateTime;
+            MainNodeInfoTabViewModel.LastWriteDateTime = directoryModel.LastModifiedDateTime;
+            MainNodeInfoTabViewModel.LastAccessDateTime = directoryModel.LastAccessDateTime;
         }
 
         private void LoadDirectorySize(string directory)
@@ -43,6 +51,6 @@ namespace Camelot.ViewModels.Implementations.Dialogs.Properties
                 .ContinueWith(t => SetSize(t.Result));
         }
 
-        private void SetSize(long size) => _applicationDispatcher.Dispatch(() => Size = size);
+        private void SetSize(long size) => _applicationDispatcher.Dispatch(() => MainNodeInfoTabViewModel.Size = size);
     }
 }

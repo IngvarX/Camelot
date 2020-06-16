@@ -1,11 +1,10 @@
 using System;
 using Camelot.Services.Abstractions;
-using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
 using ReactiveUI;
 
 namespace Camelot.ViewModels.Implementations.Dialogs.Properties
 {
-    public abstract class FileSystemNodeInformationDialogViewModelBase : ParameterizedDialogViewModelBase<FileSystemNodeNavigationParameter>
+    public class MainNodeInfoTabViewModel : ViewModelBase
     {
         private readonly IFileSizeFormatter _fileSizeFormatter;
         private string _name;
@@ -57,7 +56,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs.Properties
             set => this.RaiseAndSetIfChanged(ref _lastAccessDateTime, value);
         }
 
-        protected FileSystemNodeInformationDialogViewModelBase(
+        public MainNodeInfoTabViewModel(
             IFileSizeFormatter fileSizeFormatter)
         {
             _fileSizeFormatter = fileSizeFormatter;

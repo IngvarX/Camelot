@@ -92,6 +92,24 @@
     <AvaloniaResource Update="Views\Main\Dialogs\FileSystemNodeInformationDialog.xaml">
       <SubType>Designer</SubType>
     </AvaloniaResource>
+    <AvaloniaResource Update="Views\Main\Controls\TabView - Copy.xaml">
+      <SubType>Designer</SubType>
+    </AvaloniaResource>
+    <Compile Update="Views\Main\Controls\MainNodeInfoTabView.xaml.cs">
+      <DependentUpon>MainNodeInfoTabView.xaml</DependentUpon>
+    </Compile>
+    <AvaloniaResource Update="Views\Main\Dialogs\FileInformationDialog.xaml">
+      <SubType>Designer</SubType>
+    </AvaloniaResource>
+    <Compile Update="Views\Main\Dialogs\FileInformationDialog.xaml.cs">
+      <DependentUpon>FileInformationDialog.xaml</DependentUpon>
+    </Compile>
+    <AvaloniaResource Update="Views\Main\Dialogs\DirectoryDialog.xaml">
+      <SubType>Designer</SubType>
+    </AvaloniaResource>
+    <Compile Update="Views\Main\Dialogs\DirectoryDialog.xaml.cs">
+      <DependentUpon>DirectoryDialog.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.9.10" />
