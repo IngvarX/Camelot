@@ -507,14 +507,10 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private int GetInsertIndex(IFileSystemNodeViewModel newNodeModel)
         {
             var comparer = GetComparer();
-            var index = 0;
-            for (; index < _fileSystemNodes.Count; index++)
+            var index = _fileSystemNodes.BinarySearch(newNodeModel, comparer);
+            if (index < 0)
             {
-                var currentViewModel = _fileSystemNodes[index];
-                if (comparer.Compare(currentViewModel, newNodeModel) > 0)
-                {
-                    break;
-                }
+                index ^= -1;
             }
 
             return index;
