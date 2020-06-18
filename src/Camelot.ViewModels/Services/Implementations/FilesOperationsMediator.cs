@@ -9,11 +9,11 @@ namespace Camelot.ViewModels.Services.Implementations
     public class FilesOperationsMediator : IFilesOperationsMediator
     {
         private readonly IDirectoryService _directoryService;
-        
+
         public string OutputDirectory => InactiveFilesPanelViewModel.CurrentDirectory;
 
         public IFilesPanelViewModel ActiveFilesPanelViewModel { get; private set; }
-        
+
         public IFilesPanelViewModel InactiveFilesPanelViewModel { get; private set; }
 
         public FilesOperationsMediator(
@@ -32,7 +32,7 @@ namespace Camelot.ViewModels.Services.Implementations
             SubscribeToEvents(InactiveFilesPanelViewModel);
 
             UpdateCurrentDirectory();
-            
+
             ActiveFilesPanelViewModel.Activate();
             InactiveFilesPanelViewModel.Deactivate();
         }
@@ -53,8 +53,16 @@ namespace Camelot.ViewModels.Services.Implementations
             DeactivateInactiveViewModel();
         }
 
-        private void DirectoryServiceOnSelectedDirectoryChanged(object sender, SelectedDirectoryChangedEventArgs e) =>
+        private void DirectoryServiceOnSelectedDirectoryChanged(object sender, SelectedDirectoryChangedEventArgs e)
+        {
+            if (ActiveFilesPanelViewModel is null)
+            {
+                return;
+            }
+
             ActiveFilesPanelViewModel.CurrentDirectory = e.NewDirectory;
+        }
+
 
         private void SwapViewModels() =>
             (InactiveFilesPanelViewModel, ActiveFilesPanelViewModel) =

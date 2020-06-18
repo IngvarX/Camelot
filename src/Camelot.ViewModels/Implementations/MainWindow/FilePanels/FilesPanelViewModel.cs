@@ -48,13 +48,20 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             get => _currentDirectory;
             set
             {
+                var previousCurrentDirectory = _currentDirectory;
                 var hasChanged = _currentDirectory != value;
                 this.RaiseAndSetIfChanged(ref _currentDirectory, value);
 
                 if (hasChanged)
                 {
+                    if (previousCurrentDirectory != null)
+                    {
+                        _fileSystemWatchingService.StopWatching(previousCurrentDirectory);
+                    }
+
                     ReloadFiles();
                     SelectedTab.CurrentDirectory = _currentDirectory;
+                    _fileSystemWatchingService.StartWatching(CurrentDirectory);
                 }
             }
         }
@@ -313,13 +320,9 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
             tabViewModel.IsActive = tabViewModel.IsGloballyActive = true;
             SelectedTab = tabViewModel;
-            if (CurrentDirectory == tabViewModel.CurrentDirectory)
+            if (CurrentDirectory != tabViewModel.CurrentDirectory)
             {
-                ReloadFiles();
-            }
-            else
-            {
-                CurrentDirectory = tabViewModel.CurrentDirectory;
+                _directoryService.SelectedDirectory = CurrentDirectory = tabViewModel.CurrentDirectory;
             }
 
             Activate();
@@ -391,8 +394,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
                 return;
             }
 
-            _fileSystemWatchingService.StopWatching(CurrentDirectory);
-
             var parentDirectory = _directoryService.GetParentDirectory(CurrentDirectory);
             var directories = _directoryService.GetChildDirectories(CurrentDirectory);
             var files = _fileService.GetFiles(CurrentDirectory);
@@ -416,8 +417,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
                 _fileSystemNodes.Insert(0, parentDirectoryViewModel);
             }
-
-            _fileSystemWatchingService.StartWatching(CurrentDirectory);
         }
 
         private void SelectedFileSystemNodesOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

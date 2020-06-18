@@ -19,7 +19,7 @@ namespace Camelot.Services.Windows
             new TerminalSettings
             {
                 Command = "cmd",
-                Arguments = "/K \"cd {0}\"" // todo: switch drive?
+                Arguments = "/K \"cd /d {0}\""
             };
     }
 }

@@ -20,9 +20,9 @@ namespace Camelot.Services
             get => _directory;
             set
             {
-                if (string.IsNullOrWhiteSpace(value))
+                if (_directory == value)
                 {
-                    throw new ArgumentNullException(nameof(value));
+                    return;
                 }
 
                 _directory = value;
