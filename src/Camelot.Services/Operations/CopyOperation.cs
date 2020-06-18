@@ -108,6 +108,10 @@ namespace Camelot.Services.Operations
                 // TODO: process
                 State = OperationState.Failed;
             }
+            finally
+            {
+                CurrentProgress = 1;
+            }
         }
     }
 }

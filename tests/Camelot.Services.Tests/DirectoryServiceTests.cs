@@ -34,9 +34,12 @@ namespace Camelot.Services.Tests
         [Fact]
         public void TestCurrentDirectoryUpdateFailed()
         {
-            Assert.Throws<ArgumentNullException>(() => _directoryService.SelectedDirectory = null);
-            Assert.Throws<ArgumentNullException>(() => _directoryService.SelectedDirectory = string.Empty);
-            Assert.Throws<ArgumentNullException>(() => _directoryService.SelectedDirectory = " ");
+            _directoryService.SelectedDirectory = CurrentDirectory;
+            var isCallbackCalled = false;
+            _directoryService.SelectedDirectoryChanged += (sender, args) => isCallbackCalled = true;
+            _directoryService.SelectedDirectory = CurrentDirectory;
+
+            Assert.False(isCallbackCalled);
         }
 
         [Fact]
@@ -62,13 +65,13 @@ namespace Camelot.Services.Tests
             var children = _directoryService.GetChildDirectories(parentDirectory.FullPath);
             Assert.Contains(children, dm => dm.FullPath == CurrentDirectory);
         }
-        
+
         [Fact]
         public void TestGetRootParentDirectory()
         {
             var directory = _directoryService.GetAppRootDirectory();
             var parentDirectory = _directoryService.GetParentDirectory(directory);
-            
+
             Assert.Null(parentDirectory);
         }
 

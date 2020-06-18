@@ -32,6 +32,10 @@ namespace Camelot.Services.Operations
                 // TODO: process exception
                 State = OperationState.Cancelled;
             }
+            finally
+            {
+                CurrentProgress = 1;
+            }
 
             return Task.CompletedTask;
         }
