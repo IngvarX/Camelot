@@ -13,6 +13,7 @@ namespace Camelot.Services.Windows
             _processService = processService;
         }
 
-        public void Open(string resource) => _processService.Run(resource);
+        public void Open(string resource) =>
+            _processService.Run("explorer", $"\"{resource}\"");
     }
 }

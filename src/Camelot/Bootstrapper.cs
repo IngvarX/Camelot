@@ -256,6 +256,10 @@ namespace Camelot
             services.RegisterLazySingleton<IResourceOpeningService>(() => new WindowsResourceOpeningService(
                 resolver.GetService<IProcessService>()
             ));
+            services.RegisterLazySingleton<ITerminalService>(() => new WindowsTerminalService(
+                resolver.GetService<IProcessService>(),
+                resolver.GetService<IUnitOfWorkFactory>()
+            ));
         }
 
         private static void RegisterViewModels(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)

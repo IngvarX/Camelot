@@ -3,11 +3,11 @@ using Camelot.DataAccess.UnitOfWork;
 using Camelot.Services.AllPlatforms;
 using Camelot.Services.Environment.Interfaces;
 
-namespace Camelot.Services.Mac
+namespace Camelot.Services.Windows
 {
-    public class MacTerminalService : TerminalServiceBase
+    public class WindowsTerminalService : TerminalServiceBase
     {
-        public MacTerminalService(
+        public WindowsTerminalService(
             IProcessService processService,
             IUnitOfWorkFactory unitOfWorkFactory)
             : base(processService, unitOfWorkFactory)
@@ -18,8 +18,8 @@ namespace Camelot.Services.Mac
         protected override TerminalSettings GetDefaultSettings() =>
             new TerminalSettings
             {
-                Command = "/Applications/Utilities/Terminal.app",
-                Arguments = "--workdir {0}"
+                Command = "cmd",
+                Arguments = "/K \"cd {0}\"" // todo: switch drive?
             };
     }
 }

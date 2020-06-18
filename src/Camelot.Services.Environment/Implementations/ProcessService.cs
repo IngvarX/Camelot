@@ -6,8 +6,6 @@ namespace Camelot.Services.Environment.Implementations
 {
     public class ProcessService : IProcessService
     {
-        public void Run(string command) => Process.Start(command);
-
         public void Run(string command, string arguments)
         {
             var process = GetProcess(command, arguments);

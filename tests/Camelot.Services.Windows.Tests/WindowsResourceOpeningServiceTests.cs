@@ -6,21 +6,22 @@ namespace Camelot.Services.Windows.Tests
 {
     public class WindowsResourceOpeningServiceTests
     {
-        private const string FileName = "File.txt";
-
         [Fact]
         public void TestFileServiceOpeningWindows()
         {
+            const string fileName = "File.txt";
+            const string command = "explorer";
+            var arguments = $"\"{fileName}\"";
             var processServiceMock = new Mock<IProcessService>();
             processServiceMock
-                .Setup(m => m.Run(FileName))
+                .Setup(m => m.Run(command, arguments))
                 .Verifiable();
 
             var fileOpeningService = new WindowsResourceOpeningService(processServiceMock.Object);
 
-            fileOpeningService.Open(FileName);
+            fileOpeningService.Open(fileName);
 
-            processServiceMock.Verify(m => m.Run(FileName), Times.Once());
+            processServiceMock.Verify(m => m.Run(command, arguments), Times.Once());
         }
     }
 }
