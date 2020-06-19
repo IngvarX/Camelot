@@ -48,21 +48,32 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             get => _currentDirectory;
             set
             {
+                Activate();
+
+                if (!_directoryService.CheckIfExists(value))
+                {
+                    return;
+                }
+
                 var previousCurrentDirectory = _currentDirectory;
                 var hasChanged = _currentDirectory != value;
                 this.RaiseAndSetIfChanged(ref _currentDirectory, value);
 
-                if (hasChanged)
+                if (!hasChanged)
                 {
-                    if (previousCurrentDirectory != null)
-                    {
-                        _fileSystemWatchingService.StopWatching(previousCurrentDirectory);
-                    }
-
-                    ReloadFiles();
-                    SelectedTab.CurrentDirectory = _currentDirectory;
-                    _fileSystemWatchingService.StartWatching(CurrentDirectory);
+                    return;
                 }
+
+                if (previousCurrentDirectory != null)
+                {
+                    _fileSystemWatchingService.StopWatching(previousCurrentDirectory);
+                }
+
+                ReloadFiles();
+                SelectedTab.CurrentDirectory = _currentDirectory;
+                _fileSystemWatchingService.StartWatching(CurrentDirectory);
+
+                CurrentDirectoryChanged.Raise(this, EventArgs.Empty);
             }
         }
 
@@ -89,6 +100,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         public event EventHandler<EventArgs> ActivatedEvent;
 
         public event EventHandler<EventArgs> DeactivatedEvent;
+
+        public event EventHandler<EventArgs> CurrentDirectoryChanged;
 
         public ICommand ActivateCommand { get; }
 
@@ -139,7 +152,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
                 state.Tabs = GetDefaultTabs();
             }
 
-            _tabs = new ObservableCollection<ITabViewModel>(state.Tabs.Select(Create));
+            _tabs = GetTabs(state);
             _tabs.CollectionChanged += TabsOnCollectionChanged;
 
             SelectTab(_tabs[state.SelectedTabIndex]);
@@ -320,9 +333,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
             tabViewModel.IsActive = tabViewModel.IsGloballyActive = true;
             SelectedTab = tabViewModel;
-            Activate();
 
-            _directoryService.SelectedDirectory = CurrentDirectory = tabViewModel.CurrentDirectory;
+            CurrentDirectory = tabViewModel.CurrentDirectory;
         }
 
         private void SubscribeToEvents()
@@ -523,5 +535,14 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         private IFileSystemNodeViewModel GetViewModel(string nodePath) =>
             _fileSystemNodes.SingleOrDefault(n => n.FullPath == nodePath);
+
+        private ObservableCollection<ITabViewModel> GetTabs(PanelModel panelModel)
+        {
+            var tabs = panelModel.Tabs
+                .Where(tm => _directoryService.CheckIfExists(tm.Directory))
+                .Select(Create);
+
+            return new ObservableCollection<ITabViewModel>(tabs);
+        }
     }
 }

@@ -37,8 +37,11 @@ namespace Camelot.ViewModels.Services.Implementations
             InactiveFilesPanelViewModel.Deactivate();
         }
 
-        private void SubscribeToEvents(IFilesPanelViewModel filesPanelViewModel) =>
+        private void SubscribeToEvents(IFilesPanelViewModel filesPanelViewModel)
+        {
             filesPanelViewModel.ActivatedEvent += FilesPanelViewModelOnActivatedEvent;
+            filesPanelViewModel.CurrentDirectoryChanged += FilesPanelViewModelOnCurrentDirectoryChanged;
+        }
 
         private void FilesPanelViewModelOnActivatedEvent(object sender, EventArgs e)
         {
@@ -51,6 +54,13 @@ namespace Camelot.ViewModels.Services.Implementations
             SwapViewModels();
             UpdateCurrentDirectory();
             DeactivateInactiveViewModel();
+        }
+
+        private void FilesPanelViewModelOnCurrentDirectoryChanged(object sender, EventArgs e)
+        {
+            var filesPanelViewModel = (IFilesPanelViewModel) sender;
+
+            _directoryService.SelectedDirectory = filesPanelViewModel.CurrentDirectory;
         }
 
         private void DirectoryServiceOnSelectedDirectoryChanged(object sender, SelectedDirectoryChangedEventArgs e)
