@@ -320,12 +320,9 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
             tabViewModel.IsActive = tabViewModel.IsGloballyActive = true;
             SelectedTab = tabViewModel;
-            if (CurrentDirectory != tabViewModel.CurrentDirectory)
-            {
-                _directoryService.SelectedDirectory = CurrentDirectory = tabViewModel.CurrentDirectory;
-            }
-
             Activate();
+
+            _directoryService.SelectedDirectory = CurrentDirectory = tabViewModel.CurrentDirectory;
         }
 
         private void SubscribeToEvents()
