@@ -146,16 +146,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             CopyToClipboardCommand = ReactiveCommand.CreateFromTask(CopyToClipboardAsync);
             PasteFromClipboardCommand = ReactiveCommand.CreateFromTask(PasteFromClipboardAsync);
 
-            var state = _filesPanelStateService.GetPanelState();
-            if (!state.Tabs.Any())
-            {
-                state.Tabs = GetDefaultTabs();
-            }
-
-            _tabs = GetTabs(state);
-            _tabs.CollectionChanged += TabsOnCollectionChanged;
-
-            SelectTab(_tabs[state.SelectedTabIndex]);
+            _tabs = SetupTabs();
 
             this.WhenAnyValue(x => x.CurrentDirectory, x => x.SelectedTab)
                 .Throttle(TimeSpan.FromMilliseconds(500))
@@ -403,7 +394,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
                 return;
             }
 
-            var parentDirectory = _directoryService.GetParentDirectory(CurrentDirectory);
             var directories = _directoryService.GetChildDirectories(CurrentDirectory);
             var files = _fileService.GetFiles(CurrentDirectory);
 
@@ -420,6 +410,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             _fileSystemNodes.Clear();
             _fileSystemNodes.AddRange(models);
 
+            var parentDirectory = _directoryService.GetParentDirectory(CurrentDirectory);
             if (parentDirectory != null)
             {
                 var parentDirectoryViewModel = _fileSystemNodeViewModelFactory.Create(parentDirectory, true);
@@ -513,6 +504,22 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             return new List<TabModel> {rootDirectoryTab};
         }
 
+        private ObservableCollection<ITabViewModel> SetupTabs()
+        {
+            var state = _filesPanelStateService.GetPanelState();
+            if (!state.Tabs.Any())
+            {
+                state.Tabs = GetDefaultTabs();
+            }
+
+            var tabs = GetInitialTabs(state.Tabs);
+            tabs.CollectionChanged += TabsOnCollectionChanged;
+
+            SelectTab(tabs[state.SelectedTabIndex]);
+
+            return tabs;
+        }
+
         private int GetInsertIndex(IFileSystemNodeViewModel newNodeModel)
         {
             var comparer = GetComparer();
@@ -536,9 +543,9 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private IFileSystemNodeViewModel GetViewModel(string nodePath) =>
             _fileSystemNodes.SingleOrDefault(n => n.FullPath == nodePath);
 
-        private ObservableCollection<ITabViewModel> GetTabs(PanelModel panelModel)
+        private ObservableCollection<ITabViewModel> GetInitialTabs(IEnumerable<TabModel> tabModels)
         {
-            var tabs = panelModel.Tabs
+            var tabs = tabModels
                 .Where(tm => _directoryService.CheckIfExists(tm.Directory))
                 .Select(Create);
 
