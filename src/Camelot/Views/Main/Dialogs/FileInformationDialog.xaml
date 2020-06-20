@@ -6,18 +6,18 @@
         xmlns:controls="clr-namespace:Camelot.Views.Main.Controls"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Camelot.Views.Main.Dialogs.FileInformationDialog"
-        Width="600" Height="200"
+        Width="600" Height="400"
         Title="File information">
 
     <Design.DataContext>
         <properties:FileInformationDialogViewModel />
     </Design.DataContext>
 
-    <Grid>
+    <Border Padding="20" Classes="defaultBackgroundBorder">
         <TabControl>
-            <TabItem Header="Properties">
+            <TabItem Header="General">
                 <controls:MainNodeInfoTabView DataContext="{Binding MainNodeInfoTabViewModel}" />
             </TabItem>
         </TabControl>
-    </Grid>
+    </Border>
 </Window>

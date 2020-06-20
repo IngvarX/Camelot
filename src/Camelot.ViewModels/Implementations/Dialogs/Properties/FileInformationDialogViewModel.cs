@@ -1,3 +1,4 @@
+using System.Linq;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
 using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
@@ -31,12 +32,14 @@ namespace Camelot.ViewModels.Implementations.Dialogs.Properties
 
         private void SetupMainTab(FileModel fileModel)
         {
-            MainNodeInfoTabViewModel.Name = fileModel.Name;
-            MainNodeInfoTabViewModel.Path = _pathService.GetParentDirectory(fileModel.FullPath);
+            MainNodeInfoTabViewModel.FullPath = fileModel.FullPath;
             MainNodeInfoTabViewModel.Size = fileModel.SizeBytes;
             MainNodeInfoTabViewModel.CreatedDateTime = fileModel.CreatedDateTime;
             MainNodeInfoTabViewModel.LastWriteDateTime = fileModel.LastModifiedDateTime;
             MainNodeInfoTabViewModel.LastAccessDateTime = fileModel.LastAccessDateTime;
+            var extension = _pathService.GetExtension(fileModel.FullPath);
+            var isImage = new[] {"png", "jpg", "bmp"}.Contains(extension);
+            MainNodeInfoTabViewModel.Type = isImage ? NodeType.Image : NodeType.File;
         }
     }
 }

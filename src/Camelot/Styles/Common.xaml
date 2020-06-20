@@ -195,4 +195,8 @@
         <Setter Property="Padding" Value="0" />
     </Style>
 
+    <Style Selector="TabControl.propertiesDialogTabControl">
+        <Setter Property="BorderThickness" Value="1" />
+    </Style>
+
 </Styles>

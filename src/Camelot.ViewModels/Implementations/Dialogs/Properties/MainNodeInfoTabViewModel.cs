@@ -1,4 +1,5 @@
 using System;
+using Avalonia.Media.Imaging;
 using Camelot.Services.Abstractions;
 using ReactiveUI;
 
@@ -7,24 +8,32 @@ namespace Camelot.ViewModels.Implementations.Dialogs.Properties
     public class MainNodeInfoTabViewModel : ViewModelBase
     {
         private readonly IFileSizeFormatter _fileSizeFormatter;
+        private readonly IPathService _pathService;
         private string _name;
         private string _path;
+        private NodeType _type;
         private long _size;
         private DateTime _createdDateTime;
         private DateTime _lastWriteDateTime;
         private DateTime _lastAccessDateTime;
 
-        public string Name
-        {
-            get => _name;
-            set => this.RaiseAndSetIfChanged(ref _name, value);
-        }
+        public string Name => _pathService.GetFileName(FullPath);
 
-        public string Path
+        public string Path => _pathService.GetParentDirectory(FullPath);
+
+        public string FullPath
         {
             get => _path;
             set => this.RaiseAndSetIfChanged(ref _path, value);
         }
+
+        public NodeType Type
+        {
+            get => _type;
+            set => this.RaiseAndSetIfChanged(ref _type, value);
+        }
+
+        public IBitmap ImageBitmap => Type == NodeType.Image ? new Bitmap(FullPath) : null;
 
         public long Size
         {
@@ -57,9 +66,11 @@ namespace Camelot.ViewModels.Implementations.Dialogs.Properties
         }
 
         public MainNodeInfoTabViewModel(
-            IFileSizeFormatter fileSizeFormatter)
+            IFileSizeFormatter fileSizeFormatter,
+            IPathService pathService)
         {
             _fileSizeFormatter = fileSizeFormatter;
+            _pathService = pathService;
         }
     }
 }

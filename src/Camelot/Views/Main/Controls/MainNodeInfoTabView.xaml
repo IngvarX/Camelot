@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:properties="clr-namespace:Camelot.ViewModels.Implementations.Dialogs.Properties;assembly=Camelot.ViewModels"
+             xmlns:converters="clr-namespace:Camelot.Converters"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Camelot.Views.Main.Controls.MainNodeInfoTabView">
 
@@ -10,14 +11,32 @@
         <properties:MainNodeInfoTabViewModel />
     </Design.DataContext>
 
-    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
-        <TextBlock Grid.Column="1" Text="{Binding Name}" />
+    <UserControl.Resources>
+        <converters:EnumConverter x:Key="EnumConverter"/>
+    </UserControl.Resources>
 
-        <TextBlock Grid.Row="1" Grid.Column="0" Text="Path:" />
-        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Path}" />
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,15,*">
+        <DrawingPresenter Width="48" Height="48" Margin="3,7,3,3" VerticalAlignment="Center"
+                          IsVisible="{Binding Type, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static properties:NodeType.File}}">
+            <DrawingPresenter.Drawing>
+                <GeometryDrawing Brush="#FFFFFF" Geometry="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm160-14.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z"/>
+            </DrawingPresenter.Drawing>
+        </DrawingPresenter>
+        <DrawingPresenter Width="48" Height="48" Margin="3,7,3,3" VerticalAlignment="Center"
+                          IsVisible="{Binding Type, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static properties:NodeType.Directory}}">
+            <DrawingPresenter.Drawing>
+                <GeometryDrawing Brush="#FFFFFF" Geometry="M464 128H272l-64-64H48C21.49 64 0 85.49 0 112v288c0 26.51 21.49 48 48 48h416c26.51 0 48-21.49 48-48V176c0-26.51-21.49-48-48-48z"/>
+            </DrawingPresenter.Drawing>
+        </DrawingPresenter>
+        <Image Source="{Binding ImageBitmap}" MaxWidth="200" MaxHeight="150"
+            IsVisible="{Binding Type, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static properties:NodeType.Image}}" />
+        <TextBlock Grid.Column="2" Classes="aboutPageTextBlock" Text="{Binding Name}" />
 
-        <TextBlock Grid.Row="2" Grid.Column="0" Text="Size:" />
-        <TextBlock Grid.Row="2" Grid.Column="1">
+        <TextBlock Grid.Row="1" Grid.Column="0" Classes="aboutPageTextBlock" Text="Path:" />
+        <TextBlock Grid.Row="1" Grid.Column="2" Classes="aboutPageTextBlock" Text="{Binding Path}" />
+
+        <TextBlock Grid.Row="2" Grid.Column="0" Classes="aboutPageTextBlock" Text="Size:" />
+        <TextBlock Grid.Row="2" Grid.Column="2" Classes="aboutPageTextBlock">
             <TextBlock.Text>
                 <MultiBinding StringFormat="{}{0} ({1})">
                     <Binding Path="Size" />
@@ -26,13 +45,13 @@
             </TextBlock.Text>
         </TextBlock>
 
-        <TextBlock Grid.Row="3" Grid.Column="0" Text="Last access:" />
-        <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding LastAccessDateTime}" />
+        <TextBlock Grid.Row="3" Grid.Column="0" Classes="aboutPageTextBlock" Text="Last access:" />
+        <TextBlock Grid.Row="3" Grid.Column="2" Classes="aboutPageTextBlock" Text="{Binding LastAccessDateTime}" />
 
-        <TextBlock Grid.Row="4" Grid.Column="0" Text="Last modification:" />
-        <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding LastWriteDateTime}" />
+        <TextBlock Grid.Row="4" Grid.Column="0" Classes="aboutPageTextBlock" Text="Last modification:" />
+        <TextBlock Grid.Row="4" Grid.Column="2" Classes="aboutPageTextBlock" Text="{Binding LastWriteDateTime}" />
 
-        <TextBlock Grid.Row="5" Grid.Column="0" Text="Creation date:" />
-        <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding CreatedDateTime}" />
+        <TextBlock Grid.Row="5" Grid.Column="0" Classes="aboutPageTextBlock" Text="Creation date:" />
+        <TextBlock Grid.Row="5" Grid.Column="2" Classes="aboutPageTextBlock" Text="{Binding CreatedDateTime}" />
     </Grid>
 </UserControl>

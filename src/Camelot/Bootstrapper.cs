@@ -300,11 +300,11 @@ namespace Camelot
                 resolver.GetService<AboutDialogConfiguration>()
             ));
             services.Register(() => new MainNodeInfoTabViewModel(
-                resolver.GetService<IFileSizeFormatter>()
+                resolver.GetService<IFileSizeFormatter>(),
+                resolver.GetService<IPathService>()
             ));
             services.Register(() => new DirectoryInformationDialogViewModel(
                 resolver.GetService<IDirectoryService>(),
-                resolver.GetService<IPathService>(),
                 resolver.GetService<IApplicationDispatcher>(),
                 resolver.GetService<MainNodeInfoTabViewModel>()
             ));
