@@ -124,8 +124,13 @@
 
     <Style Selector="TabItem:selected Border.settingsTabHeaderBorder">
         <Setter Property="Background" Value="{DynamicResource OrangeBrush}" />
-        <Setter Property="Padding" Value="5" />
+        <Setter Property="Padding" Value="5,5,10,5" />
         <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="Margin" Value="0,0,10,0" />
+    </Style>
+
+    <Style Selector="Border.settingsContentBorder">
+        <Setter Property="BorderBrush" Value="{DynamicResource DirectoryTextBoxBackgroundColorBrush}" />
     </Style>
 
 </Styles>

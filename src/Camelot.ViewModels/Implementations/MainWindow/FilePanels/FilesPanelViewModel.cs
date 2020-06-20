@@ -252,26 +252,11 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             tabViewModel.ClosingAllTabsButThisRequested -= TabViewModelOnClosingAllTabsButThisRequested;
         }
 
-        private void TabViewModelOnActivationRequested(object sender, EventArgs e)
-        {
-            var tabViewModel = (ITabViewModel) sender;
+        private void TabViewModelOnActivationRequested(object sender, EventArgs e) => SelectTab((ITabViewModel) sender);
 
-            SelectTab(tabViewModel);
-        }
+        private void TabViewModelOnNewTabRequested(object sender, EventArgs e) => CreateNewTab((ITabViewModel) sender);
 
-        private void TabViewModelOnNewTabRequested(object sender, EventArgs e)
-        {
-            var tabViewModel = (ITabViewModel) sender;
-
-            CreateNewTab(tabViewModel);
-        }
-
-        private void TabViewModelOnCloseRequested(object sender, EventArgs e)
-        {
-            var tabViewModel = (ITabViewModel) sender;
-
-            CloseTab(tabViewModel);
-        }
+        private void TabViewModelOnCloseRequested(object sender, EventArgs e) => CloseTab((ITabViewModel) sender);
 
         private void TabViewModelOnClosingTabsToTheLeftRequested(object sender, EventArgs e)
         {
@@ -443,8 +428,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             this.RaisePropertyChanged(nameof(AreAnyFileSystemNodesSelected));
         }
 
-        private void SaveState()
-        {
+        private void SaveState() =>
             Task.Factory.StartNew(() =>
             {
                 var tabs = _tabs.Select(CreateFrom).ToList();
@@ -457,10 +441,13 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
                 _filesPanelStateService.SavePanelState(state);
             }, TaskCreationOptions.LongRunning);
-        }
 
         private static TabModel CreateFrom(ITabViewModel tabViewModel) =>
-            new TabModel {Directory = tabViewModel.CurrentDirectory, SortingSettings = GetSortingSettings(tabViewModel)};
+            new TabModel
+            {
+                Directory = tabViewModel.CurrentDirectory,
+                SortingSettings = GetSortingSettings(tabViewModel)
+            };
 
         private IFileSystemNodeViewModel CreateFrom(string path)
         {
