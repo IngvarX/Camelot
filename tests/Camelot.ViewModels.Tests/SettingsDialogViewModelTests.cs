@@ -16,25 +16,9 @@ namespace Camelot.ViewModels.Tests
                 .Verifiable();
             var dialogViewModel = new SettingsDialogViewModel(terminalSettingsViewModel.Object);
 
-            Assert.Equal(terminalSettingsViewModel.Object, dialogViewModel.CurrentSettingsViewModel);
+            Assert.Equal(terminalSettingsViewModel.Object, dialogViewModel.TerminalSettingsViewModel);
 
             terminalSettingsViewModel.Verify(m => m.Activate(), Times.Once);
-        }
-
-        [Fact]
-        public void TestOpenTerminalSettingsCommand()
-        {
-            var terminalSettingsViewModel = new Mock<ISettingsViewModel>();
-            terminalSettingsViewModel
-                .Setup(m => m.Activate())
-                .Verifiable();
-            var dialogViewModel = new SettingsDialogViewModel(terminalSettingsViewModel.Object);
-
-            Assert.True(dialogViewModel.OpenTerminalSettingsCommand.CanExecute(null));
-            dialogViewModel.OpenTerminalSettingsCommand.Execute(null);
-
-            terminalSettingsViewModel.Verify(m => m.Activate(), Times.Exactly(2));
-            Assert.Equal(terminalSettingsViewModel.Object, dialogViewModel.CurrentSettingsViewModel);
         }
 
         [Fact]

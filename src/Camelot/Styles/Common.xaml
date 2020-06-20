@@ -187,4 +187,8 @@
         <Setter Property="Margin" Value="5,10,0,0" />
     </Style>
 
+    <Style Selector="TabItem">
+        <Setter Property="Padding" Value="0" />
+    </Style>
+
 </Styles>

@@ -10,19 +10,24 @@ namespace Camelot.ViewModels.Implementations.Dialogs
     {
         private readonly ISettingsViewModel[] _settingsViewModels;
 
-        private ISettingsViewModel _currentSettingsViewModel;
+        private ISettingsViewModel _terminalSettingsViewModel;
+        private int _selectedIndex;
 
-        public ISettingsViewModel CurrentSettingsViewModel
+        public ISettingsViewModel TerminalSettingsViewModel
         {
-            get => _currentSettingsViewModel;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _currentSettingsViewModel, value);
-                value.Activate();
-            }
+            get => _terminalSettingsViewModel;
+            set => this.RaiseAndSetIfChanged(ref _terminalSettingsViewModel, value);
         }
 
-        public ICommand OpenTerminalSettingsCommand { get; }
+        public int SelectedIndex
+        {
+            get => _selectedIndex;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _selectedIndex, value);
+                Activate(_settingsViewModels[_selectedIndex]);
+            }
+        }
 
         public ICommand SaveCommand { get; }
 
@@ -31,14 +36,14 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         public SettingsDialogViewModel(
             ISettingsViewModel terminalSettingsViewModel)
         {
+            TerminalSettingsViewModel = terminalSettingsViewModel;
+
             _settingsViewModels = new[]
             {
                 terminalSettingsViewModel
             };
+            Activate(_settingsViewModels.First());
 
-            CurrentSettingsViewModel = _settingsViewModels.First();
-
-            OpenTerminalSettingsCommand = ReactiveCommand.Create(() => CurrentSettingsViewModel = terminalSettingsViewModel);
             SaveCommand = ReactiveCommand.Create(Save);
             CloseCommand = ReactiveCommand.Create(Close);
         }
@@ -47,5 +52,8 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             _settingsViewModels
                 .Where(vm => vm.IsChanged)
                 .ForEach(vm => vm.SaveChanges());
+
+        private static void Activate(ISettingsViewModel settingsViewModel) =>
+            settingsViewModel.Activate();
     }
 }

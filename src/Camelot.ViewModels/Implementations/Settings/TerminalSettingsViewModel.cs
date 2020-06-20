@@ -13,6 +13,7 @@ namespace Camelot.ViewModels.Implementations.Settings
         private string _terminalCommandArguments;
         private string _initialCommandText;
         private string _initialCommandArguments;
+        private bool _isActivated;
 
         public string TerminalCommandText
         {
@@ -37,6 +38,13 @@ namespace Camelot.ViewModels.Implementations.Settings
 
         public void Activate()
         {
+            if (_isActivated)
+            {
+                return;
+            }
+
+            _isActivated = true;
+
             var (command, arguments) = _terminalService.GetTerminalSettings();
 
             TerminalCommandText = _initialCommandText = command;
