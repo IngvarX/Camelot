@@ -48,7 +48,7 @@
         <Setter Property="Opacity" Value="0.9" />
     </Style>
 
-    <Style Selector="TextBox.directoryTextBox">
+    <Style Selector="TextBox">
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Background" Value="{DynamicResource DirectoryTextBoxBackgroundColorBrush}" />
     </Style>
@@ -113,4 +113,9 @@
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="BorderBrush" Value="{DynamicResource IconButtonHoverForegroundColorBrush}" />
     </Style>
+
+    <Style Selector="Button.applyDialogButton">
+        <Setter Property="Background" Value="{DynamicResource ProgressBarForegroundBrush}" />
+    </Style>
+
 </Styles>

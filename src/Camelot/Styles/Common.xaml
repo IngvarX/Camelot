@@ -25,8 +25,14 @@
         <Setter Property="Margin" Value="5,2,0,0" />
     </Style>
 
+    <Style Selector="TextBlock.settingsTabTextBlock">
+        <Setter Property="FontFamily" Value="SansSerif" />
+        <Setter Property="FontSize" Value="18" />
+    </Style>
+
     <Style Selector="TextBox">
         <Setter Property="FontSize" Value="20" />
+        <Setter Property="BorderThickness" Value="0" />
     </Style>
 
     <Style Selector="Button.iconButton">
@@ -175,6 +181,10 @@
 
     <Style Selector="Button.topOperationButton:pointerover">
         <Setter Property="Foreground" Value="{DynamicResource IconButtonHoverForegroundColorBrush}" />
+    </Style>
+
+    <Style Selector="TextBox.settingsTextBox">
+        <Setter Property="Margin" Value="5,10,0,0" />
     </Style>
 
 </Styles>

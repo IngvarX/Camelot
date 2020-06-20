@@ -10,12 +10,12 @@
         <settings:TerminalSettingsViewModel />
     </Design.DataContext>
 
-    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*">
-        <TextBlock Text="Command:" />
-        <TextBox Grid.Column="1" Text="{Binding TerminalCommandText}" />
+    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*" Margin="10">
+        <TextBlock Classes="settingsTabTextBlock" Margin="5,13,0,0" Text="Command:" />
+        <TextBox Grid.Column="1" Classes="settingsTextBox" Text="{Binding TerminalCommandText}" />
 
-        <TextBlock Grid.Row="1" Text="Arguments:" />
-        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding TerminalCommandArguments}" />
+        <TextBlock Grid.Row="1" Classes="settingsTabTextBlock" Margin="5,13,0,0" Text="Arguments:" />
+        <TextBox Grid.Row="1" Grid.Column="1" Classes="settingsTextBox" Text="{Binding TerminalCommandArguments}" />
     </Grid>
 
 </UserControl>
