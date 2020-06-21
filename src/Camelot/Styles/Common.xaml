@@ -198,6 +198,16 @@
 
     <Style Selector="TabControl.propertiesDialogTabControl">
         <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderBrush" Value="{DynamicResource LightGreyBrush}" />
+        <Setter Property="Padding" Value="15" />
+    </Style>
+
+    <Style Selector="TabControl.propertiesDialogTabControl TabItem">
+        <Setter Property="Padding" Value="5" />
+    </Style>
+
+    <Style Selector="TabControl.propertiesDialogTabControl WrapPanel">
+        <Setter Property="Background" Value="{DynamicResource AlternativeMainBackgroundColorBrush}" />
     </Style>
 
 </Styles>

@@ -107,8 +107,8 @@
     <AvaloniaResource Update="Views\Main\Dialogs\DirectoryDialog.xaml">
       <SubType>Designer</SubType>
     </AvaloniaResource>
-    <Compile Update="Views\Main\Dialogs\DirectoryDialog.xaml.cs">
-      <DependentUpon>DirectoryDialog.xaml</DependentUpon>
+    <Compile Update="Views\Main\Dialogs\DirectoryInformationDialog.xaml.cs">
+      <DependentUpon>DirectoryInformationDialog.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

@@ -6,14 +6,14 @@
         xmlns:controls="clr-namespace:Camelot.Views.Main.Controls"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Camelot.Views.Main.Dialogs.DirectoryInformationDialog"
-        Width="600" Height="400"
+        Width="700" Height="400"
         Title="Directory information">
 
     <Design.DataContext>
         <properties:DirectoryInformationDialogViewModel />
     </Design.DataContext>
 
-    <Border Padding="10" Classes="defaultBackgroundBorder">
+    <Border Padding="20" Classes="defaultBackgroundBorder">
         <TabControl Classes="propertiesDialogTabControl">
             <TabItem Header="General">
                 <controls:MainNodeInfoTabView DataContext="{Binding MainNodeInfoTabViewModel}" />

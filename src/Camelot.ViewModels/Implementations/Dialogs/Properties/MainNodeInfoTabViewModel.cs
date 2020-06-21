@@ -20,6 +20,17 @@ namespace Camelot.ViewModels.Implementations.Dialogs.Properties
         private DateTime _lastWriteDateTime;
         private DateTime _lastAccessDateTime;
 
+        private long Size
+        {
+            get => _size;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _size, value);
+                this.RaisePropertyChanged(nameof(FormattedSize));
+                this.RaisePropertyChanged(nameof(FormattedSizeAsNumber));
+            }
+        }
+
         public string Name => _pathService.GetFileName(_fullPath);
 
         public string Path => _pathService.GetParentDirectory(_fullPath);
@@ -32,17 +43,9 @@ namespace Camelot.ViewModels.Implementations.Dialogs.Properties
 
         public IBitmap ImageBitmap => CheckIfImage() ? new Bitmap(_fullPath) : null;
 
-        public long Size
-        {
-            get => _size;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _size, value);
-                this.RaisePropertyChanged(nameof(FormattedSize));
-            }
-        }
-
         public string FormattedSize => _fileSizeFormatter.GetFormattedSize(Size);
+
+        public string FormattedSizeAsNumber => _fileSizeFormatter.GetSizeAsNumber(Size);
 
         public DateTime CreatedDateTime
         {

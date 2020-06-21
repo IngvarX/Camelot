@@ -14,7 +14,7 @@
     </Design.DataContext>
 
     <Border Padding="20" Classes="defaultBackgroundBorder">
-        <TabControl>
+        <TabControl Classes="propertiesDialogTabControl">
             <TabItem Header="General">
                 <controls:MainNodeInfoTabView DataContext="{Binding MainNodeInfoTabViewModel}" />
             </TabItem>
