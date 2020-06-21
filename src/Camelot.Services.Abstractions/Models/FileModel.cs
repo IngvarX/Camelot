@@ -2,7 +2,7 @@ using Camelot.Services.Abstractions.Models.Enums;
 
 namespace Camelot.Services.Abstractions.Models
 {
-    public class FileModel : ModelBase
+    public class FileModel : NodeModelBase
     {
         public long SizeBytes { get; set; }
 

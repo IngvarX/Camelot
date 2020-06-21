@@ -2,7 +2,7 @@ using System;
 
 namespace Camelot.Services.Abstractions.Models
 {
-    public class ModelBase
+    public class NodeModelBase
     {
         public string Name { get; set; }
 

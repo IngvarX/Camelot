@@ -3,6 +3,7 @@ using ApplicationDispatcher.Interfaces;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
 using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
+using Camelot.ViewModels.Interfaces.Properties;
 
 namespace Camelot.ViewModels.Implementations.Dialogs.Properties
 {
@@ -11,12 +12,12 @@ namespace Camelot.ViewModels.Implementations.Dialogs.Properties
         private readonly IDirectoryService _directoryService;
         private readonly IApplicationDispatcher _applicationDispatcher;
 
-        public MainNodeInfoTabViewModel MainNodeInfoTabViewModel { get; }
+        public IMainNodeInfoTabViewModel MainNodeInfoTabViewModel { get; }
 
         public DirectoryInformationDialogViewModel(
             IDirectoryService directoryService,
             IApplicationDispatcher applicationDispatcher,
-            MainNodeInfoTabViewModel mainNodeInfoTabViewModel)
+            IMainNodeInfoTabViewModel mainNodeInfoTabViewModel)
         {
             _directoryService = directoryService;
             _applicationDispatcher = applicationDispatcher;
@@ -31,24 +32,22 @@ namespace Camelot.ViewModels.Implementations.Dialogs.Properties
             SetupMainTab(directoryModel);
         }
 
-        private void SetupMainTab(DirectoryModel directoryModel)
+        private void SetupMainTab(NodeModelBase directoryModel)
         {
             LoadDirectorySize(directoryModel.FullPath);
 
-            MainNodeInfoTabViewModel.FullPath = directoryModel.FullPath;
-            MainNodeInfoTabViewModel.CreatedDateTime = directoryModel.CreatedDateTime;
-            MainNodeInfoTabViewModel.LastWriteDateTime = directoryModel.LastModifiedDateTime;
-            MainNodeInfoTabViewModel.LastAccessDateTime = directoryModel.LastAccessDateTime;
-            MainNodeInfoTabViewModel.Type = NodeType.Directory;
+            MainNodeInfoTabViewModel.Activate(directoryModel, true);
         }
 
         private void LoadDirectorySize(string directory)
         {
-            Task.Factory
+            Task
+                .Factory
                 .StartNew(() => _directoryService.CalculateSize(directory))
                 .ContinueWith(t => SetSize(t.Result));
         }
 
-        private void SetSize(long size) => _applicationDispatcher.Dispatch(() => MainNodeInfoTabViewModel.Size = size);
+        private void SetSize(long size) =>
+            _applicationDispatcher.Dispatch(() => MainNodeInfoTabViewModel.SetSize(size));
     }
 }

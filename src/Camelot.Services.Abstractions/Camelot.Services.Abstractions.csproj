@@ -8,4 +8,8 @@
       <ProjectReference Include="..\Camelot.DataAccess.Models\Camelot.DataAccess.Models.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="IMimeTypeService.cs" />
+    </ItemGroup>
+
 </Project>

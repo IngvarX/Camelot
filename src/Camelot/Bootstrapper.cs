@@ -38,7 +38,6 @@ using Camelot.ViewModels.Interfaces.MainWindow;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.MainWindow.OperationsStates;
 using Camelot.ViewModels.Interfaces.Menu;
-using Camelot.ViewModels.Interfaces.Settings;
 using Camelot.ViewModels.Services.Implementations;
 using Camelot.ViewModels.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
@@ -83,6 +82,10 @@ namespace Camelot
             var fileSystemWatcherConfiguration = new FileSystemWatcherConfiguration();
             configuration.GetSection("FileSystemWatcher").Bind(fileSystemWatcherConfiguration);
             services.RegisterConstant(fileSystemWatcherConfiguration);
+
+            var mainNodeInfoTabViewModelConfiguration = new ImagePreviewConfiguration();
+            configuration.GetSection("ImagePreview").Bind(mainNodeInfoTabViewModelConfiguration);
+            services.RegisterConstant(mainNodeInfoTabViewModelConfiguration);
         }
 
         private static void RegisterEnvironmentServices(IMutableDependencyResolver services)
@@ -301,7 +304,8 @@ namespace Camelot
             ));
             services.Register(() => new MainNodeInfoTabViewModel(
                 resolver.GetService<IFileSizeFormatter>(),
-                resolver.GetService<IPathService>()
+                resolver.GetService<IPathService>(),
+                resolver.GetService<ImagePreviewConfiguration>()
             ));
             services.Register(() => new DirectoryInformationDialogViewModel(
                 resolver.GetService<IDirectoryService>(),
@@ -310,7 +314,6 @@ namespace Camelot
             ));
             services.Register(() => new FileInformationDialogViewModel(
                 resolver.GetService<IFileService>(),
-                resolver.GetService<IPathService>(),
                 resolver.GetService<MainNodeInfoTabViewModel>()
             ));
             services.Register(() => new OverwriteOptionsDialogViewModel(
