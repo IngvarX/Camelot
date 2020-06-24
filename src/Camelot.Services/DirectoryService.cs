@@ -94,16 +94,23 @@ namespace Camelot.Services
 
         public void RemoveRecursively(string directory) => Directory.Delete(directory, true);
 
-        public void Rename(string directoryPath, string newName)
+        public bool Rename(string directoryPath, string newName)
         {
             var parentDirectory = _pathService.GetParentDirectory(directoryPath);
             var newDirectoryPath = _pathService.Combine(parentDirectory, newName);
             if (directoryPath == newDirectoryPath)
             {
-                return;
+                return false;
+            }
+
+            if (CheckIfExists(newDirectoryPath))
+            {
+                return false;
             }
 
             Directory.Move(directoryPath, newDirectoryPath);
+
+            return true;
         }
 
         private static DirectoryModel CreateFrom(string directory)

@@ -105,11 +105,15 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         private void Rename()
         {
-            IsEditing = false;
-
-            if (!string.IsNullOrEmpty(_fullName))
+            if (string.IsNullOrEmpty(_fullName))
             {
-                _operationsService.Rename(_fullPath, _fullName);
+                return;
+            }
+
+            var renameResult = _operationsService.Rename(_fullPath, _fullName);
+            if (renameResult)
+            {
+                IsEditing = false;
             }
         }
 

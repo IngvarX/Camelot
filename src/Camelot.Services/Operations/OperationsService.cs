@@ -78,16 +78,19 @@ namespace Camelot.Services.Operations
             await deleteOperation.RunAsync();
         }
 
-        public void Rename(string path, string newName)
+        public bool Rename(string path, string newName)
         {
             if (_fileService.CheckIfExists(path))
             {
-                _fileService.Rename(path, newName);
+                return _fileService.Rename(path, newName);
             }
-            else if (_directoryService.CheckIfExists(path))
+
+            if (_directoryService.CheckIfExists(path))
             {
-                _directoryService.Rename(path, newName);
+                return _directoryService.Rename(path, newName);
             }
+
+            return false;
         }
 
         public void CreateDirectory(string sourceDirectory, string directoryName)

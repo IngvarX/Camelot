@@ -19,7 +19,7 @@
             </DrawingPresenter.Drawing>
         </DrawingPresenter>
         <Grid IsVisible="{Binding !IsDirectory}">
-            <Image Source="{Binding ImageBitmap}" MaxWidth="200" MaxHeight="150"
+            <Image Source="{Binding ImageBitmap}" MaxWidth="100" MaxHeight="100"
                    IsVisible="{Binding ImageBitmap, Converter={x:Static ObjectConverters.IsNotNull}}" />
             <DrawingPresenter Width="48" Height="48" Margin="3,7,3,3" VerticalAlignment="Center"
                               IsVisible="{Binding ImageBitmap, Converter={x:Static ObjectConverters.IsNull}}">

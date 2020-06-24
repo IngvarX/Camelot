@@ -42,16 +42,23 @@ namespace Camelot.Services
 
         public void Remove(string file) => File.Delete(file);
 
-        public void Rename(string filePath, string newName)
+        public bool Rename(string filePath, string newName)
         {
             var parentDirectory = _pathService.GetParentDirectory(filePath);
             var newFilePath = _pathService.Combine(parentDirectory, newName);
             if (filePath == newFilePath)
             {
-                return;
+                return false;
+            }
+
+            if (CheckIfExists(newFilePath))
+            {
+                return false;
             }
 
             File.Move(filePath, newFilePath);
+
+            return true;
         }
 
         public Task WriteTextAsync(string filePath, string text) =>

@@ -31,6 +31,6 @@ namespace Camelot.Services.Abstractions
 
         void RemoveRecursively(string directory);
 
-        void Rename(string directoryPath, string newName);
+        bool Rename(string directoryPath, string newName);
     }
 }

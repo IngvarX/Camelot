@@ -17,6 +17,6 @@ namespace Camelot.Services.Abstractions.Operations
 
         Task RemoveAsync(IReadOnlyList<string> nodes);
 
-        void Rename(string path, string newName);
+        bool Rename(string path, string newName);
     }
 }

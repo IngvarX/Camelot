@@ -19,7 +19,7 @@ namespace Camelot.Services.Abstractions
 
         void Remove(string file);
 
-        void Rename(string filePath, string newName);
+        bool Rename(string filePath, string newName);
 
         Task WriteTextAsync(string filePath, string text);
 
