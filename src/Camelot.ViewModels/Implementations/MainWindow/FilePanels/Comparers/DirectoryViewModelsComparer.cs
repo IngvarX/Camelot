@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Comparers
 {
@@ -10,7 +11,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Comparers
 
         }
 
-        protected override int Compare(DirectoryViewModel x, DirectoryViewModel y, SortingColumn sortingColumn)
+        protected override int Compare(DirectoryViewModel x, DirectoryViewModel y, SortingColumn sortingColumn,
+            bool isAscending)
         {
             if (x.IsParentDirectory)
             {
@@ -22,18 +24,16 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Comparers
                 return 1;
             }
 
-            switch (sortingColumn)
+            var sortingByNameColumns = new[] {SortingColumn.Extension, SortingColumn.Size, SortingColumn.Name};
+            var result = sortingColumn switch
             {
-                case SortingColumn.Extension:
-                case SortingColumn.Size:
-                case SortingColumn.Name:
-                    return string.Compare(PreprocessFileName(x.Name), PreprocessFileName(y.Name),
-                        StringComparison.Ordinal);
-                case SortingColumn.Date:
-                    return x.LastModifiedDateTime.CompareTo(y.LastModifiedDateTime);
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(SortingColumn));
-            }
+                _ when sortingByNameColumns.Contains(sortingColumn) =>
+                    string.Compare(PreprocessFileName(x.Name), PreprocessFileName(y.Name), StringComparison.Ordinal),
+                SortingColumn.Date => x.LastModifiedDateTime.CompareTo(y.LastModifiedDateTime),
+                _ => throw new ArgumentOutOfRangeException(nameof(SortingColumn))
+            };
+
+            return isAscending ? result : -result;
         }
     }
 }

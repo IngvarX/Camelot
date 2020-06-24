@@ -12,16 +12,11 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Comparers
             _isAscending = isAscending;
             _sortingColumn = sortingColumn;
         }
-        
-        public int Compare(T x, T y)
-        {
-            var compareResult = Compare(x, y, _sortingColumn);
 
-            return _isAscending ? compareResult : -compareResult;
-        }
+        public int Compare(T x, T y) => Compare(x, y, _sortingColumn, _isAscending);
 
-        protected abstract int Compare(T x, T y, SortingColumn sortingColumn);
-        
+        protected abstract int Compare(T x, T y, SortingColumn sortingColumn, bool isAscending);
+
         protected static string PreprocessFileName(string fileName) =>
             fileName.StartsWith(".") ? fileName.Substring(1) : fileName;
     }
