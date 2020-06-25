@@ -197,17 +197,47 @@
     </Style>
 
     <Style Selector="TabControl.propertiesDialogTabControl">
-        <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="BorderBrush" Value="{DynamicResource LightGreyBrush}" />
         <Setter Property="Padding" Value="15" />
     </Style>
 
     <Style Selector="TabControl.propertiesDialogTabControl TabItem">
         <Setter Property="Padding" Value="5" />
+        <Setter Property="HeaderTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <StackPanel Orientation="Vertical">
+                        <Border Classes="tabBorder">
+                            <Grid Classes="inactiveTabGrid" Height="40">
+                                <TextBlock Classes="tabNameTextBlock inactiveTabNameTextBlock"
+                                           Text="{Binding Path=Header, RelativeSource={RelativeSource AncestorType={x:Type TabItem}}}" />
+                            </Grid>
+                        </Border>
+
+                        <Rectangle Classes="tabRectangle" Height="2" />
+                    </StackPanel>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
-    <Style Selector="TabControl.propertiesDialogTabControl WrapPanel">
-        <Setter Property="Background" Value="{DynamicResource AlternativeMainBackgroundColorBrush}" />
+    <Style Selector="TabControl.propertiesDialogTabControl TabItem:selected">
+        <Setter Property="HeaderTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <StackPanel Orientation="Vertical">
+                        <Border Classes="tabBorder">
+                            <Grid Classes="activeTabGrid" Height="40">
+                                <TextBlock Classes="tabNameTextBlock"
+                                           Text="{Binding Path=Header, RelativeSource={RelativeSource AncestorType={x:Type TabItem}}}" />
+                            </Grid>
+                        </Border>
+
+                        <Rectangle Classes="tabRectangle tabRectangleGloballyActive"
+                                   Height="2" />
+                    </StackPanel>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
 </Styles>
