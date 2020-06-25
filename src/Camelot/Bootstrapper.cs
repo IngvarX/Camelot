@@ -83,9 +83,9 @@ namespace Camelot
             configuration.GetSection("FileSystemWatcher").Bind(fileSystemWatcherConfiguration);
             services.RegisterConstant(fileSystemWatcherConfiguration);
 
-            var mainNodeInfoTabViewModelConfiguration = new ImagePreviewConfiguration();
-            configuration.GetSection("ImagePreview").Bind(mainNodeInfoTabViewModelConfiguration);
-            services.RegisterConstant(mainNodeInfoTabViewModelConfiguration);
+            var imagePreviewConfiguration = new ImagePreviewConfiguration();
+            configuration.GetSection("ImagePreview").Bind(imagePreviewConfiguration);
+            services.RegisterConstant(imagePreviewConfiguration);
         }
 
         private static void RegisterEnvironmentServices(IMutableDependencyResolver services)
@@ -295,7 +295,6 @@ namespace Camelot
                 resolver.GetService<IFilesOperationsMediator>(),
                 resolver.GetService<FilePropertiesBehavior>(),
                 resolver.GetService<DirectoryPropertiesBehavior>()
-
             ));
             services.Register(() => new AboutDialogViewModel(
                 resolver.GetService<IApplicationVersionProvider>(),
