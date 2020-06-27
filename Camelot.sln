@@ -61,6 +61,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camelot.Services.Mac.Tests"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camelot.Services.Windows.Tests", "tests\Camelot.Services.Windows.Tests\Camelot.Services.Windows.Tests.csproj", "{E31503D3-2EE2-4F8C-ACFD-7D1B3EBBEAE1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camelot.Operations", "src\Camelot.Operations\Camelot.Operations.csproj", "{8019CB6D-1787-4FC0-A75A-1A07A5ECCD41}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camelot.Operations.Tests", "tests\Camelot.Operations.Tests\Camelot.Operations.Tests.csproj", "{06FBDF39-EF80-44BA-ACF7-F3E0286A06C9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -155,6 +159,14 @@ Global
 		{E31503D3-2EE2-4F8C-ACFD-7D1B3EBBEAE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E31503D3-2EE2-4F8C-ACFD-7D1B3EBBEAE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E31503D3-2EE2-4F8C-ACFD-7D1B3EBBEAE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8019CB6D-1787-4FC0-A75A-1A07A5ECCD41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8019CB6D-1787-4FC0-A75A-1A07A5ECCD41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8019CB6D-1787-4FC0-A75A-1A07A5ECCD41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8019CB6D-1787-4FC0-A75A-1A07A5ECCD41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06FBDF39-EF80-44BA-ACF7-F3E0286A06C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06FBDF39-EF80-44BA-ACF7-F3E0286A06C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06FBDF39-EF80-44BA-ACF7-F3E0286A06C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06FBDF39-EF80-44BA-ACF7-F3E0286A06C9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(AvalonStudioProperties) = preSolution
 		StartupItem = {DBB08575-833E-4079-86F8-45EF9C550021}
@@ -187,5 +199,7 @@ Global
 		{88F851D7-C12E-4C4E-AA49-268AC1B9FE18} = {6E54E223-60FD-418C-B6E0-0EB9095C34D0}
 		{8A8B301D-CB87-40AD-A975-14C53CEDBAA0} = {6E54E223-60FD-418C-B6E0-0EB9095C34D0}
 		{E31503D3-2EE2-4F8C-ACFD-7D1B3EBBEAE1} = {6E54E223-60FD-418C-B6E0-0EB9095C34D0}
+		{8019CB6D-1787-4FC0-A75A-1A07A5ECCD41} = {A67DE010-431F-4400-9137-0FBF610E2527}
+		{06FBDF39-EF80-44BA-ACF7-F3E0286A06C9} = {6E54E223-60FD-418C-B6E0-0EB9095C34D0}
 	EndGlobalSection
 EndGlobal

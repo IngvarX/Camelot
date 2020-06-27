@@ -127,7 +127,9 @@
   <ItemGroup>
     <ProjectReference Include="..\Camelot.Avalonia\Camelot.Avalonia.csproj" />
     <ProjectReference Include="..\Camelot.DataAccess.LiteDb\Camelot.DataAccess.LiteDb.csproj" />
+    <ProjectReference Include="..\Camelot.Operations\Camelot.Operations.csproj" />
     <ProjectReference Include="..\Camelot.Services\Camelot.Services.csproj" />
+    <ProjectReference Include="..\Camelot.TaskPool\Camelot.TaskPool.csproj" />
     <ProjectReference Include="..\Camelot.ViewModels\Camelot.ViewModels.csproj" />
   </ItemGroup>
   <ItemGroup>

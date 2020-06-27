@@ -4,19 +4,19 @@ using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Operations;
 
-namespace Camelot.Services.Operations
+namespace Camelot.Operations
 {
-    public class DeleteFileOperation : OperationBase, IInternalOperation
+    public class DeleteDirectoryOperation : OperationBase, IInternalOperation
     {
-        private readonly string _fileToRemove;
-        private readonly IFileService _fileService;
+        private readonly string _directoryToRemove;
+        private readonly IDirectoryService _directoryService;
 
-        public DeleteFileOperation(
-            string fileToRemove,
-            IFileService fileService)
+        public DeleteDirectoryOperation(
+            string directoryToRemove,
+            IDirectoryService directoryService)
         {
-            _fileToRemove = fileToRemove;
-            _fileService = fileService;
+            _directoryToRemove = directoryToRemove;
+            _directoryService = directoryService;
         }
 
         public Task RunAsync(CancellationToken cancellationToken)
@@ -24,7 +24,7 @@ namespace Camelot.Services.Operations
             try
             {
                 State = OperationState.InProgress;
-                _fileService.Remove(_fileToRemove);
+                _directoryService.RemoveRecursively(_directoryToRemove);
                 State = OperationState.Finished;
             }
             catch
@@ -34,7 +34,7 @@ namespace Camelot.Services.Operations
             }
             finally
             {
-                CurrentProgress = 1;
+                SetFinalProgress();
             }
 
             return Task.CompletedTask;

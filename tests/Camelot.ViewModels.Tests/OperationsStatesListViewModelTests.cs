@@ -64,10 +64,14 @@ namespace Camelot.ViewModels.Tests
                 applicationDispatcherMock.Object,
                 dialogServiceMock.Object);
 
+            var state = OperationState.InProgress;
             var operationMock = new Mock<IOperation>();
             operationMock
                 .Setup(m => m.ContinueAsync(options))
                 .Verifiable();
+            operationMock
+                .SetupGet(m => m.State)
+                .Returns(() => state);
             operationMock
                 .SetupGet(m => m.CurrentBlockedFile)
                 .Returns((Source, Destination));
@@ -90,7 +94,8 @@ namespace Camelot.ViewModels.Tests
 
             Assert.True(viewModel.AreAnyOperationsAvailable);
 
-            var operationStateChangedEventArgs = new OperationStateChangedEventArgs(OperationState.Blocked);
+            state = OperationState.Blocked;
+            var operationStateChangedEventArgs = new OperationStateChangedEventArgs(state);
             operationMock.Raise(m => m.StateChanged += null, operationStateChangedEventArgs);
 
             Assert.True(viewModel.AreAnyOperationsAvailable);

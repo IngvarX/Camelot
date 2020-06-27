@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Camelot.Extensions;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models.Operations;
 using Camelot.Services.Abstractions.Operations;
 
-namespace Camelot.Services.Operations
+namespace Camelot.Operations
 {
     public class OperationsService : IOperationsService
     {
@@ -32,13 +33,7 @@ namespace Camelot.Services.Operations
             _operationsStateService = operationsStateService;
         }
 
-        public void OpenFiles(IReadOnlyList<string> files)
-        {
-            foreach (var selectedFile in files)
-            {
-                _resourceOpeningService.Open(selectedFile);
-            }
-        }
+        public void OpenFiles(IReadOnlyList<string> files) => files.ForEach(_resourceOpeningService.Open);
 
         public async Task CopyAsync(IReadOnlyList<string> nodes, string destinationDirectory)
         {
@@ -85,12 +80,7 @@ namespace Camelot.Services.Operations
                 return _fileService.Rename(path, newName);
             }
 
-            if (_directoryService.CheckIfExists(path))
-            {
-                return _directoryService.Rename(path, newName);
-            }
-
-            return false;
+            return _directoryService.CheckIfExists(path) && _directoryService.Rename(path, newName);
         }
 
         public void CreateDirectory(string sourceDirectory, string directoryName)

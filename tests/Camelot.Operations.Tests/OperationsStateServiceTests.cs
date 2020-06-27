@@ -1,12 +1,12 @@
 using System.Linq;
+using Camelot.Operations;
 using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Models.EventArgs;
 using Camelot.Services.Abstractions.Operations;
-using Camelot.Services.Operations;
 using Moq;
 using Xunit;
 
-namespace Camelot.Services.Tests
+namespace Camelot.Services.Operations.Tests
 {
     public class OperationsStateServiceTests
     {

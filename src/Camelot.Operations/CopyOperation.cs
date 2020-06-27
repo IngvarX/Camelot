@@ -6,7 +6,7 @@ using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Models.Operations;
 using Camelot.Services.Abstractions.Operations;
 
-namespace Camelot.Services.Operations
+namespace Camelot.Operations
 {
     public class CopyOperation : OperationBase, IInternalOperation, ISelfBlockingOperation
     {
@@ -60,8 +60,8 @@ namespace Camelot.Services.Operations
                     await CopyFileAsync(_destinationFile, true);
                     break;
                 case OperationContinuationMode.OverwriteIfOlder:
-                    var sourceFileDateTime = _fileService.GetFile(_sourceFile).LastModifiedDateTime;;
-                    var destinationFileDateTime = _fileService.GetFile(_destinationFile).LastModifiedDateTime;
+                    var sourceFileDateTime = GetLastModifiedDateTime(_sourceFile);
+                    var destinationFileDateTime = GetLastModifiedDateTime(_destinationFile);
                     if (sourceFileDateTime > destinationFileDateTime)
                     {
                         await CopyFileAsync(_destinationFile, true);
@@ -77,6 +77,8 @@ namespace Camelot.Services.Operations
                 default:
                     throw new ArgumentOutOfRangeException(nameof(options.Mode));
             }
+
+            SetFinalProgress();
         }
 
         private void CreateOutputDirectoryIfNeeded(string destinationFile)
@@ -95,6 +97,9 @@ namespace Camelot.Services.Operations
             }
         }
 
+        private DateTime GetLastModifiedDateTime(string filePath) =>
+            _fileService.GetFile(filePath).LastModifiedDateTime;
+
         private async Task CopyFileAsync(string destinationFile, bool force = false)
         {
             try
@@ -110,7 +115,7 @@ namespace Camelot.Services.Operations
             }
             finally
             {
-                CurrentProgress = 1;
+                SetFinalProgress();
             }
         }
     }

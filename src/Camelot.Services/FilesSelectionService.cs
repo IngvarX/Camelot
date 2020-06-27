@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Camelot.Extensions;
 using Camelot.Services.Abstractions;
 
 namespace Camelot.Services
@@ -15,20 +16,8 @@ namespace Camelot.Services
             _selectedFiles = new HashSet<string>();
         }
 
-        public void SelectFiles(IEnumerable<string> files)
-        {
-            foreach (var file in files)
-            {
-                _selectedFiles.Add(file);
-            }
-        }
+        public void SelectFiles(IEnumerable<string> files) => files.ForEach(f => _selectedFiles.Add(f));
 
-        public void UnselectFiles(IEnumerable<string> files)
-        {
-            foreach (var file in files)
-            {
-                _selectedFiles.Remove(file);
-            }
-        }
+        public void UnselectFiles(IEnumerable<string> files) => files.ForEach(f => _selectedFiles.Remove(f));
     }
 }

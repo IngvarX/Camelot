@@ -1,21 +1,24 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Camelot.Operations;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Models.Operations;
 using Camelot.Services.Abstractions.Operations;
-using Camelot.Services.Operations;
 using Camelot.TaskPool.Interfaces;
 using Moq;
 using Xunit;
 
-namespace Camelot.Services.Tests
+namespace Camelot.Services.Operations.Tests
 {
     public class OperationsTests
     {
         private const string SourceName = "Source";
+        private const string SecondSourceName = "SecondSource";
         private const string DestinationName = "Destination";
+        private const string SecondDestinationName = "SecondDestination";
 
         private readonly ITaskPool _taskPool;
         private readonly IPathService _pathService;
@@ -61,30 +64,60 @@ namespace Camelot.Services.Tests
 
             Assert.Equal(OperationState.NotStarted, copyOperation.State);
 
-            var callbackCalled = false;
-            copyOperation.StateChanged += (sender, args) => callbackCalled = true;
+            var isCallbackCalled = false;
+            copyOperation.StateChanged += (sender, args) => isCallbackCalled = true;
 
             await copyOperation.RunAsync();
 
             Assert.Equal(OperationState.Finished, copyOperation.State);
 
-            Assert.True(callbackCalled);
+            Assert.True(isCallbackCalled);
             filesServiceMock.Verify(m => m.CopyAsync(SourceName, DestinationName, false), Times.Once());
         }
 
-        [Fact]
-        public async Task TestBlockedCopyOperation()
+        [Theory]
+        [InlineData(true, 1, OperationContinuationMode.Overwrite, 1, 1)]
+        [InlineData(false, 2, OperationContinuationMode.Overwrite, 1, 1)]
+        [InlineData(true, 1, OperationContinuationMode.Skip, 0, 0)]
+        [InlineData(false, 2, OperationContinuationMode.Skip, 0, 0)]
+        [InlineData(true, 1, OperationContinuationMode.OverwriteIfOlder, 1, 0)]
+        [InlineData(false, 2, OperationContinuationMode.OverwriteIfOlder, 1, 0)]
+        public async Task TestBlockedCopyOperation(bool applyForAll, int expectedCallbackCallsCount,
+            OperationContinuationMode mode, int expectedWriteCallsCountFirstFile, int expectedWriteCallsCountSecondFile)
         {
+            var now = DateTime.UtcNow;
+            var hourBeforeNow = now.AddHours(-1);
+
             var directoryServiceMock = new Mock<IDirectoryService>();
             var filesServiceMock = new Mock<IFileService>();
+            filesServiceMock
+                .Setup(m => m.GetFile(SourceName))
+                .Returns(new FileModel {LastModifiedDateTime = now});
+            filesServiceMock
+                .Setup(m => m.GetFile(DestinationName))
+                .Returns(new FileModel {LastModifiedDateTime = hourBeforeNow});
+            filesServiceMock
+                .Setup(m => m.GetFile(SecondSourceName))
+                .Returns(new FileModel {LastModifiedDateTime = hourBeforeNow});
+            filesServiceMock
+                .Setup(m => m.GetFile(SecondDestinationName))
+                .Returns(new FileModel {LastModifiedDateTime = now});
             filesServiceMock
                 .Setup(m => m.CopyAsync(SourceName, DestinationName, false))
                 .Verifiable();
             filesServiceMock
                 .Setup(m => m.CopyAsync(SourceName, DestinationName, true))
+                .Returns(Task.CompletedTask)
                 .Verifiable();
             filesServiceMock
-                .Setup(m => m.CheckIfExists(DestinationName))
+                .Setup(m => m.CopyAsync(SecondSourceName, SecondDestinationName, false))
+                .Verifiable();
+            filesServiceMock
+                .Setup(m => m.CopyAsync(SecondSourceName, SecondDestinationName, true))
+                .Returns(Task.CompletedTask)
+                .Verifiable();
+            filesServiceMock
+                .Setup(m => m.CheckIfExists(It.IsAny<string>()))
                 .Returns(true);
             var operationsFactory = new OperationsFactory(
                 _taskPool,
@@ -94,14 +127,18 @@ namespace Camelot.Services.Tests
                 _fileNameGenerationService);
             var settings = new BinaryFileSystemOperationSettings(
                 new string[] { },
-                new[] {SourceName},
+                new[] {SourceName, SecondSourceName},
                 new string[] { },
-                new[] {SourceName},
-                new Dictionary<string, string> {[SourceName] = DestinationName}
+                new[] {DestinationName, SecondDestinationName},
+                new Dictionary<string, string>
+                {
+                    [SourceName] = DestinationName,
+                    [SecondSourceName] = SecondDestinationName
+                }
             );
             var copyOperation = operationsFactory.CreateCopyOperation(settings);
 
-            var callbackCalled = false;
+            var callbackCallsCount = 0;
             copyOperation.StateChanged += async (sender, args) =>
             {
                 if (args.OperationState != OperationState.Blocked)
@@ -109,24 +146,29 @@ namespace Camelot.Services.Tests
                     return;
                 }
 
-                callbackCalled = true;
-                filesServiceMock.Verify(m => m.CopyAsync(SourceName, DestinationName, false), Times.Never);
-
                 var operation = (IOperation) sender;
-                Assert.NotNull(operation);
+                if (operation is null)
+                {
+                    return;
+                }
+
+                callbackCallsCount++;
 
                 var (sourceFilePath, _) = operation.CurrentBlockedFile;
-                var options = OperationContinuationOptions.CreateContinuationOptions(sourceFilePath, false, OperationContinuationMode.Overwrite);
+                var options = OperationContinuationOptions.CreateContinuationOptions(sourceFilePath, applyForAll, mode);
 
                 await copyOperation.ContinueAsync(options);
             };
 
             await copyOperation.RunAsync();
 
-            Assert.True(callbackCalled);
+            Assert.Equal(expectedCallbackCallsCount, callbackCallsCount);
 
             Assert.Equal(OperationState.Finished, copyOperation.State);
-            filesServiceMock.Verify(m => m.CopyAsync(SourceName, DestinationName, true), Times.Once);
+            filesServiceMock.Verify(m => m.CopyAsync(SourceName, DestinationName, true), Times.Exactly(expectedWriteCallsCountFirstFile));
+            filesServiceMock.Verify(m => m.CopyAsync(SecondSourceName, SecondDestinationName, true), Times.Exactly(expectedWriteCallsCountSecondFile));
+            filesServiceMock.Verify(m => m.CopyAsync(SourceName, DestinationName, false), Times.Never);
+            filesServiceMock.Verify(m => m.CopyAsync(SecondSourceName, SecondDestinationName, false), Times.Never);
         }
 
         [Fact]

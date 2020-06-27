@@ -4,6 +4,8 @@
         <TargetFramework>netcoreapp3.1</TargetFramework>
 
         <IsPackable>false</IsPackable>
+
+        <RootNamespace>Camelot.Services.Operations.Tests</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -15,7 +17,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\Camelot.Services\Camelot.Services.csproj" />
+        <ProjectReference Include="..\..\src\Camelot.Operations\Camelot.Operations.csproj" />
+        <ProjectReference Include="..\..\src\Camelot.Services\Camelot.Services.csproj" />
+        <ProjectReference Include="..\..\src\Camelot.TaskPool\Camelot.TaskPool.csproj" />
     </ItemGroup>
 
 </Project>

@@ -2,14 +2,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Camelot.Operations;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models.Operations;
 using Camelot.Services.Abstractions.Operations;
-using Camelot.Services.Operations;
 using Moq;
 using Xunit;
 
-namespace Camelot.Services.Tests
+namespace Camelot.Services.Operations.Tests
 {
     public class OperationsServiceTests
     {

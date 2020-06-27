@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Camelot.Services.Abstractions.Operations;
 
-namespace Camelot.Services.Operations
+namespace Camelot.Operations
 {
     public class OperationGroup
     {
@@ -10,7 +10,7 @@ namespace Camelot.Services.Operations
 
         public IReadOnlyList<IInternalOperation> CancelOperations { get; }
 
-        public bool IsCancelAvailable => CancelOperations?.Any() ?? false;
+        public bool IsCancellationAvailable => CancelOperations?.Any() ?? false;
 
         public OperationGroup(
             IReadOnlyList<IInternalOperation> operations,

@@ -4,7 +4,7 @@ using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Models.EventArgs;
 using Camelot.Services.Abstractions.Operations;
 
-namespace Camelot.Services.Operations
+namespace Camelot.Operations
 {
     public abstract class OperationBase : IOperationWithProgress, IStatefulOperation
     {
@@ -59,5 +59,7 @@ namespace Camelot.Services.Operations
         {
             _stateLocker = new object();
         }
+
+        protected void SetFinalProgress() => CurrentProgress = 1;
     }
 }

@@ -13,7 +13,7 @@ using Camelot.Services.Abstractions.Models.Operations;
 using Camelot.Services.Abstractions.Operations;
 using Camelot.TaskPool.Interfaces;
 
-namespace Camelot.Services.Operations
+namespace Camelot.Operations
 {
     public class CompositeOperation : OperationBase, ICompositeOperation
     {
@@ -97,9 +97,11 @@ namespace Camelot.Services.Operations
 
             var cancelOperations = _groupedOperationsToExecute
                 .Reverse()
-                .Where((o, i) => o.Operations[i].State.IsCancellationAvailable())
-                .Select(g => g.CancelOperations)
-                .ToArray();
+                .Where(g => g.IsCancellationAvailable)
+                .Select(g =>
+                    g.CancelOperations
+                        .Where((o, i) => g.Operations[i].State.IsCancellationAvailable()).ToArray())
+                        .ToArray();
 
             await ExecuteOperationsAsync(cancelOperations);
         }

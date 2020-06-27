@@ -85,17 +85,13 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
 
         private void AddOperation(IOperation operation)
         {
-            SubscribeToEvents(operation);
-
             var viewModel = CreateFrom(operation);
             _activeOperations.Add(viewModel);
             _operationsViewModelsDictionary[operation] = viewModel;
 
             AreAnyOperationsAvailable = true;
-            if (operation.State.IsCompleted())
-            {
-                RemoveOperation(operation);
-            }
+            UpdateOperationStatus(operation);
+            SubscribeToEvents(operation);
         }
 
         private void RemoveOperation(IOperation operation)
@@ -137,15 +133,17 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
             operation.ProgressChanged -= OperationOnProgressChanged;
         }
 
-        private void OperationOnStateChanged(object sender, OperationStateChangedEventArgs e)
+        private void OperationOnStateChanged(object sender, OperationStateChangedEventArgs e) =>
+            UpdateOperationStatus((IOperation) sender);
+
+        private void UpdateOperationStatus(IOperation operation)
         {
-            var operation = (IOperation) sender;
-            if (e.OperationState == OperationState.Finished || e.OperationState == OperationState.Cancelled)
+            if (operation.State.IsCompleted())
             {
                 _applicationDispatcher.Dispatch(() => RemoveOperation(operation));
             }
 
-            if (e.OperationState == OperationState.Blocked)
+            if (operation.State == OperationState.Blocked)
             {
                 _applicationDispatcher.DispatchAsync(() => ProcessBlockedOperationAsync(operation)).Forget();
             }
