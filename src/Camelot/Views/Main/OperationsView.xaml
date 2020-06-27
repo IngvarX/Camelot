@@ -55,7 +55,7 @@
             </StackPanel>
         </Button>
 
-        <Button Classes="operationButton" Grid.Column="3" Command="{Binding NewDirectoryCommand}">
+        <Button Classes="operationButton" Grid.Column="3" Command="{Binding CreateNewDirectoryCommand}">
             <StackPanel Orientation="Horizontal">
                 <DrawingPresenter Width="25" Height="20" Margin="0 2 0 0">
                     <DrawingPresenter.Drawing>

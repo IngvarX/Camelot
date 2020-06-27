@@ -67,16 +67,20 @@ namespace Camelot.Views.Main
             if (args.PointerPressedEventArgs.ClickCount == 2)
             {
                 args.PointerPressedEventArgs.Handled = true;
-                var fileViewModel = (IFileSystemNodeViewModel)args.Cell.DataContext;
+                var fileViewModel = (IFileSystemNodeViewModel) args.Cell.DataContext;
 
                 fileViewModel.OpenCommand.Execute(null);
             }
+            else if (args.PointerPressedEventArgs.MouseButton == MouseButton.Right)
+            {
+                ActivateViewModel();
+            }
         }
 
-        private void OnDataGridPointerReleased(object sender, PointerReleasedEventArgs args)
-        {
-            ViewModel.ActivateCommand.Execute(null);
-        }
+        private void OnDataGridPointerReleased(object sender, PointerReleasedEventArgs args) =>
+            ActivateViewModel();
+
+        private void ActivateViewModel() => ViewModel.ActivateCommand.Execute(null);
 
         private void OnNameTextBlockPointerPressed(object sender, PointerPressedEventArgs args)
         {
@@ -84,7 +88,7 @@ namespace Camelot.Views.Main
             {
                 return;
             }
-            
+
             var textBlock = (TextBlock) sender;
             var viewModel = (IFileSystemNodeViewModel) textBlock.DataContext;
 

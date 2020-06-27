@@ -209,7 +209,7 @@
                         <Border Classes="tabBorder">
                             <Grid Classes="inactiveTabGrid" Height="40">
                                 <TextBlock Classes="tabNameTextBlock inactiveTabNameTextBlock"
-                                           Text="{Binding Path=Header, RelativeSource={RelativeSource AncestorType={x:Type TabItem}}}" />
+                                           Text="{Binding Path=Header, RelativeSource={RelativeSource AncestorType=TabItem}}" />
                             </Grid>
                         </Border>
 
@@ -228,7 +228,7 @@
                         <Border Classes="tabBorder">
                             <Grid Classes="activeTabGrid" Height="40">
                                 <TextBlock Classes="tabNameTextBlock"
-                                           Text="{Binding Path=Header, RelativeSource={RelativeSource AncestorType={x:Type TabItem}}}" />
+                                           Text="{Binding Path=Header, RelativeSource={RelativeSource AncestorType=TabItem}}" />
                             </Grid>
                         </Border>
 

@@ -2,9 +2,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:main="clr-namespace:Camelot.Views.Main"
              xmlns:filePanels="clr-namespace:Camelot.ViewModels.Implementations.MainWindow.FilePanels;assembly=Camelot.ViewModels"
              xmlns:controls="clr-namespace:Camelot.Views.Main.Controls"
+             xmlns:views="clr-namespace:Camelot.Views"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Camelot.Views.Main.FilesPanelView">
 
@@ -81,6 +81,10 @@
                         <MenuItem Header="Delete" Command="{Binding DeleteCommand}"/>
                         <MenuItem Header="Copy to clipboard" Command="{Binding CopyToClipboardCommand}"/>
                         <MenuItem Header="Show properties" Command="{Binding ShowPropertiesCommand}"/>
+                        <MenuItem Header="Create">
+                            <MenuItem Header="Directory"
+                                      Command="{Binding $parent[views:MainWindow].DataContext.OperationsViewModel.CreateNewDirectoryCommand}" />
+                        </MenuItem>
                     </ContextMenu>
                 </Template>
             </DataGrid.Resources>

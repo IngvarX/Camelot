@@ -31,7 +31,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow
 
         public ICommand MoveCommand { get; }
 
-        public ICommand NewDirectoryCommand { get; }
+        public ICommand CreateNewDirectoryCommand { get; }
 
         public ICommand RemoveCommand { get; }
 
@@ -56,7 +56,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             OpenInDefaultEditorCommand = ReactiveCommand.Create(OpenInDefaultEditor);
             CopyCommand = ReactiveCommand.Create(() => Task.Run(CopyAsync));
             MoveCommand = ReactiveCommand.Create(() => Task.Run(MoveAsync));
-            NewDirectoryCommand = ReactiveCommand.CreateFromTask(CreateNewDirectoryAsync);
+            CreateNewDirectoryCommand = ReactiveCommand.CreateFromTask(CreateNewDirectoryAsync);
             RemoveCommand = ReactiveCommand.CreateFromTask(RemoveAsync);
             RemoveToTrashCommand = ReactiveCommand.CreateFromTask(RemoveToTrashAsync);
         }
