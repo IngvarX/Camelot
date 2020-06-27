@@ -34,7 +34,7 @@ namespace Camelot.Services.Operations
             }
             finally
             {
-                CurrentProgress = 1;
+                SetFinalProgress();
             }
 
             return Task.CompletedTask;

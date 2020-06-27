@@ -59,5 +59,7 @@ namespace Camelot.Services.Operations
         {
             _stateLocker = new object();
         }
+
+        protected void SetFinalProgress() => CurrentProgress = 1;
     }
 }

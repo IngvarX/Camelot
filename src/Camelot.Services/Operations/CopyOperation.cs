@@ -77,6 +77,8 @@ namespace Camelot.Services.Operations
                 default:
                     throw new ArgumentOutOfRangeException(nameof(options.Mode));
             }
+
+            SetFinalProgress();
         }
 
         private void CreateOutputDirectoryIfNeeded(string destinationFile)
@@ -113,7 +115,7 @@ namespace Camelot.Services.Operations
             }
             finally
             {
-                CurrentProgress = 1;
+                SetFinalProgress();
             }
         }
     }
