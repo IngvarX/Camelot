@@ -71,11 +71,12 @@ namespace Camelot
             services.RegisterConstant(aboutDialogConfiguration);
 
             var databaseName = configuration["DataAccess:DatabaseName"];
+            var connectionString = configuration["DataAccess:ConnectionString"];
             var assemblyLocation = Assembly.GetEntryAssembly()?.Location;
             var assemblyDirectory = Path.GetDirectoryName(assemblyLocation);
             var databaseConfiguration = new DatabaseConfiguration
             {
-                ConnectionString = $"Filename={Path.Combine(assemblyDirectory, databaseName)}; Connection=Shared"
+                ConnectionString = string.Format(connectionString, Path.Combine(assemblyDirectory, databaseName))
             };
             services.RegisterConstant(databaseConfiguration);
 
