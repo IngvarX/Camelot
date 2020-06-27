@@ -33,10 +33,10 @@
         <TextBlock Grid.Column="2" Classes="aboutPageTextBlock" Text="{Binding Name}"
                    VerticalAlignment="Center" TextWrapping="Wrap" />
 
-        <TextBlock Grid.Row="1" Grid.Column="0" Classes="aboutPageTextBlock" Text="{x:Static p:Resources.Path}:" />
+        <TextBlock Grid.Row="1" Grid.Column="0" Classes="aboutPageTextBlock" Text="{x:Static p:Resources.PathWithColon}" />
         <TextBlock Grid.Row="1" Grid.Column="2" Classes="aboutPageTextBlock" Text="{Binding Path}" />
 
-        <TextBlock Grid.Row="2" Grid.Column="0" Classes="aboutPageTextBlock" Text="{x:Static p:Resources.Size}:" />
+        <TextBlock Grid.Row="2" Grid.Column="0" Classes="aboutPageTextBlock" Text="{x:Static p:Resources.SizeWithColon}" />
         <TextBlock Grid.Row="2" Grid.Column="2" Classes="aboutPageTextBlock">
             <TextBlock.Text>
                 <MultiBinding StringFormat="{}{0} ({1})">
@@ -46,13 +46,13 @@
             </TextBlock.Text>
         </TextBlock>
 
-        <TextBlock Grid.Row="3" Grid.Column="0" Classes="aboutPageTextBlock" Text="{x:Static p:Resources.Path}:" />
+        <TextBlock Grid.Row="3" Grid.Column="0" Classes="aboutPageTextBlock" Text="{x:Static p:Resources.LastAccessWithColon}" />
         <TextBlock Grid.Row="3" Grid.Column="2" Classes="aboutPageTextBlock" Text="{Binding LastAccessDateTime}" />
 
-        <TextBlock Grid.Row="4" Grid.Column="0" Classes="aboutPageTextBlock" Text="{x:Static p:Resources.LastModification}:" />
+        <TextBlock Grid.Row="4" Grid.Column="0" Classes="aboutPageTextBlock" Text="{x:Static p:Resources.LastModificationWithColon}" />
         <TextBlock Grid.Row="4" Grid.Column="2" Classes="aboutPageTextBlock" Text="{Binding LastWriteDateTime}" />
 
-        <TextBlock Grid.Row="5" Grid.Column="0" Classes="aboutPageTextBlock" Text="{x:Static p:Resources.CreationDate}:" />
+        <TextBlock Grid.Row="5" Grid.Column="0" Classes="aboutPageTextBlock" Text="{x:Static p:Resources.CreationDateWithColon}" />
         <TextBlock Grid.Row="5" Grid.Column="2" Classes="aboutPageTextBlock" Text="{Binding CreatedDateTime}" />
     </Grid>
 </UserControl>

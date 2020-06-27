@@ -12,10 +12,10 @@
     </Design.DataContext>
 
     <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*" Margin="10">
-        <TextBlock Classes="settingsTabTextBlock" Margin="5,13,0,0" Text="{x:Static p:Resources.Command}:" />
+        <TextBlock Classes="settingsTabTextBlock" Margin="5,13,0,0" Text="{x:Static p:Resources.CommandWithColon}" />
         <TextBox Grid.Column="1" Classes="settingsTextBox" Text="{Binding TerminalCommandText}" />
 
-        <TextBlock Grid.Row="1" Classes="settingsTabTextBlock" Margin="5,13,0,0" Text="{x:Static p:Resources.Arguments}:" />
+        <TextBlock Grid.Row="1" Classes="settingsTabTextBlock" Margin="5,13,0,0" Text="{x:Static p:Resources.ArgumentsWithColon}" />
         <TextBox Grid.Row="1" Grid.Column="1" Classes="settingsTextBox" Text="{Binding TerminalCommandArguments}" />
     </Grid>
 

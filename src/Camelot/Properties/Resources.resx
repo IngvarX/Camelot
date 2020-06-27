@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
+  <!--
+    Microsoft ResX Schema
+
     Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
+
+    The primary goals of this format is to allow a simple XML format
+    that is mostly human readable. The generation and parsing of the
+    various data types are done through the TypeConverter classes
     associated with the data types.
-    
+
     Example:
-    
+
     ... ado.net/XML headers & schema ...
     <resheader name="resmimetype">text/microsoft-resx</resheader>
     <resheader name="version">2.0</resheader>
@@ -26,36 +26,36 @@
         <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
         <comment>This is a comment</comment>
     </data>
-                
-    There are any number of "resheader" rows that contain simple 
+
+    There are any number of "resheader" rows that contain simple
     name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
+
+    Each data row contains a name, and value. The row also contains a
+    type or mimetype. Type corresponds to a .NET class that support
+    text/value conversion through the TypeConverter architecture.
+    Classes that don't support this are serialized and stored with the
     mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
+
+    The mimetype is used for serialized objects, and tells the
+    ResXResourceReader how to depersist the object. This is currently not
     extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
+
+    Note - application/x-microsoft.net.object.binary.base64 is the format
+    that the ResXResourceWriter will generate, however the reader can
     read any of the formats listed below.
-    
+
     mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
-    
+
     mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
             : and then encoded with base64 encoding.
 
     mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
+    value   : The object must be serialized into a byte array
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
@@ -129,8 +129,8 @@
   <data name="ApplyActionForTheAllFilesAndFolders" xml:space="preserve">
     <value>Apply this action to the all files and folders</value>
   </data>
-  <data name="Arguments" xml:space="preserve">
-    <value>Arguments</value>
+  <data name="ArgumentsWithColon" xml:space="preserve">
+    <value>Arguments:</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
@@ -150,8 +150,8 @@
   <data name="CloseTabsToTheRight" xml:space="preserve">
     <value>Close tabs to the right</value>
   </data>
-  <data name="Command" xml:space="preserve">
-    <value>Command</value>
+  <data name="CommandWithColon" xml:space="preserve">
+    <value>Command:</value>
   </data>
   <data name="CopiedFileFromTo" xml:space="preserve">
     <value>Copied {0} to {1}</value>
@@ -177,8 +177,8 @@
   <data name="CreateDirectoryTitle" xml:space="preserve">
     <value>Create directory</value>
   </data>
-  <data name="CreationDate" xml:space="preserve">
-    <value>Creation date</value>
+  <data name="CreationDateWithColon" xml:space="preserve">
+    <value>Creation date:</value>
   </data>
   <data name="Date" xml:space="preserve">
     <value>Date</value>
@@ -201,8 +201,8 @@
   <data name="DirectoryTemplate" xml:space="preserve">
     <value>&lt;DIR&gt;</value>
   </data>
-  <data name="EnterDirectoryName" xml:space="preserve">
-    <value>Enter directory name</value>
+  <data name="EnterDirectoryNameWithColon" xml:space="preserve">
+    <value>Enter directory name:</value>
   </data>
   <data name="Extension" xml:space="preserve">
     <value>Extension</value>
@@ -234,11 +234,11 @@
   <data name="Github" xml:space="preserve">
     <value>Github</value>
   </data>
-  <data name="LastAccess" xml:space="preserve">
-    <value>Last access</value>
+  <data name="LastAccessWithColon" xml:space="preserve">
+    <value>Last access:</value>
   </data>
-  <data name="LastModification" xml:space="preserve">
-    <value>Last modification</value>
+  <data name="LastModificationWithColon" xml:space="preserve">
+    <value>Last modification:</value>
   </data>
   <data name="LastModified" xml:space="preserve">
     <value>Last modified</value>
@@ -279,8 +279,8 @@
   <data name="OverwriteOptionsTitle" xml:space="preserve">
     <value>Overwrite options</value>
   </data>
-  <data name="Path" xml:space="preserve">
-    <value>Path</value>
+  <data name="PathWithColon" xml:space="preserve">
+    <value>Path:</value>
   </data>
   <data name="PermamentlyRemoveFiles" xml:space="preserve">
     <value>Do you want to permanently remove these {0} files?</value>
@@ -329,6 +329,9 @@
   </data>
   <data name="Size" xml:space="preserve">
     <value>Size</value>
+  </data>
+  <data name="SizeWithColon" xml:space="preserve">
+    <value>Size:</value>
   </data>
   <data name="Skip" xml:space="preserve">
     <value>Skip</value>
