@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Models.Operations;
 using Camelot.Services.Abstractions.Operations;
@@ -75,12 +76,32 @@ namespace Camelot.Services.Tests
         }
 
         [Theory]
-        [InlineData(true, 1)]
-        [InlineData(false, 2)]
-        public async Task TestBlockedCopyOperationOverwrite(bool applyForAll, int expectedCallbackCallsCount)
+        [InlineData(true, 1, OperationContinuationMode.Overwrite, 1, 1)]
+        [InlineData(false, 2, OperationContinuationMode.Overwrite, 1, 1)]
+        [InlineData(true, 1, OperationContinuationMode.Skip, 0, 0)]
+        [InlineData(false, 2, OperationContinuationMode.Skip, 0, 0)]
+        [InlineData(true, 1, OperationContinuationMode.OverwriteIfOlder, 1, 0)]
+        [InlineData(false, 2, OperationContinuationMode.OverwriteIfOlder, 1, 0)]
+        public async Task TestBlockedCopyOperation(bool applyForAll, int expectedCallbackCallsCount,
+            OperationContinuationMode mode, int expectedWriteCallsCountFirstFile, int expectedWriteCallsCountSecondFile)
         {
+            var now = DateTime.UtcNow;
+            var hourBeforeNow = now.AddHours(-1);
+
             var directoryServiceMock = new Mock<IDirectoryService>();
             var filesServiceMock = new Mock<IFileService>();
+            filesServiceMock
+                .Setup(m => m.GetFile(SourceName))
+                .Returns(new FileModel {LastModifiedDateTime = now});
+            filesServiceMock
+                .Setup(m => m.GetFile(DestinationName))
+                .Returns(new FileModel {LastModifiedDateTime = hourBeforeNow});
+            filesServiceMock
+                .Setup(m => m.GetFile(SecondSourceName))
+                .Returns(new FileModel {LastModifiedDateTime = hourBeforeNow});
+            filesServiceMock
+                .Setup(m => m.GetFile(SecondDestinationName))
+                .Returns(new FileModel {LastModifiedDateTime = now});
             filesServiceMock
                 .Setup(m => m.CopyAsync(SourceName, DestinationName, false))
                 .Verifiable();
@@ -125,7 +146,6 @@ namespace Camelot.Services.Tests
                     return;
                 }
 
-
                 var operation = (IOperation) sender;
                 if (operation is null)
                 {
@@ -135,7 +155,7 @@ namespace Camelot.Services.Tests
                 callbackCallsCount++;
 
                 var (sourceFilePath, _) = operation.CurrentBlockedFile;
-                var options = OperationContinuationOptions.CreateContinuationOptions(sourceFilePath, applyForAll, OperationContinuationMode.Overwrite);
+                var options = OperationContinuationOptions.CreateContinuationOptions(sourceFilePath, applyForAll, mode);
 
                 await copyOperation.ContinueAsync(options);
             };
@@ -145,8 +165,8 @@ namespace Camelot.Services.Tests
             Assert.Equal(expectedCallbackCallsCount, callbackCallsCount);
 
             Assert.Equal(OperationState.Finished, copyOperation.State);
-            filesServiceMock.Verify(m => m.CopyAsync(SourceName, DestinationName, true), Times.Once);
-            filesServiceMock.Verify(m => m.CopyAsync(SecondSourceName, SecondDestinationName, true), Times.Once);
+            filesServiceMock.Verify(m => m.CopyAsync(SourceName, DestinationName, true), Times.Exactly(expectedWriteCallsCountFirstFile));
+            filesServiceMock.Verify(m => m.CopyAsync(SecondSourceName, SecondDestinationName, true), Times.Exactly(expectedWriteCallsCountSecondFile));
             filesServiceMock.Verify(m => m.CopyAsync(SourceName, DestinationName, false), Times.Never);
             filesServiceMock.Verify(m => m.CopyAsync(SecondSourceName, SecondDestinationName, false), Times.Never);
         }
