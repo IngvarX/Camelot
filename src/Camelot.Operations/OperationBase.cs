@@ -4,7 +4,7 @@ using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Models.EventArgs;
 using Camelot.Services.Abstractions.Operations;
 
-namespace Camelot.Services.Operations
+namespace Camelot.Operations
 {
     public abstract class OperationBase : IOperationWithProgress, IStatefulOperation
     {

@@ -4,7 +4,7 @@ using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Operations;
 
-namespace Camelot.Services.Operations
+namespace Camelot.Operations
 {
     public class DeleteFileOperation : OperationBase, IInternalOperation
     {

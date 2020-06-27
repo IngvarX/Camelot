@@ -5,7 +5,7 @@ using Camelot.Services.Abstractions.Extensions;
 using Camelot.Services.Abstractions.Models.EventArgs;
 using Camelot.Services.Abstractions.Operations;
 
-namespace Camelot.Services.Operations
+namespace Camelot.Operations
 {
     public class OperationsStateService : IOperationsStateService
     {

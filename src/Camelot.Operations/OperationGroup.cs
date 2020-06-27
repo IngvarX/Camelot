@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Camelot.Services.Abstractions.Operations;
 
-namespace Camelot.Services.Operations
+namespace Camelot.Operations
 {
     public class OperationGroup
     {
