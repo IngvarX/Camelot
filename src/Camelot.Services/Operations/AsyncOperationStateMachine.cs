@@ -93,8 +93,7 @@ namespace Camelot.Services.Operations
                 (OperationState.Blocked, OperationState.InProgress) when options is null =>
                     throw new ArgumentNullException(nameof(options)),
 
-                (OperationState.Blocked, OperationState.InProgress) =>
-                    WrapAsync(() => _compositeOperation.ContinueAsync(options), OperationState.InProgress, OperationState.Finished),
+                (OperationState.Blocked, OperationState.InProgress) => () => _compositeOperation.ContinueAsync(options),
 
                 (OperationState.Paused, OperationState.InProgress) =>
                     WrapAsync(_compositeOperation.UnpauseAsync, OperationState.InProgress, OperationState.Finished),
