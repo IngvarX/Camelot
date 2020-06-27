@@ -19,6 +19,11 @@
     <AvaloniaResource Update="Views\Main\Dialogs\RemoveNodesConfirmationDialog .xaml">
       <SubType>Designer</SubType>
     </AvaloniaResource>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Update="Views\Main\Dialogs\RemoveNodesConfirmationDialog.xaml.cs">
       <DependentUpon>RemoveNodesConfirmationDialog.xaml</DependentUpon>
     </Compile>
@@ -128,6 +133,12 @@
   <ItemGroup>
       <EmbeddedResource Include="**\*.ttf" />
       <EmbeddedResource Include="**\*.otf" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Update="appsettings.json">

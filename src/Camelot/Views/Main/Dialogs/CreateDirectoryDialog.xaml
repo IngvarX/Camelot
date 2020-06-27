@@ -2,18 +2,19 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:p="clr-namespace:Camelot.Properties"
         xmlns:dialogs="clr-namespace:Camelot.ViewModels.Implementations.Dialogs;assembly=Camelot.ViewModels"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Camelot.Views.Main.Dialogs.CreateDirectoryDialog"
         Width="400" Height="150"
-        Title="Create directory">
+        Title="{x:Static p:Resources.CREATE_DIRECTORY_TITLE}">
 
     <Design.DataContext>
         <dialogs:CreateDirectoryDialogViewModel />
     </Design.DataContext>
 
     <Grid RowDefinitions="Auto,Auto,Auto" Margin="10" HorizontalAlignment="Center">
-        <TextBlock Classes="dialogTextBlock" Text="Enter directory name:" />
+        <TextBlock Classes="dialogTextBlock" Text="{x:Static p:Resources.ENTER_DIRECTORY_NAME}:" />
         <TextBox Grid.Row="1" x:Name="DirectoryNameTextBox" Text="{Binding DirectoryName}" />
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Classes="dialogButton" Content="Cancel" Command="{Binding CancelCommand}" />

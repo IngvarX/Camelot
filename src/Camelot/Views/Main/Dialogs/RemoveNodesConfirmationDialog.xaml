@@ -2,11 +2,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:p="clr-namespace:Camelot.Properties"
         xmlns:dialogs="clr-namespace:Camelot.ViewModels.Implementations.Dialogs;assembly=Camelot.ViewModels"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Camelot.Views.Main.Dialogs.RemoveNodesConfirmationDialog"
         Width="600" Height="200"
-        Title="Files removing confirmation">
+        Title="{x:Static p:Resources.FILES_REMOVING_CONFIRMATION_TITLE}">
 
     <Design.DataContext>
         <dialogs:RemoveNodesConfirmationDialogViewModel />
@@ -15,9 +16,9 @@
     <Grid RowDefinitions="Auto,Auto,Auto"
           HorizontalAlignment="Center" VerticalAlignment="Center">
         <TextBlock Classes="dialogTextBlock" Margin="0,0,0,10"  IsVisible="{Binding IsRemovingToTrash}"
-                   Text="{Binding FilesCount, StringFormat=Do you want to remove these {0} files to trash?}" />
+                   Text="{Binding FilesCount, StringFormat={x:Static p:Resources.REMOVING_TO_TRASH}}" />
         <TextBlock Classes="dialogTextBlock" Margin="0,0,0,10" IsVisible="{Binding !IsRemovingToTrash}"
-                   Text="{Binding FilesCount, StringFormat=Do you want to permanently remove these {0} files?}" />
+                   Text="{Binding FilesCount, StringFormat={x:Static p:Resources.PERMAMENTLY_REMOVE}}" />
 
         <ItemsControl Grid.Row="1" Items="{Binding Files}" IsVisible="{Binding ShouldShowFilesList}">
             <ItemsControl.ItemTemplate>
@@ -28,8 +29,8 @@
         </ItemsControl>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Classes="dialogButton" Content="Cancel" Command="{Binding CancelCommand}" />
-            <Button Name="RemoveButton" Classes="dialogButton" Content="Delete" Command="{Binding OkCommand}" />
+            <Button Classes="dialogButton" Content="{x:Static p:Resources.CANCEL}" Command="{Binding CancelCommand}" />
+            <Button Name="RemoveButton" Classes="dialogButton" Content="{x:Static p:Resources.DELETE}" Command="{Binding OkCommand}" />
         </StackPanel>
     </Grid>
 </Window>

@@ -2,12 +2,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:p="clr-namespace:Camelot.Properties"
         xmlns:dialogs="clr-namespace:Camelot.ViewModels.Implementations.Dialogs;assembly=Camelot.ViewModels"
         xmlns:settingsViews="clr-namespace:Camelot.Views.Main.Settings"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         Width="800" Height="500"
         x:Class="Camelot.Views.Main.Dialogs.SettingsDialog"
-        Title="Settings">
+        Title="{x:Static p:Resources.SETTINGS_TITLE}">
 
     <Design.DataContext>
         <dialogs:SettingsDialogViewModel />
@@ -26,7 +27,7 @@
                                     </DrawingPresenter.Drawing>
                                 </DrawingPresenter>
 
-                                <TextBlock Classes="settingsTabTextBlock" Text="Terminal" />
+                                <TextBlock Classes="settingsTabTextBlock" Text="{x:Static p:Resources.TERMINAL}" />
                             </StackPanel>
                         </Border>
                     </TabItem.Header>
@@ -40,8 +41,8 @@
             </TabControl>
 
             <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Classes="dialogButton cancelDialogButton" Content="Close" Command="{Binding CloseCommand}" />
-                <Button Classes="dialogButton applyDialogButton" Content="Apply" Command="{Binding SaveCommand}" />
+                <Button Classes="dialogButton cancelDialogButton" Content="{x:Static p:Resources.CLOSE}" Command="{Binding CloseCommand}" />
+                <Button Classes="dialogButton applyDialogButton" Content="{x:Static p:Resources.APPLY}" Command="{Binding SaveCommand}" />
             </StackPanel>
         </Grid>
     </Border>

@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:p="clr-namespace:Camelot.Properties"
              xmlns:properties="clr-namespace:Camelot.ViewModels.Implementations.Dialogs.Properties;assembly=Camelot.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Camelot.Views.Main.Controls.MainNodeInfoTabView">
@@ -32,10 +33,10 @@
         <TextBlock Grid.Column="2" Classes="aboutPageTextBlock" Text="{Binding Name}"
                    VerticalAlignment="Center" TextWrapping="Wrap" />
 
-        <TextBlock Grid.Row="1" Grid.Column="0" Classes="aboutPageTextBlock" Text="Path:" />
+        <TextBlock Grid.Row="1" Grid.Column="0" Classes="aboutPageTextBlock" Text="{x:Static p:Resources.PATH}:" />
         <TextBlock Grid.Row="1" Grid.Column="2" Classes="aboutPageTextBlock" Text="{Binding Path}" />
 
-        <TextBlock Grid.Row="2" Grid.Column="0" Classes="aboutPageTextBlock" Text="Size:" />
+        <TextBlock Grid.Row="2" Grid.Column="0" Classes="aboutPageTextBlock" Text="{x:Static p:Resources.SIZE}:" />
         <TextBlock Grid.Row="2" Grid.Column="2" Classes="aboutPageTextBlock">
             <TextBlock.Text>
                 <MultiBinding StringFormat="{}{0} ({1})">
@@ -45,13 +46,13 @@
             </TextBlock.Text>
         </TextBlock>
 
-        <TextBlock Grid.Row="3" Grid.Column="0" Classes="aboutPageTextBlock" Text="Last access:" />
+        <TextBlock Grid.Row="3" Grid.Column="0" Classes="aboutPageTextBlock" Text="{x:Static p:Resources.PATH}:" />
         <TextBlock Grid.Row="3" Grid.Column="2" Classes="aboutPageTextBlock" Text="{Binding LastAccessDateTime}" />
 
-        <TextBlock Grid.Row="4" Grid.Column="0" Classes="aboutPageTextBlock" Text="Last modification:" />
+        <TextBlock Grid.Row="4" Grid.Column="0" Classes="aboutPageTextBlock" Text="{x:Static p:Resources.LAST_MODIFICATION}:" />
         <TextBlock Grid.Row="4" Grid.Column="2" Classes="aboutPageTextBlock" Text="{Binding LastWriteDateTime}" />
 
-        <TextBlock Grid.Row="5" Grid.Column="0" Classes="aboutPageTextBlock" Text="Creation date:" />
+        <TextBlock Grid.Row="5" Grid.Column="0" Classes="aboutPageTextBlock" Text="{x:Static p:Resources.CREATION_DATE}:" />
         <TextBlock Grid.Row="5" Grid.Column="2" Classes="aboutPageTextBlock" Text="{Binding CreatedDateTime}" />
     </Grid>
 </UserControl>
