@@ -82,7 +82,7 @@ namespace Camelot.Services.Operations.Tests
         [InlineData(false, 2, OperationContinuationMode.Skip, 0, 0)]
         [InlineData(true, 1, OperationContinuationMode.OverwriteIfOlder, 1, 0)]
         [InlineData(false, 2, OperationContinuationMode.OverwriteIfOlder, 1, 0)]
-        public async Task TestBlockedCopyOperation(bool applyForAll, int expectedCallbackCallsCount,
+        public async Task TestBlockedCopyOperation(bool applyToAll, int expectedCallbackCallsCount,
             OperationContinuationMode mode, int expectedWriteCallsCountFirstFile, int expectedWriteCallsCountSecondFile)
         {
             var now = DateTime.UtcNow;
@@ -155,7 +155,7 @@ namespace Camelot.Services.Operations.Tests
                 callbackCallsCount++;
 
                 var (sourceFilePath, _) = operation.CurrentBlockedFile;
-                var options = OperationContinuationOptions.CreateContinuationOptions(sourceFilePath, applyForAll, mode);
+                var options = OperationContinuationOptions.CreateContinuationOptions(sourceFilePath, applyToAll, mode);
 
                 await copyOperation.ContinueAsync(options);
             };

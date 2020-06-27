@@ -6,7 +6,7 @@ namespace Camelot.Services.Abstractions.Models.Operations
     {
         public string FilePath { get; }
 
-        public bool ApplyForAll { get; }
+        public bool ApplyToAll { get; }
 
         public OperationContinuationMode Mode { get; }
 
@@ -14,22 +14,22 @@ namespace Camelot.Services.Abstractions.Models.Operations
 
         private OperationContinuationOptions(
             string filePath,
-            bool applyForAll,
+            bool applyToAll,
             OperationContinuationMode mode,
             string newFilePath = null)
         {
             FilePath = filePath;
-            ApplyForAll = applyForAll;
+            ApplyToAll = applyToAll;
             Mode = mode;
             NewFilePath = newFilePath;
         }
 
         public static OperationContinuationOptions CreateRenamingContinuationOptions(
-            string filePath, bool applyForAll, string newFilePath) =>
-            new OperationContinuationOptions(filePath, applyForAll, OperationContinuationMode.Rename, newFilePath);
+            string filePath, bool applyToAll, string newFilePath) =>
+            new OperationContinuationOptions(filePath, applyToAll, OperationContinuationMode.Rename, newFilePath);
 
         public static OperationContinuationOptions CreateContinuationOptions(
-            string filePath, bool applyForAll, OperationContinuationMode mode) =>
-            new OperationContinuationOptions(filePath, applyForAll, mode);
+            string filePath, bool applyToAll, OperationContinuationMode mode) =>
+            new OperationContinuationOptions(filePath, applyToAll, mode);
     }
 }

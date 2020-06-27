@@ -63,9 +63,9 @@ namespace Camelot.Properties {
             }
         }
         
-        public static string ApplyActionForTheAllFilesAndFolders {
+        public static string ApplyActionToTheAllFilesAndFolders {
             get {
-                return ResourceManager.GetString("ApplyActionForTheAllFilesAndFolders", resourceCulture);
+                return ResourceManager.GetString("ApplyActionToTheAllFilesAndFolders", resourceCulture);
             }
         }
         

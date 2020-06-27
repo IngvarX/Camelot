@@ -63,7 +63,7 @@ namespace Camelot.Operations
 
         public async Task ContinueAsync(OperationContinuationOptions options)
         {
-            if (options.ApplyForAll)
+            if (options.ApplyToAll)
             {
                 _continuationMode = options.Mode;
             }

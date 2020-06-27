@@ -18,17 +18,17 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         private readonly IFileNameGenerationService _fileNameGenerationService;
         private readonly IPathService _pathService;
 
-        private IFileSystemNodeViewModel _sourceFileViewModel;
-        private IFileSystemNodeViewModel _destinationFileViewModel;
-        private bool _shouldApplyForAll;
+        private IFileSystemNodeViewModel _replaceWithFileViewModel;
+        private IFileSystemNodeViewModel _originalFileViewModel;
+        private bool _shouldApplyToAll;
         private string _newFileName;
         private string _destinationDirectoryName;
         private bool _areMultipleFilesAvailable;
 
-        public bool ShouldApplyForAll
+        public bool ShouldApplyToAll
         {
-            get => _shouldApplyForAll;
-            set => this.RaiseAndSetIfChanged(ref _shouldApplyForAll, value);
+            get => _shouldApplyToAll;
+            set => this.RaiseAndSetIfChanged(ref _shouldApplyToAll, value);
         }
 
         public string NewFileName
@@ -43,16 +43,16 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             set => this.RaiseAndSetIfChanged(ref _destinationDirectoryName, value);
         }
 
-        public IFileSystemNodeViewModel SourceFileViewModel
+        public IFileSystemNodeViewModel ReplaceWithFileViewModel
         {
-            get => _sourceFileViewModel;
-            set => this.RaiseAndSetIfChanged(ref _sourceFileViewModel, value);
+            get => _replaceWithFileViewModel;
+            set => this.RaiseAndSetIfChanged(ref _replaceWithFileViewModel, value);
         }
 
-        public IFileSystemNodeViewModel DestinationFileViewModel
+        public IFileSystemNodeViewModel OriginalFileViewModel
         {
-            get => _destinationFileViewModel;
-            set => this.RaiseAndSetIfChanged(ref _destinationFileViewModel, value);
+            get => _originalFileViewModel;
+            set => this.RaiseAndSetIfChanged(ref _originalFileViewModel, value);
         }
 
         public bool AreMultipleFilesAvailable
@@ -92,10 +92,10 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         public override void Activate(OverwriteOptionsNavigationParameter parameter)
         {
             var sourceFileModel = _fileService.GetFile(parameter.SourceFilePath);
-            SourceFileViewModel = CreateFrom(sourceFileModel);
+            ReplaceWithFileViewModel = CreateFrom(sourceFileModel);
 
             var destinationFileModel = _fileService.GetFile(parameter.DestinationFilePath);
-            DestinationFileViewModel = CreateFrom(destinationFileModel);
+            OriginalFileViewModel = CreateFrom(destinationFileModel);
 
             var destinationDirectory = _pathService.GetParentDirectory(destinationFileModel.FullPath);
             NewFileName = _fileNameGenerationService.GenerateName(sourceFileModel.Name, destinationDirectory);
@@ -112,11 +112,11 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 
         private void Rename()
         {
-            var destinationDirectory = _pathService.GetParentDirectory(DestinationFileViewModel.FullPath);
+            var destinationDirectory = _pathService.GetParentDirectory(OriginalFileViewModel.FullPath);
             var destinationFilePath = _pathService.Combine(destinationDirectory, _newFileName);
             var options = OperationContinuationOptions.CreateRenamingContinuationOptions(
-                SourceFileViewModel.FullPath,
-                _shouldApplyForAll,
+                ReplaceWithFileViewModel.FullPath,
+                _shouldApplyToAll,
                 destinationFilePath
             );
 
@@ -128,8 +128,8 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 
         private OperationContinuationOptions CreateFrom(OperationContinuationMode mode) =>
             OperationContinuationOptions.CreateContinuationOptions(
-                SourceFileViewModel.FullPath,
-                _shouldApplyForAll,
+                ReplaceWithFileViewModel.FullPath,
+                _shouldApplyToAll,
                 mode
             );
 

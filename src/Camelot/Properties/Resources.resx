@@ -126,7 +126,7 @@
   <data name="Apply" xml:space="preserve">
     <value>Apply</value>
   </data>
-  <data name="ApplyActionForTheAllFilesAndFolders" xml:space="preserve">
+  <data name="ApplyActionToTheAllFilesAndFolders" xml:space="preserve">
     <value>Apply this action to the all files and folders</value>
   </data>
   <data name="ArgumentsWithColon" xml:space="preserve">

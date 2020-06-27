@@ -24,13 +24,13 @@ namespace Camelot.ViewModels.Tests
         [InlineData(true, false)]
         [InlineData(false, true)]
         [InlineData(false, false)]
-        public void TestProperties(bool shouldApplyForAll, bool areMultipleFilesAvailable)
+        public void TestProperties(bool shouldApplyToAll, bool areMultipleFilesAvailable)
         {
             var dialog = Create(areMultipleFilesAvailable);
-            dialog.ShouldApplyForAll = shouldApplyForAll;
+            dialog.ShouldApplyToAll = shouldApplyToAll;
             dialog.NewFileName = NewFileName;
 
-            Assert.Equal(shouldApplyForAll, dialog.ShouldApplyForAll);
+            Assert.Equal(shouldApplyToAll, dialog.ShouldApplyToAll);
             Assert.Equal(areMultipleFilesAvailable, dialog.AreMultipleFilesAvailable);
             Assert.Equal(ParentDirectoryName, dialog.DestinationDirectoryName);
             Assert.Equal(NewFileName, dialog.NewFileName);
@@ -58,11 +58,11 @@ namespace Camelot.ViewModels.Tests
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public void TestSkip(bool shouldApplyForAll)
+        public void TestSkip(bool shouldApplyToAll)
         {
             var callbackCalled = false;
             var dialog = Create();
-            dialog.ShouldApplyForAll = shouldApplyForAll;
+            dialog.ShouldApplyToAll = shouldApplyToAll;
             dialog.CloseRequested += (sender, args) =>
             {
                 var result = args.Result;
@@ -72,7 +72,7 @@ namespace Camelot.ViewModels.Tests
                     callbackCalled = true;
                 }
 
-                Assert.Equal(shouldApplyForAll, result.Options.ApplyForAll);
+                Assert.Equal(shouldApplyToAll, result.Options.ApplyToAll);
                 Assert.Equal(SourceFilePath, result.Options.FilePath);
             };
 
@@ -84,11 +84,11 @@ namespace Camelot.ViewModels.Tests
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public void TestOverwrite(bool shouldApplyForAll)
+        public void TestOverwrite(bool shouldApplyToAll)
         {
             var callbackCalled = false;
             var dialog = Create();
-            dialog.ShouldApplyForAll = shouldApplyForAll;
+            dialog.ShouldApplyToAll = shouldApplyToAll;
             dialog.CloseRequested += (sender, args) =>
             {
                 var result = args.Result;
@@ -98,7 +98,7 @@ namespace Camelot.ViewModels.Tests
                     callbackCalled = true;
                 }
 
-                Assert.Equal(shouldApplyForAll, result.Options.ApplyForAll);
+                Assert.Equal(shouldApplyToAll, result.Options.ApplyToAll);
                 Assert.Equal(SourceFilePath, result.Options.FilePath);
             };
 
@@ -110,11 +110,11 @@ namespace Camelot.ViewModels.Tests
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public void TestOverwriteIfOlder(bool shouldApplyForAll)
+        public void TestOverwriteIfOlder(bool shouldApplyToAll)
         {
             var callbackCalled = false;
             var dialog = Create();
-            dialog.ShouldApplyForAll = shouldApplyForAll;
+            dialog.ShouldApplyToAll = shouldApplyToAll;
             dialog.CloseRequested += (sender, args) =>
             {
                 var result = args.Result;
@@ -124,7 +124,7 @@ namespace Camelot.ViewModels.Tests
                     callbackCalled = true;
                 }
 
-                Assert.Equal(shouldApplyForAll, result.Options.ApplyForAll);
+                Assert.Equal(shouldApplyToAll, result.Options.ApplyToAll);
                 Assert.Equal(SourceFilePath, result.Options.FilePath);
             };
 
@@ -136,11 +136,11 @@ namespace Camelot.ViewModels.Tests
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public void TestRename(bool shouldApplyForAll)
+        public void TestRename(bool shouldApplyToAll)
         {
             var callbackCalled = false;
             var dialog = Create();
-            dialog.ShouldApplyForAll = shouldApplyForAll;
+            dialog.ShouldApplyToAll = shouldApplyToAll;
             dialog.NewFileName = NewFileName;
             dialog.CloseRequested += (sender, args) =>
             {
@@ -151,7 +151,7 @@ namespace Camelot.ViewModels.Tests
                     callbackCalled = true;
                 }
 
-                Assert.Equal(shouldApplyForAll, result.Options.ApplyForAll);
+                Assert.Equal(shouldApplyToAll, result.Options.ApplyToAll);
                 Assert.Equal(SourceFilePath, result.Options.FilePath);
                 Assert.Equal(NewFilePath, result.Options.NewFilePath);
             };
