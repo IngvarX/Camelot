@@ -75,7 +75,7 @@ namespace Camelot
             var assemblyDirectory = Path.GetDirectoryName(assemblyLocation);
             var databaseConfiguration = new DatabaseConfiguration
             {
-                ConnectionString = Path.Combine(assemblyDirectory, databaseName)
+                ConnectionString = $"Filename={Path.Combine(assemblyDirectory, databaseName)}; Connection=Shared"
             };
             services.RegisterConstant(databaseConfiguration);
 
