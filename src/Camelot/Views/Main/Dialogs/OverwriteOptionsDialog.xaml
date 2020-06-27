@@ -7,7 +7,7 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         Width="850" Height="400"
         x:Class="Camelot.Views.Main.Dialogs.OverwriteOptionsDialog"
-        Title="{x:Static p:Resources.OVERWRITE_OPTIONS_TITLE}">
+        Title="{x:Static p:Resources.OverwriteOptionsTitle}">
 
     <Design.DataContext>
         <dialogs:OverwriteOptionsDialogViewModel />
@@ -25,7 +25,7 @@
                 <TextBlock Name="ReplaceTextBlock" Classes="boldStyleTextBlock">
                     <TextBlock.Text>
                         <MultiBinding StringFormat="{}{0} &quot;{1}&quot;?">
-                            <Binding Source="{x:Static p:Resources.REPLACE_FILE}"/>
+                            <Binding Source="{x:Static p:Resources.ReplaceFile}"/>
                             <Binding Path="SourceFileViewModel.Name" />
                         </MultiBinding>
                     </TextBlock.Text>
@@ -33,7 +33,7 @@
             </StackPanel>
 
             <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Margin="0,15" Classes="overWriteDialogTextBlock" 
-                       Text="{Binding DestinationDirectoryName, StringFormat={x:Static p:Resources.REPLACE_FILE_DESTINATION_DIRECTORY}}" />
+                       Text="{Binding DestinationDirectoryName, StringFormat={x:Static p:Resources.ReplaceFileDestinationDirectory}}" />
 
             <Grid Row="2" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,*">
                 <DrawingPresenter Width="64" Height="64" Grid.RowSpan="3">
@@ -41,11 +41,11 @@
                         <GeometryDrawing Brush="{DynamicResource CancelOperationButtonBrush}"
                                          Geometry="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm160-14.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z" />                </DrawingPresenter.Drawing>
                 </DrawingPresenter>
-                <TextBlock Grid.Column="2" Text="{x:Static p:Resources.ORIGIN_FILE}" Classes="overWriteDialogTextBlock boldStyleTextBlock" />
+                <TextBlock Grid.Column="2" Text="{x:Static p:Resources.OriginalFile}" Classes="overWriteDialogTextBlock boldStyleTextBlock" />
                 <TextBlock Grid.Row="1" Grid.Column="2" Classes="overWriteDialogTextBlock">
                     <TextBlock.Text>
                         <MultiBinding StringFormat="{}{0}: {1}">
-                            <Binding Source="{x:Static p:Resources.SIZE}"/>
+                            <Binding Source="{x:Static p:Resources.Size}"/>
                             <Binding Path="SourceFileViewModel.FormattedSize" />
                         </MultiBinding>
                     </TextBlock.Text>
@@ -53,7 +53,7 @@
                 <TextBlock Grid.Row="2" Grid.Column="2" Classes="overWriteDialogTextBlock">
                     <TextBlock.Text>
                         <MultiBinding StringFormat="{}{0}: {1}">
-                            <Binding Source="{x:Static p:Resources.LAST_MODIFIED}"/>
+                            <Binding Source="{x:Static p:Resources.LastModified}"/>
                             <Binding Path="SourceFileViewModel.LastModifiedDateTime" />
                         </MultiBinding>
                     </TextBlock.Text>
@@ -66,11 +66,11 @@
                                          Geometry="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm160-14.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z" />                
                     </DrawingPresenter.Drawing>
                 </DrawingPresenter>
-                <TextBlock Grid.Column="2" Text="{x:Static p:Resources.REPLACE_WITH}" Classes="overWriteDialogTextBlock boldStyleTextBlock" />
+                <TextBlock Grid.Column="2" Text="{x:Static p:Resources.ReplaceWith}" Classes="overWriteDialogTextBlock boldStyleTextBlock" />
                 <TextBlock Grid.Row="1" Grid.Column="2" Classes="overWriteDialogTextBlock">
                     <TextBlock.Text>
                         <MultiBinding StringFormat="{}{0}: {1}">
-                            <Binding Source="{x:Static p:Resources.SIZE}"/>
+                            <Binding Source="{x:Static p:Resources.Size}"/>
                             <Binding Path="DestinationFileViewModel.FormattedSize" />
                         </MultiBinding>
                     </TextBlock.Text>
@@ -78,7 +78,7 @@
                 <TextBlock Grid.Row="2" Grid.Column="2" Classes="overWriteDialogTextBlock">
                     <TextBlock.Text>
                         <MultiBinding StringFormat="{}{0}: {1}">
-                            <Binding Source="{x:Static p:Resources.LAST_MODIFIED}"/>
+                            <Binding Source="{x:Static p:Resources.LastModified}"/>
                             <Binding Path="DestinationFileViewModel.LastModifiedDateTime" />
                         </MultiBinding>
                     </TextBlock.Text>
@@ -89,13 +89,13 @@
                 <Expander.Content>
                     <StackPanel Orientation="Horizontal">
                         <TextBox Text="{Binding NewFileName}" Margin="0,12" />
-                        <Button Content="{x:Static p:Resources.RENAME}" Command="{Binding RenameCommand}"
+                        <Button Content="{x:Static p:Resources.Rename}" Command="{Binding RenameCommand}"
                                 Classes="dialogButton alternativeColorDialogButton" />
                     </StackPanel>
                 </Expander.Content>
 
                 <Expander.Header>
-                    <TextBlock Classes="overWriteDialogTextBlock" Text="{x:Static p:Resources.SELECT_NEW_NAME_FOR_DESTINATION}" />
+                    <TextBlock Classes="overWriteDialogTextBlock" Text="{x:Static p:Resources.SelectNewNameForDestination}" />
                 </Expander.Header>
             </Expander>
 
@@ -103,17 +103,17 @@
                       IsVisible="{Binding AreMultipleFilesAvailable}">
                 <CheckBox.Content>
                     <TextBlock Classes="overWriteDialogTextBlock"
-                               Text="{x:Static p:Resources.APPLY_ACTION_FOR_ALL_FILES_AND_FOLDERS}" />
+                               Text="{x:Static p:Resources.ApplyActionForTheAllFilesAndFolders}" />
                 </CheckBox.Content>
             </CheckBox>
 
             <Grid Row="5" ColumnSpan="2" HorizontalAlignment="Center" Margin="0,15,0,0">
                 <StackPanel Orientation="Horizontal">
-                    <Button Content="{x:Static p:Resources.CANCEL}" Command="{Binding CancelCommand}" Classes="dialogButton cancelDialogButton" />
-                    <Button Content="{x:Static p:Resources.SKIP}" Command="{Binding SkipCommand}" Classes="dialogButton alternativeColorDialogButton"
+                    <Button Content="{x:Static p:Resources.Cancel}" Command="{Binding CancelCommand}" Classes="dialogButton cancelDialogButton" />
+                    <Button Content="{x:Static p:Resources.Skip}" Command="{Binding SkipCommand}" Classes="dialogButton alternativeColorDialogButton"
                             IsVisible="{Binding AreMultipleFilesAvailable}" />
-                    <Button Content="{x:Static p:Resources.REPLACE}" Command="{Binding ReplaceCommand}" Classes="dialogButton" />
-                    <Button Content="{x:Static p:Resources.REPLACE_IF_FOLDER}" Command="{Binding ReplaceIfOlderCommand}" Classes="dialogButton" />
+                    <Button Content="{x:Static p:Resources.Replace}" Command="{Binding ReplaceCommand}" Classes="dialogButton" />
+                    <Button Content="{x:Static p:Resources.ReplaceIfOlder}" Command="{Binding ReplaceIfOlderCommand}" Classes="dialogButton" />
                 </StackPanel>
             </Grid>
         </Grid>

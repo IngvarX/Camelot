@@ -2,16 +2,22 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:p="clr-namespace:Camelot.Properties"
              xmlns:filePanels="clr-namespace:Camelot.ViewModels.Implementations.MainWindow.FilePanels;assembly=Camelot.ViewModels"
              xmlns:controls="clr-namespace:Camelot.Views.Main.Controls"
              xmlns:views="clr-namespace:Camelot.Views"
+             xmlns:converters="clr-namespace:Camelot.Converters"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Camelot.Views.Main.FilesPanelView">
 
     <Design.DataContext>
         <filePanels:FilesPanelViewModel />
     </Design.DataContext>
-
+    
+    <UserControl.Resources>
+        <converters:TextFormatConverter x:Key="TextFormatConverter" />
+    </UserControl.Resources>
+  
     <Grid Classes="defaultBackgroundColor">
         <Grid.RowDefinitions>
             <RowDefinition Height="35" />
@@ -74,15 +80,15 @@
             <DataGrid.Resources>
                 <Template x:Key="RowContextMenu">
                     <ContextMenu>
-                        <MenuItem Header="Open" Command="{Binding OpenCommand}"/>
-                        <MenuItem Header="Rename" Command="{Binding StartRenamingCommand}"/>
-                        <MenuItem Header="Copy" Command="{Binding CopyCommand}"/>
-                        <MenuItem Header="Move" Command="{Binding MoveCommand}"/>
-                        <MenuItem Header="Delete" Command="{Binding DeleteCommand}"/>
-                        <MenuItem Header="Copy to clipboard" Command="{Binding CopyToClipboardCommand}"/>
-                        <MenuItem Header="Show properties" Command="{Binding ShowPropertiesCommand}"/>
-                        <MenuItem Header="Create">
-                            <MenuItem Header="Directory"
+                        <MenuItem Header="{x:Static p:Resources.Open}" Command="{Binding OpenCommand}"/>
+                        <MenuItem Header="{x:Static p:Resources.Rename}" Command="{Binding StartRenamingCommand}"/>
+                        <MenuItem Header="{x:Static p:Resources.Copy}" Command="{Binding CopyCommand}"/>
+                        <MenuItem Header="{x:Static p:Resources.Move}" Command="{Binding MoveCommand}"/>
+                        <MenuItem Header="{x:Static p:Resources.Delete}" Command="{Binding DeleteCommand}"/>
+                        <MenuItem Header="{x:Static p:Resources.CopyToClipboard}" Command="{Binding CopyToClipboardCommand}"/>
+                        <MenuItem Header="{x:Static p:Resources.ShowProperties}" Command="{Binding ShowPropertiesCommand}"/>
+                        <MenuItem Header="{x:Static p:Resources.Create}">
+                            <MenuItem Header="{x:Static p:Resources.Directory}"
                                       Command="{Binding $parent[views:MainWindow].DataContext.OperationsViewModel.CreateNewDirectoryCommand}" />
                         </MenuItem>
                     </ContextMenu>
@@ -134,7 +140,7 @@
                             <Grid ColumnDefinitions="*,Auto,Auto,*">
                                 <controls:DataGridHeaderArrowView IsVisible="{Binding SelectedTab.SortingViewModel.IsSortingByNameEnabled}" />
 
-                                <TextBlock Grid.Column="2" Classes="dataGridColumnHeaderTextBlock" Text="Name" />
+                                <TextBlock Grid.Column="2" Classes="dataGridColumnHeaderTextBlock" Text="{x:Static p:Resources.Name}" />
                             </Grid>
                         </Button>
                     </DataGridTemplateColumn.Header>
@@ -186,7 +192,7 @@
                             <Grid ColumnDefinitions="*,Auto,Auto,*">
                                 <controls:DataGridHeaderArrowView IsVisible="{Binding SelectedTab.SortingViewModel.IsSortingByExtensionEnabled}" />
 
-                                <TextBlock Grid.Column="2" Classes="dataGridColumnHeaderTextBlock" Text="Extension" />
+                                <TextBlock Grid.Column="2" Classes="dataGridColumnHeaderTextBlock" Text="{x:Static p:Resources.Extension}" />
                             </Grid>
                         </Button>
                     </DataGridTemplateColumn.Header>
@@ -216,7 +222,7 @@
                             <Grid ColumnDefinitions="*,Auto,Auto,*">
                                 <controls:DataGridHeaderArrowView IsVisible="{Binding SelectedTab.SortingViewModel.IsSortingBySizeEnabled}" />
 
-                                <TextBlock Grid.Column="2" Classes="dataGridColumnHeaderTextBlock" Text="Size" />
+                                <TextBlock Grid.Column="2" Classes="dataGridColumnHeaderTextBlock" Text="{x:Static p:Resources.Size}" />
                             </Grid>
                         </Button>
                     </DataGridTemplateColumn.Header>
@@ -226,7 +232,7 @@
                             <ContentControl Content="{Binding DataContext, RelativeSource={RelativeSource AncestorType=DataGridCell}}">
                                 <ContentControl.DataTemplates>
                                     <DataTemplate DataType="{x:Type filePanels:DirectoryViewModel}">
-                                        <TextBlock Classes="filePanelTextBlock" Text="&lt;DIR&gt;" />
+                                        <TextBlock Classes="filePanelTextBlock" Text="{x:Static p:Resources.DirectoryTemplate}" />
                                     </DataTemplate>
 
                                     <DataTemplate DataType="{x:Type filePanels:FileViewModel}">
@@ -245,7 +251,7 @@
                             <Grid ColumnDefinitions="*,Auto,Auto,*">
                                 <controls:DataGridHeaderArrowView IsVisible="{Binding SelectedTab.SortingViewModel.IsSortingByDateEnabled}" />
 
-                                <TextBlock Grid.Column="2" Classes="dataGridColumnHeaderTextBlock" Text="Date" />
+                                <TextBlock Grid.Column="2" Classes="dataGridColumnHeaderTextBlock" Text="{x:Static p:Resources.Date}" />
                             </Grid>
                         </Button>
                     </DataGridTextColumn.Header>
@@ -257,7 +263,7 @@
             <Border Classes="selectionBorder" IsVisible="{Binding AreAnyFileSystemNodesSelected}">
                 <TextBlock Classes="selectionInfoTextBlock">
                     <TextBlock.Text>
-                        <MultiBinding StringFormat="{}{0} files ({1}) and {2} directories">
+                        <MultiBinding Converter="{StaticResource TextFormatConverter}" ConverterParameter="{x:Static p:Resources.SelectFromFilesAndDirectories}">
                             <Binding Path="SelectedFilesCount" />
                             <Binding Path="SelectedFilesSize" />
                             <Binding Path="SelectedDirectoriesCount" />

@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:p="clr-namespace:Camelot.Properties"
              xmlns:enums="clr-namespace:Camelot.Services.Abstractions.Models.Enums;assembly=Camelot.Services.Abstractions"
              xmlns:operationsStates="clr-namespace:Camelot.ViewModels.Implementations.MainWindow.OperationsStates;assembly=Camelot.ViewModels"
              xmlns:converters="clr-namespace:Camelot.Converters"
@@ -13,8 +14,9 @@
     </Design.DataContext>
 
     <UserControl.Resources>
-        <converters:EnumConverter x:Key="EnumConverter"/>
-        <converters:InverseEnumConverter x:Key="InverseEnumConverter"/>
+        <converters:EnumConverter x:Key="EnumConverter" />
+        <converters:InverseEnumConverter x:Key="InverseEnumConverter" />
+        <converters:TextFormatConverter x:Key="TextFormatConverter" />
     </UserControl.Resources>
 
     <ItemsControl Items="{Binding InactiveOperations}">
@@ -32,7 +34,7 @@
                         <Grid IsVisible="{Binding OperationType, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static enums:OperationType.Copy}}">
                             <TextBlock Classes="operationStatusTextBlock successTextBlock" IsVisible="{Binding IsProcessingSingleFile}">
                                 <TextBlock.Text>
-                                    <MultiBinding StringFormat="{}Copied {0} to {1}">
+                                    <MultiBinding Converter="{StaticResource TextFormatConverter}" ConverterParameter="{x:Static p:Resources.CopiedFileFromTo}">
                                         <Binding Path="SourceFile" />
                                         <Binding Path="TargetDirectory" />
                                     </MultiBinding>
@@ -41,7 +43,7 @@
 
                             <TextBlock Classes="operationStatusTextBlock successTextBlock" IsVisible="{Binding !IsProcessingSingleFile}">
                                 <TextBlock.Text>
-                                    <MultiBinding StringFormat="{}Copied {0} files and {1} directories to {2}">
+                                    <MultiBinding Converter="{StaticResource TextFormatConverter}" ConverterParameter="{x:Static p:Resources.CopiedFilesFromAndDirectoriesTo}">
                                         <Binding Path="SourceFilesCount" />
                                         <Binding Path="SourceDirectoriesCount" />
                                         <Binding Path="TargetDirectory" />
@@ -53,7 +55,7 @@
                         <Grid IsVisible="{Binding OperationType, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static enums:OperationType.Move}}">
                             <TextBlock Classes="operationStatusTextBlock successTextBlock" IsVisible="{Binding IsProcessingSingleFile}">
                                 <TextBlock.Text>
-                                    <MultiBinding StringFormat="{}Moved {0} to {1}">
+                                    <MultiBinding Converter="{StaticResource TextFormatConverter}" ConverterParameter="{x:Static p:Resources.MovedFileFromTo}">
                                         <Binding Path="SourceFile" />
                                         <Binding Path="TargetDirectory" />
                                     </MultiBinding>
@@ -62,7 +64,7 @@
 
                             <TextBlock Classes="operationStatusTextBlock successTextBlock" IsVisible="{Binding !IsProcessingSingleFile}">
                                 <TextBlock.Text>
-                                    <MultiBinding StringFormat="{}Moved {0} files and {1} directories to {2}">
+                                    <MultiBinding Converter="{StaticResource TextFormatConverter}" ConverterParameter="{x:Static p:Resources.MovedFilesFromAndDirectoriesTo}">
                                         <Binding Path="SourceFilesCount" />
                                         <Binding Path="SourceDirectoriesCount" />
                                         <Binding Path="TargetDirectory" />
@@ -74,7 +76,7 @@
                         <Grid IsVisible="{Binding OperationType, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static enums:OperationType.Delete}}">
                             <TextBlock Classes="operationStatusTextBlock successTextBlock" IsVisible="{Binding IsProcessingSingleFile}">
                                 <TextBlock.Text>
-                                    <MultiBinding StringFormat="{}Deleted {0} from {1}">
+                                    <MultiBinding Converter="{StaticResource TextFormatConverter}" ConverterParameter="{x:Static p:Resources.DeletedFileFromTo}">
                                         <Binding Path="SourceFile" />
                                         <Binding Path="SourceDirectory" />
                                     </MultiBinding>
@@ -83,7 +85,7 @@
 
                             <TextBlock Classes="operationStatusTextBlock successTextBlock" IsVisible="{Binding !IsProcessingSingleFile}">
                                 <TextBlock.Text>
-                                    <MultiBinding StringFormat="{}Deleted {0} files and {1} directories from {2}">
+                                    <MultiBinding Converter="{StaticResource TextFormatConverter}" ConverterParameter="{x:Static p:Resources.DeletedFilesAndDirectories}">
                                         <Binding Path="SourceFilesCount" />
                                         <Binding Path="SourceDirectoriesCount" />
                                         <Binding Path="SourceDirectory" />
@@ -104,7 +106,7 @@
                         <Grid IsVisible="{Binding OperationType, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static enums:OperationType.Copy}}">
                             <TextBlock Classes="operationStatusTextBlock errorTextBlock" IsVisible="{Binding IsProcessingSingleFile}">
                                 <TextBlock.Text>
-                                    <MultiBinding StringFormat="{}Failed to copy {0} to {1}">
+                                    <MultiBinding Converter="{StaticResource TextFormatConverter}" ConverterParameter="{x:Static p:Resources.FailedCopyFileFromTo}">
                                         <Binding Path="SourceFile" />
                                         <Binding Path="TargetDirectory" />
                                     </MultiBinding>
@@ -113,7 +115,7 @@
 
                             <TextBlock Classes="operationStatusTextBlock errorTextBlock" IsVisible="{Binding !IsProcessingSingleFile}">
                                 <TextBlock.Text>
-                                    <MultiBinding StringFormat="{}Failed to copy {0} files and {1} directories to {2}">
+                                    <MultiBinding Converter="{StaticResource TextFormatConverter}" ConverterParameter="{x:Static p:Resources.FailedCopyFromFilesAndDirectoriesTo}">
                                         <Binding Path="SourceFilesCount" />
                                         <Binding Path="SourceDirectoriesCount" />
                                         <Binding Path="TargetDirectory" />
@@ -125,7 +127,7 @@
                         <Grid IsVisible="{Binding OperationType, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static enums:OperationType.Move}}">
                             <TextBlock Classes="operationStatusTextBlock errorTextBlock" IsVisible="{Binding IsProcessingSingleFile}">
                                 <TextBlock.Text>
-                                    <MultiBinding StringFormat="{}Failed to move {0} to {1}">
+                                    <MultiBinding Converter="{StaticResource TextFormatConverter}" ConverterParameter="{x:Static p:Resources.FailedToMoveFileFromTo}">
                                         <Binding Path="SourceFile" />
                                         <Binding Path="TargetDirectory" />
                                     </MultiBinding>
@@ -134,7 +136,7 @@
 
                             <TextBlock Classes="operationStatusTextBlock errorTextBlock" IsVisible="{Binding !IsProcessingSingleFile}">
                                 <TextBlock.Text>
-                                    <MultiBinding StringFormat="{}Failed to move {0} files and {1} directories to {2}">
+                                    <MultiBinding Converter="{StaticResource TextFormatConverter}" ConverterParameter="{x:Static p:Resources.FailedToMoveFilesAndDirectoriesTo}">
                                         <Binding Path="SourceFilesCount" />
                                         <Binding Path="SourceDirectoriesCount" />
                                         <Binding Path="TargetDirectory" />
@@ -146,7 +148,7 @@
                         <Grid IsVisible="{Binding OperationType, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static enums:OperationType.Delete}}">
                             <TextBlock Classes="operationStatusTextBlock errorTextBlock" IsVisible="{Binding IsProcessingSingleFile}">
                                 <TextBlock.Text>
-                                    <MultiBinding StringFormat="{}Failed to delete {0} from {1}">
+                                    <MultiBinding Converter="{StaticResource TextFormatConverter}" ConverterParameter="{x:Static p:Resources.FailedToDeleteFileFromTo}">
                                         <Binding Path="SourceFile" />
                                         <Binding Path="SourceDirectory" />
                                     </MultiBinding>
@@ -155,8 +157,7 @@
 
                             <TextBlock Classes="operationStatusTextBlock errorTextBlock" IsVisible="{Binding !IsProcessingSingleFile}">
                                 <TextBlock.Text>
-                                    <MultiBinding
-                                        StringFormat="{}Failed to delete {0} files and {1} directories from {2}">
+                                    <MultiBinding Converter="{StaticResource TextFormatConverter}" ConverterParameter="{x:Static p:Resources.FailedToDeleteFilesAndDirectoriesFrom}">
                                         <Binding Path="SourceFilesCount" />
                                         <Binding Path="SourceDirectoriesCount" />
                                         <Binding Path="SourceDirectory" />

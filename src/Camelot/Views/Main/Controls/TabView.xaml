@@ -29,11 +29,11 @@
 
                 <Button.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="{x:Static p:Resources.NEW_TAB}" Command="{Binding NewTabCommand}" />
-                        <MenuItem Header="{x:Static p:Resources.CLOSE_TAB}" Command="{Binding CloseTabCommand}" />
-                        <MenuItem Header="{x:Static p:Resources.CLOSE_TABS_TO_THE_LEFT}" Command="{Binding CloseTabsToTheLeftCommand}" />
-                        <MenuItem Header="{x:Static p:Resources.CLOSE_TABS_TO_THE_RIGHT}" Command="{Binding CloseTabsToTheRightCommand}" />
-                        <MenuItem Header="{x:Static p:Resources.CLOSE_All_BUT_THIS}" Command="{Binding CloseAllTabsButThisCommand}" />
+                        <MenuItem Header="{x:Static p:Resources.NewTab}" Command="{Binding NewTabCommand}" />
+                        <MenuItem Header="{x:Static p:Resources.CloseTab}" Command="{Binding CloseTabCommand}" />
+                        <MenuItem Header="{x:Static p:Resources.CloseTabsToTheLeft}" Command="{Binding CloseTabsToTheLeftCommand}" />
+                        <MenuItem Header="{x:Static p:Resources.CloseTabsToTheRight}" Command="{Binding CloseTabsToTheRightCommand}" />
+                        <MenuItem Header="{x:Static p:Resources.CloseAllButThis}" Command="{Binding CloseAllTabsButThisCommand}" />
                     </ContextMenu>
                 </Button.ContextMenu>
             </Button>

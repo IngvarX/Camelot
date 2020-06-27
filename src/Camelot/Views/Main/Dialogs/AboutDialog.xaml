@@ -7,7 +7,7 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         Width="450" Height="200"
         x:Class="Camelot.Views.Main.Dialogs.AboutDialog"
-        Title="{x:Static p:Resources.ABOUT_CAMELOT_TITLE}">
+        Title="{x:Static p:Resources.AboutCamelotTitle}">
 
     <Design.DataContext>
         <dialogs:AboutDialogViewModel />
@@ -22,18 +22,18 @@
             </TextBlock.Text>
         </TextBlock>
         
-        <TextBlock Classes="aboutPageTextBlock" Text="{x:Static p:Resources.ABOUT_PAGE}" />
+        <TextBlock Classes="aboutPageTextBlock" Text="{x:Static p:Resources.AboutPage}" />
         
         <TextBlock Classes="aboutPageTextBlock">
             <TextBlock.Text>    
                 <MultiBinding StringFormat="{}{0}: {1}">
-                    <Binding Source="{x:Static p:Resources.MAINTENERS}"/>
+                    <Binding Source="{x:Static p:Resources.Maintainers}"/>
                     <Binding Path="Maintainers" />
                 </MultiBinding>
             </TextBlock.Text>
         </TextBlock>
         
-        <Button Classes="dialogButton" Command="{Binding OpenRepositoryCommand}" Content="{x:Static p:Resources.GITHUB}" />
+        <Button Classes="dialogButton" Command="{Binding OpenRepositoryCommand}" Content="{x:Static p:Resources.Github}" />
     </StackPanel>
 
 </Window>

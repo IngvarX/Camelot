@@ -117,136 +117,223 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ABOUT_CAMELOT_TITLE" xml:space="preserve">
+  <data name="AboutCamelotTitle" xml:space="preserve">
     <value>About Camelot</value>
   </data>
-  <data name="ABOUT_PAGE" xml:space="preserve">
+  <data name="AboutPage" xml:space="preserve">
     <value>Camelot is dual-panel file manager written in C#</value>
   </data>
-  <data name="APPLY" xml:space="preserve">
+  <data name="Apply" xml:space="preserve">
     <value>Apply</value>
   </data>
-  <data name="APPLY_ACTION_FOR_ALL_FILES_AND_FOLDERS" xml:space="preserve">
+  <data name="ApplyActionForTheAllFilesAndFolders" xml:space="preserve">
     <value>Apply this action to the all files and folders</value>
   </data>
-  <data name="CANCEL" xml:space="preserve">
+  <data name="Arguments" xml:space="preserve">
+    <value>Arguments</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
-  <data name="CLOSE" xml:space="preserve">
+  <data name="Close" xml:space="preserve">
     <value>Close</value>
   </data>
-  <data name="CLOSE_All_BUT_THIS" xml:space="preserve">
+  <data name="CloseAllButThis" xml:space="preserve">
     <value>Close all but this</value>
   </data>
-  <data name="CLOSE_TAB" xml:space="preserve">
+  <data name="CloseTab" xml:space="preserve">
     <value>Close tab</value>
   </data>
-  <data name="CLOSE_TABS_TO_THE_LEFT" xml:space="preserve">
+  <data name="CloseTabsToTheLeft" xml:space="preserve">
     <value>Close tabs to the left</value>
   </data>
-  <data name="CLOSE_TABS_TO_THE_RIGHT" xml:space="preserve">
+  <data name="CloseTabsToTheRight" xml:space="preserve">
     <value>Close tabs to the right</value>
   </data>
-  <data name="COPY" xml:space="preserve">
+  <data name="Command" xml:space="preserve">
+    <value>Command</value>
+  </data>
+  <data name="CopiedFileFromTo" xml:space="preserve">
+    <value>Copied {0} to {1}</value>
+  </data>
+  <data name="CopiedFilesFromAndDirectoriesTo" xml:space="preserve">
+    <value>Copied {0} files and {1} directories to {2}</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
     <value>Copy</value>
   </data>
-  <data name="CREATE_DIRECTORY_TITLE" xml:space="preserve">
+  <data name="CopyingFileFromTo" xml:space="preserve">
+    <value>Copying {0} to {1}</value>
+  </data>
+  <data name="CopyingFilesFromAndDirectoriesTo" xml:space="preserve">
+    <value>Copying {0} files and {1} directories to {2}</value>
+  </data>
+  <data name="CopyToClipboard" xml:space="preserve">
+    <value>Copy to clipboard</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="CreateDirectoryTitle" xml:space="preserve">
     <value>Create directory</value>
   </data>
-  <data name="CREATION_DATE" xml:space="preserve">
+  <data name="CreationDate" xml:space="preserve">
     <value>Creation date</value>
   </data>
-  <data name="DELETE" xml:space="preserve">
+  <data name="Date" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
     <value>Delete</value>
   </data>
-  <data name="DIRECTORY_INFORMATION_TITLE" xml:space="preserve">
+  <data name="DeletedFileFromTo" xml:space="preserve">
+    <value>Deleted {0} from {1}</value>
+  </data>
+  <data name="DeletedFilesAndDirectories" xml:space="preserve">
+    <value>Deleted {0} files and {1} directories from {2}</value>
+  </data>
+  <data name="Directory" xml:space="preserve">
+    <value>Directory</value>
+  </data>
+  <data name="DirectoryInformationTitle" xml:space="preserve">
     <value>Directory information</value>
   </data>
-  <data name="ENTER_DIRECTORY_NAME" xml:space="preserve">
+  <data name="DirectoryTemplate" xml:space="preserve">
+    <value>&lt;DIR&gt;</value>
+  </data>
+  <data name="EnterDirectoryName" xml:space="preserve">
     <value>Enter directory name</value>
   </data>
-  <data name="FILES_REMOVING_CONFIRMATION_TITLE" xml:space="preserve">
-    <value>Files removing confirmation</value>
+  <data name="Extension" xml:space="preserve">
+    <value>Extension</value>
   </data>
-  <data name="FILE_INFORMATION_TITLE" xml:space="preserve">
+  <data name="FailedCopyFileFromTo" xml:space="preserve">
+    <value>Failed to copy {0} to {1}</value>
+  </data>
+  <data name="FailedCopyFromFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Failed to copy {0} files and {1} directories to {2}</value>
+  </data>
+  <data name="FailedToDeleteFileFromTo" xml:space="preserve">
+    <value>Failed to delete {0} from {1}</value>
+  </data>
+  <data name="FailedToDeleteFilesAndDirectoriesFrom" xml:space="preserve">
+    <value>Failed to delete {0} files and {1} directories from {2}</value>
+  </data>
+  <data name="FailedToMoveFileFromTo" xml:space="preserve">
+    <value>Failed to move {0} to {1}</value>
+  </data>
+  <data name="FailedToMoveFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Failed to move {0} files and {1} directories to {2}</value>
+  </data>
+  <data name="FileInformationTitle" xml:space="preserve">
     <value>File information</value>
   </data>
-  <data name="GITHUB" xml:space="preserve">
+  <data name="FilesRemovingConfirmationTitle" xml:space="preserve">
+    <value>Files removing confirmation</value>
+  </data>
+  <data name="Github" xml:space="preserve">
     <value>Github</value>
   </data>
-  <data name="LAST_ACCESS" xml:space="preserve">
+  <data name="LastAccess" xml:space="preserve">
     <value>Last access</value>
   </data>
-  <data name="LAST_MODIFICATION" xml:space="preserve">
+  <data name="LastModification" xml:space="preserve">
     <value>Last modification</value>
   </data>
-  <data name="LAST_MODIFIED" xml:space="preserve">
+  <data name="LastModified" xml:space="preserve">
     <value>Last modified</value>
   </data>
-  <data name="MAINTENERS" xml:space="preserve">
+  <data name="Maintainers" xml:space="preserve">
     <value>Maintainers</value>
   </data>
-  <data name="MOVE" xml:space="preserve">
+  <data name="Move" xml:space="preserve">
     <value>Move</value>
   </data>
-  <data name="NEW_DIRECTORY" xml:space="preserve">
+  <data name="MovedFileFromTo" xml:space="preserve">
+    <value>Moved {0} to {1}</value>
+  </data>
+  <data name="MovedFilesFromAndDirectoriesTo" xml:space="preserve">
+    <value>Moved {0} files and {1} directories to {2}</value>
+  </data>
+  <data name="MovingFileFromTo" xml:space="preserve">
+    <value>Moving {0} to {1}</value>
+  </data>
+  <data name="MovingFromFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Moving {0} files and {1} directories to {2}</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="NewDirectory" xml:space="preserve">
     <value>New Directory</value>
   </data>
-  <data name="NEW_TAB" xml:space="preserve">
+  <data name="NewTab" xml:space="preserve">
     <value>New tab</value>
   </data>
-  <data name="OPEN" xml:space="preserve">
+  <data name="Open" xml:space="preserve">
     <value>Open</value>
   </data>
-  <data name="ORIGIN_FILE" xml:space="preserve">
+  <data name="OriginalFile" xml:space="preserve">
     <value>Original file</value>
   </data>
-  <data name="OVERWRITE_OPTIONS_TITLE" xml:space="preserve">
+  <data name="OverwriteOptionsTitle" xml:space="preserve">
     <value>Overwrite options</value>
   </data>
-  <data name="PATH" xml:space="preserve">
+  <data name="Path" xml:space="preserve">
     <value>Path</value>
   </data>
-  <data name="PERMAMENTLY_REMOVE" xml:space="preserve">
+  <data name="PermamentlyRemoveFiles" xml:space="preserve">
     <value>Do you want to permanently remove these {0} files?</value>
   </data>
-  <data name="REMOVE" xml:space="preserve">
+  <data name="Remove" xml:space="preserve">
     <value>Remove</value>
   </data>
-  <data name="REMOVING_TO_TRASH" xml:space="preserve">
+  <data name="RemovingFileFromTo" xml:space="preserve">
+    <value>Removing {0} from {1}</value>
+  </data>
+  <data name="RemovingFilesAndDirectoriesFrom" xml:space="preserve">
+    <value>Removing {0} files and {1} directories from {2}</value>
+  </data>
+  <data name="RemovingFilesToTrash" xml:space="preserve">
     <value>Do you want to remove these {0} files to trash?</value>
   </data>
-  <data name="RENAME" xml:space="preserve">
+  <data name="Rename" xml:space="preserve">
     <value>Rename</value>
   </data>
-  <data name="REPLACE" xml:space="preserve">
+  <data name="Replace" xml:space="preserve">
     <value>Replace</value>
   </data>
-  <data name="REPLACE_FILE" xml:space="preserve">
+  <data name="ReplaceFile" xml:space="preserve">
     <value>Replace file</value>
   </data>
-  <data name="REPLACE_FILE_DESTINATION_DIRECTORY" xml:space="preserve">
+  <data name="ReplaceFileDestinationDirectory" xml:space="preserve">
     <value>Another file with the same name already exists in "{0}" Do you want to replace it?</value>
   </data>
-  <data name="REPLACE_IF_FOLDER" xml:space="preserve">
+  <data name="ReplaceIfOlder" xml:space="preserve">
     <value>Replace if older</value>
   </data>
-  <data name="REPLACE_WITH" xml:space="preserve">
+  <data name="ReplaceWith" xml:space="preserve">
     <value>Replace with</value>
   </data>
-  <data name="SELECT_NEW_NAME_FOR_DESTINATION" xml:space="preserve">
+  <data name="SelectFromFilesAndDirectories" xml:space="preserve">
+    <value>{0} files ({1}) and {2} directories</value>
+  </data>
+  <data name="SelectNewNameForDestination" xml:space="preserve">
     <value>Select a new name for the destination</value>
   </data>
-  <data name="SETTINGS_TITLE" xml:space="preserve">
+  <data name="SettingsTitle" xml:space="preserve">
     <value>Settings</value>
   </data>
-  <data name="SIZE" xml:space="preserve">
+  <data name="ShowProperties" xml:space="preserve">
+    <value>Show properties</value>
+  </data>
+  <data name="Size" xml:space="preserve">
     <value>Size</value>
   </data>
-  <data name="SKIP" xml:space="preserve">
+  <data name="Skip" xml:space="preserve">
     <value>Skip</value>
   </data>
-  <data name="TERMINAL" xml:space="preserve">
+  <data name="Terminal" xml:space="preserve">
     <value>Terminal</value>
   </data>
 </root>

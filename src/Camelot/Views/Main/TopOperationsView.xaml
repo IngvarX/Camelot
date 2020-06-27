@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:p="clr-namespace:Camelot.Properties"
              xmlns:mainWindow="clr-namespace:Camelot.ViewModels.Implementations.MainWindow;assembly=Camelot.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Camelot.Views.Main.TopOperationsView">
@@ -19,7 +20,7 @@
                     </DrawingPresenter.Drawing>
                 </DrawingPresenter>
 
-                <TextBlock Text="Terminal" />
+                <TextBlock Text="{x:Static p:Resources.Terminal}" />
             </StackPanel>
         </Button>
     </StackPanel>

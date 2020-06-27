@@ -63,396 +63,657 @@ namespace Camelot.Properties {
         /// <summary>
         ///   Looks up a localized string similar to About Camelot.
         /// </summary>
-        public static string ABOUT_CAMELOT_TITLE {
+        public static string AboutCamelotTitle {
             get {
-                return ResourceManager.GetString("ABOUT_CAMELOT_TITLE", resourceCulture);
+                return ResourceManager.GetString("AboutCamelotTitle", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Camelot is dual-panel file manager written in C#.
         /// </summary>
-        public static string ABOUT_PAGE {
+        public static string AboutPage {
             get {
-                return ResourceManager.GetString("ABOUT_PAGE", resourceCulture);
+                return ResourceManager.GetString("AboutPage", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Apply.
         /// </summary>
-        public static string APPLY {
+        public static string Apply {
             get {
-                return ResourceManager.GetString("APPLY", resourceCulture);
+                return ResourceManager.GetString("Apply", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Apply this action to the all files and folders.
         /// </summary>
-        public static string APPLY_ACTION_FOR_ALL_FILES_AND_FOLDERS {
+        public static string ApplyActionForTheAllFilesAndFolders {
             get {
-                return ResourceManager.GetString("APPLY_ACTION_FOR_ALL_FILES_AND_FOLDERS", resourceCulture);
+                return ResourceManager.GetString("ApplyActionForTheAllFilesAndFolders", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Arguments.
+        /// </summary>
+        public static string Arguments {
+            get {
+                return ResourceManager.GetString("Arguments", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
-        public static string CANCEL {
+        public static string Cancel {
             get {
-                return ResourceManager.GetString("CANCEL", resourceCulture);
+                return ResourceManager.GetString("Cancel", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
-        public static string CLOSE {
+        public static string Close {
             get {
-                return ResourceManager.GetString("CLOSE", resourceCulture);
+                return ResourceManager.GetString("Close", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Close all but this.
         /// </summary>
-        public static string CLOSE_All_BUT_THIS {
+        public static string CloseAllButThis {
             get {
-                return ResourceManager.GetString("CLOSE_All_BUT_THIS", resourceCulture);
+                return ResourceManager.GetString("CloseAllButThis", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Close tab.
         /// </summary>
-        public static string CLOSE_TAB {
+        public static string CloseTab {
             get {
-                return ResourceManager.GetString("CLOSE_TAB", resourceCulture);
+                return ResourceManager.GetString("CloseTab", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Close tabs to the left.
         /// </summary>
-        public static string CLOSE_TABS_TO_THE_LEFT {
+        public static string CloseTabsToTheLeft {
             get {
-                return ResourceManager.GetString("CLOSE_TABS_TO_THE_LEFT", resourceCulture);
+                return ResourceManager.GetString("CloseTabsToTheLeft", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Close tabs to the right.
         /// </summary>
-        public static string CLOSE_TABS_TO_THE_RIGHT {
+        public static string CloseTabsToTheRight {
             get {
-                return ResourceManager.GetString("CLOSE_TABS_TO_THE_RIGHT", resourceCulture);
+                return ResourceManager.GetString("CloseTabsToTheRight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Command.
+        /// </summary>
+        public static string Command {
+            get {
+                return ResourceManager.GetString("Command", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copied {0} to {1}.
+        /// </summary>
+        public static string CopiedFileFromTo {
+            get {
+                return ResourceManager.GetString("CopiedFileFromTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copied {0} files and {1} directories to {2}.
+        /// </summary>
+        public static string CopiedFilesFromAndDirectoriesTo {
+            get {
+                return ResourceManager.GetString("CopiedFilesFromAndDirectoriesTo", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Copy.
         /// </summary>
-        public static string COPY {
+        public static string Copy {
             get {
-                return ResourceManager.GetString("COPY", resourceCulture);
+                return ResourceManager.GetString("Copy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copying {0} to {1}.
+        /// </summary>
+        public static string CopyingFileFromTo {
+            get {
+                return ResourceManager.GetString("CopyingFileFromTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copying {0} files and {1} directories to {2}.
+        /// </summary>
+        public static string CopyingFilesFromAndDirectoriesTo {
+            get {
+                return ResourceManager.GetString("CopyingFilesFromAndDirectoriesTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy to clipboard.
+        /// </summary>
+        public static string CopyToClipboard {
+            get {
+                return ResourceManager.GetString("CopyToClipboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create.
+        /// </summary>
+        public static string Create {
+            get {
+                return ResourceManager.GetString("Create", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Create directory.
         /// </summary>
-        public static string CREATE_DIRECTORY_TITLE {
+        public static string CreateDirectoryTitle {
             get {
-                return ResourceManager.GetString("CREATE_DIRECTORY_TITLE", resourceCulture);
+                return ResourceManager.GetString("CreateDirectoryTitle", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Creation date.
         /// </summary>
-        public static string CREATION_DATE {
+        public static string CreationDate {
             get {
-                return ResourceManager.GetString("CREATION_DATE", resourceCulture);
+                return ResourceManager.GetString("CreationDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date.
+        /// </summary>
+        public static string Date {
+            get {
+                return ResourceManager.GetString("Date", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Delete.
         /// </summary>
-        public static string DELETE {
+        public static string Delete {
             get {
-                return ResourceManager.GetString("DELETE", resourceCulture);
+                return ResourceManager.GetString("Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deleted {0} from {1}.
+        /// </summary>
+        public static string DeletedFileFromTo {
+            get {
+                return ResourceManager.GetString("DeletedFileFromTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deleted {0} files and {1} directories from {2}.
+        /// </summary>
+        public static string DeletedFilesAndDirectories {
+            get {
+                return ResourceManager.GetString("DeletedFilesAndDirectories", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Directory.
+        /// </summary>
+        public static string Directory {
+            get {
+                return ResourceManager.GetString("Directory", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Directory information.
         /// </summary>
-        public static string DIRECTORY_INFORMATION_TITLE {
+        public static string DirectoryInformationTitle {
             get {
-                return ResourceManager.GetString("DIRECTORY_INFORMATION_TITLE", resourceCulture);
+                return ResourceManager.GetString("DirectoryInformationTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;DIR&gt;.
+        /// </summary>
+        public static string DirectoryTemplate {
+            get {
+                return ResourceManager.GetString("DirectoryTemplate", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Enter directory name.
         /// </summary>
-        public static string ENTER_DIRECTORY_NAME {
+        public static string EnterDirectoryName {
             get {
-                return ResourceManager.GetString("ENTER_DIRECTORY_NAME", resourceCulture);
+                return ResourceManager.GetString("EnterDirectoryName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Extension.
+        /// </summary>
+        public static string Extension {
+            get {
+                return ResourceManager.GetString("Extension", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to copy {0} to {1}.
+        /// </summary>
+        public static string FailedCopyFileFromTo {
+            get {
+                return ResourceManager.GetString("FailedCopyFileFromTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to copy {0} files and {1} directories to {2}.
+        /// </summary>
+        public static string FailedCopyFromFilesAndDirectoriesTo {
+            get {
+                return ResourceManager.GetString("FailedCopyFromFilesAndDirectoriesTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to delete {0} from {1}.
+        /// </summary>
+        public static string FailedToDeleteFileFromTo {
+            get {
+                return ResourceManager.GetString("FailedToDeleteFileFromTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to delete {0} files and {1} directories from {2}.
+        /// </summary>
+        public static string FailedToDeleteFilesAndDirectoriesFrom {
+            get {
+                return ResourceManager.GetString("FailedToDeleteFilesAndDirectoriesFrom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to move {0} to {1}.
+        /// </summary>
+        public static string FailedToMoveFileFromTo {
+            get {
+                return ResourceManager.GetString("FailedToMoveFileFromTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to move {0} files and {1} directories to {2}.
+        /// </summary>
+        public static string FailedToMoveFilesAndDirectoriesTo {
+            get {
+                return ResourceManager.GetString("FailedToMoveFilesAndDirectoriesTo", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to File information.
         /// </summary>
-        public static string FILE_INFORMATION_TITLE {
+        public static string FileInformationTitle {
             get {
-                return ResourceManager.GetString("FILE_INFORMATION_TITLE", resourceCulture);
+                return ResourceManager.GetString("FileInformationTitle", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Files removing confirmation.
         /// </summary>
-        public static string FILES_REMOVING_CONFIRMATION_TITLE {
+        public static string FilesRemovingConfirmationTitle {
             get {
-                return ResourceManager.GetString("FILES_REMOVING_CONFIRMATION_TITLE", resourceCulture);
+                return ResourceManager.GetString("FilesRemovingConfirmationTitle", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Github.
         /// </summary>
-        public static string GITHUB {
+        public static string Github {
             get {
-                return ResourceManager.GetString("GITHUB", resourceCulture);
+                return ResourceManager.GetString("Github", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Last access.
         /// </summary>
-        public static string LAST_ACCESS {
+        public static string LastAccess {
             get {
-                return ResourceManager.GetString("LAST_ACCESS", resourceCulture);
+                return ResourceManager.GetString("LastAccess", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Last modification.
         /// </summary>
-        public static string LAST_MODIFICATION {
+        public static string LastModification {
             get {
-                return ResourceManager.GetString("LAST_MODIFICATION", resourceCulture);
+                return ResourceManager.GetString("LastModification", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Last modified.
         /// </summary>
-        public static string LAST_MODIFIED {
+        public static string LastModified {
             get {
-                return ResourceManager.GetString("LAST_MODIFIED", resourceCulture);
+                return ResourceManager.GetString("LastModified", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Maintainers.
         /// </summary>
-        public static string MAINTENERS {
+        public static string Maintainers {
             get {
-                return ResourceManager.GetString("MAINTENERS", resourceCulture);
+                return ResourceManager.GetString("Maintainers", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Move.
         /// </summary>
-        public static string MOVE {
+        public static string Move {
             get {
-                return ResourceManager.GetString("MOVE", resourceCulture);
+                return ResourceManager.GetString("Move", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Moved {0} to {1}.
+        /// </summary>
+        public static string MovedFileFromTo {
+            get {
+                return ResourceManager.GetString("MovedFileFromTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Moved {0} files and {1} directories to {2}.
+        /// </summary>
+        public static string MovedFilesFromAndDirectoriesTo {
+            get {
+                return ResourceManager.GetString("MovedFilesFromAndDirectoriesTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Moving {0} to {1}.
+        /// </summary>
+        public static string MovingFileFromTo {
+            get {
+                return ResourceManager.GetString("MovingFileFromTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Moving {0} files and {1} directories to {2}.
+        /// </summary>
+        public static string MovingFromFilesAndDirectoriesTo {
+            get {
+                return ResourceManager.GetString("MovingFromFilesAndDirectoriesTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        public static string Name {
+            get {
+                return ResourceManager.GetString("Name", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to New Directory.
         /// </summary>
-        public static string NEW_DIRECTORY {
+        public static string NewDirectory {
             get {
-                return ResourceManager.GetString("NEW_DIRECTORY", resourceCulture);
+                return ResourceManager.GetString("NewDirectory", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to New tab.
         /// </summary>
-        public static string NEW_TAB {
+        public static string NewTab {
             get {
-                return ResourceManager.GetString("NEW_TAB", resourceCulture);
+                return ResourceManager.GetString("NewTab", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Open.
         /// </summary>
-        public static string OPEN {
+        public static string Open {
             get {
-                return ResourceManager.GetString("OPEN", resourceCulture);
+                return ResourceManager.GetString("Open", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Original file.
         /// </summary>
-        public static string ORIGIN_FILE {
+        public static string OriginalFile {
             get {
-                return ResourceManager.GetString("ORIGIN_FILE", resourceCulture);
+                return ResourceManager.GetString("OriginalFile", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Overwrite options.
         /// </summary>
-        public static string OVERWRITE_OPTIONS_TITLE {
+        public static string OverwriteOptionsTitle {
             get {
-                return ResourceManager.GetString("OVERWRITE_OPTIONS_TITLE", resourceCulture);
+                return ResourceManager.GetString("OverwriteOptionsTitle", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Path.
         /// </summary>
-        public static string PATH {
+        public static string Path {
             get {
-                return ResourceManager.GetString("PATH", resourceCulture);
+                return ResourceManager.GetString("Path", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Do you want to permanently remove these {0} files?.
         /// </summary>
-        public static string PERMAMENTLY_REMOVE {
+        public static string PermamentlyRemoveFiles {
             get {
-                return ResourceManager.GetString("PERMAMENTLY_REMOVE", resourceCulture);
+                return ResourceManager.GetString("PermamentlyRemoveFiles", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Remove.
         /// </summary>
-        public static string REMOVE {
+        public static string Remove {
             get {
-                return ResourceManager.GetString("REMOVE", resourceCulture);
+                return ResourceManager.GetString("Remove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Removing {0} from {1}.
+        /// </summary>
+        public static string RemovingFileFromTo {
+            get {
+                return ResourceManager.GetString("RemovingFileFromTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Removing {0} files and {1} directories from {2}.
+        /// </summary>
+        public static string RemovingFilesAndDirectoriesFrom {
+            get {
+                return ResourceManager.GetString("RemovingFilesAndDirectoriesFrom", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Do you want to remove these {0} files to trash?.
         /// </summary>
-        public static string REMOVING_TO_TRASH {
+        public static string RemovingFilesToTrash {
             get {
-                return ResourceManager.GetString("REMOVING_TO_TRASH", resourceCulture);
+                return ResourceManager.GetString("RemovingFilesToTrash", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Rename.
         /// </summary>
-        public static string RENAME {
+        public static string Rename {
             get {
-                return ResourceManager.GetString("RENAME", resourceCulture);
+                return ResourceManager.GetString("Rename", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Replace.
         /// </summary>
-        public static string REPLACE {
+        public static string Replace {
             get {
-                return ResourceManager.GetString("REPLACE", resourceCulture);
+                return ResourceManager.GetString("Replace", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Replace file.
         /// </summary>
-        public static string REPLACE_FILE {
+        public static string ReplaceFile {
             get {
-                return ResourceManager.GetString("REPLACE_FILE", resourceCulture);
+                return ResourceManager.GetString("ReplaceFile", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Another file with the same name already exists in &quot;{0}&quot; Do you want to replace it?.
         /// </summary>
-        public static string REPLACE_FILE_DESTINATION_DIRECTORY {
+        public static string ReplaceFileDestinationDirectory {
             get {
-                return ResourceManager.GetString("REPLACE_FILE_DESTINATION_DIRECTORY", resourceCulture);
+                return ResourceManager.GetString("ReplaceFileDestinationDirectory", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Replace if older.
         /// </summary>
-        public static string REPLACE_IF_FOLDER {
+        public static string ReplaceIfOlder {
             get {
-                return ResourceManager.GetString("REPLACE_IF_FOLDER", resourceCulture);
+                return ResourceManager.GetString("ReplaceIfOlder", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Replace with.
         /// </summary>
-        public static string REPLACE_WITH {
+        public static string ReplaceWith {
             get {
-                return ResourceManager.GetString("REPLACE_WITH", resourceCulture);
+                return ResourceManager.GetString("ReplaceWith", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} files ({1}) and {2} directories.
+        /// </summary>
+        public static string SelectFromFilesAndDirectories {
+            get {
+                return ResourceManager.GetString("SelectFromFilesAndDirectories", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Select a new name for the destination.
         /// </summary>
-        public static string SELECT_NEW_NAME_FOR_DESTINATION {
+        public static string SelectNewNameForDestination {
             get {
-                return ResourceManager.GetString("SELECT_NEW_NAME_FOR_DESTINATION", resourceCulture);
+                return ResourceManager.GetString("SelectNewNameForDestination", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Settings.
         /// </summary>
-        public static string SETTINGS_TITLE {
+        public static string SettingsTitle {
             get {
-                return ResourceManager.GetString("SETTINGS_TITLE", resourceCulture);
+                return ResourceManager.GetString("SettingsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show properties.
+        /// </summary>
+        public static string ShowProperties {
+            get {
+                return ResourceManager.GetString("ShowProperties", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Size.
         /// </summary>
-        public static string SIZE {
+        public static string Size {
             get {
-                return ResourceManager.GetString("SIZE", resourceCulture);
+                return ResourceManager.GetString("Size", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Skip.
         /// </summary>
-        public static string SKIP {
+        public static string Skip {
             get {
-                return ResourceManager.GetString("SKIP", resourceCulture);
+                return ResourceManager.GetString("Skip", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Terminal.
         /// </summary>
-        public static string TERMINAL {
+        public static string Terminal {
             get {
-                return ResourceManager.GetString("TERMINAL", resourceCulture);
+                return ResourceManager.GetString("Terminal", resourceCulture);
             }
         }
     }

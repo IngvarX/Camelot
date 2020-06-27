@@ -8,7 +8,7 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         Width="800" Height="500"
         x:Class="Camelot.Views.Main.Dialogs.SettingsDialog"
-        Title="{x:Static p:Resources.SETTINGS_TITLE}">
+        Title="{x:Static p:Resources.SettingsTitle}">
 
     <Design.DataContext>
         <dialogs:SettingsDialogViewModel />
@@ -27,7 +27,7 @@
                                     </DrawingPresenter.Drawing>
                                 </DrawingPresenter>
 
-                                <TextBlock Classes="settingsTabTextBlock" Text="{x:Static p:Resources.TERMINAL}" />
+                                <TextBlock Classes="settingsTabTextBlock" Text="{x:Static p:Resources.Terminal}" />
                             </StackPanel>
                         </Border>
                     </TabItem.Header>
@@ -41,8 +41,8 @@
             </TabControl>
 
             <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Classes="dialogButton cancelDialogButton" Content="{x:Static p:Resources.CLOSE}" Command="{Binding CloseCommand}" />
-                <Button Classes="dialogButton applyDialogButton" Content="{x:Static p:Resources.APPLY}" Command="{Binding SaveCommand}" />
+                <Button Classes="dialogButton cancelDialogButton" Content="{x:Static p:Resources.Close}" Command="{Binding CloseCommand}" />
+                <Button Classes="dialogButton applyDialogButton" Content="{x:Static p:Resources.Apply}" Command="{Binding SaveCommand}" />
             </StackPanel>
         </Grid>
     </Border>
