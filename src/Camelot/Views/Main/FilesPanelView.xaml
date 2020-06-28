@@ -6,17 +6,12 @@
              xmlns:filePanels="clr-namespace:Camelot.ViewModels.Implementations.MainWindow.FilePanels;assembly=Camelot.ViewModels"
              xmlns:controls="clr-namespace:Camelot.Views.Main.Controls"
              xmlns:views="clr-namespace:Camelot.Views"
-             xmlns:converters="clr-namespace:Camelot.Converters"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Camelot.Views.Main.FilesPanelView">
 
     <Design.DataContext>
         <filePanels:FilesPanelViewModel />
     </Design.DataContext>
-    
-    <UserControl.Resources>
-        <converters:TextFormatConverter x:Key="TextFormatConverter" />
-    </UserControl.Resources>
   
     <Grid Classes="defaultBackgroundColor">
         <Grid.RowDefinitions>
@@ -263,7 +258,7 @@
             <Border Classes="selectionBorder" IsVisible="{Binding AreAnyFileSystemNodesSelected}">
                 <TextBlock Classes="selectionInfoTextBlock">
                     <TextBlock.Text>
-                        <MultiBinding Converter="{StaticResource TextFormatConverter}" ConverterParameter="{x:Static p:Resources.SelectFromFilesAndDirectories}">
+                        <MultiBinding StringFormat="{x:Static p:Resources.SelectFromFilesAndDirectories}">
                             <Binding Path="SelectedFilesCount" />
                             <Binding Path="SelectedFilesSize" />
                             <Binding Path="SelectedDirectoriesCount" />
