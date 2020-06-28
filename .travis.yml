@@ -11,3 +11,4 @@ script:
   - dotnet test --configuration Release --no-build /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
 after_script:
   - bash <(curl -s https://codecov.io/bash)
+  
