@@ -70,14 +70,14 @@
         <Setter Property="Padding" Value="10,6" />
         <Setter Property="FontFamily" Value="SansSerif" />
     </Style>
-
-    <Style Selector="MenuItem:pointerover">
-        <Setter Property="Foreground" Value="{DynamicResource WhiteBrush}" />
-    </Style>
+    <!-- -->
+    <!-- <Style Selector="MenuItem:pointerover"> -->
+    <!--     <Setter Property="Foreground" Value="{DynamicResource WhiteBrush}" /> -->
+    <!-- </Style> -->
 
     <Style Selector="Grid#OverlayGrid">
         <Setter Property="ZIndex" Value="-1" />
-        <Setter Property="Background" Value="Black" />
+        <Setter Property="Background" Value="{DynamicResource BlackBrush}" />
         <Setter Property="Opacity" Value="0.2" />
     </Style>
 
@@ -130,7 +130,7 @@
 
     <Style Selector="Border#OperationsBorder">
         <Setter Property="Padding" Value="20" />
-        <Setter Property="Background" Value="{DynamicResource OperationsStateBackgroundBrush}" />
+        <!-- <Setter Property="Background" Value="{DynamicResource OperationsStateBackgroundBrush}" /> -->
     </Style>
 
     <Style Selector="TextBlock.operationStatusTextBlock">
@@ -171,21 +171,21 @@
         <Setter Property="FontWeight" Value="Bold" />
     </Style>
 
-    <Style Selector="Border.defaultBackgroundBorder">
-        <Setter Property="Background" Value="{DynamicResource MainBackgroundColorBrush}" />
-    </Style>
+    <!-- <Style Selector="Border.defaultBackgroundBorder"> -->
+    <!--     <Setter Property="Background" Value="{DynamicResource MainBackgroundColorBrush}" /> -->
+    <!-- </Style> -->
 
     <Style Selector="Border.settingsContentBorder">
         <Setter Property="BorderThickness" Value="1,0,0,0" />
     </Style>
 
     <Style Selector="Button.topOperationButton">
-        <Setter Property="Foreground" Value="{DynamicResource HighlightBrush}" />
+        <!-- <Setter Property="Foreground" Value="{DynamicResource HighlightBrush}" /> -->
         <Setter Property="FontSize" Value="20" />
     </Style>
 
     <Style Selector="Button.topOperationButton:pointerover">
-        <Setter Property="Foreground" Value="{DynamicResource IconButtonHoverForegroundColorBrush}" />
+        <!-- <Setter Property="Foreground" Value="{DynamicResource IconButtonHoverForegroundColorBrush}" /> -->
     </Style>
 
     <Style Selector="TextBox.settingsTextBox">
@@ -238,6 +238,137 @@
                 </DataTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
+
+    <!-- FIXME -->
+    <Style Selector="DataGridRow">
+        <Setter Property="Foreground" Value="{DynamicResource WhiteBrush}" />
+        <Setter Property="Opacity" Value="0.7" />
+        <Setter Property="FontSize" Value="18" />
+    </Style>
+
+    <Style Selector="DataGridRow:pointerover /template/ Rectangle#BackgroundRectangle">
+        <Setter Property="IsVisible" Value="False"/>
+    </Style>
+
+    <Style Selector="DataGridRow:selected /template/ Rectangle#BackgroundRectangle">
+        <Setter Property="Fill" Value="{DynamicResource HighlightBrush}" />
+    </Style>
+
+    <Style Selector="DataGridRow:selected">
+        <Setter Property="Opacity" Value="1" />
+    </Style>
+
+    <Style Selector="DataGrid#FilesDataGrid">
+        <Setter Property="RowBackground" Value="{DynamicResource MainBackgroundColorBrush}" />
+    </Style>
+
+    <Style Selector="Button.operationButton">
+        <Setter Property="Background" Value="{DynamicResource OperationButtonBackgroundColorBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource OperationButtonForegroundColorBrush}" />
+    </Style>
+
+    <Style Selector="Button.operationButton:pointerover">
+        <Setter Property="Background" Value="{DynamicResource OperationButtonHoverBackgroundColorBrush}" />
+    </Style>
+
+    <Style Selector="Button.iconButton">
+        <Setter Property="Opacity" Value="0.8" />
+    </Style>
+
+    <Style Selector="Button.iconButton:pointerover">
+        <Setter Property="Opacity" Value="0.9" />
+    </Style>
+
+    <Style Selector="TextBox">
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Background" Value="{DynamicResource DirectoryTextBoxBackgroundColorBrush}" />
+    </Style>
+
+    <Style Selector="Border.tabBorder">
+        <Setter Property="BorderBrush" Value="{DynamicResource TabButtonBorderColorBrush}" />
+    </Style>
+
+    <!-- FIXME -->
+    <Style Selector="Rectangle.tabRectangleGloballyActive">
+        <Setter Property="Fill" Value="{DynamicResource OrangeBrush}" />
+    </Style>
+
+    <!-- FIXME -->
+    <Style Selector="Rectangle.tabRectangleActive">
+        <Setter Property="Fill" Value="{DynamicResource LightGreyBrush}" />
+    </Style>
+
+    <!-- FIXME -->
+    <Style Selector="Border.selectionBorder">
+        <Setter Property="Background" Value="{DynamicResource OrangeBrush}" />
+        <Setter Property="Margin" Value="5" />
+        <Setter Property="Padding" Value="5,2" />
+        <Setter Property="CornerRadius" Value="5" />
+    </Style>
+
+    <!-- FIXME -->
+    <Style Selector="Grid.inactiveTabGrid">
+        <Setter Property="Background" Value="{DynamicResource DirectoryTextBoxBackgroundColorBrush}" />
+    </Style>
+
+    <!-- <Style Selector="Grid.activeTabGrid"> -->
+    <!--     <Setter Property="Background" Value="{DynamicResource MainBackgroundColorBrush}" /> -->
+    <!-- </Style> -->
+
+    <Style Selector="TextBlock.inactiveTabNameTextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource InactiveTabForegroundBrush}" />
+    </Style>
+
+    <Style Selector="DockPanel#MenuDockPanel">
+        <Setter Property="Background" Value="{DynamicResource MenuBackgroundColorBrush}" />
+    </Style>
+
+    <Style Selector="TextBlock.dataGridColumnHeaderTextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource InactiveTabForegroundBrush}" />
+    </Style>
+
+    <!-- FIXME -->
+    <Style Selector="Button.dialogButton">
+        <Setter Property="Background" Value="{DynamicResource OrangeBrush}" />
+    </Style>
+
+    <Style Selector="Button.dialogButton:pointerover">
+        <Setter Property="Foreground" Value="{DynamicResource IconButtonHoverForegroundColorBrush}" />
+    </Style>
+
+    <Style Selector="Button.alternativeColorDialogButton">
+        <Setter Property="Background" Value="{DynamicResource OperationButtonHoverBackgroundColorBrush}" />
+    </Style>
+
+    <Style Selector="Button.tabButton:pointerover TextBlock.inactiveTabNameTextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource IconButtonHoverForegroundColorBrush}" />
+    </Style>
+
+    <Style Selector="Button.cancelDialogButton">
+        <Setter Property="Background" Value="{DynamicResource AlternativeMainBackgroundColorBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderBrush" Value="{DynamicResource IconButtonHoverForegroundColorBrush}" />
+    </Style>
+
+    <Style Selector="Button.applyDialogButton">
+        <Setter Property="Background" Value="{DynamicResource ProgressBarForegroundBrush}" />
+    </Style>
+
+    <Style Selector="TabItem:selected">
+        <Setter Property="Background" Value="{DynamicResource MainBackgroundColorBrush}" />
+    </Style>
+
+    <!-- FIXME -->
+    <Style Selector="TabItem:selected Border.settingsTabHeaderBorder">
+        <Setter Property="Background" Value="{DynamicResource OrangeBrush}" />
+        <Setter Property="Padding" Value="5,5,10,5" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="Margin" Value="0,0,10,0" />
+    </Style>
+
+    <Style Selector="Border.settingsContentBorder">
+        <Setter Property="BorderBrush" Value="{DynamicResource DirectoryTextBoxBackgroundColorBrush}" />
     </Style>
 
 </Styles>
