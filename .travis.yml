@@ -5,6 +5,13 @@ before_script:
   - dotnet restore
   - dotnet build --configuration Release
 script:  
-  - dotnet test --configuration Release --collect:"XPlat Code Coverage" --no-build /p:CoverletOutputFormat=opencover
+  - dotnet test --configuration Release --no-build --collect:"XPlat Code Coverage" /p:CoverletOutputFormat=opencover
 after_script:
   - bash <(curl -s https://codecov.io/bash)
+notifications:
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/6baa8a965e7042d2c9fb
+    on_success: change
+    on_failure: always
+    on_start: never

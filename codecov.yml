@@ -5,9 +5,9 @@ coverage:
         url: "https://webhooks.gitter.im/e/2d29954fe429b3fc68af"
         threshold: 1%
 ignore:
-  - "src/Camelot"
-  - "src/Camelot.Avalonia"
-  - "src/Camelot.DataAccess"
-  - "src/Camelot.DataAccess.Models"
-  - "src/Camelot.DataAccess.LiteDb"
-  - "src/Camelot.Services.Environment"
+  - "src/Camelot/**/*"
+  - "src/Camelot.Avalonia/**/*"
+  - "src/Camelot.DataAccess.Models/*"
+  - "src/Camelot.DataAccess.LiteDb/**/*"
+  - "src/Camelot.DataAccess/**/*"
+  - "src/Camelot.Services.Environment/**/*"
