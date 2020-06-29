@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:p="clr-namespace:Camelot.Properties"
              xmlns:menu="clr-namespace:Camelot.ViewModels.Implementations.Menu;assembly=Camelot.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Camelot.Views.Main.MenuView">
@@ -12,16 +13,16 @@
 
     <DockPanel Name="MenuDockPanel">
         <Menu DockPanel.Dock="Top">
-            <MenuItem Header="_File">
-                <MenuItem Header="_Exit" Command="{Binding ExitCommand}" />
+            <MenuItem Header="{x:Static p:Resources.FileHeader}">
+                <MenuItem Header="{x:Static p:Resources.ExitHeader}" Command="{Binding ExitCommand}" />
             </MenuItem>
 
-            <MenuItem Header="_Configuration">
-                <MenuItem Header="_Settings" Command="{Binding OpenSettingsCommand}" />
+            <MenuItem Header="{x:Static p:Resources.ConfigurationHeader}">
+                <MenuItem Header="{x:Static p:Resources.SettingsHeader}" Command="{Binding OpenSettingsCommand}" />
             </MenuItem>
 
-            <MenuItem Header="_Help">
-                <MenuItem Header="_About" Command="{Binding AboutCommand}" />
+            <MenuItem Header="{x:Static p:Resources.HelpHeader}">
+                <MenuItem Header="{x:Static p:Resources.AboutHeader}" Command="{Binding AboutCommand}" />
             </MenuItem>
         </Menu>
     </DockPanel>
