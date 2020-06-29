@@ -5,6 +5,6 @@ before_script:
   - dotnet restore
   - dotnet build --configuration Release
 script:  
-  - dotnet test --configuration Release --collect:"XPlat Code Coverage" --no-build /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+  - dotnet test --configuration Release --collect:"XPlat Code Coverage" --no-build /p:CoverletOutputFormat=opencover
 after_script:
   - bash <(curl -s https://codecov.io/bash)

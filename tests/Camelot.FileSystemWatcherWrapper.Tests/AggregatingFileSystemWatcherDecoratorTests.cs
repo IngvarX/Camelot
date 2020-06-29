@@ -370,6 +370,42 @@ namespace Camelot.FileSystemWatcherWrapper.Tests
             Assert.False(isCallbackCalled);
         }
 
+        [Fact]
+        public async Task TestCleanup()
+        {
+            var fileSystemWatcherWrapperMock = new Mock<IFileSystemWatcher>();
+            fileSystemWatcherWrapperMock
+                .Setup(m => m.Dispose())
+                .Verifiable();
+            fileSystemWatcherWrapperMock
+                .Setup(m => m.StopRaisingEvents())
+                .Verifiable();
+            var pathServiceMock = new Mock<IPathService>();
+            var configuration = GetConfiguration();
+
+            var decorator = new AggregatingFileSystemWatcherDecorator(pathServiceMock.Object,
+                fileSystemWatcherWrapperMock.Object, configuration);
+
+            var isCallbackCalled = false;
+            decorator.Changed += (sender, args) => isCallbackCalled = true;
+
+            decorator.StopRaisingEvents();
+            decorator.Dispose();
+
+            for (var i = 0; i < 10; i++)
+            {
+                var changedArgs = new FileSystemEventArgs(WatcherChangeTypes.Changed, DirectoryPath, FileName);
+                fileSystemWatcherWrapperMock.Raise(m => m.Changed += null, changedArgs);
+            }
+
+            await Task.Delay(DelayIntervalMs);
+
+            Assert.False(isCallbackCalled);
+
+            fileSystemWatcherWrapperMock.Verify(m => m.StopRaisingEvents(), Times.Once);
+            fileSystemWatcherWrapperMock.Verify(m => m.Dispose(), Times.Once);
+        }
+
         private static FileSystemWatcherConfiguration GetConfiguration() => new FileSystemWatcherConfiguration
         {
             RefreshIntervalMs = RefreshIntervalMs
