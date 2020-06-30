@@ -70,10 +70,6 @@
         <Setter Property="Padding" Value="10,6" />
         <Setter Property="FontFamily" Value="SansSerif" />
     </Style>
-    <!-- -->
-    <!-- <Style Selector="MenuItem:pointerover"> -->
-    <!--     <Setter Property="Foreground" Value="{DynamicResource WhiteBrush}" /> -->
-    <!-- </Style> -->
 
     <Style Selector="Grid#OverlayGrid">
         <Setter Property="ZIndex" Value="-1" />
@@ -83,6 +79,11 @@
 
     <Style Selector="TextBox#DirectoryNameTextBox">
         <Setter Property="Margin" Value="0,10" />
+    </Style>
+
+    <!-- FIXME -->
+    <Style Selector="MenuItem:selected">
+        <Setter Property="Foreground" Value="{DynamicResource WhiteBrush}"/>
     </Style>
 
     <Style Selector="Button.dialogButton">
@@ -109,12 +110,6 @@
         <Setter Property="FontFamily" Value="SansSerif" />
         <Setter Property="FontSize" Value="16" />
         <Setter Property="Margin" Value="0,5" />
-    </Style>
-
-    <Style Selector="TextBlock.filePanelTextBlock">
-        <Setter Property="FontFamily" Value="SansSerif" />
-        <Setter Property="FontSize" Value="16" />
-        <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
 
     <Style Selector="TextBlock.tabNameTextBlock">
@@ -240,9 +235,7 @@
         </Setter>
     </Style>
 
-    <!-- FIXME -->
     <Style Selector="DataGridRow">
-        <Setter Property="Foreground" Value="{DynamicResource WhiteBrush}" />
         <Setter Property="Opacity" Value="0.7" />
         <Setter Property="FontSize" Value="18" />
     </Style>
@@ -252,15 +245,19 @@
     </Style>
 
     <Style Selector="DataGridRow:pointerover /template/ Rectangle#BackgroundRectangle">
-        <Setter Property="IsVisible" Value="False"/>
+        <Setter Property="IsVisible" Value="False" />
     </Style>
 
     <Style Selector="DataGridRow:selected">
         <Setter Property="Opacity" Value="1" />
     </Style>
 
-    <Style Selector="DataGrid#FilesDataGrid">
-        <Setter Property="RowBackground" Value="{DynamicResource MainBackgroundColorBrush}" />
+    <Style Selector="DataGrid">
+        <Setter Property="RowBackground" Value="{DynamicResource ThemeBackgroundBrush}" />
+    </Style>
+
+    <Style Selector="Grid.defaultBackgroundColor">
+        <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
     </Style>
 
     <Style Selector="Button.operationButton">
@@ -281,15 +278,18 @@
     </Style>
 
     <Style Selector="TextBox">
+        <Setter Property="Background" Value="{DynamicResource ThemeControlLowBrush}" />
         <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="Background" Value="{DynamicResource DirectoryTextBoxBackgroundColorBrush}" />
+    </Style>
+
+    <Style Selector="TextBox /template/ Border">
+        <Setter Property="CornerRadius" Value="8" />
     </Style>
 
     <Style Selector="Border.tabBorder">
-        <Setter Property="BorderBrush" Value="{DynamicResource TabButtonBorderColorBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderLowBrush}" />
     </Style>
 
-    <!-- FIXME -->
     <Style Selector="Rectangle.tabRectangleGloballyActive">
         <Setter Property="Fill" Value="{DynamicResource HighlightBrush}" />
     </Style>
@@ -305,14 +305,9 @@
         <Setter Property="CornerRadius" Value="5" />
     </Style>
 
-    <!-- FIXME -->
     <Style Selector="Grid.inactiveTabGrid">
-        <Setter Property="Background" Value="{DynamicResource DirectoryTextBoxBackgroundColorBrush}" />
+        <Setter Property="Background" Value="{DynamicResource ThemeControlLowBrush}" />
     </Style>
-
-    <!-- <Style Selector="Grid.activeTabGrid"> -->
-    <!--     <Setter Property="Background" Value="{DynamicResource MainBackgroundColorBrush}" /> -->
-    <!-- </Style> -->
 
     <Style Selector="TextBlock.inactiveTabNameTextBlock">
         <Setter Property="Foreground" Value="{DynamicResource InactiveTabForegroundBrush}" />
@@ -344,7 +339,7 @@
     </Style>
 
     <Style Selector="Button.cancelDialogButton">
-        <Setter Property="Background" Value="{DynamicResource AlternativeThemeBackgroundBrush}" />
+        <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="BorderBrush" Value="{DynamicResource IconButtonHoverForegroundColorBrush}" />
     </Style>
@@ -366,7 +361,19 @@
     </Style>
 
     <Style Selector="Border.settingsContentBorder">
-        <Setter Property="BorderBrush" Value="{DynamicResource DirectoryTextBoxBackgroundColorBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ThemeControlLowBrush}" />
+    </Style>
+
+    <Style Selector="TextBlock.filePanelTextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundBrush}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="FontFamily" Value="SansSerif" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <Style Selector="DataGridRow:selected Grid">
+        <Setter Property="Background" Value="{DynamicResource HighlightBrush}" />
     </Style>
 
 </Styles>
