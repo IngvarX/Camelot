@@ -16,6 +16,7 @@ namespace Camelot.ViewModels.Tests
                 .Verifiable();
             var dialogViewModel = new SettingsDialogViewModel(terminalSettingsViewModel.Object);
 
+            Assert.Equal(0, dialogViewModel.SelectedIndex);
             Assert.Equal(terminalSettingsViewModel.Object, dialogViewModel.TerminalSettingsViewModel);
 
             terminalSettingsViewModel.Verify(m => m.Activate(), Times.Once);
