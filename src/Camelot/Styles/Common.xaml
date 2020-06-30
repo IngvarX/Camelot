@@ -236,19 +236,16 @@
     </Style>
 
     <Style Selector="DataGridRow">
-        <Setter Property="Opacity" Value="0.7" />
+        <Setter Property="Opacity" Value="1" />
         <Setter Property="FontSize" Value="18" />
     </Style>
 
-    <Style Selector="DataGridRow:selected /template/ Rectangle#BackgroundRectangle">
+    <Style Selector="DataGridRow:pointerover /template/ Rectangle">
+        <Setter Property="Opacity" Value="0" />
+    </Style>
+
+    <Style Selector="DataGridRow:selected Rectangle">
         <Setter Property="Fill" Value="{DynamicResource HighlightBrush}" />
-    </Style>
-
-    <Style Selector="DataGridRow:pointerover /template/ Rectangle#BackgroundRectangle">
-        <Setter Property="IsVisible" Value="False" />
-    </Style>
-
-    <Style Selector="DataGridRow:selected">
         <Setter Property="Opacity" Value="1" />
     </Style>
 

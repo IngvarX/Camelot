@@ -241,8 +241,8 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTextColumn Binding="{Binding LastModifiedDateTime}" Width="2*">
-                    <DataGridTextColumn.Header>
+                <DataGridTemplateColumn Width="2*">
+                    <DataGridTemplateColumn.Header>
                         <Button Command="{Binding SortFilesCommand}"
                                 CommandParameter="{x:Static filePanels:SortingColumn.Date}">
                             <Grid ColumnDefinitions="*,Auto,Auto,*">
@@ -251,8 +251,14 @@
                                 <TextBlock Grid.Column="2" Classes="dataGridColumnHeaderTextBlock" Text="{x:Static p:Resources.Date}" />
                             </Grid>
                         </Button>
-                    </DataGridTextColumn.Header>
-                </DataGridTextColumn>
+                    </DataGridTemplateColumn.Header>
+
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Classes="filePanelTextBlock" Text="{Binding LastModifiedDateTime}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
 
