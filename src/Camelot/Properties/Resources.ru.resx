@@ -136,7 +136,7 @@
     <value>Аргументы:</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Отменить</value>
+    <value>Отмена</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Закрыть</value>
@@ -203,9 +203,6 @@
   </data>
   <data name="DirectoryInformationTitle" xml:space="preserve">
     <value>Информация о каталоге</value>
-  </data>
-  <data name="DirectoryTemplate" xml:space="preserve">
-    <value>&lt;КАТАЛОГ&gt;</value>
   </data>
   <data name="EnterDirectoryNameWithColon" xml:space="preserve">
     <value>Введите название каталога:</value>
