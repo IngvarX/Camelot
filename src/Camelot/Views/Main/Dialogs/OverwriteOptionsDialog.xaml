@@ -18,7 +18,7 @@
             <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2">
                 <DrawingPresenter Width="25" Height="25">
                     <DrawingPresenter.Drawing>
-                        <GeometryDrawing Brush="{DynamicResource CancelOperationButtonBrush}"
+                        <GeometryDrawing Brush="{DynamicResource AlternativeThemeForegroundBrush}"
                                          Geometry="M569.517 440.013C587.975 472.007 564.806 512 527.94 512H48.054c-36.937 0-59.999-40.055-41.577-71.987L246.423 23.985c18.467-32.009 64.72-31.951 83.154 0l239.94 416.028zM288 354c-25.405 0-46 20.595-46 46s20.595 46 46 46 46-20.595 46-46-20.595-46-46-46zm-43.673-165.346l7.418 136c.347 6.364 5.609 11.346 11.982 11.346h48.546c6.373 0 11.635-4.982 11.982-11.346l7.418-136c.375-6.874-5.098-12.654-11.982-12.654h-63.383c-6.884 0-12.356 5.78-11.981 12.654z" />
                     </DrawingPresenter.Drawing>
                 </DrawingPresenter>
@@ -38,7 +38,7 @@
             <Grid Row="2" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,*">
                 <DrawingPresenter Width="64" Height="64" Grid.RowSpan="3">
                     <DrawingPresenter.Drawing>
-                        <GeometryDrawing Brush="{DynamicResource CancelOperationButtonBrush}"
+                        <GeometryDrawing Brush="{DynamicResource AlternativeThemeForegroundBrush}"
                                          Geometry="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm160-14.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z" />                </DrawingPresenter.Drawing>
                 </DrawingPresenter>
                 <TextBlock Grid.Column="2" Text="{x:Static p:Resources.OriginalFile}" Classes="overWriteDialogTextBlock boldStyleTextBlock" />
@@ -62,7 +62,7 @@
             <Grid Row="2" Column="1" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,*">
                 <DrawingPresenter Width="64" Height="64" Grid.RowSpan="3">
                     <DrawingPresenter.Drawing>
-                        <GeometryDrawing Brush="{DynamicResource CancelOperationButtonBrush}"
+                        <GeometryDrawing Brush="{DynamicResource AlternativeThemeForegroundBrush}"
                                          Geometry="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm160-14.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z" />
                     </DrawingPresenter.Drawing>
                 </DrawingPresenter>

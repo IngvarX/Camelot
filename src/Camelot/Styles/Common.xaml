@@ -247,12 +247,12 @@
         <Setter Property="FontSize" Value="18" />
     </Style>
 
-    <Style Selector="DataGridRow:pointerover /template/ Rectangle#BackgroundRectangle">
-        <Setter Property="IsVisible" Value="False"/>
-    </Style>
-
     <Style Selector="DataGridRow:selected /template/ Rectangle#BackgroundRectangle">
         <Setter Property="Fill" Value="{DynamicResource HighlightBrush}" />
+    </Style>
+
+    <Style Selector="DataGridRow:pointerover /template/ Rectangle#BackgroundRectangle">
+        <Setter Property="IsVisible" Value="False"/>
     </Style>
 
     <Style Selector="DataGridRow:selected">
@@ -265,7 +265,7 @@
 
     <Style Selector="Button.operationButton">
         <Setter Property="Background" Value="{DynamicResource OperationButtonBackgroundColorBrush}" />
-        <Setter Property="Foreground" Value="{DynamicResource OperationButtonForegroundColorBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundBrush}" />
     </Style>
 
     <Style Selector="Button.operationButton:pointerover">
@@ -291,17 +291,15 @@
 
     <!-- FIXME -->
     <Style Selector="Rectangle.tabRectangleGloballyActive">
-        <Setter Property="Fill" Value="{DynamicResource OrangeBrush}" />
+        <Setter Property="Fill" Value="{DynamicResource HighlightBrush}" />
     </Style>
 
-    <!-- FIXME -->
     <Style Selector="Rectangle.tabRectangleActive">
-        <Setter Property="Fill" Value="{DynamicResource LightGreyBrush}" />
+        <Setter Property="Fill" Value="{DynamicResource ThemeAccentBrush}" />
     </Style>
 
-    <!-- FIXME -->
     <Style Selector="Border.selectionBorder">
-        <Setter Property="Background" Value="{DynamicResource OrangeBrush}" />
+        <Setter Property="Background" Value="{DynamicResource HighlightBrush}" />
         <Setter Property="Margin" Value="5" />
         <Setter Property="Padding" Value="5,2" />
         <Setter Property="CornerRadius" Value="5" />
@@ -328,11 +326,11 @@
         <Setter Property="Foreground" Value="{DynamicResource InactiveTabForegroundBrush}" />
     </Style>
 
-    <!-- FIXME -->
     <Style Selector="Button.dialogButton">
-        <Setter Property="Background" Value="{DynamicResource OrangeBrush}" />
+        <Setter Property="Background" Value="{DynamicResource HighlightBrush}" />
     </Style>
 
+    <!-- FIXME -->
     <Style Selector="Button.dialogButton:pointerover">
         <Setter Property="Foreground" Value="{DynamicResource IconButtonHoverForegroundColorBrush}" />
     </Style>
@@ -346,7 +344,7 @@
     </Style>
 
     <Style Selector="Button.cancelDialogButton">
-        <Setter Property="Background" Value="{DynamicResource AlternativeMainBackgroundColorBrush}" />
+        <Setter Property="Background" Value="{DynamicResource AlternativeThemeBackgroundBrush}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="BorderBrush" Value="{DynamicResource IconButtonHoverForegroundColorBrush}" />
     </Style>
@@ -356,12 +354,12 @@
     </Style>
 
     <Style Selector="TabItem:selected">
-        <Setter Property="Background" Value="{DynamicResource MainBackgroundColorBrush}" />
+        <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
     </Style>
 
     <!-- FIXME -->
     <Style Selector="TabItem:selected Border.settingsTabHeaderBorder">
-        <Setter Property="Background" Value="{DynamicResource OrangeBrush}" />
+        <Setter Property="Background" Value="{DynamicResource HighlightBrush}" />
         <Setter Property="Padding" Value="5,5,10,5" />
         <Setter Property="CornerRadius" Value="8" />
         <Setter Property="Margin" Value="0,0,10,0" />
