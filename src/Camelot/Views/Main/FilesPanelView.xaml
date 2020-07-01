@@ -25,7 +25,8 @@
             <Button Classes="iconButton">
                 <DrawingPresenter Width="20" Height="20">
                     <DrawingPresenter.Drawing>
-                        <GeometryDrawing Brush="#FFFFFF" Geometry="M256 504C119 504 8 393 8 256S119 8 256 8s248 111 248 248-111 248-248 248zm116-292H256v-70.9c0-10.7-13-16.1-20.5-8.5L121.2 247.5c-4.7 4.7-4.7 12.2 0 16.9l114.3 114.9c7.6 7.6 20.5 2.2 20.5-8.5V300h116c6.6 0 12-5.4 12-12v-64c0-6.6-5.4-12-12-12z"/>
+                        <GeometryDrawing Brush="{DynamicResource MainWindowForegroundBrush}"
+                                         Geometry="M256 504C119 504 8 393 8 256S119 8 256 8s248 111 248 248-111 248-248 248zm116-292H256v-70.9c0-10.7-13-16.1-20.5-8.5L121.2 247.5c-4.7 4.7-4.7 12.2 0 16.9l114.3 114.9c7.6 7.6 20.5 2.2 20.5-8.5V300h116c6.6 0 12-5.4 12-12v-64c0-6.6-5.4-12-12-12z"/>
                     </DrawingPresenter.Drawing>
                 </DrawingPresenter>
             </Button>
@@ -33,7 +34,8 @@
             <Button Classes="iconButton">
                 <DrawingPresenter Width="20" Height="20">
                     <DrawingPresenter.Drawing>
-                        <GeometryDrawing Brush="#FFFFFF" Geometry="M256 8c137 0 248 111 248 248S393 504 256 504 8 393 8 256 119 8 256 8zM140 300h116v70.9c0 10.7 13 16.1 20.5 8.5l114.3-114.9c4.7-4.7 4.7-12.2 0-16.9l-114.3-115c-7.6-7.6-20.5-2.2-20.5 8.5V212H140c-6.6 0-12 5.4-12 12v64c0 6.6 5.4 12 12 12z"/>
+                        <GeometryDrawing Brush="{DynamicResource MainWindowForegroundBrush}"
+                                         Geometry="M256 8c137 0 248 111 248 248S393 504 256 504 8 393 8 256 119 8 256 8zM140 300h116v70.9c0 10.7 13 16.1 20.5 8.5l114.3-114.9c4.7-4.7 4.7-12.2 0-16.9l-114.3-115c-7.6-7.6-20.5-2.2-20.5 8.5V212H140c-6.6 0-12 5.4-12 12v64c0 6.6 5.4 12 12 12z"/>
                     </DrawingPresenter.Drawing>
                 </DrawingPresenter>
             </Button>
@@ -41,7 +43,8 @@
             <Button Classes="iconButton" Command="{Binding RefreshCommand}">
                 <DrawingPresenter Width="20" Height="20">
                     <DrawingPresenter.Drawing>
-                        <GeometryDrawing Brush="#ffffff" Geometry="M370.72 133.28C339.458 104.008 298.888 87.962 255.848 88c-77.458.068-144.328 53.178-162.791 126.85-1.344 5.363-6.122 9.15-11.651 9.15H24.103c-7.498 0-13.194-6.807-11.807-14.176C33.933 94.924 134.813 8 256 8c66.448 0 126.791 26.136 171.315 68.685L463.03 40.97C478.149 25.851 504 36.559 504 57.941V192c0 13.255-10.745 24-24 24H345.941c-21.382 0-32.09-25.851-16.971-40.971l41.75-41.749zM32 296h134.059c21.382 0 32.09 25.851 16.971 40.971l-41.75 41.75c31.262 29.273 71.835 45.319 114.876 45.28 77.418-.07 144.315-53.144 162.787-126.849 1.344-5.363 6.122-9.15 11.651-9.15h57.304c7.498 0 13.194 6.807 11.807 14.176C478.067 417.076 377.187 504 256 504c-66.448 0-126.791-26.136-171.315-68.685L48.97 471.03C33.851 486.149 8 475.441 8 454.059V320c0-13.255 10.745-24 24-24z"/>
+                        <GeometryDrawing Brush="{DynamicResource MainWindowForegroundBrush}"
+                                         Geometry="M370.72 133.28C339.458 104.008 298.888 87.962 255.848 88c-77.458.068-144.328 53.178-162.791 126.85-1.344 5.363-6.122 9.15-11.651 9.15H24.103c-7.498 0-13.194-6.807-11.807-14.176C33.933 94.924 134.813 8 256 8c66.448 0 126.791 26.136 171.315 68.685L463.03 40.97C478.149 25.851 504 36.559 504 57.941V192c0 13.255-10.745 24-24 24H345.941c-21.382 0-32.09-25.851-16.971-40.971l41.75-41.749zM32 296h134.059c21.382 0 32.09 25.851 16.971 40.971l-41.75 41.75c31.262 29.273 71.835 45.319 114.876 45.28 77.418-.07 144.315-53.144 162.787-126.849 1.344-5.363 6.122-9.15 11.651-9.15h57.304c7.498 0 13.194 6.807 11.807 14.176C478.067 417.076 377.187 504 256 504c-66.448 0-126.791-26.136-171.315-68.685L48.97 471.03C33.851 486.149 8 475.441 8 454.059V320c0-13.255 10.745-24 24-24z"/>
                     </DrawingPresenter.Drawing>
                 </DrawingPresenter>
             </Button>
@@ -110,7 +113,7 @@
                                     <DataTemplate DataType="{x:Type filePanels:DirectoryViewModel}">
                                         <DrawingPresenter Width="20" Height="20" Margin="3,7,3,3" VerticalAlignment="Center">
                                             <DrawingPresenter.Drawing>
-                                                <GeometryDrawing Brush="{DynamicResource FilesListForegroundBrush}"
+                                                <GeometryDrawing Brush="{DynamicResource MainWindowForegroundBrush}"
                                                                  Geometry="M464 128H272l-64-64H48C21.49 64 0 85.49 0 112v288c0 26.51 21.49 48 48 48h416c26.51 0 48-21.49 48-48V176c0-26.51-21.49-48-48-48z"/>
                                             </DrawingPresenter.Drawing>
                                         </DrawingPresenter>
@@ -119,7 +122,7 @@
                                     <DataTemplate DataType="{x:Type filePanels:FileViewModel}">
                                         <DrawingPresenter Width="20" Height="20" Margin="3">
                                             <DrawingPresenter.Drawing>
-                                                <GeometryDrawing Brush="{DynamicResource FilesListForegroundBrush}"
+                                                <GeometryDrawing Brush="{DynamicResource MainWindowForegroundBrush}"
                                                                  Geometry="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm160-14.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z"/>
                                             </DrawingPresenter.Drawing>
                                         </DrawingPresenter>

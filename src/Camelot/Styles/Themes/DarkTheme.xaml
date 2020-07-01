@@ -25,18 +25,12 @@
         <SolidColorBrush x:Key="ThemeBackgroundBrush" Color="{DynamicResource MainBackgroundColor}" />
         <SolidColorBrush x:Key="ThemeForegroundBrush" Color="{DynamicResource WhiteColor}"
                          Opacity="0.8" />
-        <!-- <SolidColorBrush x:Key="HighlightBrush" Color="{DynamicResource OrangeColor}" /> -->
         <Color x:Key="ThemeForegroundColor">#FFDEDEDE</Color>
-        <!-- <SolidColorBrush x:Key="OrangeBrush" Color="{DynamicResource OrangeColor}" /> -->
-        <!-- <SolidColorBrush x:Key="WhiteBrush" Color="{DynamicResource WhiteColor}" /> -->
         <SolidColorBrush x:Key="BlackBrush" Color="{DynamicResource BlackColor}" />
-        <!-- <SolidColorBrush x:Key="MainBackgroundColorBrush" Color="{DynamicResource MainBackgroundColor}" /> -->
         <SolidColorBrush x:Key="HighlightBrush" Color="{DynamicResource OrangeColor}" />
         <SolidColorBrush x:Key="HighlightForegroundBrush" Color="{DynamicResource WhiteColor}" Opacity="0.9" />
         <SolidColorBrush x:Key="ThemeAccentBrush4" Color="{DynamicResource OrangeColor}" />
         <SolidColorBrush x:Key="ThemeAccentBrush3" Color="{DynamicResource BrightOrangeColor}" />
-        <!-- <SolidColorBrush x:Key="IconButtonHoverForegroundColorBrush" Color="{DynamicResource WhiteColor}" -->
-        <!--                  Opacity="0.9" /> -->
         <SolidColorBrush x:Key="ThemeControlLowBrush" Color="{DynamicResource BlackColor}"
                          Opacity="0.2" />
         <SolidColorBrush x:Key="ThemeBorderLowBrush" Color="{DynamicResource BlackColor}"
@@ -61,13 +55,14 @@
                          Opacity="0.7" />
         <SolidColorBrush x:Key="OperationButtonBackgroundColorBrush" Color="{DynamicResource OperationButtonBackgroundColor}" />
         <SolidColorBrush x:Key="OperationButtonHoverBackgroundColorBrush" Color="{DynamicResource OperationButtonHoverBackgroundColor}" />
-        <SolidColorBrush x:Key="FilesListForegroundBrush" Color="{DynamicResource WhiteColor}" />
+        <SolidColorBrush x:Key="MainWindowForegroundBrush" Color="{DynamicResource WhiteColor}" />
         <SolidColorBrush x:Key="InactiveTabForegroundBrush" Color="{DynamicResource WhiteColor}"
                          Opacity="0.65" />
         <SolidColorBrush x:Key="TopPanelGridBackgroundBrush" Color="{DynamicResource MenuBackgroundColor}"
                          Opacity="0.2" />
         <SolidColorBrush x:Key="SuccessBrush" Color="{DynamicResource SuccessColor}" />
         <SolidColorBrush x:Key="ErrorBrush" Color="{DynamicResource ErrorColor}" />
+        <SolidColorBrush x:Key="DialogOverlayBrush" Color="{DynamicResource BlackColor}" />
 
         <!-- Theme resources -->
         <system:Double x:Key="ThemeDisabledOpacity">0.5</system:Double>
