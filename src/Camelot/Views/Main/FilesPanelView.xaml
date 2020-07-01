@@ -6,12 +6,17 @@
              xmlns:filePanels="clr-namespace:Camelot.ViewModels.Implementations.MainWindow.FilePanels;assembly=Camelot.ViewModels"
              xmlns:controls="clr-namespace:Camelot.Views.Main.Controls"
              xmlns:views="clr-namespace:Camelot.Views"
+             xmlns:converters="clr-namespace:Camelot.Converters"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Camelot.Views.Main.FilesPanelView">
 
     <Design.DataContext>
         <filePanels:FilesPanelViewModel />
     </Design.DataContext>
+
+    <UserControl.Resources>
+        <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
+    </UserControl.Resources>
 
     <Grid Classes="defaultBackgroundColor">
         <Grid.RowDefinitions>
@@ -138,7 +143,8 @@
                         <Button Command="{Binding SortFilesCommand}"
                                 CommandParameter="{x:Static filePanels:SortingColumn.Name}">
                             <Grid ColumnDefinitions="*,Auto,Auto,*">
-                                <controls:DataGridHeaderArrowView IsVisible="{Binding SelectedTab.SortingViewModel.IsSortingByNameEnabled}" />
+                                <controls:DataGridHeaderArrowView
+                                    IsVisible="{Binding SelectedTab.SortingViewModel.SortingColumn, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static filePanels:SortingColumn.Name}}" />
 
                                 <TextBlock Grid.Column="2" Classes="dataGridColumnHeaderTextBlock" Text="{x:Static p:Resources.Name}" />
                             </Grid>
@@ -190,7 +196,8 @@
                         <Button Command="{Binding SortFilesCommand}"
                                 CommandParameter="{x:Static filePanels:SortingColumn.Extension}">
                             <Grid ColumnDefinitions="*,Auto,Auto,*">
-                                <controls:DataGridHeaderArrowView IsVisible="{Binding SelectedTab.SortingViewModel.IsSortingByExtensionEnabled}" />
+                                <controls:DataGridHeaderArrowView
+                                    IsVisible="{Binding SelectedTab.SortingViewModel.SortingColumn, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static filePanels:SortingColumn.Extension}}" />
 
                                 <TextBlock Grid.Column="2" Classes="dataGridColumnHeaderTextBlock" Text="{x:Static p:Resources.Extension}" />
                             </Grid>
@@ -220,7 +227,8 @@
                         <Button Command="{Binding SortFilesCommand}"
                                 CommandParameter="{x:Static filePanels:SortingColumn.Size}">
                             <Grid ColumnDefinitions="*,Auto,Auto,*">
-                                <controls:DataGridHeaderArrowView IsVisible="{Binding SelectedTab.SortingViewModel.IsSortingBySizeEnabled}" />
+                                <controls:DataGridHeaderArrowView
+                                    IsVisible="{Binding SelectedTab.SortingViewModel.SortingColumn, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static filePanels:SortingColumn.Size}}" />
 
                                 <TextBlock Grid.Column="2" Classes="dataGridColumnHeaderTextBlock" Text="{x:Static p:Resources.Size}" />
                             </Grid>
@@ -249,7 +257,8 @@
                         <Button Command="{Binding SortFilesCommand}"
                                 CommandParameter="{x:Static filePanels:SortingColumn.Date}">
                             <Grid ColumnDefinitions="*,Auto,Auto,*">
-                                <controls:DataGridHeaderArrowView IsVisible="{Binding SelectedTab.SortingViewModel.IsSortingByDateEnabled}" />
+                                <controls:DataGridHeaderArrowView
+                                    IsVisible="{Binding SelectedTab.SortingViewModel.SortingColumn, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static filePanels:SortingColumn.Date}}" />
 
                                 <TextBlock Grid.Column="2" Classes="dataGridColumnHeaderTextBlock" Text="{x:Static p:Resources.Date}" />
                             </Grid>

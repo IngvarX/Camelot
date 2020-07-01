@@ -14,7 +14,7 @@
     </Design.DataContext>
 
     <UserControl.Resources>
-        <converters:EnumConverter x:Key="EnumConverter" />
+        <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
     </UserControl.Resources>
 
     <ItemsControl Items="{Binding ActiveOperations}">
@@ -22,7 +22,7 @@
             <DataTemplate DataType="{x:Type operationsStates:OperationStateViewModel}">
                 <Grid>
                     <StackPanel>
-                        <Grid IsVisible="{Binding OperationType, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static enums:OperationType.Copy}}">
+                        <Grid IsVisible="{Binding OperationType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:OperationType.Copy}}">
                             <TextBlock Classes="activeOperationTextBlock operationStatusTextBlock" IsVisible="{Binding IsProcessingSingleFile}">
                                 <TextBlock.Text>
                                     <MultiBinding StringFormat="{x:Static p:Resources.CopyingFileFromTo}">
@@ -43,7 +43,7 @@
                             </TextBlock>
                         </Grid>
 
-                        <Grid IsVisible="{Binding OperationType, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static enums:OperationType.Move}}">
+                        <Grid IsVisible="{Binding OperationType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:OperationType.Move}}">
                             <TextBlock Classes="activeOperationTextBlock operationStatusTextBlock" IsVisible="{Binding IsProcessingSingleFile}">
                                 <TextBlock.Text>
                                     <MultiBinding StringFormat="{x:Static p:Resources.MovingFileFromTo}">
@@ -64,7 +64,7 @@
                             </TextBlock>
                         </Grid>
 
-                        <Grid IsVisible="{Binding OperationType, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static enums:OperationType.Delete}}">
+                        <Grid IsVisible="{Binding OperationType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:OperationType.Delete}}">
                             <TextBlock Classes="activeOperationTextBlock operationStatusTextBlock" IsVisible="{Binding IsProcessingSingleFile}">
                                 <TextBlock.Text>
                                     <MultiBinding StringFormat="{x:Static p:Resources.RemovingFileFromTo}">
