@@ -28,7 +28,7 @@
         <implementations:MainWindowViewModel/>
     </Design.DataContext>
 
-    <Grid Classes="defaultBackgroundColor">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
