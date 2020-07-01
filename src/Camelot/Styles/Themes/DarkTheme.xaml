@@ -5,7 +5,8 @@
     x:Class="Camelot.Styles.Themes.DarkTheme">
 
        <Style.Resources>
-        <Color x:Key="OrangeColor">#ce701e</Color>
+        <Color x:Key="OrangeColor">#c46a1c</Color>
+        <Color x:Key="BrightOrangeColor">#ce701e</Color>
         <Color x:Key="WhiteColor">#ffffff</Color>
         <Color x:Key="BlackColor">#000000</Color>
         <Color x:Key="MenuBackgroundColor">#1b1a17</Color>
@@ -34,21 +35,27 @@
         <SolidColorBrush x:Key="OperationButtonBackgroundColorBrush" Color="{DynamicResource OperationButtonBackgroundColor}" />
         <SolidColorBrush x:Key="OperationButtonHoverBackgroundColorBrush" Color="{DynamicResource OperationButtonHoverBackgroundColor}" />
         <SolidColorBrush x:Key="HighlightBrush" Color="{DynamicResource OrangeColor}" />
-        <SolidColorBrush x:Key="FilesHighlightBrush" Color="{DynamicResource WhiteColor}" Opacity="0.95" />
         <SolidColorBrush x:Key="HighlightForegroundBrush" Color="{DynamicResource WhiteColor}" Opacity="0.9" />
         <SolidColorBrush x:Key="ThemeAccentBrush4" Color="{DynamicResource OrangeColor}" />
+        <SolidColorBrush x:Key="ThemeAccentBrush3" Color="{DynamicResource BrightOrangeColor}" />
         <!-- <SolidColorBrush x:Key="IconButtonHoverForegroundColorBrush" Color="{DynamicResource WhiteColor}" -->
         <!--                  Opacity="0.9" /> -->
-        <!-- <SolidColorBrush x:Key="InactiveTabForegroundBrush" Color="{DynamicResource WhiteColor}" -->
-        <!--                  Opacity="0.65" /> -->
+        <SolidColorBrush x:Key="InactiveTabForegroundBrush" Color="{DynamicResource WhiteColor}"
+                         Opacity="0.65" />
         <SolidColorBrush x:Key="ThemeControlLowBrush" Color="{DynamicResource BlackColor}"
                          Opacity="0.2" />
         <SolidColorBrush x:Key="ThemeBorderLowBrush" Color="{DynamicResource BlackColor}"
                          Opacity="0.4" />
 
-        <!-- Set proper colors -->
-        <SolidColorBrush x:Key="ThemeControlMidBrush" Color="{DynamicResource MainBackgroundColor}" />
-        <SolidColorBrush x:Key="ThemeControlHighBrush" Color="{DynamicResource MainBackgroundColor}" />
+        <SolidColorBrush x:Key="FilesListForegroundBrush" Color="{DynamicResource WhiteColor}" />
+                         <!-- Set proper colors -->
+        <SolidColorBrush x:Key="ThemeControlMidBrush" Color="{DynamicResource AlternativeMainBackgroundColor}" />
+        <SolidColorBrush x:Key="ThemeControlMidHighBrush" Color="{DynamicResource WhiteColor}"
+                         Opacity="0.3" />
+        <SolidColorBrush x:Key="ThemeControlHighBrush" Color="{DynamicResource WhiteColor}"
+                         Opacity="0.7" />
+        <SolidColorBrush x:Key="ThemeControlVeryHighBrush" Color="{DynamicResource WhiteColor}"
+                         Opacity="0.7" />
         <SolidColorBrush x:Key="ThemeBorderMidBrush" Color="{DynamicResource BlackColor}"
                          Opacity="0.4" />
         <!-- <SolidColorBrush x:Key="TopPanelBackgroundColorBrush" Color="{DynamicResource BlackColor}" -->
@@ -57,6 +64,8 @@
         <!-- <SolidColorBrush x:Key="TabButtonBorderColorBrush" Color="{DynamicResource BlackColor}" -->
         <!--                  Opacity="0.4" /> -->
         <SolidColorBrush x:Key="ThemeAccentBrush" Color="{DynamicResource WhiteColor}"
+                         Opacity="0.3" />
+        <SolidColorBrush x:Key="ThemeForegroundLowBrush" Color="{DynamicResource WhiteColor}"
                          Opacity="0.3" />
 
         <system:Double x:Key="ThemeDisabledOpacity">0.5</system:Double>

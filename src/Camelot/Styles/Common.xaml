@@ -9,12 +9,13 @@
 
     <Style Selector="Button.operationButton">
         <Setter Property="Padding" Value="6" />
+        <Setter Property="Margin" Value="0,15,0,0" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
     </Style>
 
     <Style Selector="TextBlock.operationTextBlock">
         <Setter Property="FontFamily" Value="SansSerif" />
-        <Setter Property="FontSize" Value="18" />
+        <Setter Property="FontSize" Value="16" />
         <Setter Property="Margin" Value="10,0,0,0" />
     </Style>
 
@@ -103,7 +104,7 @@
 
     <Style Selector="TextBlock.selectionInfoTextBlock">
         <Setter Property="FontFamily" Value="SansSerif" />
-        <Setter Property="FontSize" Value="18" />
+        <Setter Property="FontSize" Value="16" />
     </Style>
 
     <Style Selector="TextBlock.aboutPageTextBlock">
@@ -236,8 +237,24 @@
     </Style>
 
     <Style Selector="DataGridRow">
-        <Setter Property="Opacity" Value="1" />
+        <Setter Property="Opacity" Value="0.7" />
         <Setter Property="FontSize" Value="18" />
+    </Style>
+
+    <Style Selector="DataGridRow:selected">
+        <Setter Property="Opacity" Value="1" />
+    </Style>
+
+    <Style Selector="TextBlock.filePanelTextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource FilesListForegroundBrush}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="FontFamily" Value="SansSerif" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <Style Selector="DataGridRow:selected Grid">
+        <Setter Property="Background" Value="{DynamicResource HighlightBrush}" />
     </Style>
 
     <Style Selector="DataGridRow:pointerover /template/ Rectangle">
@@ -288,7 +305,7 @@
     </Style>
 
     <Style Selector="Rectangle.tabRectangleGloballyActive">
-        <Setter Property="Fill" Value="{DynamicResource HighlightBrush}" />
+        <Setter Property="Fill" Value="{DynamicResource ThemeAccentBrush3}" />
     </Style>
 
     <Style Selector="Rectangle.tabRectangleActive">
@@ -312,6 +329,10 @@
 
     <Style Selector="DockPanel#MenuDockPanel">
         <Setter Property="Background" Value="{DynamicResource MenuBackgroundColorBrush}" />
+    </Style>
+
+    <Style Selector="Menu.smallContextMenu TextBlock">
+        <Setter Property="FontSize" Value="14" />
     </Style>
 
     <Style Selector="TextBlock.dataGridColumnHeaderTextBlock">
@@ -355,22 +376,6 @@
         <Setter Property="Padding" Value="5,5,10,5" />
         <Setter Property="CornerRadius" Value="8" />
         <Setter Property="Margin" Value="0,0,10,0" />
-    </Style>
-
-    <Style Selector="Border.settingsContentBorder">
-        <Setter Property="BorderBrush" Value="{DynamicResource ThemeControlLowBrush}" />
-    </Style>
-
-    <Style Selector="TextBlock.filePanelTextBlock">
-        <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundBrush}" />
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="FontFamily" Value="SansSerif" />
-        <Setter Property="FontSize" Value="16" />
-        <Setter Property="VerticalAlignment" Value="Center" />
-    </Style>
-
-    <Style Selector="DataGridRow:selected Grid">
-        <Setter Property="Background" Value="{DynamicResource HighlightBrush}" />
     </Style>
 
 </Styles>

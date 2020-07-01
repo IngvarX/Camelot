@@ -11,7 +11,7 @@
         <mainWindow:OperationsViewModel />
     </Design.DataContext>
 
-    <Grid>
+    <Grid Classes="defaultBackgroundColor">
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition />
