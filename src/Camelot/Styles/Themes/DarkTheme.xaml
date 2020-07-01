@@ -58,6 +58,7 @@
                          Opacity="0.7" />
         <SolidColorBrush x:Key="ThemeBorderMidBrush" Color="{DynamicResource BlackColor}"
                          Opacity="0.4" />
+        <SolidColorBrush x:Key="TopPanelGridBackgroundBrush" Color="Transparent" />
         <!-- <SolidColorBrush x:Key="TopPanelBackgroundColorBrush" Color="{DynamicResource BlackColor}" -->
         <!--                  Opacity="0.3" /> -->
         <!-- <SolidColorBrush x:Key="MenuBackgroundColorBrush" Color="{DynamicResource MenuBackgroundColor}" /> -->

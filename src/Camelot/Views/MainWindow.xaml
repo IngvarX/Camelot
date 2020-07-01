@@ -36,7 +36,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <Grid ColumnDefinitions="Auto,Auto,*,Auto">
+        <Grid Classes="topPanelGrid" ColumnDefinitions="Auto,Auto,*,Auto">
             <main:MenuView DataContext="{Binding MenuViewModel}" />
             <operationsStates:OperationsStatesListView Grid.Column="1" DataContext="{Binding OperationsStateViewModel}" />
             <main:TopOperationsView Grid.Column="3" DataContext="{Binding TopOperationsViewModel}" />

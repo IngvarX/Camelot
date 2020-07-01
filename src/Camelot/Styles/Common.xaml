@@ -56,8 +56,9 @@
     </Style>
 
     <Style Selector="TextBox.directoryTextBox">
-        <Setter Property="FontSize" Value="17" />
+        <Setter Property="FontSize" Value="16" />
         <Setter Property="Margin" Value="10,0,15,0" />
+        <Setter Property="Height" Value="30" />
     </Style>
 
     <Style Selector="Rectangle.tabRectangle">
@@ -66,12 +67,13 @@
     </Style>
 
     <Style Selector="MenuItem">
-        <Setter Property="FontSize" Value="20" />
+        <Setter Property="FontSize" Value="16" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Padding" Value="10,6" />
         <Setter Property="FontFamily" Value="SansSerif" />
     </Style>
 
+    <!-- FIXME -->
     <Style Selector="Grid#OverlayGrid">
         <Setter Property="ZIndex" Value="-1" />
         <Setter Property="Background" Value="{DynamicResource BlackBrush}" />
@@ -274,6 +276,10 @@
         <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
     </Style>
 
+    <Style Selector="Grid.topPanelGrid">
+        <Setter Property="Background" Value="{DynamicResource TopPanelGridBackgroundBrush}" />
+    </Style>
+
     <Style Selector="Button.operationButton">
         <Setter Property="Background" Value="{DynamicResource OperationButtonBackgroundColorBrush}" />
         <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundBrush}" />
@@ -297,7 +303,7 @@
     </Style>
 
     <Style Selector="TextBox /template/ Border">
-        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="CornerRadius" Value="5" />
     </Style>
 
     <Style Selector="Border.tabBorder">
