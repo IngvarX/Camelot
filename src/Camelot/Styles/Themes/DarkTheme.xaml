@@ -20,6 +20,7 @@
         <Color x:Key="ErrorColor">#ffbcbc</Color>
         <Color x:Key="ProgressBarForegroundColor">#35a335</Color>
         <Color x:Key="OperationsStateBackgroundColor">#1f1e1a</Color>
+        <Color x:Key="SuccessForegroundColor">#35a335</Color>
 
         <!-- Avalonia brushes -->
         <SolidColorBrush x:Key="ThemeBackgroundBrush" Color="{DynamicResource MainBackgroundColor}" />
@@ -61,6 +62,7 @@
         <SolidColorBrush x:Key="TopPanelGridBackgroundBrush" Color="{DynamicResource MenuBackgroundColor}"
                          Opacity="0.2" />
         <SolidColorBrush x:Key="SuccessBrush" Color="{DynamicResource SuccessColor}" />
+        <SolidColorBrush x:Key="SuccessForegroundBrush" Color="{DynamicResource SuccessForegroundColor}" />
         <SolidColorBrush x:Key="ErrorBrush" Color="{DynamicResource ErrorColor}" />
         <SolidColorBrush x:Key="DialogOverlayBrush" Color="{DynamicResource BlackColor}" />
 

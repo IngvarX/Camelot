@@ -12,27 +12,27 @@
     <Design.DataContext>
         <dialogs:AboutDialogViewModel />
     </Design.DataContext>
-    
+
     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-        <TextBlock Classes="aboutPageTextBlock">
-            <TextBlock.Text>    
+        <TextBlock Classes="dialogTextBlock">
+            <TextBlock.Text>
                 <MultiBinding StringFormat="{}Camelot v{0}">
                     <Binding Path="ApplicationVersion" />
                 </MultiBinding>
             </TextBlock.Text>
         </TextBlock>
-        
-        <TextBlock Classes="aboutPageTextBlock" Text="{x:Static p:Resources.AboutPage}" />
-        
-        <TextBlock Classes="aboutPageTextBlock">
-            <TextBlock.Text>    
+
+        <TextBlock Classes="dialogTextBlock" Text="{x:Static p:Resources.AboutPage}" />
+
+        <TextBlock Classes="dialogTextBlock">
+            <TextBlock.Text>
                 <MultiBinding StringFormat="{}{0}: {1}">
                     <Binding Source="{x:Static p:Resources.Maintainers}"/>
                     <Binding Path="Maintainers" />
                 </MultiBinding>
             </TextBlock.Text>
         </TextBlock>
-        
+
         <Button Classes="dialogButton" Command="{Binding OpenRepositoryCommand}" Content="{x:Static p:Resources.Github}" />
     </StackPanel>
 
