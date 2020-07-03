@@ -18,7 +18,7 @@
         <TextBlock Classes="dialogTextBlock" Margin="0,0,0,10"  IsVisible="{Binding IsRemovingToTrash}"
                    Text="{Binding FilesCount, StringFormat={x:Static p:Resources.RemovingFilesToTrash}}" />
         <TextBlock Classes="dialogTextBlock" Margin="0,0,0,10" IsVisible="{Binding !IsRemovingToTrash}"
-                   Text="{Binding FilesCount, StringFormat={x:Static p:Resources.PermamentlyRemoveFiles}}" />
+                   Text="{Binding FilesCount, StringFormat={x:Static p:Resources.PermanentlyRemoveFiles}}" />
 
         <ItemsControl Grid.Row="1" Items="{Binding Files}" IsVisible="{Binding ShouldShowFilesList}">
             <ItemsControl.ItemTemplate>

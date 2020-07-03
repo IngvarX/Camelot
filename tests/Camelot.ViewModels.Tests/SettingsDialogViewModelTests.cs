@@ -67,5 +67,18 @@ namespace Camelot.ViewModels.Tests
 
             Assert.True(isCallbackCalled);
         }
+
+        [Fact]
+        public void TestSettingsViewModelActivation()
+        {
+            var settingsViewModelMock = new Mock<ISettingsViewModel>();
+            settingsViewModelMock
+                .Setup(m => m.Activate())
+                .Verifiable();
+            var dialogViewModel = new SettingsDialogViewModel(settingsViewModelMock.Object) {SelectedIndex = 0};
+            Assert.Equal(0, dialogViewModel.SelectedIndex);
+
+            settingsViewModelMock.Verify(m => m.Activate(), Times.Exactly(2));
+        }
     }
 }
