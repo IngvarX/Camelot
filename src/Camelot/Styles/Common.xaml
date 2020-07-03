@@ -25,7 +25,7 @@
     </Style>
 
     <Style Selector="MenuItem:selected">
-        <Setter Property="Foreground" Value="{DynamicResource HighlightForegroundBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource HighlightForegroundBrush}" />
     </Style>
 
     <Style Selector="DataGridColumnHeader">
@@ -47,16 +47,12 @@
         <Setter Property="Opacity" Value="1" />
     </Style>
 
-    <Style Selector="TextBlock.filePanelTextBlock">
-        <Setter Property="Foreground" Value="{DynamicResource MainWindowForegroundBrush}" />
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="FontFamily" Value="SansSerif" />
-        <Setter Property="FontSize" Value="16" />
-        <Setter Property="VerticalAlignment" Value="Center" />
-    </Style>
-
     <Style Selector="DataGridRow:selected Grid">
         <Setter Property="Background" Value="{DynamicResource HighlightBrush}" />
+    </Style>
+
+    <Style Selector="DataGridRow:selected MenuItem Grid">
+        <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
     </Style>
 
     <Style Selector="DataGridRow:pointerover /template/ Rectangle">
@@ -78,6 +74,14 @@
 
     <Style Selector="TabItem:selected">
         <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
+    </Style>
+
+    <Style Selector="DataGridRow:selected MenuItem /template/ Grid">
+        <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
+    </Style>
+
+    <Style Selector="DataGridRow:selected MenuItem:selected /template/ Grid">
+        <Setter Property="Background" Value="{DynamicResource HighlightBrush}" />
     </Style>
 
     <!-- Reused styles -->
