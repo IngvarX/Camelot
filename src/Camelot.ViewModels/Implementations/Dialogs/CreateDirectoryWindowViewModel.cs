@@ -41,10 +41,8 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             CancelCommand = ReactiveCommand.Create(Close);
         }
 
-        public override void Activate(CreateDirectoryNavigationParameter navigationParameter)
-        {
+        public override void Activate(CreateDirectoryNavigationParameter navigationParameter) =>
             _directoryPath = navigationParameter.DirectoryPath;
-        }
 
         private void CreateDirectory()
         {

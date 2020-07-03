@@ -10,8 +10,9 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 {
     public class RemoveNodesConfirmationDialogViewModel : ParameterizedDialogViewModelBase<RemoveNodesConfirmationDialogResult, NodesRemovingNavigationParameter>
     {
-        private readonly IPathService _pathService;
         private const int ShowedFilesLimit = 4;
+
+        private readonly IPathService _pathService;
 
         private IEnumerable<string> _files;
         private bool _isRemovingToTrash;

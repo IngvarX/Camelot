@@ -27,6 +27,7 @@ using Camelot.ViewModels.Configuration;
 using Camelot.ViewModels.Factories.Implementations;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Implementations;
+using Camelot.ViewModels.Implementations.Behaviors;
 using Camelot.ViewModels.Implementations.Dialogs;
 using Camelot.ViewModels.Implementations.Dialogs.Properties;
 using Camelot.ViewModels.Implementations.MainWindow;
