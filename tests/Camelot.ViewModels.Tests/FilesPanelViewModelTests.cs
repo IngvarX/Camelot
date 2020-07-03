@@ -146,13 +146,14 @@ namespace Camelot.ViewModels.Tests
             var filesPanelModel = _autoMocker.CreateInstance<FilesPanelViewModel>();
 
             Assert.Equal(AppRootDirectory, filesPanelModel.CurrentDirectory);
+            Assert.Single(filesPanelModel.FileSystemNodes);
 
             filesPanelModel.CurrentDirectory = NewDirectory;
 
             Assert.Equal(NewDirectory, filesPanelModel.CurrentDirectory);
             tabViewModelMock.VerifySet(m => m.CurrentDirectory = NewDirectory);
 
-            await Task.Delay(saveTimeout * 2);
+            await Task.Delay(saveTimeout * 3);
             _autoMocker.Verify<IFilesPanelStateService>(m => m.SavePanelState(It.IsAny<PanelModel>()), Times.Once);
 
             Assert.NotNull(panelModel);
@@ -161,8 +162,10 @@ namespace Camelot.ViewModels.Tests
 
             var tab = panelModel.Tabs.Single();
             Assert.Equal(NewDirectory, tab.Directory);
-            Assert.Equal((int) sortingColumn, tab.SortingSettings.SortingMode);
-            Assert.Equal(isSortingByAscendingEnabled, tab.SortingSettings.IsAscending);
+
+            var settings = tab.SortingSettings;
+            Assert.Equal(sortingColumn, (SortingColumn) settings.SortingMode);
+            Assert.Equal(isSortingByAscendingEnabled, settings.IsAscending);
         }
     }
 }
