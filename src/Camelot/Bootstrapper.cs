@@ -88,6 +88,10 @@ namespace Camelot
             var imagePreviewConfiguration = new ImagePreviewConfiguration();
             configuration.GetSection("ImagePreview").Bind(imagePreviewConfiguration);
             services.RegisterConstant(imagePreviewConfiguration);
+
+            var filePanelConfiguration = new FilePanelConfiguration();
+            configuration.GetSection("FilePanel").Bind(filePanelConfiguration);
+            services.RegisterConstant(filePanelConfiguration);
         }
 
         private static void RegisterEnvironmentServices(IMutableDependencyResolver services)
@@ -385,7 +389,8 @@ namespace Camelot
                 filesPanelStateService,
                 resolver.GetService<ITabViewModelFactory>(),
                 resolver.GetService<IFileSizeFormatter>(),
-                resolver.GetService<IClipboardOperationsService>()
+                resolver.GetService<IClipboardOperationsService>(),
+                resolver.GetService<FilePanelConfiguration>()
             );
 
             return filesPanelViewModel;

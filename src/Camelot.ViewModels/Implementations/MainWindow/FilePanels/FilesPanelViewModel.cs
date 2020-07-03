@@ -10,6 +10,7 @@ using ApplicationDispatcher.Interfaces;
 using Camelot.DataAccess.Models;
 using Camelot.Extensions;
 using Camelot.Services.Abstractions;
+using Camelot.ViewModels.Configuration;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Comparers;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
@@ -117,7 +118,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             IFilesPanelStateService filesPanelStateService,
             ITabViewModelFactory tabViewModelFactory,
             IFileSizeFormatter fileSizeFormatter,
-            IClipboardOperationsService clipboardOperationsService)
+            IClipboardOperationsService clipboardOperationsService,
+            FilePanelConfiguration filePanelConfiguration)
         {
             _fileService = fileService;
             _directoryService = directoryService;
@@ -143,7 +145,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             _tabs = SetupTabs();
 
             this.WhenAnyValue(x => x.CurrentDirectory, x => x.SelectedTab)
-                .Throttle(TimeSpan.FromMilliseconds(500))
+                .Throttle(TimeSpan.FromMilliseconds(filePanelConfiguration.SaveTimeoutMs))
                 .Subscribe(_ => SaveState());
 
             SubscribeToEvents();
