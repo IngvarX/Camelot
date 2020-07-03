@@ -7,7 +7,8 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         Width="450" Height="200"
         x:Class="Camelot.Views.Main.Dialogs.AboutDialog"
-        Title="{x:Static p:Resources.AboutCamelotTitle}">
+        Title="{x:Static p:Resources.AboutCamelotTitle}"
+        Icon="/Assets/Icons/about.png">
 
     <Design.DataContext>
         <dialogs:AboutDialogViewModel />

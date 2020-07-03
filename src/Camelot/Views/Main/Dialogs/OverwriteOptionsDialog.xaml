@@ -7,7 +7,8 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         Width="850" Height="400"
         x:Class="Camelot.Views.Main.Dialogs.OverwriteOptionsDialog"
-        Title="{x:Static p:Resources.OverwriteOptionsTitle}">
+        Title="{x:Static p:Resources.OverwriteOptionsTitle}"
+        Icon="/Assets/Icons/override.png">
 
     <Design.DataContext>
         <dialogs:OverwriteOptionsDialogViewModel />

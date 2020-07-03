@@ -8,7 +8,8 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Camelot.Views.Main.Dialogs.DirectoryInformationDialog"
         Width="700" Height="400"
-        Title="{x:Static p:Resources.DirectoryInformationTitle}">
+        Title="{x:Static p:Resources.DirectoryInformationTitle}"
+        Icon="/Assets/Icons/dir_info.png">
 
     <Design.DataContext>
         <properties:DirectoryInformationDialogViewModel />
