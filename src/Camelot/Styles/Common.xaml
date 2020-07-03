@@ -2,64 +2,19 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
+    <!-- Default styles for elements -->
+
     <Style Selector="Button">
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Background" Value="Transparent" />
-    </Style>
-
-    <Style Selector="Button.operationButton">
-        <Setter Property="Padding" Value="6" />
-        <Setter Property="Margin" Value="0,15,0,0" />
-        <Setter Property="VerticalContentAlignment" Value="Center" />
-    </Style>
-
-    <Style Selector="TextBlock.operationTextBlock">
-        <Setter Property="FontFamily" Value="SansSerif" />
-        <Setter Property="FontSize" Value="16" />
-        <Setter Property="Margin" Value="10,0,0,0" />
-    </Style>
-
-    <Style Selector="TextBlock.operationHotkeyTextBlock">
-        <Setter Property="FontFamily" Value="SansSerif" />
-        <Setter Property="FontSize" Value="16" />
-        <Setter Property="Opacity" Value="0.5" />
-        <Setter Property="Margin" Value="5,2,0,0" />
-    </Style>
-
-    <Style Selector="TextBlock.settingsTabTextBlock">
-        <Setter Property="FontFamily" Value="SansSerif" />
-        <Setter Property="FontSize" Value="18" />
+        <Setter Property="Cursor" Value="Hand" />
     </Style>
 
     <Style Selector="TextBox">
         <Setter Property="FontSize" Value="20" />
         <Setter Property="BorderThickness" Value="0" />
-    </Style>
-
-    <Style Selector="Border.tabBorder">
-        <Setter Property="CornerRadius" Value="4,4,0,0" />
-        <Setter Property="BorderThickness" Value="1" />
-    </Style>
-
-    <Style Selector="Button.tabButton">
-        <Setter Property="FontSize" Value="18" />
-        <Setter Property="FontFamily" Value="SansSerif" />
-        <Setter Property="Padding" Value="0" />
-    </Style>
-
-    <Style Selector="Button">
-        <Setter Property="Cursor" Value="Hand" />
-    </Style>
-
-    <Style Selector="TextBox.directoryTextBox">
-        <Setter Property="FontSize" Value="16" />
-        <Setter Property="Margin" Value="10,0,15,0" />
-        <Setter Property="Height" Value="30" />
-    </Style>
-
-    <Style Selector="Rectangle.tabRectangle">
-        <Setter Property="Margin" Value="0" />
-        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="Background" Value="{DynamicResource ThemeControlLowBrush}" />
+        <Setter Property="BorderThickness" Value="0" />
     </Style>
 
     <Style Selector="MenuItem">
@@ -69,51 +24,8 @@
         <Setter Property="FontFamily" Value="SansSerif" />
     </Style>
 
-    <Style Selector="Grid#OverlayGrid">
-        <Setter Property="ZIndex" Value="-1" />
-        <Setter Property="Background" Value="{DynamicResource DialogOverlayBrush}" />
-        <Setter Property="Opacity" Value="0.2" />
-    </Style>
-
-    <Style Selector="TextBox#DirectoryNameTextBox">
-        <Setter Property="Margin" Value="0,10" />
-    </Style>
-
     <Style Selector="MenuItem:selected">
         <Setter Property="Foreground" Value="{DynamicResource HighlightForegroundBrush}"/>
-    </Style>
-
-    <Style Selector="Button.dialogButton">
-        <Setter Property="FontSize" Value="18" />
-        <Setter Property="Margin" Value="20,10" />
-        <Setter Property="Padding" Value="15,10" />
-    </Style>
-
-    <Style Selector="Button.dialogButton /template/ ContentPresenter">
-        <Setter Property="CornerRadius" Value="6" />
-    </Style>
-
-    <Style Selector="TextBlock.dialogTextBlock">
-        <Setter Property="FontFamily" Value="SansSerif" />
-        <Setter Property="FontSize" Value="18" />
-    </Style>
-
-    <Style Selector="TextBlock.selectionInfoTextBlock">
-        <Setter Property="FontFamily" Value="SansSerif" />
-        <Setter Property="FontSize" Value="16" />
-    </Style>
-
-    <Style Selector="TextBlock.dialogTextBlock">
-        <Setter Property="FontFamily" Value="SansSerif" />
-        <Setter Property="FontSize" Value="16" />
-        <Setter Property="Margin" Value="0,5" />
-        <Setter Property="TextWrapping" Value="Wrap" />
-    </Style>
-
-    <Style Selector="TextBlock.tabNameTextBlock">
-        <Setter Property="Margin" Value="4,0" />
-        <Setter Property="FontSize" Value="16" />
-        <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
 
     <Style Selector="DataGridColumnHeader">
@@ -122,117 +34,8 @@
         <Setter Property="Padding" Value="0" />
     </Style>
 
-    <Style Selector="Border#OperationsBorder">
-        <Setter Property="Padding" Value="20" />
-        <!-- <Setter Property="Background" Value="{DynamicResource OperationsStateBackgroundBrush}" /> -->
-    </Style>
-
-    <Style Selector="TextBlock.operationStatusTextBlock">
-        <Setter Property="FontFamily" Value="SansSerif" />
-        <Setter Property="FontSize" Value="16" />
-        <Setter Property="Margin" Value="5" />
-    </Style>
-
-    <Style Selector="TextBlock.successTextBlock">
-        <Setter Property="Foreground" Value="{DynamicResource SuccessBrush}" />
-    </Style>
-
-    <Style Selector="TextBlock.errorTextBlock">
-        <Setter Property="Foreground" Value="{DynamicResource ErrorBrush}" />
-    </Style>
-
-    <Style Selector="ProgressBar.operationProgressBar">
-        <Setter Property="Foreground" Value="{DynamicResource SuccessForegroundBrush}" />
-        <Setter Property="Background" Value="{DynamicResource ProgressBarBackgroundBrush}" />
-    </Style>
-
-    <Style Selector="TextBlock.activeOperationTextBlock">
-        <Setter Property="Foreground" Value="{DynamicResource InactiveTabForegroundBrush}" />
-    </Style>
-
-    <Style Selector="TextBlock#ReplaceTextBlock">
-        <Setter Property="FontSize" Value="22" />
-        <Setter Property="Margin" Value="5,0,0,0" />
-        <Setter Property="TextWrapping" Value="Wrap" />
-    </Style>
-
-    <Style Selector="TextBlock.overWriteDialogTextBlock">
-        <Setter Property="FontSize" Value="18" />
-        <Setter Property="TextWrapping" Value="Wrap" />
-    </Style>
-
-    <Style Selector="TextBlock.boldStyleTextBlock">
-        <Setter Property="FontWeight" Value="Bold" />
-    </Style>
-
-    <!-- <Style Selector="Border.defaultBackgroundBorder"> -->
-    <!--     <Setter Property="Background" Value="{DynamicResource MainBackgroundColorBrush}" /> -->
-    <!-- </Style> -->
-
-    <Style Selector="Border.settingsContentBorder">
-        <Setter Property="BorderThickness" Value="1,0,0,0" />
-    </Style>
-
-    <Style Selector="Button.topOperationButton">
-        <Setter Property="Foreground" Value="{DynamicResource MainWindowForegroundBrush}" />
-        <Setter Property="FontSize" Value="18" />
-        <Setter Property="Opacity" Value="0.8" />
-    </Style>
-
-    <Style Selector="Button.topOperationButton:pointerover">
-        <Setter Property="Opacity" Value="0.9" />
-    </Style>
-
-    <Style Selector="TextBox.settingsTextBox">
-        <Setter Property="Margin" Value="5,10,0,0" />
-    </Style>
-
     <Style Selector="TabItem">
         <Setter Property="Padding" Value="0" />
-    </Style>
-
-    <Style Selector="TabControl.propertiesDialogTabControl">
-        <Setter Property="Padding" Value="15" />
-    </Style>
-
-    <Style Selector="TabControl.propertiesDialogTabControl TabItem">
-        <Setter Property="Padding" Value="5" />
-        <Setter Property="HeaderTemplate">
-            <Setter.Value>
-                <DataTemplate>
-                    <StackPanel Orientation="Vertical">
-                        <Border Classes="tabBorder">
-                            <Grid Classes="inactiveTabGrid" Height="40">
-                                <TextBlock Classes="tabNameTextBlock inactiveTabNameTextBlock"
-                                           Text="{Binding Path=Header, RelativeSource={RelativeSource AncestorType=TabItem}}" />
-                            </Grid>
-                        </Border>
-
-                        <Rectangle Classes="tabRectangle" Height="2" />
-                    </StackPanel>
-                </DataTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style Selector="TabControl.propertiesDialogTabControl TabItem:selected">
-        <Setter Property="HeaderTemplate">
-            <Setter.Value>
-                <DataTemplate>
-                    <StackPanel Orientation="Vertical">
-                        <Border Classes="tabBorder">
-                            <Grid Classes="activeTabGrid" Height="40">
-                                <TextBlock Classes="tabNameTextBlock"
-                                           Text="{Binding Path=Header, RelativeSource={RelativeSource AncestorType=TabItem}}" />
-                            </Grid>
-                        </Border>
-
-                        <Rectangle Classes="tabRectangle tabRectangleGloballyActive"
-                                   Height="2" />
-                    </StackPanel>
-                </DataTemplate>
-            </Setter.Value>
-        </Setter>
     </Style>
 
     <Style Selector="DataGridRow">
@@ -269,123 +72,18 @@
         <Setter Property="RowBackground" Value="{DynamicResource ThemeBackgroundBrush}" />
     </Style>
 
-    <Style Selector="Grid.defaultBackgroundColor">
-        <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
-    </Style>
-
-    <Style Selector="Grid.topPanelGrid">
-        <Setter Property="Background" Value="{DynamicResource TopPanelGridBackgroundBrush}" />
-    </Style>
-
-    <Style Selector="Button.operationButton">
-        <Setter Property="Background" Value="{DynamicResource OperationButtonBackgroundColorBrush}" />
-        <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundBrush}" />
-    </Style>
-
-    <Style Selector="Button.operationButton:pointerover">
-        <Setter Property="Background" Value="{DynamicResource OperationButtonHoverBackgroundColorBrush}" />
-    </Style>
-
-    <Style Selector="Button.iconButton">
-        <Setter Property="Margin" Value="2" />
-        <Setter Property="Opacity" Value="0.8" />
-    </Style>
-
-    <Style Selector="Button.iconButton:pointerover">
-        <Setter Property="Opacity" Value="0.9" />
-    </Style>
-
-    <Style Selector="TextBox">
-        <Setter Property="Background" Value="{DynamicResource ThemeControlLowBrush}" />
-        <Setter Property="BorderThickness" Value="0" />
-    </Style>
-
     <Style Selector="TextBox /template/ Border">
         <Setter Property="CornerRadius" Value="5" />
-    </Style>
-
-    <Style Selector="Border.tabBorder">
-        <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderLowBrush}" />
-    </Style>
-
-    <Style Selector="Rectangle.tabRectangleGloballyActive">
-        <Setter Property="Fill" Value="{DynamicResource ThemeAccentBrush3}" />
-    </Style>
-
-    <Style Selector="Rectangle.tabRectangleActive">
-        <Setter Property="Fill" Value="{DynamicResource ThemeAccentBrush}" />
-    </Style>
-
-    <Style Selector="Border.selectionBorder">
-        <Setter Property="Background" Value="{DynamicResource HighlightBrush}" />
-        <Setter Property="Margin" Value="5" />
-        <Setter Property="Padding" Value="5,2" />
-        <Setter Property="CornerRadius" Value="5" />
-    </Style>
-
-    <Style Selector="Grid.inactiveTabGrid">
-        <Setter Property="Background" Value="{DynamicResource ThemeControlLowBrush}" />
-    </Style>
-
-    <Style Selector="TextBlock.inactiveTabNameTextBlock">
-        <Setter Property="Foreground" Value="{DynamicResource InactiveTabForegroundBrush}" />
-    </Style>
-
-    <Style Selector="DockPanel#MenuDockPanel">
-        <Setter Property="Background" Value="{DynamicResource MenuBackgroundColorBrush}" />
-    </Style>
-
-    <Style Selector="Menu.smallContextMenu TextBlock">
-        <Setter Property="FontSize" Value="14" />
-    </Style>
-
-    <Style Selector="TextBlock.dataGridColumnHeaderTextBlock">
-        <Setter Property="Foreground" Value="{DynamicResource InactiveTabForegroundBrush}" />
-    </Style>
-
-    <Style Selector="Button.dialogButton">
-        <Setter Property="Background" Value="{DynamicResource HighlightBrush}" />
-    </Style>
-
-    <Style Selector="Button.iconButton:pressed /template/ ContentPresenter">
-        <Setter Property="Background" Value="Transparent"/>
-    </Style>
-
-    <Style Selector="Button.topOperationButton:pressed /template/ ContentPresenter">
-        <Setter Property="Background" Value="Transparent"/>
-    </Style>
-
-    <Style Selector="Button.dialogButton:pointerover">
-        <Setter Property="Foreground" Value="{DynamicResource HighlightForegroundBrush}" />
-    </Style>
-
-    <Style Selector="Button.alternativeColorDialogButton">
-        <Setter Property="Background" Value="{DynamicResource OperationButtonHoverBackgroundColorBrush}" />
-    </Style>
-
-    <Style Selector="Button.tabButton:pointerover TextBlock.inactiveTabNameTextBlock">
-        <Setter Property="Foreground" Value="{DynamicResource HighlightForegroundBrush}" />
-    </Style>
-
-    <Style Selector="Button.cancelDialogButton">
-        <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
-        <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="BorderBrush" Value="{DynamicResource HighlightForegroundBrush}" />
-    </Style>
-
-    <Style Selector="Button.applyDialogButton">
-        <Setter Property="Background" Value="{DynamicResource SuccessForegroundBrush}" />
     </Style>
 
     <Style Selector="TabItem:selected">
         <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
     </Style>
 
-    <Style Selector="TabItem:selected Border.settingsTabHeaderBorder">
-        <Setter Property="Background" Value="{DynamicResource HighlightBrush}" />
-        <Setter Property="Padding" Value="5,5,10,5" />
-        <Setter Property="CornerRadius" Value="8" />
-        <Setter Property="Margin" Value="0,0,10,0" />
+    <!-- Reused styles -->
+
+    <Style Selector="Grid.defaultBackgroundColor">
+        <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
     </Style>
 
 </Styles>

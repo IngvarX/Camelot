@@ -193,10 +193,10 @@
     <value>Удалить</value>
   </data>
   <data name="DeletedFileFromTo" xml:space="preserve">
-    <value>Удалённый {0} из {1}</value>
+    <value>Удалён {0} из {1}</value>
   </data>
   <data name="DeletedFilesAndDirectories" xml:space="preserve">
-    <value>Удалённые {0} файлы и {1} каталоги из {2}</value>
+    <value>Удалены {0} файлы и {1} каталоги из {2}</value>
   </data>
   <data name="Directory" xml:space="preserve">
     <value>Каталог</value>
