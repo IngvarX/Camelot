@@ -1,9 +1,14 @@
 coverage:
+  status:
+    project:
+      default:
+        target: auto
+        threshold: 3%
   notify:
     gitter:
       default:
-        url: "https://webhooks.gitter.im/e/2d29954fe429b3fc68af"
-        threshold: 1%
+        url: "https://webhooks.gitter.im/e/00d5f9c4fa5d8b7f29f3"
+        threshold: 0%
 ignore:
   - "src/Camelot/**/*"
   - "src/Camelot.Avalonia/**/*"
