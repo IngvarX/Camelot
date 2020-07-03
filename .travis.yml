@@ -2,19 +2,11 @@ language: csharp
 mono: none
 dotnet: 3.1
 
-addons:
-  sonarcloud:
-    organization: "ingvarx"
-    token:
-      secure: "jJYPhraEgH9rzwE2sc5KOMH6oQbTrtGexsrqy0/Ojmob7je09mvYKQUeu2UcXVok1BSYOkeZS8SrUjX1Dpm2I1Py+ZHTgOZkMdtNWQOvm1E1Cnq3e9t9sJHfZ6FiAtOHtjnCJkC/zXe+YteywJBXj4SdkeCKLNYgqYrVRyBYBC9pFu+7k2be+GS9/g6QQqAEF6E8ATdF6u9AHUBZamBlL66KkOoJks+oTSuL7wLvT9/rIPf1Qc4UjfX7ZHCUb1p1hHQpvZVCIzPhHgu7PnDRTltootarciwnIE9IhjUB7XMwsluRwSd2UmpeB/lIMh+UMmT2YVmjEonJhclEScFhfvxw7sTyxvPyHOa/0XsWQP1B4PjCEsRE6hafnxS0yHZ2IgBpdmeD8t/uDa5S5rmZdlff2TWc+1+Msw4YtkGisMncUzLafRqKJD/pq8LaavPhAJWpPQkE52YbRKvFI5f8C9/O8QENUmIA2AtC8dbTTjOK7yYtw0kf/defHPRLH1KAWaxK/0wGRlIlsyquE8pns45hUpprNvU8HZoelnqH+dv5j0v/e9yFHgJukeCqnCc+5Blm/6L6aDZtKBawYVIil3ykP0JlKUrQH/9ykcdrpvvWa1BrB969AhPZVR33Kd1qxDP90xVjU+mQPCt0PnEGNiUiu4Gez1GeqSayPsgcCmI="
-
 before_script:
   - dotnet restore
   - dotnet build --configuration Release
 script:
   - dotnet test --configuration Release --no-build --collect:"XPlat Code Coverage" /p:CoverletOutputFormat=opencover
-  - git fetch --unshallow
-  - sonar-scanner
 after_script:
   - bash <(curl -s https://codecov.io/bash)
 notifications:
