@@ -7,7 +7,8 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Camelot.Views.Main.Dialogs.CreateDirectoryDialog"
         Width="400" Height="150"
-        Title="{x:Static p:Resources.CreateDirectoryTitle}">
+        Title="{x:Static p:Resources.CreateDirectoryTitle}"
+        Icon="/Assets/new_folder.png">
 
     <Design.DataContext>
         <dialogs:CreateDirectoryDialogViewModel />

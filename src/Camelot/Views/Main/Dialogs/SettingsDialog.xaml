@@ -8,7 +8,8 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         Width="800" Height="500"
         x:Class="Camelot.Views.Main.Dialogs.SettingsDialog"
-        Title="{x:Static p:Resources.SettingsTitle}">
+        Title="{x:Static p:Resources.SettingsTitle}"
+        Icon="/Assets/settings.png">
 
     <Design.DataContext>
         <dialogs:SettingsDialogViewModel />
