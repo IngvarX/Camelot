@@ -5,7 +5,7 @@
             "name": ".NET Core Launch (console)",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build",
+            "preLaunchTask": "Build Debug",
             "program": "${workspaceFolder}/src/Camelot/bin/Debug/netcoreapp3.1/Camelot.dll",
             "args": [],
             "cwd": "${workspaceFolder}/src/Camelot",
