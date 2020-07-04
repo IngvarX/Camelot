@@ -101,12 +101,9 @@
 
     <Style Selector="TextBlock#ReplaceTextBlock">
         <Setter Property="FontSize" Value="22" />
-        <Setter Property="Margin" Value="5,0,0,0" />
+        <Setter Property="Margin" Value="10,0,0,0" />
         <Setter Property="TextWrapping" Value="Wrap" />
-    </Style>
-
-    <Style Selector="TextBlock.boldStyleTextBlock">
-        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="MaxWidth" Value="750" />
     </Style>
 
     <Style Selector="Button.topOperationButton">

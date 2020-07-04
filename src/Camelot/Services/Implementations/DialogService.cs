@@ -59,10 +59,7 @@ namespace Camelot.Services.Implementations
             where TParameter : NavigationParameterBase =>
                 ShowDialogAsync<DialogResultBase, TParameter>(viewModelName, parameter);
 
-        private static void Bind(IDataContextProvider window, object viewModel)
-        {
-            window.DataContext = viewModel;
-        }
+        private static void Bind(IDataContextProvider window, object viewModel) => window.DataContext = viewModel;
 
         private static DialogWindowBase<TResult> CreateView<TResult>(string viewModelName)
             where TResult : DialogResultBase

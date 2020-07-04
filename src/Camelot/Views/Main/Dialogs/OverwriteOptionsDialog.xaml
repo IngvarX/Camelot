@@ -88,7 +88,7 @@
             <Expander Grid.Row="3" Grid.ColumnSpan="2" Margin="0,15,0,10">
                 <Expander.Content>
                     <StackPanel Orientation="Horizontal">
-                        <TextBox Text="{Binding NewFileName}" Margin="0,12" />
+                        <TextBox Text="{Binding NewFileName}" MaxWidth="500" Margin="0,12" />
                         <Button Content="{x:Static p:Resources.Rename}" Command="{Binding RenameCommand}"
                                 Classes="dialogButton alternativeColorDialogButton" />
                     </StackPanel>
