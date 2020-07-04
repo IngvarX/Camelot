@@ -44,12 +44,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         public override void Activate(CreateDirectoryNavigationParameter navigationParameter) =>
             _directoryPath = navigationParameter.DirectoryPath;
 
-        private void CreateDirectory()
-        {
-            var result = new CreateDirectoryDialogResult(_directoryName);
-
-            Close(result);
-        }
+        private void CreateDirectory() => Close(new CreateDirectoryDialogResult(_directoryName));
 
         private bool CheckIfNameIsValid(string name)
         {

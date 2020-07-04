@@ -8,7 +8,7 @@ using Camelot.Services.Abstractions.Models.EventArgs;
 
 namespace Camelot.Services
 {
-    public class FileSystemWatchingService : IFileSystemWatchingService, IDisposable
+    public class FileSystemWatchingService : IFileSystemWatchingService
     {
         private readonly IFileSystemWatcherFactory _fileSystemWatcherWrapperFactory;
 
@@ -52,17 +52,15 @@ namespace Camelot.Services
                 return;
             }
 
-            var (watcher, _) = _fileSystemWatchersDictionary[directory];
-            _fileSystemWatchersDictionary.Remove(directory);
-
-            CleanupFileSystemWatcher(watcher);
-        }
-
-        public void Dispose()
-        {
-            foreach (var directory in _fileSystemWatchersDictionary.Keys)
+            var (watcher, subscriptionsCount) = _fileSystemWatchersDictionary[directory];
+            if (subscriptionsCount == 1)
             {
-                StopWatching(directory);
+                _fileSystemWatchersDictionary.Remove(directory);
+                CleanupFileSystemWatcher(watcher);
+            }
+            else
+            {
+                _fileSystemWatchersDictionary[directory] = (watcher, subscriptionsCount - 1);
             }
         }
 

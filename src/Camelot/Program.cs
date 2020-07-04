@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading;
 using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Logging.Serilog;
 using Avalonia.ReactiveUI;
 using Splat;
@@ -24,7 +26,7 @@ namespace Camelot
 
                 Bootstrapper.Register(Locator.CurrentMutable, Locator.Current);
 
-                BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+                BuildAvaloniaApp().StartWithClassicDesktopLifetime(args, ShutdownMode.OnMainWindowClose);
             }
             finally
             {
@@ -33,7 +35,8 @@ namespace Camelot
         }
 
         private static AppBuilder BuildAvaloniaApp()
-            => AppBuilder.Configure<App>()
+            => AppBuilder
+                .Configure<App>()
                 .UsePlatformDetect()
                 .LogToDebug()
                 .UseReactiveUI();

@@ -1,4 +1,7 @@
+using System;
 using System.IO;
+using System.Linq;
+using Camelot.Extensions;
 using Camelot.FileSystemWatcherWrapper.Interfaces;
 using Camelot.Services.Abstractions;
 using Moq;
@@ -130,6 +133,30 @@ namespace Camelot.Services.Tests
             _fileSystemWatcherMock.Raise(m => m.Renamed += null, args);
 
             Assert.False(isCallbackCalled);
+        }
+
+        [Fact]
+        public void TestMultipleSubscriptions()
+        {
+            var callbackCallsCount = 0;
+            _fileSystemWatchingService.NodeRenamed += (sender, eventArgs) => callbackCallsCount++;
+
+            _fileSystemWatchingService.StopWatching(CurrentDirectory);
+
+            for (var i = 0; i < 10; i++)
+            {
+                _fileSystemWatchingService.StartWatching(CurrentDirectory);
+            }
+
+            var args = new RenamedEventArgs(WatcherChangeTypes.Renamed, CurrentDirectory, FileName, FileName);
+            _fileSystemWatcherMock.Raise(m => m.Renamed += null, args);
+
+            Assert.Equal(1, callbackCallsCount);
+
+            _fileSystemWatchingService.StopWatching(CurrentDirectory);
+            _fileSystemWatcherMock.Raise(m => m.Renamed += null, args);
+
+            Assert.Equal(2, callbackCallsCount);
         }
     }
 }
