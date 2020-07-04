@@ -33,7 +33,8 @@
             </TextBlock.Text>
         </TextBlock>
 
-        <Button Classes="dialogButton" Command="{Binding OpenRepositoryCommand}" Content="{x:Static p:Resources.Github}" />
+        <Button Classes="dialogButton" Command="{Binding OpenRepositoryCommand}"
+                Content="{x:Static p:Resources.Github}" Width="100" />
     </StackPanel>
 
 </Window>

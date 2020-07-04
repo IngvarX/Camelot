@@ -92,7 +92,7 @@ namespace Camelot.ViewModels.Tests
         [InlineData(SortingColumn.Extension, true)]
         public async Task TestSetDirectory(SortingColumn sortingColumn, bool isSortingByAscendingEnabled)
         {
-            const int saveTimeout = 50;
+            const int saveTimeout = 30;
             _autoMocker.Use(new FilePanelConfiguration {SaveTimeoutMs = saveTimeout});
             var currentDirectory = AppRootDirectory;
             var tabViewModelMock = new Mock<ITabViewModel>();
@@ -153,7 +153,7 @@ namespace Camelot.ViewModels.Tests
             Assert.Equal(NewDirectory, filesPanelViewModel.CurrentDirectory);
             tabViewModelMock.VerifySet(m => m.CurrentDirectory = NewDirectory);
 
-            await Task.Delay(saveTimeout * 3);
+            await Task.Delay(saveTimeout * 5);
             _autoMocker.Verify<IFilesPanelStateService>(m => m.SavePanelState(It.IsAny<PanelModel>()), Times.Once);
 
             Assert.NotNull(panelModel);

@@ -94,6 +94,11 @@
         <Setter Property="Background" Value="{DynamicResource OperationButtonHoverBackgroundColorBrush}" />
     </Style>
 
+    <Style Selector="TextBox#DirectoryNameTextBox">
+        <Setter Property="Margin" Value="0,10" />
+        <Setter Property="Width" Value="300" />
+    </Style>
+
     <Style Selector="Button.cancelDialogButton">
         <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
         <Setter Property="BorderThickness" Value="1" />

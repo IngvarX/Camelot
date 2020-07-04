@@ -51,10 +51,6 @@
         <Setter Property="Opacity" Value="0.2" />
     </Style>
 
-    <Style Selector="TextBox#DirectoryNameTextBox">
-        <Setter Property="Margin" Value="0,10" />
-    </Style>
-
     <Style Selector="Button.dialogButton">
         <Setter Property="FontSize" Value="18" />
         <Setter Property="Margin" Value="20,10" />
