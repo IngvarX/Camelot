@@ -12,7 +12,6 @@ using Camelot.Extensions;
 using Camelot.Services.Abstractions;
 using Camelot.ViewModels.Configuration;
 using Camelot.ViewModels.Factories.Interfaces;
-using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Comparers;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using DynamicData;
 using ReactiveUI;
@@ -31,6 +30,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private readonly ITabViewModelFactory _tabViewModelFactory;
         private readonly IFileSizeFormatter _fileSizeFormatter;
         private readonly IClipboardOperationsService _clipboardOperationsService;
+        private readonly IFileSystemNodeViewModelComparerFactory _comparerFactory;
 
         private readonly ObservableCollection<IFileSystemNodeViewModel> _fileSystemNodes;
         private readonly ObservableCollection<IFileSystemNodeViewModel> _selectedFileSystemNodes;
@@ -40,9 +40,9 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private string _currentDirectory;
         private ITabViewModel _selectedTab;
 
-        private IEnumerable<FileViewModel> SelectedFiles => _selectedFileSystemNodes.OfType<FileViewModel>();
+        private IEnumerable<IFileViewModel> SelectedFiles => _selectedFileSystemNodes.OfType<IFileViewModel>();
 
-        private IEnumerable<DirectoryViewModel> SelectedDirectories => _selectedFileSystemNodes.OfType<DirectoryViewModel>();
+        private IEnumerable<IDirectoryViewModel> SelectedDirectories => _selectedFileSystemNodes.OfType<IDirectoryViewModel>();
 
         public string CurrentDirectory
         {
@@ -119,6 +119,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             ITabViewModelFactory tabViewModelFactory,
             IFileSizeFormatter fileSizeFormatter,
             IClipboardOperationsService clipboardOperationsService,
+            IFileSystemNodeViewModelComparerFactory comparerFactory,
             FilePanelConfiguration filePanelConfiguration)
         {
             _fileService = fileService;
@@ -131,6 +132,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             _tabViewModelFactory = tabViewModelFactory;
             _fileSizeFormatter = fileSizeFormatter;
             _clipboardOperationsService = clipboardOperationsService;
+            _comparerFactory = comparerFactory;
 
             _fileSystemNodes = new ObservableCollection<IFileSystemNodeViewModel>();
             _selectedFileSystemNodes = new ObservableCollection<IFileSystemNodeViewModel>();
@@ -503,25 +505,16 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             return tabs;
         }
 
-        private int GetInsertIndex(IFileSystemNodeViewModel newNodeModel)
+        private int GetInsertIndex(IFileSystemNodeViewModel newNodeViewModel)
         {
             var comparer = GetComparer();
-            var index = _fileSystemNodes.BinarySearch(newNodeModel, comparer);
-            if (index < 0)
-            {
-                index ^= -1;
-            }
+            var index = _fileSystemNodes.BinarySearch(newNodeViewModel, comparer);
 
-            return index;
+            return index < 0 ? index ^ -1 : index;
         }
 
-        private IComparer<IFileSystemNodeViewModel> GetComparer()
-        {
-            var sortingViewModel = SelectedTab.SortingViewModel;
-
-            return new FileSystemNodesComparer(sortingViewModel.IsSortingByAscendingEnabled,
-                sortingViewModel.SortingColumn);
-        }
+        private IComparer<IFileSystemNodeViewModel> GetComparer() =>
+            _comparerFactory.Create(SelectedTab.SortingViewModel);
 
         private IFileSystemNodeViewModel GetViewModel(string nodePath) =>
             _fileSystemNodes.SingleOrDefault(n => n.FullPath == nodePath);

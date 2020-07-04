@@ -276,6 +276,7 @@ namespace Camelot
             services.RegisterLazySingleton<IFilesOperationsMediator>(() => new FilesOperationsMediator(
                 resolver.GetService<IDirectoryService>()
             ));
+            services.RegisterLazySingleton<IFileSystemNodeViewModelComparerFactory>(() => new FileSystemNodeViewModelComparerFactory());
             services.Register(() => new TerminalSettingsViewModel(
                 resolver.GetService<ITerminalService>()
             ));
@@ -390,6 +391,7 @@ namespace Camelot
                 resolver.GetService<ITabViewModelFactory>(),
                 resolver.GetService<IFileSizeFormatter>(),
                 resolver.GetService<IClipboardOperationsService>(),
+                resolver.GetService<IFileSystemNodeViewModelComparerFactory>(),
                 resolver.GetService<FilePanelConfiguration>()
             );
 
