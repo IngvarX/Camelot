@@ -21,7 +21,7 @@ namespace Camelot.ViewModels.Services.Implementations
         {
             _directoryService = directoryService;
 
-            directoryService.SelectedDirectoryChanged += DirectoryServiceOnSelectedDirectoryChanged;
+            SubscribeToEvents();
         }
 
         public void Register(IFilesPanelViewModel activeFilesPanelViewModel, IFilesPanelViewModel inactiveFilesPanelViewModel)
@@ -63,6 +63,13 @@ namespace Camelot.ViewModels.Services.Implementations
             _directoryService.SelectedDirectory = filesPanelViewModel.CurrentDirectory;
         }
 
+        private void SubscribeToEvents() =>
+            _directoryService.SelectedDirectoryChanged += DirectoryServiceOnSelectedDirectoryChanged;
+
+        private void UnsubscribeFromEvents() =>
+            _directoryService.SelectedDirectoryChanged -= DirectoryServiceOnSelectedDirectoryChanged;
+
+
         private void DirectoryServiceOnSelectedDirectoryChanged(object sender, SelectedDirectoryChangedEventArgs e)
         {
             if (ActiveFilesPanelViewModel is null)
@@ -73,13 +80,16 @@ namespace Camelot.ViewModels.Services.Implementations
             ActiveFilesPanelViewModel.CurrentDirectory = e.NewDirectory;
         }
 
-
         private void SwapViewModels() =>
             (InactiveFilesPanelViewModel, ActiveFilesPanelViewModel) =
             (ActiveFilesPanelViewModel, InactiveFilesPanelViewModel);
 
-        private void UpdateCurrentDirectory() =>
+        private void UpdateCurrentDirectory()
+        {
+            UnsubscribeFromEvents();
             _directoryService.SelectedDirectory = ActiveFilesPanelViewModel.CurrentDirectory;
+            SubscribeToEvents();
+        }
 
         private void DeactivateInactiveViewModel() => InactiveFilesPanelViewModel.Deactivate();
     }

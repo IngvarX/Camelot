@@ -19,9 +19,6 @@ namespace Camelot.Views.Main.Dialogs
             base.OnOpened();
         }
 
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+        private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
     }
 }

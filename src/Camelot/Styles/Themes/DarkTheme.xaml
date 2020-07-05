@@ -1,0 +1,77 @@
+<Style
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime"
+    x:Class="Camelot.Styles.Themes.DarkTheme">
+
+    <Style.Resources>
+
+        <!-- Colors -->
+        <Color x:Key="OrangeColor">#c46a1c</Color>
+        <Color x:Key="BrightOrangeColor">#ce701e</Color>
+        <Color x:Key="WhiteColor">#ffffff</Color>
+        <Color x:Key="BlackColor">#000000</Color>
+        <Color x:Key="MenuBackgroundColor">#1b1a17</Color>
+        <Color x:Key="MainBackgroundColor">#272521</Color>
+        <Color x:Key="AlternativeMainBackgroundColor">#2a2824</Color>
+        <Color x:Key="OperationButtonBackgroundColor">#3c2b4e</Color>
+        <Color x:Key="OperationButtonHoverBackgroundColor">#45325a</Color>
+        <Color x:Key="SuccessColor">#bcffbc</Color>
+        <Color x:Key="ErrorColor">#ffbcbc</Color>
+        <Color x:Key="ProgressBarForegroundColor">#35a335</Color>
+        <Color x:Key="OperationsStateBackgroundColor">#1f1e1a</Color>
+        <Color x:Key="SuccessForegroundColor">#35a335</Color>
+
+        <!-- Avalonia brushes -->
+        <SolidColorBrush x:Key="ThemeBackgroundBrush" Color="{DynamicResource MainBackgroundColor}" />
+        <SolidColorBrush x:Key="ThemeForegroundBrush" Color="{DynamicResource WhiteColor}"
+                         Opacity="0.8" />
+        <Color x:Key="ThemeForegroundColor">#FFDEDEDE</Color>
+        <SolidColorBrush x:Key="BlackBrush" Color="{DynamicResource BlackColor}" />
+        <SolidColorBrush x:Key="HighlightBrush" Color="{DynamicResource OrangeColor}" />
+        <SolidColorBrush x:Key="HighlightForegroundBrush" Color="{DynamicResource WhiteColor}" Opacity="0.9" />
+        <SolidColorBrush x:Key="ThemeAccentBrush4" Color="{DynamicResource OrangeColor}" />
+        <SolidColorBrush x:Key="ThemeAccentBrush3" Color="{DynamicResource BrightOrangeColor}" />
+        <SolidColorBrush x:Key="ThemeControlLowBrush" Color="{DynamicResource BlackColor}"
+                         Opacity="0.2" />
+        <SolidColorBrush x:Key="ThemeBorderLowBrush" Color="{DynamicResource BlackColor}"
+                         Opacity="0.4" />
+        <SolidColorBrush x:Key="ThemeControlMidBrush" Color="{DynamicResource AlternativeMainBackgroundColor}" />
+        <SolidColorBrush x:Key="ThemeControlMidHighBrush" Color="{DynamicResource WhiteColor}"
+                         Opacity="0.3" />
+        <SolidColorBrush x:Key="ThemeControlHighBrush" Color="{DynamicResource WhiteColor}"
+                         Opacity="0.7" />
+        <SolidColorBrush x:Key="ThemeControlVeryHighBrush" Color="{DynamicResource WhiteColor}"
+                         Opacity="0.7" />
+        <SolidColorBrush x:Key="ThemeBorderMidBrush" Color="{DynamicResource BlackColor}"
+                         Opacity="0.4" />
+        <SolidColorBrush x:Key="ThemeAccentBrush" Color="{DynamicResource WhiteColor}"
+                         Opacity="0.3" />
+        <SolidColorBrush x:Key="ThemeForegroundLowBrush" Color="{DynamicResource WhiteColor}"
+                         Opacity="0.3" />
+
+        <!-- Custom brushes -->
+        <SolidColorBrush x:Key="AlternativeThemeBackgroundBrush" Color="{DynamicResource AlternativeMainBackgroundColor}" />
+        <SolidColorBrush x:Key="AlternativeThemeForegroundBrush" Color="{DynamicResource WhiteColor}"
+                         Opacity="0.7" />
+        <SolidColorBrush x:Key="OperationButtonBackgroundColorBrush" Color="{DynamicResource OperationButtonBackgroundColor}" />
+        <SolidColorBrush x:Key="OperationButtonHoverBackgroundColorBrush" Color="{DynamicResource OperationButtonHoverBackgroundColor}" />
+        <SolidColorBrush x:Key="MainWindowForegroundBrush" Color="{DynamicResource WhiteColor}" />
+        <SolidColorBrush x:Key="InactiveTabForegroundBrush" Color="{DynamicResource WhiteColor}"
+                         Opacity="0.65" />
+        <SolidColorBrush x:Key="TopPanelGridBackgroundBrush" Color="{DynamicResource MenuBackgroundColor}"
+                         Opacity="0.2" />
+        <SolidColorBrush x:Key="SuccessBrush" Color="{DynamicResource SuccessColor}" />
+        <SolidColorBrush x:Key="SuccessForegroundBrush" Color="{DynamicResource SuccessForegroundColor}" />
+        <SolidColorBrush x:Key="ErrorBrush" Color="{DynamicResource ErrorColor}" />
+        <SolidColorBrush x:Key="DialogOverlayBrush" Color="{DynamicResource BlackColor}" />
+
+        <!-- Theme resources -->
+        <system:Double x:Key="ThemeDisabledOpacity">0.5</system:Double>
+        <system:Double x:Key="ScrollBarThickness">18</system:Double>
+        <system:Double x:Key="ScrollBarThumbThickness">8</system:Double>
+        <Thickness x:Key="ThemeBorderThickness">1</Thickness>
+
+    </Style.Resources>
+
+</Style>

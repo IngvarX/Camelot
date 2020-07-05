@@ -14,15 +14,15 @@
     </Design.DataContext>
 
     <UserControl.Resources>
-        <converters:EnumConverter x:Key="EnumConverter" />
-        <converters:InverseEnumConverter x:Key="InverseEnumConverter" />
+        <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
+        <converters:InverseEnumToBooleanConverter x:Key="InverseEnumToBooleanConverter" />
     </UserControl.Resources>
 
     <ItemsControl Items="{Binding InactiveOperations}">
         <ItemsControl.ItemTemplate>
             <DataTemplate DataType="{x:Type operationsStates:OperationStateViewModel}">
                 <Grid>
-                    <StackPanel Orientation="Horizontal" IsVisible="{Binding State, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static enums:OperationState.Finished}}">
+                    <StackPanel Orientation="Horizontal" IsVisible="{Binding State, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:OperationState.Finished}}">
                         <DrawingPresenter Width="15" Height="15">
                             <DrawingPresenter.Drawing>
                                 <GeometryDrawing Brush="{DynamicResource SuccessBrush}"
@@ -30,7 +30,7 @@
                             </DrawingPresenter.Drawing>
                         </DrawingPresenter>
 
-                        <Grid IsVisible="{Binding OperationType, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static enums:OperationType.Copy}}">
+                        <Grid IsVisible="{Binding OperationType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:OperationType.Copy}}">
                             <TextBlock Classes="operationStatusTextBlock successTextBlock" IsVisible="{Binding IsProcessingSingleFile}">
                                 <TextBlock.Text>
                                     <MultiBinding StringFormat="{x:Static p:Resources.CopiedFileFromTo}">
@@ -51,7 +51,7 @@
                             </TextBlock>
                         </Grid>
 
-                        <Grid IsVisible="{Binding OperationType, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static enums:OperationType.Move}}">
+                        <Grid IsVisible="{Binding OperationType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:OperationType.Move}}">
                             <TextBlock Classes="operationStatusTextBlock successTextBlock" IsVisible="{Binding IsProcessingSingleFile}">
                                 <TextBlock.Text>
                                     <MultiBinding StringFormat="{x:Static p:Resources.MovedFileFromTo}">
@@ -72,7 +72,7 @@
                             </TextBlock>
                         </Grid>
 
-                        <Grid IsVisible="{Binding OperationType, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static enums:OperationType.Delete}}">
+                        <Grid IsVisible="{Binding OperationType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:OperationType.Delete}}">
                             <TextBlock Classes="operationStatusTextBlock successTextBlock" IsVisible="{Binding IsProcessingSingleFile}">
                                 <TextBlock.Text>
                                     <MultiBinding StringFormat="{x:Static p:Resources.DeletedFileFromTo}">
@@ -94,7 +94,7 @@
                         </Grid>
                     </StackPanel>
 
-                    <StackPanel Orientation="Horizontal" IsVisible="{Binding State, Converter={StaticResource InverseEnumConverter}, ConverterParameter={x:Static enums:OperationState.Finished}}">
+                    <StackPanel Orientation="Horizontal" IsVisible="{Binding State, Converter={StaticResource InverseEnumToBooleanConverter}, ConverterParameter={x:Static enums:OperationState.Finished}}">
                         <DrawingPresenter Width="15" Height="15">
                             <DrawingPresenter.Drawing>
                                 <GeometryDrawing Brush="{DynamicResource ErrorBrush}"
@@ -102,7 +102,7 @@
                             </DrawingPresenter.Drawing>
                         </DrawingPresenter>
 
-                        <Grid IsVisible="{Binding OperationType, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static enums:OperationType.Copy}}">
+                        <Grid IsVisible="{Binding OperationType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:OperationType.Copy}}">
                             <TextBlock Classes="operationStatusTextBlock errorTextBlock" IsVisible="{Binding IsProcessingSingleFile}">
                                 <TextBlock.Text>
                                     <MultiBinding StringFormat="{x:Static p:Resources.FailedCopyFileFromTo}">
@@ -123,7 +123,7 @@
                             </TextBlock>
                         </Grid>
 
-                        <Grid IsVisible="{Binding OperationType, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static enums:OperationType.Move}}">
+                        <Grid IsVisible="{Binding OperationType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:OperationType.Move}}">
                             <TextBlock Classes="operationStatusTextBlock errorTextBlock" IsVisible="{Binding IsProcessingSingleFile}">
                                 <TextBlock.Text>
                                     <MultiBinding StringFormat="{x:Static p:Resources.FailedToMoveFileFromTo}">
@@ -144,7 +144,7 @@
                             </TextBlock>
                         </Grid>
 
-                        <Grid IsVisible="{Binding OperationType, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static enums:OperationType.Delete}}">
+                        <Grid IsVisible="{Binding OperationType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:OperationType.Delete}}">
                             <TextBlock Classes="operationStatusTextBlock errorTextBlock" IsVisible="{Binding IsProcessingSingleFile}">
                                 <TextBlock.Text>
                                     <MultiBinding StringFormat="{x:Static p:Resources.FailedToDeleteFileFromTo}">

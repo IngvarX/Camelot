@@ -1,0 +1,119 @@
+<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Style Selector="TextBlock.settingsTabTextBlock">
+        <Setter Property="FontFamily" Value="SansSerif" />
+        <Setter Property="FontSize" Value="18" />
+    </Style>
+
+    <Style Selector="Button.dialogButton">
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="Margin" Value="20,10" />
+        <Setter Property="Padding" Value="15,10" />
+        <Setter Property="Background" Value="{DynamicResource HighlightBrush}" />
+    </Style>
+
+    <Style Selector="Button.dialogButton /template/ ContentPresenter">
+        <Setter Property="CornerRadius" Value="6" />
+    </Style>
+
+    <Style Selector="Button.dialogButton:pointerover">
+        <Setter Property="Foreground" Value="{DynamicResource HighlightForegroundBrush}" />
+    </Style>
+
+    <Style Selector="TextBlock.dialogTextBlock">
+        <Setter Property="FontFamily" Value="SansSerif" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="Margin" Value="0,5" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+    </Style>
+
+    <Style Selector="TextBlock.overWriteDialogTextBlock">
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+    </Style>
+
+    <Style Selector="TextBlock.boldStyleTextBlock">
+        <Setter Property="FontWeight" Value="Bold" />
+    </Style>
+
+    <Style Selector="Border.settingsContentBorder">
+        <Setter Property="BorderThickness" Value="1,0,0,0" />
+    </Style>
+
+    <Style Selector="TextBox.settingsTextBox">
+        <Setter Property="Margin" Value="5,10,0,0" />
+    </Style>
+
+    <Style Selector="TabControl.propertiesDialogTabControl">
+        <Setter Property="Padding" Value="15" />
+    </Style>
+
+    <Style Selector="TabControl.propertiesDialogTabControl TabItem">
+        <Setter Property="Padding" Value="5" />
+        <Setter Property="HeaderTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <StackPanel Orientation="Vertical">
+                        <Border Classes="tabBorder">
+                            <Grid Classes="inactiveTabGrid" Height="40">
+                                <TextBlock Classes="tabNameTextBlock inactiveTabNameTextBlock"
+                                           Text="{Binding Path=Header, RelativeSource={RelativeSource AncestorType=TabItem}}" />
+                            </Grid>
+                        </Border>
+
+                        <Rectangle Classes="tabRectangle" Height="2" />
+                    </StackPanel>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style Selector="TabControl.propertiesDialogTabControl TabItem:selected">
+        <Setter Property="HeaderTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <StackPanel Orientation="Vertical">
+                        <Border Classes="tabBorder">
+                            <Grid Classes="activeTabGrid" Height="40">
+                                <TextBlock Classes="tabNameTextBlock"
+                                           Text="{Binding Path=Header, RelativeSource={RelativeSource AncestorType=TabItem}}" />
+                            </Grid>
+                        </Border>
+
+                        <Rectangle Classes="tabRectangle tabRectangleGloballyActive"
+                                   Height="2" />
+                    </StackPanel>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style Selector="Button.alternativeColorDialogButton">
+        <Setter Property="Background" Value="{DynamicResource OperationButtonHoverBackgroundColorBrush}" />
+    </Style>
+
+    <Style Selector="TextBox#DirectoryNameTextBox">
+        <Setter Property="Margin" Value="0,10" />
+        <Setter Property="Width" Value="300" />
+    </Style>
+
+    <Style Selector="Button.cancelDialogButton">
+        <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderBrush" Value="{DynamicResource HighlightForegroundBrush}" />
+    </Style>
+
+    <Style Selector="Button.applyDialogButton">
+        <Setter Property="Background" Value="{DynamicResource SuccessForegroundBrush}" />
+    </Style>
+
+    <Style Selector="TabItem:selected Border.settingsTabHeaderBorder">
+        <Setter Property="Background" Value="{DynamicResource HighlightBrush}" />
+        <Setter Property="Padding" Value="5,5,10,5" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="Margin" Value="0,0,10,0" />
+    </Style>
+
+</Styles>

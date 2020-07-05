@@ -4,14 +4,14 @@ using Avalonia.Data.Converters;
 
 namespace Camelot.Converters
 {
-    public class EnumConverter : IValueConverter
+    public class InverseEnumToBooleanConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var actualOperationType = System.Convert.ToInt32(value);
-            var expectedOperationType = System.Convert.ToInt32(parameter);
+            var actual = System.Convert.ToInt32(value);
+            var expected = System.Convert.ToInt32(parameter);
 
-            return actualOperationType == expectedOperationType;
+            return actual != expected;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>

@@ -27,6 +27,7 @@ using Camelot.ViewModels.Configuration;
 using Camelot.ViewModels.Factories.Implementations;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Implementations;
+using Camelot.ViewModels.Implementations.Behaviors;
 using Camelot.ViewModels.Implementations.Dialogs;
 using Camelot.ViewModels.Implementations.Dialogs.Properties;
 using Camelot.ViewModels.Implementations.MainWindow;
@@ -88,6 +89,10 @@ namespace Camelot
             var imagePreviewConfiguration = new ImagePreviewConfiguration();
             configuration.GetSection("ImagePreview").Bind(imagePreviewConfiguration);
             services.RegisterConstant(imagePreviewConfiguration);
+
+            var filePanelConfiguration = new FilePanelConfiguration();
+            configuration.GetSection("FilePanel").Bind(filePanelConfiguration);
+            services.RegisterConstant(filePanelConfiguration);
         }
 
         private static void RegisterEnvironmentServices(IMutableDependencyResolver services)
@@ -276,6 +281,7 @@ namespace Camelot
             services.RegisterLazySingleton<IFilesOperationsMediator>(() => new FilesOperationsMediator(
                 resolver.GetService<IDirectoryService>()
             ));
+            services.RegisterLazySingleton<IFileSystemNodeViewModelComparerFactory>(() => new FileSystemNodeViewModelComparerFactory());
             services.Register(() => new TerminalSettingsViewModel(
                 resolver.GetService<ITerminalService>()
             ));
@@ -395,7 +401,9 @@ namespace Camelot
                 filesPanelStateService,
                 resolver.GetService<ITabViewModelFactory>(),
                 resolver.GetService<IFileSizeFormatter>(),
-                resolver.GetService<IClipboardOperationsService>()
+                resolver.GetService<IClipboardOperationsService>(),
+                resolver.GetService<IFileSystemNodeViewModelComparerFactory>(),
+                resolver.GetService<FilePanelConfiguration>()
             );
 
             return filesPanelViewModel;

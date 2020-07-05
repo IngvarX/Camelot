@@ -68,11 +68,12 @@ namespace Camelot.Services.Tests
         [InlineData(new[] {"/home/test/File1", "/home/test/File2"}, "/home/test")]
         [InlineData(new[] {"/home/test/File1", "/var/test/File2"}, "/")]
         [InlineData(new[] {"/home/test/1", "/home/test/2"}, "/home/test")]
+        [InlineData(new string[] {}, null)]
         public void TestGetCommonRootDirectory(string[] files, string expectedDirectory)
         {
             var actualDirectory = _pathService.GetCommonRootDirectory(files);
 
-            Assert.Equal(expectedDirectory, actualDirectory.Replace("\\", "/"));
+            Assert.Equal(expectedDirectory, actualDirectory?.Replace("\\", "/"));
         }
     }
 }

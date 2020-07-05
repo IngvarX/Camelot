@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Camelot.Styles.Themes;
 using Camelot.ViewModels.Implementations;
 using Camelot.Views;
 using Splat;
@@ -12,6 +13,7 @@ namespace Camelot
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
+            LoadTheme();
         }
 
         public override void OnFrameworkInitializationCompleted()
@@ -25,6 +27,12 @@ namespace Camelot
             }
 
             base.OnFrameworkInitializationCompleted();
+        }
+
+        private void LoadTheme()
+        {
+            // TODO: load themes on start from db
+            Styles.Add(new DarkTheme());
         }
     }
 }

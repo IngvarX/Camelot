@@ -92,7 +92,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow
 
             var navigationParameter = new NodesRemovingNavigationParameter(filesToRemove, false);
             var result = await ShowRemoveConfirmationDialogAsync(navigationParameter);
-            if (result?.IsConfirmed ?? false)
+            if (result)
             {
                  _operationsService.RemoveAsync(filesToRemove).Forget();
             }
@@ -108,15 +108,21 @@ namespace Camelot.ViewModels.Implementations.MainWindow
 
             var navigationParameter = new NodesRemovingNavigationParameter(filesToRemove, true);
             var result = await ShowRemoveConfirmationDialogAsync(navigationParameter);
-            if (result.IsConfirmed)
+            if (result)
             {
                 _trashCanService.MoveToTrashAsync(filesToRemove).Forget();
             }
         }
 
-        private Task<RemoveNodesConfirmationDialogResult> ShowRemoveConfirmationDialogAsync(NodesRemovingNavigationParameter navigationParameter) =>
-            _dialogService.ShowDialogAsync<RemoveNodesConfirmationDialogResult, NodesRemovingNavigationParameter>(
-                nameof(RemoveNodesConfirmationDialogViewModel), navigationParameter);
+        private async Task<bool> ShowRemoveConfirmationDialogAsync(
+            NodesRemovingNavigationParameter navigationParameter)
+        {
+            var result = await _dialogService
+                .ShowDialogAsync<RemoveNodesConfirmationDialogResult, NodesRemovingNavigationParameter>(
+                    nameof(RemoveNodesConfirmationDialogViewModel), navigationParameter);
+
+            return result?.IsConfirmed ?? false;
+        }
 
         private IReadOnlyList<string> GetSelectedFiles() =>
             _filesSelectionService

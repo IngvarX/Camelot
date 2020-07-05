@@ -15,19 +15,16 @@ namespace Camelot
             var name = fullName
                 .Replace("ViewModel", "View")
                 .Replace("Camelot", "Camelot.ViewModels");
-            
+
             var type = Type.GetType(name);
             if (type is null)
             {
                 throw new InvalidOperationException($"Type {name} was not found");
             }
 
-            return (Control)Activator.CreateInstance(type);
+            return (Control) Activator.CreateInstance(type);
         }
 
-        public bool Match(object data)
-        {
-            return data is ViewModelBase;
-        }
+        public bool Match(object data) => data is ViewModelBase;
     }
 }

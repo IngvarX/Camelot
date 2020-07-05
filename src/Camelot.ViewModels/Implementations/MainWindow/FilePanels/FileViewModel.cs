@@ -2,12 +2,13 @@ using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Behaviors;
 using Camelot.Services.Abstractions.Operations;
 using Camelot.ViewModels.Interfaces.Behaviors;
+using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Services.Interfaces;
 using ReactiveUI;
 
 namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 {
-    public class FileViewModel : FileSystemNodeViewModelBase
+    public class FileViewModel : FileSystemNodeViewModelBase, IFileViewModel
     {
         private readonly IFileSizeFormatter _fileSizeFormatter;
         private long _size;

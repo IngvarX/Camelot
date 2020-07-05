@@ -193,10 +193,10 @@
     <value>Удалить</value>
   </data>
   <data name="DeletedFileFromTo" xml:space="preserve">
-    <value>Удалённый {0} из {1}</value>
+    <value>Удалён {0} из {1}</value>
   </data>
   <data name="DeletedFilesAndDirectories" xml:space="preserve">
-    <value>Удалённые {0} файлы и {1} каталоги из {2}</value>
+    <value>Удалены {0} файлы и {1} каталоги из {2}</value>
   </data>
   <data name="Directory" xml:space="preserve">
     <value>Каталог</value>
@@ -294,8 +294,8 @@
   <data name="PathWithColon" xml:space="preserve">
     <value>Путь:</value>
   </data>
-  <data name="PermamentlyRemoveFiles" xml:space="preserve">
-    <value>Вы хотите навсегда удалить файлы: {0} ?</value>
+  <data name="PermanentlyRemoveFiles" xml:space="preserve">
+    <value>Вы хотите навсегда удалить эти {0} файлов?</value>
   </data>
   <data name="Remove" xml:space="preserve">
     <value>Удалить</value>
@@ -307,7 +307,7 @@
     <value>Удаление {0} файлов и {1} каталогов из {2}</value>
   </data>
   <data name="RemovingFilesToTrash" xml:space="preserve">
-    <value>Вы хотите переместить в корзину файлы: {0} ?</value>
+    <value>Вы хотите переместить в корзину {0} файлов?</value>
   </data>
   <data name="Rename" xml:space="preserve">
     <value>Переименовать</value>
