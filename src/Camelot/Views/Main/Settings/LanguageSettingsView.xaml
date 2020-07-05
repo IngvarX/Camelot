@@ -10,11 +10,16 @@
     <Design.DataContext>
         <settings:LanguageSettingsViewModel />
     </Design.DataContext>
-  
-    <ItemsControl Grid.Row="1" Margin="10,10,0,0" Items="{Binding Languages}">
-        <ItemsControl.ItemTemplate>
+    <ListBox Grid.Row="1" Margin="10,10,0,0" Items="{Binding Languages}" SelectedItem="{Binding CurrentLanguage, Mode=TwoWay}">
+        <ListBox.ItemsPanel>
+            <ItemsPanelTemplate>
+                <StackPanel Orientation="Vertical" />
+            </ItemsPanelTemplate>
+        </ListBox.ItemsPanel>
+        <ListBox.ItemTemplate>
             <DataTemplate>
-                <RadioButton GroupName="Languages">
+                <RadioButton GroupName="Languages" 
+                             IsChecked="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}, Mode=TwoWay}">
                     <RadioButton.Content>
                         <MultiBinding StringFormat="{}{0} ({1})">
                             <Binding Path="Name" />
@@ -23,6 +28,6 @@
                     </RadioButton.Content>
                 </RadioButton>
             </DataTemplate>
-        </ItemsControl.ItemTemplate>
-    </ItemsControl>
+        </ListBox.ItemTemplate>
+    </ListBox>
 </UserControl>

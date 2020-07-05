@@ -5,10 +5,12 @@ namespace Camelot.Services.Abstractions
 {
     public interface ILanguageManager
     {
-        LanguageModel GetLanguage();
+        LanguageModel GetCurrentLanguage { get; }
+
+        LanguageModel GetDefaultLanguage { get; }
+
+        IEnumerable<LanguageModel> GetAllLanguages { get; }
 
         void SetLanguage(LanguageModel languageModel);
-
-        IEnumerable<LanguageModel> GetAllLanguages();
     }
 }
