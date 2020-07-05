@@ -11,10 +11,17 @@
         <settings:LanguageSettingsViewModel />
     </Design.DataContext>
   
-    <ItemsControl Grid.Row="1" Margin="10,10,0,0" Items="{Binding AllLanguages}">
+    <ItemsControl Grid.Row="1" Margin="10,10,0,0" Items="{Binding Languages}">
         <ItemsControl.ItemTemplate>
             <DataTemplate>
-                <TextBlock Text="{Binding Path=Name}" />
+                <RadioButton GroupName="Languages">
+                    <RadioButton.Content>
+                        <MultiBinding StringFormat="{}{0} ({1})">
+                            <Binding Path="Name" />
+                            <Binding Path="NativeName" />
+                        </MultiBinding>
+                    </RadioButton.Content>
+                </RadioButton>
             </DataTemplate>
         </ItemsControl.ItemTemplate>
     </ItemsControl>
