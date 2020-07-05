@@ -20,6 +20,16 @@ namespace Camelot.Services.Implementations
 
         public IEnumerable<LanguageModel> GetAllLanguages => _availableLanguages.Value.Values;
 
+        public void SetLanguage(string langCode)
+        {
+            if (string.IsNullOrEmpty(langCode))
+            {
+                throw new ArgumentException($"{nameof(langCode)} can't be empty.");
+            }
+
+            Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(langCode);
+        }
+
         public void SetLanguage(LanguageModel languageModel)
         {
             Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(languageModel.Code);
