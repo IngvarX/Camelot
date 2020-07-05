@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
 using Camelot.ViewModels.Interfaces.Settings;
@@ -13,6 +14,7 @@ namespace Camelot.ViewModels.Implementations.Settings
         private readonly ILanguageManager _languageManager;
 
         private LanguageModel _currentLanguage;
+        private LanguageModel _initialLanguage;
         private readonly ObservableCollection<LanguageModel> _languages;
         private bool _isActivated;
 
@@ -34,7 +36,7 @@ namespace Camelot.ViewModels.Implementations.Settings
             _languages = SetupLanguages();
         }
 
-        public bool IsChanged => _currentLanguage != CurrentLanguage;
+        public bool IsChanged => _initialLanguage != CurrentLanguage;
 
         public void Activate()
         {
@@ -46,19 +48,22 @@ namespace Camelot.ViewModels.Implementations.Settings
             _isActivated = true;
 
             var savedLanguage = _localizationService.GetSavedLanguage();
-            var currentLanguage = _languageManager.GetLanguage();
+            var currentLanguage = _languageManager.GetCurrentLanguage;
 
-            if (savedLanguage != null)
-            {
-
-            }
+            var languageCode = savedLanguage != null ? savedLanguage.Code : currentLanguage.Code;
+            CurrentLanguage = _initialLanguage = GetLanguageOrDefault(languageCode);
         }
 
         public void SaveChanges()
         {
+            _languageManager.SetLanguage(CurrentLanguage);
+            _localizationService.SaveLanguage(CurrentLanguage);
         }
 
+        private LanguageModel GetLanguageOrDefault(string languageCode) 
+            => Languages.FirstOrDefault(l => l.Code == languageCode) ?? _languageManager.GetDefaultLanguage;
+
         private ObservableCollection<LanguageModel> SetupLanguages() 
-            => new ObservableCollection<LanguageModel>(_languageManager.GetAllLanguages());
+            => new ObservableCollection<LanguageModel>(_languageManager.GetAllLanguages);
     }
 }

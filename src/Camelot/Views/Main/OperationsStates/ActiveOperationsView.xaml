@@ -29,7 +29,7 @@
                                         <Binding Path="SourceFile" />
                                         <Binding Path="TargetDirectory" />
                                     </MultiBinding>
-                                </TextBlock.Text>п
+                                </TextBlock.Text>
                             </TextBlock>
 
                             <TextBlock Classes="activeOperationTextBlock operationStatusTextBlock" IsVisible="{Binding !IsProcessingSingleFile}">
