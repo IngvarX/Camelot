@@ -11,6 +11,8 @@ namespace Camelot.Services.Abstractions
 
         IEnumerable<LanguageModel> GetAllLanguages { get; }
 
+        void SetLanguage(string langCode);
+
         void SetLanguage(LanguageModel languageModel);
     }
 }

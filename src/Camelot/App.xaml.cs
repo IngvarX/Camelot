@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Camelot.Services.Abstractions;
 using Camelot.Styles.Themes;
 using Camelot.ViewModels.Implementations;
 using Camelot.Views;
@@ -14,6 +15,7 @@ namespace Camelot
         {
             AvaloniaXamlLoader.Load(this);
             LoadTheme();
+            LoadLanguage();
         }
 
         public override void OnFrameworkInitializationCompleted()
@@ -33,6 +35,18 @@ namespace Camelot
         {
             // TODO: load themes on start from db
             Styles.Add(new DarkTheme());
+        }
+
+        private void LoadLanguage()
+        {
+            var localizationService = Locator.Current.GetService<ILocalizationService>();
+            var languageManager = Locator.Current.GetService<ILanguageManager>();
+
+            var savedLanguage = localizationService.GetSavedLanguage();
+            if (savedLanguage != null)
+            {
+                languageManager.SetLanguage(savedLanguage.Code);
+            }
         }
     }
 }
