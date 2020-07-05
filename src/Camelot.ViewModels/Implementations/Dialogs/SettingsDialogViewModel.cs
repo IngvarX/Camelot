@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 using Camelot.Extensions;
@@ -11,12 +12,19 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         private readonly ISettingsViewModel[] _settingsViewModels;
 
         private ISettingsViewModel _terminalSettingsViewModel;
+        private ISettingsViewModel _languageSettingsViewModel;
         private int _selectedIndex;
 
         public ISettingsViewModel TerminalSettingsViewModel
         {
             get => _terminalSettingsViewModel;
             set => this.RaiseAndSetIfChanged(ref _terminalSettingsViewModel, value);
+        }
+
+        public ISettingsViewModel LanguageSettingsViewModel
+        {
+            get => _languageSettingsViewModel;
+            set => this.RaiseAndSetIfChanged(ref _languageSettingsViewModel, value);
         }
 
         public int SelectedIndex
@@ -33,15 +41,12 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 
         public ICommand CloseCommand { get; }
 
-        public SettingsDialogViewModel(
-            ISettingsViewModel terminalSettingsViewModel)
+        public SettingsDialogViewModel(IList<ISettingsViewModel> terminalSettingsViewModel)
         {
-            TerminalSettingsViewModel = terminalSettingsViewModel;
+            TerminalSettingsViewModel = terminalSettingsViewModel[0];
+            LanguageSettingsViewModel = terminalSettingsViewModel[1];
 
-            _settingsViewModels = new[]
-            {
-                terminalSettingsViewModel
-            };
+            _settingsViewModels = terminalSettingsViewModel.ToArray();
             Activate(_settingsViewModels.First());
 
             SaveCommand = ReactiveCommand.Create(Save);

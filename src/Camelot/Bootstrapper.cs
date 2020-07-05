@@ -38,6 +38,7 @@ using Camelot.ViewModels.Interfaces.MainWindow;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.MainWindow.OperationsStates;
 using Camelot.ViewModels.Interfaces.Menu;
+using Camelot.ViewModels.Interfaces.Settings;
 using Camelot.ViewModels.Services.Implementations;
 using Camelot.ViewModels.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
@@ -161,11 +162,15 @@ namespace Camelot
             services.RegisterLazySingleton(() => new DirectoryOpeningBehavior(
                 resolver.GetService<IDirectoryService>()
             ));
+            services.RegisterLazySingleton<ILocalizationService>(() => new LocalizationService(
+                resolver.GetService<IUnitOfWorkFactory>()
+            ));
             services.RegisterLazySingleton<IFileSizeFormatter>(() => new FileSizeFormatter());
             services.RegisterLazySingleton<IPathService>(() => new PathService());
             services.RegisterLazySingleton<IDialogService>(() => new DialogService(
                 resolver.GetService<IMainWindowProvider>()
             ));
+            services.RegisterLazySingleton<ILanguageManager>(() => new LanguageManager());
             services.RegisterLazySingleton<IClipboardOperationsService>(() => new ClipboardOperationsService(
                 resolver.GetService<IClipboardService>(),
                 resolver.GetService<IOperationsService>(),
@@ -274,9 +279,15 @@ namespace Camelot
             services.Register(() => new TerminalSettingsViewModel(
                 resolver.GetService<ITerminalService>()
             ));
-            services.Register(() => new SettingsDialogViewModel(
-                resolver.GetService<TerminalSettingsViewModel>()
+            services.Register(() => new LanguageSettingsViewModel(
+                resolver.GetService<ILocalizationService>(),
+                resolver.GetService<ILanguageManager>()
             ));
+            services.Register(() => new SettingsDialogViewModel(new ISettingsViewModel[]
+            {
+                resolver.GetService<TerminalSettingsViewModel>(),
+                resolver.GetService<LanguageSettingsViewModel>()
+            }));
             services.RegisterLazySingleton<ITabViewModelFactory>(() => new TabViewModelFactory(
                 resolver.GetService<IPathService>()
             ));
