@@ -87,7 +87,7 @@
     </Style>
 
     <Style Selector="ProgressBar.operationProgressBar">
-        <Setter Property="Foreground" Value="{DynamicResource SuccessForegroundBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource ProgressBarForegroundBrush}" />
         <Setter Property="Background" Value="{DynamicResource ProgressBarBackgroundBrush}" />
     </Style>
 

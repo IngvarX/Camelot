@@ -19,7 +19,11 @@
     </Style>
 
     <Style Selector="Button.dialogButton:pointerover">
-        <Setter Property="Foreground" Value="{DynamicResource HighlightForegroundBrush}" />
+        <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush3}" />
+    </Style>
+
+    <Style Selector="Button.dialogButton:pressed /template/ ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource DialogButtonPressedBrush}" />
     </Style>
 
     <Style Selector="TextBlock.dialogTextBlock">
@@ -94,6 +98,10 @@
         <Setter Property="Background" Value="{DynamicResource OperationButtonHoverBackgroundColorBrush}" />
     </Style>
 
+    <Style Selector="Button.alternativeColorDialogButton:pointerover">
+        <Setter Property="Background" Value="{DynamicResource OperationButtonBackgroundColorBrush}" />
+    </Style>
+
     <Style Selector="TextBox#DirectoryNameTextBox">
         <Setter Property="Margin" Value="0,10" />
         <Setter Property="Width" Value="300" />
@@ -106,7 +114,15 @@
     </Style>
 
     <Style Selector="Button.applyDialogButton">
-        <Setter Property="Background" Value="{DynamicResource SuccessForegroundBrush}" />
+        <Setter Property="Background" Value="{DynamicResource SuccessBackgroundBrush}" />
+    </Style>
+
+    <Style Selector="Button.applyDialogButton:pointerover">
+        <Setter Property="Background" Value="{DynamicResource SuccessHoverBackgroundBrush}" />
+    </Style>
+
+    <Style Selector="Button.applyDialogButton:pressed /template/ ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource SuccessPressedBackgroundBrush}" />
     </Style>
 
     <Style Selector="TabItem:selected Border.settingsTabHeaderBorder">
