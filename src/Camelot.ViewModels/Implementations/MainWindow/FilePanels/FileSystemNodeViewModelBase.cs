@@ -58,7 +58,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             set => this.RaiseAndSetIfChanged(ref _isEditing, value);
         }
 
-        public bool IsSelected { get; set; }
+        public bool IsWaitingForEdit { get; set; }
 
         public ICommand OpenCommand { get; }
 

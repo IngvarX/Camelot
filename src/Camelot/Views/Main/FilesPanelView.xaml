@@ -76,8 +76,8 @@
                   HorizontalScrollBarVisibility="Disabled"
                   AlternatingRowBackground="{DynamicResource AlternativeThemeBackgroundBrush}"
                   VerticalScrollBarVisibility="Visible"
+                  DoubleTapped="OnDataGridDoubleTapped"
                   CellPointerPressed="OnDataGridCellPointerPressed"
-                  PointerReleased="OnDataGridPointerReleased"
                   SelectionChanged="OnDataGridSelectionChanged">
 
             <DataGrid.Resources>
@@ -159,7 +159,7 @@
                                         <Grid>
                                             <Grid IsVisible="{Binding !IsParentDirectory}">
                                                 <TextBlock Classes="filePanelTextBlock" Text="{Binding Name}" IsVisible="{Binding !IsEditing}"
-                                                           PointerPressed="OnNameTextBlockPointerPressed" />
+                                                           Tapped="OnNameTextBlockTapped" />
                                                 <TextBox Text="{Binding FullName}" IsVisible="{Binding IsEditing}"
                                                          LostFocus="OnFullNameTextBoxLostFocus">
                                                     <TextBox.KeyBindings>
@@ -176,9 +176,9 @@
                                     <DataTemplate DataType="{x:Type filePanels:FileViewModel}">
                                         <Grid>
                                             <TextBlock Classes="filePanelTextBlock" Text="{Binding Name}" IsVisible="{Binding !IsEditing}"
-                                                        PointerPressed="OnNameTextBlockPointerPressed" />
-                                            <TextBox Classes="filePanelTextBlock" Text="{Binding FullName}" IsVisible="{Binding IsEditing}"
-                                                      LostFocus="OnFullNameTextBoxLostFocus">
+                                                       Tapped="OnNameTextBlockTapped" />
+                                            <TextBox Text="{Binding FullName}" IsVisible="{Binding IsEditing}"
+                                                     LostFocus="OnFullNameTextBoxLostFocus">
                                                 <TextBox.KeyBindings>
                                                     <KeyBinding Gesture="Enter" Command="{Binding RenameCommand}" />
                                                 </TextBox.KeyBindings>

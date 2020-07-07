@@ -5,13 +5,13 @@ namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels
     public interface IFileSystemNodeViewModel
     {
         string FullPath { get; set; }
-        
+
         string Name { get; set; }
-        
+
         bool IsEditing { get; set; }
-        
-        bool IsSelected { get; set; }
-        
+
+        bool IsWaitingForEdit { get; set; }
+
         ICommand OpenCommand { get; }
     }
 }

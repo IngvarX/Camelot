@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
+using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Camelot.Extensions;
@@ -26,15 +26,10 @@ namespace Camelot.Views.Main
             AvaloniaXamlLoader.Load(this);
         }
 
-        private void SubscribeToEvents()
-        {
-            DataContextChanged += OnDataContextChanged;
-        }
+        private void SubscribeToEvents() => DataContextChanged += OnDataContextChanged;
 
-        private void OnDataContextChanged(object sender, EventArgs e)
-        {
+        private void OnDataContextChanged(object sender, EventArgs e) =>
             ViewModel.DeactivatedEvent += ViewModelOnDeactivatedEvent;
-        }
 
         private void ViewModelOnDeactivatedEvent(object sender, EventArgs e)
         {
@@ -51,7 +46,6 @@ namespace Camelot.Views.Main
                 .Cast<IFileSystemNodeViewModel>()
                 .ToArray();
             ViewModel.SelectedFileSystemNodes.AddRange(addedItems);
-            addedItems.ForEach(vm => vm.IsSelected = true);
 
             var removedItems = args
                 .AddedItems
@@ -59,42 +53,50 @@ namespace Camelot.Views.Main
                 .ToArray();
             ViewModel.SelectedFileSystemNodes.RemoveMany(removedItems);
 
-            addedItems.Concat(removedItems).ForEach(vm => { vm.IsEditing = false; });
+            addedItems
+                .Concat(removedItems)
+                .ForEach(StopEditing);
         }
 
-        private void OnDataGridCellPointerPressed(object sender, DataGridCellPointerPressedEventArgs args)
+        private void OnDataGridDoubleTapped(object sender, RoutedEventArgs args)
         {
-            if (args.PointerPressedEventArgs.ClickCount == 2)
-            {
-                args.PointerPressedEventArgs.Handled = true;
-                var fileViewModel = (IFileSystemNodeViewModel) args.Cell.DataContext;
-
-                fileViewModel.OpenCommand.Execute(null);
-            }
-            else if (args.PointerPressedEventArgs.MouseButton == MouseButton.Right)
-            {
-                ActivateViewModel();
-            }
-        }
-
-        private void OnDataGridPointerReleased(object sender, PointerReleasedEventArgs args) =>
-            ActivateViewModel();
-
-        private void ActivateViewModel() => ViewModel.ActivateCommand.Execute(null);
-
-        private void OnNameTextBlockPointerPressed(object sender, PointerPressedEventArgs args)
-        {
-            if (args.MouseButton != MouseButton.Left || args.ClickCount == 2)
+            if (!(args.Source is IDataContextProvider dataContextProvider))
             {
                 return;
             }
 
+            if (!(dataContextProvider.DataContext is IFileSystemNodeViewModel nodeViewModel))
+            {
+                return;
+            }
+
+            args.Handled = true;
+
+            StopEditing(nodeViewModel);
+            nodeViewModel.OpenCommand.Execute(null);
+        }
+
+        private void OnDataGridCellPointerPressed(object sender, DataGridCellPointerPressedEventArgs args) =>
+            ActivateViewModel();
+
+        private void ActivateViewModel() => ViewModel.ActivateCommand.Execute(null);
+
+        private void OnNameTextBlockTapped(object sender, RoutedEventArgs args)
+        {
             var textBlock = (TextBlock) sender;
             var viewModel = (IFileSystemNodeViewModel) textBlock.DataContext;
 
-            if (viewModel.IsSelected)
+            if (viewModel.IsWaitingForEdit)
             {
                 viewModel.IsEditing = true;
+
+                // focus text box with file/dir name
+                var textBox = textBlock.Parent.VisualChildren.OfType<TextBox>().Single();
+                textBox.Focus();
+            }
+            else
+            {
+                viewModel.IsWaitingForEdit = true;
             }
         }
 
@@ -105,5 +107,8 @@ namespace Camelot.Views.Main
 
             viewModel.IsEditing = false;
         }
+
+        private static void StopEditing(IFileSystemNodeViewModel viewModel) =>
+            viewModel.IsWaitingForEdit = viewModel.IsEditing = false;
     }
 }

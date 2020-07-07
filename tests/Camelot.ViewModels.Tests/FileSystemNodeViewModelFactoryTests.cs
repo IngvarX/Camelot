@@ -58,7 +58,7 @@ namespace Camelot.ViewModels.Tests
             Assert.Equal(node.Name, name);
             Assert.Equal(node.FullPath, fullPath);
             Assert.False(node.IsEditing);
-            Assert.False(node.IsSelected);
+            Assert.False(node.IsWaitingForEdit);
         }
 
         [Theory]
@@ -99,7 +99,7 @@ namespace Camelot.ViewModels.Tests
             Assert.Equal(node.Name, name);
             Assert.Equal(node.FullPath, fullPath);
             Assert.False(node.IsEditing);
-            Assert.False(node.IsSelected);
+            Assert.False(node.IsWaitingForEdit);
         }
     }
 }
