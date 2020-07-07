@@ -15,7 +15,7 @@ ignore:
   - "src/Camelot.Avalonia/**/*"
   - "src/Camelot.DataAccess.Models/*"
   - "src/Camelot.ViewModels/Configuration/*"
-  - "src/Camelot.Services.Abstractions/Models/*"
+  - "src/Camelot.Services.Abstractions/**/*"
   - "src/Camelot.DataAccess.LiteDb/**/*"
   - "src/Camelot.DataAccess/**/*"
   - "src/Camelot.Services.Environment/**/*"
