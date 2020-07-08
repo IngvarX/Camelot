@@ -180,12 +180,24 @@
         <Setter Property="Background" Value="Transparent" />
     </Style>
 
-    <Style Selector="Button.topOperationButton:pressed /template/ ContentPresenter">
-        <Setter Property="Background" Value="Transparent" />
+    <Style Selector="Button.operationButton:pressed /template/ ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource OperationButtonPressedBackgroundColorBrush}" />
     </Style>
 
     <Style Selector="Button.tabButton:pointerover TextBlock.inactiveTabNameTextBlock">
         <Setter Property="Foreground" Value="{DynamicResource HighlightForegroundBrush}" />
+    </Style>
+
+    <Style Selector="Button.tabButton:pointerover">
+        <Setter Property="Background" Value="{DynamicResource TabButtonHoverBrush}" />
+    </Style>
+
+    <Style Selector="Button.tabButton:pointerover TextBlock.inactiveTabNameTextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource HighlightForegroundBrush}" />
+    </Style>
+
+    <Style Selector="Button.tabButton:pressed /template/ ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource TabButtonHoverBrush}" />
     </Style>
 
 </Styles>

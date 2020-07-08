@@ -42,7 +42,7 @@
             </TabControl>
 
             <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Classes="dialogButton cancelDialogButton" Content="{x:Static p:Resources.Close}" Command="{Binding CloseCommand}" />
+                <Button Classes="dialogButton transparentDialogButton" Content="{x:Static p:Resources.Close}" Command="{Binding CloseCommand}" />
                 <Button Classes="dialogButton applyDialogButton" Content="{x:Static p:Resources.Apply}" Command="{Binding SaveCommand}" />
             </StackPanel>
         </Grid>

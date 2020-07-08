@@ -102,15 +102,13 @@
         <Setter Property="Background" Value="{DynamicResource OperationButtonBackgroundColorBrush}" />
     </Style>
 
+    <Style Selector="Button.alternativeColorDialogButton:pressed /template/ ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource OperationButtonPressedBackgroundColorBrush}" />
+    </Style>
+
     <Style Selector="TextBox#DirectoryNameTextBox">
         <Setter Property="Margin" Value="0,10" />
         <Setter Property="Width" Value="300" />
-    </Style>
-
-    <Style Selector="Button.cancelDialogButton">
-        <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
-        <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="BorderBrush" Value="{DynamicResource HighlightForegroundBrush}" />
     </Style>
 
     <Style Selector="Button.applyDialogButton">
@@ -130,6 +128,21 @@
         <Setter Property="Padding" Value="5,5,10,5" />
         <Setter Property="CornerRadius" Value="8" />
         <Setter Property="Margin" Value="0,0,10,0" />
+    </Style>
+
+    <Style Selector="Button.transparentDialogButton">
+        <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderBrush" Value="{DynamicResource TransparentButtonBorderBrush}" />
+    </Style>
+
+    <Style Selector="Button.transparentDialogButton:pointerover /template/ ContentPresenter">
+        <Setter Property="BorderBrush" Value="{DynamicResource ThemeForegroundBrush}" />
+    </Style>
+
+    <Style Selector="Button.transparentDialogButton:pressed /template/ ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource DialogButtonPressedBrush}" />
+        <Setter Property="BorderBrush" Value="Transparent" />
     </Style>
 
 </Styles>
