@@ -18,4 +18,6 @@ ignore:
   - "src/Camelot.Services.Abstractions/**/*"
   - "src/Camelot.DataAccess.LiteDb/**/*"
   - "src/Camelot.DataAccess/**/*"
+  - "src/Camelot.FileSystemWatcher/Configuration/*"
+  - "src/Camelot.Operations/Models/*"
   - "src/Camelot.Services.Environment/**/*"

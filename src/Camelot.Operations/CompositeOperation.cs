@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Camelot.Extensions;
+using Camelot.Operations.Models;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Extensions;
 using Camelot.Services.Abstractions.Models.Enums;

@@ -145,4 +145,8 @@
         <Setter Property="BorderBrush" Value="Transparent" />
     </Style>
 
+    <Style Selector="Button.topOperationButton:pressed /template/ ContentPresenter">
+        <Setter Property="Background" Value="Transparent" />
+    </Style>
+
 </Styles>

@@ -40,7 +40,6 @@ namespace Camelot.Views.Main
 
         private void OnDataGridSelectionChanged(object sender, SelectionChangedEventArgs args)
         {
-            // TODO: swap RemovedItems and AddedItems after fixing bug in avalonia
             var addedItems = args
                 .RemovedItems
                 .Cast<IFileSystemNodeViewModel>()
