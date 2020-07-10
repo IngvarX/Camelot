@@ -7,12 +7,12 @@ namespace Camelot.ViewModels.Implementations.Settings
     {
         public LanguageSettingsViewModel LanguageSettingsViewModel { get; }
 
+        public bool IsChanged => LanguageSettingsViewModel.IsChanged;
+
         public GeneralSettingsViewModel(LanguageSettingsViewModel languageSettingsViewModel)
         {
             LanguageSettingsViewModel = languageSettingsViewModel;
         }
-
-        public bool IsChanged => LanguageSettingsViewModel.IsChanged;
 
         public void Activate()
         {

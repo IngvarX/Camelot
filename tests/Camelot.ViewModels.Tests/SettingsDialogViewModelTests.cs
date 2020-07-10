@@ -8,7 +8,7 @@ namespace Camelot.ViewModels.Tests
     public class SettingsDialogViewModelTests
     {
         [Fact]
-        public void TestTerminalSettingsViewModel()
+        public void TestSettingsViewModel()
         {
             var generalSettingsViewModel = new Mock<ISettingsViewModel>();
             generalSettingsViewModel

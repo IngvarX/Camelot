@@ -15,7 +15,7 @@ namespace Camelot.ViewModels.Implementations.Settings.General
 
         private LanguageModel _currentLanguage;
         private LanguageModel _initialLanguage;
-        private readonly ObservableCollection<LanguageModel> _languages;
+        private ObservableCollection<LanguageModel> _languages;
 
         private bool _isActivated;
 
@@ -27,17 +27,15 @@ namespace Camelot.ViewModels.Implementations.Settings.General
 
         public IEnumerable<LanguageModel> Languages => _languages;
 
+        public bool IsChanged => _initialLanguage != CurrentLanguage;
+
         public LanguageSettingsViewModel(
             ILocalizationService localizationService,
             ILanguageManager languageManager)
         {
             _localizationService = localizationService;
             _languageManager = languageManager;
-
-            _languages = SetupLanguages();
         }
-
-        public bool IsChanged => _initialLanguage != CurrentLanguage;
 
         public void Activate()
         {
@@ -47,6 +45,8 @@ namespace Camelot.ViewModels.Implementations.Settings.General
             }
 
             _isActivated = true;
+
+            _languages = new ObservableCollection<LanguageModel>(_languageManager.AllLanguages);
 
             var savedLanguage = _localizationService.GetSavedLanguage();
             var currentLanguage = _languageManager.CurrentLanguage;
@@ -63,8 +63,5 @@ namespace Camelot.ViewModels.Implementations.Settings.General
 
         private LanguageModel GetLanguageOrDefault(string languageCode)
             => Languages.SingleOrDefault(l => l.Code == languageCode) ?? _languageManager.DefaultLanguage;
-
-        private ObservableCollection<LanguageModel> SetupLanguages()
-            => new ObservableCollection<LanguageModel>(_languageManager.GetAllLanguages);
     }
 }
