@@ -21,9 +21,7 @@ namespace Camelot.Services
         {
             using var uow = _unitOfWorkFactory.Create();
             var repository = uow.GetRepository<Language>();
-
-            var language = repository.GetById(LanguageSettingsId);
-            return language;
+            return repository.GetById(LanguageSettingsId);
         }
 
         public void SaveLanguage(LanguageModel languageModel)

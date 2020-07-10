@@ -79,6 +79,12 @@
     <AvaloniaResource Update="Views\Main\TopOperationsView.xaml">
       <SubType>Designer</SubType>
     </AvaloniaResource>
+    <AvaloniaResource Update="Views\Main\Settings\General\LanguageSettingsView.xaml">
+      <SubType>Designer</SubType>
+    </AvaloniaResource>
+    <Compile Update="Views\Main\Settings\General\LanguageSettingsView.xaml.cs">
+      <DependentUpon>LanguageSettingsView.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\Main\TopOperationsView.xaml.cs">
       <DependentUpon>TopOperationsView.xaml</DependentUpon>
     </Compile>
@@ -94,8 +100,11 @@
     <Compile Update="Views\Main\Settings\TerminalSettingsView.xaml.cs">
       <DependentUpon>TerminalSettingsView.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\Main\Settings\LanguageSettingsView.xaml.cs">
-      <DependentUpon>LanguageSettingsView.xaml</DependentUpon>
+    <AvaloniaResource Update="Views\Main\Settings\GeneralSettingsView.xaml">
+      <SubType>Designer</SubType>
+    </AvaloniaResource>
+    <Compile Update="Views\Main\Settings\GeneralSettingsView.xaml.cs">
+      <DependentUpon>GeneralSettingsView.xaml</DependentUpon>
     </Compile>
     <AvaloniaResource Update="Views\Main\Dialogs\FileSystemNodeInformationDialog.xaml">
       <SubType>Designer</SubType>

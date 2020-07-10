@@ -14,9 +14,9 @@ namespace Camelot.Services.Implementations
         private readonly Lazy<Dictionary<string, LanguageModel>> _availableLanguages =
             new Lazy<Dictionary<string, LanguageModel>>(GetAvailableLanguages);
 
-        public LanguageModel GetCurrentLanguage => CreateLanguageModel(Thread.CurrentThread.CurrentUICulture);
+        public LanguageModel CurrentLanguage => CreateLanguageModel(Thread.CurrentThread.CurrentUICulture);
 
-        public LanguageModel GetDefaultLanguage => CreateLanguageModel(CultureInfo.DefaultThreadCurrentUICulture);
+        public LanguageModel DefaultLanguage => CreateLanguageModel(CultureInfo.DefaultThreadCurrentUICulture);
 
         public IEnumerable<LanguageModel> GetAllLanguages => _availableLanguages.Value.Values;
 

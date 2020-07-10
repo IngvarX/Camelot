@@ -6,7 +6,7 @@ using Camelot.Services.Abstractions.Models;
 using Camelot.ViewModels.Interfaces.Settings;
 using ReactiveUI;
 
-namespace Camelot.ViewModels.Implementations.Settings
+namespace Camelot.ViewModels.Implementations.Settings.General
 {
     public class LanguageSettingsViewModel : ViewModelBase, ISettingsViewModel
     {
@@ -27,7 +27,7 @@ namespace Camelot.ViewModels.Implementations.Settings
         public IEnumerable<LanguageModel> Languages => _languages;
 
         public LanguageSettingsViewModel(
-            ILocalizationService localizationService, 
+            ILocalizationService localizationService,
             ILanguageManager languageManager)
         {
             _localizationService = localizationService;
@@ -48,7 +48,7 @@ namespace Camelot.ViewModels.Implementations.Settings
             _isActivated = true;
 
             var savedLanguage = _localizationService.GetSavedLanguage();
-            var currentLanguage = _languageManager.GetCurrentLanguage;
+            var currentLanguage = _languageManager.CurrentLanguage;
 
             var languageCode = savedLanguage != null ? savedLanguage.Code : currentLanguage.Code;
             CurrentLanguage = _initialLanguage = GetLanguageOrDefault(languageCode);
@@ -60,10 +60,10 @@ namespace Camelot.ViewModels.Implementations.Settings
             _localizationService.SaveLanguage(CurrentLanguage);
         }
 
-        private LanguageModel GetLanguageOrDefault(string languageCode) 
-            => Languages.FirstOrDefault(l => l.Code == languageCode) ?? _languageManager.GetDefaultLanguage;
+        private LanguageModel GetLanguageOrDefault(string languageCode)
+            => Languages.SingleOrDefault(l => l.Code == languageCode) ?? _languageManager.DefaultLanguage;
 
-        private ObservableCollection<LanguageModel> SetupLanguages() 
+        private ObservableCollection<LanguageModel> SetupLanguages()
             => new ObservableCollection<LanguageModel>(_languageManager.GetAllLanguages);
     }
 }

@@ -1,0 +1,31 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:p="clr-namespace:Camelot.Properties"
+             xmlns:settings="clr-namespace:Camelot.ViewModels.Implementations.Settings.General;assembly=Camelot.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Camelot.Views.Main.Settings.General.LanguageSettingsView">
+
+    <Design.DataContext>
+        <settings:LanguageSettingsViewModel />
+    </Design.DataContext>
+
+    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*" Margin="10">
+        <TextBlock Classes="settingsTabTextBlock" Margin="5,13,0,0" Text="{x:Static p:Resources.Language}" />
+        <DropDown Grid.Column="1" Items="{Binding Languages}" SelectedItem="{Binding CurrentLanguage, Mode=TwoWay}">
+            <DropDown.ItemTemplate>
+                <DataTemplate>
+                    <DropDownItem>
+                        <DropDownItem.Content>
+                            <MultiBinding StringFormat="{}{0} ({1})">
+                                <Binding Path="Name" />
+                                <Binding Path="NativeName" />
+                            </MultiBinding>
+                        </DropDownItem.Content>
+                    </DropDownItem>
+                </DataTemplate>
+            </DropDown.ItemTemplate>
+        </DropDown>
+    </Grid>
+</UserControl>

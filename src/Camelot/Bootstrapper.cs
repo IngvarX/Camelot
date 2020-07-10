@@ -35,6 +35,7 @@ using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
 using Camelot.ViewModels.Implementations.MainWindow.OperationsStates;
 using Camelot.ViewModels.Implementations.Menu;
 using Camelot.ViewModels.Implementations.Settings;
+using Camelot.ViewModels.Implementations.Settings.General;
 using Camelot.ViewModels.Interfaces.MainWindow;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.MainWindow.OperationsStates;
@@ -285,15 +286,17 @@ namespace Camelot
             services.Register(() => new TerminalSettingsViewModel(
                 resolver.GetService<ITerminalService>()
             ));
+            services.Register(() => new GeneralSettingsViewModel(
+                resolver.GetService<LanguageSettingsViewModel>()
+            ));
             services.Register(() => new LanguageSettingsViewModel(
                 resolver.GetService<ILocalizationService>(),
                 resolver.GetService<ILanguageManager>()
             ));
-            services.Register(() => new SettingsDialogViewModel(new ISettingsViewModel[]
-            {
+            services.Register(() => new SettingsDialogViewModel(
                 resolver.GetService<TerminalSettingsViewModel>(),
-                resolver.GetService<LanguageSettingsViewModel>()
-            }));
+                resolver.GetService<GeneralSettingsViewModel>()
+            ));
             services.RegisterLazySingleton<ITabViewModelFactory>(() => new TabViewModelFactory(
                 resolver.GetService<IPathService>()
             ));
