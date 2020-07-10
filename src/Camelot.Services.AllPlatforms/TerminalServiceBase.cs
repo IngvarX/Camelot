@@ -28,8 +28,7 @@ namespace Camelot.Services.AllPlatforms
             _processService.Run(wrappedCommand, string.Format(wrappedArguments, directory));
         }
 
-        public TerminalSettings GetTerminalSettings() =>
-            GetSavedSettings() ?? GetDefaultSettings();
+        public TerminalSettings GetTerminalSettings() => GetSavedSettings() ?? GetDefaultSettings();
 
         public void SetTerminalSettings(TerminalSettings terminalSettings)
         {
@@ -41,8 +40,7 @@ namespace Camelot.Services.AllPlatforms
 
         protected abstract TerminalSettings GetDefaultSettings();
 
-        protected virtual (string, string) Wrap(string command, string arguments) =>
-            (command, arguments);
+        protected virtual (string, string) Wrap(string command, string arguments) => (command, arguments);
 
         private TerminalSettings GetSavedSettings()
         {
