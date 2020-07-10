@@ -1,7 +1,7 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 using Camelot.Extensions;
+using Camelot.ViewModels.Implementations.Settings;
 using Camelot.ViewModels.Interfaces.Settings;
 using ReactiveUI;
 
@@ -12,7 +12,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         private readonly ISettingsViewModel[] _settingsViewModels;
 
         private ISettingsViewModel _terminalSettingsViewModel;
-        private ISettingsViewModel _languageSettingsViewModel;
+        private ISettingsViewModel _generalSettingsViewModel;
         private int _selectedIndex;
 
         public ISettingsViewModel TerminalSettingsViewModel
@@ -21,10 +21,10 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             set => this.RaiseAndSetIfChanged(ref _terminalSettingsViewModel, value);
         }
 
-        public ISettingsViewModel LanguageSettingsViewModel
+        public ISettingsViewModel GeneralSettingsViewModel
         {
-            get => _languageSettingsViewModel;
-            set => this.RaiseAndSetIfChanged(ref _languageSettingsViewModel, value);
+            get => _generalSettingsViewModel;
+            set => this.RaiseAndSetIfChanged(ref _generalSettingsViewModel, value);
         }
 
         public int SelectedIndex
@@ -41,12 +41,18 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 
         public ICommand CloseCommand { get; }
 
-        public SettingsDialogViewModel(IList<ISettingsViewModel> terminalSettingsViewModel)
+        public SettingsDialogViewModel(
+            TerminalSettingsViewModel terminalSettingsViewModel, 
+            GeneralSettingsViewModel generalSettingsViewModel)
         {
-            TerminalSettingsViewModel = terminalSettingsViewModel[0];
-            LanguageSettingsViewModel = terminalSettingsViewModel[1];
+            TerminalSettingsViewModel = terminalSettingsViewModel;
+            GeneralSettingsViewModel = generalSettingsViewModel;
 
-            _settingsViewModels = terminalSettingsViewModel.ToArray();
+            _settingsViewModels = new ISettingsViewModel[]
+            {
+                terminalSettingsViewModel, 
+                generalSettingsViewModel
+            };
             Activate(_settingsViewModels.First());
 
             SaveCommand = ReactiveCommand.Create(Save);

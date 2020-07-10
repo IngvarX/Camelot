@@ -21,6 +21,20 @@
                     <TabItem.Header>
                         <Border Classes="settingsTabHeaderBorder">
                             <StackPanel Orientation="Horizontal">
+                                <TextBlock Classes="settingsTabTextBlock" Text="{x:Static p:Resources.General}" />
+                            </StackPanel>
+                        </Border>
+                    </TabItem.Header>
+                    <TabItem.Content>
+                        <Border Classes="settingsContentBorder" BorderBrush="Black" BorderThickness="1,0,0,0">
+                            <settingsViews:GeneralSettingsView DataContext="{Binding GeneralSettingsViewModel}" />
+                        </Border>
+                    </TabItem.Content>
+                </TabItem>
+                <TabItem VerticalContentAlignment="Center">
+                    <TabItem.Header>
+                        <Border Classes="settingsTabHeaderBorder">
+                            <StackPanel Orientation="Horizontal">
                                 <DrawingPresenter Width="20" Height="20" Margin="10,3,5,0">
                                     <DrawingPresenter.Drawing>
                                         <GeometryDrawing Brush="{DynamicResource ThemeForegroundBrush}"
@@ -36,20 +50,6 @@
                     <TabItem.Content>
                         <Border Classes="settingsContentBorder" BorderBrush="Black" BorderThickness="1,0,0,0">
                             <settingsViews:TerminalSettingsView DataContext="{Binding TerminalSettingsViewModel}" />
-                        </Border>
-                    </TabItem.Content>
-                </TabItem>
-                <TabItem VerticalContentAlignment="Center">
-                    <TabItem.Header>
-                        <Border Classes="settingsTabHeaderBorder">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Classes="settingsTabTextBlock" Text="{x:Static p:Resources.Language}" />
-                            </StackPanel>
-                        </Border>
-                    </TabItem.Header>
-                    <TabItem.Content>
-                        <Border Classes="settingsContentBorder" BorderBrush="Black" BorderThickness="1,0,0,0">
-                            <settingsViews:LanguageSettingsView DataContext="{Binding LanguageSettingsViewModel}" />
                         </Border>
                     </TabItem.Content>
                 </TabItem>

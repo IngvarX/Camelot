@@ -3,9 +3,9 @@ using Avalonia.Markup.Xaml;
 
 namespace Camelot.Views.Main.Settings
 {
-    public class LanguageSettingsView : UserControl
+    public class GeneralSettingsView : UserControl
     {
-        public LanguageSettingsView()
+        public GeneralSettingsView()
         {
             InitializeComponent();
         }
