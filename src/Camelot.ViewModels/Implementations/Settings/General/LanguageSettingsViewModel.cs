@@ -16,6 +16,7 @@ namespace Camelot.ViewModels.Implementations.Settings.General
         private LanguageModel _currentLanguage;
         private LanguageModel _initialLanguage;
         private readonly ObservableCollection<LanguageModel> _languages;
+
         private bool _isActivated;
 
         public LanguageModel CurrentLanguage

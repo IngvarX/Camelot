@@ -42,7 +42,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         public ICommand CloseCommand { get; }
 
         public SettingsDialogViewModel(
-            TerminalSettingsViewModel terminalSettingsViewModel, 
+            TerminalSettingsViewModel terminalSettingsViewModel,
             GeneralSettingsViewModel generalSettingsViewModel)
         {
             TerminalSettingsViewModel = terminalSettingsViewModel;
@@ -50,10 +50,14 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 
             _settingsViewModels = new ISettingsViewModel[]
             {
-                terminalSettingsViewModel, 
-                generalSettingsViewModel
+                generalSettingsViewModel,
+                terminalSettingsViewModel
             };
-            Activate(_settingsViewModels.First());
+
+            foreach (var viewModel in _settingsViewModels)
+            {
+                Activate(viewModel);
+            }
 
             SaveCommand = ReactiveCommand.Create(Save);
             CloseCommand = ReactiveCommand.Create(Close);
