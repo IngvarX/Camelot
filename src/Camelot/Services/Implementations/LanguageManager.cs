@@ -18,7 +18,7 @@ namespace Camelot.Services.Implementations
 
         public LanguageModel DefaultLanguage => CreateLanguageModel(CultureInfo.DefaultThreadCurrentUICulture);
 
-        public IEnumerable<LanguageModel> GetAllLanguages => _availableLanguages.Value.Values;
+        public IEnumerable<LanguageModel> AllLanguages => _availableLanguages.Value.Values;
 
         public void SetLanguage(string langCode)
         {
