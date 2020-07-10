@@ -37,7 +37,11 @@ namespace Camelot.Services.Implementations
 
         private static Dictionary<string, LanguageModel> GetAvailableLanguages()
         {
-            var languages = new Dictionary<string, LanguageModel>();
+            var defaultLanguageModel = CreateLanguageModel(CultureInfo.GetCultureInfo("en"));
+            var languages = new Dictionary<string, LanguageModel>
+            {
+                { defaultLanguageModel.Code, defaultLanguageModel }
+            };
 
             foreach (var cultureInfo in CultureInfo.GetCultures(CultureTypes.AllCultures))
             {
