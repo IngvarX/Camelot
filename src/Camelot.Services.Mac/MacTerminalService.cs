@@ -18,8 +18,8 @@ namespace Camelot.Services.Mac
         protected override TerminalSettings GetDefaultSettings() =>
             new TerminalSettings
             {
-                Command = "/Applications/Utilities/Terminal.app",
-                Arguments = "--workdir {0}"
+                Command = "open",
+                Arguments = "-a Terminal \"{0}\""
             };
     }
 }

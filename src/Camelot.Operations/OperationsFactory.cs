@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Camelot.Operations.Models;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Models.Operations;

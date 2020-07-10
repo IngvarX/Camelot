@@ -22,7 +22,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             OpenTerminalCommand = ReactiveCommand.Create(OpenTerminal);
         }
 
-        private void OpenTerminal() =>
-            _terminalService.Open(_directoryService.SelectedDirectory);
+        private void OpenTerminal() => _terminalService.Open(_directoryService.SelectedDirectory);
     }
 }

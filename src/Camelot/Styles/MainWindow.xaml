@@ -13,14 +13,14 @@
     <Style Selector="TextBlock.operationTextBlock">
         <Setter Property="FontFamily" Value="SansSerif" />
         <Setter Property="FontSize" Value="16" />
-        <Setter Property="Margin" Value="10,0,0,0" />
+        <Setter Property="Margin" Value="10,4,0,0" />
     </Style>
 
     <Style Selector="TextBlock.operationHotkeyTextBlock">
         <Setter Property="FontFamily" Value="SansSerif" />
         <Setter Property="FontSize" Value="16" />
         <Setter Property="Opacity" Value="0.5" />
-        <Setter Property="Margin" Value="5,2,0,0" />
+        <Setter Property="Margin" Value="5,5,0,0" />
     </Style>
 
     <Style Selector="Border.tabBorder">
@@ -76,6 +76,7 @@
         <Setter Property="FontFamily" Value="SansSerif" />
         <Setter Property="FontSize" Value="16" />
         <Setter Property="Margin" Value="5" />
+        <Setter Property="TextWrapping" Value="Wrap" />
     </Style>
 
     <Style Selector="TextBlock.successTextBlock">
@@ -87,7 +88,7 @@
     </Style>
 
     <Style Selector="ProgressBar.operationProgressBar">
-        <Setter Property="Foreground" Value="{DynamicResource SuccessForegroundBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource ProgressBarForegroundBrush}" />
         <Setter Property="Background" Value="{DynamicResource ProgressBarBackgroundBrush}" />
     </Style>
 
@@ -180,12 +181,24 @@
         <Setter Property="Background" Value="Transparent" />
     </Style>
 
-    <Style Selector="Button.topOperationButton:pressed /template/ ContentPresenter">
-        <Setter Property="Background" Value="Transparent" />
+    <Style Selector="Button.operationButton:pressed /template/ ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource OperationButtonPressedBackgroundColorBrush}" />
     </Style>
 
     <Style Selector="Button.tabButton:pointerover TextBlock.inactiveTabNameTextBlock">
         <Setter Property="Foreground" Value="{DynamicResource HighlightForegroundBrush}" />
+    </Style>
+
+    <Style Selector="Button.tabButton:pointerover">
+        <Setter Property="Background" Value="{DynamicResource TabButtonHoverBrush}" />
+    </Style>
+
+    <Style Selector="Button.tabButton:pointerover TextBlock.inactiveTabNameTextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource HighlightForegroundBrush}" />
+    </Style>
+
+    <Style Selector="Button.tabButton:pressed /template/ ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource TabButtonHoverBrush}" />
     </Style>
 
 </Styles>
