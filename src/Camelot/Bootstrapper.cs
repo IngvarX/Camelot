@@ -294,8 +294,8 @@ namespace Camelot
                 resolver.GetService<ILanguageManager>()
             ));
             services.Register(() => new SettingsDialogViewModel(
-                resolver.GetService<TerminalSettingsViewModel>(),
-                resolver.GetService<GeneralSettingsViewModel>()
+                resolver.GetService<GeneralSettingsViewModel>(),
+                resolver.GetService<TerminalSettingsViewModel>()
             ));
             services.RegisterLazySingleton<ITabViewModelFactory>(() => new TabViewModelFactory(
                 resolver.GetService<IPathService>()

@@ -13,19 +13,19 @@
 
     <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*" Margin="10">
         <TextBlock Classes="settingsTabTextBlock" Margin="5,13,0,0" Text="{x:Static p:Resources.Language}" />
-        <DropDown Grid.Column="1" Items="{Binding Languages}" SelectedItem="{Binding CurrentLanguage, Mode=TwoWay}">
-            <DropDown.ItemTemplate>
+        <ComboBox Grid.Column="1" Items="{Binding Languages}" SelectedItem="{Binding CurrentLanguage, Mode=TwoWay}">
+            <ComboBox.ItemTemplate>
                 <DataTemplate>
-                    <DropDownItem>
-                        <DropDownItem.Content>
+                    <ComboBoxItem>
+                        <ComboBoxItem.Content>
                             <MultiBinding StringFormat="{}{0} ({1})">
                                 <Binding Path="Name" />
                                 <Binding Path="NativeName" />
                             </MultiBinding>
-                        </DropDownItem.Content>
-                    </DropDownItem>
+                        </ComboBoxItem.Content>
+                    </ComboBoxItem>
                 </DataTemplate>
-            </DropDown.ItemTemplate>
-        </DropDown>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
     </Grid>
 </UserControl>

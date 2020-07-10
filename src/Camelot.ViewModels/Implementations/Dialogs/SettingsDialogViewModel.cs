@@ -1,7 +1,6 @@
 using System.Linq;
 using System.Windows.Input;
 using Camelot.Extensions;
-using Camelot.ViewModels.Implementations.Settings;
 using Camelot.ViewModels.Interfaces.Settings;
 using ReactiveUI;
 
@@ -42,8 +41,8 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         public ICommand CloseCommand { get; }
 
         public SettingsDialogViewModel(
-            TerminalSettingsViewModel terminalSettingsViewModel,
-            GeneralSettingsViewModel generalSettingsViewModel)
+            ISettingsViewModel generalSettingsViewModel,
+            ISettingsViewModel terminalSettingsViewModel)
         {
             TerminalSettingsViewModel = terminalSettingsViewModel;
             GeneralSettingsViewModel = generalSettingsViewModel;
@@ -54,10 +53,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
                 terminalSettingsViewModel
             };
 
-            foreach (var viewModel in _settingsViewModels)
-            {
-                Activate(viewModel);
-            }
+            Activate(_settingsViewModels.First());
 
             SaveCommand = ReactiveCommand.Create(Save);
             CloseCommand = ReactiveCommand.Create(Close);
