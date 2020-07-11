@@ -32,7 +32,7 @@
                         </Border>
                     </TabItem.Header>
                     <TabItem.Content>
-                        <Border Classes="settingsContentBorder" BorderBrush="Black" BorderThickness="1,0,0,0">
+                        <Border Classes="settingsContentBorder">
                             <settingsViews:GeneralSettingsView DataContext="{Binding GeneralSettingsViewModel}" />
                         </Border>
                     </TabItem.Content>
@@ -54,7 +54,7 @@
                     </TabItem.Header>
 
                     <TabItem.Content>
-                        <Border Classes="settingsContentBorder" BorderBrush="Black" BorderThickness="1,0,0,0">
+                        <Border Classes="settingsContentBorder">
                             <settingsViews:TerminalSettingsView DataContext="{Binding TerminalSettingsViewModel}" />
                         </Border>
                     </TabItem.Content>

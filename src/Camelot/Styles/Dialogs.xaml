@@ -44,6 +44,7 @@
 
     <Style Selector="Border.settingsContentBorder">
         <Setter Property="BorderThickness" Value="1,0,0,0" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderMidBrush}" />
     </Style>
 
     <Style Selector="TextBox.settingsTextBox">
@@ -123,11 +124,15 @@
         <Setter Property="Background" Value="{DynamicResource SuccessPressedBackgroundBrush}" />
     </Style>
 
-    <Style Selector="TabItem:selected Border.settingsTabHeaderBorder">
-        <Setter Property="Background" Value="{DynamicResource HighlightBrush}" />
+    <Style Selector="TabItem Border.settingsTabHeaderBorder">
         <Setter Property="Padding" Value="5,5,10,5" />
         <Setter Property="CornerRadius" Value="8" />
         <Setter Property="Margin" Value="0,0,10,0" />
+        <Setter Property="Width" Value="150" />
+    </Style>
+
+    <Style Selector="TabItem:selected Border.settingsTabHeaderBorder">
+        <Setter Property="Background" Value="{DynamicResource HighlightBrush}" />
     </Style>
 
     <Style Selector="Button.transparentDialogButton">
