@@ -4,7 +4,7 @@
 
     <Style Selector="TextBlock.settingsTabTextBlock">
         <Setter Property="FontFamily" Value="SansSerif" />
-        <Setter Property="FontSize" Value="18" />
+        <Setter Property="FontSize" Value="16" />
     </Style>
 
     <Style Selector="Button.dialogButton">
@@ -44,7 +44,7 @@
 
     <Style Selector="Border.settingsContentBorder">
         <Setter Property="BorderThickness" Value="1,0,0,0" />
-        <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderMidBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource SettingsTabBorderBrush}" />
     </Style>
 
     <Style Selector="TextBox.settingsTextBox">
@@ -143,6 +143,10 @@
 
     <Style Selector="Button.transparentDialogButton:pointerover /template/ ContentPresenter">
         <Setter Property="BorderBrush" Value="{DynamicResource ThemeForegroundBrush}" />
+    </Style>
+
+    <Style Selector="Button.transparentDialogButton:pointerover">
+        <Setter Property="Foreground" Value="{DynamicResource HighlightForegroundBrush}" />
     </Style>
 
     <Style Selector="Button.transparentDialogButton:pressed /template/ ContentPresenter">

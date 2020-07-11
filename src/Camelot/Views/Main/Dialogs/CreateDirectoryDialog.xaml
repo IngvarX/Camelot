@@ -17,7 +17,7 @@
         <TextBlock Classes="dialogTextBlock" Text="{x:Static p:Resources.EnterDirectoryNameWithColon}" />
         <TextBox Grid.Row="1" x:Name="DirectoryNameTextBox" Text="{Binding DirectoryName}" />
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Classes="dialogButton" Content="{x:Static p:Resources.Cancel}" Command="{Binding CancelCommand}" />
+            <Button Classes="dialogButton transparentDialogButton" Content="{x:Static p:Resources.Cancel}" Command="{Binding CancelCommand}" />
             <Button Classes="dialogButton" Content="{x:Static p:Resources.Create}" Command="{Binding CreateCommand}" />
         </StackPanel>
     </Grid>

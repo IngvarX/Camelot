@@ -404,20 +404,20 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         private void SelectedFileSystemNodesOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            var filesToAdd = e.NewItems?
+            var nodesToAdd = e.NewItems?
                 .Cast<IFileSystemNodeViewModel>()
                 .Select(f => f.FullPath);
-            if (filesToAdd != null)
+            if (nodesToAdd != null)
             {
-                _filesSelectionService.SelectFiles(filesToAdd);
+                _filesSelectionService.SelectFiles(nodesToAdd);
             }
 
-            var filesToRemove = e.OldItems?
+            var nodesToRemove = e.OldItems?
                 .Cast<IFileSystemNodeViewModel>()
                 .Select(f => f.FullPath);
-            if (filesToRemove != null)
+            if (nodesToRemove != null)
             {
-                _filesSelectionService.UnselectFiles(filesToRemove);
+                _filesSelectionService.UnselectFiles(nodesToRemove);
             }
 
             this.RaisePropertyChanged(nameof(SelectedFilesCount));

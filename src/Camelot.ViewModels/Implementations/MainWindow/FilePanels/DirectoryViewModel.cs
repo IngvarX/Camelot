@@ -2,11 +2,12 @@ using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Behaviors;
 using Camelot.Services.Abstractions.Operations;
 using Camelot.ViewModels.Interfaces.Behaviors;
+using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Services.Interfaces;
 
 namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 {
-    public class DirectoryViewModel : FileSystemNodeViewModelBase
+    public class DirectoryViewModel : FileSystemNodeViewModelBase, IDirectoryViewModel
     {
         public bool IsParentDirectory { get; set; }
 

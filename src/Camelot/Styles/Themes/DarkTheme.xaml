@@ -21,8 +21,9 @@
         <Color x:Key="SuccessColor">#bcffbc</Color>
         <Color x:Key="ErrorColor">#ffbcbc</Color>
         <Color x:Key="SuccessBackgroundColor">#35a335</Color>
-        <Color x:Key="SuccessHoverBackgroundColor">#3a87ad</Color>
+        <Color x:Key="SuccessHoverBackgroundColor">#3aad3a</Color>
         <Color x:Key="SuccessPressedBackgroundColor">#2f972f</Color>
+        <Color x:Key="SettingsTabBorderColor">#181614</Color>
 
         <!-- Avalonia brushes -->
         <SolidColorBrush x:Key="ThemeBackgroundBrush" Color="{DynamicResource MainBackgroundColor}" />
@@ -68,6 +69,7 @@
         <SolidColorBrush x:Key="SuccessBackgroundBrush" Color="{DynamicResource SuccessBackgroundColor}" />
         <SolidColorBrush x:Key="SuccessHoverBackgroundBrush" Color="{DynamicResource SuccessHoverBackgroundColor}" />
         <SolidColorBrush x:Key="SuccessPressedBackgroundBrush" Color="{DynamicResource SuccessPressedBackgroundColor}" />
+        <SolidColorBrush x:Key="SettingsTabBorderBrush" Color="{DynamicResource SettingsTabBorderColor}" />
         <SolidColorBrush x:Key="ErrorBrush" Color="{DynamicResource ErrorColor}" />
         <SolidColorBrush x:Key="DialogOverlayBrush" Color="{DynamicResource BlackColor}" />
         <SolidColorBrush x:Key="ProgressBarForegroundBrush" Color="{DynamicResource SuccessBackgroundColor}" />
