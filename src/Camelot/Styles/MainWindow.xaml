@@ -60,6 +60,7 @@
     <Style Selector="TextBlock.selectionInfoTextBlock">
         <Setter Property="FontFamily" Value="SansSerif" />
         <Setter Property="FontSize" Value="16" />
+        <Setter Property="Foreground" Value="{DynamicResource HighlightForegroundBrush}" />
     </Style>
 
     <Style Selector="TextBlock.tabNameTextBlock">
@@ -152,8 +153,8 @@
 
     <Style Selector="Border.selectionBorder">
         <Setter Property="Background" Value="{DynamicResource HighlightBrush}" />
-        <Setter Property="Margin" Value="5,5,5,0" />
-        <Setter Property="Padding" Value="5,2" />
+        <Setter Property="Margin" Value="27,2,5,0" />
+        <Setter Property="Padding" Value="7,2" />
         <Setter Property="CornerRadius" Value="5" />
     </Style>
 

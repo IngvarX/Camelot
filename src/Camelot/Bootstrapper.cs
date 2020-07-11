@@ -315,7 +315,8 @@ namespace Camelot
                 resolver.GetService<IClipboardOperationsService>(),
                 resolver.GetService<IFilesOperationsMediator>(),
                 resolver.GetService<FilePropertiesBehavior>(),
-                resolver.GetService<DirectoryPropertiesBehavior>()
+                resolver.GetService<DirectoryPropertiesBehavior>(),
+                resolver.GetService<IDialogService>()
             ));
             services.Register(() => new AboutDialogViewModel(
                 resolver.GetService<IApplicationVersionProvider>(),

@@ -28,8 +28,8 @@ namespace Camelot.Services.Linux
             var desktopEnvironment = _desktopEnvironmentService.GetDesktopEnvironment();
             var (command, arguments) = desktopEnvironment switch
             {
-                DesktopEnvironment.Kde => ("konsole", "--workdir '{0}'"),
-                _ => ("x-terminal-emulator", "--workdir '{0}'")
+                DesktopEnvironment.Kde => ("konsole", @"--workdir \""{0}\"""),
+                _ => ("x-terminal-emulator", @"--workdir \""{0}\""")
             };
 
             return new TerminalSettings {Command = command, Arguments = arguments};
@@ -37,5 +37,8 @@ namespace Camelot.Services.Linux
 
         protected override (string, string) Wrap(string command, string arguments) =>
             _shellCommandWrappingService.WrapWithNohup(command, arguments);
+
+        protected override string Escape(string directory) =>
+            directory.Replace("\"", @"\\\""");
     }
 }

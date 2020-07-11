@@ -5,6 +5,9 @@ using System.Windows.Input;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Behaviors;
 using Camelot.Services.Abstractions.Operations;
+using Camelot.ViewModels.Implementations.Dialogs;
+using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
+using Camelot.ViewModels.Implementations.Dialogs.Results;
 using Camelot.ViewModels.Interfaces.Behaviors;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Services.Interfaces;
@@ -19,6 +22,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private readonly IClipboardOperationsService _clipboardOperationsService;
         private readonly IFilesOperationsMediator _filesOperationsMediator;
         private readonly IFileSystemNodePropertiesBehavior _fileSystemNodePropertiesBehavior;
+        private readonly IDialogService _dialogService;
 
         private DateTime _lastModifiedDateTime;
         private string _fullPath;
@@ -81,13 +85,15 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             IOperationsService operationsService,
             IClipboardOperationsService clipboardOperationsService,
             IFilesOperationsMediator filesOperationsMediator,
-            IFileSystemNodePropertiesBehavior fileSystemNodePropertiesBehavior)
+            IFileSystemNodePropertiesBehavior fileSystemNodePropertiesBehavior,
+            IDialogService dialogService)
         {
             _fileSystemNodeOpeningBehavior = fileSystemNodeOpeningBehavior;
             _operationsService = operationsService;
             _clipboardOperationsService = clipboardOperationsService;
             _filesOperationsMediator = filesOperationsMediator;
             _fileSystemNodePropertiesBehavior = fileSystemNodePropertiesBehavior;
+            _dialogService = dialogService;
 
             OpenCommand = ReactiveCommand.Create(Open);
             StartRenamingCommand = ReactiveCommand.Create(StartRenaming);
@@ -119,12 +125,29 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         private Task CopyToClipboardAsync() => _clipboardOperationsService.CopyFilesAsync(Files);
 
-        private Task DeleteAsync() => _operationsService.RemoveAsync(Files);
+        private async Task DeleteAsync()
+        {
+            var result = await ShowRemoveConfirmationDialogAsync();
+            if (result)
+            {
+                await _operationsService.RemoveAsync(Files);
+            }
+        }
 
         private Task CopyAsync() => _operationsService.CopyAsync(Files, _filesOperationsMediator.OutputDirectory);
 
         private Task MoveAsync() => _operationsService.MoveAsync(Files, _filesOperationsMediator.OutputDirectory);
 
         private Task ShowPropertiesAsync() => _fileSystemNodePropertiesBehavior.ShowPropertiesAsync(FullPath);
+
+        private async Task<bool> ShowRemoveConfirmationDialogAsync()
+        {
+            var navigationParameter = new NodesRemovingNavigationParameter(Files);
+            var result = await _dialogService
+                .ShowDialogAsync<RemoveNodesConfirmationDialogResult, NodesRemovingNavigationParameter>(
+                    nameof(RemoveNodesConfirmationDialogViewModel), navigationParameter);
+
+            return result?.IsConfirmed ?? false;
+        }
     }
 }

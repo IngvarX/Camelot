@@ -21,6 +21,7 @@ namespace Camelot.ViewModels.Factories.Implementations
         private readonly IFilesOperationsMediator _filesOperationsMediator;
         private readonly IFileSystemNodePropertiesBehavior _filePropertiesBehavior;
         private readonly IFileSystemNodePropertiesBehavior _directoryPropertiesBehavior;
+        private readonly IDialogService _dialogService;
 
         public FileSystemNodeViewModelFactory(
             IFileSystemNodeOpeningBehavior fileOpeningBehavior,
@@ -31,7 +32,8 @@ namespace Camelot.ViewModels.Factories.Implementations
             IClipboardOperationsService clipboardOperationsService,
             IFilesOperationsMediator filesOperationsMediator,
             IFileSystemNodePropertiesBehavior filePropertiesBehavior,
-            IFileSystemNodePropertiesBehavior directoryPropertiesBehavior)
+            IFileSystemNodePropertiesBehavior directoryPropertiesBehavior,
+            IDialogService dialogService)
         {
             _fileOpeningBehavior = fileOpeningBehavior;
             _directoryOpeningBehavior = directoryOpeningBehavior;
@@ -42,6 +44,7 @@ namespace Camelot.ViewModels.Factories.Implementations
             _filesOperationsMediator = filesOperationsMediator;
             _filePropertiesBehavior = filePropertiesBehavior;
             _directoryPropertiesBehavior = directoryPropertiesBehavior;
+            _dialogService = dialogService;
         }
 
         public IFileSystemNodeViewModel Create(FileModel fileModel)
@@ -52,7 +55,8 @@ namespace Camelot.ViewModels.Factories.Implementations
                 _clipboardOperationsService,
                 _filesOperationsMediator,
                 _fileSizeFormatter,
-                _filePropertiesBehavior)
+                _filePropertiesBehavior,
+                _dialogService)
             {
                 FullPath = fileModel.FullPath,
                 Size = fileModel.SizeBytes,
@@ -72,7 +76,8 @@ namespace Camelot.ViewModels.Factories.Implementations
                 _operationsService,
                 _clipboardOperationsService,
                 _filesOperationsMediator,
-                _directoryPropertiesBehavior)
+                _directoryPropertiesBehavior,
+                _dialogService)
             {
                 FullPath = directoryModel.FullPath,
                 Name = directoryModel.Name,

@@ -21,5 +21,8 @@ namespace Camelot.Services.Mac
                 Command = "open",
                 Arguments = "-a Terminal \"{0}\""
             };
+
+        protected override string Escape(string directory) =>
+            directory.Replace("\"", @"\""");
     }
 }

@@ -106,7 +106,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow
                 return;
             }
 
-            var navigationParameter = new NodesRemovingNavigationParameter(filesToRemove, true);
+            var navigationParameter = new NodesRemovingNavigationParameter(filesToRemove);
             var result = await ShowRemoveConfirmationDialogAsync(navigationParameter);
             if (result)
             {

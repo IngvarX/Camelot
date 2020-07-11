@@ -9,7 +9,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs.NavigationParameters
 
         public bool IsRemovingToTrash { get; }
 
-        public NodesRemovingNavigationParameter(IReadOnlyCollection<string> files, bool isRemovingToTrash)
+        public NodesRemovingNavigationParameter(IReadOnlyCollection<string> files, bool isRemovingToTrash = true)
         {
             Files = files;
             IsRemovingToTrash = isRemovingToTrash;

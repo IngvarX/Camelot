@@ -24,7 +24,7 @@ namespace Camelot.Services.Linux.Tests
         [InlineData(DesktopEnvironment.Unknown, "x-terminal-emulator")]
         public void TestOpening(DesktopEnvironment desktopEnvironment, string command)
         {
-            var args = $"--workdir '{Directory}'";
+            var args = $@"--workdir \""{Directory}\""";
             var uowMock = new Mock<IUnitOfWork>();
             uowMock
                 .Setup(m => m.GetRepository<TerminalSettings>())

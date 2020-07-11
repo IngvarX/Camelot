@@ -24,8 +24,9 @@ namespace Camelot.Services.AllPlatforms
         {
             var (command, arguments) = GetTerminalSettings();
             var (wrappedCommand, wrappedArguments) = Wrap(command, arguments);
+            var escapedDirectory = Escape(directory);
 
-            _processService.Run(wrappedCommand, string.Format(wrappedArguments, directory));
+            _processService.Run(wrappedCommand, string.Format(wrappedArguments, escapedDirectory));
         }
 
         public TerminalSettings GetTerminalSettings() => GetSavedSettings() ?? GetDefaultSettings();
@@ -41,6 +42,8 @@ namespace Camelot.Services.AllPlatforms
         protected abstract TerminalSettings GetDefaultSettings();
 
         protected virtual (string, string) Wrap(string command, string arguments) => (command, arguments);
+
+        protected virtual string Escape(string directory) => directory;
 
         private TerminalSettings GetSavedSettings()
         {

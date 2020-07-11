@@ -16,13 +16,15 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             IOperationsService operationsService,
             IClipboardOperationsService clipboardOperationsService,
             IFilesOperationsMediator filesOperationsMediator,
-            IFileSystemNodePropertiesBehavior fileSystemNodePropertiesBehavior)
+            IFileSystemNodePropertiesBehavior fileSystemNodePropertiesBehavior,
+            IDialogService dialogService)
             : base(
                 fileSystemNodeOpeningBehavior,
                 operationsService,
                 clipboardOperationsService,
                 filesOperationsMediator,
-                fileSystemNodePropertiesBehavior)
+                fileSystemNodePropertiesBehavior,
+                dialogService)
         {
 
         }
