@@ -1,4 +1,4 @@
-namespace ApplicationDispatcher.Interfaces
+namespace Camelot.Avalonia.Interfaces
 {
     public interface IApplicationVersionProvider
     {

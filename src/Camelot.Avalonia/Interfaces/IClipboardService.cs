@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace ApplicationDispatcher.Interfaces
+namespace Camelot.Avalonia.Interfaces
 {
     public interface IClipboardService
     {

@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using System.Windows.Input;
-using ApplicationDispatcher.Interfaces;
+using Camelot.Avalonia.Interfaces;
 using Camelot.ViewModels.Implementations.Dialogs;
 using Camelot.ViewModels.Interfaces.Menu;
 using Camelot.ViewModels.Services.Interfaces;

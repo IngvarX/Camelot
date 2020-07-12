@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
-using ApplicationDispatcher.Interfaces;
 using Avalonia;
 using Avalonia.Input.Platform;
+using Camelot.Avalonia.Interfaces;
 
-namespace ApplicationDispatcher.Implementations
+namespace Camelot.Avalonia.Implementations
 {
     public class ClipboardService : IClipboardService
     {

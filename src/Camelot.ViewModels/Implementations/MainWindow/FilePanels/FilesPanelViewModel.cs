@@ -6,7 +6,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using ApplicationDispatcher.Interfaces;
+using Camelot.Avalonia.Interfaces;
 using Camelot.DataAccess.Models;
 using Camelot.Extensions;
 using Camelot.Services.Abstractions;

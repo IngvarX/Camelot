@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ApplicationDispatcher.Interfaces;
+using Camelot.Avalonia.Interfaces;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Operations;
 using Camelot.Services.Environment.Interfaces;

@@ -1,8 +1,8 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
-using Camelot.FileSystemWatcherWrapper.Configuration;
-using Camelot.FileSystemWatcherWrapper.Implementations;
-using Camelot.FileSystemWatcherWrapper.Interfaces;
+using Camelot.FileSystemWatcher.Configuration;
+using Camelot.FileSystemWatcher.Implementations;
+using Camelot.FileSystemWatcher.Interfaces;
 using Camelot.Services.Abstractions;
 using Moq;
 using Xunit;

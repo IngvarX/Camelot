@@ -1,9 +1,9 @@
 using System.IO;
-using Camelot.FileSystemWatcherWrapper.Configuration;
-using Camelot.FileSystemWatcherWrapper.Interfaces;
+using Camelot.FileSystemWatcher.Configuration;
+using Camelot.FileSystemWatcher.Interfaces;
 using Camelot.Services.Abstractions;
 
-namespace Camelot.FileSystemWatcherWrapper.Implementations
+namespace Camelot.FileSystemWatcher.Implementations
 {
     public class FileSystemWatcherFactory : IFileSystemWatcherFactory
     {
@@ -20,7 +20,7 @@ namespace Camelot.FileSystemWatcherWrapper.Implementations
 
         public IFileSystemWatcher Create(string directory)
         {
-            var fileSystemWatcher = new FileSystemWatcher
+            var fileSystemWatcher = new System.IO.FileSystemWatcher
             {
                 Path = directory,
                 NotifyFilter = NotifyFilters.Attributes |

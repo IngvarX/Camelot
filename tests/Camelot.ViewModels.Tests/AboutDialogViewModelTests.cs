@@ -1,5 +1,5 @@
 using System.Linq;
-using ApplicationDispatcher.Interfaces;
+using Camelot.Avalonia.Interfaces;
 using Camelot.Services.Abstractions;
 using Camelot.ViewModels.Configuration;
 using Camelot.ViewModels.Implementations.Dialogs;

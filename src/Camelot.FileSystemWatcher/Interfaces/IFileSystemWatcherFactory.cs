@@ -1,4 +1,4 @@
-namespace Camelot.FileSystemWatcherWrapper.Interfaces
+namespace Camelot.FileSystemWatcher.Interfaces
 {
     public interface IFileSystemWatcherFactory
     {

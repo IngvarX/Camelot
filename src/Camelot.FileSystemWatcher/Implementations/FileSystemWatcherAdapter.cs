@@ -1,13 +1,13 @@
 ﻿using System;
 using System.IO;
 using Camelot.Extensions;
-using Camelot.FileSystemWatcherWrapper.Interfaces;
+using Camelot.FileSystemWatcher.Interfaces;
 
-namespace Camelot.FileSystemWatcherWrapper.Implementations
+namespace Camelot.FileSystemWatcher.Implementations
 {
     public class FileSystemWatcherAdapter : IFileSystemWatcher
     {
-        private readonly FileSystemWatcher _fileSystemWatcher;
+        private readonly System.IO.FileSystemWatcher _fileSystemWatcher;
 
         public event EventHandler<FileSystemEventArgs> Created;
 
@@ -17,7 +17,7 @@ namespace Camelot.FileSystemWatcherWrapper.Implementations
 
         public event EventHandler<RenamedEventArgs> Renamed;
 
-        public FileSystemWatcherAdapter(FileSystemWatcher fileSystemWatcher)
+        public FileSystemWatcherAdapter(System.IO.FileSystemWatcher fileSystemWatcher)
         {
             _fileSystemWatcher = fileSystemWatcher;
 

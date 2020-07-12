@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Timers;
 using Camelot.Extensions;
-using Camelot.FileSystemWatcherWrapper.Configuration;
-using Camelot.FileSystemWatcherWrapper.Interfaces;
+using Camelot.FileSystemWatcher.Configuration;
+using Camelot.FileSystemWatcher.Interfaces;
 using Camelot.Services.Abstractions;
 
-namespace Camelot.FileSystemWatcherWrapper.Implementations
+namespace Camelot.FileSystemWatcher.Implementations
 {
     public class AggregatingFileSystemWatcherDecorator : IFileSystemWatcher
     {

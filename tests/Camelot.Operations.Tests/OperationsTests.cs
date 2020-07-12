@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Camelot.Operations;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Models.Enums;
@@ -11,7 +10,7 @@ using Camelot.TaskPool.Interfaces;
 using Moq;
 using Xunit;
 
-namespace Camelot.Services.Operations.Tests
+namespace Camelot.Operations.Tests
 {
     public class OperationsTests
     {

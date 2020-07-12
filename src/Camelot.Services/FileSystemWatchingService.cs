@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Camelot.Extensions;
-using Camelot.FileSystemWatcherWrapper.Interfaces;
+using Camelot.FileSystemWatcher.Interfaces;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models.EventArgs;
 

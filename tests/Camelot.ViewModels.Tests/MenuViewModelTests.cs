@@ -1,4 +1,4 @@
-using ApplicationDispatcher.Interfaces;
+using Camelot.Avalonia.Interfaces;
 using Camelot.ViewModels.Implementations.Dialogs;
 using Camelot.ViewModels.Implementations.Menu;
 using Camelot.ViewModels.Services.Interfaces;

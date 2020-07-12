@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
-using ApplicationDispatcher.Interfaces;
 using Avalonia.Threading;
+using Camelot.Avalonia.Interfaces;
 
-namespace ApplicationDispatcher.Implementations
+namespace Camelot.Avalonia.Implementations
 {
     public class AvaloniaDispatcher : IApplicationDispatcher
     {

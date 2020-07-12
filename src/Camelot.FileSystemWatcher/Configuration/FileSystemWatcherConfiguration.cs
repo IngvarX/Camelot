@@ -1,4 +1,4 @@
-namespace Camelot.FileSystemWatcherWrapper.Configuration
+namespace Camelot.FileSystemWatcher.Configuration
 {
     public class FileSystemWatcherConfiguration
     {

@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 
-namespace ApplicationDispatcher.Interfaces
+namespace Camelot.Avalonia.Interfaces
 {
     public interface IMainWindowProvider
     {

@@ -1,9 +1,9 @@
-using ApplicationDispatcher.Interfaces;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Camelot.Avalonia.Interfaces;
 
-namespace ApplicationDispatcher.Implementations
+namespace Camelot.Avalonia.Implementations
 {
     public class MainWindowProvider : IMainWindowProvider
     {

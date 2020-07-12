@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace Camelot.FileSystemWatcherWrapper.Interfaces
+namespace Camelot.FileSystemWatcher.Interfaces
 {
     public interface IFileSystemWatcher : IDisposable
     {

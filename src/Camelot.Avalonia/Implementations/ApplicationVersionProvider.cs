@@ -1,7 +1,7 @@
-using ApplicationDispatcher.Interfaces;
+using Camelot.Avalonia.Interfaces;
 using Microsoft.Extensions.PlatformAbstractions;
 
-namespace ApplicationDispatcher.Implementations
+namespace Camelot.Avalonia.Implementations
 {
     public class ApplicationVersionProvider : IApplicationVersionProvider
     {
