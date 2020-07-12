@@ -1,11 +1,10 @@
-﻿using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace Camelot.Views.Main.Settings
+namespace Camelot.Views.Dialogs
 {
-    public class GeneralSettingsView : UserControl
+    public class AboutDialog : DialogWindowBase
     {
-        public GeneralSettingsView()
+        public AboutDialog()
         {
             InitializeComponent();
         }

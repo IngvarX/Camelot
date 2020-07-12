@@ -17,6 +17,108 @@
         <Setter Property="BorderThickness" Value="0" />
     </Style>
 
+    <Style Selector="ComboBox">
+        <Setter Property="Background" Value="{DynamicResource ThemeControlLowBrush}" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ThemeControlLowBrush}" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border Name="border"
+                        Background="{DynamicResource ThemeControlLowBrush}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        CornerRadius="5"
+                        BorderThickness="0">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <ContentControl Name="SelectedItemContentControl"
+                            Content="{TemplateBinding SelectionBoxItem}"
+                            ContentTemplate="{TemplateBinding ItemTemplate}" />
+                        <ToggleButton Grid.Column="1" Name="toggle"
+                                      BorderThickness="0"
+                                      Background="{TemplateBinding Background}"
+                                      ClickMode="Press"
+                                      Focusable="False"
+                                      IsChecked="{TemplateBinding IsDropDownOpen, Mode=TwoWay}">
+                            <DrawingPresenter Width="10" Height="10">
+                                <DrawingPresenter.Drawing>
+                                    <GeometryDrawing Brush="{DynamicResource InactiveTabForegroundBrush}" Geometry="M143 352.3L7 216.3c-9.4-9.4-9.4-24.6 0-33.9l22.6-22.6c9.4-9.4 24.6-9.4 33.9 0l96.4 96.4 96.4-96.4c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9l-136 136c-9.2 9.4-24.4 9.4-33.8 0z" />
+                                </DrawingPresenter.Drawing>
+                            </DrawingPresenter>
+                        </ToggleButton>
+
+                        <Popup Name="PART_Popup"
+                               IsOpen="{TemplateBinding IsDropDownOpen, Mode=TwoWay}"
+                               MinWidth="{Binding Bounds.Width, RelativeSource={RelativeSource TemplatedParent}}"
+                               MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                               PlacementTarget="{TemplateBinding}"
+                               StaysOpen="False">
+                            <Border BorderBrush="{DynamicResource ThemeBorderMidBrush}"
+                                    BorderThickness="1">
+                                <ScrollViewer>
+                                    <ItemsPresenter Name="PART_ItemsPresenter"
+                                                    Items="{TemplateBinding Items}"
+                                                    ItemsPanel="{TemplateBinding ItemsPanel}"
+                                                    ItemTemplate="{TemplateBinding ItemTemplate}"
+                                                    VirtualizationMode="{TemplateBinding VirtualizationMode}" />
+                                </ScrollViewer>
+                            </Border>
+                        </Popup>
+                    </Grid>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+
+    <Style Selector="ComboBoxItem">
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="5,3" />
+        <Setter Property="FontFamily" Value="SansSerif" />
+        <Setter Property="Background" Value="{DynamicResource ThemeControlLowBrush}" />
+    </Style>
+
+    <Style Selector="ComboBoxItem:selected">
+        <Setter Property="IsVisible" Value="False" />
+    </Style>
+
+    <Style Selector="ComboBoxItem:selected:pointerover">
+        <Setter Property="Foreground" Value="{DynamicResource HighlightForegroundBrush}" />
+        <Setter Property="Background" Value="Red"/>
+    </Style>
+
+    <Style Selector="ComboBoxItem:pointerover">
+        <Setter Property="Foreground" Value="{DynamicResource HighlightForegroundBrush}" />
+        <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush3}"/>
+    </Style>
+
+    <Style Selector="ComboBoxItem:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush3}"/>
+    </Style>
+
+    <Style Selector="ComboBox:pointerover /template/ ContentControl#SelectedItemContentControl">
+        <Setter Property="Background" Value="{DynamicResource ThemeControlLowBrush}"/>
+    </Style>
+
+    <Style Selector="ContentControl#SelectedItemContentControl /template/ ComboBoxItem:pointerover">
+        <Setter Property="Background" Value="{DynamicResource ThemeControlLowBrush}"/>
+    </Style>
+
+    <Style Selector="ComboBoxItem:pointerover">
+        <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush3}"/>
+    </Style>
+
+    <Style Selector="ToggleButton">
+        <Setter Property="BorderThickness" Value="0" />
+    </Style>
+
+    <Style Selector="ToggleButton:checked /template/ ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource ThemeControlLowBrush}" />
+    </Style>
+
+    <Style Selector="ToggleButton:pressed /template/ ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource ThemeControlLowBrush}" />
+    </Style>
+
     <Style Selector="MenuItem">
         <Setter Property="FontSize" Value="16" />
         <Setter Property="BorderThickness" Value="0" />

@@ -5,7 +5,7 @@
              xmlns:p="clr-namespace:Camelot.Properties"
              xmlns:settings="clr-namespace:Camelot.ViewModels.Implementations.Settings;assembly=Camelot.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Camelot.Views.Main.Settings.TerminalSettingsView">
+             x:Class="Camelot.Views.Dialogs.Settings.TerminalSettingsView">
 
     <Design.DataContext>
         <settings:TerminalSettingsViewModel />

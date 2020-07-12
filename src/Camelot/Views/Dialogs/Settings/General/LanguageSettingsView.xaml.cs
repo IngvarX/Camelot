@@ -1,11 +1,11 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace Camelot.Views.Main.Settings
+namespace Camelot.Views.Dialogs.Settings.General
 {
-    public class TerminalSettingsView : UserControl
+    public class LanguageSettingsView : UserControl
     {
-        public TerminalSettingsView()
+        public LanguageSettingsView()
         {
             InitializeComponent();
         }

@@ -4,10 +4,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:p="clr-namespace:Camelot.Properties"
         xmlns:dialogs="clr-namespace:Camelot.ViewModels.Implementations.Dialogs;assembly=Camelot.ViewModels"
-        xmlns:settingsViews="clr-namespace:Camelot.Views.Main.Settings"
+        xmlns:settings="clr-namespace:Camelot.Views.Dialogs.Settings"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         Width="800" Height="500"
-        x:Class="Camelot.Views.Main.Dialogs.SettingsDialog"
+        x:Class="Camelot.Views.Dialogs.SettingsDialog"
         Title="{x:Static p:Resources.SettingsTitle}">
 
     <Design.DataContext>
@@ -33,7 +33,7 @@
                     </TabItem.Header>
                     <TabItem.Content>
                         <Border Classes="settingsContentBorder">
-                            <settingsViews:GeneralSettingsView DataContext="{Binding GeneralSettingsViewModel}" />
+                            <settings:GeneralSettingsView DataContext="{Binding GeneralSettingsViewModel}" />
                         </Border>
                     </TabItem.Content>
                 </TabItem>
@@ -55,7 +55,7 @@
 
                     <TabItem.Content>
                         <Border Classes="settingsContentBorder">
-                            <settingsViews:TerminalSettingsView DataContext="{Binding TerminalSettingsViewModel}" />
+                            <settings:TerminalSettingsView DataContext="{Binding TerminalSettingsViewModel}" />
                         </Border>
                     </TabItem.Content>
                 </TabItem>

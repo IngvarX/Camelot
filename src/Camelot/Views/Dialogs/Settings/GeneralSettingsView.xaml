@@ -2,16 +2,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:p="clr-namespace:Camelot.Properties"
-             xmlns:generalSettingsViews="clr-namespace:Camelot.Views.Main.Settings.General"
              xmlns:settings="clr-namespace:Camelot.ViewModels.Implementations.Settings;assembly=Camelot.ViewModels"
+             xmlns:general="clr-namespace:Camelot.Views.Dialogs.Settings.General"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Camelot.Views.Main.Settings.GeneralSettingsView">
+             x:Class="Camelot.Views.Dialogs.Settings.GeneralSettingsView">
+
     <Design.DataContext>
         <settings:GeneralSettingsViewModel />
     </Design.DataContext>
 
     <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*">
-        <generalSettingsViews:LanguageSettingsView DataContext="{Binding LanguageSettingsViewModel}" />
+        <general:LanguageSettingsView DataContext="{Binding LanguageSettingsViewModel}" />
     </Grid>
 </UserControl>

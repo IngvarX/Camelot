@@ -2,7 +2,7 @@ using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Camelot.ViewModels.Implementations.Dialogs.Results;
 
-namespace Camelot.Views.Main.Dialogs
+namespace Camelot.Views.Dialogs
 {
     public class CreateDirectoryDialog : DialogWindowBase<CreateDirectoryDialogResult>
     {

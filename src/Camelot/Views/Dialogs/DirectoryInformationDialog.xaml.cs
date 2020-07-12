@@ -1,10 +1,10 @@
 using Avalonia.Markup.Xaml;
 
-namespace Camelot.Views.Main.Dialogs
+namespace Camelot.Views.Dialogs
 {
-    public class FileInformationDialog : DialogWindowBase
+    public class DirectoryInformationDialog : DialogWindowBase
     {
-        public FileInformationDialog()
+        public DirectoryInformationDialog()
         {
             InitializeComponent();
         }

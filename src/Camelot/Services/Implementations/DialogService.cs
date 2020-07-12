@@ -9,7 +9,7 @@ using Camelot.ViewModels.Implementations.Dialogs;
 using Camelot.ViewModels.Services;
 using Camelot.ViewModels.Services.Interfaces;
 using Camelot.Views;
-using Camelot.Views.Main.Dialogs;
+using Camelot.Views.Dialogs;
 using Splat;
 
 namespace Camelot.Services.Implementations

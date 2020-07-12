@@ -4,7 +4,7 @@ using Avalonia.Controls;
 using Camelot.ViewModels.Implementations.Dialogs;
 using Camelot.ViewModels.Services;
 
-namespace Camelot.Views.Main.Dialogs
+namespace Camelot.Views.Dialogs
 {
     public class DialogWindowBase<TResult> : Window
         where TResult : DialogResultBase

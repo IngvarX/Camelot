@@ -1,6 +1,6 @@
 using Avalonia.Markup.Xaml;
 
-namespace Camelot.Views.Main.Dialogs
+namespace Camelot.Views.Dialogs
 {
     public class SettingsDialog : DialogWindowBase
     {

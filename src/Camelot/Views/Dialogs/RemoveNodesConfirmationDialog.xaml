@@ -5,7 +5,7 @@
         xmlns:p="clr-namespace:Camelot.Properties"
         xmlns:dialogs="clr-namespace:Camelot.ViewModels.Implementations.Dialogs;assembly=Camelot.ViewModels"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="Camelot.Views.Main.Dialogs.RemoveNodesConfirmationDialog"
+        x:Class="Camelot.Views.Dialogs.RemoveNodesConfirmationDialog"
         Width="600" Height="200"
         Title="{x:Static p:Resources.FilesRemovingConfirmationTitle}">
 

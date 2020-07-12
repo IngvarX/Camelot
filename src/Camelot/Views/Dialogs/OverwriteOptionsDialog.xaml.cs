@@ -1,7 +1,7 @@
 using Avalonia.Markup.Xaml;
 using Camelot.ViewModels.Implementations.Dialogs.Results;
 
-namespace Camelot.Views.Main.Dialogs
+namespace Camelot.Views.Dialogs
 {
     public class OverwriteOptionsDialog :  DialogWindowBase<OverwriteOptionsDialogResult>
     {
