@@ -14,9 +14,11 @@ namespace Camelot.Services.Implementations
         private readonly Lazy<Dictionary<string, LanguageModel>> _availableLanguages =
             new Lazy<Dictionary<string, LanguageModel>>(GetAvailableLanguages);
 
-        public LanguageModel CurrentLanguage => CreateLanguageModel(Thread.CurrentThread.CurrentUICulture);
+        private static LanguageModel _defaultLanguage = CreateLanguageModel(CultureInfo.GetCultureInfo("en"));
 
-        public LanguageModel DefaultLanguage => CreateLanguageModel(CultureInfo.DefaultThreadCurrentUICulture);
+        public LanguageModel DefaultLanguage => _defaultLanguage;
+
+        public LanguageModel CurrentLanguage => CreateLanguageModel(Thread.CurrentThread.CurrentUICulture);
 
         public IEnumerable<LanguageModel> AllLanguages => _availableLanguages.Value.Values;
 
@@ -37,10 +39,9 @@ namespace Camelot.Services.Implementations
 
         private static Dictionary<string, LanguageModel> GetAvailableLanguages()
         {
-            var defaultLanguageModel = CreateLanguageModel(CultureInfo.GetCultureInfo("en"));
             var languages = new Dictionary<string, LanguageModel>
             {
-                { defaultLanguageModel.Code, defaultLanguageModel }
+                { _defaultLanguage.Code, _defaultLanguage }
             };
 
             foreach (var cultureInfo in CultureInfo.GetCultures(CultureTypes.AllCultures))
