@@ -65,6 +65,13 @@ namespace Camelot.Services.Implementations
         }
 
         private static LanguageModel CreateLanguageModel(CultureInfo cultureInfo)
-            => new LanguageModel(cultureInfo.EnglishName, cultureInfo.NativeName.ToTitleCase(), cultureInfo.TwoLetterISOLanguageName);
+        {
+            if (cultureInfo == null)
+            {
+                return _defaultLanguage;
+            }
+
+            return new LanguageModel(cultureInfo.EnglishName, cultureInfo.NativeName.ToTitleCase(), cultureInfo.TwoLetterISOLanguageName);
+        }
     }
 }
