@@ -153,7 +153,7 @@ namespace Camelot.ViewModels.Tests
             Assert.Equal(NewDirectory, filesPanelViewModel.CurrentDirectory);
             tabViewModelMock.VerifySet(m => m.CurrentDirectory = NewDirectory);
 
-            await Task.Delay(saveTimeout * 5);
+            await Task.Delay(saveTimeout * 10);
             _autoMocker.Verify<IFilesPanelStateService>(m => m.SavePanelState(It.IsAny<PanelModel>()), Times.Once);
 
             Assert.NotNull(panelModel);
