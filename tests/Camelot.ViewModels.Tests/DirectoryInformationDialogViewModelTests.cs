@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Camelot.Avalonia.Interfaces;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
@@ -34,8 +35,10 @@ namespace Camelot.ViewModels.Tests
         }
 
         [Fact]
-        public void TestActivation()
+        public async Task TestActivation()
         {
+            var taskCompletionSource = new TaskCompletionSource<bool>();
+
             var directoryModel = new DirectoryModel {FullPath = Directory};
             var directoryServiceMock = new Mock<IDirectoryService>();
             directoryServiceMock
@@ -47,7 +50,11 @@ namespace Camelot.ViewModels.Tests
             var applicationDispatcherMock = new Mock<IApplicationDispatcher>();
             applicationDispatcherMock
                 .Setup(m => m.Dispatch(It.IsAny<Action>()))
-                .Callback<Action>(action => action());
+                .Callback<Action>(action =>
+                {
+                    action();
+                    taskCompletionSource.SetResult(true);
+                });
             var mainNodeInfoTabViewModelMock = new Mock<IMainNodeInfoTabViewModel>();
             mainNodeInfoTabViewModelMock
                 .Setup(m => m.SetSize(Size))
@@ -60,6 +67,8 @@ namespace Camelot.ViewModels.Tests
                 applicationDispatcherMock.Object, mainNodeInfoTabViewModelMock.Object);
             var parameter = new FileSystemNodeNavigationParameter(Directory);
             viewModel.Activate(parameter);
+
+            await Task.WhenAny(taskCompletionSource.Task, Task.Delay(1000));
 
             mainNodeInfoTabViewModelMock.Verify(m => m.SetSize(Size), Times.Once);
             mainNodeInfoTabViewModelMock.Verify(m => m.Activate(directoryModel, true), Times.Once);
