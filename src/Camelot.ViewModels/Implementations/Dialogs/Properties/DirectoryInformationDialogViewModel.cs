@@ -39,13 +39,11 @@ namespace Camelot.ViewModels.Implementations.Dialogs.Properties
             MainNodeInfoTabViewModel.Activate(directoryModel, true);
         }
 
-        private void LoadDirectorySize(string directory)
-        {
+        private void LoadDirectorySize(string directory) =>
             Task
                 .Factory
                 .StartNew(() => _directoryService.CalculateSize(directory))
                 .ContinueWith(t => SetSize(t.Result));
-        }
 
         private void SetSize(long size) =>
             _applicationDispatcher.Dispatch(() => MainNodeInfoTabViewModel.SetSize(size));
