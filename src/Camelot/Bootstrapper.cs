@@ -323,9 +323,11 @@ namespace Camelot
                 resolver.GetService<IResourceOpeningService>(),
                 resolver.GetService<AboutDialogConfiguration>()
             ));
+            services.RegisterLazySingleton<IBitmapFactory>(() => new BitmapFactory());
             services.Register(() => new MainNodeInfoTabViewModel(
                 resolver.GetService<IFileSizeFormatter>(),
                 resolver.GetService<IPathService>(),
+                resolver.GetService<IBitmapFactory>(),
                 resolver.GetService<ImagePreviewConfiguration>()
             ));
             services.Register(() => new DirectoryInformationDialogViewModel(
