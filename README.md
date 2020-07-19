@@ -9,7 +9,6 @@ Camelot is light cross-platform twin-panel file manager written in C#
 ![Build Status](https://img.shields.io/travis/com/IngvarX/Camelot?style=for-the-badge)
 [![Codecov](https://img.shields.io/codecov/c/github/IngvarX/Camelot?style=for-the-badge)](https://codecov.io/gh/IngvarX/Camelot)
 
-
 ## Supported OS: Linux, macOS, Windows
 
 ## Install
@@ -24,9 +23,11 @@ Dotnet Core SDK 3.1 is required.
 git clone https://github.com/IngvarX/Camelot.git
 cd Camelot
 dotnet restore
-dotnet build
+dotnet build --no-restore
 dotnet run --project src/Camelot/Camelot.csproj
 ```
+
+For publishing instructions please check [scripts](/scripts/) directory.
 
 ## Screenshots
 ![Camelot on Ubuntu](/docs/Ubuntu.png)
