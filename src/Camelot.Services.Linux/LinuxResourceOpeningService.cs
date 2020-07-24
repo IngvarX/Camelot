@@ -1,3 +1,4 @@
+using System;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Environment.Interfaces;
 using Camelot.Services.Linux.Enums;
@@ -58,7 +59,7 @@ namespace Camelot.Services.Linux
             switch (desktopEnvironment)
             {
                 case DesktopEnvironment.Kde:
-                    return WrapWithNohup("kioclient", @"exec \""{0}\""");
+                    return WrapWithNohup("kioclient5", @"exec \""{0}\""");
                 case DesktopEnvironment.Gnome:
                 case DesktopEnvironment.Lxde:
                 case DesktopEnvironment.Lxqt:
@@ -66,8 +67,10 @@ namespace Camelot.Services.Linux
                 case DesktopEnvironment.Unity:
                 case DesktopEnvironment.Cinnamon:
                     return WrapWithNohup("gio", @"open \""{0}\""");
-                default:
+                case DesktopEnvironment.Unknown:
                     return ("xdg-open", "\"{0}\"");
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(desktopEnvironment));
             }
         }
 

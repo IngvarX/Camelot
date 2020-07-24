@@ -37,7 +37,7 @@ namespace Camelot.Services.Linux.Tests
         }
 
         [Theory]
-        [InlineData(DesktopEnvironment.Kde, "kioclient")]
+        [InlineData(DesktopEnvironment.Kde, "kioclient5")]
         [InlineData(DesktopEnvironment.Gnome, "gio")]
         [InlineData(DesktopEnvironment.Lxde, "gio")]
         [InlineData(DesktopEnvironment.Lxqt, "gio")]
