@@ -147,7 +147,7 @@ namespace Camelot
                 resolver.GetService<IPathService>(),
                 resolver.GetService<IFileNameGenerationService>()
             ));
-            services.RegisterLazySingleton<IFilesSelectionService>(() => new FilesSelectionService());
+            services.RegisterLazySingleton<INodesSelectionService>(() => new NodesSelectionService());
             services.RegisterLazySingleton<IOperationsService>(() => new OperationsService(
                 resolver.GetService<IOperationsFactory>(),
                 resolver.GetService<IDirectoryService>(),
@@ -365,7 +365,7 @@ namespace Camelot
             services.Register<IOperationsViewModel>(() => new OperationsViewModel(
                 resolver.GetService<IFilesOperationsMediator>(),
                 resolver.GetService<IOperationsService>(),
-                resolver.GetService<IFilesSelectionService>(),
+                resolver.GetService<INodesSelectionService>(),
                 resolver.GetService<IDialogService>(),
                 resolver.GetService<IDirectoryService>(),
                 resolver.GetService<ITrashCanService>()
@@ -400,7 +400,7 @@ namespace Camelot
             var filesPanelViewModel = new FilesPanelViewModel(
                 resolver.GetService<IFileService>(),
                 resolver.GetService<IDirectoryService>(),
-                resolver.GetService<IFilesSelectionService>(),
+                resolver.GetService<INodesSelectionService>(),
                 resolver.GetService<IFileSystemNodeViewModelFactory>(),
                 resolver.GetService<IFileSystemWatchingService>(),
                 resolver.GetService<IApplicationDispatcher>(),

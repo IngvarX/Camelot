@@ -4,13 +4,13 @@ using Xunit;
 
 namespace Camelot.Services.Tests
 {
-    public class FilesSelectionServiceTests
+    public class NodesSelectionServiceTests
     {
-        private readonly IFilesSelectionService _filesSelectionService;
+        private readonly INodesSelectionService _nodesSelectionService;
 
-        public FilesSelectionServiceTests()
+        public NodesSelectionServiceTests()
         {
-            _filesSelectionService = new FilesSelectionService();
+            _nodesSelectionService = new NodesSelectionService();
         }
 
         [Fact]
@@ -22,15 +22,15 @@ namespace Camelot.Services.Tests
                 .Select(i => i.ToString())
                 .ToArray();
 
-            _filesSelectionService.SelectFiles(files);
+            _nodesSelectionService.SelectNodes(files);
 
-            var selectedFiles = _filesSelectionService.SelectedFiles;
+            var selectedFiles = _nodesSelectionService.SelectedNodes;
             Assert.True(selectedFiles.Count == filesCount);
 
             Assert.True(files.All(fn => selectedFiles.Contains(fn)));
 
-            _filesSelectionService.SelectFiles(selectedFiles);
-            Assert.True(_filesSelectionService.SelectedFiles.Count == filesCount);
+            _nodesSelectionService.SelectNodes(selectedFiles);
+            Assert.True(_nodesSelectionService.SelectedNodes.Count == filesCount);
         }
 
         [Fact]
@@ -42,11 +42,11 @@ namespace Camelot.Services.Tests
                 .Select(i => i.ToString())
                 .ToArray();
 
-            _filesSelectionService.SelectFiles(files);
+            _nodesSelectionService.SelectNodes(files);
             const int filesToUnselectCount = 3;
-            _filesSelectionService.UnselectFiles(files.Take(filesToUnselectCount));
+            _nodesSelectionService.UnselectNodes(files.Take(filesToUnselectCount));
 
-            var selectedFiles = _filesSelectionService.SelectedFiles;
+            var selectedFiles = _nodesSelectionService.SelectedNodes;
             Assert.True(selectedFiles.Count == filesCount - filesToUnselectCount);
 
             Assert.True(files.Skip(filesToUnselectCount).All(fn => selectedFiles.Contains(fn)));

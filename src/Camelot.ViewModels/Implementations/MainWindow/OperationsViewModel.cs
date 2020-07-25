@@ -18,7 +18,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow
     {
         private readonly IFilesOperationsMediator _filesOperationsMediator;
         private readonly IOperationsService _operationsService;
-        private readonly IFilesSelectionService _filesSelectionService;
+        private readonly INodesSelectionService _nodesSelectionService;
         private readonly IDialogService _dialogService;
         private readonly IDirectoryService _directoryService;
         private readonly ITrashCanService _trashCanService;
@@ -35,19 +35,19 @@ namespace Camelot.ViewModels.Implementations.MainWindow
 
         public ICommand RemoveCommand { get; }
 
-        public ICommand RemoveToTrashCommand { get; }
+        public ICommand MoveToTrashCommand { get; }
 
         public OperationsViewModel(
             IFilesOperationsMediator filesOperationsMediator,
             IOperationsService operationsService,
-            IFilesSelectionService filesSelectionService,
+            INodesSelectionService nodesSelectionService,
             IDialogService dialogService,
             IDirectoryService directoryService,
             ITrashCanService trashCanService)
         {
             _filesOperationsMediator = filesOperationsMediator;
             _operationsService = operationsService;
-            _filesSelectionService = filesSelectionService;
+            _nodesSelectionService = nodesSelectionService;
             _dialogService = dialogService;
             _directoryService = directoryService;
             _trashCanService = trashCanService;
@@ -58,7 +58,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             MoveCommand = ReactiveCommand.Create(() => Task.Run(MoveAsync));
             CreateNewDirectoryCommand = ReactiveCommand.CreateFromTask(CreateNewDirectoryAsync);
             RemoveCommand = ReactiveCommand.CreateFromTask(RemoveAsync);
-            RemoveToTrashCommand = ReactiveCommand.CreateFromTask(RemoveToTrashAsync);
+            MoveToTrashCommand = ReactiveCommand.CreateFromTask(MoveToTrashAsync);
         }
 
         private void Open() => _filesOperationsMediator.ActiveFilesPanelViewModel.OpenLastSelectedFile();
@@ -94,11 +94,11 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             var result = await ShowRemoveConfirmationDialogAsync(navigationParameter);
             if (result)
             {
-                 _operationsService.RemoveAsync(filesToRemove).Forget();
+                _operationsService.RemoveAsync(filesToRemove).Forget();
             }
         }
 
-        private async Task RemoveToTrashAsync()
+        private async Task MoveToTrashAsync()
         {
             var filesToRemove = GetSelectedFiles();
             if (!filesToRemove.Any())
@@ -125,8 +125,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow
         }
 
         private IReadOnlyList<string> GetSelectedFiles() =>
-            _filesSelectionService
-                .SelectedFiles
+            _nodesSelectionService
+                .SelectedNodes
                 .ToArray();
     }
 }

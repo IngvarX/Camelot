@@ -22,7 +22,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
     {
         private readonly IFileService _fileService;
         private readonly IDirectoryService _directoryService;
-        private readonly IFilesSelectionService _filesSelectionService;
+        private readonly INodesSelectionService _nodesSelectionService;
         private readonly IFileSystemNodeViewModelFactory _fileSystemNodeViewModelFactory;
         private readonly IFileSystemWatchingService _fileSystemWatchingService;
         private readonly IApplicationDispatcher _applicationDispatcher;
@@ -111,7 +111,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         public FilesPanelViewModel(
             IFileService fileService,
             IDirectoryService directoryService,
-            IFilesSelectionService filesSelectionService,
+            INodesSelectionService nodesSelectionService,
             IFileSystemNodeViewModelFactory fileSystemNodeViewModelFactory,
             IFileSystemWatchingService fileSystemWatchingService,
             IApplicationDispatcher applicationDispatcher,
@@ -124,7 +124,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         {
             _fileService = fileService;
             _directoryService = directoryService;
-            _filesSelectionService = filesSelectionService;
+            _nodesSelectionService = nodesSelectionService;
             _fileSystemNodeViewModelFactory = fileSystemNodeViewModelFactory;
             _fileSystemWatchingService = fileSystemWatchingService;
             _applicationDispatcher = applicationDispatcher;
@@ -164,7 +164,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         {
             var selectedFiles = SelectedFileSystemNodes.Select(f => f.FullPath).ToArray();
             SelectedFileSystemNodes.Clear();
-            _filesSelectionService.UnselectFiles(selectedFiles);
+            _nodesSelectionService.UnselectNodes(selectedFiles);
 
             DeactivatedEvent.Raise(this, EventArgs.Empty);
 
@@ -409,7 +409,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
                 .Select(f => f.FullPath);
             if (nodesToAdd != null)
             {
-                _filesSelectionService.SelectFiles(nodesToAdd);
+                _nodesSelectionService.SelectNodes(nodesToAdd);
             }
 
             var nodesToRemove = e.OldItems?
@@ -417,7 +417,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
                 .Select(f => f.FullPath);
             if (nodesToRemove != null)
             {
-                _filesSelectionService.UnselectFiles(nodesToRemove);
+                _nodesSelectionService.UnselectNodes(nodesToRemove);
             }
 
             this.RaisePropertyChanged(nameof(SelectedFilesCount));
@@ -474,7 +474,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             };
 
         private Task CopyToClipboardAsync() =>
-            _clipboardOperationsService.CopyFilesAsync(_filesSelectionService.SelectedFiles);
+            _clipboardOperationsService.CopyFilesAsync(_nodesSelectionService.SelectedNodes);
 
         private Task PasteFromClipboardAsync() =>
             _clipboardOperationsService.PasteFilesAsync(CurrentDirectory);

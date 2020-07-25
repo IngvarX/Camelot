@@ -207,4 +207,8 @@
         <Setter Property="Padding" Value="2" />
     </Style>
 
+    <Style Selector="ToggleButton#OperationsToggleButton">
+        <Setter Property="Background" Value="Transparent" />
+    </Style>
+
 </Styles>

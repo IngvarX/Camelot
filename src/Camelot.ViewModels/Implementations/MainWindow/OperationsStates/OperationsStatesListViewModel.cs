@@ -140,7 +140,11 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
         {
             if (operation.State.IsCompleted())
             {
-                _applicationDispatcher.Dispatch(() => RemoveOperation(operation));
+                _applicationDispatcher.Dispatch(() =>
+                {
+                    RemoveOperation(operation);
+                    UpdateProgress();
+                });
             }
 
             if (operation.State == OperationState.Blocked)
@@ -151,7 +155,10 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
             // TODO: change status
         }
 
-        private void OperationOnProgressChanged(object sender, OperationProgressChangedEventArgs e)
+        private void OperationOnProgressChanged(object sender, OperationProgressChangedEventArgs e) =>
+            UpdateProgress();
+
+        private void UpdateProgress()
         {
             var activeOperations = GetActiveOperations();
             if (!activeOperations.Any())
