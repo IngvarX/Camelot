@@ -1,3 +1,4 @@
+using System;
 using Camelot.Services.Environment.Interfaces;
 using Camelot.Services.Linux.Enums;
 using Camelot.Services.Linux.Interfaces;
@@ -70,6 +71,26 @@ namespace Camelot.Services.Linux.Tests
             fileOpeningService.Open(FileName);
 
             processServiceMock.Verify(m => m.Run(wrappedCommand, wrappedArguments), Times.Once());
+        }
+
+        [Fact]
+        public void TestOsNotSupported()
+        {
+            var processServiceMock = new Mock<IProcessService>();
+            var shellCommandWrappingService = new Mock<IShellCommandWrappingService>();
+            var desktopEnvironmentService = new Mock<IDesktopEnvironmentService>();
+            desktopEnvironmentService
+                .Setup(m => m.GetDesktopEnvironment())
+                .Returns((DesktopEnvironment) 42);
+
+            var fileOpeningService = new LinuxResourceOpeningService(
+                processServiceMock.Object,
+                shellCommandWrappingService.Object,
+                desktopEnvironmentService.Object);
+
+            void Open() => fileOpeningService.Open(FileName);
+
+            Assert.Throws<ArgumentOutOfRangeException>(Open);
         }
     }
 }
