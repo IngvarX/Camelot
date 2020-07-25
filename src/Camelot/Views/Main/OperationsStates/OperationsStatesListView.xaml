@@ -12,7 +12,7 @@
     </Design.DataContext>
 
     <Grid>
-        <ToggleButton Name="ToggleButton" IsEnabled="{Binding AreAnyOperationsAvailable}">
+        <ToggleButton x:Name="OperationsToggleButton" IsEnabled="{Binding AreAnyOperationsAvailable}">
             <Grid>
                 <TextBlock Margin="0,3,0,0" Text="{Binding TotalProgress}"
                            IsVisible="{Binding IsInProgress}"
@@ -27,7 +27,7 @@
             </Grid>
         </ToggleButton>
 
-        <Popup IsOpen="{Binding IsChecked, ElementName=ToggleButton}" StaysOpen="False">
+        <Popup IsOpen="{Binding IsChecked, ElementName=OperationsToggleButton}" StaysOpen="False">
             <Border x:Name="OperationsBorder">
                 <StackPanel Orientation="Vertical">
                     <operationsStatesViews:ActiveOperationsView />

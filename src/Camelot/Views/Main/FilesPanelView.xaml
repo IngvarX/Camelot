@@ -161,7 +161,7 @@
                                             <Grid IsVisible="{Binding !IsParentDirectory}">
                                                 <TextBlock Classes="filePanelTextBlock" Text="{Binding Name}" IsVisible="{Binding !IsEditing}"
                                                            Tapped="OnNameTextBlockTapped" />
-                                                <TextBox Text="{Binding FullName}" IsVisible="{Binding IsEditing}"
+                                                <TextBox Classes="fileNameTextBox" Text="{Binding FullName}" IsVisible="{Binding IsEditing}"
                                                          LostFocus="OnFullNameTextBoxLostFocus">
                                                     <TextBox.KeyBindings>
                                                         <KeyBinding Gesture="Enter" Command="{Binding RenameCommand}" />
@@ -178,7 +178,7 @@
                                         <Grid>
                                             <TextBlock Classes="filePanelTextBlock" Text="{Binding Name}" IsVisible="{Binding !IsEditing}"
                                                        Tapped="OnNameTextBlockTapped" />
-                                            <TextBox Text="{Binding FullName}" IsVisible="{Binding IsEditing}"
+                                            <TextBox Classes="fileNameTextBox" Text="{Binding FullName}" IsVisible="{Binding IsEditing}"
                                                      LostFocus="OnFullNameTextBoxLostFocus">
                                                 <TextBox.KeyBindings>
                                                     <KeyBinding Gesture="Enter" Command="{Binding RenameCommand}" />

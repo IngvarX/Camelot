@@ -12,7 +12,6 @@
 
     <Style Selector="TextBox">
         <Setter Property="FontSize" Value="20" />
-        <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Background" Value="{DynamicResource ThemeControlLowBrush}" />
         <Setter Property="BorderThickness" Value="0" />
     </Style>

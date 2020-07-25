@@ -202,4 +202,9 @@
         <Setter Property="Background" Value="{DynamicResource TabButtonHoverBrush}" />
     </Style>
 
+    <Style Selector="TextBox.fileNameTextBox">
+        <Setter Property="FontSize" Value="15" />
+        <Setter Property="Padding" Value="2" />
+    </Style>
+
 </Styles>
