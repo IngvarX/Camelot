@@ -15,6 +15,7 @@ namespace Camelot.Services.Linux
         private readonly IPathService _pathService;
         private readonly IFileService _fileService;
         private readonly IDirectoryService _directoryService;
+        private readonly IDateTimeProvider _dateTimeProvider;
         private readonly IEnvironmentService _environmentService;
 
         public LinuxTrashCanService(
@@ -23,13 +24,15 @@ namespace Camelot.Services.Linux
             IPathService pathService,
             IFileService fileService,
             IEnvironmentService environmentService,
-            IDirectoryService directoryService)
+            IDirectoryService directoryService,
+            IDateTimeProvider dateTimeProvider)
             : base(driveService, operationsService, pathService, fileService)
         {
             _pathService = pathService;
             _fileService = fileService;
             _environmentService = environmentService;
             _directoryService = directoryService;
+            _dateTimeProvider = dateTimeProvider;
         }
 
         protected override IReadOnlyCollection<string> GetTrashCanLocations(string volume)
@@ -57,7 +60,7 @@ namespace Camelot.Services.Linux
                 _directoryService.Create(infoTrashCanLocation);
             }
 
-            var deleteTime = _environmentService.Now;
+            var deleteTime = _dateTimeProvider.Now;
 
             await filePathsDictionary.Keys.ForEachAsync(f => WriteMetaDataAsync(f, infoTrashCanLocation, deleteTime));
         }

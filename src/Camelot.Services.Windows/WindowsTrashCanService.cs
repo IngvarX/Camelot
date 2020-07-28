@@ -20,7 +20,7 @@ namespace Camelot.Services.Windows
 
         private readonly IPathService _pathService;
         private readonly IFileService _fileService;
-        private readonly IEnvironmentService _environmentService;
+        private readonly IDateTimeProvider _dateTimeProvider;
         private readonly Random _random;
 
         private IDictionary<string, long> _fileSizesDictionary;
@@ -31,13 +31,13 @@ namespace Camelot.Services.Windows
             IOperationsService operationsService,
             IPathService pathService,
             IFileService fileService,
-            IEnvironmentService environmentService,
+            IDateTimeProvider dateTimeProvider,
             IProcessService processService)
             : base(driveService, operationsService, pathService, fileService)
         {
             _pathService = pathService;
             _fileService = fileService;
-            _environmentService = environmentService;
+            _dateTimeProvider = dateTimeProvider;
 
             _random = new Random();
 
@@ -48,7 +48,10 @@ namespace Camelot.Services.Windows
         {
             var userInfo = await processService.ExecuteAndGetOutputAsync("whoami", "/user");
 
-            _sid = userInfo.Split(" ", StringSplitOptions.RemoveEmptyEntries).Last().TrimEnd();
+            _sid = userInfo
+                .Split(" ", StringSplitOptions.RemoveEmptyEntries)
+                .Last()
+                .TrimEnd();
         }
 
         protected override async Task PrepareAsync(string[] files)
@@ -68,7 +71,7 @@ namespace Camelot.Services.Windows
         protected override async Task WriteMetaDataAsync(IReadOnlyDictionary<string, string> filePathsDictionary,
             string trashCanLocation)
         {
-            var deleteTime = _environmentService.Now;
+            var deleteTime = _dateTimeProvider.Now;
 
             foreach (var (originalFilePath, trashCanFilePath) in filePathsDictionary)
             {

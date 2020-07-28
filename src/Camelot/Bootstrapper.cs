@@ -40,7 +40,6 @@ using Camelot.ViewModels.Interfaces.MainWindow;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.MainWindow.OperationsStates;
 using Camelot.ViewModels.Interfaces.Menu;
-using Camelot.ViewModels.Interfaces.Settings;
 using Camelot.ViewModels.Services.Implementations;
 using Camelot.ViewModels.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
@@ -139,6 +138,7 @@ namespace Camelot
             services.RegisterLazySingleton<IFileService>(() => new FileService(
                 resolver.GetService<IPathService>()
             ));
+            services.RegisterLazySingleton<IDateTimeProvider>(() => new DateTimeProvider());
             services.RegisterLazySingleton<IDriveService>(() => new DriveService());
             services.Register<IOperationsFactory>(() => new OperationsFactory(
                 resolver.GetService<ITaskPool>(),
@@ -221,7 +221,8 @@ namespace Camelot
                 resolver.GetService<IPathService>(),
                 resolver.GetService<IFileService>(),
                 resolver.GetService<IEnvironmentService>(),
-                resolver.GetService<IDirectoryService>()
+                resolver.GetService<IDirectoryService>(),
+                resolver.GetService<IDateTimeProvider>()
             ));
             services.RegisterLazySingleton<IDesktopEnvironmentService>(() => new DesktopEnvironmentService(
                 resolver.GetService<IEnvironmentService>()
@@ -265,7 +266,7 @@ namespace Camelot
                 resolver.GetService<IOperationsService>(),
                 resolver.GetService<IPathService>(),
                 resolver.GetService<IFileService>(),
-                resolver.GetService<IEnvironmentService>(),
+                resolver.GetService<IDateTimeProvider>(),
                 resolver.GetService<IProcessService>()
             ));
             services.RegisterLazySingleton<IResourceOpeningService>(() => new WindowsResourceOpeningService(

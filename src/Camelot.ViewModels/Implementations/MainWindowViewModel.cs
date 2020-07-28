@@ -49,7 +49,6 @@ namespace Camelot.ViewModels.Implementations
             CreateNewTabCommand = ReactiveCommand.Create(CreateNewTab);
             CloseCurrentTabCommand = ReactiveCommand.Create(CloseCurrentTab);
 
-            // TODO: from settings
             filesOperationsMediator.Register(leftFilesPanelViewModel, rightFilesPanelViewModel);
         }
 

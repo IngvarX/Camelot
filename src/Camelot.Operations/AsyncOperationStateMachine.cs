@@ -112,7 +112,6 @@ namespace Camelot.Operations
             await taskFactory();
         }
 
-        // TODO: change if successful?
         private Func<Task> WrapAsync(Func<Task> taskFactory,
             OperationState expectedState, OperationState requestedState) =>
             async () =>

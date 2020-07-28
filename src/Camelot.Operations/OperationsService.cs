@@ -140,8 +140,8 @@ namespace Camelot.Operations
                 outputTopLevelFiles, nodes);
         }
 
-        private string GetCommonRootDirectory(IEnumerable<string> nodes) =>
-            _pathService.GetCommonRootDirectory(nodes.ToArray());
+        private string GetCommonRootDirectory(IReadOnlyList<string> nodes) =>
+            _pathService.GetCommonRootDirectory(nodes);
 
         private string GetDestinationPath(string sourceDirectory,
             string sourcePath, string destinationDirectory)

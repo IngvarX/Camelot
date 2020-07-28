@@ -27,6 +27,8 @@ namespace Camelot.Operations
         private readonly object _blockedFileLocker;
 
         private int _finishedOperationsCount;
+        private int _currentOperationsGroupIndex;
+        private int _operationsGroupsCount;
         private IReadOnlyList<IInternalOperation> _currentOperationsGroup;
         private int _totalOperationsCount;
         private CancellationTokenSource _cancellationTokenSource;
@@ -114,6 +116,7 @@ namespace Camelot.Operations
             var cancellationToken = _cancellationTokenSource.Token;
 
             _totalOperationsCount = groupedOperationsToExecute.Sum(g => g.Count);
+            _operationsGroupsCount = groupedOperationsToExecute.Count;
 
             foreach (var operationsGroup in groupedOperationsToExecute)
             {
@@ -135,7 +138,11 @@ namespace Camelot.Operations
                 }
 
                 await _taskCompletionSource.Task;
+                _currentOperationsGroupIndex++;
             }
+
+            _currentOperationsGroup = null;
+            SetFinalProgress();
         }
 
         private async void OperationOnStateChanged(object sender, OperationStateChangedEventArgs e)
@@ -241,8 +248,10 @@ namespace Camelot.Operations
 
         private void UpdateProgress()
         {
-            // TODO: prev group?
-            CurrentProgress = _currentOperationsGroup.Sum(o => o.CurrentProgress) / _totalOperationsCount;
+            var finishedOperationGroupsProgress = (double) _currentOperationsGroupIndex;
+            var currentOperationGroupProgress = _currentOperationsGroup.Sum(o => o.CurrentProgress) / _totalOperationsCount;
+
+            CurrentProgress = (finishedOperationGroupsProgress + currentOperationGroupProgress) / _operationsGroupsCount;
         }
     }
 }
