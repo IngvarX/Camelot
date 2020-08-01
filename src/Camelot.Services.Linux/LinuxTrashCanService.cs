@@ -6,7 +6,7 @@ using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Operations;
 using Camelot.Services.AllPlatforms;
 using Camelot.Services.Environment.Interfaces;
-using Camelot.Services.Linux.Builders;
+using Camelot.Services.Linux.Interfaces.Builders;
 
 namespace Camelot.Services.Linux
 {
@@ -16,6 +16,7 @@ namespace Camelot.Services.Linux
         private readonly IFileService _fileService;
         private readonly IDirectoryService _directoryService;
         private readonly IDateTimeProvider _dateTimeProvider;
+        private readonly ILinuxRemovedFileMetadataBuilderFactory _linuxRemovedFileMetadataBuilderFactory;
         private readonly IEnvironmentService _environmentService;
 
         public LinuxTrashCanService(
@@ -25,7 +26,8 @@ namespace Camelot.Services.Linux
             IFileService fileService,
             IEnvironmentService environmentService,
             IDirectoryService directoryService,
-            IDateTimeProvider dateTimeProvider)
+            IDateTimeProvider dateTimeProvider,
+            ILinuxRemovedFileMetadataBuilderFactory linuxRemovedFileMetadataBuilderFactory)
             : base(driveService, operationsService, pathService, fileService)
         {
             _pathService = pathService;
@@ -33,6 +35,7 @@ namespace Camelot.Services.Linux
             _environmentService = environmentService;
             _directoryService = directoryService;
             _dateTimeProvider = dateTimeProvider;
+            _linuxRemovedFileMetadataBuilderFactory = linuxRemovedFileMetadataBuilderFactory;
         }
 
         protected override IReadOnlyCollection<string> GetTrashCanLocations(string volume)
@@ -96,14 +99,17 @@ namespace Camelot.Services.Linux
             await _fileService.WriteTextAsync(metadataFullPath, metadata);
         }
 
-        private static string GetMetadata(string filePath, DateTime dateTime)
+        private string GetMetadata(string filePath, DateTime dateTime)
         {
-            var builder = new LinuxRemovedFileMetadataBuilder()
+            var builder = CreateBuilder()
                 .WithFilePath(filePath)
                 .WithRemovingDateTime(dateTime);
 
             return builder.Build();
         }
+
+        private ILinuxRemovedFileMetadataBuilder CreateBuilder() =>
+            _linuxRemovedFileMetadataBuilderFactory.Create();
 
         private static string GetInfoTrashCanLocation(string trashCanLocation) =>
             $"{trashCanLocation}/info";

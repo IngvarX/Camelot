@@ -20,14 +20,14 @@ namespace Camelot.Services.Windows.Builders
 
             return this;
         }
-        
+
         public WindowsRemovedFileMetadataBuilder WithRemovingDateTime(DateTime removingDateTime)
         {
             _removingDateTime = removingDateTime;
 
             return this;
         }
-        
+
         public WindowsRemovedFileMetadataBuilder WithFilePath(string filePath)
         {
             _filePath = filePath;
@@ -52,19 +52,19 @@ namespace Camelot.Services.Windows.Builders
                 .Concat(endOfLineBytes)
                 .ToArray();
         }
-        
+
         private static IEnumerable<byte> GetHeaderAsBytes() => BitConverter.GetBytes(MetadataHeader);
-        
+
         private IEnumerable<byte> GetFileSizeAsBytes() => BitConverter.GetBytes(_deletedFileSize);
 
         private IEnumerable<byte> GetRemovingDateTimeAsBytes() => BitConverter.GetBytes(_removingDateTime.ToFileTime());
-        
-        private IEnumerable<byte> GetFilePathLengthAsBytes() => BitConverter.GetBytes(GetFileLength());
+
+        private IEnumerable<byte> GetFilePathLengthAsBytes() => BitConverter.GetBytes(GetFilePathLength());
 
         private IEnumerable<byte> GetFilePathAsBytes() => Encoding.Unicode.GetBytes(_filePath);
-        
+
         private static IEnumerable<byte> GetEndOfLineAsBytes() => BitConverter.GetBytes(EndOfLine);
 
-        private int GetFileLength() => _filePath.Length + 1;
+        private int GetFilePathLength() => _filePath.Length + 1;
     }
 }

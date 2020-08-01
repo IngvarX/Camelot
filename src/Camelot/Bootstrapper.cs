@@ -19,7 +19,9 @@ using Camelot.Services.Environment.Implementations;
 using Camelot.Services.Environment.Interfaces;
 using Camelot.Services.Implementations;
 using Camelot.Services.Linux;
+using Camelot.Services.Linux.Builders;
 using Camelot.Services.Linux.Interfaces;
+using Camelot.Services.Linux.Interfaces.Builders;
 using Camelot.Services.Mac;
 using Camelot.Services.Windows;
 using Camelot.TaskPool.Interfaces;
@@ -215,6 +217,7 @@ namespace Camelot
 
         private static void RegisterLinuxServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
+            services.RegisterLazySingleton<ILinuxRemovedFileMetadataBuilderFactory>(() => new LinuxRemovedFileMetadataBuilderFactory());
             services.RegisterLazySingleton<ITrashCanService>(() => new LinuxTrashCanService(
                 resolver.GetService<IDriveService>(),
                 resolver.GetService<IOperationsService>(),
@@ -222,7 +225,8 @@ namespace Camelot
                 resolver.GetService<IFileService>(),
                 resolver.GetService<IEnvironmentService>(),
                 resolver.GetService<IDirectoryService>(),
-                resolver.GetService<IDateTimeProvider>()
+                resolver.GetService<IDateTimeProvider>(),
+                resolver.GetService<ILinuxRemovedFileMetadataBuilderFactory>()
             ));
             services.RegisterLazySingleton<IDesktopEnvironmentService>(() => new DesktopEnvironmentService(
                 resolver.GetService<IEnvironmentService>()
