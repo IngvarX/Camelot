@@ -19,7 +19,6 @@ namespace Camelot.Services.Linux.Tests
         private const string HomePath = "/home/camelot";
         private const string FileName = "file.txt";
         private const string MetaData = "metadata";
-        private const string MetaDataPath = "/.local/share/Trash/info/file.txt.trashinfo";
 
         private readonly AutoMocker _autoMocker;
 
@@ -28,13 +27,15 @@ namespace Camelot.Services.Linux.Tests
             _autoMocker = new AutoMocker();
         }
 
-        [Fact]
-        public async Task TestMoveToTrash()
+        [Theory]
+        [InlineData("/", "/home/camelot/.local/share/Trash/info/file.txt.trashinfo")]
+        [InlineData("/test", "/test/.Trash-42/info/file.txt.trashinfo")]
+        public async Task TestMoveToTrash(string volume, string metadataPath)
         {
             var now = DateTime.UtcNow;
             _autoMocker
                 .Setup<IDriveService, DriveModel>(m => m.GetFileDrive(It.IsAny<string>()))
-                .Returns(new DriveModel {RootDirectory = "/"});
+                .Returns(new DriveModel {RootDirectory = volume});
             _autoMocker
                 .Setup<IOperationsService>(m => m.MoveAsync(It.IsAny<IReadOnlyDictionary<string, string>>()))
                 .Verifiable();
@@ -48,7 +49,7 @@ namespace Camelot.Services.Linux.Tests
                 .Setup<IFileService, bool>(m => m.CheckIfExists(FilePath))
                 .Returns(true);
             _autoMocker
-                .Setup<IFileService>(m => m.WriteTextAsync(MetaDataPath, MetaData))
+                .Setup<IFileService>(m => m.WriteTextAsync(metadataPath, MetaData))
                 .Verifiable();
             _autoMocker
                 .Setup<IEnvironmentService, string>(m => m.GetEnvironmentVariable("UID"))
@@ -85,6 +86,8 @@ namespace Camelot.Services.Linux.Tests
                 .Verify<IOperationsService>(m => m.MoveAsync(It.IsAny<IReadOnlyDictionary<string, string>>()), Times.Once);
             _autoMocker
                 .Verify<IFileService>(m => m.WriteTextAsync(It.IsAny<string>(), MetaData), Times.Once);
+            _autoMocker
+                .Verify<IFileService>(m => m.WriteTextAsync(metadataPath, MetaData));
             builderMock
                 .Verify(m => m.WithFilePath(FilePath), Times.Once);
             builderMock

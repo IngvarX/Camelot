@@ -52,7 +52,7 @@ namespace Camelot.Services.Linux
         }
 
         protected override string GetFilesTrashCanLocation(string trashCanLocation) =>
-            $"{trashCanLocation}/files";
+            _pathService.Combine(trashCanLocation, "files");
 
         protected override async Task WriteMetaDataAsync(IReadOnlyDictionary<string, string> filePathsDictionary,
             string trashCanLocation)
@@ -111,27 +111,31 @@ namespace Camelot.Services.Linux
         private ILinuxRemovedFileMetadataBuilder CreateBuilder() =>
             _linuxRemovedFileMetadataBuilderFactory.Create();
 
-        private static string GetInfoTrashCanLocation(string trashCanLocation) =>
-            $"{trashCanLocation}/info";
+        private string GetInfoTrashCanLocation(string trashCanLocation) =>
+            _pathService.Combine(trashCanLocation, "info");
 
         private string GetHomeTrashCanPath()
         {
             var xdgDataHome = _environmentService.GetEnvironmentVariable("XDG_DATA_HOME");
             if (xdgDataHome != null)
             {
-                return $"{xdgDataHome}/Trash/";
+                return _pathService.Combine(xdgDataHome, "Trash");
             }
 
             var home = _environmentService.GetEnvironmentVariable("HOME");
 
-            return $"{home}/.local/share/Trash";
+            return _pathService.Combine(home, ".local/share/Trash");
         }
 
         private IReadOnlyCollection<string> GetVolumeTrashCanPaths(string volume)
         {
             var uid = GetUid();
 
-            return new[] {$"{volume}/.Trash-{uid}", $"{volume}/.Trash/{uid}"};
+            return new[]
+            {
+                _pathService.Combine(volume, $".Trash-{uid}"),
+                _pathService.Combine(volume, $".Trash/{uid}")
+            };
         }
 
         private string GetUid() => _environmentService.GetEnvironmentVariable("UID") ??
