@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Camelot.Extensions;
+using Camelot.Services.Abstractions.Exceptions;
 using Camelot.Services.Abstractions.Extensions;
 using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Models.EventArgs;
@@ -116,10 +117,22 @@ namespace Camelot.Operations
             OperationState expectedState, OperationState requestedState) =>
             async () =>
             {
-                await taskFactory();
-                if (State == expectedState)
+                try
                 {
-                    await ChangeStateAsync(expectedState, requestedState);
+                    await taskFactory();
+                    if (State == expectedState)
+                    {
+                        await ChangeStateAsync(expectedState, requestedState);
+                    }
+                }
+                catch (OperationFailedException ex)
+                {
+                    // TODO: log
+                    await ChangeStateAsync(State, OperationState.Failed);
+                }
+                catch (Exception ex)
+                {
+                    // TODO: log
                 }
             };
 

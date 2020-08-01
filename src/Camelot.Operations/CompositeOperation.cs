@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Camelot.Extensions;
 using Camelot.Operations.Models;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Exceptions;
 using Camelot.Services.Abstractions.Extensions;
 using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Models.EventArgs;
@@ -137,7 +138,12 @@ namespace Camelot.Operations
                     await _taskPool.ExecuteAsync(() => currentOperation.RunAsync(cancellationToken));
                 }
 
-                await _taskCompletionSource.Task;
+                var groupExecutionResult = await _taskCompletionSource.Task;
+                if (!groupExecutionResult)
+                {
+                    throw new OperationFailedException();
+                }
+
                 _currentOperationsGroupIndex++;
             }
 
@@ -165,7 +171,9 @@ namespace Camelot.Operations
                 var finishedOperationsCount = Interlocked.Increment(ref _finishedOperationsCount);
                 if (finishedOperationsCount == _currentOperationsGroup.Count)
                 {
-                    _taskCompletionSource.SetResult(true);
+                    var isSuccessful = !state.IsFailedOrCancelled();
+
+                    _taskCompletionSource.SetResult(isSuccessful);
                 }
             }
 
@@ -248,6 +256,11 @@ namespace Camelot.Operations
 
         private void UpdateProgress()
         {
+            if (_currentOperationsGroup is null)
+            {
+                return;
+            }
+
             var finishedOperationGroupsProgress = (double) _currentOperationsGroupIndex;
             var currentOperationGroupProgress = _currentOperationsGroup.Sum(o => o.CurrentProgress) / _totalOperationsCount;
 
