@@ -252,7 +252,8 @@ namespace Camelot
                 resolver.GetService<IOperationsService>(),
                 resolver.GetService<IPathService>(),
                 resolver.GetService<IFileService>(),
-                resolver.GetService<IEnvironmentService>()
+                resolver.GetService<IEnvironmentService>(),
+                resolver.GetService<IDirectoryService>()
             ));
             services.RegisterLazySingleton<IResourceOpeningService>(() => new MacResourceOpeningService(
                 resolver.GetService<IProcessService>()

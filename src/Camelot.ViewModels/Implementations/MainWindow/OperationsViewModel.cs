@@ -63,12 +63,12 @@ namespace Camelot.ViewModels.Implementations.MainWindow
 
         private void Open() => _filesOperationsMediator.ActiveFilesPanelViewModel.OpenLastSelectedFile();
 
-        private void OpenInDefaultEditor() => _operationsService.OpenFiles(GetSelectedFiles());
+        private void OpenInDefaultEditor() => _operationsService.OpenFiles(GetSelectedNodes());
 
-        private Task CopyAsync() => _operationsService.CopyAsync(GetSelectedFiles(),
+        private Task CopyAsync() => _operationsService.CopyAsync(GetSelectedNodes(),
             _filesOperationsMediator.OutputDirectory);
 
-        private Task MoveAsync() => _operationsService.MoveAsync(GetSelectedFiles(),
+        private Task MoveAsync() => _operationsService.MoveAsync(GetSelectedNodes(),
             _filesOperationsMediator.OutputDirectory);
 
         private async Task CreateNewDirectoryAsync()
@@ -84,33 +84,33 @@ namespace Camelot.ViewModels.Implementations.MainWindow
 
         private async Task RemoveAsync()
         {
-            var filesToRemove = GetSelectedFiles();
-            if (!filesToRemove.Any())
+            var nodesToRemove = GetSelectedNodes();
+            if (!nodesToRemove.Any())
             {
                 return;
             }
 
-            var navigationParameter = new NodesRemovingNavigationParameter(filesToRemove, false);
+            var navigationParameter = new NodesRemovingNavigationParameter(nodesToRemove, false);
             var result = await ShowRemoveConfirmationDialogAsync(navigationParameter);
             if (result)
             {
-                _operationsService.RemoveAsync(filesToRemove).Forget();
+                _operationsService.RemoveAsync(nodesToRemove).Forget();
             }
         }
 
         private async Task MoveToTrashAsync()
         {
-            var filesToRemove = GetSelectedFiles();
-            if (!filesToRemove.Any())
+            var nodesToRemove = GetSelectedNodes();
+            if (!nodesToRemove.Any())
             {
                 return;
             }
 
-            var navigationParameter = new NodesRemovingNavigationParameter(filesToRemove);
+            var navigationParameter = new NodesRemovingNavigationParameter(nodesToRemove);
             var result = await ShowRemoveConfirmationDialogAsync(navigationParameter);
             if (result)
             {
-                _trashCanService.MoveToTrashAsync(filesToRemove).Forget();
+                _trashCanService.MoveToTrashAsync(nodesToRemove).Forget();
             }
         }
 
@@ -124,7 +124,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             return result?.IsConfirmed ?? false;
         }
 
-        private IReadOnlyList<string> GetSelectedFiles() =>
+        private IReadOnlyList<string> GetSelectedNodes() =>
             _nodesSelectionService
                 .SelectedNodes
                 .ToArray();

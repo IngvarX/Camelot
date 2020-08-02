@@ -72,7 +72,7 @@ namespace Camelot.Services.Linux
         protected override string GetUniqueFilePath(string fileName, HashSet<string> filesNamesSet, string directory)
         {
             var filePath = _pathService.Combine(directory, fileName);
-            if (!filesNamesSet.Contains(filePath) && !_fileService.CheckIfExists(filePath))
+            if (!filesNamesSet.Contains(filePath) && !CheckIfExists(filePath))
             {
                 return filePath;
             }
@@ -84,10 +84,13 @@ namespace Camelot.Services.Linux
                 var newFileName = $"{fileName} ({i})";
                 result = _pathService.Combine(directory, newFileName);
                 i++;
-            } while (filesNamesSet.Contains(result) || _fileService.CheckIfExists(result));
+            } while (filesNamesSet.Contains(result) || CheckIfExists(result));
 
             return result;
         }
+
+        private bool CheckIfExists(string nodePath) =>
+            _fileService.CheckIfExists(nodePath) || _directoryService.CheckIfExists(nodePath);
 
         private async Task WriteMetaDataAsync(string oldFilePath, string newFilePath,
             string trashCanMetadataLocation, DateTime dateTime)

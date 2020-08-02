@@ -12,18 +12,21 @@ namespace Camelot.Services.Mac
         private readonly IPathService _pathService;
         private readonly IFileService _fileService;
         private readonly IEnvironmentService _environmentService;
+        private readonly IDirectoryService _directoryService;
 
         public MacTrashCanService(
             IDriveService driveService,
             IOperationsService operationsService,
             IPathService pathService,
             IFileService fileService,
-            IEnvironmentService environmentService)
+            IEnvironmentService environmentService,
+            IDirectoryService directoryService)
             : base(driveService, operationsService, pathService, fileService)
         {
             _pathService = pathService;
             _fileService = fileService;
             _environmentService = environmentService;
+            _directoryService = directoryService;
         }
 
         protected override IReadOnlyCollection<string> GetTrashCanLocations(string volume)
@@ -47,7 +50,7 @@ namespace Camelot.Services.Mac
         protected override string GetUniqueFilePath(string fileName, HashSet<string> filesNamesSet, string directory)
         {
             var filePath = _pathService.Combine(directory, fileName);
-            if (!filesNamesSet.Contains(filePath) && !_fileService.CheckIfExists(filePath))
+            if (!filesNamesSet.Contains(filePath) && CheckIfExists(filePath))
             {
                 return filePath;
             }
@@ -59,10 +62,13 @@ namespace Camelot.Services.Mac
                 var newFileName = $"{fileName} ({i})";
                 result = _pathService.Combine(directory, newFileName);
                 i++;
-            } while (filesNamesSet.Contains(result) || _fileService.CheckIfExists(result));
+            } while (filesNamesSet.Contains(result) || CheckIfExists(result));
 
             return result;
         }
+        
+        private bool CheckIfExists(string nodePath) =>
+            _fileService.CheckIfExists(nodePath) || _directoryService.CheckIfExists(nodePath);
 
         private string GetHomeTrashCanPath()
         {

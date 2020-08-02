@@ -49,9 +49,11 @@ namespace Camelot.Services.AllPlatforms
                 }
             }
 
+            await CleanupAsync();
+
             return false;
         }
-
+        
         protected virtual Task PrepareAsync(string[] files) => Task.CompletedTask;
 
         protected abstract IReadOnlyCollection<string> GetTrashCanLocations(string volume);
@@ -63,6 +65,8 @@ namespace Camelot.Services.AllPlatforms
 
         protected abstract string GetUniqueFilePath(string fileName, HashSet<string> filesNamesSet, string directory);
 
+        protected virtual Task CleanupAsync() => Task.CompletedTask;
+        
         private async Task<bool> TryMoveToTrashAsync(IReadOnlyDictionary<string, string> files)
         {
             try

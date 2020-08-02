@@ -95,6 +95,13 @@ namespace Camelot.Services.Windows
             return _pathService.Combine(directory, newFileName);
         }
 
+        protected override async Task CleanupAsync()
+        {
+            _fileSizesDictionary.Clear();
+            
+            await base.CleanupAsync();
+        }
+
         private static byte[] GetMetadataBytes(string originalFilePath, long fileSize,
             DateTime removingDate)
         {
