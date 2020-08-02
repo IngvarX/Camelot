@@ -44,17 +44,14 @@ namespace Camelot.Services.Mac
         protected override Task WriteMetaDataAsync(IReadOnlyDictionary<string, string> filePathsDictionary,
             string trashCanLocation) => Task.CompletedTask;
 
-        protected override string GetUniqueFilePath(string file, HashSet<string> filesSet, string directory)
+        protected override string GetUniqueFilePath(string fileName, HashSet<string> filesNamesSet, string directory)
         {
-            // TODO: move to move operation
-            var filePath = _pathService.Combine(directory, _pathService.GetFileName(file));
-            if (!filesSet.Contains(filePath))
+            var filePath = _pathService.Combine(directory, fileName);
+            if (!filesNamesSet.Contains(filePath) && !_fileService.CheckIfExists(filePath))
             {
                 return filePath;
             }
-
-            var fileName = _pathService.GetFileName(file);
-
+            
             string result;
             var i = 1;
             do
@@ -62,7 +59,7 @@ namespace Camelot.Services.Mac
                 var newFileName = $"{fileName} ({i})";
                 result = _pathService.Combine(directory, newFileName);
                 i++;
-            } while (filesSet.Contains(result) || _fileService.CheckIfExists(result));
+            } while (filesNamesSet.Contains(result) || _fileService.CheckIfExists(result));
 
             return result;
         }

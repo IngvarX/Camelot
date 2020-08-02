@@ -65,19 +65,18 @@ namespace Camelot.Services.Linux
 
             var deleteTime = _dateTimeProvider.Now;
 
-            await filePathsDictionary.Keys.ForEachAsync(f => WriteMetaDataAsync(f, infoTrashCanLocation, deleteTime));
+            await filePathsDictionary.ForEachAsync(kvp =>
+                WriteMetaDataAsync(kvp.Key, kvp.Value, infoTrashCanLocation, deleteTime));
         }
 
-        protected override string GetUniqueFilePath(string file, HashSet<string> filesSet, string directory)
+        protected override string GetUniqueFilePath(string fileName, HashSet<string> filesNamesSet, string directory)
         {
-            var filePath = _pathService.Combine(directory, _pathService.GetFileName(file));
-            if (!filesSet.Contains(filePath))
+            var filePath = _pathService.Combine(directory, fileName);
+            if (!filesNamesSet.Contains(filePath) && !_fileService.CheckIfExists(filePath))
             {
                 return filePath;
             }
-
-            var fileName = _pathService.GetFileName(file);
-
+            
             string result;
             var i = 1;
             do
@@ -85,16 +84,17 @@ namespace Camelot.Services.Linux
                 var newFileName = $"{fileName} ({i})";
                 result = _pathService.Combine(directory, newFileName);
                 i++;
-            } while (filesSet.Contains(result) || _fileService.CheckIfExists(result));
+            } while (filesNamesSet.Contains(result) || _fileService.CheckIfExists(result));
 
             return result;
         }
 
-        private async Task WriteMetaDataAsync(string file, string trashCanMetadataLocation, DateTime dateTime)
+        private async Task WriteMetaDataAsync(string oldFilePath, string newFilePath,
+            string trashCanMetadataLocation, DateTime dateTime)
         {
-            var fileName = _pathService.GetFileName(file);
+            var fileName = _pathService.GetFileName(newFilePath);
             var metadataFullPath = _pathService.Combine(trashCanMetadataLocation, fileName + ".trashinfo");
-            var metadata = GetMetadata(file, dateTime);
+            var metadata = GetMetadata(oldFilePath, dateTime);
 
             await _fileService.WriteTextAsync(metadataFullPath, metadata);
         }

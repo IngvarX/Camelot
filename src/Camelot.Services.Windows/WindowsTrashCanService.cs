@@ -86,13 +86,13 @@ namespace Camelot.Services.Windows
             }
         }
 
-        protected override string GetUniqueFilePath(string file, HashSet<string> filesSet, string directory)
+        protected override string GetUniqueFilePath(string fileName, HashSet<string> filesNamesSet, string directory)
         {
-            var extension = _pathService.GetExtension(file);
+            var extension = _pathService.GetExtension(fileName);
             var generatedName = GenerateName();
-            var fileName = $"{FilePrefix}{generatedName}.{extension}";
+            var newFileName = $"{FilePrefix}{generatedName}.{extension}";
 
-            return _pathService.Combine(directory, fileName);
+            return _pathService.Combine(directory, newFileName);
         }
 
         private static byte[] GetMetadataBytes(string originalFilePath, long fileSize,

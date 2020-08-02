@@ -60,11 +60,10 @@ namespace Camelot.ViewModels.Tests
                     Command = DefaultCommand,
                     Arguments = DefaultArguments
                 });
-            var isCallbackCalled = false;
             terminalServiceMock
-                .Setup(m => m.SetTerminalSettings(It.IsAny<TerminalSettings>()))
-                .Callback<TerminalSettings>(ts =>
-                    isCallbackCalled = ts.Command == NewCommand && ts.Arguments == NewArguments);
+                .Setup(m => m.SetTerminalSettings(It.Is<TerminalSettings>(ts =>
+                    ts.Command == NewCommand && ts.Arguments == NewArguments)))
+                .Verifiable();
 
             var viewModel = new TerminalSettingsViewModel(terminalServiceMock.Object);
             viewModel.Activate();
@@ -74,7 +73,9 @@ namespace Camelot.ViewModels.Tests
             Assert.True(viewModel.IsChanged);
             viewModel.SaveChanges();
 
-            Assert.True(isCallbackCalled);
+            terminalServiceMock
+                .Verify(m => m.SetTerminalSettings(It.Is<TerminalSettings>(ts =>
+                    ts.Command == NewCommand && ts.Arguments == NewArguments)), Times.Once);
         }
     }
 }

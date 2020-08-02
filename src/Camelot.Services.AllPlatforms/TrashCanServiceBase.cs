@@ -61,7 +61,7 @@ namespace Camelot.Services.AllPlatforms
         protected abstract Task WriteMetaDataAsync(IReadOnlyDictionary<string, string> filePathsDictionary,
             string trashCanLocation);
 
-        protected abstract string GetUniqueFilePath(string file, HashSet<string> filesSet, string directory);
+        protected abstract string GetUniqueFilePath(string fileName, HashSet<string> filesNamesSet, string directory);
 
         private async Task<bool> TryMoveToTrashAsync(IReadOnlyDictionary<string, string> files)
         {

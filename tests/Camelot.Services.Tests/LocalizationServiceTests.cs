@@ -43,11 +43,11 @@ namespace Camelot.Services.Tests
         [Fact]
         public void TestSaveLanguage()
         {
-            var isCallbackCalled = false;
             var repositoryMock = new Mock<IRepository<Language>>();
             repositoryMock
-                .Setup(m => m.Upsert(LanguageSettingsId, It.IsAny<Language>()))
-                .Callback<string, Language>((k, l) => isCallbackCalled = l.Code == LanguageCode && l.Name == LanguageName);
+                .Setup(m => m.Upsert(LanguageSettingsId,
+                    It.Is<Language>(l => l.Code == LanguageCode && l.Name == LanguageName)))
+                .Verifiable();
 
             var unitOfWorkMock = new Mock<IUnitOfWork>();
             unitOfWorkMock
@@ -62,7 +62,9 @@ namespace Camelot.Services.Tests
             var languageModel = new LanguageModel(LanguageName, LanguageName, LanguageCode);
             localizationService.SaveLanguage(languageModel);
 
-            Assert.True(isCallbackCalled);
+            repositoryMock
+                .Verify(m => m.Upsert(LanguageSettingsId,
+                    It.Is<Language>(l => l.Code == LanguageCode && l.Name == LanguageName)), Times.Once);
         }
     }
 }
