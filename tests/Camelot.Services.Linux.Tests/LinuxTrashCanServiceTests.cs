@@ -18,7 +18,6 @@ namespace Camelot.Services.Linux.Tests
     {
         private const string FilePath = "/home/file.txt";
         private const string HomePath = "/home/camelot";
-        private const string FileName = "file.txt";
         private const string MetaData = "metadata";
 
         private readonly AutoMocker _autoMocker;
@@ -61,9 +60,6 @@ namespace Camelot.Services.Linux.Tests
             _autoMocker
                 .Setup<IEnvironmentService, string>(m => m.GetEnvironmentVariable("HOME"))
                 .Returns(HomePath);
-            _autoMocker
-                .Setup<IDirectoryService, bool>(m => m.CheckIfExists(It.IsAny<string>()))
-                .Returns(true);
             _autoMocker
                 .Setup<IDateTimeProvider, DateTime>(m => m.Now)
                 .Returns(now);

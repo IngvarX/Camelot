@@ -50,9 +50,6 @@ namespace Camelot.Services.Mac.Tests
                 .Setup<IFileService, bool>(m => m.CheckIfExists(It.IsAny<string>()))
                 .Returns<string>(existingFiles.Contains);
             _autoMocker
-                .Setup<IDirectoryService, bool>(m => m.CheckIfExists(It.IsAny<string>()))
-                .Returns(true);
-            _autoMocker
                 .Setup<IEnvironmentService, string>(m => m.GetEnvironmentVariable("HOME"))
                 .Returns(HomePath);
 

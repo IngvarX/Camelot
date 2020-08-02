@@ -38,7 +38,7 @@ namespace Camelot.Services.AllPlatforms
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                var filesTrashCanLocation = GetFilesTrashCanLocation(trashCanLocation);
+                var filesTrashCanLocation = GetFilesTrashCanLocation(trashCanLocation); // TODO: create if not exists?
                 var destinationPathsDictionary = GetFilesTrashCanPathsMapping(nodes, filesTrashCanLocation);
                 var isRemoved = await TryMoveToTrashAsync(destinationPathsDictionary);
                 if (isRemoved)

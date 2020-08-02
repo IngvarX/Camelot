@@ -50,7 +50,7 @@ namespace Camelot.Services.Mac
         protected override string GetUniqueFilePath(string fileName, HashSet<string> filesNamesSet, string directory)
         {
             var filePath = _pathService.Combine(directory, fileName);
-            if (!filesNamesSet.Contains(filePath) && CheckIfExists(filePath))
+            if (!filesNamesSet.Contains(filePath) && !CheckIfExists(filePath))
             {
                 return filePath;
             }
