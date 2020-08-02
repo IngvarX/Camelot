@@ -34,6 +34,7 @@ namespace Camelot.Services.AllPlatforms
             await PrepareAsync(files);
 
             var trashCanLocations = GetTrashCanLocations(volume);
+            var result = false;
             foreach (var trashCanLocation in trashCanLocations)
             {
                 cancellationToken.ThrowIfCancellationRequested();
@@ -44,14 +45,15 @@ namespace Camelot.Services.AllPlatforms
                 if (isRemoved)
                 {
                     await WriteMetaDataAsync(destinationPathsDictionary, trashCanLocation);
+                    result = true;
 
-                    return true;
+                    break;
                 }
             }
 
             await CleanupAsync();
 
-            return false;
+            return result;
         }
         
         protected virtual Task PrepareAsync(string[] files) => Task.CompletedTask;

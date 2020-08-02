@@ -44,16 +44,6 @@ namespace Camelot.Services.Windows
             InitializeAsync(processService).Forget();
         }
 
-        private async Task InitializeAsync(IProcessService processService)
-        {
-            var userInfo = await processService.ExecuteAndGetOutputAsync("whoami", "/user");
-
-            _sid = userInfo
-                .Split(" ", StringSplitOptions.RemoveEmptyEntries)
-                .Last()
-                .TrimEnd();
-        }
-
         protected override async Task PrepareAsync(string[] files)
         {
             _fileSizesDictionary = _fileService
@@ -100,6 +90,16 @@ namespace Camelot.Services.Windows
             _fileSizesDictionary.Clear();
             
             await base.CleanupAsync();
+        }
+        
+        private async Task InitializeAsync(IProcessService processService)
+        {
+            var userInfo = await processService.ExecuteAndGetOutputAsync("whoami", "/user");
+
+            _sid = userInfo
+                .Split(" ", StringSplitOptions.RemoveEmptyEntries)
+                .Last()
+                .TrimEnd();
         }
 
         private static byte[] GetMetadataBytes(string originalFilePath, long fileSize,
