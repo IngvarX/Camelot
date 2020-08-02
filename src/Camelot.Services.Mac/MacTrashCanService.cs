@@ -71,9 +71,9 @@ namespace Camelot.Services.Mac
         {
             var home = _environmentService.GetEnvironmentVariable("HOME");
 
-            return $"{home}/.Trash";
+            return _pathService.Combine(home, ".Trash");
         }
 
-        private static string GetVolumeTrashCanPath(string volume) => $"{volume}/.Trashes";
+        private string GetVolumeTrashCanPath(string volume) => _pathService.Combine(volume, ".Trashes");
     }
 }

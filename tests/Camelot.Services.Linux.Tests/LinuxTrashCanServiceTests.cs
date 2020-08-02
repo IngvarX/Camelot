@@ -28,17 +28,19 @@ namespace Camelot.Services.Linux.Tests
         }
 
         [Theory]
-        [InlineData("/", "/home/camelot/.local/share/Trash/info/file.txt.trashinfo")]
-        [InlineData("/test", "/test/.Trash-42/info/file.txt.trashinfo")]
-        public async Task TestMoveToTrash(string volume, string metadataPath)
+        [InlineData("/", "/home/camelot/.local/share/Trash/info/file.txt.trashinfo", "/home/camelot/.local/share/Trash/files/")]
+        [InlineData("/test", "/test/.Trash-42/info/file.txt.trashinfo", "/test/.Trash-42/files/")]
+        public async Task TestMoveToTrash(string volume, string metadataPath, string newFilePath)
         {
             var now = DateTime.UtcNow;
             _autoMocker
                 .Setup<IDriveService, DriveModel>(m => m.GetFileDrive(It.IsAny<string>()))
                 .Returns(new DriveModel {RootDirectory = volume});
+            var isCallbackCalled = false;
             _autoMocker
                 .Setup<IOperationsService>(m => m.MoveAsync(It.IsAny<IReadOnlyDictionary<string, string>>()))
-                .Verifiable();
+                .Callback<IReadOnlyDictionary<string, string>>(d => 
+                    isCallbackCalled = d.ContainsKey(FilePath) && d[FilePath] == newFilePath);
             _autoMocker
                 .Setup<IPathService, string>(m => m.GetFileName(FilePath))
                 .Returns(FileName);
@@ -82,12 +84,9 @@ namespace Camelot.Services.Linux.Tests
             var linuxTrashCanService = _autoMocker.CreateInstance<LinuxTrashCanService>();
             await linuxTrashCanService.MoveToTrashAsync(new[] {FilePath}, CancellationToken.None);
 
+            Assert.True(isCallbackCalled);
             _autoMocker
-                .Verify<IOperationsService>(m => m.MoveAsync(It.IsAny<IReadOnlyDictionary<string, string>>()), Times.Once);
-            _autoMocker
-                .Verify<IFileService>(m => m.WriteTextAsync(It.IsAny<string>(), MetaData), Times.Once);
-            _autoMocker
-                .Verify<IFileService>(m => m.WriteTextAsync(metadataPath, MetaData));
+                .Verify<IFileService>(m => m.WriteTextAsync(metadataPath, MetaData), Times.Once);
             builderMock
                 .Verify(m => m.WithFilePath(FilePath), Times.Once);
             builderMock
