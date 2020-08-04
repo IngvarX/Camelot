@@ -30,7 +30,7 @@ namespace Camelot.Operations
             catch
             {
                 // TODO: process exception
-                State = OperationState.Cancelled;
+                State = OperationState.Failed;
             }
             finally
             {

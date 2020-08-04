@@ -38,14 +38,24 @@ namespace Camelot.Operations.Tests
             _fileNameGenerationService = fileNameGenerationServiceMock.Object;
         }
 
-        [Fact]
-        public async Task TestCopyOperation()
+        [Theory]
+        [InlineData(true, OperationState.Failed)]
+        [InlineData(false, OperationState.Finished)]
+        public async Task TestCopyOperation(bool throws, OperationState state)
         {
             var directoryServiceMock = new Mock<IDirectoryService>();
             var filesServiceMock = new Mock<IFileService>();
-            filesServiceMock
-                .Setup(m => m.CopyAsync(SourceName, DestinationName, false))
-                .Verifiable();
+            var copySetup = filesServiceMock
+                .Setup(m => m.CopyAsync(SourceName, DestinationName, false));
+            if (throws)
+            {
+                copySetup.ThrowsAsync(new AccessViolationException()).Verifiable();
+            }
+            else
+            {
+                copySetup.Verifiable();
+            }
+
             var operationsFactory = new OperationsFactory(
                 _taskPool,
                 directoryServiceMock.Object,
@@ -68,7 +78,7 @@ namespace Camelot.Operations.Tests
 
             await copyOperation.RunAsync();
 
-            Assert.Equal(OperationState.Finished, copyOperation.State);
+            Assert.Equal(state, copyOperation.State);
 
             Assert.True(isCallbackCalled);
             filesServiceMock.Verify(m => m.CopyAsync(SourceName, DestinationName, false), Times.Once());
@@ -170,17 +180,36 @@ namespace Camelot.Operations.Tests
             filesServiceMock.Verify(m => m.CopyAsync(SecondSourceName, SecondDestinationName, false), Times.Never);
         }
 
-        [Fact]
-        public async Task TestMoveOperation()
+        [Theory]
+        [InlineData(true, true, OperationState.Failed)]
+        [InlineData(true, false, OperationState.Failed)]
+        [InlineData(false, true, OperationState.Failed)]
+        [InlineData(false, false, OperationState.Finished)]
+        public async Task TestMoveOperation(bool copyThrows, bool deleteThrows, OperationState state)
         {
             var directoryServiceMock = new Mock<IDirectoryService>();
             var filesServiceMock = new Mock<IFileService>();
-            filesServiceMock
-             .Setup(m => m.CopyAsync(SourceName, DestinationName, false))
-             .Verifiable();
-            filesServiceMock
-             .Setup(m => m.Remove(SourceName))
-             .Verifiable();
+            var copySetup = filesServiceMock
+             .Setup(m => m.CopyAsync(SourceName, DestinationName, false));
+            if (copyThrows)
+            {
+                copySetup.ThrowsAsync(new AccessViolationException()).Verifiable();
+            }
+            else
+            {
+                copySetup.Verifiable();
+            }
+
+            var deleteSetup = filesServiceMock
+                .Setup(m => m.Remove(SourceName));
+            if (deleteThrows)
+            {
+                deleteSetup.Throws(new AccessViolationException()).Verifiable();
+            }
+            else
+            {
+                deleteSetup.Verifiable();
+            }
 
             var operationsFactory = new OperationsFactory(
              _taskPool,
@@ -204,21 +233,30 @@ namespace Camelot.Operations.Tests
 
             await moveOperation.RunAsync();
 
-            Assert.Equal(OperationState.Finished, moveOperation.State);
+            Assert.Equal(state, moveOperation.State);
 
             Assert.True(callbackCalled);
             filesServiceMock.Verify(m => m.CopyAsync(SourceName, DestinationName, false), Times.Once());
-            filesServiceMock.Verify(m => m.Remove(SourceName), Times.Once());
+            filesServiceMock.Verify(m => m.Remove(SourceName), copyThrows ? Times.Never() : Times.Once());
         }
 
-        [Fact]
-        public async Task TestDeleteFileOperation()
+        [Theory]
+        [InlineData(true, OperationState.Failed)]
+        [InlineData(false, OperationState.Finished)]
+        public async Task TestDeleteFileOperation(bool throws, OperationState state)
         {
             var directoryServiceMock = new Mock<IDirectoryService>();
             var filesServiceMock = new Mock<IFileService>();
-            filesServiceMock
-                .Setup(m => m.Remove(SourceName))
-                .Verifiable();
+            var removeSetup = filesServiceMock
+                .Setup(m => m.Remove(SourceName));
+            if (throws)
+            {
+                removeSetup.Throws(new AccessViolationException()).Verifiable();
+            }
+            else
+            {
+                removeSetup.Verifiable();
+            }
             var pathServiceMock = new Mock<IPathService>();
 
             var operationsFactory = new OperationsFactory(
@@ -236,19 +274,28 @@ namespace Camelot.Operations.Tests
 
             await deleteOperation.RunAsync();
 
-            Assert.Equal(OperationState.Finished, deleteOperation.State);
+            Assert.Equal(state, deleteOperation.State);
 
             Assert.True(callbackCalled);
             filesServiceMock.Verify(m => m.Remove(SourceName), Times.Once());
         }
 
-        [Fact]
-        public async Task TestDeleteDirectoryOperation()
+        [Theory]
+        [InlineData(true, OperationState.Failed)]
+        [InlineData(false, OperationState.Finished)]
+        public async Task TestDeleteDirectoryOperation(bool throws, OperationState state)
         {
             var directoryServiceMock = new Mock<IDirectoryService>();
-            directoryServiceMock
-                .Setup(m => m.RemoveRecursively(SourceName))
-                .Verifiable();
+            var removeSetup = directoryServiceMock
+                .Setup(m => m.RemoveRecursively(SourceName));
+            if (throws)
+            {
+                removeSetup.Throws(new AccessViolationException()).Verifiable();
+            }
+            else
+            {
+                removeSetup.Verifiable();
+            }
             var filesServiceMock = new Mock<IFileService>();
             var pathServiceMock = new Mock<IPathService>();
 
@@ -267,7 +314,7 @@ namespace Camelot.Operations.Tests
 
             await deleteOperation.RunAsync();
 
-            Assert.Equal(OperationState.Finished, deleteOperation.State);
+            Assert.Equal(state, deleteOperation.State);
 
             Assert.True(callbackCalled);
             directoryServiceMock.Verify(m => m.RemoveRecursively(SourceName), Times.Once());
