@@ -22,7 +22,7 @@ namespace Camelot.Services
         {
             var initialName = _pathService.GetFileName(filePath);
             var directory = _pathService.GetParentDirectory(filePath);
-            var newName= GenerateName(initialName, directory);
+            var newName = GenerateName(initialName, directory);
 
             return _pathService.Combine(directory, newName);
         }
@@ -47,7 +47,7 @@ namespace Camelot.Services
 
         private string GenerateNewName(string currentName, int i)
         {
-            var fileName = _pathService.GetFileName(currentName);
+            var fileName = _pathService.GetFileNameWithoutExtension(currentName);
             var extension = _pathService.GetExtension(currentName);
 
             return string.IsNullOrEmpty(extension) ? $"{fileName} ({i})" : $"{fileName} ({i}).{extension}";

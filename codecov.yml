@@ -21,3 +21,5 @@ ignore:
   - "src/Camelot.FileSystemWatcher/Configuration/*"
   - "src/Camelot.Operations/Models/*"
   - "src/Camelot.Services.Environment/**/*"
+  - "src/Camelot.FileSystemWatcher/Implementations/FileSystemWatcherFactory.cs"
+  - "src/Camelot.FileSystemWatcher/Implementations/AggregatingFileSystemWatcherDecorator.cs"

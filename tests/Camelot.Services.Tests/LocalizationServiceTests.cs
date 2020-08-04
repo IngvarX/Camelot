@@ -1,3 +1,4 @@
+using System;
 using Camelot.DataAccess.Models;
 using Camelot.DataAccess.Repositories;
 using Camelot.DataAccess.UnitOfWork;
@@ -65,6 +66,19 @@ namespace Camelot.Services.Tests
             repositoryMock
                 .Verify(m => m.Upsert(LanguageSettingsId,
                     It.Is<Language>(l => l.Code == LanguageCode && l.Name == LanguageName)), Times.Once);
+        }
+
+        [Fact]
+        public void TestSaveLanguageFails()
+        {
+            var unitOfWorkFactoryMock = new Mock<IUnitOfWorkFactory>();
+            var localizationService = new LocalizationService(unitOfWorkFactoryMock.Object);
+
+            Assert.Throws<ArgumentNullException>(() => localizationService.SaveLanguage(null));
+            Assert.Throws<ArgumentException>(() => localizationService.SaveLanguage(new LanguageModel("", "", "")));
+            Assert.Throws<ArgumentException>(() => localizationService.SaveLanguage(new LanguageModel(null, "", "")));
+            Assert.Throws<ArgumentException>(() => localizationService.SaveLanguage(new LanguageModel("name", "", "")));
+            Assert.Throws<ArgumentException>(() => localizationService.SaveLanguage(new LanguageModel("name", null, "")));
         }
     }
 }
