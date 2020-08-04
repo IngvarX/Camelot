@@ -72,10 +72,10 @@ namespace Camelot.Services
             return parentDirectory is null ? null : CreateFrom(parentDirectory);
         }
 
-        public IReadOnlyCollection<DirectoryModel> GetDirectories(IReadOnlyCollection<string> directories) =>
+        public IReadOnlyList<DirectoryModel> GetDirectories(IReadOnlyList<string> directories) =>
             directories.Select(CreateFrom).ToArray();
 
-        public IReadOnlyCollection<DirectoryModel> GetChildDirectories(string directory)
+        public IReadOnlyList<DirectoryModel> GetChildDirectories(string directory)
         {
             var directories = Directory
                 .GetDirectories(directory)
@@ -88,7 +88,7 @@ namespace Camelot.Services
 
         public string GetAppRootDirectory() => _pathService.GetPathRoot(Directory.GetCurrentDirectory());
 
-        public IReadOnlyCollection<string> GetFilesRecursively(string directory) => Directory
+        public IReadOnlyList<string> GetFilesRecursively(string directory) => Directory
                 .EnumerateFiles(directory, "*.*", SearchOption.AllDirectories)
                 .ToArray();
 

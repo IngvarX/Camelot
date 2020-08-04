@@ -26,9 +26,9 @@ namespace Camelot.Services
             _environmentService = environmentService;
         }
 
-        public async Task CopyFilesAsync(IReadOnlyCollection<string> files)
+        public async Task CopyFilesAsync(IReadOnlyList<string> files)
         {
-            var selectedFilesString = string.Join(_environmentService.NewLine, 
+            var selectedFilesString = string.Join(_environmentService.NewLine,
                 files.Select(f => UrlPrefix + f));
 
             await _clipboardService.SetTextAsync(selectedFilesString);

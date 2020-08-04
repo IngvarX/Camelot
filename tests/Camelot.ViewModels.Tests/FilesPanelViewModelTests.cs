@@ -134,13 +134,13 @@ namespace Camelot.ViewModels.Tests
                 .Setup<IDirectoryService, bool>(m => m.CheckIfExists(NewDirectory))
                 .Returns(true);
             _autoMocker
-                .Setup<IDirectoryService, IReadOnlyCollection<DirectoryModel>>(m => m.GetChildDirectories(It.IsAny<string>()))
+                .Setup<IDirectoryService, IReadOnlyList<DirectoryModel>>(m => m.GetChildDirectories(It.IsAny<string>()))
                 .Returns(new DirectoryModel[] {});
             _autoMocker
-                .Setup<IFileService, IReadOnlyCollection<FileModel>>(m => m.GetFiles(AppRootDirectory))
+                .Setup<IFileService, IReadOnlyList<FileModel>>(m => m.GetFiles(AppRootDirectory))
                 .Returns(new[] {new FileModel {Name = File}});
             _autoMocker
-                .Setup<IFileService, IReadOnlyCollection<FileModel>>(m => m.GetFiles(NewDirectory))
+                .Setup<IFileService, IReadOnlyList<FileModel>>(m => m.GetFiles(NewDirectory))
                 .Returns(new FileModel[] {});
 
             var filesPanelViewModel = _autoMocker.CreateInstance<FilesPanelViewModel>();
@@ -212,11 +212,11 @@ namespace Camelot.ViewModels.Tests
                 .Setup<IDirectoryService, bool>(m => m.CheckIfExists(AppRootDirectory))
                 .Returns(true);
             _autoMocker
-                .Setup<IDirectoryService, IReadOnlyCollection<DirectoryModel>>(m =>
+                .Setup<IDirectoryService, IReadOnlyList<DirectoryModel>>(m =>
                     m.GetChildDirectories(It.IsAny<string>()))
                 .Returns(new[] {new DirectoryModel {Name = NewDirectory}});
             _autoMocker
-                .Setup<IFileService, IReadOnlyCollection<FileModel>>(m => m.GetFiles(AppRootDirectory))
+                .Setup<IFileService, IReadOnlyList<FileModel>>(m => m.GetFiles(AppRootDirectory))
                 .Returns(new[] {new FileModel {Name = File}});
             const string formattedSize = "42";
             _autoMocker
@@ -284,11 +284,11 @@ namespace Camelot.ViewModels.Tests
                 .Setup<IDirectoryService, bool>(m => m.CheckIfExists(AppRootDirectory))
                 .Returns(true);
             _autoMocker
-                .Setup<IDirectoryService, IReadOnlyCollection<DirectoryModel>>(m =>
+                .Setup<IDirectoryService, IReadOnlyList<DirectoryModel>>(m =>
                     m.GetChildDirectories(It.IsAny<string>()))
                 .Returns(new[] {new DirectoryModel {Name = NewDirectory}});
             _autoMocker
-                .Setup<IFileService, IReadOnlyCollection<FileModel>>(m => m.GetFiles(AppRootDirectory))
+                .Setup<IFileService, IReadOnlyList<FileModel>>(m => m.GetFiles(AppRootDirectory))
                 .Returns(new[] {new FileModel {Name = File}});
 
             var filesPanelViewModel = _autoMocker.CreateInstance<FilesPanelViewModel>();

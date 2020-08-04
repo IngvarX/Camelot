@@ -33,7 +33,7 @@ namespace Camelot.Services.Windows
             IFileService fileService,
             IDateTimeProvider dateTimeProvider,
             IProcessService processService)
-            : base(driveService, operationsService, pathService, fileService)
+            : base(driveService, operationsService, pathService)
         {
             _pathService = pathService;
             _fileService = fileService;
@@ -44,16 +44,17 @@ namespace Camelot.Services.Windows
             InitializeAsync(processService).Forget();
         }
 
-        protected override async Task PrepareAsync(string[] files)
+        protected override async Task PrepareAsync(IReadOnlyList<string> nodes)
         {
+            var files = nodes.Where(_fileService.CheckIfExists).ToArray();
             _fileSizesDictionary = _fileService
                 .GetFiles(files)
                 .ToDictionary(f => f.FullPath, f => f.SizeBytes);
 
-            await base.PrepareAsync(files);
+            await base.PrepareAsync(nodes);
         }
 
-        protected override IReadOnlyCollection<string> GetTrashCanLocations(string volume) =>
+        protected override IReadOnlyList<string> GetTrashCanLocations(string volume) =>
             new[] {$"{volume}$Recycle.Bin\\{_sid}"};
 
         protected override string GetFilesTrashCanLocation(string trashCanLocation) => trashCanLocation;
@@ -69,7 +70,9 @@ namespace Camelot.Services.Windows
                     ? _fileSizesDictionary[originalFilePath]
                     : 0;
                 var metadataBytes = GetMetadataBytes(originalFilePath, fileSize, deleteTime);
-                var metadataFileName = _pathService.GetFileName(trashCanFilePath).Replace(FilePrefix, MetadataPrefix);
+                var metadataFileName = _pathService
+                    .GetFileName(trashCanFilePath)
+                    .Replace(FilePrefix, MetadataPrefix);
                 var metadataPath = _pathService.Combine(trashCanLocation, metadataFileName);
 
                 await _fileService.WriteBytesAsync(metadataPath, metadataBytes);
@@ -88,10 +91,10 @@ namespace Camelot.Services.Windows
         protected override async Task CleanupAsync()
         {
             _fileSizesDictionary.Clear();
-            
+
             await base.CleanupAsync();
         }
-        
+
         private async Task InitializeAsync(IProcessService processService)
         {
             var userInfo = await processService.ExecuteAndGetOutputAsync("whoami", "/user");

@@ -17,7 +17,7 @@ namespace Camelot.Services
             _pathService = pathService;
         }
 
-        public IReadOnlyCollection<FileModel> GetFiles(string directory)
+        public IReadOnlyList<FileModel> GetFiles(string directory)
         {
             var files = Directory
                 .GetFiles(directory)
@@ -26,7 +26,7 @@ namespace Camelot.Services
             return files.ToArray();
         }
 
-        public IReadOnlyCollection<FileModel> GetFiles(IReadOnlyCollection<string> files) =>
+        public IReadOnlyList<FileModel> GetFiles(IReadOnlyList<string> files) =>
             files.Select(CreateFrom).ToArray();
 
         public FileModel GetFile(string file) => CreateFrom(file);

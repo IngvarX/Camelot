@@ -28,7 +28,7 @@ namespace Camelot.Services.Linux
             IDirectoryService directoryService,
             IDateTimeProvider dateTimeProvider,
             ILinuxRemovedFileMetadataBuilderFactory linuxRemovedFileMetadataBuilderFactory)
-            : base(driveService, operationsService, pathService, fileService)
+            : base(driveService, operationsService, pathService)
         {
             _pathService = pathService;
             _fileService = fileService;
@@ -38,7 +38,7 @@ namespace Camelot.Services.Linux
             _linuxRemovedFileMetadataBuilderFactory = linuxRemovedFileMetadataBuilderFactory;
         }
 
-        protected override IReadOnlyCollection<string> GetTrashCanLocations(string volume)
+        protected override IReadOnlyList<string> GetTrashCanLocations(string volume)
         {
             var directories = new List<string>();
             if (volume != "/")
@@ -76,7 +76,7 @@ namespace Camelot.Services.Linux
             {
                 return filePath;
             }
-            
+
             string result;
             var i = 1;
             do
@@ -130,7 +130,7 @@ namespace Camelot.Services.Linux
             return _pathService.Combine(home, ".local/share/Trash");
         }
 
-        private IReadOnlyCollection<string> GetVolumeTrashCanPaths(string volume)
+        private IReadOnlyList<string> GetVolumeTrashCanPaths(string volume)
         {
             var uid = GetUid();
 

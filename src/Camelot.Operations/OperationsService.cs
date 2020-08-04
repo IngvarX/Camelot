@@ -129,6 +129,18 @@ namespace Camelot.Operations
             IReadOnlyDictionary<string, string> nodes)
         {
             var (files, directories) = Split(nodes.Keys.ToArray());
+            var sourceDirectory = GetCommonRootDirectory(nodes.Keys.ToArray());
+
+            var filePathsDictionary = files.ToDictionary(f => f, f => nodes[f]);
+            foreach (var directory in directories)
+            {
+                var filesInDirectory = _directoryService.GetFilesRecursively(directory);
+                var outputDirectory = nodes[directory];
+
+                filesInDirectory.ForEach(f =>
+                    filePathsDictionary[f] = GetDestinationPath(sourceDirectory, f, outputDirectory));
+            }
+
             var outputTopLevelFiles = files
                 .Select(f => nodes[f])
                 .ToArray();
@@ -137,7 +149,7 @@ namespace Camelot.Operations
                 .ToArray();
 
             return new BinaryFileSystemOperationSettings(directories, files, outputTopLevelDirectories,
-                outputTopLevelFiles, nodes);
+                outputTopLevelFiles, filePathsDictionary, sourceDirectory);
         }
 
         private string GetCommonRootDirectory(IReadOnlyList<string> nodes) =>

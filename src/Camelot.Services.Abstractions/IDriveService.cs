@@ -5,7 +5,7 @@ namespace Camelot.Services.Abstractions
 {
     public interface IDriveService
     {
-        IReadOnlyCollection<DriveModel> GetDrives();
+        IReadOnlyList<DriveModel> GetDrives();
 
         DriveModel GetFileDrive(string filePath);
     }

@@ -8,7 +8,7 @@ namespace Camelot.Services
 {
     public class DriveService : IDriveService
     {
-        public IReadOnlyCollection<DriveModel> GetDrives() =>
+        public IReadOnlyList<DriveModel> GetDrives() =>
             DriveInfo
                 .GetDrives()
                 .Where(d => d.DriveType != DriveType.Ram)

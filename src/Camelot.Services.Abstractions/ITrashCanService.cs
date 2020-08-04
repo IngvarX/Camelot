@@ -6,6 +6,6 @@ namespace Camelot.Services.Abstractions
 {
     public interface ITrashCanService
     {
-        Task<bool> MoveToTrashAsync(IReadOnlyCollection<string> nodes, CancellationToken cancellationToken = default);
+        Task<bool> MoveToTrashAsync(IReadOnlyList<string> nodes, CancellationToken cancellationToken = default);
     }
 }

@@ -21,7 +21,7 @@ namespace Camelot.Services.Mac
             IFileService fileService,
             IEnvironmentService environmentService,
             IDirectoryService directoryService)
-            : base(driveService, operationsService, pathService, fileService)
+            : base(driveService, operationsService, pathService)
         {
             _pathService = pathService;
             _fileService = fileService;
@@ -29,7 +29,7 @@ namespace Camelot.Services.Mac
             _directoryService = directoryService;
         }
 
-        protected override IReadOnlyCollection<string> GetTrashCanLocations(string volume)
+        protected override IReadOnlyList<string> GetTrashCanLocations(string volume)
         {
             var directories = new List<string>();
             if (volume != "/")
@@ -54,7 +54,7 @@ namespace Camelot.Services.Mac
             {
                 return filePath;
             }
-            
+
             string result;
             var i = 1;
             do
@@ -66,7 +66,7 @@ namespace Camelot.Services.Mac
 
             return result;
         }
-        
+
         private bool CheckIfExists(string nodePath) =>
             _fileService.CheckIfExists(nodePath) || _directoryService.CheckIfExists(nodePath);
 

@@ -12,26 +12,24 @@ namespace Camelot.Services.AllPlatforms
         private readonly IDriveService _driveService;
         private readonly IOperationsService _operationsService;
         private readonly IPathService _pathService;
-        private readonly IFileService _fileService;
 
         protected TrashCanServiceBase(
             IDriveService driveService,
             IOperationsService operationsService,
-            IPathService pathService,
-            IFileService fileService)
+            IPathService pathService)
         {
             _driveService = driveService;
             _operationsService = operationsService;
             _pathService = pathService;
-            _fileService = fileService;
         }
 
-        public async Task<bool> MoveToTrashAsync(IReadOnlyCollection<string> nodes, CancellationToken cancellationToken)
+        public async Task<bool> MoveToTrashAsync(IReadOnlyList<string> nodes, CancellationToken cancellationToken)
         {
-            var volume = GetVolume(nodes);
-            var files = nodes.Where(_fileService.CheckIfExists).ToArray();
+            cancellationToken.ThrowIfCancellationRequested();
 
-            await PrepareAsync(files);
+            var volume = GetVolume(nodes);
+
+            await PrepareAsync(nodes);
 
             var trashCanLocations = GetTrashCanLocations(volume);
             var result = false;
@@ -42,23 +40,25 @@ namespace Camelot.Services.AllPlatforms
                 var filesTrashCanLocation = GetFilesTrashCanLocation(trashCanLocation); // TODO: create if not exists?
                 var destinationPathsDictionary = GetFilesTrashCanPathsMapping(nodes, filesTrashCanLocation);
                 var isRemoved = await TryMoveToTrashAsync(destinationPathsDictionary);
-                if (isRemoved)
+                if (!isRemoved)
                 {
-                    await WriteMetaDataAsync(destinationPathsDictionary, trashCanLocation);
-                    result = true;
-
-                    break;
+                    continue;
                 }
+
+                await WriteMetaDataAsync(destinationPathsDictionary, trashCanLocation);
+                result = true;
+
+                break;
             }
 
             await CleanupAsync();
 
             return result;
         }
-        
-        protected virtual Task PrepareAsync(string[] files) => Task.CompletedTask;
 
-        protected abstract IReadOnlyCollection<string> GetTrashCanLocations(string volume);
+        protected virtual Task PrepareAsync(IReadOnlyList<string> nodes) => Task.CompletedTask;
+
+        protected abstract IReadOnlyList<string> GetTrashCanLocations(string volume);
 
         protected abstract string GetFilesTrashCanLocation(string trashCanLocation);
 
@@ -68,12 +68,12 @@ namespace Camelot.Services.AllPlatforms
         protected abstract string GetUniqueFilePath(string fileName, HashSet<string> filesNamesSet, string directory);
 
         protected virtual Task CleanupAsync() => Task.CompletedTask;
-        
-        private async Task<bool> TryMoveToTrashAsync(IReadOnlyDictionary<string, string> files)
+
+        private async Task<bool> TryMoveToTrashAsync(IReadOnlyDictionary<string, string> nodes)
         {
             try
             {
-                await _operationsService.MoveAsync(files);
+                await _operationsService.MoveAsync(nodes);
             }
             catch
             {
@@ -84,7 +84,7 @@ namespace Camelot.Services.AllPlatforms
             return true;
         }
 
-        private IReadOnlyDictionary<string, string> GetFilesTrashCanPathsMapping(IReadOnlyCollection<string> files,
+        private IReadOnlyDictionary<string, string> GetFilesTrashCanPathsMapping(IReadOnlyList<string> files,
             string filesTrashCanLocation)
         {
             var fileNames = new HashSet<string>();
