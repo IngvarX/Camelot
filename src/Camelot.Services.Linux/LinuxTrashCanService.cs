@@ -16,7 +16,7 @@ namespace Camelot.Services.Linux
         private readonly IFileService _fileService;
         private readonly IDirectoryService _directoryService;
         private readonly IDateTimeProvider _dateTimeProvider;
-        private readonly ILinuxRemovedFileMetadataBuilderFactory _linuxRemovedFileMetadataBuilderFactory;
+        private readonly ILinuxRemovedFileMetadataBuilderFactory _removedFileMetadataBuilderFactory;
         private readonly IEnvironmentService _environmentService;
 
         public LinuxTrashCanService(
@@ -27,7 +27,7 @@ namespace Camelot.Services.Linux
             IEnvironmentService environmentService,
             IDirectoryService directoryService,
             IDateTimeProvider dateTimeProvider,
-            ILinuxRemovedFileMetadataBuilderFactory linuxRemovedFileMetadataBuilderFactory)
+            ILinuxRemovedFileMetadataBuilderFactory removedFileMetadataBuilderFactory)
             : base(driveService, operationsService, pathService)
         {
             _pathService = pathService;
@@ -35,7 +35,7 @@ namespace Camelot.Services.Linux
             _environmentService = environmentService;
             _directoryService = directoryService;
             _dateTimeProvider = dateTimeProvider;
-            _linuxRemovedFileMetadataBuilderFactory = linuxRemovedFileMetadataBuilderFactory;
+            _removedFileMetadataBuilderFactory = removedFileMetadataBuilderFactory;
         }
 
         protected override IReadOnlyList<string> GetTrashCanLocations(string volume)
@@ -112,7 +112,7 @@ namespace Camelot.Services.Linux
         }
 
         private ILinuxRemovedFileMetadataBuilder CreateBuilder() =>
-            _linuxRemovedFileMetadataBuilderFactory.Create();
+            _removedFileMetadataBuilderFactory.Create();
 
         private string GetInfoTrashCanLocation(string trashCanLocation) =>
             _pathService.Combine(trashCanLocation, "info");

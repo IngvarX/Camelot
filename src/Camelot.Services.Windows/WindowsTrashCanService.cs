@@ -7,7 +7,7 @@ using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Operations;
 using Camelot.Services.AllPlatforms;
 using Camelot.Services.Environment.Interfaces;
-using Camelot.Services.Windows.Builders;
+using Camelot.Services.Windows.Interfaces;
 
 namespace Camelot.Services.Windows
 {
@@ -15,14 +15,12 @@ namespace Camelot.Services.Windows
     {
         private const string FilePrefix = "$R";
         private const string MetadataPrefix = "$I";
-        private const string FileNameChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        private const int FileNameLength = 6;
 
         private readonly IPathService _pathService;
         private readonly IFileService _fileService;
         private readonly IDateTimeProvider _dateTimeProvider;
-        private readonly Random _random;
-
+        private readonly IWindowsRemovedFileMetadataBuilderFactory _removedFileMetadataBuilderFactory;
+        private readonly IWindowsTrashCanNodeNameGenerator _trashCanNodeNameGenerator;
         private IDictionary<string, long> _fileSizesDictionary;
         private string _sid;
 
@@ -32,14 +30,16 @@ namespace Camelot.Services.Windows
             IPathService pathService,
             IFileService fileService,
             IDateTimeProvider dateTimeProvider,
-            IProcessService processService)
+            IProcessService processService,
+            IWindowsRemovedFileMetadataBuilderFactory removedFileMetadataBuilderFactory,
+            IWindowsTrashCanNodeNameGenerator trashCanNodeNameGenerator)
             : base(driveService, operationsService, pathService)
         {
             _pathService = pathService;
             _fileService = fileService;
             _dateTimeProvider = dateTimeProvider;
-
-            _random = new Random();
+            _removedFileMetadataBuilderFactory = removedFileMetadataBuilderFactory;
+            _trashCanNodeNameGenerator = trashCanNodeNameGenerator;
 
             InitializeAsync(processService).Forget();
         }
@@ -82,7 +82,7 @@ namespace Camelot.Services.Windows
         protected override string GetUniqueFilePath(string fileName, HashSet<string> filesNamesSet, string directory)
         {
             var extension = _pathService.GetExtension(fileName);
-            var generatedName = GenerateName();
+            var generatedName = _trashCanNodeNameGenerator.Generate();
             var newFileName = $"{FilePrefix}{generatedName}.{extension}";
 
             return _pathService.Combine(directory, newFileName);
@@ -105,10 +105,10 @@ namespace Camelot.Services.Windows
                 .TrimEnd();
         }
 
-        private static byte[] GetMetadataBytes(string originalFilePath, long fileSize,
+        private byte[] GetMetadataBytes(string originalFilePath, long fileSize,
             DateTime removingDate)
         {
-            var builder = new WindowsRemovedFileMetadataBuilder()
+            var builder = CreateBuilder()
                 .WithFileSize(fileSize)
                 .WithRemovingDateTime(removingDate)
                 .WithFilePath(originalFilePath);
@@ -116,11 +116,7 @@ namespace Camelot.Services.Windows
             return builder.Build();
         }
 
-        private string GenerateName() => new string(
-            Enumerable
-                .Repeat(FileNameChars, FileNameLength)
-                .Select(s => s[_random.Next(s.Length)])
-                .ToArray()
-        );
+        private IWindowsRemovedFileMetadataBuilder CreateBuilder() =>
+            _removedFileMetadataBuilderFactory.Create();
     }
 }

@@ -24,6 +24,8 @@ using Camelot.Services.Linux.Interfaces;
 using Camelot.Services.Linux.Interfaces.Builders;
 using Camelot.Services.Mac;
 using Camelot.Services.Windows;
+using Camelot.Services.Windows.Builders;
+using Camelot.Services.Windows.Interfaces;
 using Camelot.TaskPool.Interfaces;
 using Camelot.ViewModels.Configuration;
 using Camelot.ViewModels.Factories.Implementations;
@@ -266,13 +268,17 @@ namespace Camelot
 
         private static void RegisterWindowsServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
+            services.RegisterLazySingleton<IWindowsRemovedFileMetadataBuilderFactory>(() => new WindowsRemovedFileMetadataBuilderFactory());
+            services.RegisterLazySingleton<IWindowsTrashCanNodeNameGenerator>(() => new WindowsTrashCanNodeNameGenerator());
             services.RegisterLazySingleton<ITrashCanService>(() => new WindowsTrashCanService(
                 resolver.GetService<IDriveService>(),
                 resolver.GetService<IOperationsService>(),
                 resolver.GetService<IPathService>(),
                 resolver.GetService<IFileService>(),
                 resolver.GetService<IDateTimeProvider>(),
-                resolver.GetService<IProcessService>()
+                resolver.GetService<IProcessService>(),
+                resolver.GetService<IWindowsRemovedFileMetadataBuilderFactory>(),
+                resolver.GetService<IWindowsTrashCanNodeNameGenerator>()
             ));
             services.RegisterLazySingleton<IResourceOpeningService>(() => new WindowsResourceOpeningService(
                 resolver.GetService<IProcessService>()
