@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Camelot.Services.Abstractions;
@@ -23,6 +24,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private readonly IFilesOperationsMediator _filesOperationsMediator;
         private readonly IFileSystemNodePropertiesBehavior _fileSystemNodePropertiesBehavior;
         private readonly IDialogService _dialogService;
+        private readonly ITrashCanService _trashCanService;
 
         private DateTime _lastModifiedDateTime;
         private string _fullPath;
@@ -86,7 +88,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             IClipboardOperationsService clipboardOperationsService,
             IFilesOperationsMediator filesOperationsMediator,
             IFileSystemNodePropertiesBehavior fileSystemNodePropertiesBehavior,
-            IDialogService dialogService)
+            IDialogService dialogService,
+            ITrashCanService trashCanService)
         {
             _fileSystemNodeOpeningBehavior = fileSystemNodeOpeningBehavior;
             _operationsService = operationsService;
@@ -94,6 +97,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             _filesOperationsMediator = filesOperationsMediator;
             _fileSystemNodePropertiesBehavior = fileSystemNodePropertiesBehavior;
             _dialogService = dialogService;
+            _trashCanService = trashCanService;
 
             OpenCommand = ReactiveCommand.Create(Open);
             StartRenamingCommand = ReactiveCommand.Create(StartRenaming);
@@ -130,7 +134,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             var result = await ShowRemoveConfirmationDialogAsync();
             if (result)
             {
-                await _operationsService.RemoveAsync(Files);
+                await _trashCanService.MoveToTrashAsync(Files);
             }
         }
 

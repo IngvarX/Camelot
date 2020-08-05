@@ -328,7 +328,8 @@ namespace Camelot
                 resolver.GetService<IFilesOperationsMediator>(),
                 resolver.GetService<FilePropertiesBehavior>(),
                 resolver.GetService<DirectoryPropertiesBehavior>(),
-                resolver.GetService<IDialogService>()
+                resolver.GetService<IDialogService>(),
+                resolver.GetService<ITrashCanService>()
             ));
             services.Register(() => new AboutDialogViewModel(
                 resolver.GetService<IApplicationVersionProvider>(),

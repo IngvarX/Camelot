@@ -42,6 +42,7 @@ namespace Camelot.ViewModels.Tests
             var filesPropertiesBehaviorMock = new Mock<IFileSystemNodePropertiesBehavior>();
             var directoriesPropertiesBehaviorMock = new Mock<IFileSystemNodePropertiesBehavior>();
             var dialogServiceMock = new Mock<IDialogService>();
+            var trashCanServiceMock = new Mock<ITrashCanService>();
             var fileSystemNodeViewModelFactory = new FileSystemNodeViewModelFactory(
                 fileSystemNodeOpeningBehaviorMock.Object,
                 fileSystemNodeOpeningBehaviorMock.Object,
@@ -52,7 +53,8 @@ namespace Camelot.ViewModels.Tests
                 filesOperationsMediatorMock.Object,
                 filesPropertiesBehaviorMock.Object,
                 directoriesPropertiesBehaviorMock.Object,
-                dialogServiceMock.Object
+                dialogServiceMock.Object,
+                trashCanServiceMock.Object
             );
 
             var node = fileSystemNodeViewModelFactory.Create(fileModel);
@@ -85,6 +87,7 @@ namespace Camelot.ViewModels.Tests
             var filesPropertiesBehaviorMock = new Mock<IFileSystemNodePropertiesBehavior>();
             var directoriesPropertiesBehaviorMock = new Mock<IFileSystemNodePropertiesBehavior>();
             var dialogServiceMock = new Mock<IDialogService>();
+            var trashCanServiceMock = new Mock<ITrashCanService>();
             var fileSystemNodeViewModelFactory = new FileSystemNodeViewModelFactory(
                 fileSystemNodeOpeningBehaviorMock.Object,
                 fileSystemNodeOpeningBehaviorMock.Object,
@@ -95,7 +98,8 @@ namespace Camelot.ViewModels.Tests
                 filesOperationsMediatorMock.Object,
                 filesPropertiesBehaviorMock.Object,
                 directoriesPropertiesBehaviorMock.Object,
-                dialogServiceMock.Object
+                dialogServiceMock.Object,
+                trashCanServiceMock.Object
             );
 
             var node = fileSystemNodeViewModelFactory.Create(directoryModel, isParentDirectory);

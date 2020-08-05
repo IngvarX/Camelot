@@ -34,14 +34,16 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             IFilesOperationsMediator filesOperationsMediator,
             IFileSizeFormatter fileSizeFormatter,
             IFileSystemNodePropertiesBehavior fileSystemNodePropertiesBehavior,
-            IDialogService dialogService)
+            IDialogService dialogService,
+            ITrashCanService trashCanService)
             : base(
                 fileSystemNodeOpeningBehavior,
                 operationsService,
                 clipboardOperationsService,
                 filesOperationsMediator,
                 fileSystemNodePropertiesBehavior,
-                dialogService)
+                dialogService,
+                trashCanService)
         {
             _fileSizeFormatter = fileSizeFormatter;
         }
