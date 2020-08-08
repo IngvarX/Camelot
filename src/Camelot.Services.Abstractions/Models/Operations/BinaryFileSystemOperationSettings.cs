@@ -14,6 +14,8 @@ namespace Camelot.Services.Abstractions.Models.Operations
 
         public IReadOnlyDictionary<string, string> FilesDictionary { get; }
 
+        public IReadOnlyList<string> EmptyDirectories { get; }
+
         public string SourceDirectory { get; }
 
         public string TargetDirectory { get; }
@@ -24,6 +26,7 @@ namespace Camelot.Services.Abstractions.Models.Operations
             IReadOnlyList<string> outputTopLevelDirectories,
             IReadOnlyList<string> outputTopLevelFiles,
             IReadOnlyDictionary<string, string> filesDictionary,
+            IReadOnlyList<string> emptyDirectories,
             string sourceDirectory = null,
             string targetDirectory = null)
         {
@@ -32,6 +35,7 @@ namespace Camelot.Services.Abstractions.Models.Operations
             OutputTopLevelDirectories = outputTopLevelDirectories;
             OutputTopLevelFiles = outputTopLevelFiles;
             FilesDictionary = filesDictionary;
+            EmptyDirectories = emptyDirectories;
             SourceDirectory = sourceDirectory;
             TargetDirectory = targetDirectory;
         }

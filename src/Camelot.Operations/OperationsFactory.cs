@@ -33,7 +33,7 @@ namespace Camelot.Operations
 
         public IOperation CreateCopyOperation(BinaryFileSystemOperationSettings settings)
         {
-            var copyOperations = CreateCopyOperations(settings.FilesDictionary);
+            var copyOperations = CreateCopyOperations(settings.FilesDictionary, settings.EmptyDirectories);
             var deleteNewFilesOperations = CreateDeleteOperations(settings.OutputTopLevelDirectories, settings.OutputTopLevelFiles);
             var operationGroup = CreateOperationGroup(copyOperations, deleteNewFilesOperations);
 
@@ -47,7 +47,7 @@ namespace Camelot.Operations
 
         public IOperation CreateMoveOperation(BinaryFileSystemOperationSettings settings)
         {
-            var copyOperations = CreateCopyOperations(settings.FilesDictionary);
+            var copyOperations = CreateCopyOperations(settings.FilesDictionary, settings.EmptyDirectories);
             var deleteNewFilesOperations = CreateDeleteOperations(settings.OutputTopLevelDirectories, settings.OutputTopLevelFiles);
             var copyOperationGroup = CreateOperationGroup(copyOperations, deleteNewFilesOperations);
 
@@ -75,10 +75,17 @@ namespace Camelot.Operations
             return CreateOperation(compositeOperation);
         }
 
-        private IInternalOperation[] CreateCopyOperations(IReadOnlyDictionary<string, string> filesDictionary) =>
-            filesDictionary
-                .Select(kvp => CreateCopyOperation(kvp.Key, kvp.Value))
-                .ToArray();
+        private IInternalOperation[] CreateCopyOperations(
+            IReadOnlyDictionary<string, string> filesDictionary,
+            IReadOnlyList<string> emptyDirectoriesDictionary)
+        {
+            var filesOperations = filesDictionary
+                .Select(kvp => CreateCopyOperation(kvp.Key, kvp.Value));
+            var directoriesOperations = emptyDirectoriesDictionary
+                .Select(CreateAddDirectoryOperation);
+
+            return filesOperations.Concat(directoriesOperations).ToArray();
+        }
 
         private IInternalOperation[] CreateDeleteOperations(
             IReadOnlyList<string> topLevelDirectories,
@@ -98,8 +105,11 @@ namespace Camelot.Operations
         private IInternalOperation CreateDeleteFileOperation(string filePath) =>
             new DeleteFileOperation(filePath, _fileService);
 
-        private IInternalOperation CreateDeleteDirectoryOperation(string filePath) =>
-            new DeleteDirectoryOperation(filePath, _directoryService);
+        private IInternalOperation CreateDeleteDirectoryOperation(string directoryPath) =>
+            new DeleteDirectoryOperation(directoryPath, _directoryService);
+
+        private IInternalOperation CreateAddDirectoryOperation(string directoryPath) =>
+            new CreateDirectoryOperation(directoryPath, _directoryService);
 
         private ICompositeOperation CreateCompositeOperation(
             IReadOnlyList<OperationGroup> operations,
@@ -119,7 +129,7 @@ namespace Camelot.Operations
             params OperationGroup[] operations) => operations;
 
         private static OperationGroup CreateOperationGroup(
-            IInternalOperation[] operations, IInternalOperation[] cancelOperations = null) =>
+            IReadOnlyList<IInternalOperation> operations, IReadOnlyList<IInternalOperation> cancelOperations = null) =>
             new OperationGroup(operations, cancelOperations);
     }
 }

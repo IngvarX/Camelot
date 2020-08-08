@@ -177,9 +177,9 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         public void OpenLastSelectedFile()
         {
-            var lastSelected = _selectedFileSystemNodes.Last();
+            var lastSelected = _selectedFileSystemNodes.LastOrDefault();
 
-            lastSelected.OpenCommand.Execute(null);
+            lastSelected?.OpenCommand.Execute(null);
         }
 
         private void SortFiles(SortingColumn sortingColumn)

@@ -21,7 +21,7 @@ namespace Camelot.Services.Abstractions
 
         IReadOnlyList<DirectoryModel> GetChildDirectories(string directory);
 
-        IReadOnlyList<string> GetEmptyDirectoriesRecursive(string directory);
+        IReadOnlyList<string> GetEmptyDirectoriesRecursively(string directory);
 
         bool CheckIfExists(string directory);
 

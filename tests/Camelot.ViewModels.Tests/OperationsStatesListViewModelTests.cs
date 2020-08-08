@@ -83,7 +83,7 @@ namespace Camelot.ViewModels.Tests
             }
             var settings = new BinaryFileSystemOperationSettings(
                 array, array,
-                array,array, dictionary);
+                array,array, dictionary, array);
             var operationInfo = new OperationInfo(OperationType.Copy, settings);
             operationMock
                 .SetupGet(m => m.Info)

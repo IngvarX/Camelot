@@ -109,6 +109,9 @@ namespace Camelot.Operations
             var (files, directories) = Split(nodes);
             var sourceDirectory = GetCommonRootDirectory(nodes);
             var filesInDirectories = directories.SelectMany(_directoryService.GetFilesRecursively);
+            var emptyDirectories = directories
+                .SelectMany(_directoryService.GetEmptyDirectoriesRecursively)
+                .ToArray();
             var filePathsDictionary = filesInDirectories
                 .Concat(files)
                 .ToDictionary(
@@ -122,7 +125,7 @@ namespace Camelot.Operations
                 .ToArray();
 
             return new BinaryFileSystemOperationSettings(directories, files, outputTopLevelDirectories,
-                outputTopLevelFiles, filePathsDictionary, sourceDirectory, outputDirectory);
+                outputTopLevelFiles, filePathsDictionary, emptyDirectories, sourceDirectory, outputDirectory);
         }
 
         private BinaryFileSystemOperationSettings GetBinaryFileSystemOperationSettings(
@@ -131,6 +134,7 @@ namespace Camelot.Operations
             var (files, directories) = Split(nodes.Keys.ToArray());
             var sourceDirectory = GetCommonRootDirectory(nodes.Keys.ToArray());
 
+            var emptyDirectories = new List<string>();
             var filePathsDictionary = files.ToDictionary(f => f, f => nodes[f]);
             foreach (var directory in directories)
             {
@@ -139,6 +143,7 @@ namespace Camelot.Operations
 
                 filesInDirectory.ForEach(f =>
                     filePathsDictionary[f] = GetDestinationPath(sourceDirectory, f, outputDirectory));
+                emptyDirectories.AddRange(_directoryService.GetEmptyDirectoriesRecursively(directory));
             }
 
             var outputTopLevelFiles = files
@@ -149,7 +154,7 @@ namespace Camelot.Operations
                 .ToArray();
 
             return new BinaryFileSystemOperationSettings(directories, files, outputTopLevelDirectories,
-                outputTopLevelFiles, filePathsDictionary, sourceDirectory);
+                outputTopLevelFiles, filePathsDictionary, emptyDirectories, sourceDirectory);
         }
 
         private string GetCommonRootDirectory(IReadOnlyList<string> nodes) =>

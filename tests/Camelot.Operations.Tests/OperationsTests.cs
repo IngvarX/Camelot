@@ -67,7 +67,8 @@ namespace Camelot.Operations.Tests
                 new[] {SourceName},
                 new string[] { },
                 new[] {SourceName},
-                new Dictionary<string, string> {[SourceName] = DestinationName}
+                new Dictionary<string, string> {[SourceName] = DestinationName},
+                new string[] { }
             );
             var copyOperation = operationsFactory.CreateCopyOperation(settings);
 
@@ -143,7 +144,8 @@ namespace Camelot.Operations.Tests
                 {
                     [SourceName] = DestinationName,
                     [SecondSourceName] = SecondDestinationName
-                }
+                },
+                new string[] { }
             );
             var copyOperation = operationsFactory.CreateCopyOperation(settings);
 
@@ -218,11 +220,12 @@ namespace Camelot.Operations.Tests
              _pathService,
              _fileNameGenerationService);
             var settings = new BinaryFileSystemOperationSettings(
-             new string[] { },
-             new[] {SourceName},
-             new string[] { },
-             new[] {SourceName},
-             new Dictionary<string, string> {[SourceName] = DestinationName}
+                new string[] { },
+                new[] {SourceName},
+                new string[] { },
+                new[] {SourceName},
+                new Dictionary<string, string> {[SourceName] = DestinationName},
+                new string[] { }
             );
             var moveOperation = operationsFactory.CreateMoveOperation(settings);
 

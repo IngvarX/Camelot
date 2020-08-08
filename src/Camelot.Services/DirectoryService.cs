@@ -76,7 +76,7 @@ namespace Camelot.Services
             return directories.ToArray();
         }
 
-        public IReadOnlyList<string> GetEmptyDirectoriesRecursive(string directory)
+        public IReadOnlyList<string> GetEmptyDirectoriesRecursively(string directory)
         {
             if (CheckIfEmpty(directory))
             {
