@@ -1,15 +1,14 @@
-﻿using Camelot.ViewModels.Implementations.Settings.General;
-using Camelot.ViewModels.Interfaces.Settings;
+﻿using Camelot.ViewModels.Interfaces.Settings;
 
 namespace Camelot.ViewModels.Implementations.Settings
 {
     public class GeneralSettingsViewModel : ViewModelBase, ISettingsViewModel
     {
-        public LanguageSettingsViewModel LanguageSettingsViewModel { get; }
+        public ISettingsViewModel LanguageSettingsViewModel { get; }
 
         public bool IsChanged => LanguageSettingsViewModel.IsChanged;
 
-        public GeneralSettingsViewModel(LanguageSettingsViewModel languageSettingsViewModel)
+        public GeneralSettingsViewModel(ISettingsViewModel languageSettingsViewModel)
         {
             LanguageSettingsViewModel = languageSettingsViewModel;
         }
