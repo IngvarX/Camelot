@@ -1,6 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Operations;
 
 namespace Camelot.Operations
@@ -20,7 +21,10 @@ namespace Camelot.Operations
 
         public Task RunAsync(CancellationToken cancellationToken)
         {
-            _directoryService.Create(_directoryToCreate);
+            State = OperationState.InProgress;
+            var creationResult = _directoryService.Create(_directoryToCreate);
+            State = creationResult ? OperationState.Finished : OperationState.Failed;
+            SetFinalProgress();
 
             return Task.CompletedTask;
         }

@@ -322,5 +322,49 @@ namespace Camelot.Operations.Tests
             Assert.True(callbackCalled);
             directoryServiceMock.Verify(m => m.RemoveRecursively(SourceName), Times.Once());
         }
+
+        [Theory]
+        [InlineData(false, OperationState.Failed)]
+        [InlineData(true, OperationState.Finished)]
+        public async Task TestCopeEmptyDirectoryOperation(bool success, OperationState state)
+        {
+            var directoryServiceMock = new Mock<IDirectoryService>();
+            directoryServiceMock
+                .Setup(m => m.GetEmptyDirectoriesRecursively(SourceName))
+                .Returns(new[] {SourceName});
+            directoryServiceMock
+                .Setup(m => m.Create(DestinationName))
+                .Returns(success)
+                .Verifiable();
+            var filesServiceMock = new Mock<IFileService>();
+            var pathServiceMock = new Mock<IPathService>();
+
+            var operationsFactory = new OperationsFactory(
+                _taskPool,
+                directoryServiceMock.Object,
+                filesServiceMock.Object,
+                pathServiceMock.Object,
+                _fileNameGenerationService);
+            var settings = new BinaryFileSystemOperationSettings(
+                new[] { SourceName },
+                new string[] { },
+                new[] { DestinationName },
+                new string[] { },
+                new Dictionary<string, string>(),
+                new[] {DestinationName }
+            );
+            var copyOperation = operationsFactory.CreateCopyOperation(settings);
+            Assert.Equal(OperationState.NotStarted, copyOperation.State);
+
+            var callbackCalled = false;
+            copyOperation.StateChanged += (sender, args) => callbackCalled = true;
+
+            await copyOperation.RunAsync();
+
+            Assert.Equal(state, copyOperation.State);
+
+            Assert.True(callbackCalled);
+            directoryServiceMock.Verify(m => m.Create(DestinationName), Times.Once());
+        }
     }
 }

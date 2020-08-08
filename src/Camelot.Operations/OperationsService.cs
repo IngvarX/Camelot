@@ -111,6 +111,7 @@ namespace Camelot.Operations
             var filesInDirectories = directories.SelectMany(_directoryService.GetFilesRecursively);
             var emptyDirectories = directories
                 .SelectMany(_directoryService.GetEmptyDirectoriesRecursively)
+                .Select(d => GetDestinationPath(sourceDirectory, d, outputDirectory))
                 .ToArray();
             var filePathsDictionary = filesInDirectories
                 .Concat(files)
@@ -143,7 +144,10 @@ namespace Camelot.Operations
 
                 filesInDirectory.ForEach(f =>
                     filePathsDictionary[f] = GetDestinationPath(sourceDirectory, f, outputDirectory));
-                emptyDirectories.AddRange(_directoryService.GetEmptyDirectoriesRecursively(directory));
+                var innerEmptyDirectories = _directoryService
+                    .GetEmptyDirectoriesRecursively(directory)
+                    .Select(d => GetDestinationPath(sourceDirectory, d, outputDirectory));
+                emptyDirectories.AddRange(innerEmptyDirectories);
             }
 
             var outputTopLevelFiles = files
