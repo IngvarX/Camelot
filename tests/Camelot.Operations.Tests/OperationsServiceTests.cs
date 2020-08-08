@@ -71,6 +71,9 @@ namespace Camelot.Operations.Tests
                 .Verifiable();
             var pathServiceMock = new Mock<IPathService>();
             var fileOperationsStateServiceMock = new Mock<IOperationsStateService>();
+            fileOperationsStateServiceMock
+                .Setup(m => m.AddOperation(operationMock.Object))
+                .Verifiable();
 
             IOperationsService operationsService = new OperationsService(
                 operationsFactoryMock.Object,
@@ -84,6 +87,8 @@ namespace Camelot.Operations.Tests
 
             operationMock.Verify(m => m.RunAsync(), Times.Once());
             fileServiceMock.Verify(m => m.CheckIfExists(FileName), Times.Once());
+            fileOperationsStateServiceMock
+                .Verify(m => m.AddOperation(operationMock.Object), Times.Once());
         }
 
         [Fact]
@@ -116,6 +121,9 @@ namespace Camelot.Operations.Tests
                 .Setup(m => m.CheckIfExists(FileName))
                 .Returns(true);
             var fileOperationsStateServiceMock = new Mock<IOperationsStateService>();
+            fileOperationsStateServiceMock
+                .Setup(m => m.AddOperation(operationMock.Object))
+                .Verifiable();
             var pathServiceMock = new Mock<IPathService>();
             pathServiceMock
                 .Setup(m => m.GetCommonRootDirectory(It.IsAny<IReadOnlyList<string>>()))
@@ -138,6 +146,8 @@ namespace Camelot.Operations.Tests
             await operationsService.MoveAsync(new[] {FileName}, DirectoryName);
 
             operationMock.Verify(m => m.RunAsync(), Times.Once());
+            fileOperationsStateServiceMock
+                .Verify(m => m.AddOperation(operationMock.Object), Times.Once());
         }
 
         [Fact]
@@ -170,6 +180,9 @@ namespace Camelot.Operations.Tests
                 .Setup(m => m.CheckIfExists(FileName))
                 .Returns(true);
             var fileOperationsStateServiceMock = new Mock<IOperationsStateService>();
+            fileOperationsStateServiceMock
+                .Setup(m => m.AddOperation(operationMock.Object))
+                .Verifiable();
             var pathServiceMock = new Mock<IPathService>();
             pathServiceMock
                 .Setup(m => m.GetCommonRootDirectory(It.IsAny<IReadOnlyList<string>>()))
@@ -192,6 +205,118 @@ namespace Camelot.Operations.Tests
             await operationsService.CopyAsync(new[] {FileName}, DirectoryName);
 
             operationMock.Verify(m => m.RunAsync(), Times.Once());
+            fileOperationsStateServiceMock
+                .Verify(m => m.AddOperation(operationMock.Object), Times.Once());
+        }
+
+        [Fact]
+        public async Task TestMoveByDictionary()
+        {
+            var fullPath = Path.Combine(DirectoryName, FileName);
+            var newFullPath = Path.Combine(NewDirectoryName, NewFileName);
+            var operationsFactoryMock = new Mock<IOperationsFactory>();
+            var operationMock = new Mock<IOperation>();
+            operationMock
+                .Setup(m => m.RunAsync())
+                .Verifiable();
+            operationsFactoryMock
+                .Setup(m => m.CreateMoveOperation(It.Is<BinaryFileSystemOperationSettings>(s =>
+                    s.FilesDictionary.ContainsKey(fullPath) && s.FilesDictionary[fullPath] == newFullPath)))
+                .Returns(operationMock.Object);
+
+            var directoryServiceMock = new Mock<IDirectoryService>();
+            directoryServiceMock
+                .SetupGet(m => m.SelectedDirectory)
+                .Returns(CurrentDirectory);
+            var fileOpeningServiceMock = new Mock<IResourceOpeningService>();
+            var fileServiceMock = new Mock<IFileService>();
+            fileServiceMock
+                .Setup(m => m.CheckIfExists(fullPath))
+                .Returns(true);
+            var fileOperationsStateServiceMock = new Mock<IOperationsStateService>();
+            fileOperationsStateServiceMock
+                .Setup(m => m.AddOperation(operationMock.Object))
+                .Verifiable();
+            var pathServiceMock = new Mock<IPathService>();
+            pathServiceMock
+                .Setup(m => m.GetCommonRootDirectory(It.IsAny<IReadOnlyList<string>>()))
+                .Returns(string.Empty);
+            pathServiceMock
+                .Setup(m => m.Combine(DirectoryName, FileName))
+                .Returns(fullPath);
+            pathServiceMock
+                .Setup(m => m.GetRelativePath(string.Empty, FileName))
+                .Returns(FileName);
+
+            IOperationsService operationsService = new OperationsService(
+                operationsFactoryMock.Object,
+                directoryServiceMock.Object,
+                fileOpeningServiceMock.Object,
+                fileServiceMock.Object,
+                pathServiceMock.Object,
+                fileOperationsStateServiceMock.Object);
+
+            await operationsService.MoveAsync(new Dictionary<string, string> {[fullPath] = newFullPath});
+
+            operationMock.Verify(m => m.RunAsync(), Times.Once());
+            fileOperationsStateServiceMock
+                .Verify(m => m.AddOperation(operationMock.Object), Times.Once());
+        }
+
+        [Fact]
+        public async Task TestMoveEmptyDirectoryByDictionary()
+        {
+            var operationsFactoryMock = new Mock<IOperationsFactory>();
+            var operationMock = new Mock<IOperation>();
+            operationMock
+                .Setup(m => m.RunAsync())
+                .Verifiable();
+            operationsFactoryMock
+                .Setup(m => m.CreateMoveOperation(It.Is<BinaryFileSystemOperationSettings>(s =>
+                    s.EmptyDirectories.Single() == NewDirectoryName)))
+                .Returns(operationMock.Object);
+
+            var fileServiceMock = new Mock<IFileService>();
+            var directoryServiceMock = new Mock<IDirectoryService>();
+            directoryServiceMock
+                .Setup(m => m.CheckIfExists(DirectoryName))
+                .Returns(true);
+            directoryServiceMock
+                .Setup(m => m.GetEmptyDirectoriesRecursively(DirectoryName))
+                .Returns(new[] {DirectoryName});
+            var fileOpeningServiceMock = new Mock<IResourceOpeningService>();
+            var fileOperationsStateServiceMock = new Mock<IOperationsStateService>();
+            fileOperationsStateServiceMock
+                .Setup(m => m.AddOperation(operationMock.Object))
+                .Verifiable();
+            var pathServiceMock = new Mock<IPathService>();
+            pathServiceMock
+                .Setup(m => m.GetCommonRootDirectory(It.IsAny<IReadOnlyList<string>>()))
+                .Returns(string.Empty);
+            pathServiceMock
+                .Setup(m => m.GetRelativePath(string.Empty, DirectoryName))
+                .Returns(DirectoryName);
+            pathServiceMock
+                .Setup(m => m.GetRelativePath(DirectoryName, DirectoryName))
+                .Returns(string.Empty);
+            pathServiceMock
+                .Setup(m => m.Combine(NewDirectoryName, string.Empty))
+                .Returns(NewDirectoryName);
+
+
+            IOperationsService operationsService = new OperationsService(
+                operationsFactoryMock.Object,
+                directoryServiceMock.Object,
+                fileOpeningServiceMock.Object,
+                fileServiceMock.Object,
+                pathServiceMock.Object,
+                fileOperationsStateServiceMock.Object);
+
+            await operationsService.MoveAsync(new Dictionary<string, string> {[DirectoryName] = NewDirectoryName});
+
+            operationMock.Verify(m => m.RunAsync(), Times.Once());
+            fileOperationsStateServiceMock
+                .Verify(m => m.AddOperation(operationMock.Object), Times.Once());
         }
 
         [Fact]

@@ -143,10 +143,10 @@ namespace Camelot.Operations
                 var outputDirectory = nodes[directory];
 
                 filesInDirectory.ForEach(f =>
-                    filePathsDictionary[f] = GetDestinationPath(sourceDirectory, f, outputDirectory));
+                    filePathsDictionary[f] = GetDestinationPath(directory, f, outputDirectory));
                 var innerEmptyDirectories = _directoryService
                     .GetEmptyDirectoriesRecursively(directory)
-                    .Select(d => GetDestinationPath(sourceDirectory, d, outputDirectory));
+                    .Select(d => GetDestinationPath(directory, d, outputDirectory));
                 emptyDirectories.AddRange(innerEmptyDirectories);
             }
 
