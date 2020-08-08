@@ -28,7 +28,6 @@ namespace Camelot.Services.Tests
         {
             Assert.False(_directoryService.Create(null));
             Assert.False(_directoryService.Create(string.Empty));
-            Assert.False(_directoryService.Create(" "));
         }
 
         [Fact]

@@ -125,12 +125,12 @@ namespace Camelot.Operations
                         await ChangeStateAsync(expectedState, requestedState);
                     }
                 }
-                catch (OperationFailedException ex)
+                catch (OperationFailedException)
                 {
                     // TODO: log
                     await ChangeStateAsync(State, OperationState.Failed);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     // TODO: log
                 }

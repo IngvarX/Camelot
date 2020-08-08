@@ -19,15 +19,17 @@ namespace Camelot.Services.Abstractions
 
         DirectoryModel GetParentDirectory(string directory);
 
-        IReadOnlyList<DirectoryModel> GetDirectories(IReadOnlyList<string> directories);
-
         IReadOnlyList<DirectoryModel> GetChildDirectories(string directory);
+
+        IReadOnlyList<string> GetEmptyDirectoriesRecursive(string directory);
 
         bool CheckIfExists(string directory);
 
         string GetAppRootDirectory();
 
-        IReadOnlyList<string> GetFilesRecursively(string directory);
+        IEnumerable<string> GetFilesRecursively(string directory);
+
+        IEnumerable<string> GetDirectoriesRecursively(string directory);
 
         void RemoveRecursively(string directory);
 

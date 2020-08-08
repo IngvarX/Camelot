@@ -41,11 +41,6 @@ namespace Camelot.Services
 
         public bool Create(string directory)
         {
-            if (string.IsNullOrWhiteSpace(directory))
-            {
-                return false;
-            }
-
             try
             {
                 Directory.CreateDirectory(directory);
@@ -72,9 +67,6 @@ namespace Camelot.Services
             return parentDirectory is null ? null : CreateFrom(parentDirectory);
         }
 
-        public IReadOnlyList<DirectoryModel> GetDirectories(IReadOnlyList<string> directories) =>
-            directories.Select(CreateFrom).ToArray();
-
         public IReadOnlyList<DirectoryModel> GetChildDirectories(string directory)
         {
             var directories = Directory
@@ -84,13 +76,29 @@ namespace Camelot.Services
             return directories.ToArray();
         }
 
+        public IReadOnlyList<string> GetEmptyDirectoriesRecursive(string directory)
+        {
+            if (CheckIfEmpty(directory))
+            {
+                return new[] {directory};
+            }
+
+            var directories = GetDirectoriesRecursively(directory);
+
+            return directories.Where(CheckIfEmpty).ToArray();
+        }
+
         public bool CheckIfExists(string directory) => Directory.Exists(directory);
 
         public string GetAppRootDirectory() => _pathService.GetPathRoot(Directory.GetCurrentDirectory());
 
-        public IReadOnlyList<string> GetFilesRecursively(string directory) => Directory
+        public IEnumerable<string> GetFilesRecursively(string directory) => Directory
                 .EnumerateFiles(directory, "*.*", SearchOption.AllDirectories)
                 .ToArray();
+
+        public IEnumerable<string> GetDirectoriesRecursively(string directory) => Directory
+            .EnumerateDirectories(directory, "*.*", SearchOption.AllDirectories)
+            .ToArray();
 
         public void RemoveRecursively(string directory) => Directory.Delete(directory, true);
 
@@ -98,20 +106,21 @@ namespace Camelot.Services
         {
             var parentDirectory = _pathService.GetParentDirectory(directoryPath);
             var newDirectoryPath = _pathService.Combine(parentDirectory, newName);
-            if (directoryPath == newDirectoryPath)
+
+            try
+            {
+                Directory.Move(directoryPath, newDirectoryPath);
+            }
+            catch
             {
                 return false;
             }
-
-            if (CheckIfExists(newDirectoryPath))
-            {
-                return false;
-            }
-
-            Directory.Move(directoryPath, newDirectoryPath);
 
             return true;
         }
+
+        private static bool CheckIfEmpty(string directory) =>
+            !Directory.EnumerateFileSystemEntries(directory).Any();
 
         private static DirectoryModel CreateFrom(string directory)
         {
