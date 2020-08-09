@@ -51,7 +51,7 @@ namespace Camelot.ViewModels.Implementations.Settings.General
             var savedLanguage = _localizationService.GetSavedLanguage();
             var currentLanguage = _languageManager.CurrentLanguage;
 
-            var languageCode = savedLanguage != null ? savedLanguage.Code : currentLanguage.Code;
+            var languageCode = savedLanguage is null ? currentLanguage.Code : savedLanguage.Code;
             CurrentLanguage = _initialLanguage = GetLanguageOrDefault(languageCode);
         }
 

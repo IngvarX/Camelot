@@ -9,7 +9,7 @@ using Splat;
 
 namespace Camelot
 {
-    internal class Program
+    internal static class Program
     {
         private const int TimeoutSeconds = 3;
 

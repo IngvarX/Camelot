@@ -14,7 +14,7 @@ namespace Camelot.Services.Implementations
         private readonly Lazy<Dictionary<string, LanguageModel>> _availableLanguages =
             new Lazy<Dictionary<string, LanguageModel>>(GetAvailableLanguages);
 
-        private static LanguageModel _defaultLanguage = CreateLanguageModel(CultureInfo.GetCultureInfo("en"));
+        private static readonly LanguageModel _defaultLanguage = CreateLanguageModel(CultureInfo.GetCultureInfo("en"));
 
         public LanguageModel DefaultLanguage => _defaultLanguage;
 
@@ -22,20 +22,18 @@ namespace Camelot.Services.Implementations
 
         public IEnumerable<LanguageModel> AllLanguages => _availableLanguages.Value.Values;
 
-        public void SetLanguage(string langCode)
+        public void SetLanguage(string languageCode)
         {
-            if (string.IsNullOrEmpty(langCode))
+            if (string.IsNullOrEmpty(languageCode))
             {
-                throw new ArgumentException($"{nameof(langCode)} can't be empty.");
+                throw new ArgumentException($"{nameof(languageCode)} can't be empty.");
             }
 
-            Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(langCode);
+            Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(languageCode);
         }
 
-        public void SetLanguage(LanguageModel languageModel)
-        {
+        public void SetLanguage(LanguageModel languageModel) =>
             Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(languageModel.Code);
-        }
 
         private static Dictionary<string, LanguageModel> GetAvailableLanguages()
         {
@@ -52,7 +50,7 @@ namespace Camelot.Services.Implementations
                 }
 
                 var resourceSet = Resources.ResourceManager.GetResourceSet(cultureInfo, true, false);
-                if (resourceSet == null)
+                if (resourceSet is null)
                 {
                     continue;
                 }
@@ -64,14 +62,10 @@ namespace Camelot.Services.Implementations
             return languages;
         }
 
-        private static LanguageModel CreateLanguageModel(CultureInfo cultureInfo)
-        {
-            if (cultureInfo == null)
-            {
-                return _defaultLanguage;
-            }
-
-            return new LanguageModel(cultureInfo.EnglishName, cultureInfo.NativeName.ToTitleCase(), cultureInfo.TwoLetterISOLanguageName);
-        }
+        private static LanguageModel CreateLanguageModel(CultureInfo cultureInfo) =>
+            cultureInfo is null
+                ? _defaultLanguage
+                : new LanguageModel(cultureInfo.EnglishName, cultureInfo.NativeName.ToTitleCase(),
+                    cultureInfo.TwoLetterISOLanguageName);
     }
 }

@@ -43,8 +43,7 @@ namespace Camelot
             var localizationService = Locator.Current.GetRequiredService<ILocalizationService>();
             var languageManager = Locator.Current.GetRequiredService<ILanguageManager>();
 
-            var savedLanguage = localizationService.GetSavedLanguage();
-            if (savedLanguage != null)
+            if (localizationService.GetSavedLanguage() is { } savedLanguage)
             {
                 languageManager.SetLanguage(savedLanguage.Code);
             }
