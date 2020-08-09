@@ -517,7 +517,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             _comparerFactory.Create(SelectedTab.SortingViewModel);
 
         private IFileSystemNodeViewModel GetViewModel(string nodePath) =>
-            _fileSystemNodes.SingleOrDefault(n => n.FullPath == nodePath);
+            _fileSystemNodes.FirstOrDefault(n => n.FullPath == nodePath);
 
         private ObservableCollection<ITabViewModel> GetInitialTabs(IEnumerable<TabModel> tabModels)
         {
