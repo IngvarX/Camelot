@@ -1,8 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Camelot.Extensions;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Operations;
 using Camelot.ViewModels.Implementations.Dialogs;
@@ -54,8 +54,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow
 
             OpenCommand = ReactiveCommand.Create(Open);
             OpenInDefaultEditorCommand = ReactiveCommand.Create(OpenInDefaultEditor);
-            CopyCommand = ReactiveCommand.Create(() => Task.Run(CopyAsync));
-            MoveCommand = ReactiveCommand.Create(() => Task.Run(MoveAsync));
+            CopyCommand = ReactiveCommand.Create(Copy);
+            MoveCommand = ReactiveCommand.Create(Move);
             CreateNewDirectoryCommand = ReactiveCommand.CreateFromTask(CreateNewDirectoryAsync);
             RemoveCommand = ReactiveCommand.CreateFromTask(RemoveAsync);
             MoveToTrashCommand = ReactiveCommand.CreateFromTask(MoveToTrashAsync);
@@ -65,11 +65,11 @@ namespace Camelot.ViewModels.Implementations.MainWindow
 
         private void OpenInDefaultEditor() => _operationsService.OpenFiles(GetSelectedNodes());
 
-        private Task CopyAsync() => _operationsService.CopyAsync(GetSelectedNodes(),
-            _filesOperationsMediator.OutputDirectory);
+        private void Copy() => Execute(() => _operationsService.CopyAsync(GetSelectedNodes(),
+            _filesOperationsMediator.OutputDirectory));
 
-        private Task MoveAsync() => _operationsService.MoveAsync(GetSelectedNodes(),
-            _filesOperationsMediator.OutputDirectory);
+        private void Move() => Execute(() => _operationsService.MoveAsync(GetSelectedNodes(),
+            _filesOperationsMediator.OutputDirectory));
 
         private async Task CreateNewDirectoryAsync()
         {
@@ -94,7 +94,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             var result = await ShowRemoveConfirmationDialogAsync(navigationParameter);
             if (result)
             {
-                _operationsService.RemoveAsync(nodesToRemove).Forget();
+                Execute(() => _operationsService.RemoveAsync(nodesToRemove));
             }
         }
 
@@ -110,7 +110,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             var result = await ShowRemoveConfirmationDialogAsync(navigationParameter);
             if (result)
             {
-                _trashCanService.MoveToTrashAsync(nodesToRemove).Forget();
+                Execute(() => _trashCanService.MoveToTrashAsync(nodesToRemove));
             }
         }
 
@@ -128,5 +128,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             _nodesSelectionService
                 .SelectedNodes
                 .ToArray();
+
+        private static void Execute(Action action) => Task.Factory.StartNew(action);
     }
 }
