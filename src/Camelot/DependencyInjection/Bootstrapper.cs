@@ -49,7 +49,7 @@ using Camelot.ViewModels.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Splat;
 
-namespace Camelot
+namespace Camelot.DependencyInjection
 {
     public static class Bootstrapper
     {
@@ -116,22 +116,22 @@ namespace Camelot
         private static void RegisterFileSystemWatcherServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
             services.RegisterLazySingleton<IFileSystemWatcherFactory>(() => new FileSystemWatcherFactory(
-                resolver.GetService<IPathService>(),
-                resolver.GetService<FileSystemWatcherConfiguration>()
+                resolver.GetRequiredService<IPathService>(),
+                resolver.GetRequiredService<FileSystemWatcherConfiguration>()
             ));
         }
 
         private static void RegisterTaskPool(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
             services.RegisterLazySingleton<ITaskPool>(() => new TaskPool.Implementations.TaskPool(
-                resolver.GetService<IEnvironmentService>()
+                resolver.GetRequiredService<IEnvironmentService>()
             ));
         }
 
         private static void RegisterDataAccess(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
             services.RegisterLazySingleton<IUnitOfWorkFactory>(() => new LiteDbUnitOfWorkFactory(
-                resolver.GetService<DatabaseConfiguration>()
+                resolver.GetRequiredService<DatabaseConfiguration>()
             ));
             services.RegisterLazySingleton<IClipboardService>(() => new ClipboardService());
             services.RegisterLazySingleton<IMainWindowProvider>(() => new MainWindowProvider());
@@ -140,63 +140,63 @@ namespace Camelot
         private static void RegisterServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
             services.RegisterLazySingleton<IFileService>(() => new FileService(
-                resolver.GetService<IPathService>()
+                resolver.GetRequiredService<IPathService>()
             ));
             services.RegisterLazySingleton<IDateTimeProvider>(() => new DateTimeProvider());
             services.RegisterLazySingleton<IDriveService>(() => new DriveService());
             services.Register<IOperationsFactory>(() => new OperationsFactory(
-                resolver.GetService<ITaskPool>(),
-                resolver.GetService<IDirectoryService>(),
-                resolver.GetService<IFileService>(),
-                resolver.GetService<IPathService>(),
-                resolver.GetService<IFileNameGenerationService>()
+                resolver.GetRequiredService<ITaskPool>(),
+                resolver.GetRequiredService<IDirectoryService>(),
+                resolver.GetRequiredService<IFileService>(),
+                resolver.GetRequiredService<IPathService>(),
+                resolver.GetRequiredService<IFileNameGenerationService>()
             ));
             services.RegisterLazySingleton<INodesSelectionService>(() => new NodesSelectionService());
             services.RegisterLazySingleton<IOperationsService>(() => new OperationsService(
-                resolver.GetService<IOperationsFactory>(),
-                resolver.GetService<IDirectoryService>(),
-                resolver.GetService<IResourceOpeningService>(),
-                resolver.GetService<IFileService>(),
-                resolver.GetService<IPathService>(),
-                resolver.GetService<IOperationsStateService>()
+                resolver.GetRequiredService<IOperationsFactory>(),
+                resolver.GetRequiredService<IDirectoryService>(),
+                resolver.GetRequiredService<IResourceOpeningService>(),
+                resolver.GetRequiredService<IFileService>(),
+                resolver.GetRequiredService<IPathService>(),
+                resolver.GetRequiredService<IOperationsStateService>()
             ));
             services.RegisterLazySingleton<IDirectoryService>(() => new DirectoryService(
-                resolver.GetService<IPathService>()
+                resolver.GetRequiredService<IPathService>()
             ));
             services.Register<IFileSystemWatchingService>(() => new FileSystemWatchingService(
-                resolver.GetService<IFileSystemWatcherFactory>()
+                resolver.GetRequiredService<IFileSystemWatcherFactory>()
             ));
             services.RegisterLazySingleton(() => new FileOpeningBehavior(
-                resolver.GetService<IResourceOpeningService>()
+                resolver.GetRequiredService<IResourceOpeningService>()
             ));
             services.RegisterLazySingleton(() => new DirectoryOpeningBehavior(
-                resolver.GetService<IDirectoryService>()
+                resolver.GetRequiredService<IDirectoryService>()
             ));
             services.RegisterLazySingleton<ILocalizationService>(() => new LocalizationService(
-                resolver.GetService<IUnitOfWorkFactory>()
+                resolver.GetRequiredService<IUnitOfWorkFactory>()
             ));
             services.RegisterLazySingleton<IFileSizeFormatter>(() => new FileSizeFormatter());
             services.RegisterLazySingleton<IPathService>(() => new PathService());
             services.RegisterLazySingleton<IDialogService>(() => new DialogService(
-                resolver.GetService<IMainWindowProvider>()
+                resolver.GetRequiredService<IMainWindowProvider>()
             ));
             services.RegisterLazySingleton<ILanguageManager>(() => new LanguageManager());
             services.RegisterLazySingleton<IClipboardOperationsService>(() => new ClipboardOperationsService(
-                resolver.GetService<IClipboardService>(),
-                resolver.GetService<IOperationsService>(),
-                resolver.GetService<IEnvironmentService>()
+                resolver.GetRequiredService<IClipboardService>(),
+                resolver.GetRequiredService<IOperationsService>(),
+                resolver.GetRequiredService<IEnvironmentService>()
             ));
             services.RegisterLazySingleton<IOperationsStateService>(() => new OperationsStateService());
             services.RegisterLazySingleton<IFileNameGenerationService>(() => new FileNameGenerationService(
-                resolver.GetService<IFileService>(),
-                resolver.GetService<IDirectoryService>(),
-                resolver.GetService<IPathService>()
+                resolver.GetRequiredService<IFileService>(),
+                resolver.GetRequiredService<IDirectoryService>(),
+                resolver.GetRequiredService<IPathService>()
             ));
         }
 
         private static void RegisterPlatformSpecificServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
-            var platformService = resolver.GetService<IPlatformService>();
+            var platformService = resolver.GetRequiredService<IPlatformService>();
             var platform = platformService.GetPlatform();
 
             switch (platform)
@@ -221,48 +221,48 @@ namespace Camelot
         {
             services.RegisterLazySingleton<ILinuxRemovedFileMetadataBuilderFactory>(() => new LinuxRemovedFileMetadataBuilderFactory());
             services.RegisterLazySingleton<ITrashCanService>(() => new LinuxTrashCanService(
-                resolver.GetService<IDriveService>(),
-                resolver.GetService<IOperationsService>(),
-                resolver.GetService<IPathService>(),
-                resolver.GetService<IFileService>(),
-                resolver.GetService<IEnvironmentService>(),
-                resolver.GetService<IDirectoryService>(),
-                resolver.GetService<IDateTimeProvider>(),
-                resolver.GetService<ILinuxRemovedFileMetadataBuilderFactory>()
+                resolver.GetRequiredService<IDriveService>(),
+                resolver.GetRequiredService<IOperationsService>(),
+                resolver.GetRequiredService<IPathService>(),
+                resolver.GetRequiredService<IFileService>(),
+                resolver.GetRequiredService<IEnvironmentService>(),
+                resolver.GetRequiredService<IDirectoryService>(),
+                resolver.GetRequiredService<IDateTimeProvider>(),
+                resolver.GetRequiredService<ILinuxRemovedFileMetadataBuilderFactory>()
             ));
             services.RegisterLazySingleton<IDesktopEnvironmentService>(() => new DesktopEnvironmentService(
-                resolver.GetService<IEnvironmentService>()
+                resolver.GetRequiredService<IEnvironmentService>()
             ));
             services.RegisterLazySingleton<IShellCommandWrappingService>(() => new ShellCommandWrappingService());
             services.RegisterLazySingleton<IResourceOpeningService>(() => new LinuxResourceOpeningService(
-                resolver.GetService<IProcessService>(),
-                resolver.GetService<IShellCommandWrappingService>(),
-                resolver.GetService<IDesktopEnvironmentService>()
+                resolver.GetRequiredService<IProcessService>(),
+                resolver.GetRequiredService<IShellCommandWrappingService>(),
+                resolver.GetRequiredService<IDesktopEnvironmentService>()
             ));
             services.RegisterLazySingleton<ITerminalService>(() => new LinuxTerminalService(
-                resolver.GetService<IProcessService>(),
-                resolver.GetService<IUnitOfWorkFactory>(),
-                resolver.GetService<IDesktopEnvironmentService>(),
-                resolver.GetService<IShellCommandWrappingService>()
+                resolver.GetRequiredService<IProcessService>(),
+                resolver.GetRequiredService<IUnitOfWorkFactory>(),
+                resolver.GetRequiredService<IDesktopEnvironmentService>(),
+                resolver.GetRequiredService<IShellCommandWrappingService>()
             ));
         }
 
         private static void RegisterMacServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
             services.RegisterLazySingleton<ITrashCanService>(() => new MacTrashCanService(
-                resolver.GetService<IDriveService>(),
-                resolver.GetService<IOperationsService>(),
-                resolver.GetService<IPathService>(),
-                resolver.GetService<IFileService>(),
-                resolver.GetService<IEnvironmentService>(),
-                resolver.GetService<IDirectoryService>()
+                resolver.GetRequiredService<IDriveService>(),
+                resolver.GetRequiredService<IOperationsService>(),
+                resolver.GetRequiredService<IPathService>(),
+                resolver.GetRequiredService<IFileService>(),
+                resolver.GetRequiredService<IEnvironmentService>(),
+                resolver.GetRequiredService<IDirectoryService>()
             ));
             services.RegisterLazySingleton<IResourceOpeningService>(() => new MacResourceOpeningService(
-                resolver.GetService<IProcessService>()
+                resolver.GetRequiredService<IProcessService>()
             ));
             services.RegisterLazySingleton<ITerminalService>(() => new MacTerminalService(
-                resolver.GetService<IProcessService>(),
-                resolver.GetService<IUnitOfWorkFactory>()
+                resolver.GetRequiredService<IProcessService>(),
+                resolver.GetRequiredService<IUnitOfWorkFactory>()
             ));
         }
 
@@ -271,134 +271,134 @@ namespace Camelot
             services.RegisterLazySingleton<IWindowsRemovedFileMetadataBuilderFactory>(() => new WindowsRemovedFileMetadataBuilderFactory());
             services.RegisterLazySingleton<IWindowsTrashCanNodeNameGenerator>(() => new WindowsTrashCanNodeNameGenerator());
             services.RegisterLazySingleton<ITrashCanService>(() => new WindowsTrashCanService(
-                resolver.GetService<IDriveService>(),
-                resolver.GetService<IOperationsService>(),
-                resolver.GetService<IPathService>(),
-                resolver.GetService<IFileService>(),
-                resolver.GetService<IDateTimeProvider>(),
-                resolver.GetService<IProcessService>(),
-                resolver.GetService<IWindowsRemovedFileMetadataBuilderFactory>(),
-                resolver.GetService<IWindowsTrashCanNodeNameGenerator>()
+                resolver.GetRequiredService<IDriveService>(),
+                resolver.GetRequiredService<IOperationsService>(),
+                resolver.GetRequiredService<IPathService>(),
+                resolver.GetRequiredService<IFileService>(),
+                resolver.GetRequiredService<IDateTimeProvider>(),
+                resolver.GetRequiredService<IProcessService>(),
+                resolver.GetRequiredService<IWindowsRemovedFileMetadataBuilderFactory>(),
+                resolver.GetRequiredService<IWindowsTrashCanNodeNameGenerator>()
             ));
             services.RegisterLazySingleton<IResourceOpeningService>(() => new WindowsResourceOpeningService(
-                resolver.GetService<IProcessService>()
+                resolver.GetRequiredService<IProcessService>()
             ));
             services.RegisterLazySingleton<ITerminalService>(() => new WindowsTerminalService(
-                resolver.GetService<IProcessService>(),
-                resolver.GetService<IUnitOfWorkFactory>()
+                resolver.GetRequiredService<IProcessService>(),
+                resolver.GetRequiredService<IUnitOfWorkFactory>()
             ));
         }
 
         private static void RegisterViewModels(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
             services.RegisterLazySingleton<IFilesOperationsMediator>(() => new FilesOperationsMediator(
-                resolver.GetService<IDirectoryService>()
+                resolver.GetRequiredService<IDirectoryService>()
             ));
             services.RegisterLazySingleton<IFileSystemNodeViewModelComparerFactory>(() => new FileSystemNodeViewModelComparerFactory());
             services.Register(() => new TerminalSettingsViewModel(
-                resolver.GetService<ITerminalService>()
+                resolver.GetRequiredService<ITerminalService>()
             ));
             services.Register(() => new GeneralSettingsViewModel(
-                resolver.GetService<LanguageSettingsViewModel>()
+                resolver.GetRequiredService<LanguageSettingsViewModel>()
             ));
             services.Register(() => new LanguageSettingsViewModel(
-                resolver.GetService<ILocalizationService>(),
-                resolver.GetService<ILanguageManager>()
+                resolver.GetRequiredService<ILocalizationService>(),
+                resolver.GetRequiredService<ILanguageManager>()
             ));
             services.Register(() => new SettingsDialogViewModel(
-                resolver.GetService<GeneralSettingsViewModel>(),
-                resolver.GetService<TerminalSettingsViewModel>()
+                resolver.GetRequiredService<GeneralSettingsViewModel>(),
+                resolver.GetRequiredService<TerminalSettingsViewModel>()
             ));
             services.RegisterLazySingleton<ITabViewModelFactory>(() => new TabViewModelFactory(
-                resolver.GetService<IPathService>()
+                resolver.GetRequiredService<IPathService>()
             ));
             services.RegisterLazySingleton(() => new FilePropertiesBehavior(
-                resolver.GetService<IDialogService>()
+                resolver.GetRequiredService<IDialogService>()
             ));
             services.RegisterLazySingleton(() => new DirectoryPropertiesBehavior(
-                resolver.GetService<IDialogService>()
+                resolver.GetRequiredService<IDialogService>()
             ));
             services.RegisterLazySingleton<IFileSystemNodeViewModelFactory>(() => new FileSystemNodeViewModelFactory(
-                resolver.GetService<FileOpeningBehavior>(),
-                resolver.GetService<DirectoryOpeningBehavior>(),
-                resolver.GetService<IFileSizeFormatter>(),
-                resolver.GetService<IPathService>(),
-                resolver.GetService<IOperationsService>(),
-                resolver.GetService<IClipboardOperationsService>(),
-                resolver.GetService<IFilesOperationsMediator>(),
-                resolver.GetService<FilePropertiesBehavior>(),
-                resolver.GetService<DirectoryPropertiesBehavior>(),
-                resolver.GetService<IDialogService>(),
-                resolver.GetService<ITrashCanService>()
+                resolver.GetRequiredService<FileOpeningBehavior>(),
+                resolver.GetRequiredService<DirectoryOpeningBehavior>(),
+                resolver.GetRequiredService<IFileSizeFormatter>(),
+                resolver.GetRequiredService<IPathService>(),
+                resolver.GetRequiredService<IOperationsService>(),
+                resolver.GetRequiredService<IClipboardOperationsService>(),
+                resolver.GetRequiredService<IFilesOperationsMediator>(),
+                resolver.GetRequiredService<FilePropertiesBehavior>(),
+                resolver.GetRequiredService<DirectoryPropertiesBehavior>(),
+                resolver.GetRequiredService<IDialogService>(),
+                resolver.GetRequiredService<ITrashCanService>()
             ));
             services.Register(() => new AboutDialogViewModel(
-                resolver.GetService<IApplicationVersionProvider>(),
-                resolver.GetService<IResourceOpeningService>(),
-                resolver.GetService<AboutDialogConfiguration>()
+                resolver.GetRequiredService<IApplicationVersionProvider>(),
+                resolver.GetRequiredService<IResourceOpeningService>(),
+                resolver.GetRequiredService<AboutDialogConfiguration>()
             ));
             services.RegisterLazySingleton<IBitmapFactory>(() => new BitmapFactory());
             services.Register(() => new MainNodeInfoTabViewModel(
-                resolver.GetService<IFileSizeFormatter>(),
-                resolver.GetService<IPathService>(),
-                resolver.GetService<IBitmapFactory>(),
-                resolver.GetService<ImagePreviewConfiguration>()
+                resolver.GetRequiredService<IFileSizeFormatter>(),
+                resolver.GetRequiredService<IPathService>(),
+                resolver.GetRequiredService<IBitmapFactory>(),
+                resolver.GetRequiredService<ImagePreviewConfiguration>()
             ));
             services.Register(() => new DirectoryInformationDialogViewModel(
-                resolver.GetService<IDirectoryService>(),
-                resolver.GetService<IApplicationDispatcher>(),
-                resolver.GetService<MainNodeInfoTabViewModel>()
+                resolver.GetRequiredService<IDirectoryService>(),
+                resolver.GetRequiredService<IApplicationDispatcher>(),
+                resolver.GetRequiredService<MainNodeInfoTabViewModel>()
             ));
             services.Register(() => new FileInformationDialogViewModel(
-                resolver.GetService<IFileService>(),
-                resolver.GetService<MainNodeInfoTabViewModel>()
+                resolver.GetRequiredService<IFileService>(),
+                resolver.GetRequiredService<MainNodeInfoTabViewModel>()
             ));
             services.Register(() => new OverwriteOptionsDialogViewModel(
-                resolver.GetService<IFileService>(),
-                resolver.GetService<IFileSystemNodeViewModelFactory>(),
-                resolver.GetService<IFileNameGenerationService>(),
-                resolver.GetService<IPathService>()
+                resolver.GetRequiredService<IFileService>(),
+                resolver.GetRequiredService<IFileSystemNodeViewModelFactory>(),
+                resolver.GetRequiredService<IFileNameGenerationService>(),
+                resolver.GetRequiredService<IPathService>()
             ));
             services.Register(() => new CreateDirectoryDialogViewModel(
-                resolver.GetService<IDirectoryService>(),
-                resolver.GetService<IFileService>(),
-                resolver.GetService<IPathService>()
+                resolver.GetRequiredService<IDirectoryService>(),
+                resolver.GetRequiredService<IFileService>(),
+                resolver.GetRequiredService<IPathService>()
             ));
             services.Register<IOperationsStateViewModel>(() => new OperationsStatesListViewModel(
-                resolver.GetService<IOperationsStateService>(),
-                resolver.GetService<IOperationStateViewModelFactory>(),
-                resolver.GetService<IApplicationDispatcher>(),
-                resolver.GetService<IDialogService>()
+                resolver.GetRequiredService<IOperationsStateService>(),
+                resolver.GetRequiredService<IOperationStateViewModelFactory>(),
+                resolver.GetRequiredService<IApplicationDispatcher>(),
+                resolver.GetRequiredService<IDialogService>()
             ));
             services.Register(() => new RemoveNodesConfirmationDialogViewModel(
-                resolver.GetService<IPathService>()
+                resolver.GetRequiredService<IPathService>()
             ));
             services.Register<IOperationStateViewModelFactory>(() => new OperationStateViewModelFactory(
-                resolver.GetService<IPathService>()
+                resolver.GetRequiredService<IPathService>()
             ));
             services.Register<IOperationsViewModel>(() => new OperationsViewModel(
-                resolver.GetService<IFilesOperationsMediator>(),
-                resolver.GetService<IOperationsService>(),
-                resolver.GetService<INodesSelectionService>(),
-                resolver.GetService<IDialogService>(),
-                resolver.GetService<IDirectoryService>(),
-                resolver.GetService<ITrashCanService>()
+                resolver.GetRequiredService<IFilesOperationsMediator>(),
+                resolver.GetRequiredService<IOperationsService>(),
+                resolver.GetRequiredService<INodesSelectionService>(),
+                resolver.GetRequiredService<IDialogService>(),
+                resolver.GetRequiredService<IDirectoryService>(),
+                resolver.GetRequiredService<ITrashCanService>()
             ));
             services.Register<IMenuViewModel>(() => new MenuViewModel(
-                resolver.GetService<IApplicationCloser>(),
-                resolver.GetService<IDialogService>()
+                resolver.GetRequiredService<IApplicationCloser>(),
+                resolver.GetRequiredService<IDialogService>()
             ));
             services.Register<ITopOperationsViewModel>(() => new TopOperationsViewModel(
-                resolver.GetService<ITerminalService>(),
-                resolver.GetService<IDirectoryService>()
+                resolver.GetRequiredService<ITerminalService>(),
+                resolver.GetRequiredService<IDirectoryService>()
             ));
             services.RegisterLazySingleton(() => new MainWindowViewModel(
-                resolver.GetService<IFilesOperationsMediator>(),
-                resolver.GetService<IOperationsViewModel>(),
+                resolver.GetRequiredService<IFilesOperationsMediator>(),
+                resolver.GetRequiredService<IOperationsViewModel>(),
                 CreateFilesPanelViewModel(resolver, "Left"),
                 CreateFilesPanelViewModel(resolver, "Right"),
-                resolver.GetService<IMenuViewModel>(),
-                resolver.GetService<IOperationsStateViewModel>(),
-                resolver.GetService<ITopOperationsViewModel>()
+                resolver.GetRequiredService<IMenuViewModel>(),
+                resolver.GetRequiredService<IOperationsStateViewModel>(),
+                resolver.GetRequiredService<ITopOperationsViewModel>()
             ));
         }
 
@@ -407,22 +407,22 @@ namespace Camelot
             string panelKey)
         {
             var filesPanelStateService = new FilesPanelStateService(
-                resolver.GetService<IUnitOfWorkFactory>(),
+                resolver.GetRequiredService<IUnitOfWorkFactory>(),
                 panelKey
             );
             var filesPanelViewModel = new FilesPanelViewModel(
-                resolver.GetService<IFileService>(),
-                resolver.GetService<IDirectoryService>(),
-                resolver.GetService<INodesSelectionService>(),
-                resolver.GetService<IFileSystemNodeViewModelFactory>(),
-                resolver.GetService<IFileSystemWatchingService>(),
-                resolver.GetService<IApplicationDispatcher>(),
+                resolver.GetRequiredService<IFileService>(),
+                resolver.GetRequiredService<IDirectoryService>(),
+                resolver.GetRequiredService<INodesSelectionService>(),
+                resolver.GetRequiredService<IFileSystemNodeViewModelFactory>(),
+                resolver.GetRequiredService<IFileSystemWatchingService>(),
+                resolver.GetRequiredService<IApplicationDispatcher>(),
                 filesPanelStateService,
-                resolver.GetService<ITabViewModelFactory>(),
-                resolver.GetService<IFileSizeFormatter>(),
-                resolver.GetService<IClipboardOperationsService>(),
-                resolver.GetService<IFileSystemNodeViewModelComparerFactory>(),
-                resolver.GetService<FilePanelConfiguration>()
+                resolver.GetRequiredService<ITabViewModelFactory>(),
+                resolver.GetRequiredService<IFileSizeFormatter>(),
+                resolver.GetRequiredService<IClipboardOperationsService>(),
+                resolver.GetRequiredService<IFileSystemNodeViewModelComparerFactory>(),
+                resolver.GetRequiredService<FilePanelConfiguration>()
             );
 
             return filesPanelViewModel;

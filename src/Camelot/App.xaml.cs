@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Camelot.DependencyInjection;
 using Camelot.Services.Abstractions;
 using Camelot.Styles.Themes;
 using Camelot.ViewModels.Implementations;
@@ -24,7 +25,7 @@ namespace Camelot
             {
                 desktop.MainWindow = new MainWindow
                 {
-                    DataContext = Locator.Current.GetService<MainWindowViewModel>()
+                    DataContext = Locator.Current.GetRequiredService<MainWindowViewModel>()
                 };
             }
 
@@ -37,10 +38,10 @@ namespace Camelot
             Styles.Add(new DarkTheme());
         }
 
-        private void LoadLanguage()
+        private static void LoadLanguage()
         {
-            var localizationService = Locator.Current.GetService<ILocalizationService>();
-            var languageManager = Locator.Current.GetService<ILanguageManager>();
+            var localizationService = Locator.Current.GetRequiredService<ILocalizationService>();
+            var languageManager = Locator.Current.GetRequiredService<ILanguageManager>();
 
             var savedLanguage = localizationService.GetSavedLanguage();
             if (savedLanguage != null)

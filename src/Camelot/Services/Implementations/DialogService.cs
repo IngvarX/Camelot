@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Avalonia;
 using Camelot.Avalonia.Interfaces;
+using Camelot.DependencyInjection;
 using Camelot.ViewModels.Implementations;
 using Camelot.ViewModels.Implementations.Dialogs;
 using Camelot.ViewModels.Services;
@@ -100,7 +101,7 @@ namespace Camelot.Services.Implementations
 
         private static object GetView(Type type) => Activator.CreateInstance(type);
 
-        private static object GetViewModel(Type type) => Locator.Current.GetService(type);
+        private static object GetViewModel(Type type) => Locator.Current.GetRequiredService(type);
 
         private static Type GetViewType(string viewModelName)
         {
