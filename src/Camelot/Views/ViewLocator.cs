@@ -3,7 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Camelot.ViewModels.Implementations;
 
-namespace Camelot
+namespace Camelot.Views
 {
     public class ViewLocator : IDataTemplate
     {

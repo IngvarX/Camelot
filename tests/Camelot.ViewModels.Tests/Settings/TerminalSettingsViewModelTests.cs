@@ -4,7 +4,7 @@ using Camelot.ViewModels.Implementations.Settings;
 using Moq;
 using Xunit;
 
-namespace Camelot.ViewModels.Tests
+namespace Camelot.ViewModels.Tests.Settings
 {
     public class TerminalSettingsViewModelTests
     {

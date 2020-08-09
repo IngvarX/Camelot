@@ -5,7 +5,7 @@ using Camelot.ViewModels.Factories.Implementations;
 using Moq;
 using Xunit;
 
-namespace Camelot.ViewModels.Tests
+namespace Camelot.ViewModels.Tests.Factories
 {
     public class TabViewModelFactoryTests
     {

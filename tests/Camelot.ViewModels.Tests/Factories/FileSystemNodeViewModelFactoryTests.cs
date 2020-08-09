@@ -8,7 +8,7 @@ using Camelot.ViewModels.Services.Interfaces;
 using Moq;
 using Xunit;
 
-namespace Camelot.ViewModels.Tests
+namespace Camelot.ViewModels.Tests.Factories
 {
     public class FileSystemNodeViewModelFactoryTests
     {

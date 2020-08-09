@@ -6,7 +6,7 @@ using Camelot.ViewModels.Implementations.Dialogs;
 using Moq;
 using Xunit;
 
-namespace Camelot.ViewModels.Tests
+namespace Camelot.ViewModels.Tests.Dialogs
 {
     public class AboutDialogViewModelTests
     {

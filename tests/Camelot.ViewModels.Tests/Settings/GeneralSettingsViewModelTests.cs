@@ -3,7 +3,7 @@ using Camelot.ViewModels.Interfaces.Settings;
 using Moq;
 using Xunit;
 
-namespace Camelot.ViewModels.Tests
+namespace Camelot.ViewModels.Tests.Settings
 {
     public class GeneralSettingsViewModelTests
     {

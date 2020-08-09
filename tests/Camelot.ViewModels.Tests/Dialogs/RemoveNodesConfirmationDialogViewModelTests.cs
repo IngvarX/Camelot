@@ -5,7 +5,7 @@ using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
 using Moq;
 using Xunit;
 
-namespace Camelot.ViewModels.Tests
+namespace Camelot.ViewModels.Tests.Dialogs
 {
     public class RemoveNodesConfirmationDialogViewModelTests
     {
