@@ -48,10 +48,14 @@ namespace Camelot.ViewModels.Tests
         [Fact]
         public void TestOpenNewTabCommand()
         {
-            var filePanelViewModelMock = new Mock<IFilesPanelViewModel>();
-            filePanelViewModelMock
+            var tabsListViewModelMock = new Mock<ITabsListViewModel>();
+            tabsListViewModelMock
                 .Setup(m => m.CreateNewTab())
                 .Verifiable();
+            var filePanelViewModelMock = new Mock<IFilesPanelViewModel>();
+            filePanelViewModelMock
+                .SetupGet(m => m.TabsListViewModel)
+                .Returns(tabsListViewModelMock.Object);
             var operationsViewModelMock = new Mock<IOperationsViewModel>();
             var menuViewModelMock = new Mock<IMenuViewModel>();
             var fileOperationsMediatorMock = new Mock<IFilesOperationsMediator>();
@@ -72,16 +76,20 @@ namespace Camelot.ViewModels.Tests
 
             mainWindowViewModel.CreateNewTabCommand.Execute(null);
 
-            filePanelViewModelMock.Verify(m => m.CreateNewTab(), Times.Once);
-        }
+            tabsListViewModelMock
+                .Verify(m => m.CreateNewTab(), Times.Once);        }
 
         [Fact]
         public void TestCloseCurrentTabCommand()
         {
-            var filePanelViewModelMock = new Mock<IFilesPanelViewModel>();
-            filePanelViewModelMock
+            var tabsListViewModelMock = new Mock<ITabsListViewModel>();
+            tabsListViewModelMock
                 .Setup(m => m.CloseActiveTab())
                 .Verifiable();
+            var filePanelViewModelMock = new Mock<IFilesPanelViewModel>();
+            filePanelViewModelMock
+                .SetupGet(m => m.TabsListViewModel)
+                .Returns(tabsListViewModelMock.Object);
             var operationsViewModelMock = new Mock<IOperationsViewModel>();
             var menuViewModelMock = new Mock<IMenuViewModel>();
             var operationsStateViewModel = new Mock<IOperationsStateViewModel>();
@@ -102,7 +110,8 @@ namespace Camelot.ViewModels.Tests
 
             mainWindowViewModel.CloseCurrentTabCommand.Execute(null);
 
-            filePanelViewModelMock.Verify(m => m.CloseActiveTab(), Times.Once);
+            tabsListViewModelMock
+                .Verify(m => m.CloseActiveTab(), Times.Once);
         }
     }
 }

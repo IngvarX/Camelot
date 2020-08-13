@@ -12,6 +12,9 @@ namespace Camelot.ViewModels.Implementations
     {
         private readonly IFilesOperationsMediator _filesOperationsMediator;
 
+        private ITabsListViewModel ActiveTabsListViewModel =>
+            _filesOperationsMediator.ActiveFilesPanelViewModel.TabsListViewModel;
+
         public IOperationsViewModel OperationsViewModel { get; }
 
         public IFilesPanelViewModel LeftFilesPanelViewModel { get; }
@@ -47,13 +50,13 @@ namespace Camelot.ViewModels.Implementations
             TopOperationsViewModel = topOperationsViewModel;
 
             CreateNewTabCommand = ReactiveCommand.Create(CreateNewTab);
-            CloseCurrentTabCommand = ReactiveCommand.Create(CloseCurrentTab);
+            CloseCurrentTabCommand = ReactiveCommand.Create(CloseActiveTab);
 
             filesOperationsMediator.Register(leftFilesPanelViewModel, rightFilesPanelViewModel);
         }
 
-        private void CreateNewTab() => _filesOperationsMediator.ActiveFilesPanelViewModel.CreateNewTab();
+        private void CreateNewTab() => ActiveTabsListViewModel.CreateNewTab();
 
-        private void CloseCurrentTab() => _filesOperationsMediator.ActiveFilesPanelViewModel.CloseActiveTab();
+        private void CloseActiveTab() => ActiveTabsListViewModel.CloseActiveTab();
     }
 }

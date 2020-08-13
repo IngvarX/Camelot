@@ -388,6 +388,7 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IDialogService>()
             ));
             services.Register<ISearchViewModel>(() => new SearchViewModel());
+            services.Register<ISearchViewModel>(() => new SearchViewModel());
             services.Register<ITopOperationsViewModel>(() => new TopOperationsViewModel(
                 resolver.GetRequiredService<ITerminalService>(),
                 resolver.GetRequiredService<IDirectoryService>()
@@ -411,6 +412,12 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IUnitOfWorkFactory>(),
                 panelKey
             );
+            var tabsListViewModel = new TabsListViewModel(
+                filesPanelStateService,
+                resolver.GetRequiredService<IDirectoryService>(),
+                resolver.GetRequiredService<ITabViewModelFactory>(),
+                resolver.GetRequiredService<FilePanelConfiguration>()
+            );
             var filesPanelViewModel = new FilesPanelViewModel(
                 resolver.GetRequiredService<IFileService>(),
                 resolver.GetRequiredService<IDirectoryService>(),
@@ -418,13 +425,11 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IFileSystemNodeViewModelFactory>(),
                 resolver.GetRequiredService<IFileSystemWatchingService>(),
                 resolver.GetRequiredService<IApplicationDispatcher>(),
-                filesPanelStateService,
-                resolver.GetRequiredService<ITabViewModelFactory>(),
                 resolver.GetRequiredService<IFileSizeFormatter>(),
                 resolver.GetRequiredService<IClipboardOperationsService>(),
                 resolver.GetRequiredService<IFileSystemNodeViewModelComparerFactory>(),
                 resolver.GetRequiredService<ISearchViewModel>(),
-                resolver.GetRequiredService<FilePanelConfiguration>()
+                tabsListViewModel
             );
 
             return filesPanelViewModel;

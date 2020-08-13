@@ -4,6 +4,8 @@ namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels
 {
     public interface IFilesPanelViewModel
     {
+        ITabsListViewModel TabsListViewModel { get; }
+
         string CurrentDirectory { get; set; }
 
         event EventHandler<EventArgs> ActivatedEvent;
@@ -13,10 +15,6 @@ namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels
         void Activate();
 
         void Deactivate();
-
-        void CreateNewTab();
-
-        void CloseActiveTab();
 
         void OpenLastSelectedFile();
     }

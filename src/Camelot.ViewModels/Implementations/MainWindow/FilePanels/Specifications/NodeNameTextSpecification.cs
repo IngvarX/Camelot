@@ -4,12 +4,12 @@ using Camelot.Services.Abstractions.Specifications;
 
 namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Specifications
 {
-    public class FileNameTextSpecification : ISpecification<NodeModelBase>
+    public class NodeNameTextSpecification : ISpecification<NodeModelBase>
     {
         private readonly string _text;
         private readonly bool _isCaseSensitive;
 
-        public FileNameTextSpecification(string text, bool isCaseSensitive)
+        public NodeNameTextSpecification(string text, bool isCaseSensitive)
         {
             _text = text;
             _isCaseSensitive = isCaseSensitive;

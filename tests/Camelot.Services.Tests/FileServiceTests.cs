@@ -2,7 +2,9 @@ using System;
 using System.IO;
 using System.Linq;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Models.Enums;
+using Camelot.Services.Abstractions.Specifications;
 using Moq;
 using Xunit;
 
@@ -34,7 +36,7 @@ namespace Camelot.Services.Tests
         [Fact]
         public void TestGetFiles()
         {
-            var files = _fileService.GetFiles(CurrentDirectory);
+            var files = _fileService.GetFiles(CurrentDirectory, GetSpecification());
 
             Assert.NotNull(files);
             Assert.True(files.Any());
@@ -49,16 +51,10 @@ namespace Camelot.Services.Tests
         [Fact]
         public void TestGetFilesNoResult()
         {
-            var files = _fileService.GetFiles(CurrentDirectory);
+            var files = _fileService.GetFiles(CurrentDirectory, GetSpecification());
 
             Assert.NotNull(files);
             Assert.DoesNotContain(files, f => f.Name == FileName + FileExtension);
-        }
-
-        private static void CreateFile()
-        {
-            var file = File.Create(FilePath);
-            file.Close();
         }
 
         public void Dispose()
@@ -67,6 +63,20 @@ namespace Camelot.Services.Tests
             {
                 File.Delete(FilePath);
             }
+        }
+
+        private static void CreateFile()
+        {
+            var file = File.Create(FilePath);
+            file.Close();
+        }
+
+        private static ISpecification<NodeModelBase> GetSpecification() =>
+            new TestSpecification();
+
+        private class TestSpecification : ISpecification<NodeModelBase>
+        {
+            public bool IsSatisfiedBy(NodeModelBase nodeModel) => true;
         }
     }
 }

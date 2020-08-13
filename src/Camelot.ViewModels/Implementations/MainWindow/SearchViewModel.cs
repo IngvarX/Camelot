@@ -40,8 +40,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow
         public ISpecification<NodeModelBase> GetSpecification() =>
             (IsSearchEnabled, IsRegexSearchEnabled) switch
             {
-                (true, true) => new FileNameRegexSpecification(SearchText, IsSearchCaseSensitive),
-                (true, false) => new FileNameTextSpecification(SearchText, IsSearchCaseSensitive),
+                (true, true) => new NodeNameRegexSpecification(SearchText, IsSearchCaseSensitive),
+                (true, false) => new NodeNameTextSpecification(SearchText, IsSearchCaseSensitive),
                 _ => new EmptySpecification()
             };
     }
