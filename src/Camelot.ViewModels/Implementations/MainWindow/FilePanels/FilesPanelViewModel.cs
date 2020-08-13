@@ -10,6 +10,7 @@ using Camelot.Avalonia.Interfaces;
 using Camelot.DataAccess.Models;
 using Camelot.Extensions;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Models;
 using Camelot.ViewModels.Configuration;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
@@ -20,6 +21,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 {
     public class FilesPanelViewModel : ViewModelBase, IFilesPanelViewModel
     {
+        public ISearchViewModel SearchViewModel { get; }
         private readonly IFileService _fileService;
         private readonly IDirectoryService _directoryService;
         private readonly INodesSelectionService _nodesSelectionService;
@@ -120,6 +122,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             IFileSizeFormatter fileSizeFormatter,
             IClipboardOperationsService clipboardOperationsService,
             IFileSystemNodeViewModelComparerFactory comparerFactory,
+            ISearchViewModel searchViewModel,
             FilePanelConfiguration filePanelConfiguration)
         {
             _fileService = fileService;
@@ -133,6 +136,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             _fileSizeFormatter = fileSizeFormatter;
             _clipboardOperationsService = clipboardOperationsService;
             _comparerFactory = comparerFactory;
+
+            SearchViewModel = searchViewModel;
 
             _fileSystemNodes = new ObservableCollection<IFileSystemNodeViewModel>();
             _selectedFileSystemNodes = new ObservableCollection<IFileSystemNodeViewModel>();
@@ -378,7 +383,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             }
 
             var directories = _directoryService.GetChildDirectories(CurrentDirectory);
-            var files = _fileService.GetFiles(CurrentDirectory);
+            var files = GetFiles();
 
             var directoriesViewModels = directories
                 .Select(d => _fileSystemNodeViewModelFactory.Create(d));
@@ -424,6 +429,13 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             this.RaisePropertyChanged(nameof(SelectedFilesSize));
             this.RaisePropertyChanged(nameof(SelectedDirectoriesCount));
             this.RaisePropertyChanged(nameof(AreAnyFileSystemNodesSelected));
+        }
+
+        private IReadOnlyList<FileModel> GetFiles()
+        {
+            var specification = SearchViewModel.GetSpecification();
+
+            return _fileService.GetFiles(CurrentDirectory, specification);
         }
 
         private void SaveState() =>

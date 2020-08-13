@@ -387,6 +387,7 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IApplicationCloser>(),
                 resolver.GetRequiredService<IDialogService>()
             ));
+            services.Register<ISearchViewModel>(() => new SearchViewModel());
             services.Register<ITopOperationsViewModel>(() => new TopOperationsViewModel(
                 resolver.GetRequiredService<ITerminalService>(),
                 resolver.GetRequiredService<IDirectoryService>()
@@ -422,6 +423,7 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IFileSizeFormatter>(),
                 resolver.GetRequiredService<IClipboardOperationsService>(),
                 resolver.GetRequiredService<IFileSystemNodeViewModelComparerFactory>(),
+                resolver.GetRequiredService<ISearchViewModel>(),
                 resolver.GetRequiredService<FilePanelConfiguration>()
             );
 

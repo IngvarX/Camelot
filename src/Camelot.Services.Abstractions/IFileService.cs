@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions.Models;
+using Camelot.Services.Abstractions.Specifications;
 
 namespace Camelot.Services.Abstractions
 {
     public interface IFileService
     {
-        // TODO: pass ISpecification
-        IReadOnlyList<FileModel> GetFiles(string directory);
+        IReadOnlyList<FileModel> GetFiles(string directory, ISpecification<FileModel> specification);
 
         IReadOnlyList<FileModel> GetFiles(IReadOnlyList<string> files);
 

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Models.Enums;
+using Camelot.Services.Abstractions.Specifications;
 
 namespace Camelot.Services
 {
@@ -17,14 +18,12 @@ namespace Camelot.Services
             _pathService = pathService;
         }
 
-        public IReadOnlyList<FileModel> GetFiles(string directory)
-        {
-            var files = Directory
+        public IReadOnlyList<FileModel> GetFiles(string directory, ISpecification<FileModel> specification) =>
+            Directory
                 .GetFiles(directory)
-                .Select(CreateFrom);
-
-            return files.ToArray();
-        }
+                .Select(CreateFrom)
+                .Where(specification.IsSatisfiedBy)
+                .ToArray();
 
         public IReadOnlyList<FileModel> GetFiles(IReadOnlyList<string> files) =>
             files.Select(CreateFrom).ToArray();
