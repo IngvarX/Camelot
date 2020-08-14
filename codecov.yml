@@ -12,11 +12,13 @@ coverage:
         threshold: 0%
 ignore:
   - "src/Camelot/**/*"
+  - "src/Camelot/*"
   - "src/Camelot.Avalonia/**/*"
   - "src/Camelot.DataAccess.Models/*"
   - "src/Camelot.ViewModels/Configuration/*"
   - "src/Camelot.Services.Abstractions/**/*"
   - "src/Camelot.DataAccess.LiteDb/**/*"
+  - "src/Camelot.DataAccess.LiteDb/*"
   - "src/Camelot.DataAccess/**/*"
   - "src/Camelot.FileSystemWatcher/Configuration/*"
   - "src/Camelot.Operations/Models/*"
