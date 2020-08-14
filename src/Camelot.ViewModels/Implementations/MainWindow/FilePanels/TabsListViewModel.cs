@@ -80,7 +80,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             var tabs = GetInitialTabs(state.Tabs);
             tabs.CollectionChanged += TabsOnCollectionChanged;
 
-            SelectTab(tabs[state.SelectedTabIndex]);
+            var index = state.SelectedTabIndex >= tabs.Count ? ^1 : state.SelectedTabIndex;
+            SelectTab(tabs[index]);
 
             return tabs;
         }
@@ -102,9 +103,13 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         {
             var tabs = tabModels
                 .Where(tm => _directoryService.CheckIfExists(tm.Directory))
-                .Select(Create);
+                .ToList();
+            if (!tabs.Any())
+            {
+                tabs = GetDefaultTabs();
+            }
 
-            return new ObservableCollection<ITabViewModel>(tabs);
+            return new ObservableCollection<ITabViewModel>(tabs.Select(CreateViewModelFrom));
         }
 
         private List<TabModel> GetDefaultTabs()
@@ -117,7 +122,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             return new List<TabModel> {rootDirectoryTab};
         }
 
-        private ITabViewModel Create(string directory)
+        private ITabViewModel CreateViewModelFrom(string directory)
         {
             var tabModel = new TabModel
             {
@@ -125,10 +130,10 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
                 SortingSettings = GetSortingSettings(SelectedTab)
             };
 
-            return Create(tabModel);
+            return CreateViewModelFrom(tabModel);
         }
 
-        private ITabViewModel Create(TabModel tabModel)
+        private ITabViewModel CreateViewModelFrom(TabModel tabModel)
         {
             var tabViewModel = _tabViewModelFactory.Create(tabModel);
             SubscribeToEvents(tabViewModel);
@@ -205,7 +210,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private void CreateNewTab(ITabViewModel tabViewModel)
         {
             var tabPosition = _tabs.IndexOf(tabViewModel);
-            var newTabViewModel = Create(tabViewModel.CurrentDirectory);
+            var newTabViewModel = CreateViewModelFrom(tabViewModel.CurrentDirectory);
 
             _tabs.Insert(tabPosition, newTabViewModel);
         }
