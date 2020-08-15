@@ -2,109 +2,121 @@ using System;
 using System.IO;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models.EventArgs;
+using Camelot.Services.Environment.Interfaces;
+using Moq.AutoMock;
 using Xunit;
 
 namespace Camelot.Services.Tests
 {
-    public class DirectoryServiceTests : IDisposable
+    public class DirectoryServiceTests
     {
-        private const string DirectoryName = nameof(DirectoryServiceTests);
+        private const string DirectoryName = "Directory";
+        private const string ParentDirectoryName = "Parent";
         private const string NotExistingDirectoryName = "MissingDirectory";
 
-        private readonly IDirectoryService _directoryService;
-
-        private static string NewDirectory => Path.Combine(CurrentDirectory, DirectoryName);
-
-        private static string CurrentDirectory => Directory.GetCurrentDirectory();
+        private readonly AutoMocker _autoMocker;
 
         public DirectoryServiceTests()
         {
-            var pathService = new PathService();
-            _directoryService = new DirectoryService(pathService);
+            _autoMocker = new AutoMocker();
         }
 
         [Fact]
-        public void TestDirectoryCreationFailed()
+        public void TestDirectoryCreationSuccess()
         {
-            Assert.False(_directoryService.Create(null));
-            Assert.False(_directoryService.Create(string.Empty));
+            _autoMocker
+                .Setup<IEnvironmentDirectoryService>(m => m.CreateDirectory(DirectoryName))
+                .Verifiable();
+            var directoryService = _autoMocker.CreateInstance<DirectoryService>();
+
+            var result = directoryService.Create(DirectoryName);
+            Assert.True(result);
+            _autoMocker
+                .Verify<IEnvironmentDirectoryService>(m => m.CreateDirectory(DirectoryName));
+        }
+
+        [Fact]
+        public void TestDirectoryCreationFail()
+        {
+            _autoMocker
+                .Setup<IEnvironmentDirectoryService>(m => m.CreateDirectory(DirectoryName))
+                .Throws<InvalidOperationException>()
+                .Verifiable();
+            var directoryService = _autoMocker.CreateInstance<DirectoryService>();
+
+            var result = directoryService.Create(DirectoryName);
+            Assert.False(result);
+            _autoMocker
+                .Verify<IEnvironmentDirectoryService>(m => m.CreateDirectory(DirectoryName));
         }
 
         [Fact]
         public void TestCurrentDirectoryUpdateFailed()
         {
-            _directoryService.SelectedDirectory = CurrentDirectory;
+            var directoryService = _autoMocker.CreateInstance<DirectoryService>();
+            directoryService.SelectedDirectory = DirectoryName;
             var isCallbackCalled = false;
-            _directoryService.SelectedDirectoryChanged += (sender, args) => isCallbackCalled = true;
-            _directoryService.SelectedDirectory = CurrentDirectory;
+            directoryService.SelectedDirectoryChanged += (sender, args) => isCallbackCalled = true;
+            directoryService.SelectedDirectory = DirectoryName;
 
             Assert.False(isCallbackCalled);
         }
 
         [Fact]
-        public void TestDirectoryCreation()
-        {
-            _directoryService.SelectedDirectory = CurrentDirectory;
-            Assert.True(_directoryService.SelectedDirectory == CurrentDirectory);
-
-            Assert.True(_directoryService.Create(DirectoryName));
-            Assert.True(Directory.Exists(NewDirectory));
-
-            var directories = _directoryService.GetChildDirectories(CurrentDirectory);
-            Assert.Contains(directories, d => d.Name == DirectoryName);
-        }
-
-        [Fact]
         public void TestGetParentDirectory()
         {
-            var parentDirectory = _directoryService.GetParentDirectory(CurrentDirectory);
+            var directoryInfo = new DirectoryInfo(Directory.GetCurrentDirectory());
+            _autoMocker
+                .Setup<IEnvironmentDirectoryService, DirectoryInfo>(m => m.GetDirectory(DirectoryName))
+                .Returns(directoryInfo);
+            var directoryService = _autoMocker.CreateInstance<DirectoryService>();
+            var parentDirectory = directoryService.GetParentDirectory(DirectoryName);
 
             Assert.NotNull(parentDirectory);
-
-            var children = _directoryService.GetChildDirectories(parentDirectory.FullPath);
-            Assert.Contains(children, dm => dm.FullPath == CurrentDirectory);
+            Assert.Equal(directoryInfo.Parent.FullName, parentDirectory.FullPath);
         }
 
         [Fact]
         public void TestGetRootParentDirectory()
         {
-            var directory = _directoryService.GetAppRootDirectory();
-            var parentDirectory = _directoryService.GetParentDirectory(directory);
+            _autoMocker
+                .Setup<IEnvironmentDirectoryService, string>(m => m.GetCurrentDirectory())
+                .Returns(DirectoryName);
+            _autoMocker
+                .Setup<IPathService, string>(m => m.GetPathRoot(DirectoryName))
+                .Returns(ParentDirectoryName);
+            var directoryService = _autoMocker.CreateInstance<DirectoryService>();
+            var directory = directoryService.GetAppRootDirectory();
 
-            Assert.Null(parentDirectory);
+            Assert.Equal(ParentDirectoryName, directory);
         }
 
         [Fact]
         public void TestSelectedDirectoryEventChangedCreation()
         {
             var callbackCalled = false;
-            void DirectoryServiceOnSelectedDirectoryChanged(object sender, SelectedDirectoryChangedEventArgs e)
-            {
-                callbackCalled = true;
-                Assert.True(e.NewDirectory == CurrentDirectory);
-            }
+            void DirectoryServiceOnSelectedDirectoryChanged(object sender, SelectedDirectoryChangedEventArgs e) =>
+                callbackCalled = e.NewDirectory == DirectoryName;
 
-            _directoryService.SelectedDirectoryChanged += DirectoryServiceOnSelectedDirectoryChanged;
-            _directoryService.SelectedDirectory = CurrentDirectory;
+            var directoryService = _autoMocker.CreateInstance<DirectoryService>();
+            directoryService.SelectedDirectoryChanged += DirectoryServiceOnSelectedDirectoryChanged;
+            directoryService.SelectedDirectory = DirectoryName;
 
             Assert.True(callbackCalled);
         }
 
-        [Fact]
-        public void TestDirectoryExists()
+        [Theory]
+        [InlineData(DirectoryName, true)]
+        [InlineData(NotExistingDirectoryName, false)]
+        public void TestDirectoryExists(string directory, bool isExist)
         {
-            Assert.True(_directoryService.CheckIfExists(CurrentDirectory));
-            Assert.False(_directoryService.CheckIfExists(NotExistingDirectoryName));
-            Assert.False(_directoryService.CheckIfExists(string.Empty));
-            Assert.False(_directoryService.CheckIfExists(null));
-        }
+            _autoMocker
+                .Setup<IEnvironmentDirectoryService, bool>(m => m.CheckIfExists(directory))
+                .Returns(isExist);
+            var directoryService = _autoMocker.CreateInstance<DirectoryService>();
+            var result = directoryService.CheckIfExists(directory);
 
-        public void Dispose()
-        {
-            if (Directory.Exists(NewDirectory))
-            {
-                Directory.Delete(NewDirectory);
-            }
+            Assert.Equal(isExist, result);
         }
     }
 }

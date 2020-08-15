@@ -103,6 +103,9 @@ namespace Camelot.DependencyInjection
         {
             services.RegisterLazySingleton<IEnvironmentService>(() => new EnvironmentService());
             services.RegisterLazySingleton<IProcessService>(() => new ProcessService());
+            services.RegisterLazySingleton<IEnvironmentFileService>(() => new EnvironmentFileService());
+            services.RegisterLazySingleton<IEnvironmentDirectoryService>(() => new EnvironmentDirectoryService());
+            services.RegisterLazySingleton<IEnvironmentDriveService>(() => new EnvironmentDriveService());
             services.Register<IPlatformService>(() => new PlatformService());
         }
 
@@ -140,10 +143,13 @@ namespace Camelot.DependencyInjection
         private static void RegisterServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
             services.RegisterLazySingleton<IFileService>(() => new FileService(
-                resolver.GetRequiredService<IPathService>()
+                resolver.GetRequiredService<IPathService>(),
+                resolver.GetRequiredService<IEnvironmentFileService>()
             ));
             services.RegisterLazySingleton<IDateTimeProvider>(() => new DateTimeProvider());
-            services.RegisterLazySingleton<IDriveService>(() => new DriveService());
+            services.RegisterLazySingleton<IDriveService>(() => new DriveService(
+                resolver.GetRequiredService<IEnvironmentDriveService>()
+            ));
             services.Register<IOperationsFactory>(() => new OperationsFactory(
                 resolver.GetRequiredService<ITaskPool>(),
                 resolver.GetRequiredService<IDirectoryService>(),
@@ -161,7 +167,9 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IOperationsStateService>()
             ));
             services.RegisterLazySingleton<IDirectoryService>(() => new DirectoryService(
-                resolver.GetRequiredService<IPathService>()
+                resolver.GetRequiredService<IPathService>(),
+                resolver.GetRequiredService<IEnvironmentDirectoryService>(),
+                resolver.GetRequiredService<IEnvironmentFileService>()
             ));
             services.Register<IFileSystemWatchingService>(() => new FileSystemWatchingService(
                 resolver.GetRequiredService<IFileSystemWatcherFactory>()

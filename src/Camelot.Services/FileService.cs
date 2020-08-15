@@ -6,20 +6,25 @@ using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Specifications;
+using Camelot.Services.Environment.Interfaces;
 
 namespace Camelot.Services
 {
     public class FileService : IFileService
     {
         private readonly IPathService _pathService;
+        private readonly IEnvironmentFileService _environmentFileService;
 
-        public FileService(IPathService pathService)
+        public FileService(
+            IPathService pathService,
+            IEnvironmentFileService environmentFileService)
         {
             _pathService = pathService;
+            _environmentFileService = environmentFileService;
         }
 
         public IReadOnlyList<FileModel> GetFiles(string directory, ISpecification<FileModel> specification) =>
-            Directory
+            _environmentFileService
                 .GetFiles(directory)
                 .Select(CreateFrom)
                 .Where(specification.IsSatisfiedBy)
@@ -30,16 +35,16 @@ namespace Camelot.Services
 
         public FileModel GetFile(string file) => CreateFrom(file);
 
-        public bool CheckIfExists(string file) => File.Exists(file);
+        public bool CheckIfExists(string file) => _environmentFileService.CheckIfExists(file);
 
         public Task CopyAsync(string source, string destination, bool overwrite)
         {
-            File.Copy(source, destination, overwrite);
+            _environmentFileService.Copy(source, destination, overwrite);
 
             return Task.CompletedTask;
         }
 
-        public void Remove(string file) => File.Delete(file);
+        public void Remove(string file) => _environmentFileService.Delete(file);
 
         public bool Rename(string filePath, string newName)
         {
@@ -48,7 +53,7 @@ namespace Camelot.Services
 
             try
             {
-                File.Move(filePath, newFilePath);
+                _environmentFileService.Move(filePath, newFilePath);
             }
             catch
             {
@@ -59,14 +64,14 @@ namespace Camelot.Services
         }
 
         public Task WriteTextAsync(string filePath, string text) =>
-            File.WriteAllTextAsync(filePath, text);
+            _environmentFileService.WriteTextAsync(filePath, text);
 
         public Task WriteBytesAsync(string filePath, byte[] bytes) =>
-            File.WriteAllBytesAsync(filePath, bytes);
+            _environmentFileService.WriteBytesAsync(filePath, bytes);
 
         private FileModel CreateFrom(string file)
         {
-            var fileInfo = new FileInfo(file);
+            var fileInfo = _environmentFileService.GetFile(file);
             var fileModel = new FileModel
             {
                 Name = fileInfo.Name,

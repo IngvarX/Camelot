@@ -3,13 +3,21 @@ using System.IO;
 using System.Linq;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
+using Camelot.Services.Environment.Interfaces;
 
 namespace Camelot.Services
 {
     public class DriveService : IDriveService
     {
+        private readonly IEnvironmentDriveService _environmentDriveService;
+
+        public DriveService(IEnvironmentDriveService environmentDriveService)
+        {
+            _environmentDriveService = environmentDriveService;
+        }
+
         public IReadOnlyList<DriveModel> GetDrives() =>
-            DriveInfo
+            _environmentDriveService
                 .GetDrives()
                 .Where(d => d.DriveType != DriveType.Ram)
                 .Select(CreateFrom)

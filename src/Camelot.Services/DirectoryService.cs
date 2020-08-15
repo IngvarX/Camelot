@@ -6,12 +6,15 @@ using Camelot.Extensions;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Models.EventArgs;
+using Camelot.Services.Environment.Interfaces;
 
 namespace Camelot.Services
 {
     public class DirectoryService : IDirectoryService
     {
         private readonly IPathService _pathService;
+        private readonly IEnvironmentDirectoryService _environmentDirectoryService;
+        private readonly IEnvironmentFileService _environmentFileService;
 
         private string _directory;
 
@@ -34,16 +37,21 @@ namespace Camelot.Services
 
         public event EventHandler<SelectedDirectoryChangedEventArgs> SelectedDirectoryChanged;
 
-        public DirectoryService(IPathService pathService)
+        public DirectoryService(
+            IPathService pathService,
+            IEnvironmentDirectoryService environmentDirectoryService,
+            IEnvironmentFileService environmentFileService)
         {
             _pathService = pathService;
+            _environmentDirectoryService = environmentDirectoryService;
+            _environmentFileService = environmentFileService;
         }
 
         public bool Create(string directory)
         {
             try
             {
-                Directory.CreateDirectory(directory);
+                _environmentDirectoryService.CreateDirectory(directory);
             }
             catch
             {
@@ -54,22 +62,22 @@ namespace Camelot.Services
         }
 
         public long CalculateSize(string directory) =>
-            Directory
-                .EnumerateFiles(directory, "*.*", SearchOption.AllDirectories)
-                .Sum(f => new FileInfo(f).Length);
+            _environmentDirectoryService
+                .EnumerateFilesRecursively(directory)
+                .Sum(GetFileSize);
 
         public DirectoryModel GetDirectory(string directory) => CreateFrom(directory);
 
         public DirectoryModel GetParentDirectory(string directory)
         {
-            var parentDirectory = new DirectoryInfo(directory).Parent;
+            var parentDirectory = _environmentDirectoryService.GetDirectory(directory).Parent;
 
             return parentDirectory is null ? null : CreateFrom(parentDirectory);
         }
 
         public IReadOnlyList<DirectoryModel> GetChildDirectories(string directory)
         {
-            var directories = Directory
+            var directories = _environmentDirectoryService
                 .GetDirectories(directory)
                 .Select(CreateFrom);
 
@@ -88,19 +96,24 @@ namespace Camelot.Services
             return directories.Where(CheckIfEmpty).ToArray();
         }
 
-        public bool CheckIfExists(string directory) => Directory.Exists(directory);
+        public bool CheckIfExists(string directory) =>
+            _environmentDirectoryService.CheckIfExists(directory);
 
-        public string GetAppRootDirectory() => _pathService.GetPathRoot(Directory.GetCurrentDirectory());
+        public string GetAppRootDirectory() =>
+            _pathService.GetPathRoot(_environmentDirectoryService.GetCurrentDirectory());
 
-        public IEnumerable<string> GetFilesRecursively(string directory) => Directory
-                .EnumerateFiles(directory, "*.*", SearchOption.AllDirectories)
+        public IEnumerable<string> GetFilesRecursively(string directory) =>
+            _environmentDirectoryService
+                .EnumerateFilesRecursively(directory)
                 .ToArray();
 
-        public IEnumerable<string> GetDirectoriesRecursively(string directory) => Directory
-            .EnumerateDirectories(directory, "*.*", SearchOption.AllDirectories)
-            .ToArray();
+        public IEnumerable<string> GetDirectoriesRecursively(string directory) =>
+            _environmentDirectoryService
+                .EnumerateDirectoriesRecursively(directory)
+                .ToArray();
 
-        public void RemoveRecursively(string directory) => Directory.Delete(directory, true);
+        public void RemoveRecursively(string directory) =>
+            _environmentDirectoryService.Delete(directory, true);
 
         public bool Rename(string directoryPath, string newName)
         {
@@ -109,7 +122,7 @@ namespace Camelot.Services
 
             try
             {
-                Directory.Move(directoryPath, newDirectoryPath);
+                _environmentDirectoryService.Move(directoryPath, newDirectoryPath);
             }
             catch
             {
@@ -119,15 +132,18 @@ namespace Camelot.Services
             return true;
         }
 
-        private static bool CheckIfEmpty(string directory) =>
-            !Directory.EnumerateFileSystemEntries(directory).Any();
+        private bool CheckIfEmpty(string directory) =>
+            !_environmentDirectoryService.EnumerateFileSystemEntriesRecursively(directory).Any();
 
-        private static DirectoryModel CreateFrom(string directory)
+        private DirectoryModel CreateFrom(string directory)
         {
-            var directoryInfo = new DirectoryInfo(directory);
+            var directoryInfo = _environmentDirectoryService.GetDirectory(directory);
 
             return CreateFrom(directoryInfo);
         }
+
+        private long GetFileSize(string file) =>
+            _environmentFileService.GetFile(file).Length;
 
         private static DirectoryModel CreateFrom(FileSystemInfo directoryInfo) =>
             new DirectoryModel
