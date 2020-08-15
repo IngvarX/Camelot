@@ -97,6 +97,10 @@ namespace Camelot.DependencyInjection
             var filePanelConfiguration = new FilePanelConfiguration();
             configuration.GetSection("FilePanel").Bind(filePanelConfiguration);
             services.RegisterConstant(filePanelConfiguration);
+
+            var searchViewModelConfiguration = new SearchViewModelConfiguration();
+            configuration.GetSection("Search").Bind(searchViewModelConfiguration);
+            services.RegisterConstant(searchViewModelConfiguration);
         }
 
         private static void RegisterEnvironmentServices(IMutableDependencyResolver services)
@@ -395,8 +399,9 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IApplicationCloser>(),
                 resolver.GetRequiredService<IDialogService>()
             ));
-            services.Register<ISearchViewModel>(() => new SearchViewModel());
-            services.Register<ISearchViewModel>(() => new SearchViewModel());
+            services.Register<ISearchViewModel>(() => new SearchViewModel(
+                resolver.GetRequiredService<SearchViewModelConfiguration>()
+            ));
             services.Register<ITopOperationsViewModel>(() => new TopOperationsViewModel(
                 resolver.GetRequiredService<ITerminalService>(),
                 resolver.GetRequiredService<IDirectoryService>()

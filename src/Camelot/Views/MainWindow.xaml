@@ -22,6 +22,7 @@
         <KeyBinding Gesture="Shift+Delete" Command="{Binding OperationsViewModel.RemoveCommand}" />
         <KeyBinding Gesture="Ctrl+T" Command="{Binding CreateNewTabCommand}" />
         <KeyBinding Gesture="Ctrl+W" Command="{Binding CloseCurrentTabCommand}" />
+        <KeyBinding Gesture="Ctrl+F" Command="{Binding SearchCommand}" />
     </Window.KeyBindings>
 
     <Design.DataContext>

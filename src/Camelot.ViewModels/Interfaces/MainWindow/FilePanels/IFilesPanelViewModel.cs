@@ -6,6 +6,8 @@ namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels
     {
         ITabsListViewModel TabsListViewModel { get; }
 
+        ISearchViewModel SearchViewModel { get; }
+
         string CurrentDirectory { get; set; }
 
         event EventHandler<EventArgs> ActivatedEvent;

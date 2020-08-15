@@ -183,6 +183,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private void SubscribeToEvents()
         {
             TabsListViewModel.SelectedTabChanged += TabsListViewModelOnSelectedTabChanged;
+            SearchViewModel.SearchSettingsChanged += SearchViewModelOnSearchSettingsChanged;
             _selectedFileSystemNodes.CollectionChanged += SelectedFileSystemNodesOnCollectionChanged;
 
             void ExecuteInUiThread(Action action) => _applicationDispatcher.Dispatch(action);
@@ -206,6 +207,9 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             _fileSystemWatchingService.NodeDeleted += (sender, args) =>
                 ExecuteSynchronized(() => RemoveNode(args.Node));
         }
+
+        private void SearchViewModelOnSearchSettingsChanged(object sender, EventArgs e) =>
+            _applicationDispatcher.Dispatch(ReloadFiles);
 
         private void TabsListViewModelOnSelectedTabChanged(object sender, EventArgs e) =>
             CurrentDirectory = SelectedTab.CurrentDirectory;
@@ -250,8 +254,9 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
                 return;
             }
 
-            var directories = _directoryService.GetChildDirectories(CurrentDirectory);
-            var files = GetFiles();
+            var specification = SearchViewModel.GetSpecification();
+            var directories = _directoryService.GetChildDirectories(CurrentDirectory, specification);
+            var files = _fileService.GetFiles(CurrentDirectory, specification);
 
             var directoriesViewModels = directories
                 .Select(d => _fileSystemNodeViewModelFactory.Create(d));
@@ -297,13 +302,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             this.RaisePropertyChanged(nameof(SelectedFilesSize));
             this.RaisePropertyChanged(nameof(SelectedDirectoriesCount));
             this.RaisePropertyChanged(nameof(AreAnyFileSystemNodesSelected));
-        }
-
-        private IReadOnlyList<FileModel> GetFiles()
-        {
-            var specification = SearchViewModel.GetSpecification();
-
-            return _fileService.GetFiles(CurrentDirectory, specification);
         }
 
         private IFileSystemNodeViewModel CreateFrom(string path)

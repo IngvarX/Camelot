@@ -6,6 +6,7 @@ using Camelot.Extensions;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Models.EventArgs;
+using Camelot.Services.Abstractions.Specifications;
 using Camelot.Services.Environment.Interfaces;
 
 namespace Camelot.Services
@@ -75,14 +76,12 @@ namespace Camelot.Services
             return parentDirectory is null ? null : CreateFrom(parentDirectory);
         }
 
-        public IReadOnlyList<DirectoryModel> GetChildDirectories(string directory)
-        {
-            var directories = _environmentDirectoryService
+        public IReadOnlyList<DirectoryModel> GetChildDirectories(string directory, ISpecification<DirectoryModel> specification) =>
+            _environmentDirectoryService
                 .GetDirectories(directory)
-                .Select(CreateFrom);
-
-            return directories.ToArray();
-        }
+                .Select(CreateFrom)
+                .Where(specification.IsSatisfiedBy)
+                .ToArray();
 
         public IReadOnlyList<string> GetEmptyDirectoriesRecursively(string directory)
         {

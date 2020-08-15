@@ -24,6 +24,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <DockPanel>
@@ -287,6 +288,13 @@
                     </TextBlock.Text>
                 </TextBlock>
             </Border>
+        </Grid>
+
+        <Grid Grid.Row="4" ColumnDefinitions="Auto,*,Auto,Auto" IsVisible="{Binding IsSearchEnabled}"
+              DataContext="{Binding SearchViewModel}">
+            <TextBox Grid.Column="0" Grid.ColumnSpan="3"
+                     Text="{Binding SearchText}" />
+
         </Grid>
     </Grid>
 

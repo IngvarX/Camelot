@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Models.EventArgs;
+using Camelot.Services.Abstractions.Specifications;
 
 namespace Camelot.Services.Abstractions
 {
@@ -19,7 +20,7 @@ namespace Camelot.Services.Abstractions
 
         DirectoryModel GetParentDirectory(string directory);
 
-        IReadOnlyList<DirectoryModel> GetChildDirectories(string directory);
+        IReadOnlyList<DirectoryModel> GetChildDirectories(string directory, ISpecification<DirectoryModel> specification);
 
         IReadOnlyList<string> GetEmptyDirectoriesRecursively(string directory);
 

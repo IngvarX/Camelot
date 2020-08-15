@@ -1,5 +1,9 @@
+using System;
+using System.Reactive.Linq;
+using Camelot.Extensions;
 using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Specifications;
+using Camelot.ViewModels.Configuration;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Specifications;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using ReactiveUI;
@@ -37,6 +41,18 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             set => this.RaiseAndSetIfChanged(ref _isSearchEnabled, value);
         }
 
+        public event EventHandler<EventArgs> SearchSettingsChanged;
+
+        public SearchViewModel(SearchViewModelConfiguration searchViewModelConfiguration)
+        {
+            SearchText = string.Empty;
+
+            this.WhenAnyValue(x => x.SearchText, x => x.IsSearchEnabled,
+                    x => x.IsRegexSearchEnabled, x => x.IsSearchCaseSensitive)
+                .Throttle(TimeSpan.FromMilliseconds(searchViewModelConfiguration.TimeoutMs))
+                .Subscribe(_ => FireSettingsChangedEvent());
+        }
+
         public ISpecification<NodeModelBase> GetSpecification() =>
             (IsSearchEnabled, IsRegexSearchEnabled) switch
             {
@@ -44,5 +60,9 @@ namespace Camelot.ViewModels.Implementations.MainWindow
                 (true, false) => new NodeNameTextSpecification(SearchText, IsSearchCaseSensitive),
                 _ => new EmptySpecification()
             };
+
+        public void Show() => IsSearchEnabled = true;
+
+        private void FireSettingsChangedEvent() => SearchSettingsChanged.Raise(this, EventArgs.Empty);
     }
 }

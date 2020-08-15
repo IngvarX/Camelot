@@ -15,6 +15,9 @@ namespace Camelot.ViewModels.Implementations
         private ITabsListViewModel ActiveTabsListViewModel =>
             _filesOperationsMediator.ActiveFilesPanelViewModel.TabsListViewModel;
 
+        private ISearchViewModel SearchViewModel =>
+            _filesOperationsMediator.ActiveFilesPanelViewModel.SearchViewModel;
+
         public IOperationsViewModel OperationsViewModel { get; }
 
         public IFilesPanelViewModel LeftFilesPanelViewModel { get; }
@@ -30,6 +33,8 @@ namespace Camelot.ViewModels.Implementations
         public ICommand CreateNewTabCommand { get; }
 
         public ICommand CloseCurrentTabCommand { get; }
+
+        public ICommand SearchCommand { get; }
 
         public MainWindowViewModel(
             IFilesOperationsMediator filesOperationsMediator,
@@ -51,6 +56,7 @@ namespace Camelot.ViewModels.Implementations
 
             CreateNewTabCommand = ReactiveCommand.Create(CreateNewTab);
             CloseCurrentTabCommand = ReactiveCommand.Create(CloseActiveTab);
+            SearchCommand = ReactiveCommand.Create(Search);
 
             filesOperationsMediator.Register(leftFilesPanelViewModel, rightFilesPanelViewModel);
         }
@@ -58,5 +64,7 @@ namespace Camelot.ViewModels.Implementations
         private void CreateNewTab() => ActiveTabsListViewModel.CreateNewTab();
 
         private void CloseActiveTab() => ActiveTabsListViewModel.CloseActiveTab();
+
+        private void Search() => SearchViewModel.Show();
     }
 }
