@@ -29,7 +29,27 @@ namespace Camelot.ViewModels.Tests
             Assert.True(viewModel.OpenTerminalCommand.CanExecute(null));
             viewModel.OpenTerminalCommand.Execute(null);
 
-            terminalServiceMock.Verify(m => m.Open(Directory), Times.Once());
+            terminalServiceMock.Verify(m => m.Open(Directory), Times.Once);
+        }
+
+        [Fact]
+        public void TestSearchCommand()
+        {
+            var terminalServiceMock = new Mock<ITerminalService>();
+            var directoryServiceMock = new Mock<IDirectoryService>();
+            var filesOperationsMediatorMock = new Mock<IFilesOperationsMediator>();
+            filesOperationsMediatorMock
+                .Setup(m => m.ToggleSearchPanelVisibility())
+                .Verifiable();
+
+            var viewModel = new TopOperationsViewModel(terminalServiceMock.Object,
+                directoryServiceMock.Object, filesOperationsMediatorMock.Object);
+
+            Assert.True(viewModel.SearchCommand.CanExecute(null));
+            viewModel.SearchCommand.Execute(null);
+
+            filesOperationsMediatorMock
+                .Verify(m => m.ToggleSearchPanelVisibility(), Times.Once);
         }
     }
 }

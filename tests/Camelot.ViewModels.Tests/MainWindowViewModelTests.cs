@@ -74,6 +74,7 @@ namespace Camelot.ViewModels.Tests
                 operationsStateViewModel.Object,
                 topOperationsViewModelMock.Object);
 
+            Assert.True(mainWindowViewModel.CreateNewTabCommand.CanExecute(null));
             mainWindowViewModel.CreateNewTabCommand.Execute(null);
 
             tabsListViewModelMock
@@ -108,10 +109,41 @@ namespace Camelot.ViewModels.Tests
                 operationsStateViewModel.Object,
                 topOperationsViewModelMock.Object);
 
+            Assert.True(mainWindowViewModel.CloseCurrentTabCommand.CanExecute(null));
             mainWindowViewModel.CloseCurrentTabCommand.Execute(null);
 
             tabsListViewModelMock
                 .Verify(m => m.CloseActiveTab(), Times.Once);
+        }
+
+        [Fact]
+        public void TestSearchCommand()
+        {
+            var tabsListViewModelMock = new Mock<ITabsListViewModel>();
+            var filePanelViewModelMock = new Mock<IFilesPanelViewModel>();
+            var operationsViewModelMock = new Mock<IOperationsViewModel>();
+            var menuViewModelMock = new Mock<IMenuViewModel>();
+            var operationsStateViewModel = new Mock<IOperationsStateViewModel>();
+            var topOperationsViewModelMock = new Mock<ITopOperationsViewModel>();
+            var fileOperationsMediatorMock = new Mock<IFilesOperationsMediator>();
+            fileOperationsMediatorMock
+                .Setup(m => m.ToggleSearchPanelVisibility())
+                .Verifiable();
+
+            var mainWindowViewModel = new MainWindowViewModel(
+                fileOperationsMediatorMock.Object,
+                operationsViewModelMock.Object,
+                filePanelViewModelMock.Object,
+                filePanelViewModelMock.Object,
+                menuViewModelMock.Object,
+                operationsStateViewModel.Object,
+                topOperationsViewModelMock.Object);
+
+            Assert.True(mainWindowViewModel.SearchCommand.CanExecute(null));
+            mainWindowViewModel.SearchCommand.Execute(null);
+
+            fileOperationsMediatorMock
+                .Verify(m => m.ToggleSearchPanelVisibility(), Times.Once);
         }
     }
 }
