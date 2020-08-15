@@ -26,9 +26,6 @@ namespace Camelot.Views
             OverlayGrid.ZIndex = -1;
         }
 
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+        private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
     }
 }

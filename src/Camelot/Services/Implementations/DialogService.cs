@@ -121,6 +121,10 @@ namespace Camelot.Services.Implementations
             mainWindow.ShowOverlay();
             var result = await window.ShowDialog<TResult>(mainWindow);
             mainWindow.HideOverlay();
+            if (window is IDisposable disposable)
+            {
+                disposable.Dispose();
+            }
 
             return result;
         }

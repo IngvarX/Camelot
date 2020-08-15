@@ -21,10 +21,7 @@ namespace Camelot.Views.Main
             SubscribeToEvents();
         }
 
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+        private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
 
         private void SubscribeToEvents() => DataContextChanged += OnDataContextChanged;
 

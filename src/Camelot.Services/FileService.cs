@@ -45,17 +45,15 @@ namespace Camelot.Services
         {
             var parentDirectory = _pathService.GetParentDirectory(filePath);
             var newFilePath = _pathService.Combine(parentDirectory, newName);
-            if (filePath == newFilePath)
+
+            try
+            {
+                File.Move(filePath, newFilePath);
+            }
+            catch
             {
                 return false;
             }
-
-            if (CheckIfExists(newFilePath))
-            {
-                return false;
-            }
-
-            File.Move(filePath, newFilePath);
 
             return true;
         }
