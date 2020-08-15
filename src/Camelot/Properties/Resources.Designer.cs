@@ -536,5 +536,11 @@ namespace Camelot.Properties {
                 return ResourceManager.GetString("Terminal", resourceCulture);
             }
         }
+        
+        public static string Search {
+            get {
+                return ResourceManager.GetString("Search", resourceCulture);
+            }
+        }
     }
 }

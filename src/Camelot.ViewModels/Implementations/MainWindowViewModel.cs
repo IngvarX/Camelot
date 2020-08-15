@@ -15,9 +15,6 @@ namespace Camelot.ViewModels.Implementations
         private ITabsListViewModel ActiveTabsListViewModel =>
             _filesOperationsMediator.ActiveFilesPanelViewModel.TabsListViewModel;
 
-        private ISearchViewModel SearchViewModel =>
-            _filesOperationsMediator.ActiveFilesPanelViewModel.SearchViewModel;
-
         public IOperationsViewModel OperationsViewModel { get; }
 
         public IFilesPanelViewModel LeftFilesPanelViewModel { get; }
@@ -65,6 +62,6 @@ namespace Camelot.ViewModels.Implementations
 
         private void CloseActiveTab() => ActiveTabsListViewModel.CloseActiveTab();
 
-        private void Search() => SearchViewModel.Show();
+        private void Search() => _filesOperationsMediator.ToggleSearchPanelVisibility();
     }
 }

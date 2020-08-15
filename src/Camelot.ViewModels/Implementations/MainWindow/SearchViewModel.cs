@@ -61,7 +61,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow
                 _ => new EmptySpecification()
             };
 
-        public void Show() => IsSearchEnabled = true;
+        public void ToggleVisibility() => IsSearchEnabled = !IsSearchEnabled;
 
         private void FireSettingsChangedEvent() => SearchSettingsChanged.Raise(this, EventArgs.Empty);
     }

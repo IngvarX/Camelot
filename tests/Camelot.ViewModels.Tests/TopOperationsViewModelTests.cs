@@ -1,5 +1,6 @@
 using Camelot.Services.Abstractions;
 using Camelot.ViewModels.Implementations.MainWindow;
+using Camelot.ViewModels.Services.Interfaces;
 using Moq;
 using Xunit;
 
@@ -20,9 +21,10 @@ namespace Camelot.ViewModels.Tests
             directoryServiceMock
                 .SetupGet(m => m.SelectedDirectory)
                 .Returns(Directory);
+            var filesOperationsMediatorMock = new Mock<IFilesOperationsMediator>();
 
             var viewModel = new TopOperationsViewModel(terminalServiceMock.Object,
-                directoryServiceMock.Object);
+                directoryServiceMock.Object, filesOperationsMediatorMock.Object);
 
             Assert.True(viewModel.OpenTerminalCommand.CanExecute(null));
             viewModel.OpenTerminalCommand.Execute(null);

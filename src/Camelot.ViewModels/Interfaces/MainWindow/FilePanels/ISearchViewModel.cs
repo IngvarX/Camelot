@@ -10,6 +10,6 @@ namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels
 
         ISpecification<NodeModelBase> GetSpecification();
 
-        void Show();
+        void ToggleVisibility();
     }
 }

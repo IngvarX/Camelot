@@ -28,7 +28,13 @@ namespace Camelot.ViewModels.Tests
             var viewModel = new SearchViewModel(configuration);
             Assert.False(viewModel.IsSearchEnabled);
 
-            viewModel.Show();
+            viewModel.ToggleVisibility();
+            Assert.True(viewModel.IsSearchEnabled);
+
+            viewModel.ToggleVisibility();
+            Assert.False(viewModel.IsSearchEnabled);
+
+            viewModel.ToggleVisibility();
             Assert.True(viewModel.IsSearchEnabled);
         }
 

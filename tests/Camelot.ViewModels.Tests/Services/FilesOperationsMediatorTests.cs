@@ -120,5 +120,28 @@ namespace Camelot.ViewModels.Tests.Services
             directoryServiceMock
                 .VerifySet(m => m.SelectedDirectory = NewDirectory, Times.Once);
         }
+
+        [Fact]
+        public void TestToggleSearchVisibility()
+        {
+            var searchViewModelMock = new Mock<ISearchViewModel>();
+            searchViewModelMock
+                .Setup(m => m.ToggleVisibility())
+                .Verifiable();
+            var activeFilesPanelViewModelMock = new Mock<IFilesPanelViewModel>();
+            activeFilesPanelViewModelMock
+                .SetupGet(m => m.SearchViewModel)
+                .Returns(searchViewModelMock.Object);
+            var inactiveFilesPanelViewModelMock = new Mock<IFilesPanelViewModel>();
+            var directoryServiceMock = new Mock<IDirectoryService>();
+
+            var mediator = new FilesOperationsMediator(directoryServiceMock.Object);
+            mediator.Register(activeFilesPanelViewModelMock.Object, inactiveFilesPanelViewModelMock.Object);
+
+            mediator.ToggleSearchPanelVisibility();
+
+            searchViewModelMock
+                .Verify(m => m.ToggleVisibility(), Times.Once);
+        }
     }
 }

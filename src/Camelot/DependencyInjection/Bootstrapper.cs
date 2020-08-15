@@ -404,7 +404,8 @@ namespace Camelot.DependencyInjection
             ));
             services.Register<ITopOperationsViewModel>(() => new TopOperationsViewModel(
                 resolver.GetRequiredService<ITerminalService>(),
-                resolver.GetRequiredService<IDirectoryService>()
+                resolver.GetRequiredService<IDirectoryService>(),
+                resolver.GetRequiredService<IFilesOperationsMediator>()
             ));
             services.RegisterLazySingleton(() => new MainWindowViewModel(
                 resolver.GetRequiredService<IFilesOperationsMediator>(),
