@@ -53,20 +53,54 @@ namespace Camelot.ViewModels.Tests
         }
 
         [Fact]
-        public async Task TestSettingsChanged()
+        public async Task TestTextChangedChanged()
         {
+            var taskCompletionSource = new TaskCompletionSource<bool>();
             var configuration = new SearchViewModelConfiguration
             {
                 TimeoutMs = 10
             };
             var viewModel = new SearchViewModel(configuration);
-            var isCallbackCalled = false;
-            viewModel.SearchSettingsChanged += (sender, args) => isCallbackCalled = true;
+            viewModel.SearchSettingsChanged += (sender, args) => taskCompletionSource.SetResult(true);
 
             viewModel.SearchText = "test";
 
-            await Task.Delay(configuration.TimeoutMs * 5);
-            Assert.True(isCallbackCalled);
+            var task = await Task.WhenAny(Task.Delay(1000), taskCompletionSource.Task);
+            Assert.Equal(taskCompletionSource.Task, task);
+        }
+
+        [Fact]
+        public async Task TestSearchCaseChanged()
+        {
+            var taskCompletionSource = new TaskCompletionSource<bool>();
+            var configuration = new SearchViewModelConfiguration
+            {
+                TimeoutMs = 10
+            };
+            var viewModel = new SearchViewModel(configuration);
+            viewModel.SearchSettingsChanged += (sender, args) => taskCompletionSource.SetResult(true);
+
+            viewModel.IsSearchCaseSensitive = true;
+
+            var task = await Task.WhenAny(Task.Delay(1000), taskCompletionSource.Task);
+            Assert.Equal(taskCompletionSource.Task, task);
+        }
+
+        [Fact]
+        public async Task TestRegexChanged()
+        {
+            var taskCompletionSource = new TaskCompletionSource<bool>();
+            var configuration = new SearchViewModelConfiguration
+            {
+                TimeoutMs = 10
+            };
+            var viewModel = new SearchViewModel(configuration);
+            viewModel.SearchSettingsChanged += (sender, args) => taskCompletionSource.SetResult(true);
+
+            viewModel.IsRegexSearchEnabled = true;
+
+            var task = await Task.WhenAny(Task.Delay(1000), taskCompletionSource.Task);
+            Assert.Equal(taskCompletionSource.Task, task);
         }
     }
 }

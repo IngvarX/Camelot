@@ -25,7 +25,7 @@ namespace Camelot.Services.Tests
             _autoMocker = new AutoMocker();
             _files = new[] {"1", "2", "3"};
 
-            _files.ForEach(f => File.Create(f));
+            _files.ForEach(Create);
         }
 
         [Theory]
@@ -121,6 +121,9 @@ namespace Camelot.Services.Tests
         {
             _files.ForEach(File.Delete);
         }
+
+
+        private static void Create(string file) => File.Create(file).Dispose();
 
         private static ISpecification<NodeModelBase> GetSpecification(string pattern) =>
             new TestSpecification(pattern);
