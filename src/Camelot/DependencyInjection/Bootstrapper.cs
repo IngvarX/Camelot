@@ -99,7 +99,7 @@ namespace Camelot.DependencyInjection
             services.RegisterConstant(filePanelConfiguration);
 
             var searchViewModelConfiguration = new SearchViewModelConfiguration();
-            configuration.GetSection("Search").Bind(searchViewModelConfiguration);
+            configuration.GetSection("SearchPanel").Bind(searchViewModelConfiguration);
             services.RegisterConstant(searchViewModelConfiguration);
         }
 

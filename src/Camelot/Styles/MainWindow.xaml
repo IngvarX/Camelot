@@ -40,6 +40,13 @@
         <Setter Property="Height" Value="30" />
     </Style>
 
+    <Style Selector="TextBox.searchTextBox">
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="Padding" Value="35,5,0,0" />
+        <Setter Property="Margin" Value="27,10,5,0" />
+        <Setter Property="Height" Value="30" />
+    </Style>
+
     <Style Selector="Rectangle.tabRectangle">
         <Setter Property="Margin" Value="0" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />

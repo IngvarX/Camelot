@@ -542,5 +542,11 @@ namespace Camelot.Properties {
                 return ResourceManager.GetString("Search", resourceCulture);
             }
         }
+        
+        public static string SearchForFilesAndDirectories {
+            get {
+                return ResourceManager.GetString("SearchForFilesAndDirectories", resourceCulture);
+            }
+        }
     }
 }

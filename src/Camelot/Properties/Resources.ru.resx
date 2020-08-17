@@ -360,4 +360,7 @@
   <data name="Search" xml:space="preserve">
     <value>Поиск</value>
   </data>
+  <data name="SearchForFilesAndDirectories" xml:space="preserve">
+    <value>Поиск файлов и каталогов</value>
+  </data>
 </root>

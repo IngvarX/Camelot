@@ -366,4 +366,7 @@
   <data name="Search" xml:space="preserve">
     <value>Search</value>
   </data>
+  <data name="SearchForFilesAndDirectories" xml:space="preserve">
+    <value>Search for files and directories</value>
+  </data>
 </root>
