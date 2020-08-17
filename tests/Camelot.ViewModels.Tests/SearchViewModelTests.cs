@@ -22,20 +22,28 @@ namespace Camelot.ViewModels.Tests
         }
 
         [Fact]
-        public void TestShow()
+        public void TestToggle()
         {
+            const string searchText = "text";
             var configuration = new SearchViewModelConfiguration();
+            
             var viewModel = new SearchViewModel(configuration);
             Assert.False(viewModel.IsSearchEnabled);
 
-            viewModel.ToggleVisibility();
+            viewModel.SearchText = searchText;
+            viewModel.ToggleSearch();
             Assert.True(viewModel.IsSearchEnabled);
+            Assert.Equal(string.Empty, viewModel.SearchText);
 
-            viewModel.ToggleVisibility();
+            viewModel.SearchText = searchText;
+            viewModel.ToggleSearch();
             Assert.False(viewModel.IsSearchEnabled);
+            Assert.Equal(string.Empty, viewModel.SearchText);
 
-            viewModel.ToggleVisibility();
+            viewModel.SearchText = searchText;
+            viewModel.ToggleSearch();
             Assert.True(viewModel.IsSearchEnabled);
+            Assert.Equal(string.Empty, viewModel.SearchText);
         }
 
         [Theory]

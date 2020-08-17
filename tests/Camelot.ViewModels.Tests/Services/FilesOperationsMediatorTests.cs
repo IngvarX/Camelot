@@ -126,7 +126,7 @@ namespace Camelot.ViewModels.Tests.Services
         {
             var searchViewModelMock = new Mock<ISearchViewModel>();
             searchViewModelMock
-                .Setup(m => m.ToggleVisibility())
+                .Setup(m => m.ToggleSearch())
                 .Verifiable();
             var activeFilesPanelViewModelMock = new Mock<IFilesPanelViewModel>();
             activeFilesPanelViewModelMock
@@ -141,7 +141,7 @@ namespace Camelot.ViewModels.Tests.Services
             mediator.ToggleSearchPanelVisibility();
 
             searchViewModelMock
-                .Verify(m => m.ToggleVisibility(), Times.Once);
+                .Verify(m => m.ToggleSearch(), Times.Once);
         }
     }
 }

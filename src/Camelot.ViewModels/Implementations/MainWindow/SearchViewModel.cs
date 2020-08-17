@@ -45,7 +45,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow
 
         public SearchViewModel(SearchViewModelConfiguration searchViewModelConfiguration)
         {
-            SearchText = string.Empty;
+            Reset();
 
             this.WhenAnyValue(x => x.SearchText, x => x.IsSearchEnabled,
                     x => x.IsRegexSearchEnabled, x => x.IsSearchCaseSensitive)
@@ -61,7 +61,13 @@ namespace Camelot.ViewModels.Implementations.MainWindow
                 _ => new EmptySpecification()
             };
 
-        public void ToggleVisibility() => IsSearchEnabled = !IsSearchEnabled;
+        public void ToggleSearch()
+        {
+            Reset();
+            IsSearchEnabled = !IsSearchEnabled;
+        }
+
+        private void Reset() => SearchText = string.Empty;
 
         private void FireSettingsChangedEvent() => SearchSettingsChanged.Raise(this, EventArgs.Empty);
     }

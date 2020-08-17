@@ -37,7 +37,7 @@ namespace Camelot.ViewModels.Services.Implementations
             InactiveFilesPanelViewModel.Deactivate();
         }
 
-        public void ToggleSearchPanelVisibility() => ActiveFilesPanelViewModel.SearchViewModel.ToggleVisibility();
+        public void ToggleSearchPanelVisibility() => ActiveFilesPanelViewModel.SearchViewModel.ToggleSearch();
 
         private void SubscribeToEvents(IFilesPanelViewModel filesPanelViewModel)
         {
