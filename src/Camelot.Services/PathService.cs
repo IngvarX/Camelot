@@ -1,13 +1,20 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Environment.Interfaces;
 
 namespace Camelot.Services
 {
     public class PathService : IPathService
     {
+        private readonly IEnvironmentPathService _environmentPathService;
+
+        public PathService(IEnvironmentPathService environmentPathService)
+        {
+            _environmentPathService = environmentPathService;
+        }
+
         public string GetCommonRootDirectory(IReadOnlyList<string> paths)
         {
             if (!paths.Any())
@@ -27,19 +34,20 @@ namespace Camelot.Services
                 : GetParentDirectory(commonPrefix);
         }
 
-        public string GetParentDirectory(string path) => Path.GetDirectoryName(path);
+        public string GetParentDirectory(string path) => _environmentPathService.GetDirectoryName(path);
 
-        public string Combine(string path1, string path2) => Path.Combine(path1, path2);
+        public string Combine(string path1, string path2) => _environmentPathService.Combine(path1, path2);
 
-        public string GetRelativePath(string relativeTo, string path) => Path.GetRelativePath(relativeTo, path);
+        public string GetRelativePath(string relativeTo, string path) =>
+            _environmentPathService.GetRelativePath(relativeTo, path);
 
-        public string GetPathRoot(string path) => Path.GetPathRoot(path);
+        public string GetPathRoot(string path) => _environmentPathService.GetPathRoot(path);
 
         public string GetFileNameWithoutExtension(string path)
         {
             if (!path.StartsWith("."))
             {
-                return Path.GetFileNameWithoutExtension(path);
+                return _environmentPathService.GetFileNameWithoutExtension(path);
             }
 
             if (path.Count(c => c == '.') == 1)
@@ -54,7 +62,7 @@ namespace Camelot.Services
 
         public string GetFileName(string path)
         {
-            var fileName = Path.GetFileName(path);
+            var fileName = _environmentPathService.GetFileName(path);
 
             return string.IsNullOrEmpty(fileName) ? path : fileName;
         }
@@ -73,7 +81,7 @@ namespace Camelot.Services
                 return path.Substring(lastDot + 1);
             }
 
-            var extension = Path.GetExtension(path);
+            var extension = _environmentPathService.GetExtension(path);
 
             return extension.StartsWith(".") ? extension.Substring(1) : extension;
         }

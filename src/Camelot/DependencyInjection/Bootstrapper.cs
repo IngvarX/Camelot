@@ -110,6 +110,7 @@ namespace Camelot.DependencyInjection
             services.RegisterLazySingleton<IEnvironmentFileService>(() => new EnvironmentFileService());
             services.RegisterLazySingleton<IEnvironmentDirectoryService>(() => new EnvironmentDirectoryService());
             services.RegisterLazySingleton<IEnvironmentDriveService>(() => new EnvironmentDriveService());
+            services.RegisterLazySingleton<IEnvironmentPathService>(() => new EnvironmentPathService());
             services.Register<IPlatformService>(() => new PlatformService());
         }
 
@@ -188,7 +189,9 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IUnitOfWorkFactory>()
             ));
             services.RegisterLazySingleton<IFileSizeFormatter>(() => new FileSizeFormatter());
-            services.RegisterLazySingleton<IPathService>(() => new PathService());
+            services.RegisterLazySingleton<IPathService>(() => new PathService(
+                resolver.GetRequiredService<IEnvironmentPathService>()
+            ));
             services.RegisterLazySingleton<IDialogService>(() => new DialogService(
                 resolver.GetRequiredService<IMainWindowProvider>()
             ));

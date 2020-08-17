@@ -118,5 +118,19 @@ namespace Camelot.Services.Tests
 
             Assert.Equal(isExist, result);
         }
+
+        [Fact]
+        public void TestDirectoryRemove()
+        {
+            _autoMocker
+                .Setup<IEnvironmentDirectoryService>(m => m.Delete(DirectoryName, true))
+                .Verifiable();
+            var directoryService = _autoMocker.CreateInstance<DirectoryService>();
+
+            directoryService.RemoveRecursively(DirectoryName);
+
+            _autoMocker
+                .Verify<IEnvironmentDirectoryService>(m => m.Delete(DirectoryName, true));
+        }
     }
 }
