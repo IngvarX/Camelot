@@ -8,7 +8,6 @@ using System.Windows.Input;
 using Camelot.Avalonia.Interfaces;
 using Camelot.Extensions;
 using Camelot.Services.Abstractions;
-using Camelot.Services.Abstractions.Models;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using DynamicData;
@@ -38,7 +37,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         private IEnumerable<IDirectoryViewModel> SelectedDirectories => _selectedFileSystemNodes.OfType<IDirectoryViewModel>();
 
-        private ITabViewModel SelectedTab => TabsListViewModel.SelectedTab;
+        public ITabViewModel SelectedTab => TabsListViewModel.SelectedTab;
 
         public ISearchViewModel SearchViewModel { get; }
 
@@ -211,8 +210,11 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private void SearchViewModelOnSearchSettingsChanged(object sender, EventArgs e) =>
             _applicationDispatcher.Dispatch(ReloadFiles);
 
-        private void TabsListViewModelOnSelectedTabChanged(object sender, EventArgs e) =>
+        private void TabsListViewModelOnSelectedTabChanged(object sender, EventArgs e)
+        {
             CurrentDirectory = SelectedTab.CurrentDirectory;
+            this.RaisePropertyChanged(nameof(SelectedTab));
+        }
 
         private void RenameNode(string oldName, string newName)
         {
