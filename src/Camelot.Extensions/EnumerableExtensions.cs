@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Camelot.Extensions
@@ -21,5 +22,8 @@ namespace Camelot.Extensions
                 await action(item);
             }
         }
+
+        public static IEnumerable<T> WhereNotNull<T>(this IEnumerable<T> collection) =>
+            collection.Where(t => t != null);
     }
 }

@@ -312,14 +312,14 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             {
                 var fileModel = _fileService.GetFile(path);
 
-                return _fileSystemNodeViewModelFactory.Create(fileModel);
+                return fileModel is null ? null : _fileSystemNodeViewModelFactory.Create(fileModel);
             }
 
             if (_directoryService.CheckIfExists(path))
             {
                 var directoryModel = _directoryService.GetDirectory(path);
 
-                return _fileSystemNodeViewModelFactory.Create(directoryModel);
+                return directoryModel is null ? null : _fileSystemNodeViewModelFactory.Create(directoryModel);
             }
 
             return null;

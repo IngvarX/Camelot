@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Camelot.Extensions;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Models.Enums;
@@ -27,11 +28,12 @@ namespace Camelot.Services
             _environmentFileService
                 .GetFiles(directory)
                 .Select(CreateFrom)
+                .WhereNotNull()
                 .Where(specification.IsSatisfiedBy)
                 .ToArray();
 
         public IReadOnlyList<FileModel> GetFiles(IReadOnlyList<string> files) =>
-            files.Select(CreateFrom).ToArray();
+            files.Select(CreateFrom).WhereNotNull().ToArray();
 
         public FileModel GetFile(string file) => CreateFrom(file);
 
@@ -71,20 +73,27 @@ namespace Camelot.Services
 
         private FileModel CreateFrom(string file)
         {
-            var fileInfo = _environmentFileService.GetFile(file);
-            var fileModel = new FileModel
+            try
             {
-                Name = fileInfo.Name,
-                FullPath = fileInfo.FullName,
-                LastModifiedDateTime = fileInfo.LastWriteTime,
-                Type = GetFileType(fileInfo),
-                SizeBytes = fileInfo.Length,
-                Extension = _pathService.GetExtension(fileInfo.Name),
-                LastAccessDateTime = fileInfo.LastAccessTime,
-                CreatedDateTime = fileInfo.CreationTime
-            };
+                var fileInfo = _environmentFileService.GetFile(file);
+                var fileModel = new FileModel
+                {
+                    Name = fileInfo.Name,
+                    FullPath = fileInfo.FullName,
+                    LastModifiedDateTime = fileInfo.LastWriteTime,
+                    Type = GetFileType(fileInfo),
+                    SizeBytes = fileInfo.Length,
+                    Extension = _pathService.GetExtension(fileInfo.Name),
+                    LastAccessDateTime = fileInfo.LastAccessTime,
+                    CreatedDateTime = fileInfo.CreationTime
+                };
 
-            return fileModel;
+                return fileModel;
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         private static FileType GetFileType(FileSystemInfo fileInfo) =>
