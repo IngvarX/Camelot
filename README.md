@@ -33,6 +33,9 @@ For publishing instructions please check [scripts](/scripts/) directory.
 ![Camelot on Ubuntu](/docs/Ubuntu.png)
 *Camelot on Ubuntu*
 
+![Camelot on Macos](/docs/Macos.png)
+*Camelot on Macos*
+
 ![Camelot on Windows](/docs/Windows.png)
 *Camelot on Windows*
 
