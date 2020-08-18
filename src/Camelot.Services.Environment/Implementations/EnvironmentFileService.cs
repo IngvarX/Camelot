@@ -13,7 +13,7 @@ namespace Camelot.Services.Environment.Implementations
             Directory.GetFiles(directory);
 
         public bool CheckIfExists(string filePath) =>
-            Directory.Exists(filePath);
+            File.Exists(filePath);
 
         public void Copy(string source, string destination, bool overwrite) =>
             File.Copy(source, destination, overwrite);
