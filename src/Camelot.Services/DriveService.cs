@@ -6,7 +6,6 @@ using System.Timers;
 using Camelot.Extensions;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
-using Camelot.Services.Abstractions.Models.EventArgs;
 using Camelot.Services.Configuration;
 using Camelot.Services.Environment.Interfaces;
 
@@ -19,7 +18,7 @@ namespace Camelot.Services
 
         public IReadOnlyList<DriveModel> Drives { get; private set; }
 
-        public event EventHandler<DrivesListChangedEventArgs> DrivesListChanged;
+        public event EventHandler<EventArgs> DrivesListChanged;
 
         public DriveService(
             IEnvironmentDriveService environmentDriveService,
@@ -50,27 +49,41 @@ namespace Camelot.Services
             var drives = GetDrives();
             var newRoots = drives.Select(d => d.RootDirectory).ToHashSet();
 
-            var addedDrives = drives.Where(dm => !oldRoots.Contains(dm.RootDirectory)).ToArray();
-            var removedDrives = Drives.Where(dm => !newRoots.Contains(dm.RootDirectory)).ToArray();
+            var addedDrives = drives.Where(dm => !oldRoots.Contains(dm.RootDirectory));
+            var removedDrives = Drives.Where(dm => !newRoots.Contains(dm.RootDirectory));
 
-            Drives = drives;
+            if (addedDrives.Any() || removedDrives.Any())
+            {
+                Drives = drives;
 
-            var args = new DrivesListChangedEventArgs(addedDrives, removedDrives);
-            DrivesListChanged.Raise(this, args);
+                DrivesListChanged.Raise(this, EventArgs.Empty);
+            }
         }
 
         private IReadOnlyList<DriveModel> GetDrives() =>
             _environmentDriveService
                 .GetDrives()
-                .Where(d => d.DriveType != DriveType.Ram)
+                .Where(d => d.DriveType != DriveType.Ram && d.DriveType != DriveType.Unknown)
                 .Select(CreateFrom)
+                .WhereNotNull()
                 .ToArray();
 
-        private static DriveModel CreateFrom(DriveInfo driveInfo) =>
-            new DriveModel
+        private static DriveModel CreateFrom(DriveInfo driveInfo)
+        {
+            try
             {
-                Name = driveInfo.Name,
-                RootDirectory = driveInfo.RootDirectory.FullName
-            };
+                return new DriveModel
+                {
+                    Name = driveInfo.Name,
+                    RootDirectory = driveInfo.RootDirectory.FullName,
+                    FreeSpaceBytes = driveInfo.AvailableFreeSpace,
+                    TotalSpaceBytes = driveInfo.TotalSize
+                };
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }

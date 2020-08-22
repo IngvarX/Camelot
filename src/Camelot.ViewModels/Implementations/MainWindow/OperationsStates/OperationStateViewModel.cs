@@ -7,6 +7,7 @@ using Camelot.Services.Abstractions.Models.EventArgs;
 using Camelot.Services.Abstractions.Operations;
 using Camelot.ViewModels.Interfaces.MainWindow.OperationsStates;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
 {
@@ -15,22 +16,13 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
         private readonly IPathService _pathService;
         private readonly IOperation _operation;
 
-        private double _progress;
-        private OperationState _state;
-
         public OperationType OperationType => _operation.Info.OperationType;
 
-        public double Progress
-        {
-            get => _progress;
-            set => this.RaiseAndSetIfChanged(ref _progress, value);
-        }
+        [Reactive]
+        public double Progress { get; set; }
 
-        public OperationState State
-        {
-            get => _state;
-            set => this.RaiseAndSetIfChanged(ref _state, value);
-        }
+        [Reactive]
+        public OperationState State { get; set; }
 
         public int SourceFilesCount => _operation.Info.Files.Count;
 

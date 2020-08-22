@@ -16,6 +16,7 @@ using Camelot.ViewModels.Implementations.Dialogs.Results;
 using Camelot.ViewModels.Interfaces.MainWindow.OperationsStates;
 using Camelot.ViewModels.Services.Interfaces;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
 {
@@ -33,7 +34,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
         private readonly IDictionary<IOperation, IOperationStateViewModel> _operationsViewModelsDictionary;
 
         private int _totalProgress;
-        private bool _areAnyOperationsAvailable;
 
         public int TotalProgress
         {
@@ -45,11 +45,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
             }
         }
 
-        public bool AreAnyOperationsAvailable
-        {
-            get => _areAnyOperationsAvailable;
-            set => this.RaiseAndSetIfChanged(ref _areAnyOperationsAvailable, value);
-        }
+        [Reactive]
+        public bool AreAnyOperationsAvailable { get; set; }
 
         public bool IsInProgress => TotalProgress > 0 && TotalProgress < 100;
 

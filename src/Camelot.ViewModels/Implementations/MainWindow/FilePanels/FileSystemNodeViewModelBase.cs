@@ -12,6 +12,7 @@ using Camelot.ViewModels.Interfaces.Behaviors;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Services.Interfaces;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 {
@@ -25,43 +26,18 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private readonly IDialogService _dialogService;
         private readonly ITrashCanService _trashCanService;
 
-        private DateTime _lastModifiedDateTime;
-        private string _fullPath;
-        private string _name;
-        private string _fullName;
-        private bool _isEditing;
-
         private IReadOnlyList<string> Files => new[] {FullPath};
 
-        public DateTime LastModifiedDateTime
-        {
-            get => _lastModifiedDateTime;
-            set => this.RaiseAndSetIfChanged(ref _lastModifiedDateTime, value);
-        }
+        public DateTime LastModifiedDateTime { get; set; }
 
-        public string FullPath
-        {
-            get => _fullPath;
-            set => this.RaiseAndSetIfChanged(ref _fullPath, value);
-        }
+        public string FullPath { get; set; }
 
-        public string Name
-        {
-            get => _name;
-            set => this.RaiseAndSetIfChanged(ref _name, value);
-        }
+        public string Name { get; set; }
 
-        public string FullName
-        {
-            get => _fullName;
-            set => this.RaiseAndSetIfChanged(ref _fullName, value);
-        }
+        public string FullName { get; set; }
 
-        public bool IsEditing
-        {
-            get => _isEditing;
-            set => this.RaiseAndSetIfChanged(ref _isEditing, value);
-        }
+        [Reactive]
+        public bool IsEditing { get; set; }
 
         public bool IsWaitingForEdit { get; set; }
 
@@ -114,12 +90,12 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         private void Rename()
         {
-            if (string.IsNullOrEmpty(_fullName))
+            if (string.IsNullOrEmpty(FullName))
             {
                 return;
             }
 
-            var renameResult = _operationsService.Rename(_fullPath, _fullName);
+            var renameResult = _operationsService.Rename(FullPath, FullName);
             if (renameResult)
             {
                 IsEditing = false;

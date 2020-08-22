@@ -8,6 +8,7 @@ using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
 using Camelot.ViewModels.Implementations.Dialogs.Results;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace Camelot.ViewModels.Implementations.Dialogs
 {
@@ -18,48 +19,23 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         private readonly IFileNameGenerationService _fileNameGenerationService;
         private readonly IPathService _pathService;
 
-        private IFileSystemNodeViewModel _replaceWithFileViewModel;
-        private IFileSystemNodeViewModel _originalFileViewModel;
-        private bool _shouldApplyToAll;
-        private string _newFileName;
-        private string _destinationDirectoryName;
-        private bool _areMultipleFilesAvailable;
+        [Reactive]
+        public bool ShouldApplyToAll { get; set; }
 
-        public bool ShouldApplyToAll
-        {
-            get => _shouldApplyToAll;
-            set => this.RaiseAndSetIfChanged(ref _shouldApplyToAll, value);
-        }
+        [Reactive]
+        public string NewFileName { get; set; }
 
-        public string NewFileName
-        {
-            get => _newFileName;
-            set => this.RaiseAndSetIfChanged(ref _newFileName, value);
-        }
+        [Reactive]
+        public string DestinationDirectoryName { get; set; }
 
-        public string DestinationDirectoryName
-        {
-            get => _destinationDirectoryName;
-            set => this.RaiseAndSetIfChanged(ref _destinationDirectoryName, value);
-        }
+        [Reactive]
+        public IFileSystemNodeViewModel ReplaceWithFileViewModel { get; set; }
 
-        public IFileSystemNodeViewModel ReplaceWithFileViewModel
-        {
-            get => _replaceWithFileViewModel;
-            set => this.RaiseAndSetIfChanged(ref _replaceWithFileViewModel, value);
-        }
+        [Reactive]
+        public IFileSystemNodeViewModel OriginalFileViewModel { get; set; }
 
-        public IFileSystemNodeViewModel OriginalFileViewModel
-        {
-            get => _originalFileViewModel;
-            set => this.RaiseAndSetIfChanged(ref _originalFileViewModel, value);
-        }
-
-        public bool AreMultipleFilesAvailable
-        {
-            get => _areMultipleFilesAvailable;
-            set => this.RaiseAndSetIfChanged(ref _areMultipleFilesAvailable, value);
-        }
+        [Reactive]
+        public bool AreMultipleFilesAvailable { get; set; }
 
         public ICommand CancelCommand { get; }
 
@@ -113,10 +89,10 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         private void Rename()
         {
             var destinationDirectory = _pathService.GetParentDirectory(OriginalFileViewModel.FullPath);
-            var destinationFilePath = _pathService.Combine(destinationDirectory, _newFileName);
+            var destinationFilePath = _pathService.Combine(destinationDirectory, NewFileName);
             var options = OperationContinuationOptions.CreateRenamingContinuationOptions(
                 ReplaceWithFileViewModel.FullPath,
-                _shouldApplyToAll,
+                ShouldApplyToAll,
                 destinationFilePath
             );
 
@@ -129,7 +105,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         private OperationContinuationOptions CreateFrom(OperationContinuationMode mode) =>
             OperationContinuationOptions.CreateContinuationOptions(
                 ReplaceWithFileViewModel.FullPath,
-                _shouldApplyToAll,
+                ShouldApplyToAll,
                 mode
             );
 

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Camelot.Services.Abstractions.Models;
-using Camelot.Services.Abstractions.Models.EventArgs;
 
 namespace Camelot.Services.Abstractions
 {
@@ -9,7 +8,7 @@ namespace Camelot.Services.Abstractions
     {
         IReadOnlyList<DriveModel> Drives { get; }
 
-        event EventHandler<DrivesListChangedEventArgs> DrivesListChanged;
+        event EventHandler<EventArgs> DrivesListChanged;
 
         DriveModel GetFileDrive(string filePath);
     }

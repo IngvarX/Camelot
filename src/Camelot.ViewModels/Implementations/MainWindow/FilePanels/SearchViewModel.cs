@@ -9,6 +9,7 @@ using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Specifications;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Services.Interfaces;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
 
 namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
@@ -16,36 +17,20 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
     public class SearchViewModel : ValidatableViewModelBase<SearchViewModel>, ISearchViewModel
     {
         private readonly IRegexService _regexService;
-        private string _searchText;
-        private bool _isSearchCaseSensitive;
-        private bool _isRegexSearchEnabled;
-        private bool _isSearchEnabled;
 
         private bool IsValid => !IsRegexSearchEnabled || _regexService.ValidateRegex(SearchText);
 
-        public string SearchText
-        {
-            get => _searchText;
-            set => this.RaiseAndSetIfChanged(ref _searchText, value);
-        }
+        [Reactive]
+        public string SearchText { get; set; }
 
-        public bool IsSearchCaseSensitive
-        {
-            get => _isSearchCaseSensitive;
-            set => this.RaiseAndSetIfChanged(ref _isSearchCaseSensitive, value);
-        }
+        [Reactive]
+        public bool IsSearchCaseSensitive { get; set; }
 
-        public bool IsRegexSearchEnabled
-        {
-            get => _isRegexSearchEnabled;
-            set => this.RaiseAndSetIfChanged(ref _isRegexSearchEnabled, value);
-        }
+        [Reactive]
+        public bool IsRegexSearchEnabled { get; set; }
 
-        public bool IsSearchEnabled
-        {
-            get => _isSearchEnabled;
-            set => this.RaiseAndSetIfChanged(ref _isSearchEnabled, value);
-        }
+        [Reactive]
+        public bool IsSearchEnabled { get; set; }
 
         public event EventHandler<EventArgs> SearchSettingsChanged;
 

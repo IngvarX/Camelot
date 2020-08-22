@@ -1,18 +1,15 @@
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 {
     public class FileSystemNodesSortingViewModel : ViewModelBase, IFileSystemNodesSortingViewModel
     {
-        private SortingColumn _sortingColumn;
         private bool _isSortingByAscendingEnabled;
 
-        public SortingColumn SortingColumn
-        {
-            get => _sortingColumn;
-            set => this.RaiseAndSetIfChanged(ref _sortingColumn, value);
-        }
+        [Reactive]
+        public SortingColumn SortingColumn { get; set; }
 
         public bool IsSortingByAscendingEnabled
         {
@@ -24,7 +21,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             SortingColumn sortingColumn,
             bool isSortingByAscendingEnabled)
         {
-            _sortingColumn = sortingColumn;
+            SortingColumn = sortingColumn;
             _isSortingByAscendingEnabled = isSortingByAscendingEnabled;
         }
 

@@ -5,6 +5,7 @@ using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
 using Camelot.ViewModels.Interfaces.Settings;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace Camelot.ViewModels.Implementations.Settings.General
 {
@@ -13,17 +14,13 @@ namespace Camelot.ViewModels.Implementations.Settings.General
         private readonly ILocalizationService _localizationService;
         private readonly ILanguageManager _languageManager;
 
-        private LanguageModel _currentLanguage;
         private LanguageModel _initialLanguage;
         private ObservableCollection<LanguageModel> _languages;
 
         private bool _isActivated;
 
-        public LanguageModel CurrentLanguage
-        {
-            get => _currentLanguage;
-            set => this.RaiseAndSetIfChanged(ref _currentLanguage, value);
-        }
+        [Reactive]
+        public LanguageModel CurrentLanguage { get; set; }
 
         public IEnumerable<LanguageModel> Languages => _languages;
 

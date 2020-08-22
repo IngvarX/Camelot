@@ -10,21 +10,11 @@ namespace Camelot.ViewModels.Implementations.Dialogs
     {
         private readonly ISettingsViewModel[] _settingsViewModels;
 
-        private ISettingsViewModel _terminalSettingsViewModel;
-        private ISettingsViewModel _generalSettingsViewModel;
         private int _selectedIndex;
 
-        public ISettingsViewModel TerminalSettingsViewModel
-        {
-            get => _terminalSettingsViewModel;
-            set => this.RaiseAndSetIfChanged(ref _terminalSettingsViewModel, value);
-        }
+        public ISettingsViewModel TerminalSettingsViewModel { get; set; }
 
-        public ISettingsViewModel GeneralSettingsViewModel
-        {
-            get => _generalSettingsViewModel;
-            set => this.RaiseAndSetIfChanged(ref _generalSettingsViewModel, value);
-        }
+        public ISettingsViewModel GeneralSettingsViewModel { get; set; }
 
         public int SelectedIndex
         {
@@ -47,7 +37,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             TerminalSettingsViewModel = terminalSettingsViewModel;
             GeneralSettingsViewModel = generalSettingsViewModel;
 
-            _settingsViewModels = new ISettingsViewModel[]
+            _settingsViewModels = new[]
             {
                 generalSettingsViewModel,
                 terminalSettingsViewModel

@@ -3,6 +3,7 @@ using Camelot.Services.Abstractions;
 using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
 using Camelot.ViewModels.Implementations.Dialogs.Results;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace Camelot.ViewModels.Implementations.Dialogs
 {
@@ -12,14 +13,10 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         private readonly IFileService _fileService;
         private readonly IPathService _pathService;
 
-        private string _directoryName;
         private string _directoryPath;
 
-        public string DirectoryName
-        {
-            get => _directoryName;
-            set => this.RaiseAndSetIfChanged(ref _directoryName, value);
-        }
+        [Reactive]
+        public string DirectoryName { get; set; }
 
         public ICommand CreateCommand { get; }
 
@@ -44,7 +41,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         public override void Activate(CreateDirectoryNavigationParameter navigationParameter) =>
             _directoryPath = navigationParameter.DirectoryPath;
 
-        private void CreateDirectory() => Close(new CreateDirectoryDialogResult(_directoryName));
+        private void CreateDirectory() => Close(new CreateDirectoryDialogResult(DirectoryName));
 
         private bool CheckIfNameIsValid(string name)
         {

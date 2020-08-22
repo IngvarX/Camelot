@@ -4,6 +4,7 @@ using Camelot.Extensions;
 using Camelot.Services.Abstractions;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 {
@@ -11,8 +12,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
     {
         private readonly IPathService _pathService;
 
-        private bool _isActive;
-        private bool _isGloballyActive;
         private string _currentDirectory;
 
         public IFileSystemNodesSortingViewModel SortingViewModel { get; }
@@ -29,17 +28,11 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         public string DirectoryName => _pathService.GetFileName(_pathService.TrimPathSeparators(CurrentDirectory));
 
-        public bool IsActive
-        {
-            get => _isActive;
-            set => this.RaiseAndSetIfChanged(ref _isActive, value);
-        }
+        [Reactive]
+        public bool IsActive { get; set; }
 
-        public bool IsGloballyActive
-        {
-            get => _isGloballyActive;
-            set => this.RaiseAndSetIfChanged(ref _isGloballyActive, value);
-        }
+        [Reactive]
+        public bool IsGloballyActive { get; set; }
 
         public event EventHandler<EventArgs> ActivationRequested;
 

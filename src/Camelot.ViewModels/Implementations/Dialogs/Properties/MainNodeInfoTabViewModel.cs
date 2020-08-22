@@ -16,11 +16,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs.Properties
         private readonly IBitmapFactory _bitmapFactory;
         private readonly ImagePreviewConfiguration _configuration;
         private string _fullPath;
-        private bool _isDirectory;
         private long _size;
-        private DateTime _createdDateTime;
-        private DateTime _lastWriteDateTime;
-        private DateTime _lastAccessDateTime;
 
         private long Size
         {
@@ -37,11 +33,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs.Properties
 
         public string Path => _pathService.GetParentDirectory(_fullPath);
 
-        public bool IsDirectory
-        {
-            get => _isDirectory;
-            set => this.RaiseAndSetIfChanged(ref _isDirectory, value);
-        }
+        public bool IsDirectory { get; set; }
 
         public IBitmap ImageBitmap => CheckIfImage() ? _bitmapFactory.Create(_fullPath) : null;
 
@@ -49,23 +41,11 @@ namespace Camelot.ViewModels.Implementations.Dialogs.Properties
 
         public string FormattedSizeAsNumber => _fileSizeFormatter.GetSizeAsNumber(Size);
 
-        public DateTime CreatedDateTime
-        {
-            get => _createdDateTime;
-            set => this.RaiseAndSetIfChanged(ref _createdDateTime, value);
-        }
+        public DateTime CreatedDateTime { get; set; }
 
-        public DateTime LastWriteDateTime
-        {
-            get => _lastWriteDateTime;
-            set => this.RaiseAndSetIfChanged(ref _lastWriteDateTime, value);
-        }
+        public DateTime LastWriteDateTime { get; set; }
 
-        public DateTime LastAccessDateTime
-        {
-            get => _lastAccessDateTime;
-            set => this.RaiseAndSetIfChanged(ref _lastAccessDateTime, value);
-        }
+        public DateTime LastAccessDateTime { get; set; }
 
         public MainNodeInfoTabViewModel(
             IFileSizeFormatter fileSizeFormatter,

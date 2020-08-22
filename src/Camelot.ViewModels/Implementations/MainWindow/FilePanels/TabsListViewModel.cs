@@ -29,7 +29,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         public ITabViewModel SelectedTab
         {
             get => _selectedTab;
-            set => this.RaiseAndSetIfChanged(ref _selectedTab, value);
+            private set => this.RaiseAndSetIfChanged(ref _selectedTab, value);
         }
 
         public event EventHandler<EventArgs> SelectedTabChanged;

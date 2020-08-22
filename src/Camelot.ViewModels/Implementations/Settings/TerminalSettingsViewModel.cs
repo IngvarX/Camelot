@@ -1,7 +1,7 @@
 using Camelot.DataAccess.Models;
 using Camelot.Services.Abstractions;
 using Camelot.ViewModels.Interfaces.Settings;
-using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace Camelot.ViewModels.Implementations.Settings
 {
@@ -9,23 +9,15 @@ namespace Camelot.ViewModels.Implementations.Settings
     {
         private readonly ITerminalService _terminalService;
 
-        private string _terminalCommandText;
-        private string _terminalCommandArguments;
         private string _initialCommandText;
         private string _initialCommandArguments;
         private bool _isActivated;
 
-        public string TerminalCommandText
-        {
-            get => _terminalCommandText;
-            set => this.RaiseAndSetIfChanged(ref _terminalCommandText, value);
-        }
+        [Reactive]
+        public string TerminalCommandText { get; set; }
 
-        public string TerminalCommandArguments
-        {
-            get => _terminalCommandArguments;
-            set => this.RaiseAndSetIfChanged(ref _terminalCommandArguments, value);
-        }
+        [Reactive]
+        public string TerminalCommandArguments { get; set; }
 
         public bool IsChanged => _initialCommandText != TerminalCommandText ||
                                  _initialCommandArguments != TerminalCommandArguments;

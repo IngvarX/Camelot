@@ -5,6 +5,7 @@ using Camelot.Services.Abstractions;
 using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
 using Camelot.ViewModels.Implementations.Dialogs.Results;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace Camelot.ViewModels.Implementations.Dialogs
 {
@@ -15,7 +16,6 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         private readonly IPathService _pathService;
 
         private IEnumerable<string> _files;
-        private bool _isRemovingToTrash;
 
         public IEnumerable<string> Files
         {
@@ -32,11 +32,8 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 
         public bool ShouldShowFilesList => FilesCount <= ShowedFilesLimit;
 
-        public bool IsRemovingToTrash
-        {
-            get => _isRemovingToTrash;
-            set => this.RaiseAndSetIfChanged(ref _isRemovingToTrash, value);
-        }
+        [Reactive]
+        public bool IsRemovingToTrash { get; set; }
 
         public ICommand OkCommand { get; }
 

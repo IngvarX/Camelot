@@ -6,6 +6,7 @@
 
     <ItemGroup>
       <PackageReference Include="Avalonia.ReactiveUI" Version="0.9.11" />
+      <PackageReference Include="ReactiveUI.Fody" Version="11.5.26" />
       <PackageReference Include="ReactiveUI.Validation" Version="1.5.5" />
     </ItemGroup>
 
@@ -14,6 +15,10 @@
       <ProjectReference Include="..\Camelot.Extensions\Camelot.Extensions.csproj" />
       <ProjectReference Include="..\Camelot.Services.Abstractions\Camelot.Services.Abstractions.csproj" />
       <ProjectReference Include="..\Camelot.Services.Environment\Camelot.Services.Environment.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="FodyWeavers.xml" />
     </ItemGroup>
 
 </Project>
