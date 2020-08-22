@@ -123,6 +123,11 @@ namespace Camelot.Operations
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
+                if (!operationsGroup.Any())
+                {
+                    continue;
+                }
+
                 _taskCompletionSource = new TaskCompletionSource<bool>();
 
                 _finishedOperationsCount = 0;

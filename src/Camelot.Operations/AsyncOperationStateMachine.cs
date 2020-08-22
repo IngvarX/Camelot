@@ -138,10 +138,7 @@ namespace Camelot.Operations
 
         private static Task GetCompletedTask() => Task.CompletedTask;
 
-        private void SubscribeToEvents()
-        {
-            _compositeOperation.Blocked += CompositeOperationOnBlocked;
-        }
+        private void SubscribeToEvents() => _compositeOperation.Blocked += CompositeOperationOnBlocked;
 
         private async void CompositeOperationOnBlocked(object sender, EventArgs e) =>
             await ChangeStateAsync(OperationState.InProgress, OperationState.Blocked);
