@@ -15,6 +15,7 @@ using Camelot.Services;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Operations;
 using Camelot.Services.Behaviors;
+using Camelot.Services.Configuration;
 using Camelot.Services.Environment.Enums;
 using Camelot.Services.Environment.Implementations;
 using Camelot.Services.Environment.Interfaces;
@@ -103,6 +104,10 @@ namespace Camelot.DependencyInjection
             configuration.GetSection("SearchPanel").Bind(searchViewModelConfiguration);
             searchViewModelConfiguration.InvalidRegexResourceName = nameof(Resources.InvalidRegex);
             services.RegisterConstant(searchViewModelConfiguration);
+
+            var driveServiceConfiguration = new DriveServiceConfiguration();
+            configuration.GetSection("Drives").Bind(driveServiceConfiguration);
+            services.RegisterConstant(driveServiceConfiguration);
         }
 
         private static void RegisterEnvironmentServices(IMutableDependencyResolver services)
@@ -156,7 +161,8 @@ namespace Camelot.DependencyInjection
             ));
             services.RegisterLazySingleton<IDateTimeProvider>(() => new DateTimeProvider());
             services.RegisterLazySingleton<IDriveService>(() => new DriveService(
-                resolver.GetRequiredService<IEnvironmentDriveService>()
+                resolver.GetRequiredService<IEnvironmentDriveService>(),
+                resolver.GetRequiredService<DriveServiceConfiguration>()
             ));
             services.Register<IOperationsFactory>(() => new OperationsFactory(
                 resolver.GetRequiredService<ITaskPool>(),

@@ -1,4 +1,5 @@
 using System.IO;
+using Camelot.Services.Configuration;
 using Camelot.Services.Environment.Interfaces;
 using Moq;
 using Xunit;
@@ -21,8 +22,12 @@ namespace Camelot.Services.Tests
                 .Setup(m => m.GetDrives())
                 .Returns(drives);
 
-            var driveService = new DriveService(envDriveServiceMock.Object);
-            var drivesModels = driveService.GetDrives();
+            var configuration = new DriveServiceConfiguration
+            {
+                DrivesListRefreshIntervalMs = 10
+            };
+            var driveService = new DriveService(envDriveServiceMock.Object, configuration);
+            var drivesModels = driveService.Drives;
 
             Assert.NotNull(drivesModels);
             Assert.Equal(drives.Length, drivesModels.Count);
