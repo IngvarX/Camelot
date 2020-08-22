@@ -4,11 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:mainWindow="clr-namespace:Camelot.ViewModels.Implementations.MainWindow;assembly=Camelot.ViewModels"
              xmlns:p="clr-namespace:Camelot.Properties"
+             xmlns:filePanels="clr-namespace:Camelot.ViewModels.Implementations.MainWindow.FilePanels;assembly=Camelot.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Camelot.Views.Main.Controls.SearchView">
 
     <Design.DataContext>
-        <mainWindow:SearchViewModel />
+        <filePanels:SearchViewModel />
     </Design.DataContext>
 
     <Grid ColumnDefinitions="Auto,*,Auto,Auto" IsVisible="{Binding IsSearchEnabled}">

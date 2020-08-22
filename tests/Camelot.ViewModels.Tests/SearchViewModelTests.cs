@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Camelot.Services.Environment.Interfaces;
 using Camelot.ViewModels.Configuration;
-using Camelot.ViewModels.Implementations.MainWindow;
+using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Specifications;
 using Camelot.ViewModels.Services.Interfaces;
 using Moq;

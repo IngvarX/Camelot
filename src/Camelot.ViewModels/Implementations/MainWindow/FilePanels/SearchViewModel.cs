@@ -11,7 +11,7 @@ using Camelot.ViewModels.Services.Interfaces;
 using ReactiveUI;
 using ReactiveUI.Validation.Extensions;
 
-namespace Camelot.ViewModels.Implementations.MainWindow
+namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 {
     public class SearchViewModel : ValidatableViewModelBase<SearchViewModel>, ISearchViewModel
     {
