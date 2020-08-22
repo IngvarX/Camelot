@@ -548,5 +548,11 @@ namespace Camelot.Properties {
                 return ResourceManager.GetString("SearchForFilesAndDirectories", resourceCulture);
             }
         }
+        
+        public static string InvalidRegex {
+            get {
+                return ResourceManager.GetString("InvalidRegex", resourceCulture);
+            }
+        }
     }
 }

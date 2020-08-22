@@ -10,10 +10,18 @@
         <Setter Property="Cursor" Value="Hand" />
     </Style>
 
+    <Style Selector="ToggleButton">
+        <Setter Property="Cursor" Value="Hand" />
+    </Style>
+
     <Style Selector="TextBox">
         <Setter Property="FontSize" Value="20" />
         <Setter Property="Background" Value="{DynamicResource ThemeControlLowBrush}" />
         <Setter Property="BorderThickness" Value="0" />
+    </Style>
+
+    <Style Selector="TextBox:error">
+        <Setter Property="BorderThickness" Value="1" />
     </Style>
 
     <Style Selector="ComboBox">

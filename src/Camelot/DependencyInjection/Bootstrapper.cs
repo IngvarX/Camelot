@@ -10,6 +10,7 @@ using Camelot.FileSystemWatcher.Configuration;
 using Camelot.FileSystemWatcher.Implementations;
 using Camelot.FileSystemWatcher.Interfaces;
 using Camelot.Operations;
+using Camelot.Properties;
 using Camelot.Services;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Operations;
@@ -100,6 +101,7 @@ namespace Camelot.DependencyInjection
 
             var searchViewModelConfiguration = new SearchViewModelConfiguration();
             configuration.GetSection("SearchPanel").Bind(searchViewModelConfiguration);
+            searchViewModelConfiguration.InvalidRegexResourceName = nameof(Resources.InvalidRegex);
             services.RegisterConstant(searchViewModelConfiguration);
         }
 
@@ -111,6 +113,7 @@ namespace Camelot.DependencyInjection
             services.RegisterLazySingleton<IEnvironmentDirectoryService>(() => new EnvironmentDirectoryService());
             services.RegisterLazySingleton<IEnvironmentDriveService>(() => new EnvironmentDriveService());
             services.RegisterLazySingleton<IEnvironmentPathService>(() => new EnvironmentPathService());
+            services.RegisterLazySingleton<IRegexService>(() => new RegexService());
             services.Register<IPlatformService>(() => new PlatformService());
         }
 
@@ -195,6 +198,7 @@ namespace Camelot.DependencyInjection
             services.RegisterLazySingleton<IDialogService>(() => new DialogService(
                 resolver.GetRequiredService<IMainWindowProvider>()
             ));
+            services.RegisterLazySingleton<IResourceProvider>(() => new ResourceProvider());
             services.RegisterLazySingleton<ILanguageManager>(() => new LanguageManager());
             services.RegisterLazySingleton<IClipboardOperationsService>(() => new ClipboardOperationsService(
                 resolver.GetRequiredService<IClipboardService>(),
@@ -403,6 +407,8 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IDialogService>()
             ));
             services.Register<ISearchViewModel>(() => new SearchViewModel(
+                resolver.GetRequiredService<IRegexService>(),
+                resolver.GetRequiredService<IResourceProvider>(),
                 resolver.GetRequiredService<SearchViewModelConfiguration>()
             ));
             services.Register<ITopOperationsViewModel>(() => new TopOperationsViewModel(

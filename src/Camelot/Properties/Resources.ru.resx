@@ -363,4 +363,7 @@
   <data name="SearchForFilesAndDirectories" xml:space="preserve">
     <value>Поиск файлов и каталогов</value>
   </data>
+  <data name="InvalidRegex" xml:space="preserve">
+    <value>Неверное регулярное выражение</value>
+  </data>
 </root>

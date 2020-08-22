@@ -369,4 +369,7 @@
   <data name="SearchForFilesAndDirectories" xml:space="preserve">
     <value>Search for files and directories</value>
   </data>
+  <data name="InvalidRegex" xml:space="preserve">
+    <value>Invalid regular expression</value>
+  </data>
 </root>

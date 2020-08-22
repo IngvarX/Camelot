@@ -19,11 +19,12 @@
         <Color x:Key="OperationButtonHoverBackgroundColor">#45325a</Color>
         <Color x:Key="OperationButtonPressedBackgroundColor">#342544</Color>
         <Color x:Key="SuccessColor">#bcffbc</Color>
-        <Color x:Key="ErrorColor">#ffbcbc</Color>
+        <Color x:Key="OperationErrorColor">#ffbcbc</Color>
         <Color x:Key="SuccessBackgroundColor">#35a335</Color>
         <Color x:Key="SuccessHoverBackgroundColor">#3aad3a</Color>
         <Color x:Key="SuccessPressedBackgroundColor">#2f972f</Color>
         <Color x:Key="SettingsTabBorderColor">#181614</Color>
+        <Color x:Key="ErrorColor">#ff0000</Color>
 
         <!-- Avalonia brushes -->
         <SolidColorBrush x:Key="ThemeBackgroundBrush" Color="{DynamicResource MainBackgroundColor}" />
@@ -51,6 +52,7 @@
                          Opacity="0.3" />
         <SolidColorBrush x:Key="ThemeForegroundLowBrush" Color="{DynamicResource WhiteColor}"
                          Opacity="0.3" />
+        <SolidColorBrush x:Key="ErrorBrush" Color="{DynamicResource ErrorColor}" />
 
         <!-- Custom brushes -->
         <SolidColorBrush x:Key="AlternativeThemeBackgroundBrush" Color="{DynamicResource AlternativeMainBackgroundColor}" />
@@ -69,7 +71,7 @@
         <SolidColorBrush x:Key="SuccessHoverBackgroundBrush" Color="{DynamicResource SuccessHoverBackgroundColor}" />
         <SolidColorBrush x:Key="SuccessPressedBackgroundBrush" Color="{DynamicResource SuccessPressedBackgroundColor}" />
         <SolidColorBrush x:Key="SettingsTabBorderBrush" Color="{DynamicResource SettingsTabBorderColor}" />
-        <SolidColorBrush x:Key="ErrorBrush" Color="{DynamicResource ErrorColor}" />
+        <SolidColorBrush x:Key="OperationErrorBrush" Color="{DynamicResource OperationErrorColor}" />
         <SolidColorBrush x:Key="DialogOverlayBrush" Color="{DynamicResource BlackColor}" />
         <SolidColorBrush x:Key="ProgressBarForegroundBrush" Color="{DynamicResource SuccessBackgroundColor}" />
         <SolidColorBrush x:Key="ProgressBarBackgroundBrush" Color="{DynamicResource WhiteColor}"

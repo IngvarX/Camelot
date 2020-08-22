@@ -6,12 +6,14 @@
 
     <ItemGroup>
       <PackageReference Include="Avalonia.ReactiveUI" Version="0.9.11" />
+      <PackageReference Include="ReactiveUI.Validation" Version="1.5.5" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Camelot.Avalonia\Camelot.Avalonia.csproj" />
       <ProjectReference Include="..\Camelot.Extensions\Camelot.Extensions.csproj" />
       <ProjectReference Include="..\Camelot.Services.Abstractions\Camelot.Services.Abstractions.csproj" />
+      <ProjectReference Include="..\Camelot.Services.Environment\Camelot.Services.Environment.csproj" />
     </ItemGroup>
 
 </Project>

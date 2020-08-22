@@ -1,8 +1,11 @@
 using System;
 using System.Threading.Tasks;
+using Camelot.Services.Environment.Interfaces;
 using Camelot.ViewModels.Configuration;
 using Camelot.ViewModels.Implementations.MainWindow;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Specifications;
+using Camelot.ViewModels.Services.Interfaces;
+using Moq;
 using Xunit;
 
 namespace Camelot.ViewModels.Tests
@@ -12,8 +15,10 @@ namespace Camelot.ViewModels.Tests
         [Fact]
         public void TestDefaults()
         {
+            var regexServiceMock = new Mock<IRegexService>();
+            var resourceProviderMock = new Mock<IResourceProvider>();
             var configuration = new SearchViewModelConfiguration();
-            var viewModel = new SearchViewModel(configuration);
+            var viewModel = new SearchViewModel(regexServiceMock.Object, resourceProviderMock.Object, configuration);
 
             Assert.False(viewModel.IsSearchEnabled);
             Assert.False(viewModel.IsRegexSearchEnabled);
@@ -26,8 +31,11 @@ namespace Camelot.ViewModels.Tests
         {
             const string searchText = "text";
             var configuration = new SearchViewModelConfiguration();
-            
-            var viewModel = new SearchViewModel(configuration);
+
+            var regexServiceMock = new Mock<IRegexService>();
+            var resourceProviderMock = new Mock<IResourceProvider>();
+
+            var viewModel = new SearchViewModel(regexServiceMock.Object, resourceProviderMock.Object, configuration);
             Assert.False(viewModel.IsSearchEnabled);
 
             viewModel.SearchText = searchText;
@@ -47,15 +55,21 @@ namespace Camelot.ViewModels.Tests
         }
 
         [Theory]
-        [InlineData(false, false, typeof(EmptySpecification))]
-        [InlineData(false, true, typeof(EmptySpecification))]
-        [InlineData(true, true, typeof(NodeNameRegexSpecification))]
-        [InlineData(true, false, typeof(NodeNameTextSpecification))]
+        [InlineData(false, false, typeof(EmptySpecification), false)]
+        [InlineData(false, true, typeof(EmptySpecification), false)]
+        [InlineData(true, true, typeof(EmptySpecification), false)]
+        [InlineData(true, true, typeof(NodeNameRegexSpecification), true)]
+        [InlineData(true, false, typeof(NodeNameTextSpecification), false)]
         public void TestSpecification(bool isSearchEnabled, bool isRegexSearchEnabled,
-            Type specificationType)
+            Type specificationType, bool isRegexValid)
         {
+            var regexServiceMock = new Mock<IRegexService>();
+            regexServiceMock
+                .Setup(m => m.ValidateRegex(It.IsAny<string>()))
+                .Returns(isRegexValid);
+            var resourceProviderMock = new Mock<IResourceProvider>();
             var configuration = new SearchViewModelConfiguration();
-            var viewModel = new SearchViewModel(configuration)
+            var viewModel = new SearchViewModel(regexServiceMock.Object, resourceProviderMock.Object, configuration)
             {
                 IsSearchEnabled = isSearchEnabled,
                 IsRegexSearchEnabled = isRegexSearchEnabled
@@ -70,11 +84,14 @@ namespace Camelot.ViewModels.Tests
         public async Task TestTextChangedChanged()
         {
             var taskCompletionSource = new TaskCompletionSource<bool>();
+
+            var regexServiceMock = new Mock<IRegexService>();
+            var resourceProviderMock = new Mock<IResourceProvider>();
             var configuration = new SearchViewModelConfiguration
             {
                 TimeoutMs = 10
             };
-            var viewModel = new SearchViewModel(configuration);
+            var viewModel = new SearchViewModel(regexServiceMock.Object, resourceProviderMock.Object, configuration);
             viewModel.SearchSettingsChanged += (sender, args) => taskCompletionSource.SetResult(true);
 
             viewModel.SearchText = "test";
@@ -87,11 +104,14 @@ namespace Camelot.ViewModels.Tests
         public async Task TestSearchCaseChanged()
         {
             var taskCompletionSource = new TaskCompletionSource<bool>();
+
+            var regexServiceMock = new Mock<IRegexService>();
+            var resourceProviderMock = new Mock<IResourceProvider>();
             var configuration = new SearchViewModelConfiguration
             {
                 TimeoutMs = 10
             };
-            var viewModel = new SearchViewModel(configuration);
+            var viewModel = new SearchViewModel(regexServiceMock.Object, resourceProviderMock.Object, configuration);
             viewModel.SearchSettingsChanged += (sender, args) => taskCompletionSource.SetResult(true);
 
             viewModel.IsSearchCaseSensitive = true;
@@ -104,11 +124,14 @@ namespace Camelot.ViewModels.Tests
         public async Task TestRegexChanged()
         {
             var taskCompletionSource = new TaskCompletionSource<bool>();
+
+            var regexServiceMock = new Mock<IRegexService>();
+            var resourceProviderMock = new Mock<IResourceProvider>();
             var configuration = new SearchViewModelConfiguration
             {
                 TimeoutMs = 10
             };
-            var viewModel = new SearchViewModel(configuration);
+            var viewModel = new SearchViewModel(regexServiceMock.Object, resourceProviderMock.Object, configuration);
             viewModel.SearchSettingsChanged += (sender, args) => taskCompletionSource.SetResult(true);
 
             viewModel.IsRegexSearchEnabled = true;
