@@ -128,6 +128,9 @@
     <Compile Update="Views\Dialogs\Settings\GeneralSettingsView.xaml.cs">
       <DependentUpon>GeneralSettingsView.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\Main\Drives\DriveView.xaml.cs">
+      <DependentUpon>DriveView.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.9.11" />

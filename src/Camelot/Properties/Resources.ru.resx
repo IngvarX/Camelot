@@ -366,4 +366,10 @@
   <data name="InvalidRegex" xml:space="preserve">
     <value>Неверное регулярное выражение</value>
   </data>
+  <data name="TotalSpaceWithColon" xml:space="preserve">
+    <value>Общий объём:</value>
+  </data>
+  <data name="AvailableSpaceWithColon" xml:space="preserve">
+    <value>Доступно:</value>
+  </data>
 </root>

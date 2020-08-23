@@ -421,7 +421,9 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IResourceProvider>(),
                 resolver.GetRequiredService<SearchViewModelConfiguration>()
             ));
-            services.RegisterLazySingleton<IDriveViewModelFactory>(() => new DriveViewModelFactory());
+            services.RegisterLazySingleton<IDriveViewModelFactory>(() => new DriveViewModelFactory(
+                resolver.GetRequiredService<IFileSizeFormatter>()
+            ));
             services.Register<IDrivesListViewModel>(() => new DrivesListViewModel(
                 resolver.GetRequiredService<IDriveService>(),
                 resolver.GetRequiredService<IDriveViewModelFactory>()

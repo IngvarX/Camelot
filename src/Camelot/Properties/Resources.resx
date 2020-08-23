@@ -372,4 +372,10 @@
   <data name="InvalidRegex" xml:space="preserve">
     <value>Invalid regular expression</value>
   </data>
+  <data name="TotalSpaceWithColon" xml:space="preserve">
+    <value>Total space:</value>
+  </data>
+  <data name="AvailableSpaceWithColon" xml:space="preserve">
+    <value>Available space:</value>
+  </data>
 </root>

@@ -51,12 +51,12 @@ namespace Camelot.ViewModels.Implementations.MainWindow.Drives
         private void SubscribeToEvents() => _driveService.DrivesListChanged += DriveServiceOnDrivesListChanged;
 
         private void SubscribeToEvents(IDriveViewModel driveViewModel) =>
-            driveViewModel.OpeningRequested += DriveViewModelOnSelected;
+            driveViewModel.OpeningRequested += DriveViewModelOnOpeningRequested;
 
         private void UnsubscribeFromEvents(IDriveViewModel driveViewModel) =>
-            driveViewModel.OpeningRequested -= DriveViewModelOnSelected;
+            driveViewModel.OpeningRequested -= DriveViewModelOnOpeningRequested;
 
-        private void DriveViewModelOnSelected(object sender, EventArgs e)
+        private void DriveViewModelOnOpeningRequested(object sender, EventArgs e)
         {
             var viewModel = (IDriveViewModel) sender;
             var args = new DriveOpenedEventArgs(viewModel);

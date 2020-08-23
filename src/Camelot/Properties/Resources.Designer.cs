@@ -554,5 +554,17 @@ namespace Camelot.Properties {
                 return ResourceManager.GetString("InvalidRegex", resourceCulture);
             }
         }
+        
+        public static string TotalSpaceWithColon {
+            get {
+                return ResourceManager.GetString("TotalSpaceWithColon", resourceCulture);
+            }
+        }
+        
+        public static string AvailableSpaceWithColon {
+            get {
+                return ResourceManager.GetString("AvailableSpaceWithColon", resourceCulture);
+            }
+        }
     }
 }

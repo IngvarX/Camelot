@@ -1,0 +1,27 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:drives="clr-namespace:Camelot.ViewModels.Implementations.MainWindow.Drives;assembly=Camelot.ViewModels"
+             xmlns:drivesViews="clr-namespace:Camelot.Views.Main.Drives"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Camelot.Views.Main.Drives.DrivesListView">
+
+    <Design.DataContext>
+        <drives:DrivesListViewModel />
+    </Design.DataContext>
+
+    <ItemsControl Items="{Binding Drives}">
+        <ItemsControl.ItemTemplate>
+            <DataTemplate>
+                <drivesViews:DriveView />
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <StackPanel Orientation="Horizontal"/>
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+    </ItemsControl>
+</UserControl>

@@ -63,7 +63,7 @@ namespace Camelot.Services
         private IReadOnlyList<DriveModel> GetDrives() =>
             _environmentDriveService
                 .GetDrives()
-                .Where(d => d.DriveType != DriveType.Ram && d.DriveType != DriveType.Unknown)
+                .Where(Filter)
                 .Select(CreateFrom)
                 .WhereNotNull()
                 .ToArray();
@@ -85,5 +85,12 @@ namespace Camelot.Services
                 return null;
             }
         }
+
+        private static bool Filter(DriveInfo driveInfo) =>
+            driveInfo.DriveType != DriveType.Ram
+            && driveInfo.DriveType != DriveType.Unknown
+            && driveInfo.DriveFormat != "fuse"
+            && !driveInfo.RootDirectory.FullName.StartsWith("/snap/")
+            && !driveInfo.RootDirectory.FullName.StartsWith("/sys/");
     }
 }
