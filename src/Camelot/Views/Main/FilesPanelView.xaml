@@ -7,7 +7,6 @@
              xmlns:controls="clr-namespace:Camelot.Views.Main.Controls"
              xmlns:views="clr-namespace:Camelot.Views"
              xmlns:converters="clr-namespace:Camelot.Converters"
-             xmlns:drives="clr-namespace:Camelot.Views.Main.Drives"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Camelot.Views.Main.FilesPanelView">
 
@@ -28,7 +27,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <DockPanel>
+        <DockPanel Margin="7,0,0,0">
             <Button Classes="iconButton">
                 <DrawingPresenter Width="20" Height="20">
                     <DrawingPresenter.Drawing>

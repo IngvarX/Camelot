@@ -12,7 +12,8 @@
     </Design.DataContext>
 
     <Grid Classes="defaultBackgroundColorGrid">
-        <ItemsControl Items="{Binding Drives}">
+        <ItemsControl Items="{Binding Drives}"
+                      Margin="7,8,8,3">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <drivesViews:DriveView />
