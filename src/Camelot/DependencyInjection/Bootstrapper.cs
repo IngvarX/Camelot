@@ -423,9 +423,10 @@ namespace Camelot.DependencyInjection
             ));
             services.RegisterLazySingleton<IDriveViewModelFactory>(() => new DriveViewModelFactory(
                 resolver.GetRequiredService<IFileSizeFormatter>(),
-                resolver.GetRequiredService<IPathService>()
+                resolver.GetRequiredService<IPathService>(),
+                resolver.GetRequiredService<IFilesOperationsMediator>()
             ));
-            services.Register<IDrivesListViewModel>(() => new DrivesListViewModel(
+            services.RegisterLazySingleton<IDrivesListViewModel>(() => new DrivesListViewModel(
                 resolver.GetRequiredService<IDriveService>(),
                 resolver.GetRequiredService<IDriveViewModelFactory>(),
                 resolver.GetRequiredService<IApplicationDispatcher>()
@@ -442,7 +443,8 @@ namespace Camelot.DependencyInjection
                 CreateFilesPanelViewModel(resolver, "Right"),
                 resolver.GetRequiredService<IMenuViewModel>(),
                 resolver.GetRequiredService<IOperationsStateViewModel>(),
-                resolver.GetRequiredService<ITopOperationsViewModel>()
+                resolver.GetRequiredService<ITopOperationsViewModel>(),
+                resolver.GetRequiredService<IDrivesListViewModel>()
             ));
         }
 
@@ -471,8 +473,7 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IClipboardOperationsService>(),
                 resolver.GetRequiredService<IFileSystemNodeViewModelComparerFactory>(),
                 resolver.GetRequiredService<ISearchViewModel>(),
-                tabsListViewModel,
-                resolver.GetRequiredService<IDrivesListViewModel>()
+                tabsListViewModel
             );
 
             return filesPanelViewModel;

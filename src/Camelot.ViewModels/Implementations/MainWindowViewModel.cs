@@ -1,5 +1,6 @@
 ﻿using System.Windows.Input;
 using Camelot.ViewModels.Interfaces.MainWindow;
+using Camelot.ViewModels.Interfaces.MainWindow.Drives;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.MainWindow.OperationsStates;
 using Camelot.ViewModels.Interfaces.Menu;
@@ -26,6 +27,7 @@ namespace Camelot.ViewModels.Implementations
         public IOperationsStateViewModel OperationsStateViewModel { get; }
 
         public ITopOperationsViewModel TopOperationsViewModel { get; }
+        public IDrivesListViewModel DrivesListViewModel { get; }
 
         public ICommand CreateNewTabCommand { get; }
 
@@ -40,7 +42,8 @@ namespace Camelot.ViewModels.Implementations
             IFilesPanelViewModel rightFilesPanelViewModel,
             IMenuViewModel menuViewModel,
             IOperationsStateViewModel operationsStateViewModel,
-            ITopOperationsViewModel topOperationsViewModel)
+            ITopOperationsViewModel topOperationsViewModel,
+            IDrivesListViewModel drivesListViewModel)
         {
             _filesOperationsMediator = filesOperationsMediator;
 
@@ -50,6 +53,7 @@ namespace Camelot.ViewModels.Implementations
             MenuViewModel = menuViewModel;
             OperationsStateViewModel = operationsStateViewModel;
             TopOperationsViewModel = topOperationsViewModel;
+            DrivesListViewModel = drivesListViewModel;
 
             CreateNewTabCommand = ReactiveCommand.Create(CreateNewTab);
             CloseCurrentTabCommand = ReactiveCommand.Create(CloseActiveTab);

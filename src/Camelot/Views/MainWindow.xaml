@@ -5,6 +5,7 @@
         xmlns:main="clr-namespace:Camelot.Views.Main"
         xmlns:implementations="clr-namespace:Camelot.ViewModels.Implementations;assembly=Camelot.ViewModels"
         xmlns:operationsStates="clr-namespace:Camelot.Views.Main.OperationsStates"
+        xmlns:drives="clr-namespace:Camelot.Views.Main.Drives"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Camelot.Views.MainWindow"
         MinWidth="900" MinHeight="480"
@@ -26,7 +27,7 @@
     </Window.KeyBindings>
 
     <Design.DataContext>
-        <implementations:MainWindowViewModel/>
+        <implementations:MainWindowViewModel />
     </Design.DataContext>
 
     <Grid>
@@ -43,7 +44,7 @@
             <main:TopOperationsView Grid.Column="3" DataContext="{Binding TopOperationsViewModel}" />
         </Grid>
 
-        <main:TopSettingsView Grid.Row="1" />
+        <drives:DrivesListView Grid.Row="1" DataContext="{Binding DrivesListViewModel}" />
 
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>

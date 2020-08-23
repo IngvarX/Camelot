@@ -1,5 +1,6 @@
 using Camelot.ViewModels.Implementations;
 using Camelot.ViewModels.Interfaces.MainWindow;
+using Camelot.ViewModels.Interfaces.MainWindow.Drives;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.MainWindow.OperationsStates;
 using Camelot.ViewModels.Interfaces.Menu;
@@ -14,11 +15,13 @@ namespace Camelot.ViewModels.Tests
         [Fact]
         public void TestFilePanelsRegistrations()
         {
-            var filePanelViewModelMock = new Mock<IFilesPanelViewModel>();
+            var leftFilePanelViewModelMock = new Mock<IFilesPanelViewModel>();
+            var rightFilePanelViewModelMock = new Mock<IFilesPanelViewModel>();
             var operationsViewModelMock = new Mock<IOperationsViewModel>();
             var menuViewModelMock = new Mock<IMenuViewModel>();
-            var operationsStateViewModel = new Mock<IOperationsStateViewModel>();
+            var operationsStateViewModelMock = new Mock<IOperationsStateViewModel>();
             var topOperationsViewModelMock = new Mock<ITopOperationsViewModel>();
+            var drivesListViewModelMock = new Mock<IDrivesListViewModel>();
             var fileOperationsMediatorMock = new Mock<IFilesOperationsMediator>();
             fileOperationsMediatorMock
                 .Setup(m => m.Register(It.IsAny<IFilesPanelViewModel>(), It.IsAny<IFilesPanelViewModel>()))
@@ -27,18 +30,20 @@ namespace Camelot.ViewModels.Tests
             var mainWindowViewModel = new MainWindowViewModel(
                 fileOperationsMediatorMock.Object,
                 operationsViewModelMock.Object,
-                filePanelViewModelMock.Object,
-                filePanelViewModelMock.Object,
+                leftFilePanelViewModelMock.Object,
+                rightFilePanelViewModelMock.Object,
                 menuViewModelMock.Object,
-                operationsStateViewModel.Object,
-                topOperationsViewModelMock.Object);
+                operationsStateViewModelMock.Object,
+                topOperationsViewModelMock.Object,
+                drivesListViewModelMock.Object);
 
-            Assert.NotNull(mainWindowViewModel.LeftFilesPanelViewModel);
-            Assert.NotNull(mainWindowViewModel.RightFilesPanelViewModel);
-            Assert.NotNull(mainWindowViewModel.MenuViewModel);
-            Assert.NotNull(mainWindowViewModel.OperationsViewModel);
-            Assert.NotNull(mainWindowViewModel.OperationsStateViewModel);
-            Assert.NotNull(mainWindowViewModel.TopOperationsViewModel);
+            Assert.Equal(leftFilePanelViewModelMock.Object, mainWindowViewModel.LeftFilesPanelViewModel);
+            Assert.Equal(rightFilePanelViewModelMock.Object, mainWindowViewModel.RightFilesPanelViewModel);
+            Assert.Equal(menuViewModelMock.Object, mainWindowViewModel.MenuViewModel);
+            Assert.Equal(operationsViewModelMock.Object, mainWindowViewModel.OperationsViewModel);
+            Assert.Equal(operationsStateViewModelMock.Object, mainWindowViewModel.OperationsStateViewModel);
+            Assert.Equal(topOperationsViewModelMock.Object, mainWindowViewModel.TopOperationsViewModel);
+            Assert.Equal(drivesListViewModelMock.Object, mainWindowViewModel.DrivesListViewModel);
 
             fileOperationsMediatorMock
                 .Verify(m => m.Register(It.IsAny<IFilesPanelViewModel>(), It.IsAny<IFilesPanelViewModel>()),
@@ -64,6 +69,7 @@ namespace Camelot.ViewModels.Tests
                 .Returns(filePanelViewModelMock.Object);
             var operationsStateViewModel = new Mock<IOperationsStateViewModel>();
             var topOperationsViewModelMock = new Mock<ITopOperationsViewModel>();
+            var drivesListViewModelMock = new Mock<IDrivesListViewModel>();
 
             var mainWindowViewModel = new MainWindowViewModel(
                 fileOperationsMediatorMock.Object,
@@ -72,7 +78,8 @@ namespace Camelot.ViewModels.Tests
                 filePanelViewModelMock.Object,
                 menuViewModelMock.Object,
                 operationsStateViewModel.Object,
-                topOperationsViewModelMock.Object);
+                topOperationsViewModelMock.Object,
+                drivesListViewModelMock.Object);
 
             Assert.True(mainWindowViewModel.CreateNewTabCommand.CanExecute(null));
             mainWindowViewModel.CreateNewTabCommand.Execute(null);
@@ -99,6 +106,7 @@ namespace Camelot.ViewModels.Tests
             fileOperationsMediatorMock
                 .SetupGet(m => m.ActiveFilesPanelViewModel)
                 .Returns(filePanelViewModelMock.Object);
+            var drivesListViewModelMock = new Mock<IDrivesListViewModel>();
 
             var mainWindowViewModel = new MainWindowViewModel(
                 fileOperationsMediatorMock.Object,
@@ -107,7 +115,8 @@ namespace Camelot.ViewModels.Tests
                 filePanelViewModelMock.Object,
                 menuViewModelMock.Object,
                 operationsStateViewModel.Object,
-                topOperationsViewModelMock.Object);
+                topOperationsViewModelMock.Object,
+                drivesListViewModelMock.Object);
 
             Assert.True(mainWindowViewModel.CloseCurrentTabCommand.CanExecute(null));
             mainWindowViewModel.CloseCurrentTabCommand.Execute(null);
@@ -129,6 +138,7 @@ namespace Camelot.ViewModels.Tests
             fileOperationsMediatorMock
                 .Setup(m => m.ToggleSearchPanelVisibility())
                 .Verifiable();
+            var drivesListViewModelMock = new Mock<IDrivesListViewModel>();
 
             var mainWindowViewModel = new MainWindowViewModel(
                 fileOperationsMediatorMock.Object,
@@ -137,7 +147,8 @@ namespace Camelot.ViewModels.Tests
                 filePanelViewModelMock.Object,
                 menuViewModelMock.Object,
                 operationsStateViewModel.Object,
-                topOperationsViewModelMock.Object);
+                topOperationsViewModelMock.Object,
+                drivesListViewModelMock.Object);
 
             Assert.True(mainWindowViewModel.SearchCommand.CanExecute(null));
             mainWindowViewModel.SearchCommand.Execute(null);

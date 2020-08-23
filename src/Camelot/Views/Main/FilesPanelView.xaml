@@ -19,9 +19,8 @@
         <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
     </UserControl.Resources>
 
-    <Grid Classes="defaultBackgroundColor">
+    <Grid Classes="defaultBackgroundColorGrid">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition />
@@ -29,9 +28,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <drives:DrivesListView DataContext="{Binding DrivesListViewModel}" />
-
-        <DockPanel Grid.Row="1">
+        <DockPanel>
             <Button Classes="iconButton">
                 <DrawingPresenter Width="20" Height="20">
                     <DrawingPresenter.Drawing>
@@ -62,7 +59,7 @@
             <TextBox Classes="directoryTextBox" Text="{Binding CurrentDirectory, Mode=TwoWay}" />
         </DockPanel>
 
-        <ItemsControl Grid.Row="2" Margin="10,10,0,0" Items="{Binding TabsListViewModel.Tabs}">
+        <ItemsControl Grid.Row="1" Margin="10,10,0,0" Items="{Binding TabsListViewModel.Tabs}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel Orientation="Horizontal"/>
@@ -76,7 +73,7 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
-        <DataGrid x:Name="FilesDataGrid" Grid.Row="3" Grid.RowSpan="2"
+        <DataGrid x:Name="FilesDataGrid" Grid.Row="2" Grid.RowSpan="2"
                   Items="{Binding FileSystemNodes}"
                   CanUserSortColumns="False" IsReadOnly="True"
                   HorizontalScrollBarVisibility="Disabled"
@@ -280,7 +277,7 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <Grid Grid.Row="4" ColumnDefinitions="Auto,*">
+        <Grid Grid.Row="3" ColumnDefinitions="Auto,*">
             <Border Classes="selectionBorder" IsVisible="{Binding AreAnyFileSystemNodesSelected}">
                 <TextBlock Classes="selectionInfoTextBlock">
                     <TextBlock.Text>
@@ -294,7 +291,7 @@
             </Border>
         </Grid>
 
-        <controls:SearchView Grid.Row="5" DataContext="{Binding SearchViewModel}" />
+        <controls:SearchView Grid.Row="4" DataContext="{Binding SearchViewModel}" />
     </Grid>
 
 </UserControl>

@@ -24,7 +24,7 @@
         <Color x:Key="SuccessHoverBackgroundColor">#3aad3a</Color>
         <Color x:Key="SuccessPressedBackgroundColor">#2f972f</Color>
         <Color x:Key="SettingsTabBorderColor">#181614</Color>
-        <Color x:Key="ErrorColor">#ff0000</Color>
+        <Color x:Key="ErrorColor">#a34235</Color>
 
         <!-- Avalonia brushes -->
         <SolidColorBrush x:Key="ThemeBackgroundBrush" Color="{DynamicResource MainBackgroundColor}" />

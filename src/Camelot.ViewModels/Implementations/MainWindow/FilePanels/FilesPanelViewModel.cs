@@ -44,8 +44,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         public ITabsListViewModel TabsListViewModel { get; }
 
-        public IDrivesListViewModel DrivesListViewModel { get; }
-
         public string CurrentDirectory
         {
             get => _currentDirectory;
@@ -113,8 +111,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             IClipboardOperationsService clipboardOperationsService,
             IFileSystemNodeViewModelComparerFactory comparerFactory,
             ISearchViewModel searchViewModel,
-            ITabsListViewModel tabsListViewModel,
-            IDrivesListViewModel drivesListViewModel)
+            ITabsListViewModel tabsListViewModel)
         {
             _fileService = fileService;
             _directoryService = directoryService;
@@ -128,7 +125,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
             SearchViewModel = searchViewModel;
             TabsListViewModel = tabsListViewModel;
-            DrivesListViewModel = drivesListViewModel;
 
             _fileSystemNodes = new ObservableCollection<IFileSystemNodeViewModel>();
             _selectedFileSystemNodes = new ObservableCollection<IFileSystemNodeViewModel>();
@@ -188,7 +184,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         {
             TabsListViewModel.SelectedTabChanged += TabsListViewModelOnSelectedTabChanged;
             SearchViewModel.SearchSettingsChanged += SearchViewModelOnSearchSettingsChanged;
-            DrivesListViewModel.DriveOpened += DrivesListViewModelOnDriveOpened;
             _selectedFileSystemNodes.CollectionChanged += SelectedFileSystemNodesOnCollectionChanged;
 
             void ExecuteInUiThread(Action action) => _applicationDispatcher.Dispatch(action);
@@ -221,9 +216,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         private void SearchViewModelOnSearchSettingsChanged(object sender, EventArgs e) =>
             _applicationDispatcher.Dispatch(ReloadFiles);
-
-        private void DrivesListViewModelOnDriveOpened(object sender, DriveOpenedEventArgs args) =>
-            CurrentDirectory = args.Drive.RootDirectory;
 
         private void RenameNode(string oldName, string newName)
         {

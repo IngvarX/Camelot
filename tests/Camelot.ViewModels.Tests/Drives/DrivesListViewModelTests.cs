@@ -10,7 +10,7 @@ using Camelot.ViewModels.Interfaces.MainWindow.Drives;
 using Moq;
 using Xunit;
 
-namespace Camelot.ViewModels.Tests
+namespace Camelot.ViewModels.Tests.Drives
 {
     public class DrivesListViewModelTests
     {
@@ -41,9 +41,6 @@ namespace Camelot.ViewModels.Tests
             foreach (var driveModel in drives)
             {
                 var driveViewModelMock = new Mock<IDriveViewModel>();
-                driveViewModelMock
-                    .Setup(m => m.RootDirectory)
-                    .Returns(driveModel.RootDirectory);
                 driveViewModelFactoryMock
                     .Setup(m => m.Create(driveModel))
                     .Returns(driveViewModelMock.Object);
@@ -91,9 +88,6 @@ namespace Camelot.ViewModels.Tests
                 .SetupGet(m => m.Drives)
                 .Returns(new[] {driveModel});
             var driveViewModelMock = new Mock<IDriveViewModel>();
-            driveViewModelMock
-                .SetupGet(m => m.RootDirectory)
-                .Returns(driveModel.RootDirectory);
             driveViewModelFactoryMock
                 .Setup(m => m.Create(driveModel))
                 .Returns(driveViewModelMock.Object);
@@ -103,7 +97,6 @@ namespace Camelot.ViewModels.Tests
 
             Assert.NotNull(viewModel.Drives);
             Assert.Single(viewModel.Drives);
-            Assert.Equal(driveModel.RootDirectory, viewModel.Drives.Single().RootDirectory);
         }
     }
 }

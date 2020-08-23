@@ -11,17 +11,19 @@
         <drives:DrivesListViewModel />
     </Design.DataContext>
 
-    <ItemsControl Items="{Binding Drives}">
-        <ItemsControl.ItemTemplate>
-            <DataTemplate>
-                <drivesViews:DriveView />
-            </DataTemplate>
-        </ItemsControl.ItemTemplate>
+    <Grid Classes="defaultBackgroundColorGrid">
+        <ItemsControl Items="{Binding Drives}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <drivesViews:DriveView />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
 
-        <ItemsControl.ItemsPanel>
-            <ItemsPanelTemplate>
-                <StackPanel Orientation="Horizontal"/>
-            </ItemsPanelTemplate>
-        </ItemsControl.ItemsPanel>
-    </ItemsControl>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+    </Grid>
 </UserControl>

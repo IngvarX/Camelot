@@ -176,7 +176,7 @@
 
     <!-- Reused styles -->
 
-    <Style Selector="Grid.defaultBackgroundColor">
+    <Style Selector="Grid.defaultBackgroundColorGrid">
         <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
     </Style>
 
