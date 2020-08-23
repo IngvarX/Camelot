@@ -9,6 +9,7 @@ using Camelot.Avalonia.Interfaces;
 using Camelot.Extensions;
 using Camelot.Services.Abstractions;
 using Camelot.ViewModels.Factories.Interfaces;
+using Camelot.ViewModels.Interfaces.MainWindow.Drives;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using DynamicData;
 using ReactiveUI;
@@ -42,6 +43,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         public ISearchViewModel SearchViewModel { get; }
 
         public ITabsListViewModel TabsListViewModel { get; }
+
+        public IDrivesListViewModel DrivesListViewModel { get; }
 
         public string CurrentDirectory
         {
@@ -110,7 +113,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             IClipboardOperationsService clipboardOperationsService,
             IFileSystemNodeViewModelComparerFactory comparerFactory,
             ISearchViewModel searchViewModel,
-            ITabsListViewModel tabsListViewModel)
+            ITabsListViewModel tabsListViewModel,
+            IDrivesListViewModel drivesListViewModel)
         {
             _fileService = fileService;
             _directoryService = directoryService;
@@ -124,6 +128,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
             SearchViewModel = searchViewModel;
             TabsListViewModel = tabsListViewModel;
+            DrivesListViewModel = drivesListViewModel;
 
             _fileSystemNodes = new ObservableCollection<IFileSystemNodeViewModel>();
             _selectedFileSystemNodes = new ObservableCollection<IFileSystemNodeViewModel>();
@@ -183,6 +188,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         {
             TabsListViewModel.SelectedTabChanged += TabsListViewModelOnSelectedTabChanged;
             SearchViewModel.SearchSettingsChanged += SearchViewModelOnSearchSettingsChanged;
+            DrivesListViewModel.DriveOpened += DrivesListViewModelOnDriveOpened;
             _selectedFileSystemNodes.CollectionChanged += SelectedFileSystemNodesOnCollectionChanged;
 
             void ExecuteInUiThread(Action action) => _applicationDispatcher.Dispatch(action);
@@ -207,14 +213,17 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
                 ExecuteSynchronized(() => RemoveNode(args.Node));
         }
 
-        private void SearchViewModelOnSearchSettingsChanged(object sender, EventArgs e) =>
-            _applicationDispatcher.Dispatch(ReloadFiles);
-
         private void TabsListViewModelOnSelectedTabChanged(object sender, EventArgs e)
         {
             CurrentDirectory = SelectedTab.CurrentDirectory;
             this.RaisePropertyChanged(nameof(SelectedTab));
         }
+
+        private void SearchViewModelOnSearchSettingsChanged(object sender, EventArgs e) =>
+            _applicationDispatcher.Dispatch(ReloadFiles);
+
+        private void DrivesListViewModelOnDriveOpened(object sender, DriveOpenedEventArgs args) =>
+            CurrentDirectory = args.Drive.RootDirectory;
 
         private void RenameNode(string oldName, string newName)
         {
@@ -224,7 +233,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         private void InsertNode(string nodePath)
         {
-            var newNodeModel = CreateFrom(nodePath);
+            var newNodeModel = _fileSystemNodeViewModelFactory.Create(nodePath);
             if (newNodeModel is null)
             {
                 return;
@@ -304,25 +313,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             this.RaisePropertyChanged(nameof(SelectedFilesSize));
             this.RaisePropertyChanged(nameof(SelectedDirectoriesCount));
             this.RaisePropertyChanged(nameof(AreAnyFileSystemNodesSelected));
-        }
-
-        private IFileSystemNodeViewModel CreateFrom(string path)
-        {
-            if (_fileService.CheckIfExists(path))
-            {
-                var fileModel = _fileService.GetFile(path);
-
-                return fileModel is null ? null : _fileSystemNodeViewModelFactory.Create(fileModel);
-            }
-
-            if (_directoryService.CheckIfExists(path))
-            {
-                var directoryModel = _directoryService.GetDirectory(path);
-
-                return directoryModel is null ? null : _fileSystemNodeViewModelFactory.Create(directoryModel);
-            }
-
-            return null;
         }
 
         private Task CopyToClipboardAsync() =>

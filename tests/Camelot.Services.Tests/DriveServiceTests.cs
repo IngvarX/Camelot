@@ -11,12 +11,7 @@ namespace Camelot.Services.Tests
         [Fact]
         public void TestGetDrives()
         {
-            var drives = new[]
-            {
-                new DriveInfo("A"),
-                new DriveInfo("B"),
-                new DriveInfo("C"),
-            };
+            var drives = DriveInfo.GetDrives();
             var envDriveServiceMock = new Mock<IEnvironmentDriveService>();
             envDriveServiceMock
                 .Setup(m => m.GetDrives())
@@ -30,7 +25,7 @@ namespace Camelot.Services.Tests
             var drivesModels = driveService.Drives;
 
             Assert.NotNull(drivesModels);
-            Assert.Equal(drives.Length, drivesModels.Count);
+            Assert.NotEmpty(drivesModels);
         }
     }
 }

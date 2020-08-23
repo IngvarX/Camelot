@@ -37,12 +37,14 @@ using Camelot.ViewModels.Implementations.Behaviors;
 using Camelot.ViewModels.Implementations.Dialogs;
 using Camelot.ViewModels.Implementations.Dialogs.Properties;
 using Camelot.ViewModels.Implementations.MainWindow;
+using Camelot.ViewModels.Implementations.MainWindow.Drives;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
 using Camelot.ViewModels.Implementations.MainWindow.OperationsStates;
 using Camelot.ViewModels.Implementations.Menu;
 using Camelot.ViewModels.Implementations.Settings;
 using Camelot.ViewModels.Implementations.Settings.General;
 using Camelot.ViewModels.Interfaces.MainWindow;
+using Camelot.ViewModels.Interfaces.MainWindow.Drives;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.MainWindow.OperationsStates;
 using Camelot.ViewModels.Interfaces.Menu;
@@ -354,7 +356,9 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<FilePropertiesBehavior>(),
                 resolver.GetRequiredService<DirectoryPropertiesBehavior>(),
                 resolver.GetRequiredService<IDialogService>(),
-                resolver.GetRequiredService<ITrashCanService>()
+                resolver.GetRequiredService<ITrashCanService>(),
+                resolver.GetRequiredService<IFileService>(),
+                resolver.GetRequiredService<IDirectoryService>()
             ));
             services.Register(() => new AboutDialogViewModel(
                 resolver.GetRequiredService<IApplicationVersionProvider>(),
@@ -388,7 +392,7 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IFileService>(),
                 resolver.GetRequiredService<IPathService>()
             ));
-            services.Register<IOperationsStateViewModel>(() => new OperationsStatesListViewModel(
+            services.RegisterLazySingleton<IOperationsStateViewModel>(() => new OperationsStatesListViewModel(
                 resolver.GetRequiredService<IOperationsStateService>(),
                 resolver.GetRequiredService<IOperationStateViewModelFactory>(),
                 resolver.GetRequiredService<IApplicationDispatcher>(),
@@ -397,7 +401,7 @@ namespace Camelot.DependencyInjection
             services.Register(() => new RemoveNodesConfirmationDialogViewModel(
                 resolver.GetRequiredService<IPathService>()
             ));
-            services.Register<IOperationStateViewModelFactory>(() => new OperationStateViewModelFactory(
+            services.RegisterLazySingleton<IOperationStateViewModelFactory>(() => new OperationStateViewModelFactory(
                 resolver.GetRequiredService<IPathService>()
             ));
             services.Register<IOperationsViewModel>(() => new OperationsViewModel(
@@ -416,6 +420,11 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IRegexService>(),
                 resolver.GetRequiredService<IResourceProvider>(),
                 resolver.GetRequiredService<SearchViewModelConfiguration>()
+            ));
+            services.RegisterLazySingleton<IDriveViewModelFactory>(() => new DriveViewModelFactory());
+            services.Register<IDrivesListViewModel>(() => new DrivesListViewModel(
+                resolver.GetRequiredService<IDriveService>(),
+                resolver.GetRequiredService<IDriveViewModelFactory>()
             ));
             services.Register<ITopOperationsViewModel>(() => new TopOperationsViewModel(
                 resolver.GetRequiredService<ITerminalService>(),
@@ -458,7 +467,8 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IClipboardOperationsService>(),
                 resolver.GetRequiredService<IFileSystemNodeViewModelComparerFactory>(),
                 resolver.GetRequiredService<ISearchViewModel>(),
-                tabsListViewModel
+                tabsListViewModel,
+                resolver.GetRequiredService<IDrivesListViewModel>()
             );
 
             return filesPanelViewModel;

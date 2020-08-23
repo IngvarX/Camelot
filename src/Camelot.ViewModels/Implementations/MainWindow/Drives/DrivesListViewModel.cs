@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Camelot.Extensions;
 using Camelot.Services.Abstractions;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Interfaces.MainWindow.Drives;
@@ -17,6 +18,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.Drives
 
         public IEnumerable<IDriveViewModel> Drives => _drives;
 
+        public event EventHandler<DriveOpenedEventArgs> DriveOpened;
+
         public DrivesListViewModel(
             IDriveService driveService,
             IDriveViewModelFactory driveViewModelFactory)
@@ -29,8 +32,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.Drives
             ReloadDrives();
         }
 
-        private void SubscribeToEvents() => _driveService.DrivesListChanged += DriveServiceOnDrivesListChanged;
-
         private void DriveServiceOnDrivesListChanged(object sender, EventArgs args) =>
             ReloadDrives();
 
@@ -38,10 +39,29 @@ namespace Camelot.ViewModels.Implementations.MainWindow.Drives
         {
             var drives = _driveService
                 .Drives
-                .Select(_driveViewModelFactory.Create);
+                .Select(_driveViewModelFactory.Create)
+                .ToArray();
+            drives.ForEach(SubscribeToEvents);
 
+            _drives.ForEach(UnsubscribeFromEvents);
             _drives.Clear();
             _drives.AddRange(drives);
+        }
+
+        private void SubscribeToEvents() => _driveService.DrivesListChanged += DriveServiceOnDrivesListChanged;
+
+        private void SubscribeToEvents(IDriveViewModel driveViewModel) =>
+            driveViewModel.OpeningRequested += DriveViewModelOnSelected;
+
+        private void UnsubscribeFromEvents(IDriveViewModel driveViewModel) =>
+            driveViewModel.OpeningRequested -= DriveViewModelOnSelected;
+
+        private void DriveViewModelOnSelected(object sender, EventArgs e)
+        {
+            var viewModel = (IDriveViewModel) sender;
+            var args = new DriveOpenedEventArgs(viewModel);
+
+            DriveOpened.Raise(this, args);
         }
     }
 }

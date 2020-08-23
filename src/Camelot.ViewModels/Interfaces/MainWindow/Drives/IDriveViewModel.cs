@@ -1,9 +1,11 @@
+using System;
+
 namespace Camelot.ViewModels.Interfaces.MainWindow.Drives
 {
     public interface IDriveViewModel
     {
-        string RootDirectory { get; }
+        event EventHandler<EventArgs> OpeningRequested;
 
-        bool IsSelected { get; set; }
+        string RootDirectory { get; }
     }
 }

@@ -1,17 +1,20 @@
 using Camelot.Services.Abstractions;
-using Camelot.Services.Abstractions.Behaviors;
 using Camelot.Services.Abstractions.Models;
-using Camelot.Services.Abstractions.Operations;
 using Camelot.ViewModels.Factories.Implementations;
-using Camelot.ViewModels.Interfaces.Behaviors;
-using Camelot.ViewModels.Services.Interfaces;
-using Moq;
+using Moq.AutoMock;
 using Xunit;
 
 namespace Camelot.ViewModels.Tests.Factories
 {
     public class FileSystemNodeViewModelFactoryTests
     {
+        private readonly AutoMocker _autoMocker;
+
+        public FileSystemNodeViewModelFactoryTests()
+        {
+            _autoMocker = new AutoMocker();
+        }
+
         [Fact]
         public void TestCreateFile()
         {
@@ -24,40 +27,19 @@ namespace Camelot.ViewModels.Tests.Factories
                 FullPath = fullPath
             };
 
-            var fileSystemNodeOpeningBehaviorMock = new Mock<IFileSystemNodeOpeningBehavior>();
-            var fileSizeFormatterMock = new Mock<IFileSizeFormatter>();
-            var pathServiceMock = new Mock<IPathService>();
-            pathServiceMock
-                .Setup(m => m.GetFileName(fileModel.Name))
+            _autoMocker
+                .Setup<IPathService, string>(m => m.GetFileName(fileModel.Name))
                 .Returns(name);
-            pathServiceMock
-                .Setup(m => m.GetFileNameWithoutExtension(fileModel.Name))
+            _autoMocker
+                .Setup<IPathService, string>(m => m.GetFileNameWithoutExtension(fileModel.Name))
                 .Returns(name);
-            pathServiceMock
-                .Setup(m => m.GetExtension(fileModel.Name))
+            _autoMocker
+                .Setup<IPathService, string>(m => m.GetExtension(fileModel.Name))
                 .Returns(extension);
-            var operationsServiceMock = new Mock<IOperationsService>();
-            var clipboardOperationsServiceMock = new Mock<IClipboardOperationsService>();
-            var filesOperationsMediatorMock = new Mock<IFilesOperationsMediator>();
-            var filesPropertiesBehaviorMock = new Mock<IFileSystemNodePropertiesBehavior>();
-            var directoriesPropertiesBehaviorMock = new Mock<IFileSystemNodePropertiesBehavior>();
-            var dialogServiceMock = new Mock<IDialogService>();
-            var trashCanServiceMock = new Mock<ITrashCanService>();
-            var fileSystemNodeViewModelFactory = new FileSystemNodeViewModelFactory(
-                fileSystemNodeOpeningBehaviorMock.Object,
-                fileSystemNodeOpeningBehaviorMock.Object,
-                fileSizeFormatterMock.Object,
-                pathServiceMock.Object,
-                operationsServiceMock.Object,
-                clipboardOperationsServiceMock.Object,
-                filesOperationsMediatorMock.Object,
-                filesPropertiesBehaviorMock.Object,
-                directoriesPropertiesBehaviorMock.Object,
-                dialogServiceMock.Object,
-                trashCanServiceMock.Object
-            );
 
-            var node = fileSystemNodeViewModelFactory.Create(fileModel);
+            var factory = _autoMocker.CreateInstance<FileSystemNodeViewModelFactory>();
+
+            var node = factory.Create(fileModel);
 
             Assert.Equal(node.Name, name);
             Assert.Equal(node.FullPath, fullPath);
@@ -78,31 +60,9 @@ namespace Camelot.ViewModels.Tests.Factories
                 FullPath = fullPath
             };
 
-            var fileSystemNodeOpeningBehaviorMock = new Mock<IFileSystemNodeOpeningBehavior>();
-            var fileSizeFormatterMock = new Mock<IFileSizeFormatter>();
-            var pathServiceMock = new Mock<IPathService>();
-            var operationsServiceMock = new Mock<IOperationsService>();
-            var clipboardOperationsServiceMock = new Mock<IClipboardOperationsService>();
-            var filesOperationsMediatorMock = new Mock<IFilesOperationsMediator>();
-            var filesPropertiesBehaviorMock = new Mock<IFileSystemNodePropertiesBehavior>();
-            var directoriesPropertiesBehaviorMock = new Mock<IFileSystemNodePropertiesBehavior>();
-            var dialogServiceMock = new Mock<IDialogService>();
-            var trashCanServiceMock = new Mock<ITrashCanService>();
-            var fileSystemNodeViewModelFactory = new FileSystemNodeViewModelFactory(
-                fileSystemNodeOpeningBehaviorMock.Object,
-                fileSystemNodeOpeningBehaviorMock.Object,
-                fileSizeFormatterMock.Object,
-                pathServiceMock.Object,
-                operationsServiceMock.Object,
-                clipboardOperationsServiceMock.Object,
-                filesOperationsMediatorMock.Object,
-                filesPropertiesBehaviorMock.Object,
-                directoriesPropertiesBehaviorMock.Object,
-                dialogServiceMock.Object,
-                trashCanServiceMock.Object
-            );
+            var factory = _autoMocker.CreateInstance<FileSystemNodeViewModelFactory>();
 
-            var node = fileSystemNodeViewModelFactory.Create(directoryModel, isParentDirectory);
+            var node = factory.Create(directoryModel, isParentDirectory);
 
             Assert.Equal(node.Name, name);
             Assert.Equal(node.FullPath, fullPath);

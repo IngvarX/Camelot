@@ -23,6 +23,8 @@ namespace Camelot.ViewModels.Factories.Implementations
         private readonly IFileSystemNodePropertiesBehavior _directoryPropertiesBehavior;
         private readonly IDialogService _dialogService;
         private readonly ITrashCanService _trashCanService;
+        private readonly IFileService _fileService;
+        private readonly IDirectoryService _directoryService;
 
         public FileSystemNodeViewModelFactory(
             IFileSystemNodeOpeningBehavior fileOpeningBehavior,
@@ -35,7 +37,9 @@ namespace Camelot.ViewModels.Factories.Implementations
             IFileSystemNodePropertiesBehavior filePropertiesBehavior,
             IFileSystemNodePropertiesBehavior directoryPropertiesBehavior,
             IDialogService dialogService,
-            ITrashCanService trashCanService)
+            ITrashCanService trashCanService,
+            IFileService fileService,
+            IDirectoryService directoryService)
         {
             _fileOpeningBehavior = fileOpeningBehavior;
             _directoryOpeningBehavior = directoryOpeningBehavior;
@@ -48,6 +52,27 @@ namespace Camelot.ViewModels.Factories.Implementations
             _directoryPropertiesBehavior = directoryPropertiesBehavior;
             _dialogService = dialogService;
             _trashCanService = trashCanService;
+            _fileService = fileService;
+            _directoryService = directoryService;
+        }
+
+        public IFileSystemNodeViewModel Create(string path)
+        {
+            if (_fileService.CheckIfExists(path))
+            {
+                var fileModel = _fileService.GetFile(path);
+
+                return fileModel is null ? null : Create(fileModel);
+            }
+
+            if (_directoryService.CheckIfExists(path))
+            {
+                var directoryModel = _directoryService.GetDirectory(path);
+
+                return directoryModel is null ? null : Create(directoryModel, false);
+            }
+
+            return null;
         }
 
         public IFileSystemNodeViewModel Create(FileModel fileModel)
