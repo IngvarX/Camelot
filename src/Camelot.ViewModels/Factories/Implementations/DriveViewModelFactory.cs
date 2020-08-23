@@ -9,13 +9,17 @@ namespace Camelot.ViewModels.Factories.Implementations
     public class DriveViewModelFactory : IDriveViewModelFactory
     {
         private readonly IFileSizeFormatter _fileSizeFormatter;
+        private readonly IPathService _pathService;
 
-        public DriveViewModelFactory(IFileSizeFormatter fileSizeFormatter)
+        public DriveViewModelFactory(
+            IFileSizeFormatter fileSizeFormatter,
+            IPathService pathService)
         {
             _fileSizeFormatter = fileSizeFormatter;
+            _pathService = pathService;
         }
 
         public IDriveViewModel Create(DriveModel driveModel) =>
-            new DriveViewModel(_fileSizeFormatter, driveModel);
+            new DriveViewModel(_fileSizeFormatter, _pathService, driveModel);
     }
 }

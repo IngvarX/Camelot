@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Camelot.Avalonia.Interfaces;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
 using Camelot.ViewModels.Factories.Interfaces;
@@ -49,8 +50,13 @@ namespace Camelot.ViewModels.Tests
 
                 driveViewModels.Add(driveViewModelMock.Object);
             }
+            var applicationDispatcherMock = new Mock<IApplicationDispatcher>();
+            applicationDispatcherMock
+                .Setup(m => m.Dispatch(It.IsAny<Action>()))
+                .Callback<Action>(action => action());
+
             var viewModel = new DrivesListViewModel(driveServiceMock.Object,
-                driveViewModelFactoryMock.Object);
+                driveViewModelFactoryMock.Object, applicationDispatcherMock.Object);
 
             Assert.NotNull(viewModel.Drives);
             var actualDrivesViewModels = viewModel.Drives.ToArray();
@@ -66,8 +72,13 @@ namespace Camelot.ViewModels.Tests
                 .SetupGet(m => m.Drives)
                 .Returns(new List<DriveModel>());
             var driveViewModelFactoryMock = new Mock<IDriveViewModelFactory>();
+            var applicationDispatcherMock = new Mock<IApplicationDispatcher>();
+            applicationDispatcherMock
+                .Setup(m => m.Dispatch(It.IsAny<Action>()))
+                .Callback<Action>(action => action());
+
             var viewModel = new DrivesListViewModel(driveServiceMock.Object,
-                driveViewModelFactoryMock.Object);
+                driveViewModelFactoryMock.Object, applicationDispatcherMock.Object);
 
             Assert.NotNull(viewModel.Drives);
             Assert.Empty(viewModel.Drives);

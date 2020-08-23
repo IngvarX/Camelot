@@ -422,11 +422,13 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<SearchViewModelConfiguration>()
             ));
             services.RegisterLazySingleton<IDriveViewModelFactory>(() => new DriveViewModelFactory(
-                resolver.GetRequiredService<IFileSizeFormatter>()
+                resolver.GetRequiredService<IFileSizeFormatter>(),
+                resolver.GetRequiredService<IPathService>()
             ));
             services.Register<IDrivesListViewModel>(() => new DrivesListViewModel(
                 resolver.GetRequiredService<IDriveService>(),
-                resolver.GetRequiredService<IDriveViewModelFactory>()
+                resolver.GetRequiredService<IDriveViewModelFactory>(),
+                resolver.GetRequiredService<IApplicationDispatcher>()
             ));
             services.Register<ITopOperationsViewModel>(() => new TopOperationsViewModel(
                 resolver.GetRequiredService<ITerminalService>(),

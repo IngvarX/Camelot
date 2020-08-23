@@ -86,11 +86,20 @@ namespace Camelot.Services
             }
         }
 
-        private static bool Filter(DriveInfo driveInfo) =>
-            driveInfo.DriveType != DriveType.Ram
-            && driveInfo.DriveType != DriveType.Unknown
-            && driveInfo.DriveFormat != "fuse"
-            && !driveInfo.RootDirectory.FullName.StartsWith("/snap/")
-            && !driveInfo.RootDirectory.FullName.StartsWith("/sys/");
+        private static bool Filter(DriveInfo driveInfo)
+        {
+            try
+            {
+                return driveInfo.DriveType != DriveType.Ram
+                       && driveInfo.DriveType != DriveType.Unknown
+                       && driveInfo.DriveFormat != "fuse"
+                       && !driveInfo.RootDirectory.FullName.StartsWith("/snap/")
+                       && !driveInfo.RootDirectory.FullName.StartsWith("/sys/");
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }

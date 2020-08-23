@@ -11,9 +11,10 @@ namespace Camelot.ViewModels.Implementations.MainWindow.Drives
     public class DriveViewModel : ViewModelBase, IDriveViewModel
     {
         private readonly IFileSizeFormatter _fileSizeFormatter;
+        private readonly IPathService _pathService;
         private readonly DriveModel _driveModel;
 
-        public string DriveName => _driveModel.Name;
+        public string DriveName => _pathService.GetFileName(_driveModel.Name);
 
         public string RootDirectory => _driveModel.RootDirectory;
 
@@ -31,9 +32,11 @@ namespace Camelot.ViewModels.Implementations.MainWindow.Drives
 
         public DriveViewModel(
             IFileSizeFormatter fileSizeFormatter,
+            IPathService pathService,
             DriveModel driveModel)
         {
             _fileSizeFormatter = fileSizeFormatter;
+            _pathService = pathService;
             _driveModel = driveModel;
 
             OpenCommand = ReactiveCommand.Create(Open);
