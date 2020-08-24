@@ -154,6 +154,39 @@ namespace Camelot.ViewModels.Tests
         }
 
         [Theory]
+        [InlineData(null, false)]
+        [InlineData("", false)]
+        [InlineData("Test", true)]
+        public async Task TestCreateNewFile(string fileName, bool isCalled)
+        {
+            var taskCompletionSource = new TaskCompletionSource<bool>();
+            _autoMocker
+                .Setup<IOperationsService>(m => m.CreateFile(Directory, fileName))
+                .Callback(() => taskCompletionSource.SetResult(true))
+                .Verifiable();
+            _autoMocker
+                .Setup<IDirectoryService, string>(m => m.SelectedDirectory)
+                .Returns(Directory);
+            _autoMocker
+                .Setup<IDialogService, Task<CreateFileDialogResult>>(m =>
+                    m.ShowDialogAsync<CreateFileDialogResult, CreateNodeNavigationParameter>(
+                        nameof(CreateFileDialogViewModel), It.Is<CreateNodeNavigationParameter>(p =>
+                            p.DirectoryPath == Directory)))
+                .Returns(Task.FromResult(new CreateFileDialogResult(fileName)));
+
+            var viewModel = _autoMocker.CreateInstance<OperationsViewModel>();
+
+            Assert.True(viewModel.CreateNewFileCommand.CanExecute(null));
+            viewModel.CreateNewFileCommand.Execute(null);
+
+            await Task.WhenAny(Task.Delay(DelayMs), taskCompletionSource.Task);
+
+            _autoMocker
+                .Verify<IOperationsService>(m => m.CreateFile(Directory, fileName),
+                    isCalled ? Times.Once() : Times.Never());
+        }
+
+        [Theory]
         [InlineData(false)]
         [InlineData(true)]
         public async Task TestRemove(bool isConfirmed)

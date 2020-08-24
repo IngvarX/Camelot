@@ -45,15 +45,9 @@ namespace Camelot.Views.Dialogs
             MaxHeight = MinHeight = Height;
         }
 
-        private void SubscribeToViewModelEvents()
-        {
-            ViewModel.CloseRequested += ViewModelOnCloseRequested;
-        }
+        private void SubscribeToViewModelEvents() => ViewModel.CloseRequested += ViewModelOnCloseRequested;
 
-        private void UnsubscribeFromViewModelEvents()
-        {
-            ViewModel.CloseRequested -= ViewModelOnCloseRequested;
-        }
+        private void UnsubscribeFromViewModelEvents() => ViewModel.CloseRequested -= ViewModelOnCloseRequested;
 
         private void SubscribeToViewEvents()
         {
@@ -67,10 +61,7 @@ namespace Camelot.Views.Dialogs
             Opened -= OnOpened;
         }
 
-        private void OnDataContextChanged(object sender, EventArgs e)
-        {
-            SubscribeToViewModelEvents();
-        }
+        private void OnDataContextChanged(object sender, EventArgs e) => SubscribeToViewModelEvents();
 
         private void ViewModelOnCloseRequested(object sender, DialogResultEventArgs<TResult> args)
         {
