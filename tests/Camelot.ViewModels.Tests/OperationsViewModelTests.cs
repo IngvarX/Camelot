@@ -135,11 +135,11 @@ namespace Camelot.ViewModels.Tests
                 .Setup<IDirectoryService, string>(m => m.SelectedDirectory)
                 .Returns(Directory);
             _autoMocker
-                .Setup<IDialogService, Task<CreateNodeDialogResult>>(m =>
-                    m.ShowDialogAsync<CreateNodeDialogResult, CreateNodeNavigationParameter>(
-                        nameof(CreateNodeDialogViewModel), It.Is<CreateNodeNavigationParameter>(p =>
+                .Setup<IDialogService, Task<CreateDirectoryDialogResult>>(m =>
+                    m.ShowDialogAsync<CreateDirectoryDialogResult, CreateNodeNavigationParameter>(
+                        nameof(CreateDirectoryDialogViewModel), It.Is<CreateNodeNavigationParameter>(p =>
                             p.DirectoryPath == Directory)))
-                .Returns(Task.FromResult(new CreateNodeDialogResult(directoryName)));
+                .Returns(Task.FromResult(new CreateDirectoryDialogResult(directoryName)));
 
             var viewModel = _autoMocker.CreateInstance<OperationsViewModel>();
 
