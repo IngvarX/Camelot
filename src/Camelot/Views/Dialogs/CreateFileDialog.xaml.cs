@@ -6,9 +6,9 @@ using Camelot.ViewModels.Implementations.Dialogs.Results;
 
 namespace Camelot.Views.Dialogs
 {
-    public class CreateDirectoryDialog : DialogWindowBase<CreateDirectoryDialogResult>
+    public class CreateFileDialog : DialogWindowBase<CreateFileDialogResult>
     {
-        public CreateDirectoryDialog()
+        public CreateFileDialog()
         {
             InitializeComponent();
         }
@@ -27,7 +27,7 @@ namespace Camelot.Views.Dialogs
             {
                 args.Handled = true;
 
-                var viewModel = (CreateDirectoryDialogViewModel) ViewModel;
+                var viewModel = (CreateFileDialogViewModel) ViewModel;
                 viewModel.CreateCommand.Execute(null);
             }
         }

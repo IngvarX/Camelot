@@ -566,5 +566,23 @@ namespace Camelot.Properties {
                 return ResourceManager.GetString("AvailableSpaceWithColon", resourceCulture);
             }
         }
+        
+        public static string File {
+            get {
+                return ResourceManager.GetString("File", resourceCulture);
+            }
+        }
+        
+        public static string CreateFileTitle {
+            get {
+                return ResourceManager.GetString("CreateFileTitle", resourceCulture);
+            }
+        }
+        
+        public static string EnterFileNameWithColon {
+            get {
+                return ResourceManager.GetString("EnterFileNameWithColon", resourceCulture);
+            }
+        }
     }
 }

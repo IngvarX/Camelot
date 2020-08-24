@@ -15,6 +15,8 @@ namespace Camelot.Services.Abstractions.Operations
 
         void CreateDirectory(string sourceDirectory, string directoryName);
 
+        void CreateFile(string sourceDirectory, string fileName);
+
         Task RemoveAsync(IReadOnlyList<string> nodes);
 
         bool Rename(string path, string newName);

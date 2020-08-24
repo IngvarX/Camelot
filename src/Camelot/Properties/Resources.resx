@@ -378,4 +378,13 @@
   <data name="AvailableSpaceWithColon" xml:space="preserve">
     <value>Available space:</value>
   </data>
+  <data name="File" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="CreateFileTitle" xml:space="preserve">
+    <value>Create file</value>
+  </data>
+  <data name="EnterFileNameWithColon" xml:space="preserve">
+    <value>Enter file name:</value>
+  </data>
 </root>

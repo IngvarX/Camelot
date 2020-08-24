@@ -29,5 +29,8 @@ namespace Camelot.Services.Environment.Implementations
 
         public Task WriteBytesAsync(string filePath, byte[] bytes) =>
             File.WriteAllBytesAsync(filePath, bytes);
+
+        public void Create(string filePath) =>
+            File.Create(filePath).Dispose();
     }
 }

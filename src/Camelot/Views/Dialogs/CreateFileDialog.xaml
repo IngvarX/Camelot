@@ -5,18 +5,18 @@
         xmlns:p="clr-namespace:Camelot.Properties"
         xmlns:dialogs="clr-namespace:Camelot.ViewModels.Implementations.Dialogs;assembly=Camelot.ViewModels"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="Camelot.Views.Dialogs.CreateDirectoryDialog"
+        x:Class="Camelot.Views.Dialogs.CreateFileDialog"
         Width="400" Height="200"
-        Title="{x:Static p:Resources.CreateDirectoryTitle}">
+        Title="{x:Static p:Resources.CreateFileTitle}">
 
     <Design.DataContext>
-        <dialogs:CreateDirectoryDialogViewModel />
+        <dialogs:CreateFileDialogViewModel />
     </Design.DataContext>
 
     <Grid RowDefinitions="Auto,Auto,Auto" Margin="10" HorizontalAlignment="Center">
-        <TextBlock Classes="dialogTextBlock" Text="{x:Static p:Resources.EnterDirectoryNameWithColon}" />
+        <TextBlock Classes="dialogTextBlock" Text="{x:Static p:Resources.EnterFileNameWithColon}" />
 
-        <TextBox Grid.Row="1" x:Name="NodeNameTextBox" Text="{Binding DirectoryName}"
+        <TextBox Grid.Row="1" x:Name="NodeNameTextBox" Text="{Binding FileName}"
                  KeyUp="OnNodeNameTextBoxKeyUp" />
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">

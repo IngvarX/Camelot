@@ -90,6 +90,13 @@ namespace Camelot.Operations
             _directoryService.Create(fullPath);
         }
 
+        public void CreateFile(string sourceDirectory, string fileName)
+        {
+            var fullPath = _pathService.Combine(sourceDirectory, fileName);
+
+            _fileService.CreateFile(fullPath);
+        }
+
         private (string[] Files, string[] Directories) Split(IReadOnlyList<string> nodes)
         {
             var files = nodes

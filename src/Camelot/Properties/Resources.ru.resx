@@ -372,4 +372,13 @@
   <data name="AvailableSpaceWithColon" xml:space="preserve">
     <value>Доступно:</value>
   </data>
+  <data name="File" xml:space="preserve">
+    <value>Файл</value>
+  </data>
+  <data name="CreateFileTitle" xml:space="preserve">
+    <value>Создать новый файл</value>
+  </data>
+  <data name="EnterFileNameWithColon" xml:space="preserve">
+    <value>Введите название файла:</value>
+  </data>
 </root>

@@ -392,6 +392,11 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IFileService>(),
                 resolver.GetRequiredService<IPathService>()
             ));
+            services.Register(() => new CreateFileDialogViewModel(
+                resolver.GetRequiredService<IDirectoryService>(),
+                resolver.GetRequiredService<IFileService>(),
+                resolver.GetRequiredService<IPathService>()
+            ));
             services.RegisterLazySingleton<IOperationsStateViewModel>(() => new OperationsStatesListViewModel(
                 resolver.GetRequiredService<IOperationsStateService>(),
                 resolver.GetRequiredService<IOperationStateViewModelFactory>(),

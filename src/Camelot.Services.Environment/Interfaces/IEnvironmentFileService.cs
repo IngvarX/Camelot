@@ -20,5 +20,7 @@ namespace Camelot.Services.Environment.Interfaces
         Task WriteTextAsync(string filePath, string text);
 
         Task WriteBytesAsync(string filePath, byte[] bytes);
+
+        void Create(string filePath);
     }
 }

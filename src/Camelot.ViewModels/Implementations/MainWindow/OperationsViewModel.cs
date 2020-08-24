@@ -33,6 +33,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow
 
         public ICommand CreateNewDirectoryCommand { get; }
 
+        public ICommand CreateNewFileCommand { get; }
+
         public ICommand RemoveCommand { get; }
 
         public ICommand MoveToTrashCommand { get; }
@@ -57,6 +59,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             CopyCommand = ReactiveCommand.Create(Copy);
             MoveCommand = ReactiveCommand.Create(Move);
             CreateNewDirectoryCommand = ReactiveCommand.CreateFromTask(CreateNewDirectoryAsync);
+            CreateNewFileCommand = ReactiveCommand.CreateFromTask(CreateNewFileAsync);
             RemoveCommand = ReactiveCommand.CreateFromTask(RemoveAsync);
             MoveToTrashCommand = ReactiveCommand.CreateFromTask(MoveToTrashAsync);
         }
@@ -73,12 +76,23 @@ namespace Camelot.ViewModels.Implementations.MainWindow
 
         private async Task CreateNewDirectoryAsync()
         {
-            var parameter = new CreateDirectoryNavigationParameter(_directoryService.SelectedDirectory);
-            var result = await _dialogService.ShowDialogAsync<CreateDirectoryDialogResult, CreateDirectoryNavigationParameter>(
+            var parameter = new CreateNodeNavigationParameter(_directoryService.SelectedDirectory);
+            var result = await _dialogService.ShowDialogAsync<CreateDirectoryDialogResult, CreateNodeNavigationParameter>(
                 nameof(CreateDirectoryDialogViewModel), parameter);
             if (!string.IsNullOrEmpty(result?.DirectoryName))
             {
                 _operationsService.CreateDirectory(_directoryService.SelectedDirectory, result.DirectoryName);
+            }
+        }
+
+        private async Task CreateNewFileAsync()
+        {
+            var parameter = new CreateNodeNavigationParameter(_directoryService.SelectedDirectory);
+            var result = await _dialogService.ShowDialogAsync<CreateFileDialogResult, CreateNodeNavigationParameter>(
+                nameof(CreateFileDialogViewModel), parameter);
+            if (!string.IsNullOrEmpty(result?.FileName))
+            {
+                _operationsService.CreateFile(_directoryService.SelectedDirectory, result.FileName);
             }
         }
 

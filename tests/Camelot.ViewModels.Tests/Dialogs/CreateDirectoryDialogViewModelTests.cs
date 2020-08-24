@@ -24,7 +24,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
 
             var dialog = new CreateDirectoryDialogViewModel(
                 directoryServiceMock.Object, fileServiceMock.Object, pathServiceMock.Object);
-            dialog.Activate(new CreateDirectoryNavigationParameter(DirectoryPath));
+            dialog.Activate(new CreateNodeNavigationParameter(DirectoryPath));
 
             Assert.False(dialog.CreateCommand.CanExecute(null));
 
@@ -48,7 +48,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
 
             var dialog = new CreateDirectoryDialogViewModel(
                 directoryServiceMock.Object, fileServiceMock.Object, pathServiceMock.Object);
-            dialog.Activate(new CreateDirectoryNavigationParameter(DirectoryPath));
+            dialog.Activate(new CreateNodeNavigationParameter(DirectoryPath));
 
             dialog.DirectoryName = DirectoryName;
 
@@ -70,7 +70,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
 
             var dialog = new CreateDirectoryDialogViewModel(
                 directoryServiceMock.Object, fileServiceMock.Object, pathServiceMock.Object);
-            dialog.Activate(new CreateDirectoryNavigationParameter(DirectoryPath));
+            dialog.Activate(new CreateNodeNavigationParameter(DirectoryPath));
 
             dialog.DirectoryName = DirectoryName;
 
@@ -86,7 +86,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
 
             var dialog = new CreateDirectoryDialogViewModel(
                 directoryServiceMock.Object, fileServiceMock.Object, pathServiceMock.Object);
-            dialog.Activate(new CreateDirectoryNavigationParameter(DirectoryPath));
+            dialog.Activate(new CreateNodeNavigationParameter(DirectoryPath));
 
             var isCallbackCalled = false;
             dialog.CloseRequested += (sender, args) =>
@@ -116,7 +116,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
 
             var dialog = new CreateDirectoryDialogViewModel(
                 directoryServiceMock.Object, fileServiceMock.Object, pathServiceMock.Object);
-            dialog.Activate(new CreateDirectoryNavigationParameter(DirectoryPath));
+            dialog.Activate(new CreateNodeNavigationParameter(DirectoryPath));
 
             var isCallbackCalled = false;
             dialog.CloseRequested += (sender, args) =>

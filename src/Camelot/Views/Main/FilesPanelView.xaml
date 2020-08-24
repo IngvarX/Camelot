@@ -94,6 +94,8 @@
                         <MenuItem Header="{x:Static p:Resources.Create}">
                             <MenuItem Header="{x:Static p:Resources.Directory}"
                                       Command="{Binding $parent[views:MainWindow].DataContext.OperationsViewModel.CreateNewDirectoryCommand}" />
+                            <MenuItem Header="{x:Static p:Resources.File}"
+                                      Command="{Binding $parent[views:MainWindow].DataContext.OperationsViewModel.CreateNewFileCommand}" />
                         </MenuItem>
                         <MenuItem Header="{x:Static p:Resources.ShowProperties}" Command="{Binding ShowPropertiesCommand}"/>
                     </ContextMenu>

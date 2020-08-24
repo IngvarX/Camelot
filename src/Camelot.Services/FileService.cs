@@ -71,6 +71,9 @@ namespace Camelot.Services
         public Task WriteBytesAsync(string filePath, byte[] bytes) =>
             _environmentFileService.WriteBytesAsync(filePath, bytes);
 
+        public void CreateFile(string filePath) =>
+            _environmentFileService.Create(filePath);
+
         private FileModel CreateFrom(string file)
         {
             try

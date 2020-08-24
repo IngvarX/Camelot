@@ -24,5 +24,7 @@ namespace Camelot.Services.Abstractions
         Task WriteTextAsync(string filePath, string text);
 
         Task WriteBytesAsync(string filePath, byte[] bytes);
+
+        void CreateFile(string filePath);
     }
 }

@@ -7,7 +7,7 @@ using ReactiveUI.Fody.Helpers;
 
 namespace Camelot.ViewModels.Implementations.Dialogs
 {
-    public class CreateDirectoryDialogViewModel : ParameterizedDialogViewModelBase<CreateDirectoryDialogResult, CreateNodeNavigationParameter>
+    public class CreateFileDialogViewModel : ParameterizedDialogViewModelBase<CreateFileDialogResult, CreateNodeNavigationParameter>
     {
         private readonly IDirectoryService _directoryService;
         private readonly IFileService _fileService;
@@ -16,13 +16,13 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         private string _directoryPath;
 
         [Reactive]
-        public string DirectoryName { get; set; }
+        public string FileName { get; set; }
 
         public ICommand CreateCommand { get; }
 
         public ICommand CancelCommand { get; }
 
-        public CreateDirectoryDialogViewModel(
+        public CreateFileDialogViewModel(
             IDirectoryService directoryService,
             IFileService fileService,
             IPathService pathService)
@@ -31,17 +31,17 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             _fileService = fileService;
             _pathService = pathService;
 
-            var canCreate = this.WhenAnyValue(x => x.DirectoryName,
+            var canCreate = this.WhenAnyValue(x => x.FileName,
                 CheckIfNameIsValid);
 
-            CreateCommand = ReactiveCommand.Create(CreateDirectory, canCreate);
+            CreateCommand = ReactiveCommand.Create(CreateFile, canCreate);
             CancelCommand = ReactiveCommand.Create(Close);
         }
 
         public override void Activate(CreateNodeNavigationParameter navigationParameter) =>
             _directoryPath = navigationParameter.DirectoryPath;
 
-        private void CreateDirectory() => Close(new CreateDirectoryDialogResult(DirectoryName));
+        private void CreateFile() => Close(new CreateFileDialogResult(FileName));
 
         private bool CheckIfNameIsValid(string name)
         {

@@ -107,7 +107,7 @@
         <Setter Property="Background" Value="{DynamicResource OperationButtonPressedBackgroundColorBrush}" />
     </Style>
 
-    <Style Selector="TextBox#DirectoryNameTextBox">
+    <Style Selector="TextBox#NodeNameTextBox">
         <Setter Property="Margin" Value="0,10" />
         <Setter Property="Width" Value="300" />
     </Style>

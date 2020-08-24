@@ -101,8 +101,8 @@
     <Compile Update="Views\Dialogs\AboutDialog.xaml.cs">
       <DependentUpon>AboutDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\Dialogs\CreateDirectoryDialog.xaml.cs">
-      <DependentUpon>CreateDirectoryDialog.xaml</DependentUpon>
+    <Compile Update="Views\Dialogs\CreateNodeDialog.xaml.cs">
+      <DependentUpon>CreateNodeDialog.xaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Dialogs\OverwriteOptionsDialog.xaml.cs">
       <DependentUpon>OverwriteOptionsDialog.xaml</DependentUpon>
