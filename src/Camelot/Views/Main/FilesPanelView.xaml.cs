@@ -37,6 +37,7 @@ namespace Camelot.Views.Main
 
         private void OnDataGridSelectionChanged(object sender, SelectionChangedEventArgs args)
         {
+            // TODO: fix after avalonia update
             var addedItems = args
                 .RemovedItems
                 .Cast<IFileSystemNodeViewModel>()
