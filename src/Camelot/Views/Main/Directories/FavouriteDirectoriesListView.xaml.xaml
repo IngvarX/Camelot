@@ -2,21 +2,21 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:drives="clr-namespace:Camelot.ViewModels.Implementations.MainWindow.Drives;assembly=Camelot.ViewModels"
-             xmlns:drivesViews="clr-namespace:Camelot.Views.Main.Drives"
+             xmlns:directories="clr-namespace:Camelot.ViewModels.Implementations.MainWindow.Directories;assembly=Camelot.ViewModels"
+             xmlns:directoriesViews="clr-namespace:Camelot.Views.Main.Directories"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Camelot.Views.Main.Drives.DrivesListView">
+             x:Class="Camelot.Views.Main.Directories.FavouriteDirectoriesListView">
 
     <Design.DataContext>
-        <drives:DrivesListViewModel />
+        <directories:FavouriteDirectoriesListViewModel />
     </Design.DataContext>
 
     <Grid Classes="defaultBackgroundColorGrid">
-        <ItemsControl Items="{Binding Drives}"
-                      Margin="7,8,8,3">
+        <ItemsControl Items="{Binding Directories}"
+                      Margin="0,8,8,3">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <drivesViews:DriveView />
+                    <directoriesViews:FavouriteDirectoryView />
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
 

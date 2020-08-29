@@ -1,11 +1,11 @@
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace Camelot.Views.Main.Drives
+namespace Camelot.Views.Main.Directories
 {
-    public class DrivesListView : UserControl
+    public class FavouriteDirectoryView : UserControl
     {
-        public DrivesListView()
+        public FavouriteDirectoryView()
         {
             InitializeComponent();
         }

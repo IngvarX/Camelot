@@ -131,6 +131,9 @@
     <Compile Update="Views\Main\Drives\DriveView.xaml.cs">
       <DependentUpon>DriveView.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\Main\Directories\FavouriteDirectoriesListView.xaml.cs">
+      <DependentUpon>FavouriteDirectoriesListView.xaml.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.9.12" />

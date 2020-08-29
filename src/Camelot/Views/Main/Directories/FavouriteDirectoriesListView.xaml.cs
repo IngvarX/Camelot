@@ -3,9 +3,9 @@ using Avalonia.Markup.Xaml;
 
 namespace Camelot.Views.Main.Directories
 {
-    public class DirectoryView : UserControl
+    public class FavouriteDirectoriesListView : UserControl
     {
-        public DirectoryView()
+        public FavouriteDirectoriesListView()
         {
             InitializeComponent();
         }
