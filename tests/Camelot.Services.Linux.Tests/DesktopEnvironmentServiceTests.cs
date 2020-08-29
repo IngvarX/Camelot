@@ -14,6 +14,7 @@ namespace Camelot.Services.Linux.Tests
         [InlineData("kde", DesktopEnvironment.Kde, XdgCurrentDesktop)]
         [InlineData("gnome", DesktopEnvironment.Gnome, DesktopSession)]
         [InlineData("unity", DesktopEnvironment.Unity, DesktopSession)]
+        [InlineData("mate", DesktopEnvironment.Mate, DesktopSession)]
         [InlineData("unknown", DesktopEnvironment.Unknown, XdgCurrentDesktop)]
         [InlineData("cinnamon", DesktopEnvironment.Cinnamon, DesktopSession)]
         [InlineData("unity", DesktopEnvironment.Unity, XdgCurrentDesktop)]
