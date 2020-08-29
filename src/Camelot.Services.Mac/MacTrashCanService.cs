@@ -13,6 +13,7 @@ namespace Camelot.Services.Mac
         private readonly IFileService _fileService;
         private readonly IEnvironmentService _environmentService;
         private readonly IDirectoryService _directoryService;
+        private readonly IHomeDirectoryProvider _homeDirectoryProvider;
 
         public MacTrashCanService(
             IDriveService driveService,
@@ -20,13 +21,15 @@ namespace Camelot.Services.Mac
             IPathService pathService,
             IFileService fileService,
             IEnvironmentService environmentService,
-            IDirectoryService directoryService)
+            IDirectoryService directoryService,
+            IHomeDirectoryProvider homeDirectoryProvider)
             : base(driveService, operationsService, pathService)
         {
             _pathService = pathService;
             _fileService = fileService;
             _environmentService = environmentService;
             _directoryService = directoryService;
+            _homeDirectoryProvider = homeDirectoryProvider;
         }
 
         protected override IReadOnlyList<string> GetTrashCanLocations(string volume)
@@ -72,9 +75,9 @@ namespace Camelot.Services.Mac
 
         private string GetHomeTrashCanPath()
         {
-            var home = _environmentService.GetEnvironmentVariable("HOME");
+            var homeDirectoryPath = _homeDirectoryProvider.HomeDirectoryPath;
 
-            return _pathService.Combine(home, ".Trash");
+            return _pathService.Combine(homeDirectoryPath, ".Trash");
         }
 
         private string GetVolumeTrashCanPath(string volume) => _pathService.Combine(volume, ".Trashes");

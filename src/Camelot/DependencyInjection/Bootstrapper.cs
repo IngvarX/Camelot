@@ -14,6 +14,7 @@ using Camelot.Properties;
 using Camelot.Services;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Operations;
+using Camelot.Services.AllPlatforms;
 using Camelot.Services.Behaviors;
 using Camelot.Services.Configuration;
 using Camelot.Services.Environment.Enums;
@@ -37,6 +38,7 @@ using Camelot.ViewModels.Implementations.Behaviors;
 using Camelot.ViewModels.Implementations.Dialogs;
 using Camelot.ViewModels.Implementations.Dialogs.Properties;
 using Camelot.ViewModels.Implementations.MainWindow;
+using Camelot.ViewModels.Implementations.MainWindow.Directories;
 using Camelot.ViewModels.Implementations.MainWindow.Drives;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
 using Camelot.ViewModels.Implementations.MainWindow.OperationsStates;
@@ -44,6 +46,7 @@ using Camelot.ViewModels.Implementations.Menu;
 using Camelot.ViewModels.Implementations.Settings;
 using Camelot.ViewModels.Implementations.Settings.General;
 using Camelot.ViewModels.Interfaces.MainWindow;
+using Camelot.ViewModels.Interfaces.MainWindow.Directories;
 using Camelot.ViewModels.Interfaces.MainWindow.Drives;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.MainWindow.OperationsStates;
@@ -255,7 +258,11 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IEnvironmentService>(),
                 resolver.GetRequiredService<IDirectoryService>(),
                 resolver.GetRequiredService<IDateTimeProvider>(),
-                resolver.GetRequiredService<ILinuxRemovedFileMetadataBuilderFactory>()
+                resolver.GetRequiredService<ILinuxRemovedFileMetadataBuilderFactory>(),
+                resolver.GetRequiredService<IHomeDirectoryProvider>()
+            ));
+            services.RegisterLazySingleton<IHomeDirectoryProvider>(() => new UnixHomeDirectoryProvider(
+                resolver.GetRequiredService<IEnvironmentService>()
             ));
             services.RegisterLazySingleton<IDesktopEnvironmentService>(() => new DesktopEnvironmentService(
                 resolver.GetRequiredService<IEnvironmentService>()
@@ -282,10 +289,14 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IPathService>(),
                 resolver.GetRequiredService<IFileService>(),
                 resolver.GetRequiredService<IEnvironmentService>(),
-                resolver.GetRequiredService<IDirectoryService>()
+                resolver.GetRequiredService<IDirectoryService>(),
+                resolver.GetRequiredService<IHomeDirectoryProvider>()
             ));
             services.RegisterLazySingleton<IResourceOpeningService>(() => new MacResourceOpeningService(
                 resolver.GetRequiredService<IProcessService>()
+            ));
+            services.RegisterLazySingleton<IHomeDirectoryProvider>(() => new UnixHomeDirectoryProvider(
+                resolver.GetRequiredService<IEnvironmentService>()
             ));
             services.RegisterLazySingleton<ITerminalService>(() => new MacTerminalService(
                 resolver.GetRequiredService<IProcessService>(),
@@ -297,6 +308,9 @@ namespace Camelot.DependencyInjection
         {
             services.RegisterLazySingleton<IWindowsRemovedFileMetadataBuilderFactory>(() => new WindowsRemovedFileMetadataBuilderFactory());
             services.RegisterLazySingleton<IWindowsTrashCanNodeNameGenerator>(() => new WindowsTrashCanNodeNameGenerator());
+            services.RegisterLazySingleton<IHomeDirectoryProvider>(() => new WindowsHomeDirectoryProvider(
+                resolver.GetRequiredService<IEnvironmentService>()
+            ));
             services.RegisterLazySingleton<ITrashCanService>(() => new WindowsTrashCanService(
                 resolver.GetRequiredService<IDriveService>(),
                 resolver.GetRequiredService<IOperationsService>(),
@@ -441,6 +455,14 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IDirectoryService>(),
                 resolver.GetRequiredService<IFilesOperationsMediator>()
             ));
+            services.RegisterLazySingleton<IFavouriteDirectoryViewModelFactory>(() => new FavouriteDirectoryViewModelFactory(
+                resolver.GetRequiredService<IFilesOperationsMediator>(),
+                resolver.GetRequiredService<IDirectoryService>()
+            ));
+            services.RegisterLazySingleton<IFavouriteDirectoriesListViewModel>(() => new FavouriteDirectoriesListViewModel(
+                resolver.GetRequiredService<IFavouriteDirectoryViewModelFactory>(),
+                resolver.GetRequiredService<IHomeDirectoryProvider>()
+            ));
             services.RegisterLazySingleton(() => new MainWindowViewModel(
                 resolver.GetRequiredService<IFilesOperationsMediator>(),
                 resolver.GetRequiredService<IOperationsViewModel>(),
@@ -449,7 +471,8 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IMenuViewModel>(),
                 resolver.GetRequiredService<IOperationsStateViewModel>(),
                 resolver.GetRequiredService<ITopOperationsViewModel>(),
-                resolver.GetRequiredService<IDrivesListViewModel>()
+                resolver.GetRequiredService<IDrivesListViewModel>(),
+                resolver.GetRequiredService<IFavouriteDirectoriesListViewModel>()
             ));
         }
 

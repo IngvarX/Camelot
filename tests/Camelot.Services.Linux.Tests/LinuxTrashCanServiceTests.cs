@@ -58,7 +58,7 @@ namespace Camelot.Services.Linux.Tests
                 .Setup<IEnvironmentService, string>(m => m.GetEnvironmentVariable("UID"))
                 .Returns("42");
             _autoMocker
-                .Setup<IEnvironmentService, string>(m => m.GetEnvironmentVariable("HOME"))
+                .Setup<IHomeDirectoryProvider, string>(m => m.HomeDirectoryPath)
                 .Returns(HomePath);
             _autoMocker
                 .Setup<IDateTimeProvider, DateTime>(m => m.Now)

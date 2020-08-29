@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Operations;
-using Camelot.Services.Environment.Interfaces;
 using Moq;
 using Moq.AutoMock;
 using Xunit;
@@ -50,7 +49,7 @@ namespace Camelot.Services.Mac.Tests
                 .Setup<IFileService, bool>(m => m.CheckIfExists(It.IsAny<string>()))
                 .Returns<string>(existingFiles.Contains);
             _autoMocker
-                .Setup<IEnvironmentService, string>(m => m.GetEnvironmentVariable("HOME"))
+                .Setup<IHomeDirectoryProvider, string>(m => m.HomeDirectoryPath)
                 .Returns(HomePath);
 
             var macTrashCanService = _autoMocker.CreateInstance<MacTrashCanService>();

@@ -1,5 +1,6 @@
 ﻿using System.Windows.Input;
 using Camelot.ViewModels.Interfaces.MainWindow;
+using Camelot.ViewModels.Interfaces.MainWindow.Directories;
 using Camelot.ViewModels.Interfaces.MainWindow.Drives;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.MainWindow.OperationsStates;
@@ -27,7 +28,10 @@ namespace Camelot.ViewModels.Implementations
         public IOperationsStateViewModel OperationsStateViewModel { get; }
 
         public ITopOperationsViewModel TopOperationsViewModel { get; }
+
         public IDrivesListViewModel DrivesListViewModel { get; }
+
+        public IFavouriteDirectoriesListViewModel FavouriteDirectoriesListViewModel { get; }
 
         public ICommand CreateNewTabCommand { get; }
 
@@ -43,7 +47,8 @@ namespace Camelot.ViewModels.Implementations
             IMenuViewModel menuViewModel,
             IOperationsStateViewModel operationsStateViewModel,
             ITopOperationsViewModel topOperationsViewModel,
-            IDrivesListViewModel drivesListViewModel)
+            IDrivesListViewModel drivesListViewModel,
+            IFavouriteDirectoriesListViewModel favouriteDirectoriesListViewModel)
         {
             _filesOperationsMediator = filesOperationsMediator;
 
@@ -54,6 +59,7 @@ namespace Camelot.ViewModels.Implementations
             OperationsStateViewModel = operationsStateViewModel;
             TopOperationsViewModel = topOperationsViewModel;
             DrivesListViewModel = drivesListViewModel;
+            FavouriteDirectoriesListViewModel = favouriteDirectoriesListViewModel;
 
             CreateNewTabCommand = ReactiveCommand.Create(CreateNewTab);
             CloseCurrentTabCommand = ReactiveCommand.Create(CloseActiveTab);

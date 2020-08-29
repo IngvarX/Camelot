@@ -17,6 +17,7 @@ namespace Camelot.Services.Linux
         private readonly IDirectoryService _directoryService;
         private readonly IDateTimeProvider _dateTimeProvider;
         private readonly ILinuxRemovedFileMetadataBuilderFactory _removedFileMetadataBuilderFactory;
+        private readonly IHomeDirectoryProvider _homeDirectoryProvider;
         private readonly IEnvironmentService _environmentService;
 
         public LinuxTrashCanService(
@@ -27,7 +28,8 @@ namespace Camelot.Services.Linux
             IEnvironmentService environmentService,
             IDirectoryService directoryService,
             IDateTimeProvider dateTimeProvider,
-            ILinuxRemovedFileMetadataBuilderFactory removedFileMetadataBuilderFactory)
+            ILinuxRemovedFileMetadataBuilderFactory removedFileMetadataBuilderFactory,
+            IHomeDirectoryProvider homeDirectoryProvider)
             : base(driveService, operationsService, pathService)
         {
             _pathService = pathService;
@@ -36,6 +38,7 @@ namespace Camelot.Services.Linux
             _directoryService = directoryService;
             _dateTimeProvider = dateTimeProvider;
             _removedFileMetadataBuilderFactory = removedFileMetadataBuilderFactory;
+            _homeDirectoryProvider = homeDirectoryProvider;
         }
 
         protected override IReadOnlyList<string> GetTrashCanLocations(string volume)
@@ -125,7 +128,7 @@ namespace Camelot.Services.Linux
                 return _pathService.Combine(xdgDataHome, "Trash");
             }
 
-            var home = _environmentService.GetEnvironmentVariable("HOME");
+            var home = _homeDirectoryProvider.HomeDirectoryPath;
 
             return _pathService.Combine(home, ".local/share/Trash");
         }
