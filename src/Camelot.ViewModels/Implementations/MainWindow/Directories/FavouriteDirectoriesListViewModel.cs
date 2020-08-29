@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Camelot.Services.Abstractions;
 using Camelot.ViewModels.Factories.Interfaces;
@@ -10,7 +11,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.Directories
         private readonly IFavouriteDirectoryViewModelFactory _favouriteDirectoryViewModelFactory;
         private readonly ObservableCollection<IFavouriteDirectoryViewModel> _directories;
 
-        public ObservableCollection<IFavouriteDirectoryViewModel> Directories => _directories;
+        public IEnumerable<IFavouriteDirectoryViewModel> Directories => _directories;
 
         public FavouriteDirectoriesListViewModel(
             IFavouriteDirectoryViewModelFactory favouriteDirectoryViewModelFactory,
