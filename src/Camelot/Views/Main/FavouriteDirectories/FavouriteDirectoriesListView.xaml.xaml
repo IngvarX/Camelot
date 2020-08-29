@@ -2,13 +2,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:directories="clr-namespace:Camelot.ViewModels.Implementations.MainWindow.Directories;assembly=Camelot.ViewModels"
-             xmlns:directoriesViews="clr-namespace:Camelot.Views.Main.Directories"
+             xmlns:favouriteDirectories="clr-namespace:Camelot.ViewModels.Implementations.MainWindow.FavouriteDirectories;assembly=Camelot.ViewModels"
+             xmlns:favouriteDirectories1="clr-namespace:Camelot.Views.Main.FavouriteDirectories"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Camelot.Views.Main.Directories.FavouriteDirectoriesListView">
+             x:Class="Camelot.Views.Main.FavouriteDirectories.FavouriteDirectoriesListView">
 
     <Design.DataContext>
-        <directories:FavouriteDirectoriesListViewModel />
+        <favouriteDirectories:FavouriteDirectoriesListViewModel />
     </Design.DataContext>
 
     <Grid Classes="defaultBackgroundColorGrid">
@@ -16,7 +16,7 @@
                       Margin="0,8,8,3">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <directoriesViews:FavouriteDirectoryView />
+                    <favouriteDirectories1:FavouriteDirectoryView />
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
 

@@ -2,12 +2,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:directories="clr-namespace:Camelot.ViewModels.Implementations.MainWindow.Directories;assembly=Camelot.ViewModels"
+             xmlns:favouriteDirectories="clr-namespace:Camelot.ViewModels.Implementations.MainWindow.FavouriteDirectories;assembly=Camelot.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Camelot.Views.Main.Directories.FavouriteDirectoryView">
+             x:Class="Camelot.Views.Main.FavouriteDirectories.FavouriteDirectoryView">
 
     <Design.DataContext>
-        <directories:FavouriteDirectoryViewModel />
+        <favouriteDirectories:FavouriteDirectoryViewModel />
     </Design.DataContext>
 
     <Button Classes="iconButton" Command="{Binding OpenCommand}">

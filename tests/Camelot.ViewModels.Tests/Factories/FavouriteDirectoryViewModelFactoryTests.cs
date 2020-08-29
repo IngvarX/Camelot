@@ -1,6 +1,6 @@
 using Camelot.Services.Abstractions;
 using Camelot.ViewModels.Factories.Implementations;
-using Camelot.ViewModels.Implementations.MainWindow.Directories;
+using Camelot.ViewModels.Implementations.MainWindow.FavouriteDirectories;
 using Camelot.ViewModels.Services.Interfaces;
 using Moq;
 using Xunit;

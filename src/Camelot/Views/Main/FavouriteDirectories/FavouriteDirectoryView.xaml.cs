@@ -1,11 +1,11 @@
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace Camelot.Views.Main.Directories
+namespace Camelot.Views.Main.FavouriteDirectories
 {
-    public class FavouriteDirectoriesListView : UserControl
+    public class FavouriteDirectoryView : UserControl
     {
-        public FavouriteDirectoriesListView()
+        public FavouriteDirectoryView()
         {
             InitializeComponent();
         }

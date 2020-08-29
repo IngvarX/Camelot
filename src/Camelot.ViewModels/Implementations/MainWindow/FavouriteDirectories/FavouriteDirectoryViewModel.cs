@@ -4,7 +4,7 @@ using Camelot.ViewModels.Interfaces.MainWindow.Directories;
 using Camelot.ViewModels.Services.Interfaces;
 using ReactiveUI;
 
-namespace Camelot.ViewModels.Implementations.MainWindow.Directories
+namespace Camelot.ViewModels.Implementations.MainWindow.FavouriteDirectories
 {
     public class FavouriteDirectoryViewModel : ViewModelBase, IFavouriteDirectoryViewModel
     {

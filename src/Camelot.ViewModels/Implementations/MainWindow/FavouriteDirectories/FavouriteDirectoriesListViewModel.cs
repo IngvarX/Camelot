@@ -4,7 +4,7 @@ using Camelot.Services.Abstractions;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Interfaces.MainWindow.Directories;
 
-namespace Camelot.ViewModels.Implementations.MainWindow.Directories
+namespace Camelot.ViewModels.Implementations.MainWindow.FavouriteDirectories
 {
     public class FavouriteDirectoriesListViewModel : ViewModelBase, IFavouriteDirectoriesListViewModel
     {
