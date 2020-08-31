@@ -34,7 +34,7 @@ namespace Camelot.ViewModels.Tests.Drives
             };
             var driveServiceMock = new Mock<IDriveService>();
             driveServiceMock
-                .SetupGet(m => m.Drives)
+                .SetupGet(m => m.MountedDrives)
                 .Returns(drives);
             var driveViewModelFactoryMock = new Mock<IDriveViewModelFactory>();
             var driveViewModels = new List<IDriveViewModel>();
@@ -66,7 +66,7 @@ namespace Camelot.ViewModels.Tests.Drives
         {
             var driveServiceMock = new Mock<IDriveService>();
             driveServiceMock
-                .SetupGet(m => m.Drives)
+                .SetupGet(m => m.MountedDrives)
                 .Returns(new List<DriveModel>());
             var driveViewModelFactoryMock = new Mock<IDriveViewModelFactory>();
             var applicationDispatcherMock = new Mock<IApplicationDispatcher>();
@@ -85,7 +85,7 @@ namespace Camelot.ViewModels.Tests.Drives
                 RootDirectory = "B"
             };
             driveServiceMock
-                .SetupGet(m => m.Drives)
+                .SetupGet(m => m.MountedDrives)
                 .Returns(new[] {driveModel});
             var driveViewModelMock = new Mock<IDriveViewModel>();
             driveViewModelFactoryMock

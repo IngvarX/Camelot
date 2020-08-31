@@ -5,6 +5,6 @@ namespace Camelot.Services.Environment.Implementations
 {
     public class EnvironmentDriveService : IEnvironmentDriveService
     {
-        public DriveInfo[] GetDrives() => DriveInfo.GetDrives();
+        public DriveInfo[] GetMountedDrives() => DriveInfo.GetDrives();
     }
 }

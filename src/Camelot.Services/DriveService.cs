@@ -14,25 +14,30 @@ namespace Camelot.Services
     public class DriveService : IDriveService
     {
         private readonly IEnvironmentDriveService _environmentDriveService;
+        private readonly IUnmountedDriveService _unmountedDriveService;
         private readonly Timer _timer;
 
-        public IReadOnlyList<DriveModel> Drives { get; private set; }
+        public IReadOnlyList<DriveModel> MountedDrives { get; private set; }
+
+        public IReadOnlyList<UnmountedDriveModel> UnmountedDrives { get; private set; }
 
         public event EventHandler<EventArgs> DrivesListChanged;
 
         public DriveService(
             IEnvironmentDriveService environmentDriveService,
+            IUnmountedDriveService unmountedDriveService,
             DriveServiceConfiguration configuration)
         {
             _environmentDriveService = environmentDriveService;
+            _unmountedDriveService = unmountedDriveService;
             _timer = new Timer(configuration.DrivesListRefreshIntervalMs);
 
-            Drives = GetDrives();
+            ReloadDrives();
             SetupTimer();
         }
 
         public DriveModel GetFileDrive(string filePath) =>
-            GetDrives()
+            GetMountedDrives()
                 .OrderByDescending(d => d.RootDirectory.Length)
                 .First(d => filePath.StartsWith(d.RootDirectory));
 
@@ -42,30 +47,48 @@ namespace Camelot.Services
             _timer.Start();
         }
 
-        private void TimerOnElapsed(object sender, ElapsedEventArgs e)
-        {
-            var oldRoots = Drives.Select(d => d.RootDirectory).ToHashSet();
+        private void TimerOnElapsed(object sender, ElapsedEventArgs e) => ReloadDrives();
 
-            var drives = GetDrives();
+        private void ReloadDrives()
+        {
+            ReloadMountedDrives();
+            ReloadUnmountedDrives();
+        }
+
+        private void ReloadMountedDrives()
+        {
+            var oldRoots = MountedDrives.Select(d => d.RootDirectory).ToHashSet();
+
+            var drives = GetMountedDrives();
             var newRoots = drives.Select(d => d.RootDirectory).ToHashSet();
 
             var addedDrives = drives.Where(dm => !oldRoots.Contains(dm.RootDirectory));
-            var removedDrives = Drives.Where(dm => !newRoots.Contains(dm.RootDirectory));
+            var removedDrives = MountedDrives.Where(dm => !newRoots.Contains(dm.RootDirectory));
 
             if (addedDrives.Any() || removedDrives.Any())
             {
-                Drives = drives;
+                MountedDrives = drives;
 
                 DrivesListChanged.Raise(this, EventArgs.Empty);
             }
         }
 
-        private IReadOnlyList<DriveModel> GetDrives() =>
+        private void ReloadUnmountedDrives()
+        {
+            UnmountedDrives = GetUnmountedDrives();
+        }
+
+        private IReadOnlyList<DriveModel> GetMountedDrives() =>
             _environmentDriveService
-                .GetDrives()
+                .GetMountedDrives()
                 .Where(Filter)
                 .Select(CreateFrom)
                 .WhereNotNull()
+                .ToArray();
+
+        private IReadOnlyList<UnmountedDriveModel> GetUnmountedDrives() =>
+            _unmountedDriveService
+                .GetUnmountedDrives()
                 .ToArray();
 
         private static DriveModel CreateFrom(DriveInfo driveInfo)
@@ -77,7 +100,8 @@ namespace Camelot.Services
                     Name = driveInfo.Name,
                     RootDirectory = driveInfo.RootDirectory.FullName,
                     FreeSpaceBytes = driveInfo.AvailableFreeSpace,
-                    TotalSpaceBytes = driveInfo.TotalSize
+                    TotalSpaceBytes = driveInfo.TotalSize,
+                    IsMounted = true
                 };
             }
             catch

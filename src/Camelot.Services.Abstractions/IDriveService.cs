@@ -6,7 +6,9 @@ namespace Camelot.Services.Abstractions
 {
     public interface IDriveService
     {
-        IReadOnlyList<DriveModel> Drives { get; }
+        IReadOnlyList<DriveModel> MountedDrives { get; }
+
+        IReadOnlyList<UnmountedDriveModel> UnmountedDrives { get; }
 
         event EventHandler<EventArgs> DrivesListChanged;
 

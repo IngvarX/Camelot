@@ -14,7 +14,7 @@ namespace Camelot.Services.Tests
             var drives = DriveInfo.GetDrives();
             var envDriveServiceMock = new Mock<IEnvironmentDriveService>();
             envDriveServiceMock
-                .Setup(m => m.GetDrives())
+                .Setup(m => m.GetMountedDrives())
                 .Returns(drives);
 
             var configuration = new DriveServiceConfiguration

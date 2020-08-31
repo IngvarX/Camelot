@@ -4,6 +4,6 @@ namespace Camelot.Services.Environment.Interfaces
 {
     public interface IEnvironmentDriveService
     {
-        DriveInfo[] GetDrives();
+        DriveInfo[] GetMountedDrives();
     }
 }

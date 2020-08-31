@@ -39,7 +39,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.Drives
         private void ReloadDrives()
         {
             var drives = _driveService
-                .Drives
+                .MountedDrives
                 .Select(_driveViewModelFactory.Create)
                 .ToArray();
 
