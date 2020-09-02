@@ -167,6 +167,7 @@ namespace Camelot.DependencyInjection
             services.RegisterLazySingleton<IDateTimeProvider>(() => new DateTimeProvider());
             services.RegisterLazySingleton<IDriveService>(() => new DriveService(
                 resolver.GetRequiredService<IEnvironmentDriveService>(),
+                resolver.GetRequiredService<IUnmountedDriveService>(),
                 resolver.GetRequiredService<DriveServiceConfiguration>()
             ));
             services.Register<IOperationsFactory>(() => new OperationsFactory(
@@ -250,6 +251,7 @@ namespace Camelot.DependencyInjection
         private static void RegisterLinuxServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
             services.RegisterLazySingleton<ILinuxRemovedFileMetadataBuilderFactory>(() => new LinuxRemovedFileMetadataBuilderFactory());
+            services.RegisterLazySingleton<IUnmountedDriveService>(() => new LinuxUnmountedDriveService());
             services.RegisterLazySingleton<ITrashCanService>(() => new LinuxTrashCanService(
                 resolver.GetRequiredService<IDriveService>(),
                 resolver.GetRequiredService<IOperationsService>(),
@@ -283,6 +285,7 @@ namespace Camelot.DependencyInjection
 
         private static void RegisterMacServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
+            services.RegisterLazySingleton<IUnmountedDriveService>(() => new MacUnmountedDriveService());
             services.RegisterLazySingleton<ITrashCanService>(() => new MacTrashCanService(
                 resolver.GetRequiredService<IDriveService>(),
                 resolver.GetRequiredService<IOperationsService>(),
@@ -311,6 +314,7 @@ namespace Camelot.DependencyInjection
             services.RegisterLazySingleton<IHomeDirectoryProvider>(() => new WindowsHomeDirectoryProvider(
                 resolver.GetRequiredService<IEnvironmentService>()
             ));
+            services.RegisterLazySingleton<IUnmountedDriveService>(() => new WindowsUnmountedDriveService());
             services.RegisterLazySingleton<ITrashCanService>(() => new WindowsTrashCanService(
                 resolver.GetRequiredService<IDriveService>(),
                 resolver.GetRequiredService<IOperationsService>(),

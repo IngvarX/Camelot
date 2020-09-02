@@ -17,9 +17,12 @@ namespace Camelot.Services
         private readonly IUnmountedDriveService _unmountedDriveService;
         private readonly Timer _timer;
 
-        public IReadOnlyList<DriveModel> MountedDrives { get; private set; }
+        private readonly List<DriveModel> _mountedDrives;
+        private readonly List<UnmountedDriveModel> _unmountedDrives;
 
-        public IReadOnlyList<UnmountedDriveModel> UnmountedDrives { get; private set; }
+        public IReadOnlyList<DriveModel> MountedDrives => _mountedDrives;
+
+        public IReadOnlyList<UnmountedDriveModel> UnmountedDrives => _unmountedDrives;
 
         public event EventHandler<EventArgs> DrivesListChanged;
 
@@ -30,6 +33,9 @@ namespace Camelot.Services
         {
             _environmentDriveService = environmentDriveService;
             _unmountedDriveService = unmountedDriveService;
+
+            _mountedDrives = new List<DriveModel>();
+            _unmountedDrives = new List<UnmountedDriveModel>();
             _timer = new Timer(configuration.DrivesListRefreshIntervalMs);
 
             ReloadDrives();
@@ -57,7 +63,7 @@ namespace Camelot.Services
 
         private void ReloadMountedDrives()
         {
-            var oldRoots = MountedDrives.Select(d => d.RootDirectory).ToHashSet();
+            var oldRoots = _mountedDrives.Select(d => d.RootDirectory).ToHashSet();
 
             var drives = GetMountedDrives();
             var newRoots = drives.Select(d => d.RootDirectory).ToHashSet();
@@ -67,7 +73,8 @@ namespace Camelot.Services
 
             if (addedDrives.Any() || removedDrives.Any())
             {
-                MountedDrives = drives;
+                _mountedDrives.Clear();
+                _mountedDrives.AddRange(drives);
 
                 DrivesListChanged.Raise(this, EventArgs.Empty);
             }
@@ -75,7 +82,9 @@ namespace Camelot.Services
 
         private void ReloadUnmountedDrives()
         {
-            UnmountedDrives = GetUnmountedDrives();
+            var unmountedDrives = GetUnmountedDrives();
+            _unmountedDrives.Clear();
+            _unmountedDrives.AddRange(unmountedDrives);
         }
 
         private IReadOnlyList<DriveModel> GetMountedDrives() =>
