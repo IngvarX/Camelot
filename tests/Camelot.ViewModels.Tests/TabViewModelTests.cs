@@ -8,14 +8,36 @@ namespace Camelot.ViewModels.Tests
 {
     public class TabViewModelTests
     {
+        private const string CurrentDirectory = "CurrDir";
+        private const string CurrentDirectoryName = "CurrDirName";
+
         private readonly TabViewModel _tabViewModel;
 
         public TabViewModelTests()
         {
             var pathServiceMock = new Mock<IPathService>();
+            pathServiceMock
+                .Setup(m => m.TrimPathSeparators(CurrentDirectory))
+                .Returns(CurrentDirectory);
+            pathServiceMock
+                .Setup(m => m.GetFileName(CurrentDirectory))
+                .Returns(CurrentDirectoryName);
             var sortingViewModelMock = new Mock<IFileSystemNodesSortingViewModel>();
 
-            _tabViewModel = new TabViewModel(pathServiceMock.Object, sortingViewModelMock.Object, string.Empty);
+            _tabViewModel = new TabViewModel(pathServiceMock.Object, sortingViewModelMock.Object, CurrentDirectory);
+        }
+
+        [Fact]
+        public void TestProperties()
+        {
+            Assert.Equal(CurrentDirectory, _tabViewModel.CurrentDirectory);
+            Assert.Equal(CurrentDirectoryName, _tabViewModel.DirectoryName);
+            Assert.False(_tabViewModel.IsActive);
+            Assert.False(_tabViewModel.IsGloballyActive);
+
+            _tabViewModel.IsActive = _tabViewModel.IsGloballyActive = true;
+            Assert.True(_tabViewModel.IsActive);
+            Assert.True(_tabViewModel.IsGloballyActive);
         }
 
         [Fact]
