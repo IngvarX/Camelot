@@ -4,7 +4,6 @@ using System.Linq;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
 using Camelot.ViewModels.Interfaces.Settings;
-using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
 namespace Camelot.ViewModels.Implementations.Settings.General

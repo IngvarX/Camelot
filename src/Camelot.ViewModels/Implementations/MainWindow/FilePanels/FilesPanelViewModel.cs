@@ -9,7 +9,6 @@ using Camelot.Avalonia.Interfaces;
 using Camelot.Extensions;
 using Camelot.Services.Abstractions;
 using Camelot.ViewModels.Factories.Interfaces;
-using Camelot.ViewModels.Interfaces.MainWindow.Drives;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using DynamicData;
 using ReactiveUI;

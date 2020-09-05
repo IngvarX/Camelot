@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Camelot.Services.Abstractions;
@@ -190,6 +191,59 @@ namespace Camelot.ViewModels.Tests
             Assert.True(isDeactivationCallbackCalled);
             tabViewModelMock.VerifySet(m => m.IsGloballyActive = false, Times.Once);
             Assert.Empty(filesPanelViewModel.SelectedFileSystemNodes);
+        }
+
+        [Fact]
+        public void TestRefreshCommand()
+        {
+            _autoMocker
+                .Setup<IDirectoryService, bool>(m => m.CheckIfExists(AppRootDirectory))
+                .Returns(true);
+            _autoMocker
+                .Setup<IDirectoryService, IReadOnlyList<DirectoryModel>>(m => m.GetChildDirectories(AppRootDirectory, It.IsAny<ISpecification<DirectoryModel>>()))
+                .Returns(new DirectoryModel[] {})
+                .Verifiable();
+            _autoMocker
+                .Setup<IFileService, IReadOnlyList<FileModel>>(m => m.GetFiles(AppRootDirectory, It.IsAny<ISpecification<NodeModelBase>>()))
+                .Returns(new FileModel[] {})
+                .Verifiable();
+            var tabViewModelMock = new Mock<ITabViewModel>();
+            tabViewModelMock
+                .SetupGet(m => m.CurrentDirectory)
+                .Returns(AppRootDirectory);
+            var tabsListViewModelMock = new Mock<ITabsListViewModel>();
+            tabsListViewModelMock
+                .SetupGet(m => m.SelectedTab)
+                .Returns(tabViewModelMock.Object);
+            _autoMocker.Use(tabsListViewModelMock.Object);
+
+            var filesPanelViewModel = _autoMocker.CreateInstance<FilesPanelViewModel>();
+
+            _autoMocker
+                .Verify<IDirectoryService, IReadOnlyList<DirectoryModel>>(
+                    m => m.GetChildDirectories(AppRootDirectory, It.IsAny<ISpecification<DirectoryModel>>()),
+                    Times.Once);
+            _autoMocker
+                .Verify<IFileService, IReadOnlyList<FileModel>>(
+                    m => m.GetFiles(AppRootDirectory, It.IsAny<ISpecification<NodeModelBase>>()),
+                    Times.Once);
+
+            var random = new Random();
+            var refreshCount = random.Next(5, 15);
+            for (var i = 0; i < refreshCount; i++)
+            {
+                Assert.True(filesPanelViewModel.RefreshCommand.CanExecute(null));
+                filesPanelViewModel.RefreshCommand.Execute(null);
+            }
+
+            _autoMocker
+                .Verify<IDirectoryService, IReadOnlyList<DirectoryModel>>(
+                    m => m.GetChildDirectories(AppRootDirectory, It.IsAny<ISpecification<DirectoryModel>>()),
+                    Times.Exactly(refreshCount + 1));
+            _autoMocker
+                .Verify<IFileService, IReadOnlyList<FileModel>>(
+                    m => m.GetFiles(AppRootDirectory, It.IsAny<ISpecification<NodeModelBase>>()),
+                    Times.Exactly(refreshCount + 1));
         }
     }
 }
