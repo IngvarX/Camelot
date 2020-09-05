@@ -110,7 +110,9 @@
 
             <DataGrid.KeyBindings>
                 <KeyBinding Gesture="Ctrl+C" Command="{Binding CopyToClipboardCommand}" />
+                <KeyBinding Gesture="Meta+C" Command="{Binding CopyToClipboardCommand}" />
                 <KeyBinding Gesture="Ctrl+V" Command="{Binding PasteFromClipboardCommand}" />
+                <KeyBinding Gesture="Meta+V" Command="{Binding PasteFromClipboardCommand}" />
             </DataGrid.KeyBindings>
 
             <DataGrid.Columns>

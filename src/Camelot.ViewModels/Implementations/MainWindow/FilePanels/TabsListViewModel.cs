@@ -145,11 +145,13 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         {
             UnsubscribeFromEvents(tabViewModel);
 
+            var index = _tabs.IndexOf(tabViewModel);
             _tabs.Remove(tabViewModel);
 
             if (SelectedTab == tabViewModel)
             {
-                SelectTab(_tabs.First());
+                var newActiveTabIndex = index > 0 ? index - 1 : 0;
+                SelectTab(_tabs[newActiveTabIndex]);
             }
         }
 
