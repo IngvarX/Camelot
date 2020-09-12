@@ -23,6 +23,7 @@ using Camelot.Services.Environment.Interfaces;
 using Camelot.Services.Implementations;
 using Camelot.Services.Linux;
 using Camelot.Services.Linux.Builders;
+using Camelot.Services.Linux.Configuration;
 using Camelot.Services.Linux.Interfaces;
 using Camelot.Services.Linux.Interfaces.Builders;
 using Camelot.Services.Mac;
@@ -113,6 +114,10 @@ namespace Camelot.DependencyInjection
             var driveServiceConfiguration = new DriveServiceConfiguration();
             configuration.GetSection("Drives").Bind(driveServiceConfiguration);
             services.RegisterConstant(driveServiceConfiguration);
+            
+            var unmountedDrivesConfiguration = new UnmountedDrivesConfiguration();
+            configuration.GetSection("UnmountedDrives").Bind(unmountedDrivesConfiguration);
+            services.RegisterConstant(unmountedDrivesConfiguration);
         }
 
         private static void RegisterEnvironmentServices(IMutableDependencyResolver services)
@@ -251,7 +256,11 @@ namespace Camelot.DependencyInjection
         private static void RegisterLinuxServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
             services.RegisterLazySingleton<ILinuxRemovedFileMetadataBuilderFactory>(() => new LinuxRemovedFileMetadataBuilderFactory());
-            services.RegisterLazySingleton<IUnmountedDriveService>(() => new LinuxUnmountedDriveService());
+            services.RegisterLazySingleton<IUnmountedDriveService>(() => new LinuxUnmountedDriveService(
+                resolver.GetRequiredService<IProcessService>(),
+                resolver.GetRequiredService<IEnvironmentService>(),
+                resolver.GetRequiredService<UnmountedDrivesConfiguration>()
+            ));
             services.RegisterLazySingleton<ITrashCanService>(() => new LinuxTrashCanService(
                 resolver.GetRequiredService<IDriveService>(),
                 resolver.GetRequiredService<IOperationsService>(),

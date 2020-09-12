@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Timers;
 using Camelot.Extensions;
 using Camelot.Services.Abstractions;
@@ -38,7 +39,7 @@ namespace Camelot.Services
             _unmountedDrives = new List<UnmountedDriveModel>();
             _timer = new Timer(configuration.DrivesListRefreshIntervalMs);
 
-            ReloadDrives();
+            ReloadDrivesAsync().Forget();
             SetupTimer();
         }
 
@@ -53,12 +54,12 @@ namespace Camelot.Services
             _timer.Start();
         }
 
-        private void TimerOnElapsed(object sender, ElapsedEventArgs e) => ReloadDrives();
+        private async void TimerOnElapsed(object sender, ElapsedEventArgs e) => await ReloadDrivesAsync();
 
-        private void ReloadDrives()
+        private async Task ReloadDrivesAsync()
         {
             ReloadMountedDrives();
-            ReloadUnmountedDrives();
+            await ReloadUnmountedDrivesAsync();
         }
 
         private void ReloadMountedDrives()
@@ -80,9 +81,9 @@ namespace Camelot.Services
             }
         }
 
-        private void ReloadUnmountedDrives()
+        private async Task ReloadUnmountedDrivesAsync()
         {
-            var unmountedDrives = GetUnmountedDrives();
+            var unmountedDrives = await _unmountedDriveService.GetUnmountedDrivesAsync();
             _unmountedDrives.Clear();
             _unmountedDrives.AddRange(unmountedDrives);
         }
@@ -93,11 +94,6 @@ namespace Camelot.Services
                 .Where(Filter)
                 .Select(CreateFrom)
                 .WhereNotNull()
-                .ToArray();
-
-        private IReadOnlyList<UnmountedDriveModel> GetUnmountedDrives() =>
-            _unmountedDriveService
-                .GetUnmountedDrives()
                 .ToArray();
 
         private static DriveModel CreateFrom(DriveInfo driveInfo)

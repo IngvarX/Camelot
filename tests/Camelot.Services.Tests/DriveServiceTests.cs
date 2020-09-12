@@ -1,5 +1,5 @@
+using System;
 using System.IO;
-using System.Linq;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Configuration;
@@ -21,8 +21,8 @@ namespace Camelot.Services.Tests
                 .Returns(drives);
             var unmountedDriveServiceMock = new Mock<IUnmountedDriveService>();
             unmountedDriveServiceMock
-                .Setup(m => m.GetUnmountedDrives())
-                .Returns(Enumerable.Empty<UnmountedDriveModel>());
+                .Setup(m => m.GetUnmountedDrivesAsync())
+                .ReturnsAsync(Array.Empty<UnmountedDriveModel>());
 
             var configuration = new DriveServiceConfiguration
             {

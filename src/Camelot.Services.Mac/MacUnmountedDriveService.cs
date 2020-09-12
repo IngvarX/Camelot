@@ -1,5 +1,6 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
 
@@ -8,7 +9,7 @@ namespace Camelot.Services.Mac
     public class MacUnmountedDriveService : IUnmountedDriveService
     {
         // TODO: load drives
-        public IEnumerable<UnmountedDriveModel> GetUnmountedDrives() =>
-            Enumerable.Empty<UnmountedDriveModel>();
+        public Task<IReadOnlyList<UnmountedDriveModel>> GetUnmountedDrivesAsync() =>
+            Task.FromResult((IReadOnlyList<UnmountedDriveModel>) Array.Empty<UnmountedDriveModel>());
     }
 }

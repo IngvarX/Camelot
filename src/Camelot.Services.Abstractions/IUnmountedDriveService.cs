@@ -1,10 +1,11 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Camelot.Services.Abstractions.Models;
 
 namespace Camelot.Services.Abstractions
 {
     public interface IUnmountedDriveService
     {
-        IEnumerable<UnmountedDriveModel> GetUnmountedDrives();
+        Task<IReadOnlyList<UnmountedDriveModel>> GetUnmountedDrivesAsync();
     }
 }
