@@ -7,5 +7,7 @@ namespace Camelot.Services.Abstractions
     public interface IUnmountedDriveService
     {
         Task<IReadOnlyList<UnmountedDriveModel>> GetUnmountedDrivesAsync();
+
+        void Mount(string drive);
     }
 }

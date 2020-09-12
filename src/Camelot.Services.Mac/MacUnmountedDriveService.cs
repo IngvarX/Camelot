@@ -11,5 +11,7 @@ namespace Camelot.Services.Mac
         // TODO: load drives
         public Task<IReadOnlyList<UnmountedDriveModel>> GetUnmountedDrivesAsync() =>
             Task.FromResult((IReadOnlyList<UnmountedDriveModel>) Array.Empty<UnmountedDriveModel>());
+
+        public void Mount(string drive) => throw new NotImplementedException();
     }
 }

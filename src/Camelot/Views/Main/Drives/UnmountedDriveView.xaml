@@ -11,7 +11,7 @@
         <drives:UnmountedDriveViewModel />
     </Design.DataContext>
 
-    <Button Classes="iconButton">
+    <Button Classes="iconButton" Command="{Binding MountCommand}">
         <Grid ColumnDefinitions="Auto,Auto">
             <DrawingPresenter Width="20" Height="20">
                 <DrawingPresenter.Drawing>

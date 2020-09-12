@@ -10,5 +10,8 @@ namespace Camelot.Services.Windows
     {
         public Task<IReadOnlyList<UnmountedDriveModel>> GetUnmountedDrivesAsync() =>
             Task.FromResult((IReadOnlyList<UnmountedDriveModel>) Array.Empty<UnmountedDriveModel>());
+
+        public void Mount(string drive) =>
+            throw new InvalidOperationException("Nount on Windows is not supported");
     }
 }

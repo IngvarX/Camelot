@@ -114,7 +114,7 @@ namespace Camelot.DependencyInjection
             var driveServiceConfiguration = new DriveServiceConfiguration();
             configuration.GetSection("Drives").Bind(driveServiceConfiguration);
             services.RegisterConstant(driveServiceConfiguration);
-            
+
             var unmountedDrivesConfiguration = new UnmountedDrivesConfiguration();
             configuration.GetSection("UnmountedDrives").Bind(unmountedDrivesConfiguration);
             services.RegisterConstant(unmountedDrivesConfiguration);
@@ -456,7 +456,8 @@ namespace Camelot.DependencyInjection
             services.RegisterLazySingleton<IDriveViewModelFactory>(() => new DriveViewModelFactory(
                 resolver.GetRequiredService<IFileSizeFormatter>(),
                 resolver.GetRequiredService<IPathService>(),
-                resolver.GetRequiredService<IFilesOperationsMediator>()
+                resolver.GetRequiredService<IFilesOperationsMediator>(),
+                resolver.GetRequiredService<IUnmountedDriveService>()
             ));
             services.RegisterLazySingleton<IDrivesListViewModel>(() => new DrivesListViewModel(
                 resolver.GetRequiredService<IDriveService>(),

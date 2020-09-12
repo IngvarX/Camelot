@@ -11,9 +11,11 @@ namespace Camelot.Services.Linux
 {
     public class LinuxUnmountedDriveService : IUnmountedDriveService
     {
-        private const string Command = "lsblk";
-        private const string Arguments = "--noheadings --raw -o NAME,MOUNTPOINT";
-        
+        private const string FindDrivesCommand = "lsblk";
+        private const string FindDriveArguments = "--noheadings --raw -o NAME,MOUNTPOINT";
+        private const string MountDriveCommand = "udisksctl";
+        private const string MountDriveArguments = "mount -b {0}";
+
         private readonly IProcessService _processService;
         private readonly IEnvironmentService _environmentService;
         private readonly UnmountedDrivesConfiguration _configuration;
@@ -27,7 +29,7 @@ namespace Camelot.Services.Linux
             _environmentService = environmentService;
             _configuration = configuration;
         }
-        
+
         public async Task<IReadOnlyList<UnmountedDriveModel>> GetUnmountedDrivesAsync()
         {
             if (!_configuration.IsEnabled)
@@ -44,10 +46,23 @@ namespace Camelot.Services.Linux
                 return Array.Empty<UnmountedDriveModel>();
             }
         }
-        
+
+        public void Mount(string drive)
+        {
+            try
+            {
+                var arguments = string.Format(MountDriveArguments, drive);
+                _processService.Run(MountDriveCommand, arguments);
+            }
+            catch
+            {
+                // ignore
+            }
+        }
+
         private async Task<IReadOnlyList<UnmountedDriveModel>> GetUnmountedDrivesUsingLsblkAsync()
         {
-            var drives = await _processService.ExecuteAndGetOutputAsync(Command, Arguments);
+            var drives = await _processService.ExecuteAndGetOutputAsync(FindDrivesCommand, FindDriveArguments);
 
             return drives
                 .Split(_environmentService.NewLine, StringSplitOptions.RemoveEmptyEntries)
@@ -76,7 +91,7 @@ namespace Camelot.Services.Linux
                    && !driveName.StartsWith("loop")
                    && char.IsDigit(driveName[^1]);
         }
-        
+
         private static UnmountedDriveModel CreateFrom(string[] driveData) =>
             new UnmountedDriveModel
             {
