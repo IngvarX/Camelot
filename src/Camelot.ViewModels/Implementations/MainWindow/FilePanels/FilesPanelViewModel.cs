@@ -9,6 +9,7 @@ using Camelot.Avalonia.Interfaces;
 using Camelot.Extensions;
 using Camelot.Services.Abstractions;
 using Camelot.ViewModels.Factories.Interfaces;
+using Camelot.ViewModels.Interfaces.MainWindow;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using DynamicData;
 using ReactiveUI;
@@ -42,6 +43,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         public ISearchViewModel SearchViewModel { get; }
 
         public ITabsListViewModel TabsListViewModel { get; }
+        
+        public IOperationsViewModel OperationsViewModel { get; }
 
         public string CurrentDirectory
         {
@@ -110,7 +113,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             IClipboardOperationsService clipboardOperationsService,
             IFileSystemNodeViewModelComparerFactory comparerFactory,
             ISearchViewModel searchViewModel,
-            ITabsListViewModel tabsListViewModel)
+            ITabsListViewModel tabsListViewModel,
+            IOperationsViewModel operationsViewModel)
         {
             _fileService = fileService;
             _directoryService = directoryService;
@@ -124,6 +128,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
             SearchViewModel = searchViewModel;
             TabsListViewModel = tabsListViewModel;
+            OperationsViewModel = operationsViewModel;
 
             _fileSystemNodes = new ObservableCollection<IFileSystemNodeViewModel>();
             _selectedFileSystemNodes = new ObservableCollection<IFileSystemNodeViewModel>();

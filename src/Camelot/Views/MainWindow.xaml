@@ -14,16 +14,6 @@
         Title="Camelot">
 
     <Window.KeyBindings>
-        <KeyBinding Gesture="Enter" Command="{Binding OperationsViewModel.OpenCommand}" />
-        <KeyBinding Gesture="F4" Command="{Binding OperationsViewModel.OpenInDefaultEditorCommand}" />
-        <KeyBinding Gesture="F5" Command="{Binding OperationsViewModel.CopyCommand}" />
-        <KeyBinding Gesture="F6" Command="{Binding OperationsViewModel.MoveCommand}" />
-        <KeyBinding Gesture="F7" Command="{Binding OperationsViewModel.CreateNewDirectoryCommand}" />
-        <KeyBinding Gesture="F8" Command="{Binding OperationsViewModel.MoveToTrashCommand}" />
-        <KeyBinding Gesture="Delete" Command="{Binding OperationsViewModel.MoveToTrashCommand}" />
-        <KeyBinding Gesture="Back" Command="{Binding OperationsViewModel.MoveToTrashCommand}" />
-        <KeyBinding Gesture="Shift+Delete" Command="{Binding OperationsViewModel.RemoveCommand}" />
-        <KeyBinding Gesture="Shift+Back" Command="{Binding OperationsViewModel.RemoveCommand}" />
         <KeyBinding Gesture="Ctrl+T" Command="{Binding CreateNewTabCommand}" />
         <KeyBinding Gesture="Meta+T" Command="{Binding CreateNewTabCommand}" />
         <KeyBinding Gesture="Ctrl+W" Command="{Binding CloseCurrentTabCommand}" />

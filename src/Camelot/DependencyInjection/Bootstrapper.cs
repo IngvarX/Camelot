@@ -505,7 +505,8 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IClipboardOperationsService>(),
                 resolver.GetRequiredService<IFileSystemNodeViewModelComparerFactory>(),
                 resolver.GetRequiredService<ISearchViewModel>(),
-                tabsListViewModel
+                tabsListViewModel,
+                resolver.GetRequiredService<IOperationsViewModel>()
             );
 
             return filesPanelViewModel;
