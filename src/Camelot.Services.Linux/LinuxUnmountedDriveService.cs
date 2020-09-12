@@ -49,15 +49,9 @@ namespace Camelot.Services.Linux
 
         public void Mount(string drive)
         {
-            try
-            {
-                var arguments = string.Format(MountDriveArguments, drive);
-                _processService.Run(MountDriveCommand, arguments);
-            }
-            catch
-            {
-                // ignore
-            }
+            var arguments = string.Format(MountDriveArguments, drive);
+
+            _processService.Run(MountDriveCommand, arguments);
         }
 
         private async Task<IReadOnlyList<UnmountedDriveModel>> GetUnmountedDrivesUsingLsblkAsync()

@@ -16,7 +16,17 @@
                       Margin="7,8,8,3">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <drivesViews:DriveView />
+                    <ContentControl Content="{Binding .}">
+                        <ContentControl.DataTemplates>
+                            <DataTemplate DataType="{x:Type drives:DriveViewModel}">
+                                <drivesViews:DriveView />
+                            </DataTemplate>
+
+                            <DataTemplate DataType="{x:Type drives:UnmountedDriveViewModel}">
+                                <drivesViews:UnmountedDriveView />
+                            </DataTemplate>
+                        </ContentControl.DataTemplates>
+                    </ContentControl>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
 

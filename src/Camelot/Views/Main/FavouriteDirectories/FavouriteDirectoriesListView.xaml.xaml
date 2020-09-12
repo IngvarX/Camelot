@@ -3,7 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:favouriteDirectories="clr-namespace:Camelot.ViewModels.Implementations.MainWindow.FavouriteDirectories;assembly=Camelot.ViewModels"
-             xmlns:favouriteDirectories1="clr-namespace:Camelot.Views.Main.FavouriteDirectories"
+             xmlns:favouriteDirectoriesViews="clr-namespace:Camelot.Views.Main.FavouriteDirectories"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Camelot.Views.Main.FavouriteDirectories.FavouriteDirectoriesListView">
 
@@ -16,7 +16,7 @@
                       Margin="0,8,8,3">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <favouriteDirectories1:FavouriteDirectoryView />
+                    <favouriteDirectoriesViews:FavouriteDirectoryView />
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
 
