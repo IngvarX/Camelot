@@ -25,5 +25,8 @@ namespace Camelot.ViewModels.Factories.Implementations
 
         public IDriveViewModel Create(DriveModel driveModel) =>
             new DriveViewModel(_fileSizeFormatter, _pathService, _filesOperationsMediator, driveModel);
+
+        public IDriveViewModel Create(UnmountedDriveModel unmountedDriveModel) =>
+            new UnmountedDriveViewModel(unmountedDriveModel);
     }
 }

@@ -387,4 +387,7 @@
   <data name="EnterFileNameWithColon" xml:space="preserve">
     <value>Enter file name:</value>
   </data>
+  <data name="ClickToMount" xml:space="preserve">
+    <value>Click to mount</value>
+  </data>
 </root>

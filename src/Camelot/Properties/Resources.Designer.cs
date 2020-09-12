@@ -584,5 +584,11 @@ namespace Camelot.Properties {
                 return ResourceManager.GetString("EnterFileNameWithColon", resourceCulture);
             }
         }
+        
+        public static string ClickToMount {
+            get {
+                return ResourceManager.GetString("ClickToMount", resourceCulture);
+            }
+        }
     }
 }

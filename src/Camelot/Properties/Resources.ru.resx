@@ -381,4 +381,7 @@
   <data name="EnterFileNameWithColon" xml:space="preserve">
     <value>Введите название файла:</value>
   </data>
+  <data name="ClickToMount" xml:space="preserve">
+    <value>Нажмите, чтобы примонтировать устройство</value>
+  </data>
 </root>

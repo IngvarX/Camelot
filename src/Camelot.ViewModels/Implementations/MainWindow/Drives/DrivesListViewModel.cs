@@ -38,10 +38,13 @@ namespace Camelot.ViewModels.Implementations.MainWindow.Drives
 
         private void ReloadDrives()
         {
-            var drives = _driveService
+            var mountedDrives = _driveService
                 .MountedDrives
-                .Select(_driveViewModelFactory.Create)
-                .ToArray();
+                .Select(_driveViewModelFactory.Create);
+            var unmountedDrives = _driveService
+                .UnmountedDrives
+                .Select(_driveViewModelFactory.Create);
+            var drives = mountedDrives.Concat(unmountedDrives).ToArray();
 
             _applicationDispatcher.Dispatch(() =>
             {

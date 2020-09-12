@@ -84,8 +84,20 @@ namespace Camelot.Services
         private async Task ReloadUnmountedDrivesAsync()
         {
             var unmountedDrives = await _unmountedDriveService.GetUnmountedDrivesAsync();
-            _unmountedDrives.Clear();
-            _unmountedDrives.AddRange(unmountedDrives);
+            
+            var oldRoots = _unmountedDrives.Select(d => d.FullName).ToHashSet();
+            var newRoots = unmountedDrives.Select(d => d.FullName).ToHashSet();
+
+            var addedDrives = unmountedDrives.Where(udm => !oldRoots.Contains(udm.FullName));
+            var removedDrives = UnmountedDrives.Where(udm => !newRoots.Contains(udm.FullName));
+
+            if (addedDrives.Any() || removedDrives.Any())
+            {
+                _unmountedDrives.Clear();
+                _unmountedDrives.AddRange(unmountedDrives);
+
+                DrivesListChanged.Raise(this, EventArgs.Empty);
+            }
         }
 
         private IReadOnlyList<DriveModel> GetMountedDrives() =>
