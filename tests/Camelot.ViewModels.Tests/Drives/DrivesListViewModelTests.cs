@@ -36,6 +36,9 @@ namespace Camelot.ViewModels.Tests.Drives
             driveServiceMock
                 .SetupGet(m => m.MountedDrives)
                 .Returns(drives);
+            driveServiceMock
+                .SetupGet(m => m.UnmountedDrives)
+                .Returns(new UnmountedDriveModel[0]);
             var driveViewModelFactoryMock = new Mock<IDriveViewModelFactory>();
             var driveViewModels = new List<IDriveViewModel>();
             foreach (var driveModel in drives)
@@ -73,6 +76,9 @@ namespace Camelot.ViewModels.Tests.Drives
             applicationDispatcherMock
                 .Setup(m => m.Dispatch(It.IsAny<Action>()))
                 .Callback<Action>(action => action());
+            driveServiceMock
+                .SetupGet(m => m.UnmountedDrives)
+                .Returns(new UnmountedDriveModel[0]);
 
             var viewModel = new DrivesListViewModel(driveServiceMock.Object,
                 driveViewModelFactoryMock.Object, applicationDispatcherMock.Object);

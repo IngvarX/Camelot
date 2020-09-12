@@ -11,20 +11,39 @@ namespace Camelot.ViewModels.Tests.Factories
     public class DriveViewModelFactoryTests
     {
         [Fact]
-        public void TestCreate()
+        public void TestCreateMounted()
         {
             var driveModel = new DriveModel();
             var fileSizeFormatterMock = new Mock<IFileSizeFormatter>();
             var pathServiceMock = new Mock<IPathService>();
             var fileOperationsMediatorMock = new Mock<IFilesOperationsMediator>();
+            var unmountedDriveServiceMock = new Mock<IUnmountedDriveService>();
 
             var factory = new DriveViewModelFactory(fileSizeFormatterMock.Object, pathServiceMock.Object,
-                fileOperationsMediatorMock.Object);
+                fileOperationsMediatorMock.Object, unmountedDriveServiceMock.Object);
 
             var viewModel = factory.Create(driveModel);
 
             Assert.NotNull(viewModel);
             Assert.IsType<DriveViewModel>(viewModel);
+        }
+
+        [Fact]
+        public void TestCreateUnmounted()
+        {
+            var unmountedDriveModel = new UnmountedDriveModel();
+            var fileSizeFormatterMock = new Mock<IFileSizeFormatter>();
+            var pathServiceMock = new Mock<IPathService>();
+            var fileOperationsMediatorMock = new Mock<IFilesOperationsMediator>();
+            var unmountedDriveServiceMock = new Mock<IUnmountedDriveService>();
+
+            var factory = new DriveViewModelFactory(fileSizeFormatterMock.Object, pathServiceMock.Object,
+                fileOperationsMediatorMock.Object, unmountedDriveServiceMock.Object);
+
+            var viewModel = factory.Create(unmountedDriveModel);
+
+            Assert.NotNull(viewModel);
+            Assert.IsType<UnmountedDriveViewModel>(viewModel);
         }
     }
 }
