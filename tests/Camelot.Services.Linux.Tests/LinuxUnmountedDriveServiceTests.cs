@@ -35,7 +35,7 @@ namespace Camelot.Services.Linux.Tests
         [InlineData("loop ", new string[] {}, new string[] {})]
         [InlineData("sda \nsdc2 ", new[] {"sdc2"}, new[] {"/dev/sdc2"})]
         [InlineData("\n\n \n", new string[] {}, new string[] {})]
-        [InlineData("sd ", new string[] {}, new string[] {})]
+        [InlineData("sd \n,s", new string[] {}, new string[] {})]
         [InlineData("sda1 \nsdc \nsdc2 \nsdc3 /mnt/test",  new[] {"sda1", "sdc2"}, new[] {"/dev/sda1", "/dev/sdc2"})]
         public async Task TestGetUnmountedDrivesEnabled(string output, string[] names, string[] fullNames)
         {
