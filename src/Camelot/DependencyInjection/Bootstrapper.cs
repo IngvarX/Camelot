@@ -175,7 +175,7 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IUnmountedDriveService>(),
                 resolver.GetRequiredService<DriveServiceConfiguration>()
             ));
-            services.Register<IOperationsFactory>(() => new OperationsFactory(
+            services.RegisterLazySingleton<IOperationsFactory>(() => new OperationsFactory(
                 resolver.GetRequiredService<ITaskPool>(),
                 resolver.GetRequiredService<IDirectoryService>(),
                 resolver.GetRequiredService<IFileService>(),
@@ -444,7 +444,7 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IDirectoryService>(),
                 resolver.GetRequiredService<ITrashCanService>()
             ));
-            services.Register<IMenuViewModel>(() => new MenuViewModel(
+            services.RegisterLazySingleton<IMenuViewModel>(() => new MenuViewModel(
                 resolver.GetRequiredService<IApplicationCloser>(),
                 resolver.GetRequiredService<IDialogService>()
             ));
@@ -464,7 +464,7 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IDriveViewModelFactory>(),
                 resolver.GetRequiredService<IApplicationDispatcher>()
             ));
-            services.Register<ITopOperationsViewModel>(() => new TopOperationsViewModel(
+            services.RegisterLazySingleton<ITopOperationsViewModel>(() => new TopOperationsViewModel(
                 resolver.GetRequiredService<ITerminalService>(),
                 resolver.GetRequiredService<IDirectoryService>(),
                 resolver.GetRequiredService<IFilesOperationsMediator>()
