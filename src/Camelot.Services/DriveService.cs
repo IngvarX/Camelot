@@ -16,10 +16,10 @@ namespace Camelot.Services
     {
         private readonly IEnvironmentDriveService _environmentDriveService;
         private readonly IUnmountedDriveService _unmountedDriveService;
-        private readonly Timer _timer;
 
         private readonly List<DriveModel> _mountedDrives;
         private readonly List<UnmountedDriveModel> _unmountedDrives;
+        private readonly Timer _timer;
 
         public IReadOnlyList<DriveModel> MountedDrives => _mountedDrives;
 
@@ -84,7 +84,7 @@ namespace Camelot.Services
         private async Task ReloadUnmountedDrivesAsync()
         {
             var unmountedDrives = await _unmountedDriveService.GetUnmountedDrivesAsync();
-            
+
             var oldRoots = _unmountedDrives.Select(d => d.FullName).ToHashSet();
             var newRoots = unmountedDrives.Select(d => d.FullName).ToHashSet();
 

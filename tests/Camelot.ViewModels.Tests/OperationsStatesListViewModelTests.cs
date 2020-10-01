@@ -111,7 +111,7 @@ namespace Camelot.ViewModels.Tests
 
             await Task.Delay(500);
 
-            operationMock.Verify(m => m.ContinueAsync(options), Times.Once());
+            operationMock.Verify(m => m.ContinueAsync(options), Times.Once);
         }
     }
 }
