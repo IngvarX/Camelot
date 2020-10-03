@@ -5,6 +5,7 @@ using Camelot.Extensions;
 using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Specifications;
 using Camelot.Services.Environment.Interfaces;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.AutoMock;
 using Xunit;
@@ -76,17 +77,58 @@ namespace Camelot.Services.Tests
                 .Verify<IEnvironmentFileService>(m => m.Copy(FileName, NewFileName, overwrite));
         }
 
-        [Fact]
-        public void TestRemove()
+        [Theory]
+        [InlineData(true, false)]
+        [InlineData(false, true)]
+        public void TestRemove(bool throws, bool expected)
         {
             _autoMocker
                 .Setup<IEnvironmentFileService>(m => m.Delete(FileName))
                 .Verifiable();
-            var fileService = _autoMocker.CreateInstance<FileService>();
-            fileService.Remove(FileName);
+            if (throws)
+            {
+                _autoMocker
+                    .Setup<IEnvironmentFileService>(m => m.Delete(FileName))
+                    .Throws<InvalidOperationException>();
+            }
 
+            var fileService = _autoMocker.CreateInstance<FileService>();
+            var result = fileService.Remove(FileName);
+
+            Assert.Equal(expected, result);
             _autoMocker
                 .Verify<IEnvironmentFileService>(m => m.Delete(FileName));
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void TestCreateFile(bool throws)
+        {
+            _autoMocker
+                .Setup<IEnvironmentFileService>(m => m.Create(FileName))
+                .Verifiable();
+            if (throws)
+            {
+                _autoMocker
+                    .Setup<IEnvironmentFileService>(m => m.Create(FileName))
+                    .Throws<InvalidOperationException>();
+            }
+
+            _autoMocker
+                .Setup<ILogger>(m => m.Log(LogLevel.Error, It.IsAny<EventId>(), It.IsAny<object>(), It.IsAny<Exception>(), It.IsAny<Func<object,Exception,string>>()))
+                .Verifiable();
+
+            var fileService = _autoMocker.CreateInstance<FileService>();
+            fileService.CreateFile(FileName);
+
+            _autoMocker
+                .Verify<IEnvironmentFileService>(m => m.Create(FileName));
+            _autoMocker
+                .Verify<ILogger>(
+                    m => m.Log(LogLevel.Error, It.IsAny<EventId>(), It.IsAny<object>(), It.IsAny<Exception>(),
+                        It.IsAny<Func<object, Exception, string>>()),
+                    throws ? Times.Once() : Times.Never());
         }
 
         [Fact]

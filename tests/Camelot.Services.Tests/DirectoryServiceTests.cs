@@ -63,6 +63,19 @@ namespace Camelot.Services.Tests
         }
 
         [Fact]
+        public void TestCurrentDirectoryUpdateSucceeded()
+        {
+            var directoryService = _autoMocker.CreateInstance<DirectoryService>();
+            directoryService.SelectedDirectory = DirectoryName;
+            var isCallbackCalled = false;
+            directoryService.SelectedDirectoryChanged += (sender, args) => isCallbackCalled = true;
+            directoryService.SelectedDirectory = ParentDirectoryName;
+
+            Assert.True(isCallbackCalled);
+            Assert.Equal(ParentDirectoryName, directoryService.SelectedDirectory);
+        }
+
+        [Fact]
         public void TestGetParentDirectory()
         {
             var directoryInfo = new DirectoryInfo(Directory.GetCurrentDirectory());
@@ -119,16 +132,26 @@ namespace Camelot.Services.Tests
             Assert.Equal(isExist, result);
         }
 
-        [Fact]
-        public void TestDirectoryRemove()
+        [Theory]
+        [InlineData(true, false)]
+        [InlineData(false, true)]
+        public void TestDirectoryRemove(bool throws, bool expected)
         {
             _autoMocker
                 .Setup<IEnvironmentDirectoryService>(m => m.Delete(DirectoryName, true))
                 .Verifiable();
+            if (throws)
+            {
+                _autoMocker
+                    .Setup<IEnvironmentDirectoryService>(m => m.Delete(DirectoryName, true))
+                    .Throws<InvalidOperationException>();
+            }
+
             var directoryService = _autoMocker.CreateInstance<DirectoryService>();
 
-            directoryService.RemoveRecursively(DirectoryName);
+            var actual = directoryService.RemoveRecursively(DirectoryName);
 
+            Assert.Equal(expected, actual);
             _autoMocker
                 .Verify<IEnvironmentDirectoryService>(m => m.Delete(DirectoryName, true));
         }
