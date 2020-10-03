@@ -7,6 +7,7 @@ using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Models.Operations;
 using Camelot.Services.Abstractions.Operations;
 using Camelot.TaskPool.Interfaces;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -22,6 +23,7 @@ namespace Camelot.Operations.Tests
         private readonly ITaskPool _taskPool;
         private readonly IPathService _pathService;
         private readonly IFileNameGenerationService _fileNameGenerationService;
+        private readonly ILogger _logger;
 
         public OperationsTests()
         {
@@ -36,6 +38,9 @@ namespace Camelot.Operations.Tests
 
             var fileNameGenerationServiceMock = new Mock<IFileNameGenerationService>();
             _fileNameGenerationService = fileNameGenerationServiceMock.Object;
+
+            var loggerMock = new Mock<ILogger>();
+            _logger = loggerMock.Object;
         }
 
         [Theory]
@@ -46,22 +51,17 @@ namespace Camelot.Operations.Tests
             var directoryServiceMock = new Mock<IDirectoryService>();
             var filesServiceMock = new Mock<IFileService>();
             var copySetup = filesServiceMock
-                .Setup(m => m.CopyAsync(SourceName, DestinationName, false));
-            if (throws)
-            {
-                copySetup.ThrowsAsync(new AccessViolationException()).Verifiable();
-            }
-            else
-            {
-                copySetup.Verifiable();
-            }
+                .Setup(m => m.CopyAsync(SourceName, DestinationName, false))
+                .ReturnsAsync(!throws);
+            copySetup.Verifiable();
 
             var operationsFactory = new OperationsFactory(
                 _taskPool,
                 directoryServiceMock.Object,
                 filesServiceMock.Object,
                 _pathService,
-                _fileNameGenerationService);
+                _fileNameGenerationService,
+                _logger);
             var settings = new BinaryFileSystemOperationSettings(
                 new string[] { },
                 new[] {SourceName},
@@ -82,7 +82,7 @@ namespace Camelot.Operations.Tests
             Assert.Equal(state, copyOperation.State);
 
             Assert.True(isCallbackCalled);
-            filesServiceMock.Verify(m => m.CopyAsync(SourceName, DestinationName, false), Times.Once());
+            filesServiceMock.Verify(m => m.CopyAsync(SourceName, DestinationName, false), Times.Once);
         }
 
         [Theory]
@@ -117,14 +117,14 @@ namespace Camelot.Operations.Tests
                 .Verifiable();
             filesServiceMock
                 .Setup(m => m.CopyAsync(SourceName, DestinationName, true))
-                .Returns(Task.CompletedTask)
+                .ReturnsAsync(true)
                 .Verifiable();
             filesServiceMock
                 .Setup(m => m.CopyAsync(SecondSourceName, SecondDestinationName, false))
                 .Verifiable();
             filesServiceMock
                 .Setup(m => m.CopyAsync(SecondSourceName, SecondDestinationName, true))
-                .Returns(Task.CompletedTask)
+                .ReturnsAsync(true)
                 .Verifiable();
             filesServiceMock
                 .Setup(m => m.CheckIfExists(It.IsAny<string>()))
@@ -134,7 +134,8 @@ namespace Camelot.Operations.Tests
                 directoryServiceMock.Object,
                 filesServiceMock.Object,
                 _pathService,
-                _fileNameGenerationService);
+                _fileNameGenerationService,
+                _logger);
             var settings = new BinaryFileSystemOperationSettings(
                 new string[] { },
                 new[] {SourceName, SecondSourceName},
@@ -192,33 +193,22 @@ namespace Camelot.Operations.Tests
             var directoryServiceMock = new Mock<IDirectoryService>();
             var filesServiceMock = new Mock<IFileService>();
             var copySetup = filesServiceMock
-             .Setup(m => m.CopyAsync(SourceName, DestinationName, false));
-            if (copyThrows)
-            {
-                copySetup.ThrowsAsync(new AccessViolationException()).Verifiable();
-            }
-            else
-            {
-                copySetup.Verifiable();
-            }
+                .Setup(m => m.CopyAsync(SourceName, DestinationName, false))
+                .ReturnsAsync(!copyThrows);
+            copySetup.Verifiable();
 
             var deleteSetup = filesServiceMock
-                .Setup(m => m.Remove(SourceName));
-            if (deleteThrows)
-            {
-                deleteSetup.Throws(new AccessViolationException()).Verifiable();
-            }
-            else
-            {
-                deleteSetup.Verifiable();
-            }
+                .Setup(m => m.Remove(SourceName))
+                .Returns(!deleteThrows);
+            deleteSetup.Verifiable();
 
             var operationsFactory = new OperationsFactory(
              _taskPool,
              directoryServiceMock.Object,
              filesServiceMock.Object,
              _pathService,
-             _fileNameGenerationService);
+             _fileNameGenerationService,
+             _logger);
             var settings = new BinaryFileSystemOperationSettings(
                 new string[] { },
                 new[] {SourceName},
@@ -251,15 +241,10 @@ namespace Camelot.Operations.Tests
             var directoryServiceMock = new Mock<IDirectoryService>();
             var filesServiceMock = new Mock<IFileService>();
             var removeSetup = filesServiceMock
-                .Setup(m => m.Remove(SourceName));
-            if (throws)
-            {
-                removeSetup.Throws(new AccessViolationException()).Verifiable();
-            }
-            else
-            {
-                removeSetup.Verifiable();
-            }
+                .Setup(m => m.Remove(SourceName))
+                .Returns(!throws);
+            removeSetup.Verifiable();
+
             var pathServiceMock = new Mock<IPathService>();
 
             var operationsFactory = new OperationsFactory(
@@ -267,7 +252,8 @@ namespace Camelot.Operations.Tests
                 directoryServiceMock.Object,
                 filesServiceMock.Object,
                 pathServiceMock.Object,
-                _fileNameGenerationService);
+                _fileNameGenerationService,
+                _logger);
             var deleteOperation = operationsFactory.CreateDeleteOperation(
                 new UnaryFileSystemOperationSettings(new string[] {}, new[] {SourceName}, SourceName));
 
@@ -290,15 +276,10 @@ namespace Camelot.Operations.Tests
         {
             var directoryServiceMock = new Mock<IDirectoryService>();
             var removeSetup = directoryServiceMock
-                .Setup(m => m.RemoveRecursively(SourceName));
-            if (throws)
-            {
-                removeSetup.Throws(new AccessViolationException()).Verifiable();
-            }
-            else
-            {
-                removeSetup.Verifiable();
-            }
+                .Setup(m => m.RemoveRecursively(SourceName))
+                .Returns(!throws);
+            removeSetup.Verifiable();
+
             var filesServiceMock = new Mock<IFileService>();
             var pathServiceMock = new Mock<IPathService>();
 
@@ -307,7 +288,8 @@ namespace Camelot.Operations.Tests
                 directoryServiceMock.Object,
                 filesServiceMock.Object,
                 pathServiceMock.Object,
-                _fileNameGenerationService);
+                _fileNameGenerationService,
+                _logger);
             var deleteOperation = operationsFactory.CreateDeleteOperation(
                 new UnaryFileSystemOperationSettings(new[] {SourceName}, new string[] {}, SourceName));
             Assert.Equal(OperationState.NotStarted, deleteOperation.State);
@@ -344,7 +326,8 @@ namespace Camelot.Operations.Tests
                 directoryServiceMock.Object,
                 filesServiceMock.Object,
                 pathServiceMock.Object,
-                _fileNameGenerationService);
+                _fileNameGenerationService,
+                _logger);
             var settings = new BinaryFileSystemOperationSettings(
                 new[] { SourceName },
                 new string[] { },
