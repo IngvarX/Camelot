@@ -15,9 +15,9 @@ namespace Camelot.Services.Abstractions
 
         bool CheckIfExists(string file);
 
-        Task CopyAsync(string source, string destination, bool overwrite = false);
+        Task<bool> CopyAsync(string source, string destination, bool overwrite = false);
 
-        void Remove(string file);
+        bool Remove(string file);
 
         bool Rename(string filePath, string newName);
 

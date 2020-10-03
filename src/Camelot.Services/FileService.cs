@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,6 +9,7 @@ using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Specifications;
 using Camelot.Services.Environment.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace Camelot.Services
 {
@@ -15,13 +17,16 @@ namespace Camelot.Services
     {
         private readonly IPathService _pathService;
         private readonly IEnvironmentFileService _environmentFileService;
+        private readonly ILogger _logger;
 
         public FileService(
             IPathService pathService,
-            IEnvironmentFileService environmentFileService)
+            IEnvironmentFileService environmentFileService,
+            ILogger logger)
         {
             _pathService = pathService;
             _environmentFileService = environmentFileService;
+            _logger = logger;
         }
 
         public IReadOnlyList<FileModel> GetFiles(string directory, ISpecification<FileModel> specification) =>
@@ -39,14 +44,38 @@ namespace Camelot.Services
 
         public bool CheckIfExists(string file) => _environmentFileService.CheckIfExists(file);
 
-        public Task CopyAsync(string source, string destination, bool overwrite)
+        public Task<bool> CopyAsync(string source, string destination, bool overwrite)
         {
-            _environmentFileService.Copy(source, destination, overwrite);
+            try
+            {
+                _environmentFileService.Copy(source, destination, overwrite);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(
+                    $"Failed to copy file {source} to {destination} (overwrite: {overwrite}) with error {ex}");
 
-            return Task.CompletedTask;
+                return Task.FromResult(false);
+            }
+
+            return Task.FromResult(true);
         }
 
-        public void Remove(string file) => _environmentFileService.Delete(file);
+        public bool Remove(string file)
+        {
+            try
+            {
+                _environmentFileService.Delete(file);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed to remove file {file} with error {ex}");
+
+                return false;
+            }
+
+            return true;
+        }
 
         public bool Rename(string filePath, string newName)
         {
@@ -57,8 +86,10 @@ namespace Camelot.Services
             {
                 _environmentFileService.Move(filePath, newFilePath);
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError($"Failed to rename file {filePath} to {newName} with error {ex}");
+
                 return false;
             }
 
@@ -71,8 +102,17 @@ namespace Camelot.Services
         public Task WriteBytesAsync(string filePath, byte[] bytes) =>
             _environmentFileService.WriteBytesAsync(filePath, bytes);
 
-        public void CreateFile(string filePath) =>
-            _environmentFileService.Create(filePath);
+        public void CreateFile(string filePath)
+        {
+            try
+            {
+                _environmentFileService.Create(filePath);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed to create file {filePath} with error {ex}");
+            }
+        }
 
         private FileModel CreateFrom(string file)
         {

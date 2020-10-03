@@ -24,15 +24,19 @@ namespace Camelot
                     return;
                 }
 
-                Bootstrapper.Register(Locator.CurrentMutable, Locator.Current);
+                RegisterDependencies();
 
-                BuildAvaloniaApp().StartWithClassicDesktopLifetime(args, ShutdownMode.OnMainWindowClose);
+                BuildAvaloniaApp()
+                    .StartWithClassicDesktopLifetime(args, ShutdownMode.OnMainWindowClose);
             }
             finally
             {
                 mutex.ReleaseMutex();
             }
         }
+
+        private static void RegisterDependencies() =>
+            Bootstrapper.Register(Locator.CurrentMutable, Locator.Current);
 
         private static AppBuilder BuildAvaloniaApp()
             => AppBuilder

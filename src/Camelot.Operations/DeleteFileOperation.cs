@@ -8,34 +8,23 @@ namespace Camelot.Operations
 {
     public class DeleteFileOperation : OperationBase, IInternalOperation
     {
-        private readonly string _fileToRemove;
         private readonly IFileService _fileService;
+        private readonly string _fileToRemove;
 
         public DeleteFileOperation(
-            string fileToRemove,
-            IFileService fileService)
+            IFileService fileService,
+            string fileToRemove)
         {
-            _fileToRemove = fileToRemove;
             _fileService = fileService;
+            _fileToRemove = fileToRemove;
         }
 
         public Task RunAsync(CancellationToken cancellationToken)
         {
-            try
-            {
-                State = OperationState.InProgress;
-                _fileService.Remove(_fileToRemove);
-                State = OperationState.Finished;
-            }
-            catch
-            {
-                // TODO: process exception
-                State = OperationState.Failed;
-            }
-            finally
-            {
-                SetFinalProgress();
-            }
+            State = OperationState.InProgress;
+            var isRemoved = _fileService.Remove(_fileToRemove);
+            State = isRemoved ? OperationState.Finished : OperationState.Failed;
+            SetFinalProgress();
 
             return Task.CompletedTask;
         }

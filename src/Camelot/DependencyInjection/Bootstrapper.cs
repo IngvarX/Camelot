@@ -3,6 +3,7 @@ using System.IO;
 using System.Reflection;
 using Camelot.Avalonia.Implementations;
 using Camelot.Avalonia.Interfaces;
+using Camelot.Configuration;
 using Camelot.DataAccess.Configuration;
 using Camelot.DataAccess.LiteDb;
 using Camelot.DataAccess.UnitOfWork;
@@ -55,7 +56,10 @@ using Camelot.ViewModels.Interfaces.Menu;
 using Camelot.ViewModels.Services.Implementations;
 using Camelot.ViewModels.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
+using Serilog;
+using Serilog.Extensions.Logging;
 using Splat;
+using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace Camelot.DependencyInjection
 {
@@ -64,6 +68,7 @@ namespace Camelot.DependencyInjection
         public static void Register(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
             RegisterConfiguration(services);
+            RegisterLogging(services, resolver);
             RegisterEnvironmentServices(services);
             RegisterAvaloniaServices(services);
             RegisterFileSystemWatcherServices(services, resolver);
@@ -72,6 +77,24 @@ namespace Camelot.DependencyInjection
             RegisterServices(services, resolver);
             RegisterPlatformSpecificServices(services, resolver);
             RegisterViewModels(services, resolver);
+        }
+
+        private static void RegisterLogging(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
+        {
+            services.RegisterLazySingleton(() =>
+            {
+                var config = resolver.GetRequiredService<LoggingConfiguration>();
+                var logFilePath = Path.Combine(Directory.GetCurrentDirectory(), config.LogFileName);
+                var logger = new LoggerConfiguration()
+                    .MinimumLevel.Override("Default", config.DefaultLogLevel)
+                    .MinimumLevel.Override("Microsoft", config.MicrosoftLogLevel)
+                    .WriteTo.Console()
+                    .WriteTo.RollingFile(logFilePath, fileSizeLimitBytes: config.LimitBytes)
+                    .CreateLogger();
+                var factory = new SerilogLoggerFactory(logger);
+
+                return factory.CreateLogger("Default");
+            });
         }
 
         private static void RegisterConfiguration(IMutableDependencyResolver services)
@@ -118,6 +141,10 @@ namespace Camelot.DependencyInjection
             var unmountedDrivesConfiguration = new UnmountedDrivesConfiguration();
             configuration.GetSection("UnmountedDrives").Bind(unmountedDrivesConfiguration);
             services.RegisterConstant(unmountedDrivesConfiguration);
+
+            var loggingConfiguration = new LoggingConfiguration();
+            configuration.GetSection("Logging").Bind(loggingConfiguration);
+            services.RegisterConstant(loggingConfiguration);
         }
 
         private static void RegisterEnvironmentServices(IMutableDependencyResolver services)
@@ -167,7 +194,8 @@ namespace Camelot.DependencyInjection
         {
             services.RegisterLazySingleton<IFileService>(() => new FileService(
                 resolver.GetRequiredService<IPathService>(),
-                resolver.GetRequiredService<IEnvironmentFileService>()
+                resolver.GetRequiredService<IEnvironmentFileService>(),
+                resolver.GetRequiredService<ILogger>()
             ));
             services.RegisterLazySingleton<IDateTimeProvider>(() => new DateTimeProvider());
             services.RegisterLazySingleton<IDriveService>(() => new DriveService(
@@ -180,7 +208,8 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IDirectoryService>(),
                 resolver.GetRequiredService<IFileService>(),
                 resolver.GetRequiredService<IPathService>(),
-                resolver.GetRequiredService<IFileNameGenerationService>()
+                resolver.GetRequiredService<IFileNameGenerationService>(),
+                resolver.GetRequiredService<ILogger>()
             ));
             services.RegisterLazySingleton<INodesSelectionService>(() => new NodesSelectionService());
             services.RegisterLazySingleton<IOperationsService>(() => new OperationsService(
@@ -194,7 +223,8 @@ namespace Camelot.DependencyInjection
             services.RegisterLazySingleton<IDirectoryService>(() => new DirectoryService(
                 resolver.GetRequiredService<IPathService>(),
                 resolver.GetRequiredService<IEnvironmentDirectoryService>(),
-                resolver.GetRequiredService<IEnvironmentFileService>()
+                resolver.GetRequiredService<IEnvironmentFileService>(),
+                resolver.GetRequiredService<ILogger>()
             ));
             services.Register<IFileSystemWatchingService>(() => new FileSystemWatchingService(
                 resolver.GetRequiredService<IFileSystemWatcherFactory>()

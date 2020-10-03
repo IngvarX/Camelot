@@ -6,6 +6,7 @@ using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Models.Operations;
 using Camelot.Services.Abstractions.Operations;
 using Camelot.TaskPool.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace Camelot.Operations
 {
@@ -16,19 +17,22 @@ namespace Camelot.Operations
         private readonly IFileService _fileService;
         private readonly IPathService _pathService;
         private readonly IFileNameGenerationService _fileNameGenerationService;
+        private readonly ILogger _logger;
 
         public OperationsFactory(
             ITaskPool taskPool,
             IDirectoryService directoryService,
             IFileService fileService,
             IPathService pathService,
-            IFileNameGenerationService fileNameGenerationService)
+            IFileNameGenerationService fileNameGenerationService,
+            ILogger logger)
         {
             _taskPool = taskPool;
             _directoryService = directoryService;
             _fileService = fileService;
             _pathService = pathService;
             _fileNameGenerationService = fileNameGenerationService;
+            _logger = logger;
         }
 
         public IOperation CreateCopyOperation(BinaryFileSystemOperationSettings settings)
@@ -103,21 +107,21 @@ namespace Camelot.Operations
             new CopyOperation(_directoryService, _fileService, _pathService, source, destination);
 
         private IInternalOperation CreateDeleteFileOperation(string filePath) =>
-            new DeleteFileOperation(filePath, _fileService);
+            new DeleteFileOperation(_fileService, filePath);
 
         private IInternalOperation CreateDeleteDirectoryOperation(string directoryPath) =>
-            new DeleteDirectoryOperation(directoryPath, _directoryService);
+            new DeleteDirectoryOperation(_directoryService, directoryPath);
 
         private IInternalOperation CreateAddDirectoryOperation(string directoryPath) =>
-            new CreateDirectoryOperation(directoryPath, _directoryService);
+            new CreateDirectoryOperation(_directoryService, directoryPath);
 
         private ICompositeOperation CreateCompositeOperation(
             IReadOnlyList<OperationGroup> operations,
             OperationInfo operationInfo) =>
             new CompositeOperation(_taskPool, _fileNameGenerationService, operations, operationInfo);
 
-        private static IOperation CreateOperation(ICompositeOperation compositeOperation) =>
-            new AsyncOperationStateMachine(compositeOperation);
+        private IOperation CreateOperation(ICompositeOperation compositeOperation) =>
+            new AsyncOperationStateMachine(compositeOperation, _logger);
 
         private static OperationInfo Create(OperationType operationType, BinaryFileSystemOperationSettings settings) =>
             new OperationInfo(operationType, settings);

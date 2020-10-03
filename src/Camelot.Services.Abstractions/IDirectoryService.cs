@@ -32,7 +32,7 @@ namespace Camelot.Services.Abstractions
 
         IEnumerable<string> GetDirectoriesRecursively(string directory);
 
-        void RemoveRecursively(string directory);
+        bool RemoveRecursively(string directory);
 
         bool Rename(string directoryPath, string newName);
     }

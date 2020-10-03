@@ -8,6 +8,7 @@ using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Models.EventArgs;
 using Camelot.Services.Abstractions.Specifications;
 using Camelot.Services.Environment.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace Camelot.Services
 {
@@ -16,6 +17,7 @@ namespace Camelot.Services
         private readonly IPathService _pathService;
         private readonly IEnvironmentDirectoryService _environmentDirectoryService;
         private readonly IEnvironmentFileService _environmentFileService;
+        private readonly ILogger _logger;
 
         private string _directory;
 
@@ -41,11 +43,13 @@ namespace Camelot.Services
         public DirectoryService(
             IPathService pathService,
             IEnvironmentDirectoryService environmentDirectoryService,
-            IEnvironmentFileService environmentFileService)
+            IEnvironmentFileService environmentFileService,
+            ILogger logger)
         {
             _pathService = pathService;
             _environmentDirectoryService = environmentDirectoryService;
             _environmentFileService = environmentFileService;
+            _logger = logger;
         }
 
         public bool Create(string directory)
@@ -54,8 +58,10 @@ namespace Camelot.Services
             {
                 _environmentDirectoryService.CreateDirectory(directory);
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError($"Failed to create directory {directory} with error {ex}");
+
                 return false;
             }
 
@@ -111,8 +117,21 @@ namespace Camelot.Services
                 .EnumerateDirectoriesRecursively(directory)
                 .ToArray();
 
-        public void RemoveRecursively(string directory) =>
-            _environmentDirectoryService.Delete(directory, true);
+        public bool RemoveRecursively(string directory)
+        {
+            try
+            {
+                _environmentDirectoryService.Delete(directory, true);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed to delete directory {directory} with error {ex}");
+
+                return false;
+            }
+
+            return true;
+        }
 
         public bool Rename(string directoryPath, string newName)
         {
@@ -123,8 +142,11 @@ namespace Camelot.Services
             {
                 _environmentDirectoryService.Move(directoryPath, newDirectoryPath);
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(
+                    $"Failed to rename directory {directoryPath} to {newName} with error {ex}");
+
                 return false;
             }
 

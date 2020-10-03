@@ -8,34 +8,23 @@ namespace Camelot.Operations
 {
     public class DeleteDirectoryOperation : OperationBase, IInternalOperation
     {
-        private readonly string _directoryToRemove;
         private readonly IDirectoryService _directoryService;
+        private readonly string _directoryToRemove;
 
         public DeleteDirectoryOperation(
-            string directoryToRemove,
-            IDirectoryService directoryService)
+            IDirectoryService directoryService,
+            string directoryToRemove)
         {
-            _directoryToRemove = directoryToRemove;
             _directoryService = directoryService;
+            _directoryToRemove = directoryToRemove;
         }
 
         public Task RunAsync(CancellationToken cancellationToken)
         {
-            try
-            {
-                State = OperationState.InProgress;
-                _directoryService.RemoveRecursively(_directoryToRemove);
-                State = OperationState.Finished;
-            }
-            catch
-            {
-                // TODO: process exception
-                State = OperationState.Failed;
-            }
-            finally
-            {
-                SetFinalProgress();
-            }
+            State = OperationState.InProgress;
+            var isRemoved = _directoryService.RemoveRecursively(_directoryToRemove);
+            State = isRemoved ? OperationState.Finished : OperationState.Failed;
+            SetFinalProgress();
 
             return Task.CompletedTask;
         }

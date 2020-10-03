@@ -7,12 +7,14 @@ using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Models.EventArgs;
 using Camelot.Services.Abstractions.Models.Operations;
 using Camelot.Services.Abstractions.Operations;
+using Microsoft.Extensions.Logging;
 
 namespace Camelot.Operations
 {
     public class AsyncOperationStateMachine : IOperation
     {
         private readonly ICompositeOperation _compositeOperation;
+        private readonly ILogger _logger;
 
         private OperationState _operationState;
 
@@ -43,9 +45,12 @@ namespace Camelot.Operations
             remove => _compositeOperation.ProgressChanged -= value;
         }
 
-        public AsyncOperationStateMachine(ICompositeOperation compositeOperation)
+        public AsyncOperationStateMachine(
+            ICompositeOperation compositeOperation,
+            ILogger logger)
         {
             _compositeOperation = compositeOperation;
+            _logger = logger;
 
             SubscribeToEvents();
         }
@@ -125,14 +130,17 @@ namespace Camelot.Operations
                         await ChangeStateAsync(expectedState, requestedState);
                     }
                 }
-                catch (OperationFailedException)
+                catch (OperationFailedException ex)
                 {
-                    // TODO: log
+                    _logger.LogError(
+                        $"{nameof(AsyncOperationStateMachine)} {nameof(OperationFailedException)} occurred: {ex}");
+
                     await ChangeStateAsync(State, OperationState.Failed);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    // TODO: log
+                    _logger.LogError(
+                        $"{nameof(AsyncOperationStateMachine)} {nameof(Exception)} occurred: {ex}");
                 }
             };
 

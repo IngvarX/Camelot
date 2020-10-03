@@ -83,17 +83,10 @@ namespace Camelot.Operations
 
         private void CreateOutputDirectoryIfNeeded(string destinationFile)
         {
-            try
+            var outputDirectory = _pathService.GetParentDirectory(destinationFile);
+            if (!_directoryService.CheckIfExists(outputDirectory))
             {
-                var outputDirectory = _pathService.GetParentDirectory(destinationFile);
-                if (!_directoryService.CheckIfExists(outputDirectory))
-                {
-                    _directoryService.Create(outputDirectory);
-                }
-            }
-            catch
-            {
-                // ignore
+                _directoryService.Create(outputDirectory);
             }
         }
 
@@ -102,21 +95,10 @@ namespace Camelot.Operations
 
         private async Task CopyFileAsync(string destinationFile, bool force = false)
         {
-            try
-            {
-                State = OperationState.InProgress;
-                await _fileService.CopyAsync(_sourceFile, destinationFile, force);
-                State = OperationState.Finished;
-            }
-            catch
-            {
-                // TODO: process
-                State = OperationState.Failed;
-            }
-            finally
-            {
-                SetFinalProgress();
-            }
+            State = OperationState.InProgress;
+            var isCopied = await _fileService.CopyAsync(_sourceFile, destinationFile, force);
+            State = isCopied ? OperationState.Finished : OperationState.Failed;
+            SetFinalProgress();
         }
     }
 }
