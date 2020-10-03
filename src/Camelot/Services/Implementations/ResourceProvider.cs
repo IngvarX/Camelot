@@ -7,6 +7,6 @@ namespace Camelot.Services.Implementations
     public class ResourceProvider : IResourceProvider
     {
         public string GetResourceByName(string name) =>
-            Resources.ResourceManager.GetString(name) ?? throw new ArgumentException(nameof(name));
+            Resources.ResourceManager.GetString(name) ?? throw new ArgumentException(name);
     }
 }

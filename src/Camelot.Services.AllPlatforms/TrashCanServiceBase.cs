@@ -39,11 +39,7 @@ namespace Camelot.Services.AllPlatforms
 
                 var filesTrashCanLocation = GetFilesTrashCanLocation(trashCanLocation); // TODO: create if not exists?
                 var destinationPathsDictionary = GetFilesTrashCanPathsMapping(nodes, filesTrashCanLocation);
-                var isRemoved = await TryMoveToTrashAsync(destinationPathsDictionary);
-                if (!isRemoved)
-                {
-                    continue;
-                }
+                await _operationsService.MoveAsync(destinationPathsDictionary);
 
                 await WriteMetaDataAsync(destinationPathsDictionary, trashCanLocation);
                 result = true;
@@ -68,21 +64,6 @@ namespace Camelot.Services.AllPlatforms
         protected abstract string GetUniqueFilePath(string fileName, HashSet<string> filesNamesSet, string directory);
 
         protected virtual Task CleanupAsync() => Task.CompletedTask;
-
-        private async Task<bool> TryMoveToTrashAsync(IReadOnlyDictionary<string, string> nodes)
-        {
-            try
-            {
-                await _operationsService.MoveAsync(nodes);
-            }
-            catch
-            {
-                return false;
-            }
-
-            // TODO: check results in future
-            return true;
-        }
 
         private IReadOnlyDictionary<string, string> GetFilesTrashCanPathsMapping(IReadOnlyList<string> files,
             string filesTrashCanLocation)
