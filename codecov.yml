@@ -11,6 +11,7 @@ coverage:
         url: "https://webhooks.gitter.im/e/00d5f9c4fa5d8b7f29f3"
         threshold: 0%
 ignore:
+  - "tests/**/*"
   - "src/Camelot/**/*"
   - "src/Camelot/*"
   - "src/Camelot.Avalonia/**/*"
