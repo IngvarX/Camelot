@@ -116,18 +116,18 @@ namespace Camelot.Services.Tests
             }
 
             _autoMocker
-                .Setup<ILogger>(m => m.Log(LogLevel.Error, It.IsAny<EventId>(), It.IsAny<object>(), It.IsAny<Exception>(), It.IsAny<Func<object,Exception,string>>()))
+                .Setup<ILogger>(m => m.Log(LogLevel.Error, It.IsAny<EventId>(), It.Is<It.IsAnyType>((v, t) => true),
+                    It.IsAny<Exception>(), It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)))
                 .Verifiable();
 
             var fileService = _autoMocker.CreateInstance<FileService>();
             fileService.CreateFile(FileName);
 
             _autoMocker
-                .Verify<IEnvironmentFileService>(m => m.Create(FileName));
+                .Verify<IEnvironmentFileService>(m => m.Create(FileName), Times.Once);
             _autoMocker
-                .Verify<ILogger>(
-                    m => m.Log(LogLevel.Error, It.IsAny<EventId>(), It.IsAny<object>(), It.IsAny<Exception>(),
-                        It.IsAny<Func<object, Exception, string>>()),
+                .Verify<ILogger>(m => m.Log(LogLevel.Error, It.IsAny<EventId>(), It.Is<It.IsAnyType>((v, t) => true),
+                        It.IsAny<Exception>(), It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)),
                     throws ? Times.Once() : Times.Never());
         }
 

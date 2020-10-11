@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Camelot.Extensions;
@@ -71,6 +72,18 @@ namespace Camelot.Views.Main
 
             StopEditing(nodeViewModel);
             nodeViewModel.OpenCommand.Execute(null);
+        }
+
+        private void OnDataGridKeyDown(object sender, KeyEventArgs args)
+        {
+            if (args.Key != Key.Delete && args.Key != Key.Back)
+            {
+                return;
+            }
+
+            args.Handled = true;
+
+            ViewModel.OperationsViewModel.MoveToTrashCommand.Execute(null);
         }
 
         private void OnDataGridCellPointerPressed(object sender, DataGridCellPointerPressedEventArgs args) =>

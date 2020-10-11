@@ -78,6 +78,7 @@
                   HorizontalScrollBarVisibility="Disabled"
                   AlternatingRowBackground="{DynamicResource AlternativeThemeBackgroundBrush}"
                   VerticalScrollBarVisibility="Visible"
+                  KeyDown="OnDataGridKeyDown"
                   DoubleTapped="OnDataGridDoubleTapped"
                   CellPointerPressed="OnDataGridCellPointerPressed"
                   SelectionChanged="OnDataGridSelectionChanged">
@@ -119,8 +120,6 @@
                 <KeyBinding Gesture="F6" Command="{Binding OperationsViewModel.MoveCommand}" />
                 <KeyBinding Gesture="F7" Command="{Binding OperationsViewModel.CreateNewDirectoryCommand}" />
                 <KeyBinding Gesture="F8" Command="{Binding OperationsViewModel.MoveToTrashCommand}" />
-                <KeyBinding Gesture="Delete" Command="{Binding OperationsViewModel.MoveToTrashCommand}" />
-                <KeyBinding Gesture="Back" Command="{Binding OperationsViewModel.MoveToTrashCommand}" />
                 <KeyBinding Gesture="Shift+Delete" Command="{Binding OperationsViewModel.RemoveCommand}" />
                 <KeyBinding Gesture="Shift+Back" Command="{Binding OperationsViewModel.RemoveCommand}" />
             </DataGrid.KeyBindings>
