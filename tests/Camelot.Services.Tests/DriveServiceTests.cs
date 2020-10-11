@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
@@ -13,7 +14,7 @@ namespace Camelot.Services.Tests
     public class DriveServiceTests
     {
         [Fact]
-        public void TestGetMountedDrives()
+        public void TestGetDrives()
         {
             var drives = DriveInfo.GetDrives();
             var envDriveServiceMock = new Mock<IEnvironmentDriveService>();
@@ -30,7 +31,7 @@ namespace Camelot.Services.Tests
 
             var configuration = new DriveServiceConfiguration
             {
-                DrivesListRefreshIntervalMs = 10
+                DrivesListRefreshIntervalMs = 10_000
             };
             var driveService = new DriveService(envDriveServiceMock.Object, unmountedDriveServiceMock.Object,
                 configuration);
@@ -95,6 +96,39 @@ namespace Camelot.Services.Tests
             await Task.Delay(50);
 
             Assert.True(isCallbackCalled);
+        }
+
+        [Fact]
+        public void TestGetFileDrive()
+        {
+            var drives = DriveInfo.GetDrives();
+            var envDriveServiceMock = new Mock<IEnvironmentDriveService>();
+            envDriveServiceMock
+                .Setup(m => m.GetMountedDrives())
+                .Returns(drives);
+            var unmountedDriveServiceMock = new Mock<IUnmountedDriveService>();
+            unmountedDriveServiceMock
+                .Setup(m => m.GetUnmountedDrivesAsync())
+                .ReturnsAsync(Array.Empty<UnmountedDriveModel>());
+
+            var configuration = new DriveServiceConfiguration
+            {
+                DrivesListRefreshIntervalMs = 10_000
+            };
+            var driveService = new DriveService(envDriveServiceMock.Object, unmountedDriveServiceMock.Object,
+                configuration);
+
+            var filePath = Assembly.GetEntryAssembly().Location;
+            var drive = driveService.GetFileDrive(filePath);
+
+            Assert.NotNull(drive);
+            Assert.NotNull(drive.Name);
+            Assert.NotNull(drive.RootDirectory);
+
+            Assert.NotEmpty(drive.Name);
+            Assert.NotEmpty(drive.RootDirectory);
+            Assert.True(drive.FreeSpaceBytes > 0);
+            Assert.True(drive.TotalSpaceBytes > 0);
         }
     }
 }

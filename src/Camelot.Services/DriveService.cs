@@ -117,8 +117,7 @@ namespace Camelot.Services
                     Name = driveInfo.Name,
                     RootDirectory = driveInfo.RootDirectory.FullName,
                     FreeSpaceBytes = driveInfo.AvailableFreeSpace,
-                    TotalSpaceBytes = driveInfo.TotalSize,
-                    IsMounted = true
+                    TotalSpaceBytes = driveInfo.TotalSize
                 };
             }
             catch

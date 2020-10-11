@@ -9,7 +9,5 @@ namespace Camelot.Services.Abstractions.Models
         public long FreeSpaceBytes { get; set; }
 
         public long TotalSpaceBytes { get; set; }
-
-        public bool IsMounted { get; set; }
     }
 }

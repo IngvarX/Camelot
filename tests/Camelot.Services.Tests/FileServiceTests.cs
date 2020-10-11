@@ -5,6 +5,7 @@ using Camelot.Extensions;
 using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Specifications;
 using Camelot.Services.Environment.Interfaces;
+using Camelot.Tests.Common.Extensions;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.AutoMock;
@@ -115,20 +116,14 @@ namespace Camelot.Services.Tests
                     .Throws<InvalidOperationException>();
             }
 
-            _autoMocker
-                .Setup<ILogger>(m => m.Log(LogLevel.Error, It.IsAny<EventId>(), It.Is<It.IsAnyType>((v, t) => true),
-                    It.IsAny<Exception>(), It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)))
-                .Verifiable();
+            _autoMocker.MockLogError();
 
             var fileService = _autoMocker.CreateInstance<FileService>();
             fileService.CreateFile(FileName);
 
             _autoMocker
                 .Verify<IEnvironmentFileService>(m => m.Create(FileName), Times.Once);
-            _autoMocker
-                .Verify<ILogger>(m => m.Log(LogLevel.Error, It.IsAny<EventId>(), It.Is<It.IsAnyType>((v, t) => true),
-                        It.IsAny<Exception>(), It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)),
-                    throws ? Times.Once() : Times.Never());
+            _autoMocker.VerifyLogError(throws ? Times.Once() : Times.Never());
         }
 
         [Fact]
@@ -163,7 +158,6 @@ namespace Camelot.Services.Tests
         {
             _files.ForEach(File.Delete);
         }
-
 
         private static void Create(string file) => File.Create(file).Dispose();
 

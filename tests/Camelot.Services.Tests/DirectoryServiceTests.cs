@@ -3,6 +3,9 @@ using System.IO;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models.EventArgs;
 using Camelot.Services.Environment.Interfaces;
+using Camelot.Tests.Common.Extensions;
+using Microsoft.Extensions.Logging;
+using Moq;
 using Moq.AutoMock;
 using Xunit;
 
@@ -12,6 +15,7 @@ namespace Camelot.Services.Tests
     {
         private const string DirectoryName = "Directory";
         private const string ParentDirectoryName = "Parent";
+        private const string NewDirectoryName = "New";
         private const string NotExistingDirectoryName = "MissingDirectory";
 
         private readonly AutoMocker _autoMocker;
@@ -147,6 +151,8 @@ namespace Camelot.Services.Tests
                     .Throws<InvalidOperationException>();
             }
 
+            _autoMocker.MockLogError();
+
             var directoryService = _autoMocker.CreateInstance<DirectoryService>();
 
             var actual = directoryService.RemoveRecursively(DirectoryName);
@@ -154,6 +160,40 @@ namespace Camelot.Services.Tests
             Assert.Equal(expected, actual);
             _autoMocker
                 .Verify<IEnvironmentDirectoryService>(m => m.Delete(DirectoryName, true));
+            _autoMocker.VerifyLogError(throws ? Times.Once() : Times.Never());
+        }
+
+        [Theory]
+        [InlineData(true, false)]
+        [InlineData(false, true)]
+        public void TestDirectoryRename(bool throws, bool expected)
+        {
+            _autoMocker
+                .Setup<IPathService, string>(m => m.GetParentDirectory(DirectoryName))
+                .Returns(ParentDirectoryName);
+            _autoMocker
+                .Setup<IPathService, string>(m => m.Combine(ParentDirectoryName, NewDirectoryName))
+                .Returns(NotExistingDirectoryName);
+            _autoMocker
+                .Setup<IEnvironmentDirectoryService>(m => m.Move(DirectoryName, NotExistingDirectoryName))
+                .Verifiable();
+            if (throws)
+            {
+                _autoMocker
+                    .Setup<IEnvironmentDirectoryService>(m => m.Move(DirectoryName, NotExistingDirectoryName))
+                    .Throws<InvalidOperationException>();
+            }
+
+            _autoMocker.MockLogError();
+
+            var directoryService = _autoMocker.CreateInstance<DirectoryService>();
+
+            var actual = directoryService.Rename(DirectoryName, NewDirectoryName);
+
+            Assert.Equal(expected, actual);
+            _autoMocker
+                .Verify<IEnvironmentDirectoryService>(m => m.Move(DirectoryName, NotExistingDirectoryName));
+            _autoMocker.VerifyLogError(throws ? Times.Once() : Times.Never());
         }
     }
 }
