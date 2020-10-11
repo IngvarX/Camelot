@@ -44,7 +44,7 @@ namespace Camelot.Services
         }
 
         public DriveModel GetFileDrive(string filePath) =>
-            GetMountedDrives()
+            MountedDrives
                 .OrderByDescending(d => d.RootDirectory.Length)
                 .First(d => filePath.StartsWith(d.RootDirectory));
 
