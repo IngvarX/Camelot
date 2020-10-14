@@ -19,17 +19,16 @@ namespace Camelot.Services.Linux
                 await using var desktopFile = File.OpenRead(desktopFilePath);
 
                 var desktopEntry = new IniFileReader().ReadFile(desktopFile);
-
-                if (desktopEntry["Type"] != "Application")
+                if (desktopEntry["Desktop Entry:Type"] != "Application")
                 {
                     continue;
                 }
 
                 installedSoftwares.Add(new SoftwareModel
                 {
-                    DisplayName = desktopEntry["Name"],
-                    DisplayIcon = desktopEntry["Icon"],
-                    InstallLocation = desktopEntry["Exec"]
+                    DisplayName = desktopEntry["Desktop Entry:Name"],
+                    DisplayIcon = desktopEntry["Desktop Entry:Icon"],
+                    InstallLocation = desktopEntry["Desktop Entry:Exec"]
                 });
             }
 
@@ -57,25 +56,25 @@ namespace Camelot.Services.Linux
                         continue;
                     }
 
-                    if (line[0] == ';' || line[0] == '#' || line[0] == '/')
+                    switch (line[0])
                     {
-                        continue;
+                        case ';':
+                        case '#':
+                        case '/':
+                            continue;
+                        case '[' when line[^1] == ']':
+                            sectionPrefix = line.Substring(1, line.Length - 2) + keyDelimiter;
+                            continue;
                     }
 
-                    if (line[0] == '[' && line[^1] == ']')
-                    {
-                        sectionPrefix = line.Substring(1, line.Length - 2) + keyDelimiter;
-                        continue;
-                    }
-
-                    int separator = line.IndexOf('=');
+                    var separator = line.IndexOf('=');
                     if (separator < 0)
                     {
                         throw new FormatException("Unrecognized line format");
                     }
 
-                    string key = sectionPrefix + line.Substring(0, separator).Trim();
-                    string value = line.Substring(separator + 1).Trim();
+                    var key = sectionPrefix + line.Substring(0, separator).Trim();
+                    var value = line.Substring(separator + 1).Trim();
 
                     if (value.Length > 1 && value[0] == '"' && value[^1] == '"')
                     {
