@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
 using Microsoft.Win32;
@@ -12,7 +13,7 @@ namespace Camelot.Services.Windows
 
         private const string RegkeyInstalledSoftwareX64 = @"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall";
 
-        public IEnumerable<SoftwareModel> GetAllInstalledSoftwares()
+        public Task<IEnumerable<SoftwareModel>> GetAllInstalledSoftwares()
         {
             var installedSoftwares = new List<SoftwareModel>();
 
@@ -26,7 +27,7 @@ namespace Camelot.Services.Windows
                 AddSoftwares(softwareX64Key);
             }
 
-            return installedSoftwares;
+            return Task.FromResult<IEnumerable<SoftwareModel>>(installedSoftwares);
 
             void AddSoftwares(RegistryKey softwareKey)
             {
