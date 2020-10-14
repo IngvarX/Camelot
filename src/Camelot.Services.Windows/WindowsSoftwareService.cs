@@ -8,51 +8,57 @@ namespace Camelot.Services.Windows
 {
     public class WindowsSoftwareService : ISoftwareService
     {
+        private const string RegkeyInstalledSoftwareX32 = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall";
+
+        private const string RegkeyInstalledSoftwareX64 = @"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall";
+
         public IEnumerable<SoftwareModel> GetAllInstalledSoftwares()
         {
             var installedSoftwares = new List<SoftwareModel>();
 
-            var uninstalls = Registry.LocalMachine.OpenSubKey("SOFTWARE");
+            using var softwareX32Key = Registry.LocalMachine.OpenSubKey(RegkeyInstalledSoftwareX32);
+            AddSoftwares(softwareX32Key);
+
             if (RuntimeInformation.ProcessArchitecture == Architecture.X64 ||
                 RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
             {
-                uninstalls = uninstalls.OpenSubKey("WOW6432Node");
-            }
-
-            uninstalls = uninstalls
-                .OpenSubKey("Microsoft")
-                .OpenSubKey("Windows")
-                .OpenSubKey("CurrentVersion")
-                .OpenSubKey("Uninstall");
-
-            foreach (var sofwareKeyName in uninstalls.GetSubKeyNames())
-            {
-                using var sofwareRegistryKey = uninstalls.OpenSubKey(sofwareKeyName);
-                if (sofwareRegistryKey == null)
-                {
-                    continue;
-                }
-
-                var displayName = sofwareRegistryKey.GetValue("DisplayName") as string;
-                if (string.IsNullOrWhiteSpace(displayName))
-                {
-                    continue;
-                }
-
-                var displayIcon = sofwareRegistryKey.GetValue("DisplayIcon") as string;
-                var displayVersion = sofwareRegistryKey.GetValue("DisplayVersion") as string;
-                var installLocation = sofwareRegistryKey.GetValue("InstallLocation") as string;
-
-                installedSoftwares.Add(new SoftwareModel
-                {
-                    DisplayIcon = displayIcon,
-                    DisplayName = displayName,
-                    DisplayVersion = displayVersion,
-                    InstallLocation = installLocation
-                });
+                using var softwareX64Key = Registry.LocalMachine.OpenSubKey(RegkeyInstalledSoftwareX64);
+                AddSoftwares(softwareX64Key);
             }
 
             return installedSoftwares;
+
+            void AddSoftwares(RegistryKey softwareKey)
+            {
+                foreach (var softwareKeyName in softwareKey.GetSubKeyNames())
+                {
+                    using var softwareRegistryKey = softwareKey.OpenSubKey(softwareKeyName);
+                    if (softwareRegistryKey == null)
+                    {
+                        continue;
+                    }
+
+                    var displayName = softwareRegistryKey.GetValue("DisplayName") as string;
+                    var installLocation = softwareRegistryKey.GetValue("InstallLocation") as string;
+
+                    if (string.IsNullOrWhiteSpace(displayName) ||
+                        string.IsNullOrWhiteSpace(installLocation))
+                    {
+                        continue;
+                    }
+
+                    var displayIcon = softwareRegistryKey.GetValue("DisplayIcon") as string;
+                    var displayVersion = softwareRegistryKey.GetValue("DisplayVersion") as string;
+
+                    installedSoftwares.Add(new SoftwareModel
+                    {
+                        DisplayIcon = displayIcon,
+                        DisplayName = displayName,
+                        DisplayVersion = displayVersion,
+                        InstallLocation = installLocation
+                    });
+                }
+            }
         }
     }
 }
