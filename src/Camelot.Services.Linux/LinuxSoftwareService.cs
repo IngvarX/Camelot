@@ -19,7 +19,13 @@ namespace Camelot.Services.Linux
                 await using var desktopFile = File.OpenRead(desktopFilePath);
 
                 var desktopEntry = new IniFileReader().ReadFile(desktopFile);
-                if (desktopEntry["Desktop Entry:Type"] != "Application")
+
+                if (!desktopEntry.TryGetValue("Desktop Entry:Type", out var desktopType))
+                {
+                    continue;
+                }
+
+                if (desktopType.Equals("Application", StringComparison.OrdinalIgnoreCase))
                 {
                     continue;
                 }
@@ -27,8 +33,7 @@ namespace Camelot.Services.Linux
                 installedSoftwares.Add(new SoftwareModel
                 {
                     DisplayName = desktopEntry["Desktop Entry:Name"],
-                    DisplayIcon = desktopEntry["Desktop Entry:Icon"],
-                    InstallLocation = desktopEntry["Desktop Entry:Exec"]
+                    DisplayIcon = desktopEntry["Desktop Entry:Icon"]
                 });
             }
 
