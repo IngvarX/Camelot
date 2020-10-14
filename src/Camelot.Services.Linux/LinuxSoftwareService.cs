@@ -14,7 +14,7 @@ namespace Camelot.Services.Linux
         {
             var installedSoftwares = new List<SoftwareModel>();
 
-            foreach (var desktopFilePath in Directory.GetFiles("/usr/share/applications/*.desktop"))
+            foreach (var desktopFilePath in Directory.GetFiles("/usr/share/applications/", "*.desktop"))
             {
                 await using var desktopFile = File.OpenRead(desktopFilePath);
 
