@@ -20,7 +20,7 @@ namespace Camelot.Services.Linux
                 var desktopEntry = new IniFileReader().ReadFile(desktopFile);
 
                 var desktopType = desktopEntry.GetValueOrDefault("Desktop Entry:Type");
-                if (desktopType == null || desktopType.Equals("Application", StringComparison.OrdinalIgnoreCase))
+                if (desktopType == null || !desktopType.Equals("Application", StringComparison.OrdinalIgnoreCase))
                 {
                     continue;
                 }
