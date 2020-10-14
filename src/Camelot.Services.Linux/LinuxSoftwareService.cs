@@ -70,7 +70,7 @@ namespace Camelot.Services.Linux
                     var separator = line.IndexOf('=');
                     if (separator < 0)
                     {
-                        throw new FormatException("Unrecognized line format");
+                        continue;
                     }
 
                     var key = sectionPrefix + line.Substring(0, separator).Trim();
@@ -81,12 +81,10 @@ namespace Camelot.Services.Linux
                         value = value.Substring(1, value.Length - 2);
                     }
 
-                    if (data.ContainsKey(key))
+                    if (!data.ContainsKey(key))
                     {
-                        throw new FormatException("Duplicated key");
+                        data[key] = value;
                     }
-
-                    data[key] = value;
                 }
 
                 return data;
