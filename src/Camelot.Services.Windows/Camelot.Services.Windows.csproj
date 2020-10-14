@@ -5,6 +5,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Microsoft.Win32.Registry" Version="4.7.0" />
+    </ItemGroup>
+
+    <ItemGroup>
       <ProjectReference Include="..\Camelot.Extensions\Camelot.Extensions.csproj" />
       <ProjectReference Include="..\Camelot.Services.Abstractions\Camelot.Services.Abstractions.csproj" />
       <ProjectReference Include="..\Camelot.Services.AllPlatforms\Camelot.Services.AllPlatforms.csproj" />
