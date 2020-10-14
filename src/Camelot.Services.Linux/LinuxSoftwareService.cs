@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
@@ -20,20 +19,16 @@ namespace Camelot.Services.Linux
 
                 var desktopEntry = new IniFileReader().ReadFile(desktopFile);
 
-                if (!desktopEntry.TryGetValue("Desktop Entry:Type", out var desktopType))
-                {
-                    continue;
-                }
-
-                if (desktopType.Equals("Application", StringComparison.OrdinalIgnoreCase))
+                var desktopType = desktopEntry.GetValueOrDefault("Desktop Entry:Type");
+                if (desktopType == null || desktopType.Equals("Application", StringComparison.OrdinalIgnoreCase))
                 {
                     continue;
                 }
 
                 installedSoftwares.Add(new SoftwareModel
                 {
-                    DisplayName = desktopEntry["Desktop Entry:Name"],
-                    DisplayIcon = desktopEntry["Desktop Entry:Icon"]
+                    DisplayName = desktopEntry.GetValueOrDefault("Desktop Entry:Name"),
+                    DisplayIcon = desktopEntry.GetValueOrDefault("Desktop Entry:Icon")
                 });
             }
 
