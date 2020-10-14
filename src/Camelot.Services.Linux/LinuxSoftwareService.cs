@@ -25,10 +25,18 @@ namespace Camelot.Services.Linux
                     continue;
                 }
 
+                var displayName = desktopEntry.GetValueOrDefault("Desktop Entry:Name");
+                var displayIcon = desktopEntry.GetValueOrDefault("Desktop Entry:Icon");
+
+                if (string.IsNullOrWhiteSpace(displayName))
+                {
+                    continue;
+                }
+
                 installedSoftwares.Add(new SoftwareModel
                 {
-                    DisplayName = desktopEntry.GetValueOrDefault("Desktop Entry:Name"),
-                    DisplayIcon = desktopEntry.GetValueOrDefault("Desktop Entry:Icon")
+                    DisplayName = displayName,
+                    DisplayIcon = displayIcon
                 });
             }
 
