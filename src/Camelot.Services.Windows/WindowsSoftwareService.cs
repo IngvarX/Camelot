@@ -32,14 +32,14 @@ namespace Camelot.Services.Windows
                 {
                     continue;
                 }
-                
-                var displayIcon = sofwareRegistryKey.GetValue("DisplayIcon") as string;
-                if (string.IsNullOrWhiteSpace(displayIcon))
+
+                var displayName = sofwareRegistryKey.GetValue("DisplayName") as string;
+                if (string.IsNullOrWhiteSpace(displayName))
                 {
                     continue;
                 }
 
-                var displayName = sofwareRegistryKey.GetValue("DisplayName") as string;
+                var displayIcon = sofwareRegistryKey.GetValue("DisplayIcon") as string;
                 var displayVersion = sofwareRegistryKey.GetValue("DisplayVersion") as string;
                 var installLocation = sofwareRegistryKey.GetValue("InstallLocation") as string;
 
