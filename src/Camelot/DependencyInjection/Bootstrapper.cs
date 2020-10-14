@@ -320,6 +320,7 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IDesktopEnvironmentService>(),
                 resolver.GetRequiredService<IShellCommandWrappingService>()
             ));
+            services.RegisterLazySingleton<ISoftwareService>(() => new LinuxSoftwareService());
         }
 
         private static void RegisterMacServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
