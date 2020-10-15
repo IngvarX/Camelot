@@ -24,7 +24,7 @@ namespace Camelot.Services.Mac
         {
             var (command, arguments) = _terminalService.GetTerminalSettings();
             var applicationsJson = await _processService.ExecuteAndGetOutputAsync(
-                command, string.Format(arguments, "system_profiler -json SPApplicationsDataType");
+                command, string.Format(arguments, "system_profiler -json SPApplicationsDataType"));
 
             var applications = JsonSerializer.Deserialize<IList<MacApplicationDataType>>(applicationsJson);
 
