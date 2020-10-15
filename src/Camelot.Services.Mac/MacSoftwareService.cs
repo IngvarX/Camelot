@@ -12,16 +12,19 @@ namespace Camelot.Services.Mac
     public class MacSoftwareService : ISoftwareService
     {
         private readonly IProcessService _processService;
+        private readonly ITerminalService _terminalService;
 
-        public MacSoftwareService(IProcessService processService)
+        public MacSoftwareService(IProcessService processService, ITerminalService terminalService)
         {
             _processService = processService;
+            _terminalService = terminalService;
         }
 
         public async Task<IEnumerable<SoftwareModel>> GetAllInstalledSoftwares()
         {
+            var (command, arguments) = _terminalService.GetTerminalSettings();
             var applicationsJson = await _processService.ExecuteAndGetOutputAsync(
-                "system_profiler", "-json SPApplicationsDataType");
+                command, string.Format(arguments, "system_profiler -json SPApplicationsDataType");
 
             var applications = JsonSerializer.Deserialize<IList<MacApplicationDataType>>(applicationsJson);
 
