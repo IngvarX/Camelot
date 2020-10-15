@@ -346,8 +346,9 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IUnitOfWorkFactory>()
             ));
             services.RegisterLazySingleton<ISoftwareService>(() => new MacSoftwareService(
-                resolver.GetRequiredService<IProcessService>())
-            );
+                resolver.GetRequiredService<IProcessService>(),
+                resolver.GetRequiredService<ITerminalService>()
+            ));
         }
 
         private static void RegisterWindowsServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
