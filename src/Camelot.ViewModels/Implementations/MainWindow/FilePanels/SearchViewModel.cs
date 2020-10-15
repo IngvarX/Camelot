@@ -45,7 +45,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             this.ValidationRule(vm => vm.SearchText,
                 vm =>
                     this.WhenAnyValue(x => x.IsRegexSearchEnabled, x => x.SearchText).Select(_ => IsValid),
-                (vm, r) => resourceProvider.GetResourceByName(searchViewModelConfiguration.InvalidRegexResourceName));
+                vm => resourceProvider.GetResourceByName(searchViewModelConfiguration.InvalidRegexResourceName));
             this.WhenAnyValue(x => x.SearchText, x => x.IsSearchEnabled,
                     x => x.IsRegexSearchEnabled, x => x.IsSearchCaseSensitive)
                 .Throttle(TimeSpan.FromMilliseconds(searchViewModelConfiguration.TimeoutMs))
