@@ -14,7 +14,7 @@ using ReactiveUI.Validation.Extensions;
 
 namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 {
-    public class SearchViewModel : ValidatableViewModelBase<SearchViewModel>, ISearchViewModel
+    public class SearchViewModel : ValidatableViewModelBase, ISearchViewModel
     {
         private readonly IRegexService _regexService;
 
@@ -42,10 +42,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             _regexService = regexService;
             Reset();
 
-            this.ValidationRule(vm => vm.SearchText,
-                vm =>
-                    this.WhenAnyValue(x => x.IsRegexSearchEnabled, x => x.SearchText).Select(_ => IsValid),
-                vm => resourceProvider.GetResourceByName(searchViewModelConfiguration.InvalidRegexResourceName));
+            this.ValidationRule(this.WhenAnyValue(x => x.IsRegexSearchEnabled, x => x.SearchText).Select(_ => IsValid),
+                resourceProvider.GetResourceByName(searchViewModelConfiguration.InvalidRegexResourceName));
             this.WhenAnyValue(x => x.SearchText, x => x.IsSearchEnabled,
                     x => x.IsRegexSearchEnabled, x => x.IsSearchCaseSensitive)
                 .Throttle(TimeSpan.FromMilliseconds(searchViewModelConfiguration.TimeoutMs))
