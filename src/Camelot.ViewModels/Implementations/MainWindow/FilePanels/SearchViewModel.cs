@@ -1,5 +1,6 @@
 using System;
 using System.Reactive.Linq;
+using Camelot.Avalonia.Interfaces;
 using Camelot.Extensions;
 using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Specifications;
@@ -17,6 +18,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
     public class SearchViewModel : ValidatableViewModelBase, ISearchViewModel
     {
         private readonly IRegexService _regexService;
+        private readonly IApplicationDispatcher _applicationDispatcher;
 
         private bool IsValid => !IsRegexSearchEnabled || _regexService.ValidateRegex(SearchText);
 
@@ -37,9 +39,12 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         public SearchViewModel(
             IRegexService regexService,
             IResourceProvider resourceProvider,
+            IApplicationDispatcher applicationDispatcher,
             SearchViewModelConfiguration searchViewModelConfiguration)
         {
             _regexService = regexService;
+            _applicationDispatcher = applicationDispatcher;
+
             Reset();
 
             this.ValidationRule(this.WhenAnyValue(x => x.IsRegexSearchEnabled, x => x.SearchText).Select(_ => IsValid),
@@ -70,7 +75,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         {
             if (IsValid)
             {
-                SearchSettingsChanged.Raise(this, EventArgs.Empty);
+                _applicationDispatcher.Dispatch(() => SearchSettingsChanged.Raise(this, EventArgs.Empty));
             }
         }
     }

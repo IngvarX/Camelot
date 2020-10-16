@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Camelot.Avalonia.Interfaces;
 using Camelot.Services.Environment.Interfaces;
 using Camelot.ViewModels.Configuration;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
@@ -17,6 +18,7 @@ namespace Camelot.ViewModels.Tests
         private const string ResourceName = "ResourceName";
 
         private readonly IResourceProvider _resourceProvider;
+        private readonly IApplicationDispatcher _applicationDispatcher;
 
         public SearchViewModelTests()
         {
@@ -26,6 +28,13 @@ namespace Camelot.ViewModels.Tests
                 .Returns(Error);
 
             _resourceProvider = resourceProviderMock.Object;
+
+            var applicationDispatcherMock = new Mock<IApplicationDispatcher>();
+            applicationDispatcherMock
+                .Setup(m => m.Dispatch(It.IsAny<Action>()))
+                .Callback<Action>(action => action());
+
+            _applicationDispatcher = applicationDispatcherMock.Object;
         }
 
         [Fact]
@@ -33,7 +42,7 @@ namespace Camelot.ViewModels.Tests
         {
             var regexServiceMock = new Mock<IRegexService>();
             var configuration = GetConfiguration();
-            var viewModel = new SearchViewModel(regexServiceMock.Object, _resourceProvider, configuration);
+            var viewModel = new SearchViewModel(regexServiceMock.Object, _resourceProvider, _applicationDispatcher, configuration);
 
             Assert.False(viewModel.IsSearchEnabled);
             Assert.False(viewModel.IsRegexSearchEnabled);
@@ -48,7 +57,7 @@ namespace Camelot.ViewModels.Tests
 
             var regexServiceMock = new Mock<IRegexService>();
 
-            var viewModel = new SearchViewModel(regexServiceMock.Object, _resourceProvider, configuration);
+            var viewModel = new SearchViewModel(regexServiceMock.Object, _resourceProvider, _applicationDispatcher, configuration);
             Assert.False(viewModel.IsSearchEnabled);
 
             viewModel.SearchText = SearchText;
@@ -81,7 +90,7 @@ namespace Camelot.ViewModels.Tests
                 .Setup(m => m.ValidateRegex(It.IsAny<string>()))
                 .Returns(isRegexValid);
             var configuration = GetConfiguration();
-            var viewModel = new SearchViewModel(regexServiceMock.Object, _resourceProvider, configuration)
+            var viewModel = new SearchViewModel(regexServiceMock.Object, _resourceProvider, _applicationDispatcher, configuration)
             {
                 IsSearchEnabled = isSearchEnabled,
                 IsRegexSearchEnabled = isRegexSearchEnabled
@@ -99,7 +108,7 @@ namespace Camelot.ViewModels.Tests
 
             var regexServiceMock = new Mock<IRegexService>();
             var configuration = GetConfiguration();
-            var viewModel = new SearchViewModel(regexServiceMock.Object, _resourceProvider, configuration);
+            var viewModel = new SearchViewModel(regexServiceMock.Object, _resourceProvider, _applicationDispatcher, configuration);
             viewModel.SearchSettingsChanged += (sender, args) => taskCompletionSource.SetResult(true);
 
             viewModel.SearchText = "test";
@@ -115,7 +124,7 @@ namespace Camelot.ViewModels.Tests
 
             var regexServiceMock = new Mock<IRegexService>();
             var configuration = GetConfiguration();
-            var viewModel = new SearchViewModel(regexServiceMock.Object, _resourceProvider, configuration);
+            var viewModel = new SearchViewModel(regexServiceMock.Object, _resourceProvider, _applicationDispatcher, configuration);
             viewModel.SearchSettingsChanged += (sender, args) => taskCompletionSource.SetResult(true);
 
             viewModel.IsSearchCaseSensitive = true;
@@ -136,7 +145,7 @@ namespace Camelot.ViewModels.Tests
                 .Setup(m => m.ValidateRegex(SearchText))
                 .Returns(isRegexValid);
             var configuration = GetConfiguration();
-            var viewModel = new SearchViewModel(regexServiceMock.Object, _resourceProvider, configuration);
+            var viewModel = new SearchViewModel(regexServiceMock.Object, _resourceProvider, _applicationDispatcher, configuration);
             viewModel.SearchSettingsChanged += (sender, args) => taskCompletionSource.SetResult(true);
 
             viewModel.SearchText = SearchText;

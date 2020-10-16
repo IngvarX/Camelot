@@ -481,6 +481,7 @@ namespace Camelot.DependencyInjection
             services.Register<ISearchViewModel>(() => new SearchViewModel(
                 resolver.GetRequiredService<IRegexService>(),
                 resolver.GetRequiredService<IResourceProvider>(),
+                resolver.GetRequiredService<IApplicationDispatcher>(),
                 resolver.GetRequiredService<SearchViewModelConfiguration>()
             ));
             services.RegisterLazySingleton<IDriveViewModelFactory>(() => new DriveViewModelFactory(
