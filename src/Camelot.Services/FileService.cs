@@ -114,6 +114,8 @@ namespace Camelot.Services
             }
         }
 
+        public FileStream OpenRead(string filePath) => _environmentFileService.OpenRead(filePath);
+
         private FileModel CreateFrom(string file)
         {
             try

@@ -18,6 +18,7 @@ using Camelot.Services.Abstractions.Archive;
 using Camelot.Services.Abstractions.Operations;
 using Camelot.Services.AllPlatforms;
 using Camelot.Services.Archive;
+using Camelot.Services.Archives;
 using Camelot.Services.Behaviors;
 using Camelot.Services.Configuration;
 using Camelot.Services.Environment.Enums;
@@ -198,7 +199,9 @@ namespace Camelot.DependencyInjection
 
         private static void RegisterServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
-            services.RegisterLazySingleton<IArchiveProcessorFactory>(() => new ArchiveProcessorFactory());
+            services.RegisterLazySingleton<IArchiveProcessorFactory>(() => new ArchiveProcessorFactory(
+                resolver.GetRequiredService<IFileService>()
+            ));
             services.RegisterLazySingleton<IArchiveTypeMapper>(() => new ArchiveTypeMapper(
                 resolver.GetRequiredService<IPathService>(),
                 resolver.GetRequiredService<ArchiveTypeMapperConfiguration>()

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Specifications;
@@ -26,5 +27,7 @@ namespace Camelot.Services.Abstractions
         Task WriteBytesAsync(string filePath, byte[] bytes);
 
         void CreateFile(string filePath);
+
+        FileStream OpenRead(string filePath);
     }
 }

@@ -32,5 +32,8 @@ namespace Camelot.Services.Environment.Implementations
 
         public void Create(string filePath) =>
             File.Create(filePath).Dispose();
+
+        public FileStream OpenRead(string filePath) =>
+            File.OpenRead(filePath);
     }
 }
