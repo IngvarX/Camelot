@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Archive;
 using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Archive;
@@ -75,20 +76,35 @@ namespace Camelot.Services.Tests.Archive
         }
 
         [Theory]
-        [InlineData(ArchiveType.Rar)]
-        [InlineData(ArchiveType.Tar)]
-        [InlineData(ArchiveType.Zip)]
-        [InlineData(ArchiveType.SevenZip)]
-        [InlineData(ArchiveType.GZip)]
-        [InlineData(ArchiveType.TarBz)]
-        [InlineData(ArchiveType.TarGz)]
-        [InlineData(ArchiveType.TarLz)]
-        [InlineData(ArchiveType.TarXz)]
-        public async Task TestUnpackAsync(ArchiveType archiveType)
+        [InlineData(ArchiveType.Rar, OutputDirPath)]
+        [InlineData(ArchiveType.Tar, OutputDirPath)]
+        [InlineData(ArchiveType.Zip, OutputDirPath)]
+        [InlineData(ArchiveType.SevenZip, OutputDirPath)]
+        [InlineData(ArchiveType.GZip, OutputDirPath)]
+        [InlineData(ArchiveType.TarBz, OutputDirPath)]
+        [InlineData(ArchiveType.TarGz, OutputDirPath)]
+        [InlineData(ArchiveType.TarLz, OutputDirPath)]
+        [InlineData(ArchiveType.TarXz, OutputDirPath)]
+        [InlineData(ArchiveType.Rar, null)]
+        [InlineData(ArchiveType.Tar, null)]
+        [InlineData(ArchiveType.Zip, null)]
+        [InlineData(ArchiveType.SevenZip, null)]
+        [InlineData(ArchiveType.GZip, null)]
+        [InlineData(ArchiveType.TarBz, null)]
+        [InlineData(ArchiveType.TarGz, null)]
+        [InlineData(ArchiveType.TarLz, null)]
+        [InlineData(ArchiveType.TarXz, null)]
+        public async Task TestUnpackAsync(ArchiveType archiveType, string outputDirPath)
         {
             _autoMocker
                 .Setup<IArchiveTypeMapper, ArchiveType?>(m => m.GetArchiveTypeFrom(FilePath))
                 .Returns(archiveType);
+            if (outputDirPath is null)
+            {
+                _autoMocker
+                    .Setup<IPathService, string>(m => m.GetParentDirectory(FilePath))
+                    .Returns(OutputDirPath);
+            }
 
             var processorMock = new Mock<IArchiveProcessor>();
             processorMock
@@ -99,7 +115,7 @@ namespace Camelot.Services.Tests.Archive
                 .Returns(processorMock.Object);
 
             var service = _autoMocker.CreateInstance<ArchiveService>();
-            await service.UnpackAsync(FilePath, OutputDirPath);
+            await service.UnpackAsync(FilePath, outputDirPath);
 
             processorMock
                 .Verify(m => m.UnpackAsync(FilePath, OutputDirPath), Times.Once);

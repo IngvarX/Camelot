@@ -384,4 +384,10 @@
   <data name="ClickToMount" xml:space="preserve">
     <value>Нажмите, чтобы примонтировать устройство</value>
   </data>
+  <data name="Pack" xml:space="preserve">
+    <value>Архивировать</value>
+  </data>
+  <data name="Unpack" xml:space="preserve">
+    <value>Разархивировать</value>
+  </data>
 </root>

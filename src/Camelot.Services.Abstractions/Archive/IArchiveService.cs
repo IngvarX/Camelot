@@ -8,7 +8,7 @@ namespace Camelot.Services.Abstractions.Archive
     {
         Task PackAsync(IReadOnlyList<string> nodes, string outputFile, ArchiveType archiveType);
 
-        Task UnpackAsync(string archivePath, string outputDirectory);
+        Task UnpackAsync(string archivePath, string outputDirectory = null);
 
         bool CheckIfFileIsArchive(string archivePath);
     }

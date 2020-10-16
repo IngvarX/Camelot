@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Archive;
 using Camelot.Services.Abstractions.Models.Enums;
 
@@ -10,13 +11,16 @@ namespace Camelot.Services.Archive
     {
         private readonly IArchiveTypeMapper _archiveTypeMapper;
         private readonly IArchiveProcessorFactory _archiveProcessorFactory;
+        private readonly IPathService _pathService;
 
         public ArchiveService(
             IArchiveTypeMapper archiveTypeMapper,
-            IArchiveProcessorFactory archiveProcessorFactory)
+            IArchiveProcessorFactory archiveProcessorFactory,
+            IPathService pathService)
         {
             _archiveTypeMapper = archiveTypeMapper;
             _archiveProcessorFactory = archiveProcessorFactory;
+            _pathService = pathService;
         }
 
         public async Task PackAsync(IReadOnlyList<string> nodes, string outputFile, ArchiveType archiveType)
@@ -26,12 +30,14 @@ namespace Camelot.Services.Archive
             await archiveProcessor.PackAsync(nodes, outputFile);
         }
 
-        public async Task UnpackAsync(string archivePath, string outputDirectory)
+        public async Task UnpackAsync(string archivePath, string outputDirectory = null)
         {
             if (!CheckIfFileIsArchive(archivePath))
             {
                 throw new InvalidOperationException($"{archivePath} is not an archive!");
             }
+
+            outputDirectory ??= _pathService.GetParentDirectory(archivePath);
 
             // ReSharper disable once PossibleInvalidOperationException
             var archiveType =_archiveTypeMapper.GetArchiveTypeFrom(archivePath).Value;

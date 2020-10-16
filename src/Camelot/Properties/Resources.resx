@@ -390,4 +390,10 @@
   <data name="ClickToMount" xml:space="preserve">
     <value>Click to mount</value>
   </data>
+  <data name="Pack" xml:space="preserve">
+    <value>Pack</value>
+  </data>
+  <data name="Unpack" xml:space="preserve">
+    <value>Unpack</value>
+  </data>
 </root>

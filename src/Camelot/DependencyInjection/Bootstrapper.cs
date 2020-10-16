@@ -205,7 +205,8 @@ namespace Camelot.DependencyInjection
             ));
             services.RegisterLazySingleton<IArchiveService>(() => new ArchiveService(
                 resolver.GetRequiredService<IArchiveTypeMapper>(),
-                resolver.GetRequiredService<IArchiveProcessorFactory>()
+                resolver.GetRequiredService<IArchiveProcessorFactory>(),
+                resolver.GetRequiredService<IPathService>()
             ));
             services.RegisterLazySingleton<IFileService>(() => new FileService(
                 resolver.GetRequiredService<IPathService>(),
@@ -430,7 +431,8 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IDialogService>(),
                 resolver.GetRequiredService<ITrashCanService>(),
                 resolver.GetRequiredService<IFileService>(),
-                resolver.GetRequiredService<IDirectoryService>()
+                resolver.GetRequiredService<IDirectoryService>(),
+                resolver.GetRequiredService<IArchiveService>()
             ));
             services.Register(() => new AboutDialogViewModel(
                 resolver.GetRequiredService<IApplicationVersionProvider>(),

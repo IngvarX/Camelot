@@ -1,4 +1,5 @@
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Archive;
 using Camelot.Services.Abstractions.Behaviors;
 using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Operations;
@@ -25,6 +26,7 @@ namespace Camelot.ViewModels.Factories.Implementations
         private readonly ITrashCanService _trashCanService;
         private readonly IFileService _fileService;
         private readonly IDirectoryService _directoryService;
+        private readonly IArchiveService _archiveService;
 
         public FileSystemNodeViewModelFactory(
             IFileSystemNodeOpeningBehavior fileOpeningBehavior,
@@ -39,7 +41,8 @@ namespace Camelot.ViewModels.Factories.Implementations
             IDialogService dialogService,
             ITrashCanService trashCanService,
             IFileService fileService,
-            IDirectoryService directoryService)
+            IDirectoryService directoryService,
+            IArchiveService archiveService)
         {
             _fileOpeningBehavior = fileOpeningBehavior;
             _directoryOpeningBehavior = directoryOpeningBehavior;
@@ -54,6 +57,7 @@ namespace Camelot.ViewModels.Factories.Implementations
             _trashCanService = trashCanService;
             _fileService = fileService;
             _directoryService = directoryService;
+            _archiveService = archiveService;
         }
 
         public IFileSystemNodeViewModel Create(string path)
@@ -85,7 +89,8 @@ namespace Camelot.ViewModels.Factories.Implementations
                 _fileSizeFormatter,
                 _filePropertiesBehavior,
                 _dialogService,
-                _trashCanService)
+                _trashCanService,
+                _archiveService)
             {
                 FullPath = fileModel.FullPath,
                 Size = fileModel.SizeBytes,
@@ -107,7 +112,8 @@ namespace Camelot.ViewModels.Factories.Implementations
                 _filesOperationsMediator,
                 _directoryPropertiesBehavior,
                 _dialogService,
-                _trashCanService)
+                _trashCanService,
+                _archiveService)
             {
                 FullPath = directoryModel.FullPath,
                 Name = directoryModel.Name,

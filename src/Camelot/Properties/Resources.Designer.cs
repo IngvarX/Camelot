@@ -590,5 +590,17 @@ namespace Camelot.Properties {
                 return ResourceManager.GetString("ClickToMount", resourceCulture);
             }
         }
+        
+        public static string Pack {
+            get {
+                return ResourceManager.GetString("Pack", resourceCulture);
+            }
+        }
+        
+        public static string Unpack {
+            get {
+                return ResourceManager.GetString("Unpack", resourceCulture);
+            }
+        }
     }
 }
