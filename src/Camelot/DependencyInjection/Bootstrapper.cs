@@ -147,6 +147,10 @@ namespace Camelot.DependencyInjection
             var loggingConfiguration = new LoggingConfiguration();
             configuration.GetSection("Logging").Bind(loggingConfiguration);
             services.RegisterConstant(loggingConfiguration);
+
+            var archiveTypeMapperConfiguration = new ArchiveTypeMapperConfiguration();
+            configuration.GetSection("Archive").Bind(archiveTypeMapperConfiguration);
+            services.RegisterConstant(archiveTypeMapperConfiguration);
         }
 
         private static void RegisterEnvironmentServices(IMutableDependencyResolver services)
@@ -195,8 +199,12 @@ namespace Camelot.DependencyInjection
         private static void RegisterServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
             services.RegisterLazySingleton<IArchiveProcessorFactory>(() => new ArchiveProcessorFactory());
-            services.RegisterLazySingleton<IArchiveService>(() => new ArchiveService(
+            services.RegisterLazySingleton<IArchiveTypeMapper>(() => new ArchiveTypeMapper(
                 resolver.GetRequiredService<IPathService>(),
+                resolver.GetRequiredService<ArchiveTypeMapperConfiguration>()
+            ));
+            services.RegisterLazySingleton<IArchiveService>(() => new ArchiveService(
+                resolver.GetRequiredService<IArchiveTypeMapper>(),
                 resolver.GetRequiredService<IArchiveProcessorFactory>()
             ));
             services.RegisterLazySingleton<IFileService>(() => new FileService(
