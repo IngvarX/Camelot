@@ -48,33 +48,5 @@ namespace Camelot.Services.Archive
 
         public bool CheckIfFileIsArchive(string archivePath) =>
             _archiveTypeMapper.GetArchiveTypeFrom(archivePath).HasValue;
-        //
-        // private ArchiveType? GetArchiveTypeFrom(string filePath)
-        // {
-        //     var fileName = _pathService.GetFileNameWithoutExtension(filePath);
-        //     var extension = _pathService.GetExtension(filePath);
-        //     if (fileName.EndsWith(".tar"))
-        //     {
-        //         extension = "tar." + extension;
-        //     }
-        //
-        //     return extension switch
-        //     {
-        //         "tar" => ArchiveType.Tar,
-        //         "zip" => ArchiveType.Zip,
-        //         "gzip" => ArchiveType.GZip,
-        //         "gz" => ArchiveType.Zip,
-        //         "tar.gz" => ArchiveType.TarGz,
-        //         "tgz" => ArchiveType.TarGz,
-        //         "bz" => ArchiveType.TarBz,
-        //         "tar.bz" => ArchiveType.TarBz,
-        //         "tar.xz" => ArchiveType.TarXz,
-        //         "xz" => ArchiveType.TarXz,
-        //         "rar" => ArchiveType.Rar,
-        //         "7zip" => ArchiveType.SevenZip,
-        //         "7z" => ArchiveType.SevenZip,
-        //         _ => null
-        //     };
-        // }
     }
 }
