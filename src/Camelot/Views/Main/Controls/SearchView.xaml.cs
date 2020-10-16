@@ -3,7 +3,7 @@ using Avalonia.Markup.Xaml;
 
 namespace Camelot.Views.Main.Controls
 {
-    public class SearchView :  UserControl
+    public class SearchView : UserControl
     {
         public SearchView()
         {

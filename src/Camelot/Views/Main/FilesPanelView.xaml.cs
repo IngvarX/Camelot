@@ -29,20 +29,29 @@ namespace Camelot.Views.Main
         private void OnDataContextChanged(object sender, EventArgs e) =>
             ViewModel.DeactivatedEvent += ViewModelOnDeactivatedEvent;
 
-        private void ViewModelOnDeactivatedEvent(object sender, EventArgs e)
-        {
-            var dataGrid = this.FindControl<DataGrid>("FilesDataGrid");
-
-            dataGrid.SelectedItems.Clear();
-        }
+        private void ViewModelOnDeactivatedEvent(object sender, EventArgs e) => ClearSelection();
 
         private void OnDataGridSelectionChanged(object sender, SelectionChangedEventArgs args)
         {
-            // TODO: fix after avalonia update
             var addedItems = args
                 .RemovedItems
                 .Cast<IFileSystemNodeViewModel>()
                 .ToArray();
+
+            if (!ViewModel.IsActive)
+            {
+                // data grid inserted items in inactive fle panel
+                // remove them if any
+                if (addedItems.Any())
+                {
+                   ClearSelection();
+                }
+
+                return;
+            }
+
+            // TODO: fix after avalonia update
+
             ViewModel.SelectedFileSystemNodes.AddRange(addedItems);
 
             var removedItems = args
@@ -120,5 +129,12 @@ namespace Camelot.Views.Main
 
         private static void StopEditing(IFileSystemNodeViewModel viewModel) =>
             viewModel.IsWaitingForEdit = viewModel.IsEditing = false;
+
+        private void ClearSelection()
+        {
+            var dataGrid = this.FindControl<DataGrid>("FilesDataGrid");
+
+            dataGrid.SelectedItems.Clear();
+        }
     }
 }

@@ -43,8 +43,10 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         public ISearchViewModel SearchViewModel { get; }
 
         public ITabsListViewModel TabsListViewModel { get; }
-        
+
         public IOperationsViewModel OperationsViewModel { get; }
+
+        public bool IsActive => SelectedTab.IsGloballyActive;
 
         public string CurrentDirectory
         {
