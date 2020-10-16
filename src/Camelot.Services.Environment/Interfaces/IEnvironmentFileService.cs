@@ -24,5 +24,7 @@ namespace Camelot.Services.Environment.Interfaces
         void Create(string filePath);
 
         FileStream OpenRead(string filePath);
+
+        FileStream OpenWrite(string filePath);
     }
 }

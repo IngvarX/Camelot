@@ -35,5 +35,8 @@ namespace Camelot.Services.Environment.Implementations
 
         public FileStream OpenRead(string filePath) =>
             File.OpenRead(filePath);
+
+        public FileStream OpenWrite(string filePath) =>
+            File.OpenWrite(filePath);
     }
 }

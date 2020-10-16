@@ -16,9 +16,16 @@ namespace Camelot.Services.Archives
             _fileService = fileService;
         }
 
-        public Task PackAsync(IReadOnlyList<string> nodes, string outputFile)
+        public async Task PackAsync(IReadOnlyList<string> nodes, string outputFile)
         {
-            throw new System.NotImplementedException();
+            await using var fileStream = _fileService.OpenRead(outputFile);
+            using var tarArchive = TarArchive.CreateOutputTarArchive(fileStream, Encoding.Default);
+            foreach (var node in nodes)
+            {
+                var tarEntry = TarEntry.CreateEntryFromFile(node);
+
+                tarArchive.WriteEntry(tarEntry, true);
+            }
         }
 
         public async Task UnpackAsync(string archivePath, string outputDirectory)
@@ -27,7 +34,6 @@ namespace Camelot.Services.Archives
 
             using var tarArchive = TarArchive.CreateInputTarArchive(fileStream, Encoding.Default);
             tarArchive.ExtractContents(outputDirectory);
-            tarArchive.Close();
         }
     }
 }
