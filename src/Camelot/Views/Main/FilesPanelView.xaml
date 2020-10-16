@@ -86,12 +86,12 @@
             <DataGrid.Resources>
                 <Template x:Key="RowContextMenu">
                     <ContextMenu Classes="smallContextMenu">
-                        <MenuItem Header="{x:Static p:Resources.Open}" Command="{Binding OpenCommand}"/>
-                        <MenuItem Header="{x:Static p:Resources.Pack}" Command="{Binding PackCommand}"/>
-                        <MenuItem Header="{x:Static p:Resources.Unpack}" Command="{Binding UnpackCommand}"/>
-                        <MenuItem Header="{x:Static p:Resources.Rename}" Command="{Binding StartRenamingCommand}"/>
-                        <MenuItem Header="{x:Static p:Resources.Copy}" Command="{Binding CopyCommand}"/>
-                        <MenuItem Header="{x:Static p:Resources.Move}" Command="{Binding MoveCommand}"/>
+                        <MenuItem Header="{x:Static p:Resources.Open}" Command="{Binding OpenCommand}" />
+                        <MenuItem Header="{x:Static p:Resources.Pack}" Command="{Binding PackCommand}" />
+                        <MenuItem Header="{x:Static p:Resources.Unpack}" Command="{Binding UnpackCommand}" IsVisible="{Binding IsArchive}" />
+                        <MenuItem Header="{x:Static p:Resources.Rename}" Command="{Binding StartRenamingCommand}" />
+                        <MenuItem Header="{x:Static p:Resources.Copy}" Command="{Binding CopyCommand}" />
+                        <MenuItem Header="{x:Static p:Resources.Move}" Command="{Binding MoveCommand}" />
                         <MenuItem Header="{x:Static p:Resources.Delete}" Command="{Binding DeleteCommand}"/>
                         <MenuItem Header="{x:Static p:Resources.CopyToClipboard}" Command="{Binding CopyToClipboardCommand}"/>
                         <MenuItem Header="{x:Static p:Resources.Create}">

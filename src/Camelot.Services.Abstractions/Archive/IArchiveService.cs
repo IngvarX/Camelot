@@ -10,6 +10,6 @@ namespace Camelot.Services.Abstractions.Archive
 
         Task UnpackAsync(string archivePath, string outputDirectory = null);
 
-        bool CheckIfFileIsArchive(string archivePath);
+        bool CheckIfNodeIsArchive(string nodePath);
     }
 }

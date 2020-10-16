@@ -41,6 +41,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         [Reactive]
         public bool IsEditing { get; set; }
 
+        public bool IsArchive => _archiveService.CheckIfNodeIsArchive(FullPath);
+
         public bool IsWaitingForEdit { get; set; }
 
         public ICommand OpenCommand { get; }

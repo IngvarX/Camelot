@@ -32,7 +32,7 @@ namespace Camelot.Services.Archive
 
         public async Task UnpackAsync(string archivePath, string outputDirectory = null)
         {
-            if (!CheckIfFileIsArchive(archivePath))
+            if (!CheckIfNodeIsArchive(archivePath))
             {
                 throw new InvalidOperationException($"{archivePath} is not an archive!");
             }
@@ -46,7 +46,7 @@ namespace Camelot.Services.Archive
             await archiveProcessor.UnpackAsync(archivePath, outputDirectory);
         }
 
-        public bool CheckIfFileIsArchive(string archivePath) =>
-            _archiveTypeMapper.GetArchiveTypeFrom(archivePath).HasValue;
+        public bool CheckIfNodeIsArchive(string nodePath) =>
+            _archiveTypeMapper.GetArchiveTypeFrom(nodePath).HasValue;
     }
 }

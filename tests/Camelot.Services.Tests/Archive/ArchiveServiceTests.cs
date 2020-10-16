@@ -41,7 +41,7 @@ namespace Camelot.Services.Tests.Archive
                 .Returns(archiveType);
 
             var service = _autoMocker.CreateInstance<ArchiveService>();
-            var actual = service.CheckIfFileIsArchive(FilePath);
+            var actual = service.CheckIfNodeIsArchive(FilePath);
 
             Assert.Equal(isArchive, actual);
         }
