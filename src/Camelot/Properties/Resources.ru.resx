@@ -387,7 +387,7 @@
   <data name="Pack" xml:space="preserve">
     <value>Архивировать</value>
   </data>
-  <data name="Unpack" xml:space="preserve">
+  <data name="Extract" xml:space="preserve">
     <value>Разархивировать</value>
   </data>
   <data name="ExtractingArchiveTo" xml:space="preserve">

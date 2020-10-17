@@ -29,12 +29,12 @@ namespace Camelot.Services
             _logger = logger;
         }
 
-        public IReadOnlyList<FileModel> GetFiles(string directory, ISpecification<FileModel> specification) =>
+        public IReadOnlyList<FileModel> GetFiles(string directory, ISpecification<FileModel> specification = null) =>
             _environmentFileService
                 .GetFiles(directory)
                 .Select(CreateFrom)
                 .WhereNotNull()
-                .Where(specification.IsSatisfiedBy)
+                .Where(f => specification?.IsSatisfiedBy(f) ?? true)
                 .ToArray();
 
         public IReadOnlyList<FileModel> GetFiles(IReadOnlyList<string> files) =>

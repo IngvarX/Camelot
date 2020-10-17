@@ -597,9 +597,9 @@ namespace Camelot.Properties {
             }
         }
         
-        public static string Unpack {
+        public static string Extract {
             get {
-                return ResourceManager.GetString("Unpack", resourceCulture);
+                return ResourceManager.GetString("Extract", resourceCulture);
             }
         }
         

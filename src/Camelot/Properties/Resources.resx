@@ -393,8 +393,8 @@
   <data name="Pack" xml:space="preserve">
     <value>Pack</value>
   </data>
-  <data name="Unpack" xml:space="preserve">
-    <value>Unpack</value>
+  <data name="Extract" xml:space="preserve">
+    <value>Extract</value>
   </data>
   <data name="ExtractingArchiveTo" xml:space="preserve">
     <value>Extracting {0} to {1}</value>

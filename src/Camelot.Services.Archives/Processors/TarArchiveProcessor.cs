@@ -5,7 +5,7 @@ using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Archive;
 using ICSharpCode.SharpZipLib.Tar;
 
-namespace Camelot.Services.Archives
+namespace Camelot.Services.Archives.Processors
 {
     public class TarArchiveProcessor : IArchiveProcessor
     {
@@ -18,7 +18,7 @@ namespace Camelot.Services.Archives
 
         public async Task PackAsync(IReadOnlyList<string> nodes, string outputFile)
         {
-            await using var fileStream = _fileService.OpenRead(outputFile);
+            await using var fileStream = _fileService.OpenWrite(outputFile);
             using var tarArchive = TarArchive.CreateOutputTarArchive(fileStream, Encoding.Default);
             foreach (var node in nodes)
             {

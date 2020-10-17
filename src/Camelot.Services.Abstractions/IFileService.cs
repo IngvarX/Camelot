@@ -8,7 +8,7 @@ namespace Camelot.Services.Abstractions
 {
     public interface IFileService
     {
-        IReadOnlyList<FileModel> GetFiles(string directory, ISpecification<FileModel> specification);
+        IReadOnlyList<FileModel> GetFiles(string directory, ISpecification<FileModel> specification = null);
 
         IReadOnlyList<FileModel> GetFiles(IReadOnlyList<string> files);
 

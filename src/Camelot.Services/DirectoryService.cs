@@ -82,11 +82,11 @@ namespace Camelot.Services
             return parentDirectory is null ? null : CreateFrom(parentDirectory);
         }
 
-        public IReadOnlyList<DirectoryModel> GetChildDirectories(string directory, ISpecification<DirectoryModel> specification) =>
+        public IReadOnlyList<DirectoryModel> GetChildDirectories(string directory, ISpecification<DirectoryModel> specification = null) =>
             _environmentDirectoryService
                 .GetDirectories(directory)
                 .Select(CreateFrom)
-                .Where(specification.IsSatisfiedBy)
+                .Where(d => specification?.IsSatisfiedBy(d) ?? true)
                 .ToArray();
 
         public IReadOnlyList<string> GetEmptyDirectoriesRecursively(string directory)
