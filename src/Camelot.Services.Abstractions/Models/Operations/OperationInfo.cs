@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Camelot.Services.Abstractions.Models.Enums;
 
@@ -34,6 +35,24 @@ namespace Camelot.Services.Abstractions.Models.Operations
             Directories = settings.TopLevelDirectories;
             TotalFilesCount = Files.Count + Directories.Count;
             SourceDirectory = settings.SourceDirectory;
+        }
+
+        public OperationInfo(ExtractArchiveOperationSettings settings)
+        {
+            OperationType = OperationType.Extract;
+            Files = new[] {settings.InputTopLevelFile};
+            Directories = Array.Empty<string>();
+            TotalFilesCount = 1;
+            TargetDirectory = settings.TargetDirectory;
+        }
+
+        public OperationInfo(PackOperationSettings settings)
+        {
+            OperationType = OperationType.Extract;
+            Files = settings.InputTopLevelFiles;
+            Directories = settings.InputTopLevelDirectories;
+            TotalFilesCount = Files.Count;
+            TargetDirectory = settings.TargetDirectory;
         }
     }
 }

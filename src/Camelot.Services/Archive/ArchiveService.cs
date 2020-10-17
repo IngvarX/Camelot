@@ -4,33 +4,30 @@ using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Archive;
 using Camelot.Services.Abstractions.Models.Enums;
+using Camelot.Services.Abstractions.Operations;
 
 namespace Camelot.Services.Archive
 {
     public class ArchiveService : IArchiveService
     {
         private readonly IArchiveTypeMapper _archiveTypeMapper;
-        private readonly IArchiveProcessorFactory _archiveProcessorFactory;
         private readonly IPathService _pathService;
+        private readonly IOperationsService _operationsService;
 
         public ArchiveService(
             IArchiveTypeMapper archiveTypeMapper,
-            IArchiveProcessorFactory archiveProcessorFactory,
-            IPathService pathService)
+            IPathService pathService,
+            IOperationsService operationsService)
         {
             _archiveTypeMapper = archiveTypeMapper;
-            _archiveProcessorFactory = archiveProcessorFactory;
             _pathService = pathService;
+            _operationsService = operationsService;
         }
 
-        public async Task PackAsync(IReadOnlyList<string> nodes, string outputFile, ArchiveType archiveType)
-        {
-            var archiveProcessor = _archiveProcessorFactory.Create(archiveType);
+        public Task PackAsync(IReadOnlyList<string> nodes, string outputFile, ArchiveType archiveType) =>
+            _operationsService.PackAsync(nodes, outputFile, archiveType);
 
-            await archiveProcessor.PackAsync(nodes, outputFile);
-        }
-
-        public async Task UnpackAsync(string archivePath, string outputDirectory = null)
+        public async Task ExtractAsync(string archivePath, string outputDirectory = null)
         {
             if (!CheckIfNodeIsArchive(archivePath))
             {
@@ -38,12 +35,10 @@ namespace Camelot.Services.Archive
             }
 
             outputDirectory ??= _pathService.GetParentDirectory(archivePath);
-
             // ReSharper disable once PossibleInvalidOperationException
             var archiveType =_archiveTypeMapper.GetArchiveTypeFrom(archivePath).Value;
-            var archiveProcessor = _archiveProcessorFactory.Create(archiveType);
 
-            await archiveProcessor.UnpackAsync(archivePath, outputDirectory);
+            await _operationsService.ExtractAsync(archivePath, outputDirectory, archiveType);
         }
 
         public bool CheckIfNodeIsArchive(string nodePath) =>

@@ -208,8 +208,8 @@ namespace Camelot.DependencyInjection
             ));
             services.RegisterLazySingleton<IArchiveService>(() => new ArchiveService(
                 resolver.GetRequiredService<IArchiveTypeMapper>(),
-                resolver.GetRequiredService<IArchiveProcessorFactory>(),
-                resolver.GetRequiredService<IPathService>()
+                resolver.GetRequiredService<IPathService>(),
+                resolver.GetRequiredService<IOperationsService>()
             ));
             services.RegisterLazySingleton<IFileService>(() => new FileService(
                 resolver.GetRequiredService<IPathService>(),
@@ -228,7 +228,8 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IFileService>(),
                 resolver.GetRequiredService<IPathService>(),
                 resolver.GetRequiredService<IFileNameGenerationService>(),
-                resolver.GetRequiredService<ILogger>()
+                resolver.GetRequiredService<ILogger>(),
+                resolver.GetRequiredService<IArchiveProcessorFactory>()
             ));
             services.RegisterLazySingleton<INodesSelectionService>(() => new NodesSelectionService());
             services.RegisterLazySingleton<IOperationsService>(() => new OperationsService(

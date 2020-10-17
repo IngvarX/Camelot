@@ -28,7 +28,7 @@ namespace Camelot.Services.Archives
             }
         }
 
-        public async Task UnpackAsync(string archivePath, string outputDirectory)
+        public async Task ExtractAsync(string archivePath, string outputDirectory)
         {
             await using var fileStream = _fileService.OpenRead(archivePath);
 

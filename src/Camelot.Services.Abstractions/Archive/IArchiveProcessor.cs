@@ -7,6 +7,6 @@ namespace Camelot.Services.Abstractions.Archive
     {
         Task PackAsync(IReadOnlyList<string> nodes, string outputFile);
 
-        Task UnpackAsync(string archivePath, string outputDirectory);
+        Task ExtractAsync(string archivePath, string outputDirectory);
     }
 }

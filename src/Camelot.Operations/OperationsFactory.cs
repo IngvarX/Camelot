@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
+using Camelot.Operations.Archive;
 using Camelot.Operations.Models;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Archive;
 using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Models.Operations;
 using Camelot.Services.Abstractions.Operations;
@@ -18,6 +20,7 @@ namespace Camelot.Operations
         private readonly IPathService _pathService;
         private readonly IFileNameGenerationService _fileNameGenerationService;
         private readonly ILogger _logger;
+        private readonly IArchiveProcessorFactory _archiveProcessorFactory;
 
         public OperationsFactory(
             ITaskPool taskPool,
@@ -25,7 +28,8 @@ namespace Camelot.Operations
             IFileService fileService,
             IPathService pathService,
             IFileNameGenerationService fileNameGenerationService,
-            ILogger logger)
+            ILogger logger,
+            IArchiveProcessorFactory archiveProcessorFactory)
         {
             _taskPool = taskPool;
             _directoryService = directoryService;
@@ -33,6 +37,7 @@ namespace Camelot.Operations
             _pathService = pathService;
             _fileNameGenerationService = fileNameGenerationService;
             _logger = logger;
+            _archiveProcessorFactory = archiveProcessorFactory;
         }
 
         public IOperation CreateCopyOperation(BinaryFileSystemOperationSettings settings)
@@ -42,7 +47,7 @@ namespace Camelot.Operations
             var operationGroup = CreateOperationGroup(copyOperations, deleteNewFilesOperations);
 
             var operations = CreateOperationsGroupsList(operationGroup);
-            var operationInfo = Create(OperationType.Copy, settings);
+            var operationInfo = CreateOperationInfo(OperationType.Copy, settings);
 
             var compositeOperation = CreateCompositeOperation(operations, operationInfo);
 
@@ -59,7 +64,7 @@ namespace Camelot.Operations
             var deleteOperationGroup = CreateOperationGroup(deleteOldFilesOperations);
 
             var operations = CreateOperationsGroupsList(copyOperationGroup, deleteOperationGroup);
-            var operationInfo = Create(OperationType.Move, settings);
+            var operationInfo = CreateOperationInfo(OperationType.Move, settings);
 
             var compositeOperation = CreateCompositeOperation(operations, operationInfo);
 
@@ -72,7 +77,34 @@ namespace Camelot.Operations
             var deleteOperationGroup = CreateOperationGroup(deleteOperations);
 
             var operations = CreateOperationsGroupsList(deleteOperationGroup);
-            var operationInfo = Create(OperationType.Delete,settings);
+            var operationInfo = CreateOperationInfo(OperationType.Delete, settings);
+
+            var compositeOperation = CreateCompositeOperation(operations, operationInfo);
+
+            return CreateOperation(compositeOperation);
+        }
+
+        public IOperation CreatePackOperation(PackOperationSettings settings)
+        {
+            var archiveProcessor = CreateArchiveProcessor(settings.ArchiveType);
+            var nodes = settings.InputTopLevelFiles.Concat(settings.InputTopLevelDirectories).ToArray();
+            var packOperation = CreatePackOperation(archiveProcessor, nodes, settings.TargetDirectory);
+            var operationGroup = CreateOperationGroup(new[] {packOperation});
+            var operations = CreateOperationsGroupsList(operationGroup);
+            var operationInfo = CreateOperationInfo(settings);
+
+            var compositeOperation = CreateCompositeOperation(operations, operationInfo);
+
+            return CreateOperation(compositeOperation);
+        }
+
+        public IOperation CreateExtractOperation(ExtractArchiveOperationSettings settings)
+        {
+            var archiveProcessor = CreateArchiveProcessor(settings.ArchiveType);
+            var extractOperation = CreateExtractOperation(archiveProcessor, settings.InputTopLevelFile, settings.TargetDirectory);
+            var operationGroup = CreateOperationGroup(new[] {extractOperation});
+            var operations = CreateOperationsGroupsList(operationGroup);
+            var operationInfo = CreateOperationInfo(settings);
 
             var compositeOperation = CreateCompositeOperation(operations, operationInfo);
 
@@ -115,6 +147,18 @@ namespace Camelot.Operations
         private IInternalOperation CreateAddDirectoryOperation(string directoryPath) =>
             new CreateDirectoryOperation(_directoryService, directoryPath);
 
+        private IInternalOperation CreatePackOperation(IArchiveProcessor archiveProcessor,
+            IReadOnlyList<string> nodes, string outputFilePath) =>
+            new PackOperation(archiveProcessor, _directoryService, _pathService,
+                nodes, outputFilePath);
+
+        private IInternalOperation CreateExtractOperation(IArchiveProcessor archiveProcessor,
+            string archiveFilePath, string outputDirectory) =>
+            new ExtractOperation(archiveProcessor, _directoryService, archiveFilePath, outputDirectory);
+
+        private IArchiveProcessor CreateArchiveProcessor(ArchiveType archiveType) =>
+            _archiveProcessorFactory.Create(archiveType);
+
         private ICompositeOperation CreateCompositeOperation(
             IReadOnlyList<OperationGroup> operations,
             OperationInfo operationInfo) =>
@@ -123,11 +167,17 @@ namespace Camelot.Operations
         private IOperation CreateOperation(ICompositeOperation compositeOperation) =>
             new AsyncOperationStateMachine(compositeOperation, _logger);
 
-        private static OperationInfo Create(OperationType operationType, BinaryFileSystemOperationSettings settings) =>
+        private static OperationInfo CreateOperationInfo(OperationType operationType, BinaryFileSystemOperationSettings settings) =>
             new OperationInfo(operationType, settings);
 
-        private static OperationInfo Create(OperationType operationType, UnaryFileSystemOperationSettings settings) =>
+        private static OperationInfo CreateOperationInfo(OperationType operationType, UnaryFileSystemOperationSettings settings) =>
             new OperationInfo(operationType, settings);
+
+        private static OperationInfo CreateOperationInfo(PackOperationSettings settings) =>
+            new OperationInfo(settings);
+
+        private static OperationInfo CreateOperationInfo(ExtractArchiveOperationSettings settings) =>
+            new OperationInfo(settings);
 
         private static IReadOnlyList<OperationGroup> CreateOperationsGroupsList(
             params OperationGroup[] operations) => operations;

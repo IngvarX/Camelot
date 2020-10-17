@@ -100,7 +100,13 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         private Task PackAsync() => throw new NotImplementedException();
 
-        private Task UnpackAsync() => _archiveService.UnpackAsync(FullPath);
+        private async Task UnpackAsync()
+        {
+            if (IsArchive)
+            {
+                await _archiveService.ExtractAsync(FullPath);
+            }
+        }
 
         private void StartRenaming() => IsEditing = true;
 

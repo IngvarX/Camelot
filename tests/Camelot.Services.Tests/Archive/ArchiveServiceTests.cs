@@ -108,24 +108,24 @@ namespace Camelot.Services.Tests.Archive
 
             var processorMock = new Mock<IArchiveProcessor>();
             processorMock
-                .Setup(m => m.UnpackAsync(FilePath, OutputDirPath))
+                .Setup(m => m.ExtractAsync(FilePath, OutputDirPath))
                 .Verifiable();
             _autoMocker
                 .Setup<IArchiveProcessorFactory, IArchiveProcessor>(m => m.Create(archiveType))
                 .Returns(processorMock.Object);
 
             var service = _autoMocker.CreateInstance<ArchiveService>();
-            await service.UnpackAsync(FilePath, outputDirPath);
+            await service.ExtractAsync(FilePath, outputDirPath);
 
             processorMock
-                .Verify(m => m.UnpackAsync(FilePath, OutputDirPath), Times.Once);
+                .Verify(m => m.ExtractAsync(FilePath, OutputDirPath), Times.Once);
         }
 
         [Fact]
         public async Task TestUnpackAsyncFailed()
         {
             var service = _autoMocker.CreateInstance<ArchiveService>();
-            Task UnpackAsync() => service.UnpackAsync(FilePath, OutputDirPath);
+            Task UnpackAsync() => service.ExtractAsync(FilePath, OutputDirPath);
 
             await Assert.ThrowsAsync<InvalidOperationException>(UnpackAsync);
         }
