@@ -396,4 +396,22 @@
   <data name="Unpack" xml:space="preserve">
     <value>Unpack</value>
   </data>
+  <data name="ExtractingArchiveTo" xml:space="preserve">
+    <value>Extracting {0} to {1}</value>
+  </data>
+  <data name="PackingFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Packing {0} files and {1} directories to (2)</value>
+  </data>
+  <data name="PackingFileTo" xml:space="preserve">
+    <value>Packing file {0} to {1}</value>
+  </data>
+  <data name="ExtractedArchiveTo" xml:space="preserve">
+    <value>Extracted archive {0} to {1}</value>
+  </data>
+  <data name="PackedFileTo" xml:space="preserve">
+    <value>Packed file {0} to {1}</value>
+  </data>
+  <data name="PackedFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Packed {0} files and {1} directories to {2}</value>
+  </data>
 </root>

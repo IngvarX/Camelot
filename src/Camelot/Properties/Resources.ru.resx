@@ -390,4 +390,22 @@
   <data name="Unpack" xml:space="preserve">
     <value>Разархивировать</value>
   </data>
+  <data name="ExtractingArchiveTo" xml:space="preserve">
+    <value>Распаковывается архив {0} в {1}</value>
+  </data>
+  <data name="PackingFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Архивируются {0} файлов и {1} каталогов в {2}</value>
+  </data>
+  <data name="PackingFileTo" xml:space="preserve">
+    <value>Архивируется файл {0} в {1}</value>
+  </data>
+  <data name="ExtractedArchiveTo" xml:space="preserve">
+    <value>Распакован архив {0} в {1}</value>
+  </data>
+  <data name="PackedFileTo" xml:space="preserve">
+    <value>Архивирован файл {0} в {1}</value>
+  </data>
+  <data name="PackedFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Архивировано {0} файлов и {1} каталогов в {2}</value>
+  </data>
 </root>

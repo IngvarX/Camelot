@@ -602,5 +602,41 @@ namespace Camelot.Properties {
                 return ResourceManager.GetString("Unpack", resourceCulture);
             }
         }
+        
+        public static string ExtractingArchiveTo {
+            get {
+                return ResourceManager.GetString("ExtractingArchiveTo", resourceCulture);
+            }
+        }
+        
+        public static string PackingFilesAndDirectoriesTo {
+            get {
+                return ResourceManager.GetString("PackingFilesAndDirectoriesTo", resourceCulture);
+            }
+        }
+        
+        public static string PackingFileTo {
+            get {
+                return ResourceManager.GetString("PackingFileTo", resourceCulture);
+            }
+        }
+        
+        public static string ExtractedArchiveTo {
+            get {
+                return ResourceManager.GetString("ExtractedArchiveTo", resourceCulture);
+            }
+        }
+        
+        public static string PackedFileTo {
+            get {
+                return ResourceManager.GetString("PackedFileTo", resourceCulture);
+            }
+        }
+        
+        public static string PackedFilesAndDirectoriesTo {
+            get {
+                return ResourceManager.GetString("PackedFilesAndDirectoriesTo", resourceCulture);
+            }
+        }
     }
 }

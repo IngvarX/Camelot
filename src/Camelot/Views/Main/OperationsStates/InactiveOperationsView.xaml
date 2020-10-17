@@ -92,6 +92,38 @@
                                 </TextBlock.Text>
                             </TextBlock>
                         </Grid>
+
+                        <Grid IsVisible="{Binding OperationType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:OperationType.Pack}}">
+                            <TextBlock Classes="operationStatusTextBlock successTextBlock" IsVisible="{Binding IsProcessingSingleFile}">
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat="{x:Static p:Resources.DeletedFileFromTo}">
+                                        <Binding Path="SourceFile" />
+                                        <Binding Path="SourceDirectory" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+
+                            <TextBlock Classes="operationStatusTextBlock successTextBlock" IsVisible="{Binding !IsProcessingSingleFile}">
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat="{x:Static p:Resources.DeletedFilesAndDirectories}">
+                                        <Binding Path="SourceFilesCount" />
+                                        <Binding Path="SourceDirectoriesCount" />
+                                        <Binding Path="SourceDirectory" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </Grid>
+
+                        <Grid IsVisible="{Binding OperationType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:OperationType.Extract}}">
+                            <TextBlock Classes="operationStatusTextBlock successTextBlock">
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat="{x:Static p:Resources.ExtractedArchiveTo}">
+                                        <Binding Path="SourceFile" />
+                                        <Binding Path="TargetDirectory" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </Grid>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" IsVisible="{Binding State, Converter={StaticResource InverseEnumToBooleanConverter}, ConverterParameter={x:Static enums:OperationState.Finished}}">
