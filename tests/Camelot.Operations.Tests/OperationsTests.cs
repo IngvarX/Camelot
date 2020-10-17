@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Archive;
 using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Models.Operations;
@@ -18,6 +20,7 @@ namespace Camelot.Operations.Tests
         private const string SourceName = "Source";
         private const string SecondSourceName = "SecondSource";
         private const string DestinationName = "Destination";
+        private const string DestinationDirName = "DestinationDir";
         private const string SecondDestinationName = "SecondDestination";
 
         private readonly AutoMocker _autoMocker;
@@ -289,6 +292,89 @@ namespace Camelot.Operations.Tests
 
             Assert.True(callbackCalled);
             _autoMocker.Verify<IDirectoryService, bool>(m => m.Create(DestinationName), Times.Once);
+        }
+
+        [Theory]
+        [InlineData(ArchiveType.Rar)]
+        [InlineData(ArchiveType.Tar)]
+        [InlineData(ArchiveType.Zip)]
+        [InlineData(ArchiveType.GZip)]
+        [InlineData(ArchiveType.TarBz)]
+        [InlineData(ArchiveType.TarGz)]
+        [InlineData(ArchiveType.TarLz)]
+        [InlineData(ArchiveType.TarXz)]
+        [InlineData(ArchiveType.SevenZip)]
+        public async Task TestPackOperation(ArchiveType archiveType)
+        {
+            var processorMock = new Mock<IArchiveProcessor>();
+            processorMock
+                .Setup(m => m.PackAsync(
+                    It.Is<IReadOnlyList<string>>(l => l.Single() == SourceName),
+                    DestinationDirName))
+                .Verifiable();
+            _autoMocker
+                .Setup<IArchiveProcessorFactory, IArchiveProcessor>(m => m.Create(archiveType))
+                .Returns(processorMock.Object);
+
+            var operationsFactory = _autoMocker.CreateInstance<OperationsFactory>();
+            var settings = new PackOperationSettings(
+                new string[] {}, new[] {SourceName},
+            DestinationName, DestinationDirName, archiveType);
+            var operation = operationsFactory.CreatePackOperation(settings);
+
+            Assert.Equal(OperationState.NotStarted, operation.State);
+            var callbackCalled = false;
+            operation.StateChanged += (sender, args) => callbackCalled = true;
+
+            await operation.RunAsync();
+
+            Assert.Equal(OperationState.Finished, operation.State);
+            Assert.True(callbackCalled);
+
+            processorMock
+                .Verify(m => m.PackAsync(
+                    It.Is<IReadOnlyList<string>>(l => l.Single() == SourceName),
+                    DestinationDirName), Times.Once);
+        }
+
+        [Theory]
+        [InlineData(ArchiveType.Rar)]
+        [InlineData(ArchiveType.Tar)]
+        [InlineData(ArchiveType.Zip)]
+        [InlineData(ArchiveType.GZip)]
+        [InlineData(ArchiveType.TarBz)]
+        [InlineData(ArchiveType.TarGz)]
+        [InlineData(ArchiveType.TarLz)]
+        [InlineData(ArchiveType.TarXz)]
+        [InlineData(ArchiveType.SevenZip)]
+        public async Task TestExtractOperation(ArchiveType archiveType)
+        {
+            var processorMock = new Mock<IArchiveProcessor>();
+            processorMock
+                .Setup(m => m.ExtractAsync(
+                    SourceName, DestinationDirName))
+                .Verifiable();
+            _autoMocker
+                .Setup<IArchiveProcessorFactory, IArchiveProcessor>(m => m.Create(archiveType))
+                .Returns(processorMock.Object);
+
+            var operationsFactory = _autoMocker.CreateInstance<OperationsFactory>();
+            var settings = new ExtractArchiveOperationSettings(
+                SourceName, DestinationDirName, archiveType);
+            var operation = operationsFactory.CreateExtractOperation(settings);
+
+            Assert.Equal(OperationState.NotStarted, operation.State);
+            var callbackCalled = false;
+            operation.StateChanged += (sender, args) => callbackCalled = true;
+
+            await operation.RunAsync();
+
+            Assert.Equal(OperationState.Finished, operation.State);
+            Assert.True(callbackCalled);
+
+            processorMock
+                .Verify(m => m.ExtractAsync(
+                    SourceName, DestinationDirName), Times.Once);
         }
     }
 }
