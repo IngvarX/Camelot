@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Models.Operations;
 using Camelot.Services.Abstractions.Operations;
 using Moq;
@@ -73,6 +74,80 @@ namespace Camelot.Operations.Tests
             operationMock.Verify(m => m.RunAsync(), Times.Once);
             _autoMocker
                 .Verify<IFileService, bool>(m => m.CheckIfExists(FileName), Times.Once);
+            _autoMocker
+                .Verify<IOperationsStateService>(m => m.AddOperation(operationMock.Object), Times.Once);
+        }
+
+        [Theory]
+        [InlineData(ArchiveType.Rar)]
+        [InlineData(ArchiveType.Zip)]
+        [InlineData(ArchiveType.GZip)]
+        [InlineData(ArchiveType.Tar)]
+        [InlineData(ArchiveType.SevenZip)]
+        [InlineData(ArchiveType.TarGz)]
+        [InlineData(ArchiveType.TarBz)]
+        [InlineData(ArchiveType.TarXz)]
+        [InlineData(ArchiveType.TarLz)]
+        public async Task TestFilesPack(ArchiveType archiveType)
+        {
+            var operationMock = new Mock<IOperation>();
+            operationMock
+                .Setup(m => m.RunAsync())
+                .Verifiable();
+            _autoMocker
+                .Setup<IOperationsFactory, IOperation>(m => m.CreatePackOperation(
+                    It.Is<PackOperationSettings>(s => s.ArchiveType == archiveType && s.InputTopLevelFiles.Single() == FileName)))
+                .Returns(operationMock.Object);
+
+            _autoMocker
+                .Setup<IFileService, bool>(m => m.CheckIfExists(FileName))
+                .Returns(true)
+                .Verifiable();
+            _autoMocker
+                .Setup<IOperationsStateService>(m => m.AddOperation(operationMock.Object))
+                .Verifiable();
+
+            var operationsService = _autoMocker.CreateInstance<OperationsService>();
+
+            await operationsService.PackAsync(new[] {FileName}, NewFileName, archiveType);
+
+            operationMock.Verify(m => m.RunAsync(), Times.Once);
+            _autoMocker
+                .Verify<IFileService, bool>(m => m.CheckIfExists(FileName), Times.Once);
+            _autoMocker
+                .Verify<IOperationsStateService>(m => m.AddOperation(operationMock.Object), Times.Once);
+        }
+
+        [Theory]
+        [InlineData(ArchiveType.Rar)]
+        [InlineData(ArchiveType.Zip)]
+        [InlineData(ArchiveType.GZip)]
+        [InlineData(ArchiveType.Tar)]
+        [InlineData(ArchiveType.SevenZip)]
+        [InlineData(ArchiveType.TarGz)]
+        [InlineData(ArchiveType.TarBz)]
+        [InlineData(ArchiveType.TarXz)]
+        [InlineData(ArchiveType.TarLz)]
+        public async Task TestFilesExtract(ArchiveType archiveType)
+        {
+            var operationMock = new Mock<IOperation>();
+            operationMock
+                .Setup(m => m.RunAsync())
+                .Verifiable();
+            _autoMocker
+                .Setup<IOperationsFactory, IOperation>(m => m.CreateExtractOperation(
+                    It.Is<ExtractArchiveOperationSettings>(s => s.ArchiveType == archiveType && s.InputTopLevelFile == FileName && s.TargetDirectory == DirectoryName)))
+                .Returns(operationMock.Object);
+
+            _autoMocker
+                .Setup<IOperationsStateService>(m => m.AddOperation(operationMock.Object))
+                .Verifiable();
+
+            var operationsService = _autoMocker.CreateInstance<OperationsService>();
+
+            await operationsService.ExtractAsync(FileName, DirectoryName, archiveType);
+
+            operationMock.Verify(m => m.RunAsync(), Times.Once);
             _autoMocker
                 .Verify<IOperationsStateService>(m => m.AddOperation(operationMock.Object), Times.Once);
         }
@@ -273,6 +348,25 @@ namespace Camelot.Operations.Tests
 
             _autoMocker
                 .Verify<IDirectoryService, bool>(m => m.Create(fullDirectoryPath), Times.Once);
+        }
+
+        [Fact]
+        public void TestFileCreation()
+        {
+            var fullDirectoryPath = Path.Combine(SelectedDirectoryName, DirectoryName);
+            _autoMocker
+                .Setup<IFileService>(m => m.CreateFile(fullDirectoryPath))
+                .Verifiable();
+            _autoMocker
+                .Setup<IPathService, string>(m => m.Combine(SelectedDirectoryName, FileName))
+                .Returns(fullDirectoryPath);
+
+            var operationsService = _autoMocker.CreateInstance<OperationsService>();
+
+            operationsService.CreateFile(SelectedDirectoryName, FileName);
+
+            _autoMocker
+                .Verify<IFileService>(m => m.CreateFile(fullDirectoryPath), Times.Once);
         }
 
         [Fact]
