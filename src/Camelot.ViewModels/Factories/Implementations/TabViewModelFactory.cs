@@ -2,6 +2,7 @@ using Camelot.DataAccess.Models;
 using Camelot.Services.Abstractions;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
+using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Enums;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 
 namespace Camelot.ViewModels.Factories.Implementations

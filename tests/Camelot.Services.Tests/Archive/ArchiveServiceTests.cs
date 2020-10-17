@@ -91,7 +91,52 @@ namespace Camelot.Services.Tests.Archive
         [InlineData(ArchiveType.TarGz, null)]
         [InlineData(ArchiveType.TarLz, null)]
         [InlineData(ArchiveType.TarXz, null)]
-        public async Task TestUnpackAsync(ArchiveType archiveType, string outputDirPath)
+        public async Task ExtractToNewDirectoryAsync(ArchiveType archiveType, string outputDirPath)
+        {
+            _autoMocker
+                .Setup<IArchiveTypeMapper, ArchiveType?>(m => m.GetArchiveTypeFrom(FilePath))
+                .Returns(archiveType);
+            _autoMocker
+                .Setup<IFileNameGenerationService, string>(m => m.GenerateFullNameWithoutExtension(FilePath))
+                .Returns(outputDirPath);
+            if (outputDirPath is null)
+            {
+                _autoMocker
+                    .Setup<IPathService, string>(m => m.GetParentDirectory(FilePath))
+                    .Returns(OutputDirPath);
+            }
+
+            _autoMocker
+                .Setup<IOperationsService>(m => m.ExtractAsync(FilePath, OutputDirPath, archiveType))
+                .Verifiable();
+
+            var service = _autoMocker.CreateInstance<ArchiveService>();
+            await service.ExtractToNewDirectoryAsync(FilePath);
+
+            _autoMocker
+                .Verify<IOperationsService>(m => m.ExtractAsync(FilePath, OutputDirPath, archiveType), Times.Once);
+        }
+
+        [Theory]
+        [InlineData(ArchiveType.Rar, OutputDirPath)]
+        [InlineData(ArchiveType.Tar, OutputDirPath)]
+        [InlineData(ArchiveType.Zip, OutputDirPath)]
+        [InlineData(ArchiveType.SevenZip, OutputDirPath)]
+        [InlineData(ArchiveType.GZip, OutputDirPath)]
+        [InlineData(ArchiveType.TarBz, OutputDirPath)]
+        [InlineData(ArchiveType.TarGz, OutputDirPath)]
+        [InlineData(ArchiveType.TarLz, OutputDirPath)]
+        [InlineData(ArchiveType.TarXz, OutputDirPath)]
+        [InlineData(ArchiveType.Rar, null)]
+        [InlineData(ArchiveType.Tar, null)]
+        [InlineData(ArchiveType.Zip, null)]
+        [InlineData(ArchiveType.SevenZip, null)]
+        [InlineData(ArchiveType.GZip, null)]
+        [InlineData(ArchiveType.TarBz, null)]
+        [InlineData(ArchiveType.TarGz, null)]
+        [InlineData(ArchiveType.TarLz, null)]
+        [InlineData(ArchiveType.TarXz, null)]
+        public async Task TestExtractAsync(ArchiveType archiveType, string outputDirPath)
         {
             _autoMocker
                 .Setup<IArchiveTypeMapper, ArchiveType?>(m => m.GetArchiveTypeFrom(FilePath))
@@ -115,12 +160,21 @@ namespace Camelot.Services.Tests.Archive
         }
 
         [Fact]
-        public async Task TestUnpackAsyncFailed()
+        public async Task TestExtractAsyncFailed()
         {
             var service = _autoMocker.CreateInstance<ArchiveService>();
-            Task UnpackAsync() => service.ExtractAsync(FilePath, OutputDirPath);
+            Task ExtractAsync() => service.ExtractAsync(FilePath, OutputDirPath);
 
-            await Assert.ThrowsAsync<InvalidOperationException>(UnpackAsync);
+            await Assert.ThrowsAsync<InvalidOperationException>(ExtractAsync);
+        }
+
+        [Fact]
+        public async Task TestExtractToNewDirectoryAsyncFailed()
+        {
+            var service = _autoMocker.CreateInstance<ArchiveService>();
+            Task ExtractAsync() => service.ExtractToNewDirectoryAsync(FilePath);
+
+            await Assert.ThrowsAsync<InvalidOperationException>(ExtractAsync);
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Enums;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 
 namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Comparers

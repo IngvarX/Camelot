@@ -13,19 +13,29 @@ namespace Camelot.Services.Archive
         private readonly IArchiveTypeMapper _archiveTypeMapper;
         private readonly IPathService _pathService;
         private readonly IOperationsService _operationsService;
+        private readonly IFileNameGenerationService _fileNameGenerationService;
 
         public ArchiveService(
             IArchiveTypeMapper archiveTypeMapper,
             IPathService pathService,
-            IOperationsService operationsService)
+            IOperationsService operationsService,
+            IFileNameGenerationService fileNameGenerationService)
         {
             _archiveTypeMapper = archiveTypeMapper;
             _pathService = pathService;
             _operationsService = operationsService;
+            _fileNameGenerationService = fileNameGenerationService;
         }
 
         public Task PackAsync(IReadOnlyList<string> nodes, string outputFile, ArchiveType archiveType) =>
             _operationsService.PackAsync(nodes, outputFile, archiveType);
+
+        public async Task ExtractToNewDirectoryAsync(string archivePath)
+        {
+            var fullName = _fileNameGenerationService.GenerateFullNameWithoutExtension(archivePath);
+
+            await ExtractAsync(archivePath, fullName);
+        }
 
         public async Task ExtractAsync(string archivePath, string outputDirectory = null)
         {

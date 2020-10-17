@@ -21,10 +21,15 @@ namespace Camelot.Services
         public string GenerateFullName(string filePath)
         {
             var initialName = _pathService.GetFileName(filePath);
-            var directory = _pathService.GetParentDirectory(filePath);
-            var newName = GenerateName(initialName, directory);
 
-            return _pathService.Combine(directory, newName);
+            return GenerateByInitialName(filePath, initialName);
+        }
+
+        public string GenerateFullNameWithoutExtension(string filePath)
+        {
+            var initialName = _pathService.GetFileNameWithoutExtension(filePath);
+
+            return GenerateByInitialName(filePath, initialName);
         }
 
         public string GenerateName(string initialName, string directory)
@@ -36,6 +41,14 @@ namespace Camelot.Services
             }
 
             return currentName;
+        }
+
+        private string GenerateByInitialName(string filePath, string initialName)
+        {
+            var directory = _pathService.GetParentDirectory(filePath);
+            var newName = GenerateName(initialName, directory);
+
+            return _pathService.Combine(directory, newName);
         }
 
         private bool IsNameAlreadyInUse(string name, string directory)

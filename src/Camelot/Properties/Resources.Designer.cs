@@ -638,5 +638,23 @@ namespace Camelot.Properties {
                 return ResourceManager.GetString("PackedFilesAndDirectoriesTo", resourceCulture);
             }
         }
+        
+        public static string ExtractArchiveHere {
+            get {
+                return ResourceManager.GetString("ExtractArchiveHere", resourceCulture);
+            }
+        }
+        
+        public static string ExtractArchiveToNewDirectory {
+            get {
+                return ResourceManager.GetString("ExtractArchiveToNewDirectory", resourceCulture);
+            }
+        }
+        
+        public static string SelectDirectoryForExtraction {
+            get {
+                return ResourceManager.GetString("SelectDirectoryForExtraction", resourceCulture);
+            }
+        }
     }
 }

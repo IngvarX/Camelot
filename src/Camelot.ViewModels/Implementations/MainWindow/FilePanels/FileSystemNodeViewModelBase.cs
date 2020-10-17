@@ -9,6 +9,7 @@ using Camelot.Services.Abstractions.Operations;
 using Camelot.ViewModels.Implementations.Dialogs;
 using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
 using Camelot.ViewModels.Implementations.Dialogs.Results;
+using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Enums;
 using Camelot.ViewModels.Interfaces.Behaviors;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Services.Interfaces;
@@ -49,7 +50,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         public ICommand PackCommand { get; }
 
-        public ICommand UnpackCommand { get; }
+        public ICommand ExtractCommand { get; }
 
         public ICommand StartRenamingCommand { get; }
 
@@ -86,7 +87,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
             OpenCommand = ReactiveCommand.Create(Open);
             PackCommand = ReactiveCommand.CreateFromTask(PackAsync);
-            UnpackCommand = ReactiveCommand.CreateFromTask(UnpackAsync);
+            ExtractCommand = ReactiveCommand.CreateFromTask<ExtractCommandType>(ExtractAsync);
             StartRenamingCommand = ReactiveCommand.Create(StartRenaming);
             RenameCommand = ReactiveCommand.Create(Rename);
             CopyToClipboardCommand = ReactiveCommand.CreateFromTask(CopyToClipboardAsync);
@@ -100,11 +101,26 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         private Task PackAsync() => throw new NotImplementedException();
 
-        private async Task UnpackAsync()
+        private async Task ExtractAsync(ExtractCommandType commandType)
         {
-            if (IsArchive)
+            if (!IsArchive)
             {
-                await _archiveService.ExtractAsync(FullPath);
+                return;
+            }
+
+            switch (commandType)
+            {
+                case ExtractCommandType.CurrentDirectory:
+                    await _archiveService.ExtractAsync(FullPath);
+                    break;
+                case ExtractCommandType.NewDirectory:
+                    await _archiveService.ExtractToNewDirectoryAsync(FullPath);
+                    break;
+                case ExtractCommandType.SelectDirectory:
+                    // TODO:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(commandType), commandType, null);
             }
         }
 

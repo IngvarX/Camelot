@@ -408,4 +408,13 @@
   <data name="PackedFilesAndDirectoriesTo" xml:space="preserve">
     <value>Архивировано {0} файлов и {1} каталогов в {2}</value>
   </data>
+  <data name="ExtractArchiveHere" xml:space="preserve">
+    <value>Расппаковать архив тут</value>
+  </data>
+  <data name="ExtractArchiveToNewDirectory" xml:space="preserve">
+    <value>Распаковать архив в новом каталоге</value>
+  </data>
+  <data name="SelectDirectoryForExtraction" xml:space="preserve">
+    <value>Выбрать каталог для разархивирвания</value>
+  </data>
 </root>
