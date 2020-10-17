@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Archive;
 using Camelot.Services.Abstractions.Models.Enums;
+using Camelot.Services.Abstractions.Operations;
 using Camelot.Services.Archive;
 using Moq;
 using Moq.AutoMock;
@@ -60,19 +61,15 @@ namespace Camelot.Services.Tests.Archive
         {
             var nodes = new[] {FilePath};
 
-            var processorMock = new Mock<IArchiveProcessor>();
-            processorMock
-                .Setup(m => m.PackAsync(nodes, OutputFilePath))
-                .Verifiable();
             _autoMocker
-                .Setup<IArchiveProcessorFactory, IArchiveProcessor>(m => m.Create(archiveType))
-                .Returns(processorMock.Object);
+                .Setup<IOperationsService>(m => m.PackAsync(nodes, OutputFilePath, archiveType))
+                .Verifiable();
 
             var service = _autoMocker.CreateInstance<ArchiveService>();
             await service.PackAsync(nodes, OutputFilePath, archiveType);
 
-            processorMock
-                .Verify(m => m.PackAsync(nodes, OutputFilePath), Times.Once);
+            _autoMocker
+                .Verify<IOperationsService>(m => m.PackAsync(nodes, OutputFilePath, archiveType), Times.Once);
         }
 
         [Theory]
@@ -106,19 +103,15 @@ namespace Camelot.Services.Tests.Archive
                     .Returns(OutputDirPath);
             }
 
-            var processorMock = new Mock<IArchiveProcessor>();
-            processorMock
-                .Setup(m => m.ExtractAsync(FilePath, OutputDirPath))
-                .Verifiable();
             _autoMocker
-                .Setup<IArchiveProcessorFactory, IArchiveProcessor>(m => m.Create(archiveType))
-                .Returns(processorMock.Object);
+                .Setup<IOperationsService>(m => m.ExtractAsync(FilePath, OutputDirPath, archiveType))
+                .Verifiable();
 
             var service = _autoMocker.CreateInstance<ArchiveService>();
             await service.ExtractAsync(FilePath, outputDirPath);
 
-            processorMock
-                .Verify(m => m.ExtractAsync(FilePath, OutputDirPath), Times.Once);
+            _autoMocker
+                .Verify<IOperationsService>(m => m.ExtractAsync(FilePath, OutputDirPath, archiveType), Times.Once);
         }
 
         [Fact]

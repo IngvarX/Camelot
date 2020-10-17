@@ -7,8 +7,8 @@ using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Models.Operations;
 using Camelot.Services.Abstractions.Operations;
 using Camelot.TaskPool.Interfaces;
-using Microsoft.Extensions.Logging;
 using Moq;
+using Moq.AutoMock;
 using Xunit;
 
 namespace Camelot.Operations.Tests
@@ -20,27 +20,15 @@ namespace Camelot.Operations.Tests
         private const string DestinationName = "Destination";
         private const string SecondDestinationName = "SecondDestination";
 
-        private readonly ITaskPool _taskPool;
-        private readonly IPathService _pathService;
-        private readonly IFileNameGenerationService _fileNameGenerationService;
-        private readonly ILogger _logger;
+        private readonly AutoMocker _autoMocker;
 
         public OperationsTests()
         {
-            var taskPoolMock = new Mock<ITaskPool>();
-            taskPoolMock
-                .Setup(m => m.ExecuteAsync(It.IsAny<Func<Task>>()))
+            _autoMocker = new AutoMocker();
+
+            _autoMocker
+                .Setup<ITaskPool, Task>(m => m.ExecuteAsync(It.IsAny<Func<Task>>()))
                 .Returns<Func<Task>>(x => x());
-            _taskPool = taskPoolMock.Object;
-
-            var pathServiceMock = new Mock<IPathService>();
-            _pathService = pathServiceMock.Object;
-
-            var fileNameGenerationServiceMock = new Mock<IFileNameGenerationService>();
-            _fileNameGenerationService = fileNameGenerationServiceMock.Object;
-
-            var loggerMock = new Mock<ILogger>();
-            _logger = loggerMock.Object;
         }
 
         [Theory]
@@ -48,20 +36,12 @@ namespace Camelot.Operations.Tests
         [InlineData(false, OperationState.Finished)]
         public async Task TestCopyOperation(bool throws, OperationState state)
         {
-            var directoryServiceMock = new Mock<IDirectoryService>();
-            var filesServiceMock = new Mock<IFileService>();
-            var copySetup = filesServiceMock
-                .Setup(m => m.CopyAsync(SourceName, DestinationName, false))
+            var copySetup = _autoMocker
+                .Setup<IFileService, Task<bool>>(m => m.CopyAsync(SourceName, DestinationName, false))
                 .ReturnsAsync(!throws);
             copySetup.Verifiable();
 
-            var operationsFactory = new OperationsFactory(
-                _taskPool,
-                directoryServiceMock.Object,
-                filesServiceMock.Object,
-                _pathService,
-                _fileNameGenerationService,
-                _logger);
+            var operationsFactory = _autoMocker.CreateInstance<OperationsFactory>();
             var settings = new BinaryFileSystemOperationSettings(
                 new string[] { },
                 new[] {SourceName},
@@ -82,7 +62,7 @@ namespace Camelot.Operations.Tests
             Assert.Equal(state, copyOperation.State);
 
             Assert.True(isCallbackCalled);
-            filesServiceMock.Verify(m => m.CopyAsync(SourceName, DestinationName, false), Times.Once);
+            _autoMocker.Verify<IFileService>(m => m.CopyAsync(SourceName, DestinationName, false), Times.Once);
         }
 
         [Theory]
@@ -98,44 +78,36 @@ namespace Camelot.Operations.Tests
             var now = DateTime.UtcNow;
             var hourBeforeNow = now.AddHours(-1);
 
-            var directoryServiceMock = new Mock<IDirectoryService>();
-            var filesServiceMock = new Mock<IFileService>();
-            filesServiceMock
-                .Setup(m => m.GetFile(SourceName))
+            _autoMocker
+                .Setup<IFileService, FileModel>(m => m.GetFile(SourceName))
                 .Returns(new FileModel {LastModifiedDateTime = now});
-            filesServiceMock
-                .Setup(m => m.GetFile(DestinationName))
+            _autoMocker
+                .Setup<IFileService, FileModel>(m => m.GetFile(DestinationName))
                 .Returns(new FileModel {LastModifiedDateTime = hourBeforeNow});
-            filesServiceMock
-                .Setup(m => m.GetFile(SecondSourceName))
+            _autoMocker
+                .Setup<IFileService, FileModel>(m => m.GetFile(SecondSourceName))
                 .Returns(new FileModel {LastModifiedDateTime = hourBeforeNow});
-            filesServiceMock
-                .Setup(m => m.GetFile(SecondDestinationName))
+            _autoMocker
+                .Setup<IFileService, FileModel>(m => m.GetFile(SecondDestinationName))
                 .Returns(new FileModel {LastModifiedDateTime = now});
-            filesServiceMock
-                .Setup(m => m.CopyAsync(SourceName, DestinationName, false))
+            _autoMocker
+                .Setup<IFileService>(m => m.CopyAsync(SourceName, DestinationName, false))
                 .Verifiable();
-            filesServiceMock
-                .Setup(m => m.CopyAsync(SourceName, DestinationName, true))
+            _autoMocker
+                .Setup<IFileService, Task<bool>>(m => m.CopyAsync(SourceName, DestinationName, true))
                 .ReturnsAsync(true)
                 .Verifiable();
-            filesServiceMock
-                .Setup(m => m.CopyAsync(SecondSourceName, SecondDestinationName, false))
+            _autoMocker
+                .Setup<IFileService>(m => m.CopyAsync(SecondSourceName, SecondDestinationName, false))
                 .Verifiable();
-            filesServiceMock
-                .Setup(m => m.CopyAsync(SecondSourceName, SecondDestinationName, true))
+            _autoMocker
+                .Setup<IFileService, Task<bool>>(m => m.CopyAsync(SecondSourceName, SecondDestinationName, true))
                 .ReturnsAsync(true)
                 .Verifiable();
-            filesServiceMock
-                .Setup(m => m.CheckIfExists(It.IsAny<string>()))
+            _autoMocker
+                .Setup<IFileService, bool>(m => m.CheckIfExists(It.IsAny<string>()))
                 .Returns(true);
-            var operationsFactory = new OperationsFactory(
-                _taskPool,
-                directoryServiceMock.Object,
-                filesServiceMock.Object,
-                _pathService,
-                _fileNameGenerationService,
-                _logger);
+            var operationsFactory = _autoMocker.CreateInstance<OperationsFactory>();
             var settings = new BinaryFileSystemOperationSettings(
                 new string[] { },
                 new[] {SourceName, SecondSourceName},
@@ -177,10 +149,14 @@ namespace Camelot.Operations.Tests
             Assert.Equal(expectedCallbackCallsCount, callbackCallsCount);
 
             Assert.Equal(OperationState.Finished, copyOperation.State);
-            filesServiceMock.Verify(m => m.CopyAsync(SourceName, DestinationName, true), Times.Exactly(expectedWriteCallsCountFirstFile));
-            filesServiceMock.Verify(m => m.CopyAsync(SecondSourceName, SecondDestinationName, true), Times.Exactly(expectedWriteCallsCountSecondFile));
-            filesServiceMock.Verify(m => m.CopyAsync(SourceName, DestinationName, false), Times.Never);
-            filesServiceMock.Verify(m => m.CopyAsync(SecondSourceName, SecondDestinationName, false), Times.Never);
+            _autoMocker
+                .Verify<IFileService>(m => m.CopyAsync(SourceName, DestinationName, true), Times.Exactly(expectedWriteCallsCountFirstFile));
+            _autoMocker
+                .Verify<IFileService>(m => m.CopyAsync(SecondSourceName, SecondDestinationName, true), Times.Exactly(expectedWriteCallsCountSecondFile));
+            _autoMocker
+                .Verify<IFileService>(m => m.CopyAsync(SourceName, DestinationName, false), Times.Never);
+            _autoMocker
+                .Verify<IFileService>(m => m.CopyAsync(SecondSourceName, SecondDestinationName, false), Times.Never);
         }
 
         [Theory]
@@ -190,25 +166,17 @@ namespace Camelot.Operations.Tests
         [InlineData(false, false, OperationState.Finished)]
         public async Task TestMoveOperation(bool copyThrows, bool deleteThrows, OperationState state)
         {
-            var directoryServiceMock = new Mock<IDirectoryService>();
-            var filesServiceMock = new Mock<IFileService>();
-            var copySetup = filesServiceMock
-                .Setup(m => m.CopyAsync(SourceName, DestinationName, false))
+            var copySetup = _autoMocker
+                .Setup<IFileService, Task<bool>>(m => m.CopyAsync(SourceName, DestinationName, false))
                 .ReturnsAsync(!copyThrows);
             copySetup.Verifiable();
 
-            var deleteSetup = filesServiceMock
-                .Setup(m => m.Remove(SourceName))
+            var deleteSetup = _autoMocker
+                .Setup<IFileService, bool>(m => m.Remove(SourceName))
                 .Returns(!deleteThrows);
             deleteSetup.Verifiable();
 
-            var operationsFactory = new OperationsFactory(
-             _taskPool,
-             directoryServiceMock.Object,
-             filesServiceMock.Object,
-             _pathService,
-             _fileNameGenerationService,
-             _logger);
+            var operationsFactory = _autoMocker.CreateInstance<OperationsFactory>();
             var settings = new BinaryFileSystemOperationSettings(
                 new string[] { },
                 new[] {SourceName},
@@ -229,8 +197,10 @@ namespace Camelot.Operations.Tests
             Assert.Equal(state, moveOperation.State);
 
             Assert.True(callbackCalled);
-            filesServiceMock.Verify(m => m.CopyAsync(SourceName, DestinationName, false), Times.Once());
-            filesServiceMock.Verify(m => m.Remove(SourceName), copyThrows ? Times.Never() : Times.Once());
+            _autoMocker
+                .Verify<IFileService>(m => m.CopyAsync(SourceName, DestinationName, false), Times.Once());
+            _autoMocker
+                .Verify<IFileService, bool>(m => m.Remove(SourceName), copyThrows ? Times.Never() : Times.Once());
         }
 
         [Theory]
@@ -238,22 +208,12 @@ namespace Camelot.Operations.Tests
         [InlineData(false, OperationState.Finished)]
         public async Task TestDeleteFileOperation(bool throws, OperationState state)
         {
-            var directoryServiceMock = new Mock<IDirectoryService>();
-            var filesServiceMock = new Mock<IFileService>();
-            var removeSetup = filesServiceMock
-                .Setup(m => m.Remove(SourceName))
+            var removeSetup = _autoMocker
+                .Setup<IFileService, bool>(m => m.Remove(SourceName))
                 .Returns(!throws);
             removeSetup.Verifiable();
 
-            var pathServiceMock = new Mock<IPathService>();
-
-            var operationsFactory = new OperationsFactory(
-                _taskPool,
-                directoryServiceMock.Object,
-                filesServiceMock.Object,
-                pathServiceMock.Object,
-                _fileNameGenerationService,
-                _logger);
+            var operationsFactory = _autoMocker.CreateInstance<OperationsFactory>();
             var deleteOperation = operationsFactory.CreateDeleteOperation(
                 new UnaryFileSystemOperationSettings(new string[] {}, new[] {SourceName}, SourceName));
 
@@ -266,7 +226,7 @@ namespace Camelot.Operations.Tests
             Assert.Equal(state, deleteOperation.State);
 
             Assert.True(callbackCalled);
-            filesServiceMock.Verify(m => m.Remove(SourceName), Times.Once());
+            _autoMocker.Verify<IFileService, bool>(m => m.Remove(SourceName), Times.Once);
         }
 
         [Theory]
@@ -274,22 +234,12 @@ namespace Camelot.Operations.Tests
         [InlineData(false, OperationState.Finished)]
         public async Task TestDeleteDirectoryOperation(bool throws, OperationState state)
         {
-            var directoryServiceMock = new Mock<IDirectoryService>();
-            var removeSetup = directoryServiceMock
-                .Setup(m => m.RemoveRecursively(SourceName))
+            var removeSetup = _autoMocker
+                .Setup<IDirectoryService, bool>(m => m.RemoveRecursively(SourceName))
                 .Returns(!throws);
             removeSetup.Verifiable();
 
-            var filesServiceMock = new Mock<IFileService>();
-            var pathServiceMock = new Mock<IPathService>();
-
-            var operationsFactory = new OperationsFactory(
-                _taskPool,
-                directoryServiceMock.Object,
-                filesServiceMock.Object,
-                pathServiceMock.Object,
-                _fileNameGenerationService,
-                _logger);
+            var operationsFactory = _autoMocker.CreateInstance<OperationsFactory>();
             var deleteOperation = operationsFactory.CreateDeleteOperation(
                 new UnaryFileSystemOperationSettings(new[] {SourceName}, new string[] {}, SourceName));
             Assert.Equal(OperationState.NotStarted, deleteOperation.State);
@@ -302,7 +252,7 @@ namespace Camelot.Operations.Tests
             Assert.Equal(state, deleteOperation.State);
 
             Assert.True(callbackCalled);
-            directoryServiceMock.Verify(m => m.RemoveRecursively(SourceName), Times.Once());
+            _autoMocker.Verify<IDirectoryService, bool>(m => m.RemoveRecursively(SourceName), Times.Once);
         }
 
         [Theory]
@@ -310,24 +260,15 @@ namespace Camelot.Operations.Tests
         [InlineData(true, OperationState.Finished)]
         public async Task TestCopeEmptyDirectoryOperation(bool success, OperationState state)
         {
-            var directoryServiceMock = new Mock<IDirectoryService>();
-            directoryServiceMock
-                .Setup(m => m.GetEmptyDirectoriesRecursively(SourceName))
+            _autoMocker
+                .Setup<IDirectoryService, IReadOnlyList<string>>(m => m.GetEmptyDirectoriesRecursively(SourceName))
                 .Returns(new[] {SourceName});
-            directoryServiceMock
-                .Setup(m => m.Create(DestinationName))
+            _autoMocker
+                .Setup<IDirectoryService, bool>(m => m.Create(DestinationName))
                 .Returns(success)
                 .Verifiable();
-            var filesServiceMock = new Mock<IFileService>();
-            var pathServiceMock = new Mock<IPathService>();
 
-            var operationsFactory = new OperationsFactory(
-                _taskPool,
-                directoryServiceMock.Object,
-                filesServiceMock.Object,
-                pathServiceMock.Object,
-                _fileNameGenerationService,
-                _logger);
+            var operationsFactory = _autoMocker.CreateInstance<OperationsFactory>();
             var settings = new BinaryFileSystemOperationSettings(
                 new[] { SourceName },
                 new string[] { },
@@ -347,7 +288,7 @@ namespace Camelot.Operations.Tests
             Assert.Equal(state, copyOperation.State);
 
             Assert.True(callbackCalled);
-            directoryServiceMock.Verify(m => m.Create(DestinationName), Times.Once());
+            _autoMocker.Verify<IDirectoryService, bool>(m => m.Create(DestinationName), Times.Once);
         }
     }
 }
