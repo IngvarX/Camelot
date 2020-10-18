@@ -201,7 +201,7 @@ namespace Camelot.DependencyInjection
         {
             services.RegisterLazySingleton<IArchiveProcessorFactory>(() => new ArchiveProcessorFactory(
                 resolver.GetRequiredService<IFileService>(),
-                resolver.GetRequiredService<IPathService>()
+                resolver.GetRequiredService<IDirectoryService>()
             ));
             services.RegisterLazySingleton<IArchiveTypeMapper>(() => new ArchiveTypeMapper(
                 resolver.GetRequiredService<IPathService>(),

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
@@ -10,19 +11,26 @@ namespace Camelot.Services.Archives.Processors
     public class TarArchiveProcessor : IArchiveProcessor
     {
         private readonly IFileService _fileService;
+        private readonly IDirectoryService _directoryService;
 
-        public TarArchiveProcessor(IFileService fileService)
+        public TarArchiveProcessor(
+            IFileService fileService,
+            IDirectoryService directoryService)
         {
             _fileService = fileService;
+            _directoryService = directoryService;
         }
 
-        public async Task PackAsync(IReadOnlyList<string> nodes, string outputFile)
+        public async Task PackAsync(IReadOnlyList<string> files, IReadOnlyList<string> directories,
+            string sourceDirectory, string outputFile)
         {
             await using var fileStream = _fileService.OpenWrite(outputFile);
             using var tarArchive = TarArchive.CreateOutputTarArchive(fileStream, Encoding.Default);
-            foreach (var node in nodes)
+
+            var filesInDirectories = directories.SelectMany(d => _directoryService.GetFilesRecursively(d));
+            foreach (var file in files.Concat(filesInDirectories))
             {
-                var tarEntry = TarEntry.CreateEntryFromFile(node);
+                var tarEntry = TarEntry.CreateEntryFromFile(file);
 
                 tarArchive.WriteEntry(tarEntry, true);
             }

@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Archive;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
@@ -10,19 +9,11 @@ namespace Camelot.Services.Archives.Processors
 {
     public class ZipArchiveProcessor : IArchiveProcessor
     {
-        private readonly IPathService _pathService;
-
-        public ZipArchiveProcessor(
-            IPathService pathService)
+        public Task PackAsync(IReadOnlyList<string> files, IReadOnlyList<string> directories,
+            string sourceDirectory, string outputFile)
         {
-            _pathService = pathService;
-        }
-
-        public Task PackAsync(IReadOnlyList<string> nodes, string outputFile)
-        {
-            var sourceDirectory = _pathService.GetCommonRootDirectory(nodes);
             var fastZip = Create();
-            var scanFilter = Create(nodes);
+            var scanFilter = Create(files.Concat(directories).ToHashSet());
 
             fastZip.CreateZip(outputFile, sourceDirectory, true, scanFilter, scanFilter);
 
@@ -43,7 +34,7 @@ namespace Camelot.Services.Archives.Processors
             CreateEmptyDirectories = true
         };
 
-        private static IScanFilter Create(IReadOnlyList<string> nodes) =>
-            new ScanFilter(nodes.ToHashSet());
+        private static IScanFilter Create(ISet<string> nodes) =>
+            new ScanFilter(nodes);
     }
 }

@@ -18,6 +18,7 @@ namespace Camelot.Services.Archives.Tests
         [Theory]
         [InlineData(ArchiveType.Tar, typeof(TarArchiveProcessor))]
         [InlineData(ArchiveType.Zip, typeof(ZipArchiveProcessor))]
+        [InlineData(ArchiveType.TarGz, typeof(TarGzArchiveProcessor))]
         public void TestCreate(ArchiveType archiveType, Type expectedType)
         {
             var factory = _autoMocker.CreateInstance<ArchiveProcessorFactory>();

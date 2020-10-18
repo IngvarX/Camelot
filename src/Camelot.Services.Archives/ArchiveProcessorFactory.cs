@@ -9,14 +9,14 @@ namespace Camelot.Services.Archives
     public class ArchiveProcessorFactory : IArchiveProcessorFactory
     {
         private readonly IFileService _fileService;
-        private readonly IPathService _pathService;
+        private readonly IDirectoryService _directoryService;
 
         public ArchiveProcessorFactory(
             IFileService fileService,
-            IPathService pathService)
+            IDirectoryService directoryService)
         {
             _fileService = fileService;
-            _pathService = pathService;
+            _directoryService = directoryService;
         }
 
         public IArchiveProcessor Create(ArchiveType archiveType)
@@ -24,10 +24,11 @@ namespace Camelot.Services.Archives
             switch (archiveType)
             {
                 case ArchiveType.Tar:
-                    return new TarArchiveProcessor(_fileService);
+                    return new TarArchiveProcessor(_fileService, _directoryService);
                 case ArchiveType.Zip:
-                    return new ZipArchiveProcessor(_pathService);
+                    return new ZipArchiveProcessor();
                 case ArchiveType.TarGz:
+                    return new TarGzArchiveProcessor(_fileService);
                 case ArchiveType.TarBz:
                 case ArchiveType.TarXz:
                 case ArchiveType.TarLz:

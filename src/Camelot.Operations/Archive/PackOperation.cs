@@ -1,9 +1,9 @@
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Archive;
 using Camelot.Services.Abstractions.Models.Enums;
+using Camelot.Services.Abstractions.Models.Operations;
 using Camelot.Services.Abstractions.Operations;
 
 namespace Camelot.Operations.Archive
@@ -13,29 +13,27 @@ namespace Camelot.Operations.Archive
         private readonly IArchiveProcessor _archiveProcessor;
         private readonly IDirectoryService _directoryService;
         private readonly IPathService _pathService;
-        private readonly IReadOnlyList<string> _nodes;
-        private readonly string _outputFilePath;
+        private readonly PackOperationSettings _settings;
 
         public PackOperation(
             IArchiveProcessor archiveProcessor,
             IDirectoryService directoryService,
             IPathService pathService,
-            IReadOnlyList<string> nodes,
-            string outputFilePath)
+            PackOperationSettings settings)
         {
             _archiveProcessor = archiveProcessor;
             _directoryService = directoryService;
             _pathService = pathService;
-            _nodes = nodes;
-            _outputFilePath = outputFilePath;
+            _settings = settings;
         }
 
         public async Task RunAsync(CancellationToken cancellationToken)
         {
-            CreateOutputDirectoryIfNeeded(_outputFilePath);
+            CreateOutputDirectoryIfNeeded(_settings.TargetDirectory);
 
             State = OperationState.InProgress;
-            await _archiveProcessor.PackAsync(_nodes, _outputFilePath);
+            await _archiveProcessor.PackAsync(_settings.InputTopLevelFiles, _settings.InputTopLevelDirectories,
+                _settings.SourceDirectory, _settings.OutputTopLevelFile);
             State = OperationState.Finished;
             SetFinalProgress();
         }

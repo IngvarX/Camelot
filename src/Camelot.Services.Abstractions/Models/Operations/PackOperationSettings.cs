@@ -11,6 +11,8 @@ namespace Camelot.Services.Abstractions.Models.Operations
 
         public string OutputTopLevelFile { get; }
 
+        public string SourceDirectory { get; }
+
         public string TargetDirectory { get; }
 
         public ArchiveType ArchiveType { get; }
@@ -19,12 +21,14 @@ namespace Camelot.Services.Abstractions.Models.Operations
             IReadOnlyList<string> inputTopLevelDirectories,
             IReadOnlyList<string> inputTopLevelFiles,
             string outputTopLevelFile,
+            string sourceDirectory,
             string targetDirectory,
             ArchiveType archiveType)
         {
             InputTopLevelDirectories = inputTopLevelDirectories;
             InputTopLevelFiles = inputTopLevelFiles;
             OutputTopLevelFile = outputTopLevelFile;
+            SourceDirectory = sourceDirectory;
             TargetDirectory = targetDirectory;
             ArchiveType = archiveType;
         }

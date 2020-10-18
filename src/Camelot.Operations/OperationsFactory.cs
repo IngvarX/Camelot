@@ -88,7 +88,7 @@ namespace Camelot.Operations
         {
             var archiveProcessor = CreateArchiveProcessor(settings.ArchiveType);
             var nodes = settings.InputTopLevelFiles.Concat(settings.InputTopLevelDirectories).ToArray();
-            var packOperation = CreatePackOperation(archiveProcessor, nodes, settings.TargetDirectory);
+            var packOperation = CreatePackOperation(archiveProcessor, settings);
             var operationGroup = CreateOperationGroup(new[] {packOperation});
             var operations = CreateOperationsGroupsList(operationGroup);
             var operationInfo = CreateOperationInfo(settings);
@@ -148,9 +148,8 @@ namespace Camelot.Operations
             new CreateDirectoryOperation(_directoryService, directoryPath);
 
         private IInternalOperation CreatePackOperation(IArchiveProcessor archiveProcessor,
-            IReadOnlyList<string> nodes, string outputFilePath) =>
-            new PackOperation(archiveProcessor, _directoryService, _pathService,
-                nodes, outputFilePath);
+            PackOperationSettings settings) =>
+            new PackOperation(archiveProcessor, _directoryService, _pathService, settings);
 
         private IInternalOperation CreateExtractOperation(IArchiveProcessor archiveProcessor,
             string archiveFilePath, string outputDirectory) =>

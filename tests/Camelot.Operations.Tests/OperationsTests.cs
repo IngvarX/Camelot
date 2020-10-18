@@ -20,6 +20,7 @@ namespace Camelot.Operations.Tests
         private const string SourceName = "Source";
         private const string SecondSourceName = "SecondSource";
         private const string DestinationName = "Destination";
+        private const string SourceDirName = "SourceDir";
         private const string DestinationDirName = "DestinationDir";
         private const string SecondDestinationName = "SecondDestination";
 
@@ -310,7 +311,7 @@ namespace Camelot.Operations.Tests
             processorMock
                 .Setup(m => m.PackAsync(
                     It.Is<IReadOnlyList<string>>(l => l.Single() == SourceName),
-                    DestinationDirName))
+                    It.IsAny<IReadOnlyList<string>>(), SourceDirName, DestinationName))
                 .Verifiable();
             _autoMocker
                 .Setup<IArchiveProcessorFactory, IArchiveProcessor>(m => m.Create(archiveType))
@@ -319,7 +320,7 @@ namespace Camelot.Operations.Tests
             var operationsFactory = _autoMocker.CreateInstance<OperationsFactory>();
             var settings = new PackOperationSettings(
                 new string[] {}, new[] {SourceName},
-            DestinationName, DestinationDirName, archiveType);
+            DestinationName, SourceDirName, DestinationDirName, archiveType);
             var operation = operationsFactory.CreatePackOperation(settings);
 
             Assert.Equal(OperationState.NotStarted, operation.State);
@@ -334,7 +335,8 @@ namespace Camelot.Operations.Tests
             processorMock
                 .Verify(m => m.PackAsync(
                     It.Is<IReadOnlyList<string>>(l => l.Single() == SourceName),
-                    DestinationDirName), Times.Once);
+                    It.IsAny<IReadOnlyList<string>>(), SourceDirName, DestinationName),
+                    Times.Once);
         }
 
         [Theory]
