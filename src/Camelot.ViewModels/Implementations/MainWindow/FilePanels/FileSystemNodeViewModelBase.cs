@@ -99,7 +99,18 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         private void Open() => _fileSystemNodeOpeningBehavior.Open(FullPath);
 
-        private Task PackAsync() => throw new NotImplementedException();
+        private async Task PackAsync()
+        {
+            var parameter = new CreateArchiveNavigationParameter(FullPath);
+            var dialogResult = await _dialogService.ShowDialogAsync<CreateArchiveDialogResult, CreateArchiveNavigationParameter>(
+                nameof(CreateArchiveDialogViewModel), parameter);
+            if (dialogResult is null)
+            {
+                return;
+            }
+
+            await _archiveService.PackAsync(Files, dialogResult.ArchivePath, dialogResult.ArchiveType);
+        }
 
         private async Task ExtractAsync(ExtractCommandType commandType)
         {

@@ -417,4 +417,7 @@
   <data name="SelectDirectoryForExtraction" xml:space="preserve">
     <value>Выбрать каталог для разархивирвания</value>
   </data>
+  <data name="PackFilesTitle" xml:space="preserve">
+    <value>Архивировать файлы</value>
+  </data>
 </root>

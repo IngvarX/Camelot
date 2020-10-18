@@ -445,6 +445,10 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IResourceOpeningService>(),
                 resolver.GetRequiredService<AboutDialogConfiguration>()
             ));
+            services.Register(() => new CreateArchiveDialogViewModel(
+                resolver.GetRequiredService<IDirectoryService>(),
+                resolver.GetRequiredService<IFileService>()
+            ));
             services.RegisterLazySingleton<IBitmapFactory>(() => new BitmapFactory());
             services.Register(() => new MainNodeInfoTabViewModel(
                 resolver.GetRequiredService<IFileSizeFormatter>(),

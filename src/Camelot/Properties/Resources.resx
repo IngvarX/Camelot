@@ -423,4 +423,7 @@
   <data name="SelectDirectoryForExtraction" xml:space="preserve">
     <value>Select directory for extraction</value>
   </data>
+  <data name="PackFilesTitle" xml:space="preserve">
+    <value>Pack files</value>
+  </data>
 </root>

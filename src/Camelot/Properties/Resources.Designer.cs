@@ -656,5 +656,11 @@ namespace Camelot.Properties {
                 return ResourceManager.GetString("SelectDirectoryForExtraction", resourceCulture);
             }
         }
+        
+        public static string PackFilesTitle {
+            get {
+                return ResourceManager.GetString("PackFilesTitle", resourceCulture);
+            }
+        }
     }
 }
