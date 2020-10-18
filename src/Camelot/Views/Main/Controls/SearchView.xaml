@@ -20,7 +20,8 @@
             </DrawingPresenter.Drawing>
         </DrawingPresenter>
 
-        <TextBox Grid.Column="0" Grid.ColumnSpan="4" Classes="searchTextBox" Watermark="{x:Static p:Resources.SearchForFilesAndDirectories}"
+        <TextBox Grid.Column="0" Grid.ColumnSpan="4" Name="SearchTextBox"
+                 Classes="searchTextBox" Watermark="{x:Static p:Resources.SearchForFilesAndDirectories}"
                  Text="{Binding SearchText}" />
 
         <ToggleButton Grid.Column="2" IsChecked="{Binding IsSearchCaseSensitive}"

@@ -7,6 +7,7 @@
              xmlns:controls="clr-namespace:Camelot.Views.Main.Controls"
              xmlns:views="clr-namespace:Camelot.Views"
              xmlns:converters="clr-namespace:Camelot.Converters"
+             xmlns:enums="clr-namespace:Camelot.ViewModels.Implementations.MainWindow.FilePanels.Enums;assembly=Camelot.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Camelot.Views.Main.FilesPanelView">
 
@@ -86,10 +87,19 @@
             <DataGrid.Resources>
                 <Template x:Key="RowContextMenu">
                     <ContextMenu Classes="smallContextMenu">
-                        <MenuItem Header="{x:Static p:Resources.Open}" Command="{Binding OpenCommand}"/>
-                        <MenuItem Header="{x:Static p:Resources.Rename}" Command="{Binding StartRenamingCommand}"/>
-                        <MenuItem Header="{x:Static p:Resources.Copy}" Command="{Binding CopyCommand}"/>
-                        <MenuItem Header="{x:Static p:Resources.Move}" Command="{Binding MoveCommand}"/>
+                        <MenuItem Header="{x:Static p:Resources.Open}" Command="{Binding OpenCommand}" />
+                        <MenuItem Header="{x:Static p:Resources.Pack}" Command="{Binding PackCommand}" />
+                        <MenuItem Header="{x:Static p:Resources.Extract}" IsVisible="{Binding IsArchive}" >
+                            <MenuItem Header="{x:Static p:Resources.ExtractArchiveHere}"
+                                      Command="{Binding ExtractCommand}" CommandParameter="{x:Static enums:ExtractCommandType.CurrentDirectory}" />
+                            <MenuItem Header="{x:Static p:Resources.ExtractArchiveToNewDirectory}"
+                                      Command="{Binding ExtractCommand}" CommandParameter="{x:Static enums:ExtractCommandType.NewDirectory}" />
+                            <MenuItem Header="{x:Static p:Resources.SelectDirectoryForExtraction}"
+                                      Command="{Binding ExtractCommand}" CommandParameter="{x:Static enums:ExtractCommandType.SelectDirectory}" />
+                        </MenuItem>
+                        <MenuItem Header="{x:Static p:Resources.Rename}" Command="{Binding StartRenamingCommand}" />
+                        <MenuItem Header="{x:Static p:Resources.Copy}" Command="{Binding CopyCommand}" />
+                        <MenuItem Header="{x:Static p:Resources.Move}" Command="{Binding MoveCommand}" />
                         <MenuItem Header="{x:Static p:Resources.Delete}" Command="{Binding DeleteCommand}"/>
                         <MenuItem Header="{x:Static p:Resources.CopyToClipboard}" Command="{Binding CopyToClipboardCommand}"/>
                         <MenuItem Header="{x:Static p:Resources.Create}">
@@ -156,10 +166,10 @@
                 <DataGridTemplateColumn Width="5*">
                     <DataGridTemplateColumn.Header>
                         <Button Command="{Binding SortFilesCommand}"
-                                CommandParameter="{x:Static filePanels:SortingColumn.Name}">
+                                CommandParameter="{x:Static enums:SortingColumn.Name}">
                             <Grid ColumnDefinitions="*,Auto,Auto,*">
                                 <controls:DataGridHeaderArrowView
-                                    IsVisible="{Binding SelectedTab.SortingViewModel.SortingColumn, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static filePanels:SortingColumn.Name}}" />
+                                    IsVisible="{Binding SelectedTab.SortingViewModel.SortingColumn, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:SortingColumn.Name}}" />
 
                                 <TextBlock Grid.Column="2" Classes="dataGridColumnHeaderTextBlock" Text="{x:Static p:Resources.Name}" />
                             </Grid>
@@ -209,10 +219,10 @@
                 <DataGridTemplateColumn Width="1*">
                     <DataGridTemplateColumn.Header>
                         <Button Command="{Binding SortFilesCommand}"
-                                CommandParameter="{x:Static filePanels:SortingColumn.Extension}">
+                                CommandParameter="{x:Static enums:SortingColumn.Extension}">
                             <Grid ColumnDefinitions="*,Auto,Auto,*">
                                 <controls:DataGridHeaderArrowView
-                                    IsVisible="{Binding SelectedTab.SortingViewModel.SortingColumn, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static filePanels:SortingColumn.Extension}}" />
+                                    IsVisible="{Binding SelectedTab.SortingViewModel.SortingColumn, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:SortingColumn.Extension}}" />
 
                                 <TextBlock Grid.Column="2" Classes="dataGridColumnHeaderTextBlock" Text="{x:Static p:Resources.Extension}" />
                             </Grid>
@@ -240,10 +250,10 @@
                 <DataGridTemplateColumn Width="1*">
                     <DataGridTemplateColumn.Header>
                         <Button Command="{Binding SortFilesCommand}"
-                                CommandParameter="{x:Static filePanels:SortingColumn.Size}">
+                                CommandParameter="{x:Static enums:SortingColumn.Size}">
                             <Grid ColumnDefinitions="*,Auto,Auto,*">
                                 <controls:DataGridHeaderArrowView
-                                    IsVisible="{Binding SelectedTab.SortingViewModel.SortingColumn, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static filePanels:SortingColumn.Size}}" />
+                                    IsVisible="{Binding SelectedTab.SortingViewModel.SortingColumn, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:SortingColumn.Size}}" />
 
                                 <TextBlock Grid.Column="2" Classes="dataGridColumnHeaderTextBlock" Text="{x:Static p:Resources.Size}" />
                             </Grid>
@@ -270,10 +280,10 @@
                 <DataGridTemplateColumn Width="2*">
                     <DataGridTemplateColumn.Header>
                         <Button Command="{Binding SortFilesCommand}"
-                                CommandParameter="{x:Static filePanels:SortingColumn.Date}">
+                                CommandParameter="{x:Static enums:SortingColumn.Date}">
                             <Grid ColumnDefinitions="*,Auto,Auto,*">
                                 <controls:DataGridHeaderArrowView
-                                    IsVisible="{Binding SelectedTab.SortingViewModel.SortingColumn, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static filePanels:SortingColumn.Date}}" />
+                                    IsVisible="{Binding SelectedTab.SortingViewModel.SortingColumn, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:SortingColumn.Date}}" />
 
                                 <TextBlock Grid.Column="2" Classes="dataGridColumnHeaderTextBlock" Text="{x:Static p:Resources.Date}" />
                             </Grid>

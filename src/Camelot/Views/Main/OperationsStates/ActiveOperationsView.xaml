@@ -85,6 +85,38 @@
                             </TextBlock>
                         </Grid>
 
+                        <Grid IsVisible="{Binding OperationType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:OperationType.Pack}}">
+                            <TextBlock Classes="activeOperationTextBlock operationStatusTextBlock" IsVisible="{Binding IsProcessingSingleFile}">
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat="{x:Static p:Resources.PackedFileTo}">
+                                        <Binding Path="SourceFile" />
+                                        <Binding Path="TargetDirectory" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+
+                            <TextBlock Classes="activeOperationTextBlock operationStatusTextBlock" IsVisible="{Binding !IsProcessingSingleFile}">
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat="{x:Static p:Resources.PackingFilesAndDirectoriesTo}">
+                                        <Binding Path="SourceFilesCount" />
+                                        <Binding Path="SourceDirectoriesCount" />
+                                        <Binding Path="TargetDirectory" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </Grid>
+
+                        <Grid IsVisible="{Binding OperationType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:OperationType.Extract}}">
+                            <TextBlock Classes="activeOperationTextBlock operationStatusTextBlock">
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat="{x:Static p:Resources.ExtractingArchiveTo}">
+                                        <Binding Path="SourceFile" />
+                                        <Binding Path="TargetDirectory" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </Grid>
+
                         <Grid ColumnDefinitions="*,Auto">
                             <ProgressBar Classes="operationProgressBar" Minimum="0" Maximum="100" Height="4"
                                          Value="{Binding Progress}" />

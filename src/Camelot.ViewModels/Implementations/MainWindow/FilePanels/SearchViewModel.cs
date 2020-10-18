@@ -1,5 +1,6 @@
 using System;
 using System.Reactive.Linq;
+using Camelot.Avalonia.Interfaces;
 using Camelot.Extensions;
 using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Specifications;
@@ -14,9 +15,10 @@ using ReactiveUI.Validation.Extensions;
 
 namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 {
-    public class SearchViewModel : ValidatableViewModelBase<SearchViewModel>, ISearchViewModel
+    public class SearchViewModel : ValidatableViewModelBase, ISearchViewModel
     {
         private readonly IRegexService _regexService;
+        private readonly IApplicationDispatcher _applicationDispatcher;
 
         private bool IsValid => !IsRegexSearchEnabled || _regexService.ValidateRegex(SearchText);
 
@@ -37,15 +39,16 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         public SearchViewModel(
             IRegexService regexService,
             IResourceProvider resourceProvider,
+            IApplicationDispatcher applicationDispatcher,
             SearchViewModelConfiguration searchViewModelConfiguration)
         {
             _regexService = regexService;
+            _applicationDispatcher = applicationDispatcher;
+
             Reset();
 
-            this.ValidationRule(vm => vm.SearchText,
-                vm =>
-                    this.WhenAnyValue(x => x.IsRegexSearchEnabled, x => x.SearchText).Select(_ => IsValid),
-                (vm, r) => resourceProvider.GetResourceByName(searchViewModelConfiguration.InvalidRegexResourceName));
+            this.ValidationRule(this.WhenAnyValue(x => x.IsRegexSearchEnabled, x => x.SearchText).Select(_ => IsValid),
+                resourceProvider.GetResourceByName(searchViewModelConfiguration.InvalidRegexResourceName));
             this.WhenAnyValue(x => x.SearchText, x => x.IsSearchEnabled,
                     x => x.IsRegexSearchEnabled, x => x.IsSearchCaseSensitive)
                 .Throttle(TimeSpan.FromMilliseconds(searchViewModelConfiguration.TimeoutMs))
@@ -72,7 +75,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         {
             if (IsValid)
             {
-                SearchSettingsChanged.Raise(this, EventArgs.Empty);
+                _applicationDispatcher.Dispatch(() => SearchSettingsChanged.Raise(this, EventArgs.Empty));
             }
         }
     }

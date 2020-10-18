@@ -6,7 +6,6 @@ using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Specifications;
 using Camelot.Services.Environment.Interfaces;
 using Camelot.Tests.Common.Extensions;
-using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.AutoMock;
 using Xunit;

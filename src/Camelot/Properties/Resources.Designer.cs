@@ -590,5 +590,71 @@ namespace Camelot.Properties {
                 return ResourceManager.GetString("ClickToMount", resourceCulture);
             }
         }
+        
+        public static string Pack {
+            get {
+                return ResourceManager.GetString("Pack", resourceCulture);
+            }
+        }
+        
+        public static string Extract {
+            get {
+                return ResourceManager.GetString("Extract", resourceCulture);
+            }
+        }
+        
+        public static string ExtractingArchiveTo {
+            get {
+                return ResourceManager.GetString("ExtractingArchiveTo", resourceCulture);
+            }
+        }
+        
+        public static string PackingFilesAndDirectoriesTo {
+            get {
+                return ResourceManager.GetString("PackingFilesAndDirectoriesTo", resourceCulture);
+            }
+        }
+        
+        public static string PackingFileTo {
+            get {
+                return ResourceManager.GetString("PackingFileTo", resourceCulture);
+            }
+        }
+        
+        public static string ExtractedArchiveTo {
+            get {
+                return ResourceManager.GetString("ExtractedArchiveTo", resourceCulture);
+            }
+        }
+        
+        public static string PackedFileTo {
+            get {
+                return ResourceManager.GetString("PackedFileTo", resourceCulture);
+            }
+        }
+        
+        public static string PackedFilesAndDirectoriesTo {
+            get {
+                return ResourceManager.GetString("PackedFilesAndDirectoriesTo", resourceCulture);
+            }
+        }
+        
+        public static string ExtractArchiveHere {
+            get {
+                return ResourceManager.GetString("ExtractArchiveHere", resourceCulture);
+            }
+        }
+        
+        public static string ExtractArchiveToNewDirectory {
+            get {
+                return ResourceManager.GetString("ExtractArchiveToNewDirectory", resourceCulture);
+            }
+        }
+        
+        public static string SelectDirectoryForExtraction {
+            get {
+                return ResourceManager.GetString("SelectDirectoryForExtraction", resourceCulture);
+            }
+        }
     }
 }

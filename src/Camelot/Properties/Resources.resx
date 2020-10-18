@@ -390,4 +390,37 @@
   <data name="ClickToMount" xml:space="preserve">
     <value>Click to mount</value>
   </data>
+  <data name="Pack" xml:space="preserve">
+    <value>Pack</value>
+  </data>
+  <data name="Extract" xml:space="preserve">
+    <value>Extract</value>
+  </data>
+  <data name="ExtractingArchiveTo" xml:space="preserve">
+    <value>Extracting {0} to {1}</value>
+  </data>
+  <data name="PackingFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Packing {0} files and {1} directories to (2)</value>
+  </data>
+  <data name="PackingFileTo" xml:space="preserve">
+    <value>Packing file {0} to {1}</value>
+  </data>
+  <data name="ExtractedArchiveTo" xml:space="preserve">
+    <value>Extracted archive {0} to {1}</value>
+  </data>
+  <data name="PackedFileTo" xml:space="preserve">
+    <value>Packed file {0} to {1}</value>
+  </data>
+  <data name="PackedFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Packed {0} files and {1} directories to {2}</value>
+  </data>
+  <data name="ExtractArchiveHere" xml:space="preserve">
+    <value>Extract archive here</value>
+  </data>
+  <data name="ExtractArchiveToNewDirectory" xml:space="preserve">
+    <value>Extract archive to new directory</value>
+  </data>
+  <data name="SelectDirectoryForExtraction" xml:space="preserve">
+    <value>Select directory for extraction</value>
+  </data>
 </root>

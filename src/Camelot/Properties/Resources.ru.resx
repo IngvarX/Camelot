@@ -384,4 +384,37 @@
   <data name="ClickToMount" xml:space="preserve">
     <value>Нажмите, чтобы примонтировать устройство</value>
   </data>
+  <data name="Pack" xml:space="preserve">
+    <value>Архивировать</value>
+  </data>
+  <data name="Extract" xml:space="preserve">
+    <value>Разархивировать</value>
+  </data>
+  <data name="ExtractingArchiveTo" xml:space="preserve">
+    <value>Распаковывается архив {0} в {1}</value>
+  </data>
+  <data name="PackingFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Архивируются {0} файлов и {1} каталогов в {2}</value>
+  </data>
+  <data name="PackingFileTo" xml:space="preserve">
+    <value>Архивируется файл {0} в {1}</value>
+  </data>
+  <data name="ExtractedArchiveTo" xml:space="preserve">
+    <value>Распакован архив {0} в {1}</value>
+  </data>
+  <data name="PackedFileTo" xml:space="preserve">
+    <value>Архивирован файл {0} в {1}</value>
+  </data>
+  <data name="PackedFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Архивировано {0} файлов и {1} каталогов в {2}</value>
+  </data>
+  <data name="ExtractArchiveHere" xml:space="preserve">
+    <value>Расппаковать архив тут</value>
+  </data>
+  <data name="ExtractArchiveToNewDirectory" xml:space="preserve">
+    <value>Распаковать архив в новом каталоге</value>
+  </data>
+  <data name="SelectDirectoryForExtraction" xml:space="preserve">
+    <value>Выбрать каталог для разархивирвания</value>
+  </data>
 </root>

@@ -4,6 +4,8 @@ namespace Camelot.Services.Abstractions.Models.Enums
     {
         Copy,
         Move,
-        Delete
+        Delete,
+        Pack,
+        Extract
     }
 }

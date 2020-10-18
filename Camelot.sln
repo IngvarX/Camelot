@@ -73,6 +73,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camelot.Extensions.Tests", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camelot.Tests.Common", "tests\Camelot.Tests.Common\Camelot.Tests.Common.csproj", "{F45DBF3A-E17D-4855-BAF5-05A8F4C273B1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camelot.Services.Archives", "src\Camelot.Services.Archives\Camelot.Services.Archives.csproj", "{3601BDA0-04D4-4CCE-96F1-0AA65F4800B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camelot.Services.Archives.Tests", "tests\Camelot.Services.Archives.Tests\Camelot.Services.Archives.Tests.csproj", "{59D6D13A-17F7-4CCB-AAD7-3748BD559F1F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -191,6 +195,14 @@ Global
 		{F45DBF3A-E17D-4855-BAF5-05A8F4C273B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F45DBF3A-E17D-4855-BAF5-05A8F4C273B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F45DBF3A-E17D-4855-BAF5-05A8F4C273B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3601BDA0-04D4-4CCE-96F1-0AA65F4800B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3601BDA0-04D4-4CCE-96F1-0AA65F4800B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3601BDA0-04D4-4CCE-96F1-0AA65F4800B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3601BDA0-04D4-4CCE-96F1-0AA65F4800B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59D6D13A-17F7-4CCB-AAD7-3748BD559F1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59D6D13A-17F7-4CCB-AAD7-3748BD559F1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59D6D13A-17F7-4CCB-AAD7-3748BD559F1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59D6D13A-17F7-4CCB-AAD7-3748BD559F1F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(AvalonStudioProperties) = preSolution
 		StartupItem = {DBB08575-833E-4079-86F8-45EF9C550021}
@@ -229,5 +241,7 @@ Global
 		{70D6D1F1-BE1D-4425-AE84-F7E9A00C999E} = {6E54E223-60FD-418C-B6E0-0EB9095C34D0}
 		{0EA0C184-6C47-41FC-8B7A-8572B8F39EB5} = {6E54E223-60FD-418C-B6E0-0EB9095C34D0}
 		{F45DBF3A-E17D-4855-BAF5-05A8F4C273B1} = {6E54E223-60FD-418C-B6E0-0EB9095C34D0}
+		{3601BDA0-04D4-4CCE-96F1-0AA65F4800B2} = {A67DE010-431F-4400-9137-0FBF610E2527}
+		{59D6D13A-17F7-4CCB-AAD7-3748BD559F1F} = {6E54E223-60FD-418C-B6E0-0EB9095C34D0}
 	EndGlobalSection
 EndGlobal

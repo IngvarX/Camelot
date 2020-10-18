@@ -1,4 +1,5 @@
 using System;
+using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Enums;
 
 namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Comparers
 {

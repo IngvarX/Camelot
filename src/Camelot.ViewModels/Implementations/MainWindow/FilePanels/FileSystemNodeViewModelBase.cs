@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Archive;
 using Camelot.Services.Abstractions.Behaviors;
 using Camelot.Services.Abstractions.Operations;
 using Camelot.ViewModels.Implementations.Dialogs;
 using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
 using Camelot.ViewModels.Implementations.Dialogs.Results;
+using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Enums;
 using Camelot.ViewModels.Interfaces.Behaviors;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Services.Interfaces;
@@ -25,6 +27,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private readonly IFileSystemNodePropertiesBehavior _fileSystemNodePropertiesBehavior;
         private readonly IDialogService _dialogService;
         private readonly ITrashCanService _trashCanService;
+        private readonly IArchiveService _archiveService;
 
         private IReadOnlyList<string> Files => new[] {FullPath};
 
@@ -39,9 +42,15 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         [Reactive]
         public bool IsEditing { get; set; }
 
+        public bool IsArchive => _archiveService.CheckIfNodeIsArchive(FullPath);
+
         public bool IsWaitingForEdit { get; set; }
 
         public ICommand OpenCommand { get; }
+
+        public ICommand PackCommand { get; }
+
+        public ICommand ExtractCommand { get; }
 
         public ICommand StartRenamingCommand { get; }
 
@@ -64,7 +73,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             IFilesOperationsMediator filesOperationsMediator,
             IFileSystemNodePropertiesBehavior fileSystemNodePropertiesBehavior,
             IDialogService dialogService,
-            ITrashCanService trashCanService)
+            ITrashCanService trashCanService,
+            IArchiveService archiveService)
         {
             _fileSystemNodeOpeningBehavior = fileSystemNodeOpeningBehavior;
             _operationsService = operationsService;
@@ -73,8 +83,11 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             _fileSystemNodePropertiesBehavior = fileSystemNodePropertiesBehavior;
             _dialogService = dialogService;
             _trashCanService = trashCanService;
+            _archiveService = archiveService;
 
             OpenCommand = ReactiveCommand.Create(Open);
+            PackCommand = ReactiveCommand.CreateFromTask(PackAsync);
+            ExtractCommand = ReactiveCommand.CreateFromTask<ExtractCommandType>(ExtractAsync);
             StartRenamingCommand = ReactiveCommand.Create(StartRenaming);
             RenameCommand = ReactiveCommand.Create(Rename);
             CopyToClipboardCommand = ReactiveCommand.CreateFromTask(CopyToClipboardAsync);
@@ -85,6 +98,31 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         }
 
         private void Open() => _fileSystemNodeOpeningBehavior.Open(FullPath);
+
+        private Task PackAsync() => throw new NotImplementedException();
+
+        private async Task ExtractAsync(ExtractCommandType commandType)
+        {
+            if (!IsArchive)
+            {
+                return;
+            }
+
+            switch (commandType)
+            {
+                case ExtractCommandType.CurrentDirectory:
+                    await _archiveService.ExtractAsync(FullPath);
+                    break;
+                case ExtractCommandType.NewDirectory:
+                    await _archiveService.ExtractToNewDirectoryAsync(FullPath);
+                    break;
+                case ExtractCommandType.SelectDirectory:
+                    // TODO:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(commandType), commandType, null);
+            }
+        }
 
         private void StartRenaming() => IsEditing = true;
 

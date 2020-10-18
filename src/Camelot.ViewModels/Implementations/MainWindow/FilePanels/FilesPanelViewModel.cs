@@ -9,6 +9,7 @@ using Camelot.Avalonia.Interfaces;
 using Camelot.Extensions;
 using Camelot.Services.Abstractions;
 using Camelot.ViewModels.Factories.Interfaces;
+using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Enums;
 using Camelot.ViewModels.Interfaces.MainWindow;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using DynamicData;
@@ -43,8 +44,10 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         public ISearchViewModel SearchViewModel { get; }
 
         public ITabsListViewModel TabsListViewModel { get; }
-        
+
         public IOperationsViewModel OperationsViewModel { get; }
+
+        public bool IsActive => SelectedTab.IsGloballyActive;
 
         public string CurrentDirectory
         {

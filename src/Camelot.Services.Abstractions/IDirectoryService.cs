@@ -20,7 +20,7 @@ namespace Camelot.Services.Abstractions
 
         DirectoryModel GetParentDirectory(string directory);
 
-        IReadOnlyList<DirectoryModel> GetChildDirectories(string directory, ISpecification<DirectoryModel> specification);
+        IReadOnlyList<DirectoryModel> GetChildDirectories(string directory, ISpecification<DirectoryModel> specification = null);
 
         IReadOnlyList<string> GetEmptyDirectoriesRecursively(string directory);
 

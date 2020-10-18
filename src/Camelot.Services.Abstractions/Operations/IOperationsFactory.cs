@@ -9,5 +9,9 @@ namespace Camelot.Services.Abstractions.Operations
         IOperation CreateMoveOperation(BinaryFileSystemOperationSettings settings);
 
         IOperation CreateDeleteOperation(UnaryFileSystemOperationSettings settings);
+
+        IOperation CreatePackOperation(PackOperationSettings settings);
+
+        IOperation CreateExtractOperation(ExtractArchiveOperationSettings settings);
     }
 }

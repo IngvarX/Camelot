@@ -14,8 +14,11 @@ using Camelot.Operations;
 using Camelot.Properties;
 using Camelot.Services;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Archive;
 using Camelot.Services.Abstractions.Operations;
 using Camelot.Services.AllPlatforms;
+using Camelot.Services.Archive;
+using Camelot.Services.Archives;
 using Camelot.Services.Behaviors;
 using Camelot.Services.Configuration;
 using Camelot.Services.Environment.Enums;
@@ -145,6 +148,10 @@ namespace Camelot.DependencyInjection
             var loggingConfiguration = new LoggingConfiguration();
             configuration.GetSection("Logging").Bind(loggingConfiguration);
             services.RegisterConstant(loggingConfiguration);
+
+            var archiveTypeMapperConfiguration = new ArchiveTypeMapperConfiguration();
+            configuration.GetSection("Archive").Bind(archiveTypeMapperConfiguration);
+            services.RegisterConstant(archiveTypeMapperConfiguration);
         }
 
         private static void RegisterEnvironmentServices(IMutableDependencyResolver services)
@@ -192,6 +199,20 @@ namespace Camelot.DependencyInjection
 
         private static void RegisterServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
+            services.RegisterLazySingleton<IArchiveProcessorFactory>(() => new ArchiveProcessorFactory(
+                resolver.GetRequiredService<IFileService>(),
+                resolver.GetRequiredService<IPathService>()
+            ));
+            services.RegisterLazySingleton<IArchiveTypeMapper>(() => new ArchiveTypeMapper(
+                resolver.GetRequiredService<IPathService>(),
+                resolver.GetRequiredService<ArchiveTypeMapperConfiguration>()
+            ));
+            services.RegisterLazySingleton<IArchiveService>(() => new ArchiveService(
+                resolver.GetRequiredService<IArchiveTypeMapper>(),
+                resolver.GetRequiredService<IPathService>(),
+                resolver.GetRequiredService<IOperationsService>(),
+                resolver.GetRequiredService<IFileNameGenerationService>()
+            ));
             services.RegisterLazySingleton<IFileService>(() => new FileService(
                 resolver.GetRequiredService<IPathService>(),
                 resolver.GetRequiredService<IEnvironmentFileService>(),
@@ -209,7 +230,8 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IFileService>(),
                 resolver.GetRequiredService<IPathService>(),
                 resolver.GetRequiredService<IFileNameGenerationService>(),
-                resolver.GetRequiredService<ILogger>()
+                resolver.GetRequiredService<ILogger>(),
+                resolver.GetRequiredService<IArchiveProcessorFactory>()
             ));
             services.RegisterLazySingleton<INodesSelectionService>(() => new NodesSelectionService());
             services.RegisterLazySingleton<IOperationsService>(() => new OperationsService(
@@ -421,7 +443,8 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IDialogService>(),
                 resolver.GetRequiredService<ITrashCanService>(),
                 resolver.GetRequiredService<IFileService>(),
-                resolver.GetRequiredService<IDirectoryService>()
+                resolver.GetRequiredService<IDirectoryService>(),
+                resolver.GetRequiredService<IArchiveService>()
             ));
             services.Register(() => new AboutDialogViewModel(
                 resolver.GetRequiredService<IApplicationVersionProvider>(),
@@ -487,6 +510,7 @@ namespace Camelot.DependencyInjection
             services.Register<ISearchViewModel>(() => new SearchViewModel(
                 resolver.GetRequiredService<IRegexService>(),
                 resolver.GetRequiredService<IResourceProvider>(),
+                resolver.GetRequiredService<IApplicationDispatcher>(),
                 resolver.GetRequiredService<SearchViewModelConfiguration>()
             ));
             services.RegisterLazySingleton<IDriveViewModelFactory>(() => new DriveViewModelFactory(

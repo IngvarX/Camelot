@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Enums;
 
 namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Comparers
 {

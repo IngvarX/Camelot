@@ -1,4 +1,4 @@
-namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
+namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Enums
 {
     public enum SortingColumn : byte
     {

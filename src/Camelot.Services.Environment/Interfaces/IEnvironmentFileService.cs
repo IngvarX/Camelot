@@ -22,5 +22,9 @@ namespace Camelot.Services.Environment.Interfaces
         Task WriteBytesAsync(string filePath, byte[] bytes);
 
         void Create(string filePath);
+
+        FileStream OpenRead(string filePath);
+
+        FileStream OpenWrite(string filePath);
     }
 }

@@ -29,12 +29,12 @@ namespace Camelot.Services
             _logger = logger;
         }
 
-        public IReadOnlyList<FileModel> GetFiles(string directory, ISpecification<FileModel> specification) =>
+        public IReadOnlyList<FileModel> GetFiles(string directory, ISpecification<FileModel> specification = null) =>
             _environmentFileService
                 .GetFiles(directory)
                 .Select(CreateFrom)
                 .WhereNotNull()
-                .Where(specification.IsSatisfiedBy)
+                .Where(f => specification?.IsSatisfiedBy(f) ?? true)
                 .ToArray();
 
         public IReadOnlyList<FileModel> GetFiles(IReadOnlyList<string> files) =>
@@ -113,6 +113,9 @@ namespace Camelot.Services
                 _logger.LogError($"Failed to create file {filePath} with error {ex}");
             }
         }
+
+        public FileStream OpenRead(string filePath) => _environmentFileService.OpenRead(filePath);
+        public FileStream OpenWrite(string filePath) => _environmentFileService.OpenWrite(filePath);
 
         private FileModel CreateFrom(string file)
         {

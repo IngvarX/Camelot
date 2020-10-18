@@ -1,4 +1,5 @@
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
+using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Enums;
 using Xunit;
 
 namespace Camelot.ViewModels.Tests

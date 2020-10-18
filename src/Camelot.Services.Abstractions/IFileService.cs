@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Specifications;
@@ -7,7 +8,7 @@ namespace Camelot.Services.Abstractions
 {
     public interface IFileService
     {
-        IReadOnlyList<FileModel> GetFiles(string directory, ISpecification<FileModel> specification);
+        IReadOnlyList<FileModel> GetFiles(string directory, ISpecification<FileModel> specification = null);
 
         IReadOnlyList<FileModel> GetFiles(IReadOnlyList<string> files);
 
@@ -26,5 +27,9 @@ namespace Camelot.Services.Abstractions
         Task WriteBytesAsync(string filePath, byte[] bytes);
 
         void CreateFile(string filePath);
+
+        FileStream OpenRead(string filePath);
+
+        FileStream OpenWrite(string filePath);
     }
 }
