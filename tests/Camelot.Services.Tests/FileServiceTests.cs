@@ -63,16 +63,26 @@ namespace Camelot.Services.Tests
         }
 
         [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public async Task TestCopy(bool overwrite)
+        [InlineData(true, true, false)]
+        [InlineData(true, false, true)]
+        [InlineData(false, true, false)]
+        [InlineData(false, false, true)]
+        public async Task TestCopy(bool overwrite, bool throws, bool expected)
         {
             _autoMocker
                 .Setup<IEnvironmentFileService>(m => m.Copy(FileName, NewFileName, overwrite))
                 .Verifiable();
-            var fileService = _autoMocker.CreateInstance<FileService>();
-            await fileService.CopyAsync(FileName, NewFileName, overwrite);
+            if (throws)
+            {
+                _autoMocker
+                    .Setup<IEnvironmentFileService>(m => m.Copy(FileName, NewFileName, overwrite))
+                    .Throws<InvalidOperationException>();
+            }
 
+            var fileService = _autoMocker.CreateInstance<FileService>();
+            var result = await fileService.CopyAsync(FileName, NewFileName, overwrite);
+
+            Assert.Equal(expected, result);
             _autoMocker
                 .Verify<IEnvironmentFileService>(m => m.Copy(FileName, NewFileName, overwrite));
         }
