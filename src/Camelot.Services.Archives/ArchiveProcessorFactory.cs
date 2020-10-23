@@ -13,15 +13,18 @@ namespace Camelot.Services.Archives
     public class ArchiveProcessorFactory : IArchiveProcessorFactory
     {
         private readonly IFileService _fileService;
+        private readonly IDirectoryService _directoryService;
         private readonly IFileNameGenerationService _fileNameGenerationService;
         private readonly IPathService _pathService;
 
         public ArchiveProcessorFactory(
             IFileService fileService,
+            IDirectoryService directoryService,
             IFileNameGenerationService fileNameGenerationService,
             IPathService pathService)
         {
             _fileService = fileService;
+            _directoryService = directoryService;
             _fileNameGenerationService = fileNameGenerationService;
             _pathService = pathService;
         }
@@ -73,6 +76,6 @@ namespace Camelot.Services.Archives
             new SingleFileZipArchiveReader(_fileService, _fileNameGenerationService, _pathService, streamFactory);
 
         private IArchiveWriter CreateArchiveWriter(InternalArchiveType archiveType, WriterOptions options) =>
-            new ArchiveWriter(_fileService, archiveType, options);
+            new ArchiveWriter(_fileService, _pathService, _directoryService, archiveType, options);
     }
 }
