@@ -27,35 +27,36 @@ namespace Camelot.Services.Archives
             _pathService = pathService;
         }
 
-        public IArchiveProcessor Create(ArchiveType archiveType)
-        {
-            switch (archiveType)
+        public IArchiveProcessor Create(ArchiveType archiveType) =>
+            archiveType switch
             {
-                case ArchiveType.Tar:
-                    return new TarArchiveProcessor(_fileService, _directoryService);
-                case ArchiveType.Zip:
-                    return new ZipArchiveProcessor();
-                case ArchiveType.TarGz:
-                    return new TarZipArchiveProcessor(_fileService, CreateGzStreamFactory());
-                case ArchiveType.GZip:
-                    return new SingleFileZipArchiveProcessor(_fileService, _fileNameGenerationService, _pathService,
-                        CreateGzStreamFactory());
-                case ArchiveType.TarBz2:
-                    return new TarZipArchiveProcessor(_fileService, CreateBz2StreamFactory());
-                case ArchiveType.Bz2:
-                    return new SingleFileZipArchiveProcessor(_fileService, _fileNameGenerationService, _pathService,
-                        CreateBz2StreamFactory());
-                case ArchiveType.TarXz:
-                case ArchiveType.TarLz:
-                case ArchiveType.SevenZip:
-                    return null;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(archiveType), archiveType, null);
-            }
-        }
+                ArchiveType.Tar => new TarArchiveProcessor(_fileService, _directoryService),
+                ArchiveType.Zip => new ZipArchiveProcessor(),
+                ArchiveType.TarGz => CreateTarZipArchiveProcessor(CreateGzStreamFactory()),
+                ArchiveType.GZip => CreateSingleFileZipArchiveProcessor(CreateGzStreamFactory()),
+                ArchiveType.TarBz2 =>CreateTarZipArchiveProcessor(CreateBz2StreamFactory()),
+                ArchiveType.Bz2 => CreateSingleFileZipArchiveProcessor(CreateBz2StreamFactory()),
+                ArchiveType.TarXz => CreateTarZipArchiveProcessor(CreateXzStreamFactory()),
+                ArchiveType.Xz => CreateSingleFileZipArchiveProcessor(CreateXzStreamFactory()),
+                ArchiveType.TarLz => CreateTarZipArchiveProcessor(CreateLzStreamFactory()),
+                ArchiveType.Lz => CreateSingleFileZipArchiveProcessor(CreateLzStreamFactory()),
+                ArchiveType.SevenZip => null,
+                _ => throw new ArgumentOutOfRangeException(nameof(archiveType), archiveType, null)
+            };
+
+        private IArchiveProcessor CreateSingleFileZipArchiveProcessor(IStreamFactory factory) =>
+            new SingleFileZipArchiveProcessor(_fileService, _fileNameGenerationService,
+                _pathService, factory);
+
+        private IArchiveProcessor CreateTarZipArchiveProcessor(IStreamFactory factory) =>
+            new TarZipArchiveProcessor(_fileService, factory);
 
         private static IStreamFactory CreateBz2StreamFactory() => new Bzip2StreamFactory();
 
         private static IStreamFactory CreateGzStreamFactory() => new GzipStreamFactory();
+
+        private static IStreamFactory CreateXzStreamFactory() => new XzStreamFactory();
+
+        private static IStreamFactory CreateLzStreamFactory() => new LzStreamFactory();
     }
 }

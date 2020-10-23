@@ -8,6 +8,8 @@ namespace Camelot.Services.Abstractions.Models.Enums
         Bz2,
         TarBz2,
         TarXz,
+        Xz,
+        Lz,
         TarLz,
         GZip,
         SevenZip

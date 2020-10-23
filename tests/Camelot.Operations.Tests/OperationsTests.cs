@@ -301,8 +301,11 @@ namespace Camelot.Operations.Tests
         [InlineData(ArchiveType.GZip)]
         [InlineData(ArchiveType.TarBz2)]
         [InlineData(ArchiveType.TarGz)]
-        [InlineData(ArchiveType.TarLz)]
+        [InlineData(ArchiveType.Bz2)]
         [InlineData(ArchiveType.TarXz)]
+        [InlineData(ArchiveType.Xz)]
+        [InlineData(ArchiveType.TarLz)]
+        [InlineData(ArchiveType.Lz)]
         [InlineData(ArchiveType.SevenZip)]
         public async Task TestPackOperation(ArchiveType archiveType)
         {
@@ -344,8 +347,11 @@ namespace Camelot.Operations.Tests
         [InlineData(ArchiveType.GZip)]
         [InlineData(ArchiveType.TarBz2)]
         [InlineData(ArchiveType.TarGz)]
-        [InlineData(ArchiveType.TarLz)]
+        [InlineData(ArchiveType.Bz2)]
         [InlineData(ArchiveType.TarXz)]
+        [InlineData(ArchiveType.Xz)]
+        [InlineData(ArchiveType.TarLz)]
+        [InlineData(ArchiveType.Lz)]
         [InlineData(ArchiveType.SevenZip)]
         public async Task TestExtractOperation(ArchiveType archiveType)
         {

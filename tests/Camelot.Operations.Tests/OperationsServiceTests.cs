@@ -85,8 +85,11 @@ namespace Camelot.Operations.Tests
         [InlineData(ArchiveType.SevenZip)]
         [InlineData(ArchiveType.TarGz)]
         [InlineData(ArchiveType.TarBz2)]
+        [InlineData(ArchiveType.Bz2)]
         [InlineData(ArchiveType.TarXz)]
+        [InlineData(ArchiveType.Xz)]
         [InlineData(ArchiveType.TarLz)]
+        [InlineData(ArchiveType.Lz)]
         public async Task TestFilesPack(ArchiveType archiveType)
         {
             var operationMock = new Mock<IOperation>();
@@ -124,8 +127,11 @@ namespace Camelot.Operations.Tests
         [InlineData(ArchiveType.SevenZip)]
         [InlineData(ArchiveType.TarGz)]
         [InlineData(ArchiveType.TarBz2)]
+        [InlineData(ArchiveType.Bz2)]
         [InlineData(ArchiveType.TarXz)]
+        [InlineData(ArchiveType.Xz)]
         [InlineData(ArchiveType.TarLz)]
+        [InlineData(ArchiveType.Lz)]
         public async Task TestFilesExtract(ArchiveType archiveType)
         {
             var operationMock = new Mock<IOperation>();

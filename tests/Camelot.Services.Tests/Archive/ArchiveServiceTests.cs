@@ -33,8 +33,11 @@ namespace Camelot.Services.Tests.Archive
         [InlineData(ArchiveType.GZip, true)]
         [InlineData(ArchiveType.TarBz2, true)]
         [InlineData(ArchiveType.TarGz, true)]
-        [InlineData(ArchiveType.TarLz, true)]
+        [InlineData(ArchiveType.Bz2, true)]
         [InlineData(ArchiveType.TarXz, true)]
+        [InlineData(ArchiveType.Xz, true)]
+        [InlineData(ArchiveType.TarLz, true)]
+        [InlineData(ArchiveType.Lz, true)]
         public void TestCheckIfFileIsArchive(ArchiveType? archiveType, bool isArchive)
         {
             _autoMocker
@@ -54,8 +57,11 @@ namespace Camelot.Services.Tests.Archive
         [InlineData(ArchiveType.GZip)]
         [InlineData(ArchiveType.TarBz2)]
         [InlineData(ArchiveType.TarGz)]
-        [InlineData(ArchiveType.TarLz)]
+        [InlineData(ArchiveType.Bz2)]
         [InlineData(ArchiveType.TarXz)]
+        [InlineData(ArchiveType.Xz)]
+        [InlineData(ArchiveType.TarLz)]
+        [InlineData(ArchiveType.Lz)]
         public async Task TestPackAsync(ArchiveType archiveType)
         {
             var nodes = new[] {FilePath};
