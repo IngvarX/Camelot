@@ -296,11 +296,10 @@ namespace Camelot.Operations.Tests
         }
 
         [Theory]
-        [InlineData(ArchiveType.Rar)]
         [InlineData(ArchiveType.Tar)]
         [InlineData(ArchiveType.Zip)]
         [InlineData(ArchiveType.GZip)]
-        [InlineData(ArchiveType.TarBz)]
+        [InlineData(ArchiveType.TarBz2)]
         [InlineData(ArchiveType.TarGz)]
         [InlineData(ArchiveType.TarLz)]
         [InlineData(ArchiveType.TarXz)]
@@ -340,11 +339,10 @@ namespace Camelot.Operations.Tests
         }
 
         [Theory]
-        [InlineData(ArchiveType.Rar)]
         [InlineData(ArchiveType.Tar)]
         [InlineData(ArchiveType.Zip)]
         [InlineData(ArchiveType.GZip)]
-        [InlineData(ArchiveType.TarBz)]
+        [InlineData(ArchiveType.TarBz2)]
         [InlineData(ArchiveType.TarGz)]
         [InlineData(ArchiveType.TarLz)]
         [InlineData(ArchiveType.TarXz)]

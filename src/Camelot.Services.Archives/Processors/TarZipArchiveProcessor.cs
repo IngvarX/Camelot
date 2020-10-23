@@ -3,19 +3,23 @@ using System.Text;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Archive;
+using Camelot.Services.Archives.Interfaces;
 using ICSharpCode.SharpZipLib.GZip;
 using ICSharpCode.SharpZipLib.Tar;
 
 namespace Camelot.Services.Archives.Processors
 {
-    public class TarGzArchiveProcessor : IArchiveProcessor
+    public class TarZipArchiveProcessor : IArchiveProcessor
     {
         private readonly IFileService _fileService;
+        private readonly IStreamFactory _streamFactory;
 
-        public TarGzArchiveProcessor(
-            IFileService fileService)
+        public TarZipArchiveProcessor(
+            IFileService fileService,
+            IStreamFactory streamFactory)
         {
             _fileService = fileService;
+            _streamFactory = streamFactory;
         }
 
         public Task PackAsync(IReadOnlyList<string> files, IReadOnlyList<string> directories, string sourceDirectory,
@@ -37,7 +41,7 @@ namespace Camelot.Services.Archives.Processors
         public Task ExtractAsync(string archivePath, string outputDirectory)
         {
             using var inStream = _fileService.OpenRead(archivePath);
-            using var gzipStream = new GZipInputStream(inStream);
+            using var gzipStream = _streamFactory.CreateInputStream(inStream);
             using var tarArchive = TarArchive.CreateInputTarArchive(gzipStream, Encoding.Default);
 
             tarArchive.ExtractContents(outputDirectory);

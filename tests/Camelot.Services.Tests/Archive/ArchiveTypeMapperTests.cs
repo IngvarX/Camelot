@@ -21,7 +21,7 @@ namespace Camelot.Services.Tests.Archive
         [InlineData("archive.tar", "archive", "tar", "tar", ArchiveType.Tar)]
         [InlineData("archive.tar.gz", "archive.tar", "gz", "tar.gz", ArchiveType.TarGz)]
         [InlineData("archive.zip", "archive", "zip", "zip", ArchiveType.Zip)]
-        [InlineData("archive.rar", "archive", "rar", "rar", ArchiveType.Rar)]
+        [InlineData("archive.bz2", "archive", "bz2", "bz2", ArchiveType.Bz2)]
         public void TestGetArchiveTypeFrom(string filePath, string fileName, string extension, string fullExtension,
             ArchiveType archiveType)
         {

@@ -39,8 +39,8 @@ namespace Camelot.Services.Archives.Processors
         public async Task ExtractAsync(string archivePath, string outputDirectory)
         {
             await using var fileStream = _fileService.OpenRead(archivePath);
-
             using var tarArchive = TarArchive.CreateInputTarArchive(fileStream, Encoding.Default);
+
             tarArchive.ExtractContents(outputDirectory);
         }
     }

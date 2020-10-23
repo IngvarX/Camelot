@@ -46,7 +46,7 @@ namespace Camelot.Services.Archive
 
             outputDirectory ??= _pathService.GetParentDirectory(archivePath);
             // ReSharper disable once PossibleInvalidOperationException
-            var archiveType =_archiveTypeMapper.GetArchiveTypeFrom(archivePath).Value;
+            var archiveType = _archiveTypeMapper.GetArchiveTypeFrom(archivePath).Value;
 
             await _operationsService.ExtractAsync(archivePath, outputDirectory, archiveType);
         }
