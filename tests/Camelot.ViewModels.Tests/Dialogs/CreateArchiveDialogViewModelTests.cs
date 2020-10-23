@@ -1,7 +1,12 @@
+using System.Collections.Generic;
+using System.Linq;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models.Enums;
+using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Implementations.Dialogs;
+using Camelot.ViewModels.Implementations.Dialogs.Archives;
 using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
+using Moq;
 using Moq.AutoMock;
 using Xunit;
 
@@ -25,6 +30,8 @@ namespace Camelot.ViewModels.Tests.Dialogs
         [InlineData(" ")]
         public void TestArchiveWithWhiteSpaceCreation(string archivePath)
         {
+            SetupForType();
+
             var dialog = _autoMocker.CreateInstance<CreateArchiveDialogViewModel>();
             dialog.Activate(new CreateArchiveNavigationParameter(archivePath, true));
 
@@ -41,6 +48,8 @@ namespace Camelot.ViewModels.Tests.Dialogs
         [InlineData(true, true)]
         public void TestArchiveWithExistingNodeNameCreation(bool fileExists, bool dirExists)
         {
+            SetupForType();
+
             _autoMocker
                 .Setup<IDirectoryService, bool>(m => m.CheckIfExists(NewArchivePath))
                 .Returns(dirExists);
@@ -59,11 +68,14 @@ namespace Camelot.ViewModels.Tests.Dialogs
         [Fact]
         public void TestProperties()
         {
+            SetupForType();
+
             var dialog = _autoMocker.CreateInstance<CreateArchiveDialogViewModel>();
             dialog.Activate(new CreateArchiveNavigationParameter(ArchivePath, true));
 
             Assert.Equal(ArchivePath, dialog.ArchivePath);
             Assert.Equal(ArchiveType.Zip, dialog.SelectedArchiveType.ArchiveType);
+            Assert.Single(dialog.AvailableArchiveTypes);
         }
 
         [Theory]
@@ -72,6 +84,8 @@ namespace Camelot.ViewModels.Tests.Dialogs
         [InlineData(ArchiveType.Tar)]
         public void TestArchiveCreation(ArchiveType archiveType)
         {
+            SetupForType(archiveType);
+
             var dialog = _autoMocker.CreateInstance<CreateArchiveDialogViewModel>();
             dialog.Activate(new CreateArchiveNavigationParameter(ArchivePath, true));
 
@@ -95,8 +109,34 @@ namespace Camelot.ViewModels.Tests.Dialogs
         }
 
         [Fact]
+        public void TestArchiveSingleFile()
+        {
+            SetupForType();
+
+            var dialog = _autoMocker.CreateInstance<CreateArchiveDialogViewModel>();
+            dialog.Activate(new CreateArchiveNavigationParameter(ArchivePath, true));
+
+            _autoMocker
+                .Verify<IArchiveTypeViewModelFactory>(m => m.CreateForSingleFile(), Times.Once);
+        }
+
+        [Fact]
+        public void TestArchiveMultipleFiles()
+        {
+            SetupForType();
+
+            var dialog = _autoMocker.CreateInstance<CreateArchiveDialogViewModel>();
+            dialog.Activate(new CreateArchiveNavigationParameter(ArchivePath, false));
+
+            _autoMocker
+                .Verify<IArchiveTypeViewModelFactory>(m => m.CreateForMultipleFiles(), Times.Once);
+        }
+
+        [Fact]
         public void TestCancel()
         {
+            SetupForType();
+
             var dialog = _autoMocker.CreateInstance<CreateArchiveDialogViewModel>();
             dialog.Activate(new CreateArchiveNavigationParameter(ArchivePath, true));
 
@@ -114,6 +154,20 @@ namespace Camelot.ViewModels.Tests.Dialogs
             dialog.CancelCommand.Execute(null);
 
             Assert.True(isCallbackCalled);
+        }
+
+        private void SetupForType(ArchiveType archiveType = ArchiveType.Zip)
+        {
+            var viewModels = new[]
+            {
+                new ArchiveTypeViewModel(archiveType, "Name"),
+            };
+            _autoMocker
+                .Setup<IArchiveTypeViewModelFactory, IReadOnlyList<ArchiveTypeViewModel>>(m => m.CreateForSingleFile())
+                .Returns(viewModels);
+            _autoMocker
+                .Setup<IArchiveTypeViewModelFactory, IReadOnlyList<ArchiveTypeViewModel>>(m => m.CreateForMultipleFiles())
+                .Returns(viewModels);
         }
     }
 }
