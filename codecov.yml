@@ -24,6 +24,7 @@ ignore:
   - "src/Camelot.FileSystemWatcher/Configuration/*"
   - "src/Camelot.Operations/Models/*"
   - "src/Camelot.Services.Environment/**/*"
+  - "src/Camelot.Services.Archives/Implementations/*"
   - "src/Camelot.ViewModels/Factories/Implementations/BitmapFactory.cs"
   - "src/Camelot.FileSystemWatcher/Implementations/FileSystemWatcherFactory.cs"
   - "src/Camelot.FileSystemWatcher/Implementations/FileSystemWatcherAdapter.cs"

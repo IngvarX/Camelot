@@ -57,6 +57,16 @@ namespace Camelot.Services.Archives.Tests
         }
 
         [Fact]
+        public void TestCreateReaderFailed()
+        {
+            const ArchiveType archiveType = (ArchiveType) 42;
+            var factory = _autoMocker.CreateInstance<ArchiveProcessorFactory>();
+            void Create() => factory.CreateReader(archiveType);
+
+            Assert.Throws<ArgumentOutOfRangeException>(Create);
+        }
+
+        [Fact]
         public void TestCreateWriterFailed()
         {
             const ArchiveType archiveType = (ArchiveType) 42;
