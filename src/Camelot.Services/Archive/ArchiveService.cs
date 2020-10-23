@@ -32,7 +32,8 @@ namespace Camelot.Services.Archive
 
         public async Task ExtractToNewDirectoryAsync(string archivePath)
         {
-            var fullName = _fileNameGenerationService.GenerateFullNameWithoutExtension(archivePath);
+            var cleanedUpArchivePath = CleanupArchivePath(archivePath);
+            var fullName = _fileNameGenerationService.GenerateFullNameWithoutExtension(cleanedUpArchivePath);
 
             await ExtractAsync(archivePath, fullName);
         }
@@ -53,5 +54,8 @@ namespace Camelot.Services.Archive
 
         public bool CheckIfNodeIsArchive(string nodePath) =>
             _archiveTypeMapper.GetArchiveTypeFrom(nodePath).HasValue;
+
+        private static string CleanupArchivePath(string archivePath) =>
+            archivePath.Replace(".tar", string.Empty);
     }
 }
