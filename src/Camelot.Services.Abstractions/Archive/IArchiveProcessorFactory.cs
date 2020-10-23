@@ -4,6 +4,8 @@ namespace Camelot.Services.Abstractions.Archive
 {
     public interface IArchiveProcessorFactory
     {
-        IArchiveProcessor Create(ArchiveType archiveType);
+        IArchiveReader CreateReader(ArchiveType archiveType);
+
+        IArchiveWriter CreateWriter(ArchiveType archiveType);
     }
 }

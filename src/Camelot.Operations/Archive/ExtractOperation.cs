@@ -9,18 +9,18 @@ namespace Camelot.Operations.Archive
 {
     public class ExtractOperation : OperationBase, IInternalOperation
     {
-        private readonly IArchiveProcessor _archiveProcessor;
+        private readonly IArchiveReader _archiveReader;
         private readonly IDirectoryService _directoryService;
         private readonly string _archiveFilePath;
         private readonly string _outputDirectory;
 
         public ExtractOperation(
-            IArchiveProcessor archiveProcessor,
+            IArchiveReader archiveReader,
             IDirectoryService directoryService,
             string archiveFilePath,
             string outputDirectory)
         {
-            _archiveProcessor = archiveProcessor;
+            _archiveReader = archiveReader;
             _directoryService = directoryService;
             _archiveFilePath = archiveFilePath;
             _outputDirectory = outputDirectory;
@@ -31,7 +31,7 @@ namespace Camelot.Operations.Archive
             CreateOutputDirectoryIfNeeded(_outputDirectory);
 
             State = OperationState.InProgress;
-            await _archiveProcessor.ExtractAsync(_archiveFilePath, _outputDirectory);
+            await _archiveReader.ExtractAsync(_archiveFilePath, _outputDirectory);
             State = OperationState.Finished;
             SetFinalProgress();
         }

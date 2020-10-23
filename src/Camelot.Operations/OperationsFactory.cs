@@ -86,9 +86,8 @@ namespace Camelot.Operations
 
         public IOperation CreatePackOperation(PackOperationSettings settings)
         {
-            var archiveProcessor = CreateArchiveProcessor(settings.ArchiveType);
-            var nodes = settings.InputTopLevelFiles.Concat(settings.InputTopLevelDirectories).ToArray();
-            var packOperation = CreatePackOperation(archiveProcessor, settings);
+            var archiveWriter = CreateArchiveWriter(settings.ArchiveType);
+            var packOperation = CreatePackOperation(archiveWriter, settings);
             var operationGroup = CreateOperationGroup(new[] {packOperation});
             var operations = CreateOperationsGroupsList(operationGroup);
             var operationInfo = CreateOperationInfo(settings);
@@ -100,7 +99,7 @@ namespace Camelot.Operations
 
         public IOperation CreateExtractOperation(ExtractArchiveOperationSettings settings)
         {
-            var archiveProcessor = CreateArchiveProcessor(settings.ArchiveType);
+            var archiveProcessor = CreateArchiveReader(settings.ArchiveType);
             var extractOperation = CreateExtractOperation(archiveProcessor, settings.InputTopLevelFile, settings.TargetDirectory);
             var operationGroup = CreateOperationGroup(new[] {extractOperation});
             var operations = CreateOperationsGroupsList(operationGroup);
@@ -147,16 +146,19 @@ namespace Camelot.Operations
         private IInternalOperation CreateAddDirectoryOperation(string directoryPath) =>
             new CreateDirectoryOperation(_directoryService, directoryPath);
 
-        private IInternalOperation CreatePackOperation(IArchiveProcessor archiveProcessor,
+        private IInternalOperation CreatePackOperation(IArchiveWriter archiveWriter,
             PackOperationSettings settings) =>
-            new PackOperation(archiveProcessor, _directoryService, _pathService, settings);
+            new PackOperation(archiveWriter, _directoryService, _pathService, settings);
 
-        private IInternalOperation CreateExtractOperation(IArchiveProcessor archiveProcessor,
+        private IInternalOperation CreateExtractOperation(IArchiveReader archiveReader,
             string archiveFilePath, string outputDirectory) =>
-            new ExtractOperation(archiveProcessor, _directoryService, archiveFilePath, outputDirectory);
+            new ExtractOperation(archiveReader, _directoryService, archiveFilePath, outputDirectory);
 
-        private IArchiveProcessor CreateArchiveProcessor(ArchiveType archiveType) =>
-            _archiveProcessorFactory.Create(archiveType);
+        private IArchiveReader CreateArchiveReader(ArchiveType archiveType) =>
+            _archiveProcessorFactory.CreateReader(archiveType);
+
+        private IArchiveWriter CreateArchiveWriter(ArchiveType archiveType) =>
+            _archiveProcessorFactory.CreateWriter(archiveType);
 
         private ICompositeOperation CreateCompositeOperation(
             IReadOnlyList<OperationGroup> operations,

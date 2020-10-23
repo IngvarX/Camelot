@@ -309,14 +309,14 @@ namespace Camelot.Operations.Tests
         [InlineData(ArchiveType.SevenZip)]
         public async Task TestPackOperation(ArchiveType archiveType)
         {
-            var processorMock = new Mock<IArchiveProcessor>();
+            var processorMock = new Mock<IArchiveWriter>();
             processorMock
                 .Setup(m => m.PackAsync(
                     It.Is<IReadOnlyList<string>>(l => l.Single() == SourceName),
                     It.IsAny<IReadOnlyList<string>>(), SourceDirName, DestinationName))
                 .Verifiable();
             _autoMocker
-                .Setup<IArchiveProcessorFactory, IArchiveProcessor>(m => m.Create(archiveType))
+                .Setup<IArchiveProcessorFactory, IArchiveWriter>(m => m.CreateWriter(archiveType))
                 .Returns(processorMock.Object);
 
             var operationsFactory = _autoMocker.CreateInstance<OperationsFactory>();
@@ -355,13 +355,13 @@ namespace Camelot.Operations.Tests
         [InlineData(ArchiveType.SevenZip)]
         public async Task TestExtractOperation(ArchiveType archiveType)
         {
-            var processorMock = new Mock<IArchiveProcessor>();
+            var processorMock = new Mock<IArchiveReader>();
             processorMock
                 .Setup(m => m.ExtractAsync(
                     SourceName, DestinationDirName))
                 .Verifiable();
             _autoMocker
-                .Setup<IArchiveProcessorFactory, IArchiveProcessor>(m => m.Create(archiveType))
+                .Setup<IArchiveProcessorFactory, IArchiveReader>(m => m.CreateReader(archiveType))
                 .Returns(processorMock.Object);
 
             var operationsFactory = _autoMocker.CreateInstance<OperationsFactory>();

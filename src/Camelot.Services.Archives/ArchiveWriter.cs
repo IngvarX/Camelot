@@ -3,18 +3,17 @@ using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Archive;
 using SharpCompress.Common;
-using SharpCompress.Readers;
 using SharpCompress.Writers;
 
 namespace Camelot.Services.Archives
 {
-    public class ArchiveProcessor : IArchiveProcessor
+    public class ArchiveWriter : IArchiveWriter
     {
         private readonly IFileService _fileService;
         private readonly ArchiveType _archiveType;
         private readonly WriterOptions _options;
 
-        public ArchiveProcessor(
+        public ArchiveWriter(
             IFileService fileService,
             ArchiveType archiveType,
             WriterOptions options)
@@ -34,20 +33,6 @@ namespace Camelot.Services.Archives
             {
                 writer.Write(file, file);
             }
-        }
-
-        public async Task ExtractAsync(string archivePath, string outputDirectory)
-        {
-            await using var inStream = _fileService.OpenRead(archivePath);
-            using var reader = ReaderFactory.Open(inStream);
-
-            var options = new ExtractionOptions
-            {
-                ExtractFullPath = true,
-                Overwrite = true
-            };
-
-            reader.WriteAllToDirectory(outputDirectory, options);
         }
     }
 }

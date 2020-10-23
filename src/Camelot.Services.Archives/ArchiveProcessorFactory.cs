@@ -18,24 +18,27 @@ namespace Camelot.Services.Archives
             _fileService = fileService;
         }
 
-        public IArchiveProcessor Create(ArchiveType archiveType) =>
+        public IArchiveReader CreateReader(ArchiveType archiveType) =>
+            new ArchiveReader(_fileService);
+
+        public IArchiveWriter CreateWriter(ArchiveType archiveType) =>
             archiveType switch
             {
-                ArchiveType.Tar => CreateArchiveProcessor(InternalArchiveType.Tar, CompressionType.None),
-                ArchiveType.Zip => CreateArchiveProcessor(InternalArchiveType.Zip, CompressionType.Deflate),
-                ArchiveType.TarGz => CreateArchiveProcessor(InternalArchiveType.Tar, CompressionType.GZip),
-                ArchiveType.GZip => CreateArchiveProcessor(InternalArchiveType.Zip, CompressionType.GZip),
-                ArchiveType.TarBz2 => CreateArchiveProcessor(InternalArchiveType.Tar, CompressionType.BZip2),
-                ArchiveType.Bz2 => CreateArchiveProcessor(InternalArchiveType.Zip, CompressionType.BZip2),
-                ArchiveType.TarXz => CreateArchiveProcessor(InternalArchiveType.Tar, CompressionType.Xz),
-                ArchiveType.Xz => CreateArchiveProcessor(InternalArchiveType.Zip, CompressionType.Xz),
-                ArchiveType.TarLz => CreateArchiveProcessor(InternalArchiveType.Tar, CompressionType.LZip),
-                ArchiveType.Lz => CreateArchiveProcessor(InternalArchiveType.Zip, CompressionType.LZip),
-                ArchiveType.SevenZip => CreateArchiveProcessor(InternalArchiveType.SevenZip, CompressionType.LZMA),
+                ArchiveType.Tar => CreateArchiveWriter(InternalArchiveType.Tar, CompressionType.None),
+                ArchiveType.Zip => CreateArchiveWriter(InternalArchiveType.Zip, CompressionType.Deflate),
+                ArchiveType.TarGz => CreateArchiveWriter(InternalArchiveType.Tar, CompressionType.GZip),
+                ArchiveType.GZip => CreateArchiveWriter(InternalArchiveType.Zip, CompressionType.GZip),
+                ArchiveType.TarBz2 => CreateArchiveWriter(InternalArchiveType.Tar, CompressionType.BZip2),
+                ArchiveType.Bz2 => CreateArchiveWriter(InternalArchiveType.Zip, CompressionType.BZip2),
+                ArchiveType.TarXz => CreateArchiveWriter(InternalArchiveType.Tar, CompressionType.Xz),
+                ArchiveType.Xz => CreateArchiveWriter(InternalArchiveType.Zip, CompressionType.Xz),
+                ArchiveType.TarLz => CreateArchiveWriter(InternalArchiveType.Tar, CompressionType.LZip),
+                ArchiveType.Lz => CreateArchiveWriter(InternalArchiveType.Zip, CompressionType.LZip),
+                ArchiveType.SevenZip => CreateArchiveWriter(InternalArchiveType.SevenZip, CompressionType.LZMA),
                 _ => throw new ArgumentOutOfRangeException(nameof(archiveType), archiveType, null)
             };
 
-        private IArchiveProcessor CreateArchiveProcessor(InternalArchiveType archiveType, WriterOptions options) =>
-            new ArchiveProcessor(_fileService, archiveType, options);
+        private IArchiveWriter CreateArchiveWriter(InternalArchiveType archiveType, WriterOptions options) =>
+            new ArchiveWriter(_fileService, archiveType, options);
     }
 }
