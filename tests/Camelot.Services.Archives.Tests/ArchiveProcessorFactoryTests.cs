@@ -41,11 +41,11 @@ namespace Camelot.Services.Archives.Tests
         [InlineData(ArchiveType.TarGz, typeof(ArchiveReader))]
         [InlineData(ArchiveType.TarBz2, typeof(ArchiveReader))]
         [InlineData(ArchiveType.GZip, typeof(ArchiveReader))]
-        [InlineData(ArchiveType.Bz2, typeof(ArchiveReader))]
+        [InlineData(ArchiveType.Bz2, typeof(SingleFileZipArchiveReader))]
         [InlineData(ArchiveType.SevenZip, typeof(ArchiveReader))]
-        [InlineData(ArchiveType.Xz, typeof(ArchiveReader))]
+        [InlineData(ArchiveType.Xz, typeof(SingleFileZipArchiveReader))]
         [InlineData(ArchiveType.TarXz, typeof(ArchiveReader))]
-        [InlineData(ArchiveType.Lz, typeof(ArchiveReader))]
+        [InlineData(ArchiveType.Lz, typeof(SingleFileZipArchiveReader))]
         [InlineData(ArchiveType.TarLz, typeof(ArchiveReader))]
         public void TestCreateReader(ArchiveType archiveType, Type expectedType)
         {

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Archive;
@@ -32,6 +33,11 @@ namespace Camelot.Services.Archives
             foreach (var file in files)
             {
                 writer.Write(file, file);
+            }
+
+            foreach (var directory in directories)
+            {
+                writer.WriteAll(directory, "*", SearchOption.AllDirectories);
             }
         }
     }

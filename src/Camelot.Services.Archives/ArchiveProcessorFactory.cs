@@ -1,6 +1,8 @@
 using System;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Archive;
+using Camelot.Services.Archives.Implementations;
+using Camelot.Services.Archives.Interfaces;
 using SharpCompress.Common;
 using SharpCompress.Writers;
 using ArchiveType = Camelot.Services.Abstractions.Models.Enums.ArchiveType;
@@ -11,15 +13,42 @@ namespace Camelot.Services.Archives
     public class ArchiveProcessorFactory : IArchiveProcessorFactory
     {
         private readonly IFileService _fileService;
+        private readonly IFileNameGenerationService _fileNameGenerationService;
+        private readonly IPathService _pathService;
 
         public ArchiveProcessorFactory(
-            IFileService fileService)
+            IFileService fileService,
+            IFileNameGenerationService fileNameGenerationService,
+            IPathService pathService)
         {
             _fileService = fileService;
+            _fileNameGenerationService = fileNameGenerationService;
+            _pathService = pathService;
         }
 
-        public IArchiveReader CreateReader(ArchiveType archiveType) =>
-            new ArchiveReader(_fileService);
+        public IArchiveReader CreateReader(ArchiveType archiveType)
+        {
+            switch (archiveType)
+            {
+                case ArchiveType.Zip:
+                case ArchiveType.Tar:
+                case ArchiveType.TarGz:
+                case ArchiveType.TarBz2:
+                case ArchiveType.TarXz:
+                case ArchiveType.TarLz:
+                case ArchiveType.GZip:
+                case ArchiveType.SevenZip:
+                    return CreateDefaultArchiveReader();
+                case ArchiveType.Xz:
+                    return SingleFileZipArchiveReader(new XzStreamFactory());
+                case ArchiveType.Lz:
+                    return SingleFileZipArchiveReader(new LzipStreamFactory());
+                case ArchiveType.Bz2:
+                    return SingleFileZipArchiveReader(new Bz2StreamFactory());
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(archiveType), archiveType, null);
+            }
+        }
 
         public IArchiveWriter CreateWriter(ArchiveType archiveType) =>
             archiveType switch
@@ -37,6 +66,11 @@ namespace Camelot.Services.Archives
                 ArchiveType.SevenZip => CreateArchiveWriter(InternalArchiveType.SevenZip, CompressionType.LZMA),
                 _ => throw new ArgumentOutOfRangeException(nameof(archiveType), archiveType, null)
             };
+
+        private IArchiveReader CreateDefaultArchiveReader() => new ArchiveReader(_fileService);
+
+        private IArchiveReader SingleFileZipArchiveReader(IStreamFactory streamFactory) =>
+            new SingleFileZipArchiveReader(_fileService, _fileNameGenerationService, _pathService, streamFactory);
 
         private IArchiveWriter CreateArchiveWriter(InternalArchiveType archiveType, WriterOptions options) =>
             new ArchiveWriter(_fileService, archiveType, options);
