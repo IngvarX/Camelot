@@ -26,7 +26,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
         public void TestArchiveWithWhiteSpaceCreation(string archivePath)
         {
             var dialog = _autoMocker.CreateInstance<CreateArchiveDialogViewModel>();
-            dialog.Activate(new CreateArchiveNavigationParameter(archivePath));
+            dialog.Activate(new CreateArchiveNavigationParameter(archivePath, true));
 
             Assert.False(dialog.CreateCommand.CanExecute(null));
 
@@ -49,7 +49,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
                 .Returns(fileExists);
 
             var dialog = _autoMocker.CreateInstance<CreateArchiveDialogViewModel>();
-            dialog.Activate(new CreateArchiveNavigationParameter(ArchivePath));
+            dialog.Activate(new CreateArchiveNavigationParameter(ArchivePath, true));
 
             dialog.ArchivePath = NewArchivePath;
 
@@ -60,10 +60,10 @@ namespace Camelot.ViewModels.Tests.Dialogs
         public void TestProperties()
         {
             var dialog = _autoMocker.CreateInstance<CreateArchiveDialogViewModel>();
-            dialog.Activate(new CreateArchiveNavigationParameter(ArchivePath));
+            dialog.Activate(new CreateArchiveNavigationParameter(ArchivePath, true));
 
             Assert.Equal(ArchivePath, dialog.ArchivePath);
-            Assert.Equal(ArchiveType.Zip, dialog.ArchiveType);
+            Assert.Equal(ArchiveType.Zip, dialog.SelectedArchiveType.ArchiveType);
         }
 
         [Theory]
@@ -73,7 +73,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
         public void TestArchiveCreation(ArchiveType archiveType)
         {
             var dialog = _autoMocker.CreateInstance<CreateArchiveDialogViewModel>();
-            dialog.Activate(new CreateArchiveNavigationParameter(ArchivePath));
+            dialog.Activate(new CreateArchiveNavigationParameter(ArchivePath, true));
 
             var isCallbackCalled = false;
             dialog.CloseRequested += (sender, args) =>
@@ -85,10 +85,8 @@ namespace Camelot.ViewModels.Tests.Dialogs
             };
 
             dialog.ArchivePath = NewArchivePath;
-            dialog.ArchiveType = archiveType;
 
             Assert.Equal(NewArchivePath, dialog.ArchivePath);
-            Assert.Equal(archiveType, dialog.ArchiveType);
             Assert.True(dialog.CreateCommand.CanExecute(null));
 
             dialog.CreateCommand.Execute(null);
@@ -100,7 +98,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
         public void TestCancel()
         {
             var dialog = _autoMocker.CreateInstance<CreateArchiveDialogViewModel>();
-            dialog.Activate(new CreateArchiveNavigationParameter(ArchivePath));
+            dialog.Activate(new CreateArchiveNavigationParameter(ArchivePath, true));
 
             var isCallbackCalled = false;
             dialog.CloseRequested += (sender, args) =>

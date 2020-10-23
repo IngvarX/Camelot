@@ -1,4 +1,3 @@
-using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Enums;
 
 namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels

@@ -6,9 +6,12 @@ namespace Camelot.ViewModels.Implementations.Dialogs.NavigationParameters
     {
         public string DefaultArchivePath { get; }
 
-        public CreateArchiveNavigationParameter(string defaultArchivePath)
+        public bool IsPackingSingleFile { get; }
+
+        public CreateArchiveNavigationParameter(string defaultArchivePath, bool isPackingSingleFile)
         {
             DefaultArchivePath = defaultArchivePath;
+            IsPackingSingleFile = isPackingSingleFile;
         }
     }
 }

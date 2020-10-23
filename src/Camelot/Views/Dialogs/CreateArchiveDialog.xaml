@@ -17,7 +17,17 @@
         <TextBox Grid.Row="1" Text="{Binding ArchivePath}" />
 
         <ComboBox Items="{Binding AvailableArchiveTypes}" Margin="0,4,0,0" Width="200"
-                  SelectedItem="{Binding ArchiveType, Mode=TwoWay}" />
+                  SelectedItem="{Binding SelectedArchiveType, Mode=TwoWay}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <ComboBoxItem>
+                        <ComboBoxItem.Content>
+                            <Binding Path="Name" />
+                        </ComboBoxItem.Content>
+                    </ComboBoxItem>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Classes="dialogButton transparentDialogButton" Content="{x:Static p:Resources.Cancel}" Command="{Binding CancelCommand}" />

@@ -152,6 +152,10 @@ namespace Camelot.DependencyInjection
             var archiveTypeMapperConfiguration = new ArchiveTypeMapperConfiguration();
             configuration.GetSection("Archive").Bind(archiveTypeMapperConfiguration);
             services.RegisterConstant(archiveTypeMapperConfiguration);
+
+            var archiveTypeViewModelFactoryConfiguration = new ArchiveTypeViewModelFactoryConfiguration();
+            configuration.GetSection("ArchiveViewModelFactory").Bind(archiveTypeViewModelFactoryConfiguration);
+            services.RegisterConstant(archiveTypeViewModelFactoryConfiguration);
         }
 
         private static void RegisterEnvironmentServices(IMutableDependencyResolver services)
@@ -420,6 +424,9 @@ namespace Camelot.DependencyInjection
             services.RegisterLazySingleton<ITabViewModelFactory>(() => new TabViewModelFactory(
                 resolver.GetRequiredService<IPathService>()
             ));
+            services.Register<IArchiveTypeViewModelFactory>(() => new ArchiveTypeViewModelFactory(
+                resolver.GetRequiredService<ArchiveTypeViewModelFactoryConfiguration>()
+            ));
             services.RegisterLazySingleton(() => new FilePropertiesBehavior(
                 resolver.GetRequiredService<IDialogService>()
             ));
@@ -449,7 +456,8 @@ namespace Camelot.DependencyInjection
             ));
             services.Register(() => new CreateArchiveDialogViewModel(
                 resolver.GetRequiredService<IDirectoryService>(),
-                resolver.GetRequiredService<IFileService>()
+                resolver.GetRequiredService<IFileService>(),
+                resolver.GetRequiredService<IArchiveTypeViewModelFactory>()
             ));
             services.RegisterLazySingleton<IBitmapFactory>(() => new BitmapFactory());
             services.Register(() => new MainNodeInfoTabViewModel(

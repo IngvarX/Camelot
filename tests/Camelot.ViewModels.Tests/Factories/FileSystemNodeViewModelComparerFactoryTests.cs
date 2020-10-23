@@ -1,5 +1,4 @@
 using Camelot.ViewModels.Factories.Implementations;
-using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Comparers;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Enums;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;

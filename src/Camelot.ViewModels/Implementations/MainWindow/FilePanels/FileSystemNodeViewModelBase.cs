@@ -101,7 +101,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         private async Task PackAsync()
         {
-            var parameter = new CreateArchiveNavigationParameter(FullPath);
+            var parameter = new CreateArchiveNavigationParameter(FullPath, true);
             var dialogResult = await _dialogService.ShowDialogAsync<CreateArchiveDialogResult, CreateArchiveNavigationParameter>(
                 nameof(CreateArchiveDialogViewModel), parameter);
             if (dialogResult is null)

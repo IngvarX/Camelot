@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -9,7 +8,6 @@ using Camelot.ViewModels.Implementations.Dialogs;
 using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
 using Camelot.ViewModels.Implementations.Dialogs.Results;
 using Camelot.ViewModels.Interfaces.MainWindow;
-using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Services.Interfaces;
 using ReactiveUI;
 
@@ -67,7 +65,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             }
 
             var defaultPath = _pathService.Combine(_directoryService.SelectedDirectory, selectedNodes.First());
-            var parameter = new CreateArchiveNavigationParameter(defaultPath);
+            var parameter = new CreateArchiveNavigationParameter(defaultPath, selectedNodes.Length == 1);
             var dialogResult = await _dialogService.ShowDialogAsync<CreateArchiveDialogResult, CreateArchiveNavigationParameter>(
                 nameof(CreateArchiveDialogViewModel), parameter);
             if (dialogResult is null)

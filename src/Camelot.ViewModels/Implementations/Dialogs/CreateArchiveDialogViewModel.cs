@@ -1,10 +1,13 @@
-using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 using Camelot.Services.Abstractions;
-using Camelot.Services.Abstractions.Models.Enums;
+using Camelot.ViewModels.Factories.Interfaces;
+using Camelot.ViewModels.Implementations.Dialogs.Archives;
 using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
 using Camelot.ViewModels.Implementations.Dialogs.Results;
+using DynamicData;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
@@ -14,14 +17,16 @@ namespace Camelot.ViewModels.Implementations.Dialogs
     {
         private readonly IDirectoryService _directoryService;
         private readonly IFileService _fileService;
+        private readonly IArchiveTypeViewModelFactory _archiveTypeViewModelFactory;
+        private readonly ObservableCollection<ArchiveTypeViewModel> _availableArchiveTypes;
 
         [Reactive]
         public string ArchivePath { get; set; }
 
-        public IEnumerable<ArchiveType> AvailableArchiveTypes => new[] {ArchiveType.Tar};
+        public IEnumerable<ArchiveTypeViewModel> AvailableArchiveTypes => _availableArchiveTypes;
 
         [Reactive]
-        public ArchiveType ArchiveType { get; set; }
+        public ArchiveTypeViewModel SelectedArchiveType { get; set; }
 
         public ICommand CreateCommand { get; }
 
@@ -29,10 +34,13 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 
         public CreateArchiveDialogViewModel(
             IDirectoryService directoryService,
-            IFileService fileService)
+            IFileService fileService,
+            IArchiveTypeViewModelFactory archiveTypeViewModelFactory)
         {
             _directoryService = directoryService;
             _fileService = fileService;
+            _archiveTypeViewModelFactory = archiveTypeViewModelFactory;
+            _availableArchiveTypes = new ObservableCollection<ArchiveTypeViewModel>();
 
             var canCreate = this.WhenAnyValue(x => x.ArchivePath,
                 CheckIfPathIsValid);
@@ -41,11 +49,18 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             CancelCommand = ReactiveCommand.Create(Close);
         }
 
-        public override void Activate(CreateArchiveNavigationParameter parameter) =>
+        public override void Activate(CreateArchiveNavigationParameter parameter)
+        {
             ArchivePath = parameter.DefaultArchivePath;
+            var archiveTypeViewModels = parameter.IsPackingSingleFile
+                ? _archiveTypeViewModelFactory.CreateForSingleFile()
+                : _archiveTypeViewModelFactory.CreateForMultipleFiles();
+            _availableArchiveTypes.AddRange(archiveTypeViewModels);
+            SelectedArchiveType = archiveTypeViewModels.First();
+        }
 
         private void CreateArchive() =>
-            Close(new CreateArchiveDialogResult(ArchivePath, ArchiveType));
+            Close(new CreateArchiveDialogResult(ArchivePath, SelectedArchiveType.ArchiveType));
 
         private bool CheckIfPathIsValid(string path) =>
             !string.IsNullOrWhiteSpace(path) &&
