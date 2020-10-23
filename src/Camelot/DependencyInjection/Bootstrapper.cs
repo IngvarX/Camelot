@@ -526,7 +526,11 @@ namespace Camelot.DependencyInjection
             services.RegisterLazySingleton<ITopOperationsViewModel>(() => new TopOperationsViewModel(
                 resolver.GetRequiredService<ITerminalService>(),
                 resolver.GetRequiredService<IDirectoryService>(),
-                resolver.GetRequiredService<IFilesOperationsMediator>()
+                resolver.GetRequiredService<IFilesOperationsMediator>(),
+                resolver.GetRequiredService<IDialogService>(),
+                resolver.GetRequiredService<IPathService>(),
+                resolver.GetRequiredService<IArchiveService>(),
+                resolver.GetRequiredService<INodesSelectionService>()
             ));
             services.RegisterLazySingleton<IFavouriteDirectoryViewModelFactory>(() => new FavouriteDirectoryViewModelFactory(
                 resolver.GetRequiredService<IFilesOperationsMediator>(),

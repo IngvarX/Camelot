@@ -14,7 +14,10 @@
     </Design.DataContext>
 
     <Grid RowDefinitions="Auto,Auto,Auto" Margin="10" HorizontalAlignment="Center">
+        <TextBox Grid.Row="1" Text="{Binding ArchivePath}" />
 
+        <ComboBox Items="{Binding AvailableArchiveTypes}" Margin="0,4,0,0" Width="200"
+                  SelectedItem="{Binding ArchiveType, Mode=TwoWay}" />
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Classes="dialogButton transparentDialogButton" Content="{x:Static p:Resources.Cancel}" Command="{Binding CancelCommand}" />

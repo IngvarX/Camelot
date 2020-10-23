@@ -80,7 +80,7 @@ namespace Camelot.Operations.Tests
 
         [Theory]
         [InlineData(ArchiveType.Zip)]
-        [InlineData(ArchiveType.GZip)]
+        [InlineData(ArchiveType.Gz)]
         [InlineData(ArchiveType.Tar)]
         [InlineData(ArchiveType.SevenZip)]
         [InlineData(ArchiveType.TarGz)]
@@ -122,7 +122,7 @@ namespace Camelot.Operations.Tests
 
         [Theory]
         [InlineData(ArchiveType.Zip)]
-        [InlineData(ArchiveType.GZip)]
+        [InlineData(ArchiveType.Gz)]
         [InlineData(ArchiveType.Tar)]
         [InlineData(ArchiveType.SevenZip)]
         [InlineData(ArchiveType.TarGz)]

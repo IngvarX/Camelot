@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Windows.Input;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models.Enums;
@@ -15,6 +17,8 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 
         [Reactive]
         public string ArchivePath { get; set; }
+
+        public IEnumerable<ArchiveType> AvailableArchiveTypes => new[] {ArchiveType.Tar};
 
         [Reactive]
         public ArchiveType ArchiveType { get; set; }

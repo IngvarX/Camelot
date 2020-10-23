@@ -36,7 +36,7 @@ namespace Camelot.Services.Archives
                 case ArchiveType.TarBz2:
                 case ArchiveType.TarXz:
                 case ArchiveType.TarLz:
-                case ArchiveType.GZip:
+                case ArchiveType.Gz:
                 case ArchiveType.SevenZip:
                     return CreateDefaultArchiveReader();
                 case ArchiveType.Xz:
@@ -56,7 +56,7 @@ namespace Camelot.Services.Archives
                 ArchiveType.Tar => CreateArchiveWriter(InternalArchiveType.Tar, CompressionType.None),
                 ArchiveType.Zip => CreateArchiveWriter(InternalArchiveType.Zip, CompressionType.Deflate),
                 ArchiveType.TarGz => CreateArchiveWriter(InternalArchiveType.Tar, CompressionType.GZip),
-                ArchiveType.GZip => CreateArchiveWriter(InternalArchiveType.Zip, CompressionType.GZip),
+                ArchiveType.Gz => CreateArchiveWriter(InternalArchiveType.Zip, CompressionType.GZip),
                 ArchiveType.TarBz2 => CreateArchiveWriter(InternalArchiveType.Tar, CompressionType.BZip2),
                 ArchiveType.Bz2 => CreateArchiveWriter(InternalArchiveType.Zip, CompressionType.BZip2),
                 ArchiveType.TarXz => CreateArchiveWriter(InternalArchiveType.Tar, CompressionType.Xz),
