@@ -1,62 +1,41 @@
 using System;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Archive;
-using Camelot.Services.Abstractions.Models.Enums;
-using Camelot.Services.Archives.Implementations;
-using Camelot.Services.Archives.Interfaces;
-using Camelot.Services.Archives.Processors;
+using SharpCompress.Common;
+using SharpCompress.Writers;
+using ArchiveType = Camelot.Services.Abstractions.Models.Enums.ArchiveType;
+using InternalArchiveType = SharpCompress.Common.ArchiveType;
 
 namespace Camelot.Services.Archives
 {
     public class ArchiveProcessorFactory : IArchiveProcessorFactory
     {
         private readonly IFileService _fileService;
-        private readonly IDirectoryService _directoryService;
-        private readonly IFileNameGenerationService _fileNameGenerationService;
-        private readonly IPathService _pathService;
 
         public ArchiveProcessorFactory(
-            IFileService fileService,
-            IDirectoryService directoryService,
-            IFileNameGenerationService fileNameGenerationService,
-            IPathService pathService)
+            IFileService fileService)
         {
             _fileService = fileService;
-            _directoryService = directoryService;
-            _fileNameGenerationService = fileNameGenerationService;
-            _pathService = pathService;
         }
 
         public IArchiveProcessor Create(ArchiveType archiveType) =>
             archiveType switch
             {
-                ArchiveType.Tar => new TarArchiveProcessor(_fileService, _directoryService),
-                ArchiveType.Zip => new ZipArchiveProcessor(_fileService),
-                ArchiveType.TarGz => CreateTarZipArchiveProcessor(CreateGzStreamFactory()),
-                ArchiveType.GZip => CreateSingleFileZipArchiveProcessor(CreateGzStreamFactory()),
-                ArchiveType.TarBz2 =>CreateTarZipArchiveProcessor(CreateBz2StreamFactory()),
-                ArchiveType.Bz2 => CreateSingleFileZipArchiveProcessor(CreateBz2StreamFactory()),
-                ArchiveType.TarXz => CreateTarZipArchiveProcessor(CreateXzStreamFactory()),
-                ArchiveType.Xz => CreateSingleFileZipArchiveProcessor(CreateXzStreamFactory()),
-                ArchiveType.TarLz => CreateTarZipArchiveProcessor(CreateLzStreamFactory()),
-                ArchiveType.Lz => CreateSingleFileZipArchiveProcessor(CreateLzStreamFactory()),
-                ArchiveType.SevenZip => null,
+                ArchiveType.Tar => CreateArchiveProcessor(InternalArchiveType.Tar, CompressionType.None),
+                ArchiveType.Zip => CreateArchiveProcessor(InternalArchiveType.Zip, CompressionType.Deflate),
+                ArchiveType.TarGz => CreateArchiveProcessor(InternalArchiveType.Tar, CompressionType.GZip),
+                ArchiveType.GZip => CreateArchiveProcessor(InternalArchiveType.Zip, CompressionType.GZip),
+                ArchiveType.TarBz2 => CreateArchiveProcessor(InternalArchiveType.Tar, CompressionType.BZip2),
+                ArchiveType.Bz2 => CreateArchiveProcessor(InternalArchiveType.Zip, CompressionType.BZip2),
+                ArchiveType.TarXz => CreateArchiveProcessor(InternalArchiveType.Tar, CompressionType.Xz),
+                ArchiveType.Xz => CreateArchiveProcessor(InternalArchiveType.Zip, CompressionType.Xz),
+                ArchiveType.TarLz => CreateArchiveProcessor(InternalArchiveType.Tar, CompressionType.LZip),
+                ArchiveType.Lz => CreateArchiveProcessor(InternalArchiveType.Zip, CompressionType.LZip),
+                ArchiveType.SevenZip => CreateArchiveProcessor(InternalArchiveType.SevenZip, CompressionType.LZMA),
                 _ => throw new ArgumentOutOfRangeException(nameof(archiveType), archiveType, null)
             };
 
-        private IArchiveProcessor CreateSingleFileZipArchiveProcessor(IStreamFactory factory) =>
-            new SingleFileZipArchiveProcessor(_fileService, _fileNameGenerationService,
-                _pathService, factory);
-
-        private IArchiveProcessor CreateTarZipArchiveProcessor(IStreamFactory factory) =>
-            new TarZipArchiveProcessor(_fileService, factory);
-
-        private static IStreamFactory CreateBz2StreamFactory() => new Bzip2StreamFactory();
-
-        private static IStreamFactory CreateGzStreamFactory() => new GzipStreamFactory();
-
-        private static IStreamFactory CreateXzStreamFactory() => new XzStreamFactory();
-
-        private static IStreamFactory CreateLzStreamFactory() => new LzStreamFactory();
+        private IArchiveProcessor CreateArchiveProcessor(InternalArchiveType archiveType, WriterOptions options) =>
+            new ArchiveProcessor(_fileService, archiveType, options);
     }
 }

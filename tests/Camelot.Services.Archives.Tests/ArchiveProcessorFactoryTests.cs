@@ -1,6 +1,5 @@
 using System;
 using Camelot.Services.Abstractions.Models.Enums;
-using Camelot.Services.Archives.Processors;
 using Moq.AutoMock;
 using Xunit;
 
@@ -16,12 +15,17 @@ namespace Camelot.Services.Archives.Tests
         }
 
         [Theory]
-        [InlineData(ArchiveType.Tar, typeof(TarArchiveProcessor))]
-        [InlineData(ArchiveType.Zip, typeof(ZipArchiveProcessor))]
-        [InlineData(ArchiveType.TarGz, typeof(TarZipArchiveProcessor))]
-        [InlineData(ArchiveType.TarBz2, typeof(TarZipArchiveProcessor))]
-        [InlineData(ArchiveType.GZip, typeof(SingleFileZipArchiveProcessor))]
-        [InlineData(ArchiveType.Bz2, typeof(SingleFileZipArchiveProcessor))]
+        [InlineData(ArchiveType.Tar, typeof(ArchiveProcessor))]
+        [InlineData(ArchiveType.Zip, typeof(ArchiveProcessor))]
+        [InlineData(ArchiveType.TarGz, typeof(ArchiveProcessor))]
+        [InlineData(ArchiveType.TarBz2, typeof(ArchiveProcessor))]
+        [InlineData(ArchiveType.GZip, typeof(ArchiveProcessor))]
+        [InlineData(ArchiveType.Bz2, typeof(ArchiveProcessor))]
+        [InlineData(ArchiveType.SevenZip, typeof(ArchiveProcessor))]
+        [InlineData(ArchiveType.Xz, typeof(ArchiveProcessor))]
+        [InlineData(ArchiveType.TarXz, typeof(ArchiveProcessor))]
+        [InlineData(ArchiveType.Lz, typeof(ArchiveProcessor))]
+        [InlineData(ArchiveType.TarLz, typeof(ArchiveProcessor))]
         public void TestCreate(ArchiveType archiveType, Type expectedType)
         {
             var factory = _autoMocker.CreateInstance<ArchiveProcessorFactory>();
