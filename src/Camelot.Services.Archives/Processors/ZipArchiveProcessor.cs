@@ -1,40 +1,44 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Archive;
-using ICSharpCode.SharpZipLib.Core;
-using ICSharpCode.SharpZipLib.Zip;
+using SharpCompress.Common;
+using SharpCompress.Readers;
 
 namespace Camelot.Services.Archives.Processors
 {
     public class ZipArchiveProcessor : IArchiveProcessor
     {
+        private readonly IFileService _fileService;
+
+        public ZipArchiveProcessor(IFileService fileService)
+        {
+            _fileService = fileService;
+        }
+
         public Task PackAsync(IReadOnlyList<string> files, IReadOnlyList<string> directories,
             string sourceDirectory, string outputFile)
         {
-            var fastZip = Create();
-            var scanFilter = Create(files.Concat(directories).ToHashSet());
-
-            fastZip.CreateZip(outputFile, sourceDirectory, true, scanFilter, scanFilter);
-
-            return Task.CompletedTask;
-        }
-
-        public Task ExtractAsync(string archivePath, string outputDirectory)
-        {
-            var fastZip = Create();
-
-            fastZip.ExtractZip(archivePath, outputDirectory, FastZip.Overwrite.Always, null, null, null, true);
+            // var fastZip = Create();
+            // var scanFilter = Create(files.Concat(directories).ToHashSet());
+            //
+            // fastZip.CreateZip(outputFile, sourceDirectory, true, scanFilter, scanFilter);
 
             return Task.CompletedTask;
         }
 
-        private static FastZip Create() => new FastZip
+        public async Task ExtractAsync(string archivePath, string outputDirectory)
         {
-            CreateEmptyDirectories = true
-        };
+            await using var inStream = _fileService.OpenRead(archivePath);
+            using var reader = ReaderFactory.Open(inStream);
 
-        private static IScanFilter Create(ISet<string> nodes) =>
-            new ScanFilter(nodes);
+            var options = new ExtractionOptions
+            {
+                ExtractFullPath = true,
+                Overwrite = true
+            };
+
+            reader.WriteAllToDirectory(outputDirectory, options);
+        }
     }
 }

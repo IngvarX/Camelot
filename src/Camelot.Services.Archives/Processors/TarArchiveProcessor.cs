@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Archive;
-using ICSharpCode.SharpZipLib.Tar;
+using SharpCompress.Archives;
+using SharpCompress.Archives.Tar;
+using SharpCompress.Common;
+using SharpCompress.Readers;
+using SharpCompress.Writers.Tar;
 
 namespace Camelot.Services.Archives.Processors
 {
@@ -25,23 +28,31 @@ namespace Camelot.Services.Archives.Processors
             string sourceDirectory, string outputFile)
         {
             await using var fileStream = _fileService.OpenWrite(outputFile);
-            using var tarArchive = TarArchive.CreateOutputTarArchive(fileStream, Encoding.Default);
+            using var tarArchive = TarArchive.Create();
 
             var filesInDirectories = directories.SelectMany(d => _directoryService.GetFilesRecursively(d));
             foreach (var file in files.Concat(filesInDirectories))
             {
-                var tarEntry = TarEntry.CreateEntryFromFile(file);
-
-                tarArchive.WriteEntry(tarEntry, true);
+                tarArchive.AddEntry(file, file);
             }
+
+            tarArchive.SaveTo(fileStream, new TarWriterOptions(CompressionType.None, true));
         }
 
-        public async Task ExtractAsync(string archivePath, string outputDirectory)
+        public Task ExtractAsync(string archivePath, string outputDirectory)
         {
-            await using var fileStream = _fileService.OpenRead(archivePath);
-            using var tarArchive = TarArchive.CreateInputTarArchive(fileStream, Encoding.Default);
+            using var tarArchive = TarArchive.Open(archivePath);
+            using var reader = tarArchive.ExtractAllEntries();
 
-            tarArchive.ExtractContents(outputDirectory);
+            var options = new ExtractionOptions
+            {
+                ExtractFullPath = true,
+                Overwrite = true
+            };
+
+            reader.WriteAllToDirectory(outputDirectory, options);
+
+            return Task.CompletedTask;
         }
     }
 }

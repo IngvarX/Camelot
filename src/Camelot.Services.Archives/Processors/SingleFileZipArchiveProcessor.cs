@@ -5,14 +5,11 @@ using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Archive;
 using Camelot.Services.Archives.Interfaces;
-using ICSharpCode.SharpZipLib.Core;
 
 namespace Camelot.Services.Archives.Processors
 {
     public class SingleFileZipArchiveProcessor : IArchiveProcessor
     {
-        private const int BufferSize = 4096;
-
         private readonly IFileService _fileService;
         private readonly IFileNameGenerationService _fileNameGenerationService;
         private readonly IPathService _pathService;
@@ -30,7 +27,7 @@ namespace Camelot.Services.Archives.Processors
             _streamFactory = streamFactory;
         }
 
-        public Task PackAsync(IReadOnlyList<string> files, IReadOnlyList<string> directories,
+        public async Task PackAsync(IReadOnlyList<string> files, IReadOnlyList<string> directories,
             string sourceDirectory, string outputFile)
         {
             if (directories.Any() || files.Count > 1)
@@ -38,28 +35,22 @@ namespace Camelot.Services.Archives.Processors
                 throw new InvalidOperationException("Gzip can be used for single file only!");
             }
 
-            using var inStream = _fileService.OpenRead(files.Single());
-            using var outStream = _fileService.OpenWrite(outputFile);
-            using var zipStream = _streamFactory.CreateOutputStream(outStream);
+            await using var inStream = _fileService.OpenRead(files.Single());
+            await using var outStream = _fileService.OpenWrite(outputFile);
+            await using var zipStream = _streamFactory.CreateOutputStream(outStream);
 
-            var dataBuffer = new byte[BufferSize];
-            StreamUtils.Copy(inStream, zipStream, dataBuffer);
-
-            return Task.CompletedTask;
+            await zipStream.CopyToAsync(outStream);
         }
 
-        public Task ExtractAsync(string archivePath, string outputDirectory)
+        public async Task ExtractAsync(string archivePath, string outputDirectory)
         {
-            using var inStream = _fileService.OpenRead(archivePath);
-            using var zipStream = _streamFactory.CreateInputStream(inStream);
+            await using var inStream = _fileService.OpenRead(archivePath);
+            await using var zipStream = _streamFactory.CreateInputStream(inStream);
 
             var outputFilePath = GetOutputFilePath(archivePath, outputDirectory);
-            using var fileStream = _fileService.OpenWrite(outputFilePath);
+            await using var outStream = _fileService.OpenWrite(outputFilePath);
 
-            var dataBuffer = new byte[BufferSize];
-            StreamUtils.Copy(zipStream, fileStream, dataBuffer);
-
-            return Task.CompletedTask;
+            await zipStream.CopyToAsync(outStream);
         }
 
         private string GetOutputFilePath(string archivePath, string outputDirectory)

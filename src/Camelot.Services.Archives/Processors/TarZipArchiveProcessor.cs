@@ -1,11 +1,10 @@
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Archive;
 using Camelot.Services.Archives.Interfaces;
-using ICSharpCode.SharpZipLib.GZip;
-using ICSharpCode.SharpZipLib.Tar;
+using SharpCompress.Common;
+using SharpCompress.Readers;
 
 namespace Camelot.Services.Archives.Processors
 {
@@ -26,8 +25,8 @@ namespace Camelot.Services.Archives.Processors
             string outputFile)
         {
             using var fileStream = _fileService.OpenWrite(outputFile);
-            using var gZipStream = new GZipOutputStream(fileStream);
-            var tarArchive = TarArchive.CreateOutputTarArchive(gZipStream);
+            // using var gZipStream = new GZipOutputStream(fileStream);
+            // var tarArchive = TarArchive.CreateOutputTarArchive(gZipStream);
 
             // tarArchive.RootPath = sourceDirectory.Replace('\\', '/');
             // if (tarArchive.RootPath.EndsWith("/"))
@@ -38,15 +37,18 @@ namespace Camelot.Services.Archives.Processors
             return Task.CompletedTask;
         }
 
-        public Task ExtractAsync(string archivePath, string outputDirectory)
+        public async Task ExtractAsync(string archivePath, string outputDirectory)
         {
-            using var inStream = _fileService.OpenRead(archivePath);
-            using var gzipStream = _streamFactory.CreateInputStream(inStream);
-            using var tarArchive = TarArchive.CreateInputTarArchive(gzipStream, Encoding.Default);
+            await using var inStream = _fileService.OpenRead(archivePath);
+            using var reader = ReaderFactory.Open(inStream);
 
-            tarArchive.ExtractContents(outputDirectory);
+            var options = new ExtractionOptions
+            {
+                ExtractFullPath = true,
+                Overwrite = true
+            };
 
-            return Task.CompletedTask;
+            reader.WriteAllToDirectory(outputDirectory, options);
         }
     }
 }

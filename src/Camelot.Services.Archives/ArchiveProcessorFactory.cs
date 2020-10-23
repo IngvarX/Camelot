@@ -31,7 +31,7 @@ namespace Camelot.Services.Archives
             archiveType switch
             {
                 ArchiveType.Tar => new TarArchiveProcessor(_fileService, _directoryService),
-                ArchiveType.Zip => new ZipArchiveProcessor(),
+                ArchiveType.Zip => new ZipArchiveProcessor(_fileService),
                 ArchiveType.TarGz => CreateTarZipArchiveProcessor(CreateGzStreamFactory()),
                 ArchiveType.GZip => CreateSingleFileZipArchiveProcessor(CreateGzStreamFactory()),
                 ArchiveType.TarBz2 =>CreateTarZipArchiveProcessor(CreateBz2StreamFactory()),
