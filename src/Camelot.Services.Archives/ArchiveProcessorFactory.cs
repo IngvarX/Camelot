@@ -59,13 +59,13 @@ namespace Camelot.Services.Archives
                 ArchiveType.Tar => CreateArchiveWriter(InternalArchiveType.Tar, CompressionType.None),
                 ArchiveType.Zip => CreateArchiveWriter(InternalArchiveType.Zip, CompressionType.Deflate),
                 ArchiveType.TarGz => CreateArchiveWriter(InternalArchiveType.Tar, CompressionType.GZip),
-                ArchiveType.Gz => CreateArchiveWriter(InternalArchiveType.Zip, CompressionType.GZip),
+                ArchiveType.Gz => CreateArchiveWriter(InternalArchiveType.GZip, CompressionType.GZip),
                 ArchiveType.TarBz2 => CreateArchiveWriter(InternalArchiveType.Tar, CompressionType.BZip2),
                 ArchiveType.Bz2 => CreateArchiveWriter(InternalArchiveType.Zip, CompressionType.BZip2),
                 ArchiveType.TarXz => CreateArchiveWriter(InternalArchiveType.Tar, CompressionType.Xz),
-                ArchiveType.Xz => CreateArchiveWriter(InternalArchiveType.Zip, CompressionType.Xz),
                 ArchiveType.TarLz => CreateArchiveWriter(InternalArchiveType.Tar, CompressionType.LZip),
-                ArchiveType.Lz => CreateArchiveWriter(InternalArchiveType.Zip, CompressionType.LZip),
+                ArchiveType.Lz => CreateArchiveWriter(InternalArchiveType.Zip, CompressionType.LZMA),
+                ArchiveType.Xz => CreateArchiveWriter(InternalArchiveType.Zip, CompressionType.Xz),
                 ArchiveType.SevenZip => CreateArchiveWriter(InternalArchiveType.SevenZip, CompressionType.LZMA),
                 _ => throw new ArgumentOutOfRangeException(nameof(archiveType), archiveType, null)
             };

@@ -29,10 +29,10 @@ namespace Camelot.Services.Archives.Tests
         public void TestCreateWriter(ArchiveType archiveType, Type expectedType)
         {
             var factory = _autoMocker.CreateInstance<ArchiveProcessorFactory>();
-            var processor = factory.CreateWriter(archiveType);
+            var writer = factory.CreateWriter(archiveType);
 
-            Assert.NotNull(processor);
-            Assert.IsType(expectedType, processor);
+            Assert.NotNull(writer);
+            Assert.IsType(expectedType, writer);
         }
 
         [Theory]
@@ -50,10 +50,10 @@ namespace Camelot.Services.Archives.Tests
         public void TestCreateReader(ArchiveType archiveType, Type expectedType)
         {
             var factory = _autoMocker.CreateInstance<ArchiveProcessorFactory>();
-            var processor = factory.CreateReader(archiveType);
+            var reader = factory.CreateReader(archiveType);
 
-            Assert.NotNull(processor);
-            Assert.IsType(expectedType, processor);
+            Assert.NotNull(reader);
+            Assert.IsType(expectedType, reader);
         }
 
         [Fact]
