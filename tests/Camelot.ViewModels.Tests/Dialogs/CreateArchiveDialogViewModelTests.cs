@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.ViewModels.Factories.Interfaces;
@@ -16,6 +17,8 @@ namespace Camelot.ViewModels.Tests.Dialogs
         private const string ArchivePath = "Archive";
         private const string NewArchivePath = "Archive";
         private const string ArchiveTypeName = "Name";
+        private const string ArchiveZip = "zip";
+        private const string ArchiveTar = "tar";
 
         private readonly AutoMocker _autoMocker;
 
@@ -35,7 +38,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
             var dialog = _autoMocker.CreateInstance<CreateArchiveDialogViewModel>();
             dialog.Activate(new CreateArchiveNavigationParameter(archivePath, true));
 
-            Assert.False(dialog.CreateCommand.CanExecute(null));
+            Assert.True(dialog.CreateCommand.CanExecute(null));
 
             dialog.ArchivePath = archivePath;
 
@@ -73,7 +76,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
             var dialog = _autoMocker.CreateInstance<CreateArchiveDialogViewModel>();
             dialog.Activate(new CreateArchiveNavigationParameter(ArchivePath, true));
 
-            Assert.Equal(ArchivePath, dialog.ArchivePath);
+            Assert.Equal($"{ArchivePath}.{ArchiveTypeName}", dialog.ArchivePath);
             Assert.Equal(ArchiveType.Zip, dialog.SelectedArchiveType.ArchiveType);
             Assert.Equal(ArchiveTypeName, dialog.SelectedArchiveType.Name);
             Assert.Single(dialog.AvailableArchiveTypes);
@@ -134,6 +137,30 @@ namespace Camelot.ViewModels.Tests.Dialogs
         }
 
         [Fact]
+        public void TestArchiveChangeType()
+        {
+            var viewModels = new[]
+            {
+                new ArchiveTypeViewModel(ArchiveType.Zip, ArchiveZip),
+                new ArchiveTypeViewModel(ArchiveType.Tar, ArchiveTar)
+            };
+            _autoMocker
+                .Setup<IArchiveTypeViewModelFactory, IReadOnlyList<ArchiveTypeViewModel>>(m => m.CreateForSingleFile())
+                .Returns(viewModels);
+
+            var dialog = _autoMocker.CreateInstance<CreateArchiveDialogViewModel>();
+            dialog.Activate(new CreateArchiveNavigationParameter(ArchivePath, true));
+
+            Assert.EndsWith(ArchiveZip, dialog.ArchivePath);
+
+            dialog.SelectedArchiveType = dialog.AvailableArchiveTypes.Last();
+            Assert.EndsWith(ArchiveTar, dialog.ArchivePath);
+
+            dialog.SelectedArchiveType = dialog.AvailableArchiveTypes.First();
+            Assert.EndsWith(ArchiveZip, dialog.ArchivePath);
+        }
+
+        [Fact]
         public void TestCancel()
         {
             SetupForType();
@@ -161,7 +188,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
         {
             var viewModels = new[]
             {
-                new ArchiveTypeViewModel(archiveType, ArchiveTypeName),
+                new ArchiveTypeViewModel(archiveType, ArchiveTypeName)
             };
             _autoMocker
                 .Setup<IArchiveTypeViewModelFactory, IReadOnlyList<ArchiveTypeViewModel>>(m => m.CreateForSingleFile())

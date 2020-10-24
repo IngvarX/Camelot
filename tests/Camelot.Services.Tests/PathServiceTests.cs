@@ -1,6 +1,7 @@
 using System.IO;
 using Camelot.Services.Environment.Interfaces;
 using Moq;
+using Moq.AutoMock;
 using Xunit;
 
 namespace Camelot.Services.Tests
@@ -12,6 +13,13 @@ namespace Camelot.Services.Tests
 
         private static string FullPath => $"{Directory}{Path.DirectorySeparatorChar}{File}";
 
+        private readonly AutoMocker _autoMocker;
+
+        public PathServiceTests()
+        {
+            _autoMocker = new AutoMocker();
+        }
+
         [Theory]
         [InlineData("File", "File")]
         [InlineData("File.cs", "File")]
@@ -20,11 +28,10 @@ namespace Camelot.Services.Tests
         [InlineData(".travis.yml", ".travis")]
         public void TestNameExtraction(string fileName, string expectedFileName)
         {
-            var environmentPathServiceMock = new Mock<IEnvironmentPathService>();
-            environmentPathServiceMock
-                .Setup(m => m.GetFileNameWithoutExtension(It.IsAny<string>()))
+            _autoMocker
+                .Setup<IEnvironmentPathService, string>(m => m.GetFileNameWithoutExtension(It.IsAny<string>()))
                 .Returns<string>(Path.GetFileNameWithoutExtension);
-            var pathService = new PathService(environmentPathServiceMock.Object);
+            var pathService = _autoMocker.CreateInstance<PathService>();
             var actualFileName = pathService.GetFileNameWithoutExtension(fileName);
 
             Assert.Equal(expectedFileName, actualFileName);
@@ -38,11 +45,10 @@ namespace Camelot.Services.Tests
         [InlineData(".travis.yml", "yml")]
         public void TestExtensionExtraction(string fileName, string expectedExtension)
         {
-            var environmentPathServiceMock = new Mock<IEnvironmentPathService>();
-            environmentPathServiceMock
-                .Setup(m => m.GetExtension(It.IsAny<string>()))
+            _autoMocker
+                .Setup<IEnvironmentPathService, string>(m => m.GetExtension(It.IsAny<string>()))
                 .Returns<string>(Path.GetExtension);
-            var pathService = new PathService(environmentPathServiceMock.Object);
+            var pathService = _autoMocker.CreateInstance<PathService>();
             var actualExtension = pathService.GetExtension(fileName);
 
             Assert.Equal(expectedExtension, actualExtension);
@@ -51,11 +57,10 @@ namespace Camelot.Services.Tests
         [Fact]
         public void TestPathCombine()
         {
-            var environmentPathServiceMock = new Mock<IEnvironmentPathService>();
-            environmentPathServiceMock
-                .Setup(m => m.Combine(Directory, File))
+            _autoMocker
+                .Setup<IEnvironmentPathService, string>(m => m.Combine(Directory, File))
                 .Returns(FullPath);
-            var pathService = new PathService(environmentPathServiceMock.Object);
+            var pathService = _autoMocker.CreateInstance<PathService>();
             var path = pathService.Combine(Directory, File);
 
             Assert.Equal(FullPath, path);
@@ -68,8 +73,7 @@ namespace Camelot.Services.Tests
         [InlineData("/", "/")]
         public void TestTrimPathSeparators(string directory, string expectedResult)
         {
-            var environmentPathServiceMock = new Mock<IEnvironmentPathService>();
-            var pathService = new PathService(environmentPathServiceMock.Object);
+            var pathService = _autoMocker.CreateInstance<PathService>();
             var path = pathService.TrimPathSeparators(directory);
 
             Assert.Equal(path, expectedResult);
@@ -82,11 +86,10 @@ namespace Camelot.Services.Tests
         [InlineData(new string[] {}, null)]
         public void TestGetCommonRootDirectory(string[] files, string expectedDirectory)
         {
-            var environmentPathServiceMock = new Mock<IEnvironmentPathService>();
-            environmentPathServiceMock
-                .Setup(m => m.GetDirectoryName(It.IsAny<string>()))
+            _autoMocker
+                .Setup<IEnvironmentPathService, string>(m => m.GetDirectoryName(It.IsAny<string>()))
                 .Returns<string>(Path.GetDirectoryName);
-            var pathService = new PathService(environmentPathServiceMock.Object);
+            var pathService = _autoMocker.CreateInstance<PathService>();
             var actualDirectory = pathService.GetCommonRootDirectory(files);
 
             Assert.Equal(expectedDirectory, actualDirectory?.Replace("\\", "/"));
@@ -95,11 +98,10 @@ namespace Camelot.Services.Tests
         [Fact]
         public void TestGetRelativePath()
         {
-            var environmentPathServiceMock = new Mock<IEnvironmentPathService>();
-            environmentPathServiceMock
-                .Setup(m => m.GetRelativePath(Directory, File))
+            _autoMocker
+                .Setup<IEnvironmentPathService, string>(m => m.GetRelativePath(Directory, File))
                 .Returns(FullPath);
-            var pathService = new PathService(environmentPathServiceMock.Object);
+            var pathService = _autoMocker.CreateInstance<PathService>();
             var path = pathService.GetRelativePath(Directory, File);
 
             Assert.Equal(FullPath, path);
@@ -108,11 +110,10 @@ namespace Camelot.Services.Tests
         [Fact]
         public void TestGetPathRoot()
         {
-            var environmentPathServiceMock = new Mock<IEnvironmentPathService>();
-            environmentPathServiceMock
-                .Setup(m => m.GetPathRoot(FullPath))
+            _autoMocker
+                .Setup<IEnvironmentPathService, string>(m => m.GetPathRoot(FullPath))
                 .Returns(Directory);
-            var pathService = new PathService(environmentPathServiceMock.Object);
+            var pathService = _autoMocker.CreateInstance<PathService>();
             var path = pathService.GetPathRoot(FullPath);
 
             Assert.Equal(Directory, path);
