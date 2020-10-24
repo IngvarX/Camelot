@@ -420,4 +420,10 @@
   <data name="PackFilesTitle" xml:space="preserve">
     <value>Архивировать файлы</value>
   </data>
+  <data name="PackToTheFileWithColon" xml:space="preserve">
+    <value>Архивировать в файл:</value>
+  </data>
+  <data name="CreateArchive" xml:space="preserve">
+    <value>Создать архив</value>
+  </data>
 </root>

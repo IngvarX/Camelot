@@ -426,4 +426,10 @@
   <data name="PackFilesTitle" xml:space="preserve">
     <value>Pack files</value>
   </data>
+  <data name="PackToTheFileWithColon" xml:space="preserve">
+    <value>Pack to the file:</value>
+  </data>
+  <data name="CreateArchive" xml:space="preserve">
+    <value>Create archive</value>
+  </data>
 </root>

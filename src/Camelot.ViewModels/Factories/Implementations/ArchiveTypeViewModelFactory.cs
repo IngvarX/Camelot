@@ -25,7 +25,7 @@ namespace Camelot.ViewModels.Factories.Implementations
 
         public IReadOnlyList<ArchiveTypeViewModel> CreateForMultipleFiles() =>
             _configuration
-                .MultipleFileArchiveTypes
+                .MultipleFilesArchiveTypes
                 .Select(CreateFrom)
                 .ToArray();
 

@@ -662,5 +662,17 @@ namespace Camelot.Properties {
                 return ResourceManager.GetString("PackFilesTitle", resourceCulture);
             }
         }
+        
+        public static string PackToTheFileWithColon {
+            get {
+                return ResourceManager.GetString("PackToTheFileWithColon", resourceCulture);
+            }
+        }
+        
+        public static string CreateArchive {
+            get {
+                return ResourceManager.GetString("CreateArchive", resourceCulture);
+            }
+        }
     }
 }

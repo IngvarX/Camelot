@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.ViewModels.Factories.Interfaces;
@@ -16,6 +15,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
     {
         private const string ArchivePath = "Archive";
         private const string NewArchivePath = "Archive";
+        private const string ArchiveTypeName = "Name";
 
         private readonly AutoMocker _autoMocker;
 
@@ -75,6 +75,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
 
             Assert.Equal(ArchivePath, dialog.ArchivePath);
             Assert.Equal(ArchiveType.Zip, dialog.SelectedArchiveType.ArchiveType);
+            Assert.Equal(ArchiveTypeName, dialog.SelectedArchiveType.Name);
             Assert.Single(dialog.AvailableArchiveTypes);
         }
 
@@ -160,7 +161,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
         {
             var viewModels = new[]
             {
-                new ArchiveTypeViewModel(archiveType, "Name"),
+                new ArchiveTypeViewModel(archiveType, ArchiveTypeName),
             };
             _autoMocker
                 .Setup<IArchiveTypeViewModelFactory, IReadOnlyList<ArchiveTypeViewModel>>(m => m.CreateForSingleFile())

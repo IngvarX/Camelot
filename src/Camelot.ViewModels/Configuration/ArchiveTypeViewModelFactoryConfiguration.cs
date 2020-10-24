@@ -7,6 +7,6 @@ namespace Camelot.ViewModels.Configuration
     {
         public Dictionary<ArchiveType, string> SingleFileArchiveTypes { get; set; }
 
-        public Dictionary<ArchiveType, string> MultipleFileArchiveTypes { get; set; }
+        public Dictionary<ArchiveType, string> MultipleFilesArchiveTypes { get; set; }
     }
 }

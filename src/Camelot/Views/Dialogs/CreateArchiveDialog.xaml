@@ -5,7 +5,7 @@
         xmlns:p="clr-namespace:Camelot.Properties"
         xmlns:dialogs="clr-namespace:Camelot.ViewModels.Implementations.Dialogs;assembly=Camelot.ViewModels"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        Width="500" Height="300"
+        Width="600" Height="300"
         x:Class="Camelot.Views.Dialogs.CreateArchiveDialog"
         Title="{x:Static p:Resources.PackFilesTitle}">
 
@@ -13,10 +13,25 @@
         <dialogs:CreateArchiveDialogViewModel />
     </Design.DataContext>
 
-    <Grid RowDefinitions="Auto,Auto,Auto" Margin="10" HorizontalAlignment="Center">
-        <TextBox Grid.Row="1" Text="{Binding ArchivePath}" />
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" Margin="10" HorizontalAlignment="Center">
+        <StackPanel Orientation="Horizontal">
+            <DrawingPresenter Width="25" Height="25">
+                <DrawingPresenter.Drawing>
+                    <GeometryDrawing Brush="{DynamicResource AlternativeThemeForegroundBrush}"
+                                     Geometry="M509.5 184.6L458.9 32.8C452.4 13.2 434.1 0 413.4 0H272v192h238.7c-.4-2.5-.4-5-1.2-7.4zM240 0H98.6c-20.7 0-39 13.2-45.5 32.8L2.5 184.6c-.8 2.4-.8 4.9-1.2 7.4H240V0zM0 224v240c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V224H0z" />
+                </DrawingPresenter.Drawing>
+            </DrawingPresenter>
+            <TextBlock Classes="boldStyleTextBlock dialogTitleTextBlock" Text="{x:Static p:Resources.CreateArchive}" />
+        </StackPanel>
 
-        <ComboBox Items="{Binding AvailableArchiveTypes}" Margin="0,4,0,0" Width="200"
+        <TextBlock Grid.Row="1" Classes="dialogTextBlock" Margin="0,30,0,10"
+                   Text="{x:Static p:Resources.PackToTheFileWithColon}" />
+
+        <TextBox Grid.Row="2" Width="500"
+                 Text="{Binding ArchivePath}" />
+
+        <ComboBox Grid.Row="3" Width="500" Margin="0,15"
+                  Items="{Binding AvailableArchiveTypes}"
                   SelectedItem="{Binding SelectedArchiveType, Mode=TwoWay}">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
@@ -29,7 +44,7 @@
             </ComboBox.ItemTemplate>
         </ComboBox>
 
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Classes="dialogButton transparentDialogButton" Content="{x:Static p:Resources.Cancel}" Command="{Binding CancelCommand}" />
             <Button Classes="dialogButton" Content="{x:Static p:Resources.Create}" Command="{Binding CreateCommand}" />
         </StackPanel>
