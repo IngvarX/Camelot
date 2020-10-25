@@ -109,8 +109,9 @@ namespace Camelot.ViewModels.Factories.Implementations
 
         public IFileSystemNodeViewModel Create(DirectoryModel directoryModel, bool isParentDirectory)
         {
+            var openingBehavior = GetDirectoryOpeningBehavior(directoryModel);
             var directoryViewModel = new DirectoryViewModel(
-                _directoryOpeningBehavior,
+                openingBehavior,
                 _operationsService,
                 _clipboardOperationsService,
                 _filesOperationsMediator,
@@ -129,5 +130,8 @@ namespace Camelot.ViewModels.Factories.Implementations
 
             return directoryViewModel;
         }
+
+        private IFileSystemNodeOpeningBehavior GetDirectoryOpeningBehavior(NodeModelBase directoryModel) =>
+            directoryModel.FullPath.EndsWith(".app") ? _fileOpeningBehavior : _directoryOpeningBehavior;
     }
 }
