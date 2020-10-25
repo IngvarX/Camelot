@@ -28,9 +28,9 @@ namespace Camelot.Services.Abstractions
 
         string GetAppRootDirectory();
 
-        IEnumerable<string> GetFilesRecursively(string directory);
+        IReadOnlyList<string> GetFilesRecursively(string directory);
 
-        IEnumerable<string> GetDirectoriesRecursively(string directory);
+        IReadOnlyList<string> GetDirectoriesRecursively(string directory);
 
         bool RemoveRecursively(string directory);
 
