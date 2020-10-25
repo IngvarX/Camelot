@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -22,6 +21,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow
         private readonly IPathService _pathService;
         private readonly IArchiveService _archiveService;
         private readonly INodesSelectionService _nodesSelectionService;
+        private readonly ISystemDialogService _systemDialogService;
 
         public ICommand PackCommand { get; }
 
@@ -38,7 +38,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             IDialogService dialogService,
             IPathService pathService,
             IArchiveService archiveService,
-            INodesSelectionService nodesSelectionService)
+            INodesSelectionService nodesSelectionService,
+            ISystemDialogService systemDialogService)
         {
             _terminalService = terminalService;
             _directoryService = directoryService;
@@ -47,6 +48,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             _pathService = pathService;
             _archiveService = archiveService;
             _nodesSelectionService = nodesSelectionService;
+            _systemDialogService = systemDialogService;
 
             PackCommand = ReactiveCommand.CreateFromTask(PackAsync);
             ExtractCommand = ReactiveCommand.Create(ExtractAsync);
@@ -76,10 +78,27 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             await _archiveService.PackAsync(selectedNodes, dialogResult.ArchivePath, dialogResult.ArchiveType);
         }
 
-        private Task ExtractAsync()
+        private async Task ExtractAsync()
         {
-            // TODO: show dialog
-            throw new NotImplementedException();
+            var selectedArchives = _nodesSelectionService
+                .SelectedNodes
+                .Where(_archiveService.CheckIfNodeIsArchive)
+                .ToArray();
+            if (!selectedArchives.Any())
+            {
+                return;
+            }
+
+            var directory = await _systemDialogService.GetDirectoryAsync();
+            if (string.IsNullOrWhiteSpace(directory))
+            {
+                return;
+            }
+
+            foreach (var archive in selectedArchives)
+            {
+                await _archiveService.ExtractAsync(archive, directory);
+            }
         }
 
         private void Search() => _filesOperationsMediator.ToggleSearchPanelVisibility();

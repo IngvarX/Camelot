@@ -28,6 +28,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private readonly IDialogService _dialogService;
         private readonly ITrashCanService _trashCanService;
         private readonly IArchiveService _archiveService;
+        private readonly ISystemDialogService _systemDialogService;
 
         private IReadOnlyList<string> Files => new[] {FullPath};
 
@@ -74,7 +75,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             IFileSystemNodePropertiesBehavior fileSystemNodePropertiesBehavior,
             IDialogService dialogService,
             ITrashCanService trashCanService,
-            IArchiveService archiveService)
+            IArchiveService archiveService,
+            ISystemDialogService systemDialogService)
         {
             _fileSystemNodeOpeningBehavior = fileSystemNodeOpeningBehavior;
             _operationsService = operationsService;
@@ -84,6 +86,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             _dialogService = dialogService;
             _trashCanService = trashCanService;
             _archiveService = archiveService;
+            _systemDialogService = systemDialogService;
 
             OpenCommand = ReactiveCommand.Create(Open);
             PackCommand = ReactiveCommand.CreateFromTask(PackAsync);
@@ -128,7 +131,11 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
                     await _archiveService.ExtractToNewDirectoryAsync(FullPath);
                     break;
                 case ExtractCommandType.SelectDirectory:
-                    // TODO:
+                    var directory = await _systemDialogService.GetDirectoryAsync();
+                    if (!string.IsNullOrWhiteSpace(directory))
+                    {
+                        await _archiveService.ExtractAsync(FullPath, directory);
+                    }
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(commandType), commandType, null);

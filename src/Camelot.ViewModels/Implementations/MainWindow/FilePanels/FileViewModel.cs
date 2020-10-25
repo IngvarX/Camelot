@@ -37,7 +37,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             IFileSystemNodePropertiesBehavior fileSystemNodePropertiesBehavior,
             IDialogService dialogService,
             ITrashCanService trashCanService,
-            IArchiveService archiveService)
+            IArchiveService archiveService,
+            ISystemDialogService systemDialogService)
             : base(
                 fileSystemNodeOpeningBehavior,
                 operationsService,
@@ -46,7 +47,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
                 fileSystemNodePropertiesBehavior,
                 dialogService,
                 trashCanService,
-                archiveService)
+                archiveService,
+                systemDialogService)
         {
             _fileSizeFormatter = fileSizeFormatter;
         }

@@ -273,6 +273,9 @@ namespace Camelot.DependencyInjection
             services.RegisterLazySingleton<IDialogService>(() => new DialogService(
                 resolver.GetRequiredService<IMainWindowProvider>()
             ));
+            services.RegisterLazySingleton<ISystemDialogService>(() => new SystemDialogService(
+                resolver.GetRequiredService<IMainWindowProvider>()
+            ));
             services.RegisterLazySingleton<IResourceProvider>(() => new ResourceProvider());
             services.RegisterLazySingleton<ILanguageManager>(() => new LanguageManager());
             services.RegisterLazySingleton<IClipboardOperationsService>(() => new ClipboardOperationsService(
@@ -447,7 +450,8 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<ITrashCanService>(),
                 resolver.GetRequiredService<IFileService>(),
                 resolver.GetRequiredService<IDirectoryService>(),
-                resolver.GetRequiredService<IArchiveService>()
+                resolver.GetRequiredService<IArchiveService>(),
+                resolver.GetRequiredService<ISystemDialogService>()
             ));
             services.Register(() => new AboutDialogViewModel(
                 resolver.GetRequiredService<IApplicationVersionProvider>(),
@@ -539,7 +543,8 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IDialogService>(),
                 resolver.GetRequiredService<IPathService>(),
                 resolver.GetRequiredService<IArchiveService>(),
-                resolver.GetRequiredService<INodesSelectionService>()
+                resolver.GetRequiredService<INodesSelectionService>(),
+                resolver.GetRequiredService<ISystemDialogService>()
             ));
             services.RegisterLazySingleton<IFavouriteDirectoryViewModelFactory>(() => new FavouriteDirectoryViewModelFactory(
                 resolver.GetRequiredService<IFilesOperationsMediator>(),
