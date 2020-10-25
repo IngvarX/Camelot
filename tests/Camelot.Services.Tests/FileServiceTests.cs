@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using Camelot.Extensions;
+using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Specifications;
 using Camelot.Services.Environment.Interfaces;
@@ -17,6 +18,7 @@ namespace Camelot.Services.Tests
         private const string DirectoryName = "Dir";
         private const string FileName = "File";
         private const string NewFileName = "NewFile";
+        private const string NewFilePath = "NewFilePath";
 
         private readonly AutoMocker _autoMocker;
         private readonly string[] _files;
@@ -146,11 +148,12 @@ namespace Camelot.Services.Tests
             await fileService.WriteTextAsync(FileName, text);
 
             _autoMocker
-                .Verify<IEnvironmentFileService>(m => m.WriteTextAsync(FileName, text));
+                .Verify<IEnvironmentFileService>(m => m.WriteTextAsync(FileName, text),
+                    Times.Once);
         }
 
         [Fact]
-        public async Task TestWriteBites()
+        public async Task TestWriteBytes()
         {
             var bytes = new byte[] {1, 2, 5};
             _autoMocker
@@ -160,7 +163,87 @@ namespace Camelot.Services.Tests
             await fileService.WriteBytesAsync(FileName, bytes);
 
             _autoMocker
-                .Verify<IEnvironmentFileService>(m => m.WriteBytesAsync(FileName, bytes));
+                .Verify<IEnvironmentFileService>(m => m.WriteBytesAsync(FileName, bytes),
+                    Times.Once);
+        }
+
+        [Fact]
+        public void TestOpenRead()
+        {
+            _autoMocker
+                .Setup<IEnvironmentFileService, Stream>(m => m.OpenRead(FileName))
+                .Verifiable();
+            var fileService = _autoMocker.CreateInstance<FileService>();
+            fileService.OpenRead(FileName);
+
+            _autoMocker
+                .Verify<IEnvironmentFileService>(m => m.OpenRead(FileName),
+                    Times.Once);
+        }
+
+        [Fact]
+        public void TestRename()
+        {
+            _autoMocker
+                .Setup<IEnvironmentFileService>(m => m.Move(FileName, NewFilePath))
+                .Verifiable();
+            _autoMocker
+                .Setup<IPathService, string>(m => m.GetParentDirectory(FileName))
+                .Returns(DirectoryName);
+            _autoMocker
+                .Setup<IPathService, string>(m => m.Combine(DirectoryName, NewFileName))
+                .Returns(NewFilePath);
+            _autoMocker.MockLogError();
+
+            var fileService = _autoMocker.CreateInstance<FileService>();
+            var result = fileService.Rename(FileName, NewFileName);
+
+            Assert.True(result);
+
+            _autoMocker
+                .Verify<IEnvironmentFileService>(m => m.Move(FileName, NewFilePath),
+                    Times.Once);
+            _autoMocker.VerifyLogError(Times.Never());
+        }
+
+        [Fact]
+        public void TestRenameFailed()
+        {
+            _autoMocker
+                .Setup<IEnvironmentFileService>(m => m.Move(FileName, NewFilePath))
+                .Throws<InvalidOperationException>()
+                .Verifiable();
+            _autoMocker
+                .Setup<IPathService, string>(m => m.GetParentDirectory(FileName))
+                .Returns(DirectoryName);
+            _autoMocker
+                .Setup<IPathService, string>(m => m.Combine(DirectoryName, NewFileName))
+                .Returns(NewFilePath);
+            _autoMocker.MockLogError();
+
+            var fileService = _autoMocker.CreateInstance<FileService>();
+            var result = fileService.Rename(FileName, NewFileName);
+
+            Assert.False(result);
+
+            _autoMocker
+                .Verify<IEnvironmentFileService>(m => m.Move(FileName, NewFilePath),
+                    Times.Once);
+            _autoMocker.VerifyLogError(Times.Once());
+        }
+
+        [Fact]
+        public void TestOpenWrite()
+        {
+            _autoMocker
+                .Setup<IEnvironmentFileService>(m => m.OpenWrite(FileName))
+                .Verifiable();
+            var fileService = _autoMocker.CreateInstance<FileService>();
+            fileService.OpenWrite(FileName);
+
+            _autoMocker
+                .Verify<IEnvironmentFileService>(m => m.OpenWrite(FileName),
+                    Times.Once);
         }
 
         public void Dispose()
