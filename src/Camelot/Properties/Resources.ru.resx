@@ -426,4 +426,13 @@
   <data name="CreateArchive" xml:space="preserve">
     <value>Создать архив</value>
   </data>
+  <data name="FailedToExtractArchiveTo" xml:space="preserve">
+    <value>Не удалось распаковать архив {0} в {1}</value>
+  </data>
+  <data name="FailedToPackTo" xml:space="preserve">
+    <value>Не удалось архивировать {0} в {1}</value>
+  </data>
+  <data name="FailedToPackFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Не удалось архивировать {0} файлов и {1} каталогов в {2}</value>
+  </data>
 </root>

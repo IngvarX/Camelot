@@ -674,5 +674,23 @@ namespace Camelot.Properties {
                 return ResourceManager.GetString("CreateArchive", resourceCulture);
             }
         }
+        
+        public static string FailedToExtractArchiveTo {
+            get {
+                return ResourceManager.GetString("FailedToExtractArchiveTo", resourceCulture);
+            }
+        }
+        
+        public static string FailedToPackTo {
+            get {
+                return ResourceManager.GetString("FailedToPackTo", resourceCulture);
+            }
+        }
+        
+        public static string FailedToPackFilesAndDirectoriesTo {
+            get {
+                return ResourceManager.GetString("FailedToPackFilesAndDirectoriesTo", resourceCulture);
+            }
+        }
     }
 }
