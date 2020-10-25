@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models.Enums;
@@ -130,8 +131,10 @@ namespace Camelot.Services.Archives.Tests
                 .Setup<IPathService, string>(m => m.GetRelativePath(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns<string, string>(Path.GetRelativePath);
             _autoMocker
-                .Setup<IDirectoryService, IEnumerable<string>>(m => m.GetFilesRecursively(It.IsAny<string>()))
-                .Returns<string>(d => Directory.EnumerateFiles(d, "*.*", SearchOption.AllDirectories));
+                .Setup<IDirectoryService, IReadOnlyList<string>>(m => m.GetFilesRecursively(It.IsAny<string>()))
+                .Returns<string>(d => Directory
+                    .EnumerateFiles(d, "*.*", SearchOption.AllDirectories)
+                    .ToArray());
         }
     }
 }
