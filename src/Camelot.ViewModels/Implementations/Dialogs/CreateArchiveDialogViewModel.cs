@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Camelot.Services.Abstractions;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Implementations.Dialogs.Archives;
 using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
 using Camelot.ViewModels.Implementations.Dialogs.Results;
+using Camelot.ViewModels.Services.Interfaces;
 using DynamicData;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -20,6 +22,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         private readonly IDirectoryService _directoryService;
         private readonly IFileService _fileService;
         private readonly IArchiveTypeViewModelFactory _archiveTypeViewModelFactory;
+        private readonly ISystemDialogService _systemDialogService;
         private readonly ObservableCollection<ArchiveTypeViewModel> _availableArchiveTypes;
 
         [Reactive]
@@ -30,6 +33,8 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         [Reactive]
         public ArchiveTypeViewModel SelectedArchiveType { get; set; }
 
+        public ICommand SelectPathCommand { get; }
+
         public ICommand CreateCommand { get; }
 
         public ICommand CancelCommand { get; }
@@ -37,11 +42,13 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         public CreateArchiveDialogViewModel(
             IDirectoryService directoryService,
             IFileService fileService,
-            IArchiveTypeViewModelFactory archiveTypeViewModelFactory)
+            IArchiveTypeViewModelFactory archiveTypeViewModelFactory,
+            ISystemDialogService systemDialogService)
         {
             _directoryService = directoryService;
             _fileService = fileService;
             _archiveTypeViewModelFactory = archiveTypeViewModelFactory;
+            _systemDialogService = systemDialogService;
             _availableArchiveTypes = new ObservableCollection<ArchiveTypeViewModel>();
 
             this.WhenAnyValue(x => x.SelectedArchiveType)
@@ -51,6 +58,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             var canCreate = this.WhenAnyValue(x => x.ArchivePath,
                 CheckIfPathIsValid);
 
+            SelectPathCommand = ReactiveCommand.CreateFromTask(SelectPathAsync);
             CreateCommand = ReactiveCommand.Create(CreateArchive, canCreate);
             CancelCommand = ReactiveCommand.Create(Close);
 
@@ -66,6 +74,15 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             SelectedArchiveType = archiveTypeViewModels.First();
 
             ArchivePath = $"{parameter.DefaultArchivePath}.{SelectedArchiveType.Name}";
+        }
+
+        private async Task SelectPathAsync()
+        {
+            var path = await _systemDialogService.GetFileAsync(ArchivePath);
+            if (!string.IsNullOrWhiteSpace(path))
+            {
+                ArchivePath = path;
+            }
         }
 
         private void CreateArchive() =>

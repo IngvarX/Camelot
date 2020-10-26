@@ -21,5 +21,13 @@ namespace Camelot.Services.Implementations
 
             return await dialog.ShowAsync(window);
         }
+
+        public async Task<string> GetFileAsync(string initialFile = null)
+        {
+            var dialog = new SaveFileDialog {InitialFileName = initialFile};
+            var window = _mainWindowProvider.GetMainWindow();
+
+            return await dialog.ShowAsync(window);
+        }
     }
 }

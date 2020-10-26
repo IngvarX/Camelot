@@ -461,7 +461,8 @@ namespace Camelot.DependencyInjection
             services.Register(() => new CreateArchiveDialogViewModel(
                 resolver.GetRequiredService<IDirectoryService>(),
                 resolver.GetRequiredService<IFileService>(),
-                resolver.GetRequiredService<IArchiveTypeViewModelFactory>()
+                resolver.GetRequiredService<IArchiveTypeViewModelFactory>(),
+                resolver.GetRequiredService<ISystemDialogService>()
             ));
             services.RegisterLazySingleton<IBitmapFactory>(() => new BitmapFactory());
             services.Register(() => new MainNodeInfoTabViewModel(

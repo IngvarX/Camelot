@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Implementations.Dialogs;
 using Camelot.ViewModels.Implementations.Dialogs.Archives;
 using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
+using Camelot.ViewModels.Services.Interfaces;
 using Moq;
 using Moq.AutoMock;
 using Xunit;
@@ -15,8 +17,9 @@ namespace Camelot.ViewModels.Tests.Dialogs
     public class CreateArchiveDialogViewModelTests
     {
         private const string ArchivePath = "Archive";
-        private const string NewArchivePath = "Archive";
+        private const string NewArchivePath = "NewArchive";
         private const string ArchiveTypeName = "Name";
+        private const string ArchiveFullPath = "Archive.Name";
         private const string ArchiveZip = "zip";
         private const string ArchiveTar = "tar";
 
@@ -43,6 +46,49 @@ namespace Camelot.ViewModels.Tests.Dialogs
             dialog.ArchivePath = archivePath;
 
             Assert.False(dialog.CreateCommand.CanExecute(null));
+        }
+
+        [Fact]
+        public void TestSelectPathCommand()
+        {
+            SetupForType();
+
+            _autoMocker
+                .Setup<ISystemDialogService, Task<string>>(m => m.GetFileAsync(ArchiveFullPath))
+                .ReturnsAsync(NewArchivePath);
+
+            var dialog = _autoMocker.CreateInstance<CreateArchiveDialogViewModel>();
+            dialog.Activate(new CreateArchiveNavigationParameter(ArchivePath, true));
+
+            Assert.Equal(ArchiveFullPath, dialog.ArchivePath);
+
+            Assert.True(dialog.SelectPathCommand.CanExecute(null));
+            dialog.SelectPathCommand.Execute(null);
+
+            Assert.Equal(NewArchivePath, dialog.ArchivePath);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        public void TestSelectPathCommandInvalidPath(string archivePath)
+        {
+            SetupForType();
+
+            _autoMocker
+                .Setup<ISystemDialogService, Task<string>>(m => m.GetFileAsync(ArchiveFullPath))
+                .ReturnsAsync(archivePath);
+
+            var dialog = _autoMocker.CreateInstance<CreateArchiveDialogViewModel>();
+            dialog.Activate(new CreateArchiveNavigationParameter(ArchivePath, true));
+
+            Assert.Equal(ArchiveFullPath, dialog.ArchivePath);
+
+            Assert.True(dialog.SelectPathCommand.CanExecute(null));
+            dialog.SelectPathCommand.Execute(null);
+
+            Assert.Equal(ArchiveFullPath, dialog.ArchivePath);
         }
 
         [Theory]
