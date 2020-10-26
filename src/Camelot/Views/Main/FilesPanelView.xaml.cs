@@ -14,7 +14,9 @@ namespace Camelot.Views.Main
 {
     public class FilesPanelView : UserControl
     {
-        private FilesPanelViewModel ViewModel => (FilesPanelViewModel) DataContext;
+        private DataGrid FilesDataGrid => this.FindControl<DataGrid>("FilesDataGrid");
+
+        private FilesPanelViewModel ViewModel => (FilesPanelViewModel)DataContext;
 
         public FilesPanelView()
         {
@@ -26,10 +28,15 @@ namespace Camelot.Views.Main
 
         private void SubscribeToEvents() => DataContextChanged += OnDataContextChanged;
 
-        private void OnDataContextChanged(object sender, EventArgs e) =>
+        private void OnDataContextChanged(object sender, EventArgs e)
+        {
             ViewModel.DeactivatedEvent += ViewModelOnDeactivatedEvent;
+            ViewModel.ActivatedEvent += ViewModelOnActivatedEvent;
+        }
 
         private void ViewModelOnDeactivatedEvent(object sender, EventArgs e) => ClearSelection();
+
+        private void ViewModelOnActivatedEvent(object sender, EventArgs e) => FilesDataGrid.Focus();
 
         private void OnDataGridSelectionChanged(object sender, SelectionChangedEventArgs args)
         {
@@ -132,9 +139,7 @@ namespace Camelot.Views.Main
 
         private void ClearSelection()
         {
-            var dataGrid = this.FindControl<DataGrid>("FilesDataGrid");
-
-            dataGrid.SelectedItems.Clear();
+            FilesDataGrid.SelectedItems.Clear();
         }
     }
 }
