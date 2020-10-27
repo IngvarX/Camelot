@@ -69,7 +69,7 @@ namespace Camelot.Services.Tests
             var driveService = new DriveService(envDriveServiceMock.Object, unmountedDriveServiceMock.Object,
                 configuration);
 
-            await Task.Delay(100);
+            await Task.Delay(300);
 
             Assert.NotNull(driveService.MountedDrives);
             Assert.NotNull(driveService.UnmountedDrives);
@@ -93,7 +93,7 @@ namespace Camelot.Services.Tests
                 })
                 .Verifiable();
 
-            await Task.Delay(50);
+            await Task.Delay(300);
 
             Assert.True(isCallbackCalled);
         }
