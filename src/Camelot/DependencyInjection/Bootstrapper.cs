@@ -80,6 +80,7 @@ namespace Camelot.DependencyInjection
             RegisterServices(services, resolver);
             RegisterPlatformSpecificServices(services, resolver);
             RegisterViewModels(services, resolver);
+            RegisterPlatformSpecificViewModels(services, resolver);
         }
 
         private static void RegisterLogging(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
@@ -401,6 +402,42 @@ namespace Camelot.DependencyInjection
             services.RegisterLazySingleton<ITerminalService>(() => new WindowsTerminalService(
                 resolver.GetRequiredService<IProcessService>(),
                 resolver.GetRequiredService<IUnitOfWorkFactory>()
+            ));
+        }
+
+        private static void RegisterPlatformSpecificViewModels(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
+        {
+            var platformService = resolver.GetRequiredService<IPlatformService>();
+            var platform = platformService.GetPlatform();
+
+            if (platform == Platform.MacOs)
+            {
+                RegisterMacViewModels(services, resolver);
+            }
+        }
+
+        private static void RegisterMacViewModels(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
+        {
+            services.RegisterLazySingleton(() => new MacDirectoryOpeningBehavior(
+                resolver.GetRequiredService<FileOpeningBehavior>(),
+                resolver.GetRequiredService<DirectoryOpeningBehavior>()
+            ));
+            services.RegisterLazySingleton<IFileSystemNodeViewModelFactory>(() => new FileSystemNodeViewModelFactory(
+                resolver.GetRequiredService<FileOpeningBehavior>(),
+                resolver.GetRequiredService<MacDirectoryOpeningBehavior>(),
+                resolver.GetRequiredService<IFileSizeFormatter>(),
+                resolver.GetRequiredService<IPathService>(),
+                resolver.GetRequiredService<IOperationsService>(),
+                resolver.GetRequiredService<IClipboardOperationsService>(),
+                resolver.GetRequiredService<IFilesOperationsMediator>(),
+                resolver.GetRequiredService<FilePropertiesBehavior>(),
+                resolver.GetRequiredService<DirectoryPropertiesBehavior>(),
+                resolver.GetRequiredService<IDialogService>(),
+                resolver.GetRequiredService<ITrashCanService>(),
+                resolver.GetRequiredService<IFileService>(),
+                resolver.GetRequiredService<IDirectoryService>(),
+                resolver.GetRequiredService<IArchiveService>(),
+                resolver.GetRequiredService<ISystemDialogService>()
             ));
         }
 

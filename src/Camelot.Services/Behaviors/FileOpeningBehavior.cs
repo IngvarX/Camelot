@@ -12,6 +12,6 @@ namespace Camelot.Services.Behaviors
             _resourceOpeningService = resourceOpeningService;
         }
 
-        public void Open(string file) => _resourceOpeningService.Open(file);
+        public void Open(string node) => _resourceOpeningService.Open(node);
     }
 }

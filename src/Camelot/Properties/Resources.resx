@@ -124,7 +124,7 @@
     <value>_About</value>
   </data>
   <data name="AboutPage" xml:space="preserve">
-    <value>Camelot is dual-panel file manager written in C#</value>
+    <value>Camelot is dual-panel node manager written in C#</value>
   </data>
   <data name="Apply" xml:space="preserve">
     <value>Apply</value>
@@ -181,7 +181,7 @@
     <value>Create</value>
   </data>
   <data name="CreateDirectoryTitle" xml:space="preserve">
-    <value>Create directory</value>
+    <value>Create node</value>
   </data>
   <data name="CreationDateWithColon" xml:space="preserve">
     <value>Creation date:</value>
@@ -208,7 +208,7 @@
     <value>&lt;DIR&gt;</value>
   </data>
   <data name="EnterDirectoryNameWithColon" xml:space="preserve">
-    <value>Enter directory name:</value>
+    <value>Enter node name:</value>
   </data>
   <data name="ExitHeader" xml:space="preserve">
     <value>_Exit</value>
@@ -295,7 +295,7 @@
     <value>Open</value>
   </data>
   <data name="OriginalFile" xml:space="preserve">
-    <value>Original file</value>
+    <value>Original node</value>
   </data>
   <data name="OverwriteOptionsTitle" xml:space="preserve">
     <value>Overwrite options</value>
@@ -325,10 +325,10 @@
     <value>Replace</value>
   </data>
   <data name="ReplaceFile" xml:space="preserve">
-    <value>Replace file</value>
+    <value>Replace node</value>
   </data>
   <data name="ReplaceFileDestinationDirectory" xml:space="preserve">
-    <value>Another file with the same name already exists in "{0}" Do you want to replace it?</value>
+    <value>Another node with the same name already exists in "{0}" Do you want to replace it?</value>
   </data>
   <data name="ReplaceIfOlder" xml:space="preserve">
     <value>Replace if older</value>
@@ -382,10 +382,10 @@
     <value>File</value>
   </data>
   <data name="CreateFileTitle" xml:space="preserve">
-    <value>Create file</value>
+    <value>Create node</value>
   </data>
   <data name="EnterFileNameWithColon" xml:space="preserve">
-    <value>Enter file name:</value>
+    <value>Enter node name:</value>
   </data>
   <data name="ClickToMount" xml:space="preserve">
     <value>Click to mount</value>
@@ -403,13 +403,13 @@
     <value>Packing {0} files and {1} directories to (2)</value>
   </data>
   <data name="PackingFileTo" xml:space="preserve">
-    <value>Packing file {0} to {1}</value>
+    <value>Packing node {0} to {1}</value>
   </data>
   <data name="ExtractedArchiveTo" xml:space="preserve">
     <value>Extracted archive {0} to {1}</value>
   </data>
   <data name="PackedFileTo" xml:space="preserve">
-    <value>Packed file {0} to {1}</value>
+    <value>Packed node {0} to {1}</value>
   </data>
   <data name="PackedFilesAndDirectoriesTo" xml:space="preserve">
     <value>Packed {0} files and {1} directories to {2}</value>
@@ -418,16 +418,16 @@
     <value>Extract archive here</value>
   </data>
   <data name="ExtractArchiveToNewDirectory" xml:space="preserve">
-    <value>Extract archive to new directory</value>
+    <value>Extract archive to new node</value>
   </data>
   <data name="SelectDirectoryForExtraction" xml:space="preserve">
-    <value>Select directory for extraction</value>
+    <value>Select node for extraction</value>
   </data>
   <data name="PackFilesTitle" xml:space="preserve">
     <value>Pack files</value>
   </data>
   <data name="PackToTheFileWithColon" xml:space="preserve">
-    <value>Pack to the file:</value>
+    <value>Pack to the node:</value>
   </data>
   <data name="CreateArchive" xml:space="preserve">
     <value>Create archive</value>
