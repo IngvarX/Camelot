@@ -20,11 +20,7 @@ namespace Camelot.Services.Archives.Tests
         [InlineData(ArchiveType.TarGz, typeof(ArchiveWriter))]
         [InlineData(ArchiveType.TarBz2, typeof(ArchiveWriter))]
         [InlineData(ArchiveType.Gz, typeof(ArchiveWriter))]
-        [InlineData(ArchiveType.Bz2, typeof(ArchiveWriter))]
-        [InlineData(ArchiveType.SevenZip, typeof(ArchiveWriter))]
-        [InlineData(ArchiveType.Xz, typeof(ArchiveWriter))]
         [InlineData(ArchiveType.TarXz, typeof(ArchiveWriter))]
-        [InlineData(ArchiveType.Lz, typeof(ArchiveWriter))]
         [InlineData(ArchiveType.TarLz, typeof(ArchiveWriter))]
         public void TestCreateWriter(ArchiveType archiveType, Type expectedType)
         {
