@@ -52,6 +52,7 @@ namespace Camelot.ViewModels.Tests.OperationsStates
             Assert.Equal(filesCount, viewModel.SourceFilesCount);
             Assert.Equal(dirsCount, viewModel.SourceDirectoriesCount);
             Assert.Equal(isProcessingSingleFile, viewModel.IsProcessingSingleFile);
+            Assert.Equal(operationType, viewModel.OperationType);
         }
 
         [Fact]

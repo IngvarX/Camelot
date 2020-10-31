@@ -157,6 +157,11 @@ namespace Camelot.DependencyInjection
             var archiveTypeViewModelFactoryConfiguration = new ArchiveTypeViewModelFactoryConfiguration();
             configuration.GetSection("ArchiveViewModelFactory").Bind(archiveTypeViewModelFactoryConfiguration);
             services.RegisterConstant(archiveTypeViewModelFactoryConfiguration);
+
+
+            var operationsStatesConfiguration = new OperationsStatesConfiguration();
+            configuration.GetSection("OperationsStates").Bind(operationsStatesConfiguration);
+            services.RegisterConstant(operationsStatesConfiguration);
         }
 
         private static void RegisterEnvironmentServices(IMutableDependencyResolver services)
@@ -537,7 +542,8 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IOperationsStateService>(),
                 resolver.GetRequiredService<IOperationStateViewModelFactory>(),
                 resolver.GetRequiredService<IApplicationDispatcher>(),
-                resolver.GetRequiredService<IDialogService>()
+                resolver.GetRequiredService<IDialogService>(),
+                resolver.GetRequiredService<OperationsStatesConfiguration>()
             ));
             services.Register(() => new RemoveNodesConfirmationDialogViewModel(
                 resolver.GetRequiredService<IPathService>()

@@ -6,13 +6,13 @@ using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Models.EventArgs;
 using Camelot.Services.Abstractions.Models.Operations;
 using Camelot.Services.Abstractions.Operations;
-using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Implementations.Dialogs;
 using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
 using Camelot.ViewModels.Implementations.Dialogs.Results;
 using Camelot.ViewModels.Implementations.MainWindow.OperationsStates;
 using Camelot.ViewModels.Services.Interfaces;
 using Moq;
+using Moq.AutoMock;
 using Xunit;
 
 namespace Camelot.ViewModels.Tests.OperationsStates
@@ -23,6 +23,13 @@ namespace Camelot.ViewModels.Tests.OperationsStates
         private const string Source = "Source";
         private const string Destination = "Destination";
 
+        private readonly AutoMocker _autoMocker;
+
+        public OperationsStatesListViewModelTests()
+        {
+            _autoMocker = new AutoMocker();
+        }
+
         [Theory]
         [InlineData(false, 1)]
         [InlineData(true, 2)]
@@ -32,22 +39,18 @@ namespace Camelot.ViewModels.Tests.OperationsStates
 
             var options = OperationContinuationOptions.CreateContinuationOptions(FilePath,
                 true, OperationContinuationMode.Skip);
-            var operationsStateServiceMock = new Mock<IOperationsStateService>();
-            var operationStateViewModelFactoryMock = new Mock<IOperationStateViewModelFactory>();
-            var applicationDispatcherMock = new Mock<IApplicationDispatcher>();
-            applicationDispatcherMock
-                .Setup(m => m.Dispatch(It.IsAny<Action>()))
+            _autoMocker
+                .Setup<IApplicationDispatcher>(m => m.Dispatch(It.IsAny<Action>()))
                 .Callback<Action>(action => action());
-            applicationDispatcherMock
-                .Setup(m => m.DispatchAsync(It.IsAny<Func<Task>>()))
+            _autoMocker
+                .Setup<IApplicationDispatcher>(m => m.DispatchAsync(It.IsAny<Func<Task>>()))
                 .Callback<Func<Task>>(async func =>
                 {
                     await func();
                     taskCompletionSource.SetResult(true);
                 });
-            var dialogServiceMock = new Mock<IDialogService>();
-            dialogServiceMock
-                .Setup(m => m.ShowDialogAsync<OverwriteOptionsDialogResult, OverwriteOptionsNavigationParameter>(
+            _autoMocker
+                .Setup<IDialogService, Task<OverwriteOptionsDialogResult>>(m => m.ShowDialogAsync<OverwriteOptionsDialogResult, OverwriteOptionsNavigationParameter>(
                     nameof(OverwriteOptionsDialogViewModel),
                     It.IsAny<OverwriteOptionsNavigationParameter>()))
                 .Callback<string, OverwriteOptionsNavigationParameter>((_, p) =>
@@ -56,13 +59,9 @@ namespace Camelot.ViewModels.Tests.OperationsStates
                     Assert.Equal(Source, p.SourceFilePath);
                     Assert.Equal(Destination, p.DestinationFilePath);
                 })
-                .Returns(Task.FromResult(new OverwriteOptionsDialogResult(options)));
+                .ReturnsAsync(new OverwriteOptionsDialogResult(options));
 
-            var viewModel = new OperationsStatesListViewModel(
-                operationsStateServiceMock.Object,
-                operationStateViewModelFactoryMock.Object,
-                applicationDispatcherMock.Object,
-                dialogServiceMock.Object);
+            var viewModel = _autoMocker.CreateInstance<OperationsStatesListViewModel>();
 
             var state = OperationState.InProgress;
             var operationMock = new Mock<IOperation>();
@@ -90,7 +89,9 @@ namespace Camelot.ViewModels.Tests.OperationsStates
                 .Returns(operationInfo);
 
             var operationStartedEventArgs = new OperationStartedEventArgs(operationMock.Object);
-            operationsStateServiceMock.Raise(m => m.OperationStarted += null, operationStartedEventArgs);
+            _autoMocker
+                .GetMock<IOperationsStateService>()
+                .Raise(m => m.OperationStarted += null, operationStartedEventArgs);
 
             Assert.True(viewModel.AreAnyOperationsAvailable);
 
