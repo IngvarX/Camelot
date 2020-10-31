@@ -83,8 +83,6 @@ namespace Camelot.Services.Archives.Tests
         [InlineData("archive.tar.gz", ArchiveType.TarGz)]
         [InlineData("archive.tar.bz2", ArchiveType.TarBz2)]
         [InlineData("archive.tar.lz", ArchiveType.TarLz)]
-        // [InlineData("archive.lz", ArchiveType.Lz)]
-        // [InlineData("archive.bz2", ArchiveType.Bz2)]
         [InlineData("archive.gz", ArchiveType.Gz)]
         public async Task TestArchiveCreateExtractSingleFile(string outputFileName, ArchiveType archiveType)
         {
