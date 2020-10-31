@@ -114,9 +114,9 @@ namespace Camelot.Services
             }
         }
 
-        public FileStream OpenRead(string filePath) => _environmentFileService.OpenRead(filePath);
+        public Stream OpenRead(string filePath) => _environmentFileService.OpenRead(filePath);
 
-        public FileStream OpenWrite(string filePath) => _environmentFileService.OpenWrite(filePath);
+        public Stream OpenWrite(string filePath) => _environmentFileService.OpenWrite(filePath);
 
         private FileModel CreateFrom(string file)
         {
