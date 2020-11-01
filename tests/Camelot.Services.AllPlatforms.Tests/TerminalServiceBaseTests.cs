@@ -1,6 +1,7 @@
 using Camelot.DataAccess.Models;
 using Camelot.DataAccess.Repositories;
 using Camelot.DataAccess.UnitOfWork;
+using Camelot.Services.Abstractions.Models.State;
 using Camelot.Services.Environment.Interfaces;
 using Moq;
 using Xunit;
@@ -15,7 +16,7 @@ namespace Camelot.Services.AllPlatforms.Tests
         [Fact]
         public void TestSave()
         {
-            var terminalSettings = new TerminalSettings
+            var terminalSettings = new TerminalSettingsStateModel
             {
                 Command = Command,
                 Arguments = Arguments

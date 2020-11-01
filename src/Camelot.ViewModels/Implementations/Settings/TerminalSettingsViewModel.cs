@@ -1,5 +1,5 @@
-using Camelot.DataAccess.Models;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Models.State;
 using Camelot.ViewModels.Interfaces.Settings;
 using ReactiveUI.Fody.Helpers;
 
@@ -45,7 +45,7 @@ namespace Camelot.ViewModels.Implementations.Settings
 
         public void SaveChanges()
         {
-            var settings = new TerminalSettings
+            var settings = new TerminalSettingsStateModel
             {
                 Command = TerminalCommandText,
                 Arguments = TerminalCommandArguments

@@ -17,12 +17,13 @@ namespace Camelot.Services
             _unitOfWorkFactory = unitOfWorkFactory;
         }
 
-        public Language GetSavedLanguage()
+        public LanguageModel GetSavedLanguage()
         {
             using var uow = _unitOfWorkFactory.Create();
             var repository = uow.GetRepository<Language>();
+            var dbModel = repository.GetById(LanguageSettingsId);
 
-            return repository.GetById(LanguageSettingsId);
+            return CreateFrom(dbModel);
         }
 
         public void SaveLanguage(LanguageModel languageModel)
@@ -45,13 +46,23 @@ namespace Camelot.Services
             using var uow = _unitOfWorkFactory.Create();
             var repository = uow.GetRepository<Language>();
 
-            var language = new Language
-            {
-                Code = languageModel.Code,
-                Name = languageModel.Name
-            };
+            var language = CreateFrom(languageModel);
 
             repository.Upsert(LanguageSettingsId, language);
         }
+
+        private static LanguageModel CreateFrom(Language model) =>
+            new LanguageModel
+            {
+                Code = model.Code,
+                Name = model.Name
+            };
+
+        private static Language CreateFrom(LanguageModel model) =>
+            new Language
+            {
+                Code = model.Code,
+                Name = model.Name
+            };
     }
 }

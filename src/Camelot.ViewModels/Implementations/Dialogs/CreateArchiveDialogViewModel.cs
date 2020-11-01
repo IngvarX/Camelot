@@ -6,6 +6,8 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Archive;
+using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Implementations.Dialogs.Archives;
 using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
@@ -23,6 +25,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         private readonly IFileService _fileService;
         private readonly IArchiveTypeViewModelFactory _archiveTypeViewModelFactory;
         private readonly ISystemDialogService _systemDialogService;
+        private readonly ICreateArchiveStateService _createArchiveStateService;
         private readonly ObservableCollection<ArchiveTypeViewModel> _availableArchiveTypes;
 
         [Reactive]
@@ -43,12 +46,14 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             IDirectoryService directoryService,
             IFileService fileService,
             IArchiveTypeViewModelFactory archiveTypeViewModelFactory,
-            ISystemDialogService systemDialogService)
+            ISystemDialogService systemDialogService,
+            ICreateArchiveStateService createArchiveStateService)
         {
             _directoryService = directoryService;
             _fileService = fileService;
             _archiveTypeViewModelFactory = archiveTypeViewModelFactory;
             _systemDialogService = systemDialogService;
+            _createArchiveStateService = createArchiveStateService;
             _availableArchiveTypes = new ObservableCollection<ArchiveTypeViewModel>();
 
             this.WhenAnyValue(x => x.SelectedArchiveType)
@@ -71,7 +76,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
                 ? _archiveTypeViewModelFactory.CreateForSingleFile()
                 : _archiveTypeViewModelFactory.CreateForMultipleFiles();
             _availableArchiveTypes.AddRange(archiveTypeViewModels);
-            SelectedArchiveType = archiveTypeViewModels.First();
+            SelectedArchiveType = GetSelectedArchiveType();
 
             ArchivePath = $"{parameter.DefaultArchivePath}.{SelectedArchiveType.Name}";
         }
@@ -99,6 +104,15 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             var archivePathWithoutExtension = ArchivePath.Substring(0, ArchivePath.Length - currentExtensionLength);
 
             return $"{archivePathWithoutExtension}{current.Name}";
+        }
+
+        private ArchiveTypeViewModel GetSelectedArchiveType()
+        {
+            var stateModel = _createArchiveStateService.GetState();
+            var archiveType = (ArchiveType) stateModel.ArchiveType;
+
+            return _availableArchiveTypes.SingleOrDefault(vm => vm.ArchiveType == archiveType) ??
+                   _availableArchiveTypes.First();
         }
     }
 }

@@ -1,11 +1,11 @@
-using Camelot.DataAccess.Models;
+using Camelot.Services.Abstractions.Models.State;
 
 namespace Camelot.Services.Abstractions
 {
     public interface IFilesPanelStateService
     {
-        PanelModel GetPanelState();
+        PanelStateModel GetPanelState();
 
-        void SavePanelState(PanelModel model);
+        void SavePanelState(PanelStateModel model);
     }
 }
