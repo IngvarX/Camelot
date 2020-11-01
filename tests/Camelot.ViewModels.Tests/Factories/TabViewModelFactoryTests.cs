@@ -13,7 +13,7 @@ namespace Camelot.ViewModels.Tests.Factories
         public void TestDirectoryName()
         {
             var directoryName = Directory.GetCurrentDirectory();
-            var tabModel = new TabStateModel {Directory = directoryName};
+            var tabModel = new TabStateModel {Directory = directoryName, SortingSettings = new SortingSettingsStateModel()};
             var pathServiceMock = new Mock<IPathService>();
             pathServiceMock
                 .Setup(m => m.TrimPathSeparators(directoryName))

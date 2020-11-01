@@ -33,7 +33,10 @@ namespace Camelot.ViewModels.Tests
                 .Returns(tabViewModel);
             _autoMocker
                 .Setup<IFilesPanelStateService, PanelStateModel>(m => m.GetPanelState())
-                .Returns(new PanelStateModel())
+                .Returns(new PanelStateModel()
+                {
+                    Tabs = new List<TabStateModel>()
+                })
                 .Verifiable();
 
             _autoMocker

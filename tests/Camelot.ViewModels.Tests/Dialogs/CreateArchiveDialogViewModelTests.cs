@@ -195,6 +195,12 @@ namespace Camelot.ViewModels.Tests.Dialogs
             _autoMocker
                 .Setup<IArchiveTypeViewModelFactory, IReadOnlyList<ArchiveTypeViewModel>>(m => m.CreateForSingleFile())
                 .Returns(viewModels);
+            _autoMocker
+                .Setup<ICreateArchiveStateService, CreateArchiveStateModel>(m => m.GetState())
+                .Returns(new CreateArchiveStateModel
+                {
+                    ArchiveType = ArchiveType.Zip
+                });
 
             var dialog = _autoMocker.CreateInstance<CreateArchiveDialogViewModel>();
             dialog.Activate(new CreateArchiveNavigationParameter(ArchivePath, true));
