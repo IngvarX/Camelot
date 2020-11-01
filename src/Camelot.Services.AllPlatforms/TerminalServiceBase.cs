@@ -57,11 +57,13 @@ namespace Camelot.Services.AllPlatforms
         }
 
         private static TerminalSettingsStateModel CreateFrom(TerminalSettings model) =>
-            new TerminalSettingsStateModel
-            {
-                Arguments = model.Arguments,
-                Command = model.Command
-            };
+            model is null
+                ? null
+                : new TerminalSettingsStateModel
+                {
+                    Arguments = model.Arguments,
+                    Command = model.Command
+                };
 
         private static TerminalSettings CreateFrom(TerminalSettingsStateModel stateModel) =>
             new TerminalSettings

@@ -215,6 +215,9 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IFileNameGenerationService>(),
                 resolver.GetRequiredService<IPathService>()
             ));
+            services.Register<ICreateArchiveStateService>(() => new CreateArchiveStateService(
+                resolver.GetRequiredService<IUnitOfWorkFactory>()
+            ));
             services.RegisterLazySingleton<IArchiveTypeMapper>(() => new ArchiveTypeMapper(
                 resolver.GetRequiredService<IPathService>(),
                 resolver.GetRequiredService<ArchiveTypeMapperConfiguration>()
@@ -504,7 +507,8 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IDirectoryService>(),
                 resolver.GetRequiredService<IFileService>(),
                 resolver.GetRequiredService<IArchiveTypeViewModelFactory>(),
-                resolver.GetRequiredService<ISystemDialogService>()
+                resolver.GetRequiredService<ISystemDialogService>(),
+                resolver.GetRequiredService<ICreateArchiveStateService>()
             ));
             services.RegisterLazySingleton<IBitmapFactory>(() => new BitmapFactory());
             services.Register(() => new MainNodeInfoTabViewModel(

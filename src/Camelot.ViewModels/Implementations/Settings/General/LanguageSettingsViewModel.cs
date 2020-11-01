@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
+using Camelot.Services.Abstractions.Models.State;
 using Camelot.ViewModels.Interfaces.Settings;
 using ReactiveUI.Fody.Helpers;
 
@@ -54,8 +55,17 @@ namespace Camelot.ViewModels.Implementations.Settings.General
         public void SaveChanges()
         {
             _languageManager.SetLanguage(CurrentLanguage);
-            _localizationService.SaveLanguage(CurrentLanguage);
+
+            var languageStateModel = GetLanguageStateModel();
+            _localizationService.SaveLanguage(languageStateModel);
         }
+
+        private LanguageStateModel GetLanguageStateModel() =>
+            new LanguageStateModel
+            {
+                Code = CurrentLanguage.Code,
+                Name = CurrentLanguage.Name
+            };
 
         private LanguageModel GetLanguageOrDefault(string languageCode)
             => Languages.SingleOrDefault(l => l.Code == languageCode) ?? _languageManager.DefaultLanguage;

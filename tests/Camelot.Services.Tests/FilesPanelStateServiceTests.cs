@@ -5,6 +5,7 @@ using Camelot.DataAccess.Models;
 using Camelot.DataAccess.Repositories;
 using Camelot.DataAccess.UnitOfWork;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Models.State;
 using Moq;
 using Xunit;
 
@@ -67,9 +68,9 @@ namespace Camelot.Services.Tests
 
             var tabs = Enumerable
                 .Range(0, 10)
-                .Select(_ => new TabModel())
+                .Select(_ => new TabStateModel())
                 .ToList();
-            var state = new PanelModel {Tabs = tabs};
+            var state = new PanelStateModel {Tabs = tabs};
 
             filesPanelStateService.SavePanelState(state);
 

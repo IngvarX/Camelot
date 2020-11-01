@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Camelot.DataAccess.Models;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Models.State;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
@@ -29,11 +29,11 @@ namespace Camelot.ViewModels.Tests
         {
             var tabViewModel = new Mock<ITabViewModel>().Object;
             _autoMocker
-                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<TabModel>()))
+                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<TabStateModel>()))
                 .Returns(tabViewModel);
             _autoMocker
-                .Setup<IFilesPanelStateService, PanelModel>(m => m.GetPanelState())
-                .Returns(PanelModel.Empty)
+                .Setup<IFilesPanelStateService, PanelStateModel>(m => m.GetPanelState())
+                .Returns(new PanelStateModel())
                 .Verifiable();
 
             _autoMocker
@@ -46,7 +46,7 @@ namespace Camelot.ViewModels.Tests
 
             var tabsListViewModel = _autoMocker.CreateInstance<TabsListViewModel>();
 
-            _autoMocker.Verify<IFilesPanelStateService, PanelModel>(m => m.GetPanelState(), Times.Once);
+            _autoMocker.Verify<IFilesPanelStateService, PanelStateModel>(m => m.GetPanelState(), Times.Once);
             _autoMocker.Verify<IDirectoryService, string>(m => m.GetAppRootDirectory(), Times.Once);
 
             Assert.Single(tabsListViewModel.Tabs);
@@ -60,14 +60,14 @@ namespace Camelot.ViewModels.Tests
 
             var tabViewModel = new Mock<ITabViewModel>().Object;
             _autoMocker
-                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<TabModel>()))
+                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<TabStateModel>()))
                 .Returns(tabViewModel);
             _autoMocker
-                .Setup<IFilesPanelStateService, PanelModel>(m => m.GetPanelState())
-                .Returns(new PanelModel
+                .Setup<IFilesPanelStateService, PanelStateModel>(m => m.GetPanelState())
+                .Returns(new PanelStateModel
                 {
                     Tabs = Enumerable
-                        .Repeat(new TabModel {Directory = AppRootDirectory}, tabsCount)
+                        .Repeat(new TabStateModel {Directory = AppRootDirectory}, tabsCount)
                         .ToList()
                 })
                 .Verifiable();
@@ -78,7 +78,7 @@ namespace Camelot.ViewModels.Tests
 
             var tabsListViewModel = _autoMocker.CreateInstance<TabsListViewModel>();
 
-            _autoMocker.Verify<IFilesPanelStateService, PanelModel>(m => m.GetPanelState(), Times.Once);
+            _autoMocker.Verify<IFilesPanelStateService, PanelStateModel>(m => m.GetPanelState(), Times.Once);
 
             Assert.Equal(tabsCount, tabsListViewModel.Tabs.Count());
         }
@@ -92,18 +92,18 @@ namespace Camelot.ViewModels.Tests
                 .SetupGet(m => m.SortingViewModel)
                 .Returns(sortingViewModelMock.Object);
             _autoMocker
-                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<TabModel>()))
+                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<TabStateModel>()))
                 .Returns(tabViewModelMock.Object);
             _autoMocker
-                .Setup<IFilesPanelStateService>(m => m.SavePanelState(It.IsAny<PanelModel>()))
+                .Setup<IFilesPanelStateService>(m => m.SavePanelState(It.IsAny<PanelStateModel>()))
                 .Verifiable();
             _autoMocker
-                .Setup<IFilesPanelStateService, PanelModel>(m => m.GetPanelState())
-                .Returns(new PanelModel
+                .Setup<IFilesPanelStateService, PanelStateModel>(m => m.GetPanelState())
+                .Returns(new PanelStateModel
                 {
-                    Tabs = new List<TabModel>
+                    Tabs = new List<TabStateModel>
                     {
-                        new TabModel {Directory = AppRootDirectory}
+                        new TabStateModel {Directory = AppRootDirectory}
                     }
                 });
 
@@ -123,7 +123,7 @@ namespace Camelot.ViewModels.Tests
             Assert.Single(tabsListViewModel.Tabs);
 
             _autoMocker
-                .Verify<IFilesPanelStateService>(m => m.SavePanelState(It.IsAny<PanelModel>()), Times.AtLeast(2));
+                .Verify<IFilesPanelStateService>(m => m.SavePanelState(It.IsAny<PanelStateModel>()), Times.AtLeast(2));
         }
 
         [Fact]
@@ -135,7 +135,7 @@ namespace Camelot.ViewModels.Tests
                 .SetupGet(m => m.SortingViewModel)
                 .Returns(sortingViewModelMock.Object);
             _autoMocker
-                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.Is<TabModel>(tm => tm.Directory == AppRootDirectory)))
+                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.Is<TabStateModel>(tm => tm.Directory == AppRootDirectory)))
                 .Returns(tabViewModelMock.Object);
             _autoMocker
                 .Setup<IDirectoryService, bool>(m => m.CheckIfExists(AppRootDirectory))
@@ -144,13 +144,13 @@ namespace Camelot.ViewModels.Tests
                 .Setup<IDirectoryService, string>(m => m.GetAppRootDirectory())
                 .Returns(AppRootDirectory);
             _autoMocker
-                .Setup<IFilesPanelStateService, PanelModel>(m => m.GetPanelState())
-                .Returns(new PanelModel
+                .Setup<IFilesPanelStateService, PanelStateModel>(m => m.GetPanelState())
+                .Returns(new PanelStateModel
                 {
-                    Tabs = new List<TabModel>
+                    Tabs = new List<TabStateModel>
                     {
-                        new TabModel {Directory = Directory},
-                        new TabModel {Directory = Directory}
+                        new TabStateModel {Directory = Directory},
+                        new TabStateModel {Directory = Directory}
                     },
                     SelectedTabIndex = 1
                 });
@@ -168,26 +168,26 @@ namespace Camelot.ViewModels.Tests
                 .SetupGet(m => m.SortingViewModel)
                 .Returns(sortingViewModelMock.Object);
             _autoMocker
-                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.Is<TabModel>(tm => tm.Directory == AppRootDirectory)))
+                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.Is<TabStateModel>(tm => tm.Directory == AppRootDirectory)))
                 .Returns(tabViewModelMock.Object);
             var secondTabViewModelMock = new Mock<ITabViewModel>();
             secondTabViewModelMock
                 .SetupGet(m => m.SortingViewModel)
                 .Returns(sortingViewModelMock.Object);
             _autoMocker
-                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.Is<TabModel>(tm => tm.Directory == Directory)))
+                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.Is<TabStateModel>(tm => tm.Directory == Directory)))
                 .Returns(secondTabViewModelMock.Object);
             _autoMocker
                 .Setup<IDirectoryService, bool>(m => m.CheckIfExists(It.Is<string>(d => d == AppRootDirectory || d == Directory)))
                 .Returns(true);
             _autoMocker
-                .Setup<IFilesPanelStateService, PanelModel>(m => m.GetPanelState())
-                .Returns(new PanelModel
+                .Setup<IFilesPanelStateService, PanelStateModel>(m => m.GetPanelState())
+                .Returns(new PanelStateModel
                 {
-                    Tabs = new List<TabModel>
+                    Tabs = new List<TabStateModel>
                     {
-                        new TabModel {Directory = AppRootDirectory},
-                        new TabModel {Directory = Directory}
+                        new TabStateModel {Directory = AppRootDirectory},
+                        new TabStateModel {Directory = Directory}
                     }
                 });
 
@@ -204,18 +204,18 @@ namespace Camelot.ViewModels.Tests
             var firstTabMock = Create();
             var currentTabMock = firstTabMock;
             _autoMocker
-                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.Is<TabModel>(tm => tm.Directory == AppRootDirectory)))
+                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.Is<TabStateModel>(tm => tm.Directory == AppRootDirectory)))
                 .Returns(() => currentTabMock.Object);
             _autoMocker
                 .Setup<IDirectoryService, bool>(m => m.CheckIfExists(AppRootDirectory))
                 .Returns(true);
             _autoMocker
-                .Setup<IFilesPanelStateService, PanelModel>(m => m.GetPanelState())
-                .Returns(new PanelModel
+                .Setup<IFilesPanelStateService, PanelStateModel>(m => m.GetPanelState())
+                .Returns(new PanelStateModel
                 {
-                    Tabs = new List<TabModel>
+                    Tabs = new List<TabStateModel>
                     {
-                        new TabModel {Directory = AppRootDirectory}
+                        new TabStateModel {Directory = AppRootDirectory}
                     }
                 });
 
@@ -238,7 +238,7 @@ namespace Camelot.ViewModels.Tests
         {
             var tabs = new List<Mock<ITabViewModel>>();
             _autoMocker
-                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.Is<TabModel>(tm => tm.Directory == AppRootDirectory)))
+                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.Is<TabStateModel>(tm => tm.Directory == AppRootDirectory)))
                 .Returns(() =>
                 {
                     var mock = Create();
@@ -250,14 +250,14 @@ namespace Camelot.ViewModels.Tests
                 .Setup<IDirectoryService, bool>(m => m.CheckIfExists(AppRootDirectory))
                 .Returns(true);
             _autoMocker
-                .Setup<IFilesPanelStateService, PanelModel>(m => m.GetPanelState())
-                .Returns(new PanelModel
+                .Setup<IFilesPanelStateService, PanelStateModel>(m => m.GetPanelState())
+                .Returns(new PanelStateModel
                 {
-                    Tabs = new List<TabModel>
+                    Tabs = new List<TabStateModel>
                     {
-                        new TabModel {Directory = AppRootDirectory},
-                        new TabModel {Directory = AppRootDirectory},
-                        new TabModel {Directory = AppRootDirectory}
+                        new TabStateModel {Directory = AppRootDirectory},
+                        new TabStateModel {Directory = AppRootDirectory},
+                        new TabStateModel {Directory = AppRootDirectory}
                     }
                 });
 
@@ -275,7 +275,7 @@ namespace Camelot.ViewModels.Tests
         {
             var tabs = new List<Mock<ITabViewModel>>();
             _autoMocker
-                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.Is<TabModel>(tm => tm.Directory == AppRootDirectory)))
+                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.Is<TabStateModel>(tm => tm.Directory == AppRootDirectory)))
                 .Returns(() =>
                 {
                     var mock = Create();
@@ -287,14 +287,14 @@ namespace Camelot.ViewModels.Tests
                 .Setup<IDirectoryService, bool>(m => m.CheckIfExists(AppRootDirectory))
                 .Returns(true);
             _autoMocker
-                .Setup<IFilesPanelStateService, PanelModel>(m => m.GetPanelState())
-                .Returns(new PanelModel
+                .Setup<IFilesPanelStateService, PanelStateModel>(m => m.GetPanelState())
+                .Returns(new PanelStateModel
                 {
-                    Tabs = new List<TabModel>
+                    Tabs = new List<TabStateModel>
                     {
-                        new TabModel {Directory = AppRootDirectory},
-                        new TabModel {Directory = AppRootDirectory},
-                        new TabModel {Directory = AppRootDirectory}
+                        new TabStateModel {Directory = AppRootDirectory},
+                        new TabStateModel {Directory = AppRootDirectory},
+                        new TabStateModel {Directory = AppRootDirectory}
                     }
                 });
 
@@ -313,7 +313,7 @@ namespace Camelot.ViewModels.Tests
         {
             var tabs = new List<Mock<ITabViewModel>>();
             _autoMocker
-                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.Is<TabModel>(tm => tm.Directory == AppRootDirectory)))
+                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.Is<TabStateModel>(tm => tm.Directory == AppRootDirectory)))
                 .Returns(() =>
                 {
                     var mock = Create();
@@ -325,14 +325,14 @@ namespace Camelot.ViewModels.Tests
                 .Setup<IDirectoryService, bool>(m => m.CheckIfExists(AppRootDirectory))
                 .Returns(true);
             _autoMocker
-                .Setup<IFilesPanelStateService, PanelModel>(m => m.GetPanelState())
-                .Returns(new PanelModel
+                .Setup<IFilesPanelStateService, PanelStateModel>(m => m.GetPanelState())
+                .Returns(new PanelStateModel
                 {
-                    Tabs = new List<TabModel>
+                    Tabs = new List<TabStateModel>
                     {
-                        new TabModel {Directory = AppRootDirectory},
-                        new TabModel {Directory = AppRootDirectory},
-                        new TabModel {Directory = AppRootDirectory}
+                        new TabStateModel {Directory = AppRootDirectory},
+                        new TabStateModel {Directory = AppRootDirectory},
+                        new TabStateModel {Directory = AppRootDirectory}
                     }
                 });
 

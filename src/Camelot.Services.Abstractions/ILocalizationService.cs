@@ -1,11 +1,11 @@
-﻿using Camelot.Services.Abstractions.Models;
+﻿using Camelot.Services.Abstractions.Models.State;
 
 namespace Camelot.Services.Abstractions
 {
     public interface ILocalizationService
     {
-        LanguageModel GetSavedLanguage();
+        LanguageStateModel GetSavedLanguage();
 
-        void SaveLanguage(LanguageModel language);
+        void SaveLanguage(LanguageStateModel language);
     }
 }

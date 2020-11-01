@@ -1,7 +1,7 @@
 using System.Linq;
-using Camelot.DataAccess.Models;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
+using Camelot.Services.Abstractions.Models.State;
 using Camelot.ViewModels.Implementations.Settings.General;
 using Moq;
 using Xunit;
@@ -21,7 +21,7 @@ namespace Camelot.ViewModels.Tests.Settings
             var localizationServiceMock = new Mock<ILocalizationService>();
             localizationServiceMock
                 .Setup(m => m.GetSavedLanguage())
-                .Returns(new Language
+                .Returns(new LanguageStateModel
                 {
                     Name = languages.Last().Name,
                     Code = languages.Last().Code
@@ -50,7 +50,7 @@ namespace Camelot.ViewModels.Tests.Settings
                 new LanguageModel("test", "test", "t1"),
                 new LanguageModel("test2", "test2", "t2")
             };
-            var language = new Language
+            var language = new LanguageStateModel
             {
                 Name = languageModels.Last().Name,
                 Code = languageModels.Last().Code
@@ -60,7 +60,8 @@ namespace Camelot.ViewModels.Tests.Settings
                 .Setup(m => m.GetSavedLanguage())
                 .Returns(language);
             localizationServiceMock
-                .Setup(m => m.SaveLanguage(languageModels.First()))
+                .Setup(m => m.SaveLanguage(It.Is<LanguageStateModel>(l =>
+                    l.Code == languageModels.First().Code && l.Name == languageModels.First().Name)))
                 .Verifiable();
             var languageManagerMock = new Mock<ILanguageManager>();
             languageManagerMock
@@ -79,7 +80,8 @@ namespace Camelot.ViewModels.Tests.Settings
             languageManagerMock
                 .Verify(m => m.SetLanguage(languageModels.First()), Times.Once);
             localizationServiceMock
-                .Verify(m => m.SaveLanguage(languageModels.First()), Times.Once);
+                .Verify(m => m.SaveLanguage(It.Is<LanguageStateModel>(l =>
+                    l.Code == languageModels.First().Code && l.Name == languageModels.First().Name)), Times.Once);
         }
     }
 }

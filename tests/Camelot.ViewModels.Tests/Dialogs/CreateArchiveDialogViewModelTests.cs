@@ -2,7 +2,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Archive;
 using Camelot.Services.Abstractions.Models.Enums;
+using Camelot.Services.Abstractions.Models.State;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Implementations.Dialogs;
 using Camelot.ViewModels.Implementations.Dialogs.Archives;
@@ -242,6 +244,12 @@ namespace Camelot.ViewModels.Tests.Dialogs
             _autoMocker
                 .Setup<IArchiveTypeViewModelFactory, IReadOnlyList<ArchiveTypeViewModel>>(m => m.CreateForMultipleFiles())
                 .Returns(viewModels);
+            _autoMocker
+                .Setup<ICreateArchiveStateService, CreateArchiveStateModel>(m => m.GetState())
+                .Returns(new CreateArchiveStateModel
+                {
+                    ArchiveType = archiveType
+                });
         }
     }
 }

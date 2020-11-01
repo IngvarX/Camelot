@@ -1,5 +1,5 @@
-using Camelot.DataAccess.Models;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Models.State;
 using Camelot.ViewModels.Implementations.Settings;
 using Moq;
 using Xunit;
@@ -19,7 +19,7 @@ namespace Camelot.ViewModels.Tests.Settings
             var terminalServiceMock = new Mock<ITerminalService>();
             terminalServiceMock
                 .Setup(m => m.GetTerminalSettings())
-                .Returns(new TerminalSettings
+                .Returns(new TerminalSettingsStateModel
                 {
                     Command = DefaultCommand,
                     Arguments = DefaultArguments
@@ -39,7 +39,7 @@ namespace Camelot.ViewModels.Tests.Settings
             var terminalServiceMock = new Mock<ITerminalService>();
             terminalServiceMock
                 .Setup(m => m.GetTerminalSettings())
-                .Returns(new TerminalSettings())
+                .Returns(new TerminalSettingsStateModel())
                 .Verifiable();
 
             var viewModel = new TerminalSettingsViewModel(terminalServiceMock.Object);
@@ -55,13 +55,13 @@ namespace Camelot.ViewModels.Tests.Settings
             var terminalServiceMock = new Mock<ITerminalService>();
             terminalServiceMock
                 .Setup(m => m.GetTerminalSettings())
-                .Returns(new TerminalSettings
+                .Returns(new TerminalSettingsStateModel
                 {
                     Command = DefaultCommand,
                     Arguments = DefaultArguments
                 });
             terminalServiceMock
-                .Setup(m => m.SetTerminalSettings(It.Is<TerminalSettings>(ts =>
+                .Setup(m => m.SetTerminalSettings(It.Is<TerminalSettingsStateModel>(ts =>
                     ts.Command == NewCommand && ts.Arguments == NewArguments)))
                 .Verifiable();
 
@@ -74,7 +74,7 @@ namespace Camelot.ViewModels.Tests.Settings
             viewModel.SaveChanges();
 
             terminalServiceMock
-                .Verify(m => m.SetTerminalSettings(It.Is<TerminalSettings>(ts =>
+                .Verify(m => m.SetTerminalSettings(It.Is<TerminalSettingsStateModel>(ts =>
                     ts.Command == NewCommand && ts.Arguments == NewArguments)), Times.Once);
         }
     }
