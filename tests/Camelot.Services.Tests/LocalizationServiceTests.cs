@@ -60,7 +60,7 @@ namespace Camelot.Services.Tests
                 .Returns(unitOfWorkMock.Object);
 
             var localizationService = new LocalizationService(unitOfWorkFactoryMock.Object);
-            var languageModel = CreateFrom(LanguageCode, LanguageName);
+            var languageModel = CreateFrom(LanguageName, LanguageCode);
             localizationService.SaveLanguage(languageModel);
 
             repositoryMock
@@ -81,7 +81,7 @@ namespace Camelot.Services.Tests
             Assert.Throws<ArgumentException>(() => localizationService.SaveLanguage(CreateFrom("name", null)));
         }
 
-        private static LanguageStateModel CreateFrom(string code, string name) =>
+        private static LanguageStateModel CreateFrom(string name, string code) =>
             new LanguageStateModel
             {
                 Code = code,

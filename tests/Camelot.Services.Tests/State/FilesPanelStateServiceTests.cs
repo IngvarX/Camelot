@@ -9,7 +9,7 @@ using Camelot.Services.Abstractions.Models.State;
 using Moq;
 using Xunit;
 
-namespace Camelot.Services.Tests
+namespace Camelot.Services.Tests.State
 {
     public class FilesPanelStateServiceTests
     {
