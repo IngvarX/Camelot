@@ -138,6 +138,11 @@ namespace Camelot.ViewModels.Tests.Dialogs
         {
             SetupForType(archiveType);
 
+            _autoMocker
+                .Setup<ICreateArchiveStateService>(m => m.SaveState(
+                    It.Is<CreateArchiveStateModel>(sm => sm.ArchiveType == archiveType)))
+                .Verifiable();
+
             var dialog = _autoMocker.CreateInstance<CreateArchiveDialogViewModel>();
             dialog.Activate(new CreateArchiveNavigationParameter(ArchivePath, true));
 
@@ -158,6 +163,10 @@ namespace Camelot.ViewModels.Tests.Dialogs
             dialog.CreateCommand.Execute(null);
 
             Assert.True(isCallbackCalled);
+
+            _autoMocker
+                .Verify<ICreateArchiveStateService>(m => m.SaveState(
+                    It.Is<CreateArchiveStateModel>(sm => sm.ArchiveType == archiveType)), Times.Once);
         }
 
         [Fact]

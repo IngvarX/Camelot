@@ -22,7 +22,7 @@ namespace Camelot.Services.Mac
             behavior.Open(directory);
         }
 
-        // .app directory is Macos application, so open it as a node
+        // .app directory is Macos application, so open it as a file
         private IFileSystemNodeOpeningBehavior GetBehavior(string directory) =>
             directory.EndsWith(".app") ? _fileOpeningBehavior : _directoryOpeningBehavior;
     }

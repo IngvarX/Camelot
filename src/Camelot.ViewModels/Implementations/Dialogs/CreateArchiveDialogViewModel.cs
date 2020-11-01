@@ -8,6 +8,7 @@ using System.Windows.Input;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Archive;
 using Camelot.Services.Abstractions.Models.Enums;
+using Camelot.Services.Abstractions.Models.State;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Implementations.Dialogs.Archives;
 using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
@@ -90,8 +91,22 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             }
         }
 
-        private void CreateArchive() =>
+        private void CreateArchive()
+        {
+            SaveState();
+
             Close(new CreateArchiveDialogResult(ArchivePath, SelectedArchiveType.ArchiveType));
+        }
+
+        private void SaveState()
+        {
+            var state = new CreateArchiveStateModel
+            {
+                ArchiveType = SelectedArchiveType.ArchiveType
+            };
+
+            _createArchiveStateService.SaveState(state);
+        }
 
         private bool CheckIfPathIsValid(string path) =>
             !string.IsNullOrWhiteSpace(path) &&

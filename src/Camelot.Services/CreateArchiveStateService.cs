@@ -9,7 +9,7 @@ namespace Camelot.Services
 {
     public class CreateArchiveStateService : ICreateArchiveStateService
     {
-        private const string Key = "CreateArchiveState";
+        private const string Key = "CreateArchiveSettings";
 
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
@@ -22,8 +22,8 @@ namespace Camelot.Services
         public CreateArchiveStateModel GetState()
         {
             using var unitOfWork = _unitOfWorkFactory.Create();
-            var repository = unitOfWork.GetRepository<CreateArchiveState>();
-            var dbModel = repository.GetById(Key) ?? CreateArchiveState.Empty;
+            var repository = unitOfWork.GetRepository<CreateArchiveSettings>();
+            var dbModel = repository.GetById(Key) ?? CreateArchiveSettings.Empty;
 
             return CreateFrom(dbModel);
         }
@@ -36,21 +36,21 @@ namespace Camelot.Services
             }
 
             using var unitOfWork = _unitOfWorkFactory.Create();
-            var repository = unitOfWork.GetRepository<CreateArchiveState>();
+            var repository = unitOfWork.GetRepository<CreateArchiveSettings>();
             var dbModel = CreateFrom(model);
             repository.Upsert(Key, dbModel);
 
             unitOfWork.SaveChanges();
         }
 
-        private static CreateArchiveStateModel CreateFrom(CreateArchiveState model) =>
+        private static CreateArchiveStateModel CreateFrom(CreateArchiveSettings model) =>
             new CreateArchiveStateModel
             {
                 ArchiveType = (ArchiveType) model.ArchiveType
             };
 
-        private static CreateArchiveState CreateFrom(CreateArchiveStateModel model) =>
-            new CreateArchiveState
+        private static CreateArchiveSettings CreateFrom(CreateArchiveStateModel model) =>
+            new CreateArchiveSettings
             {
                 ArchiveType = (int) model.ArchiveType
             };
