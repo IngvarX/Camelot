@@ -1,6 +1,6 @@
+using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Comparers;
-using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Enums;
 using Moq.AutoMock;
 using Xunit;
 
@@ -16,11 +16,11 @@ namespace Camelot.ViewModels.Tests
         }
 
         [Theory]
-        [InlineData(true, SortingColumn.Date)]
-        [InlineData(false, SortingColumn.Name)]
-        [InlineData(true, SortingColumn.Extension)]
-        [InlineData(false, SortingColumn.Size)]
-        public void TestSortingParentDirectory(bool isAscending, SortingColumn sortingColumn)
+        [InlineData(true, SortingMode.Date)]
+        [InlineData(false, SortingMode.Name)]
+        [InlineData(true, SortingMode.Extension)]
+        [InlineData(false, SortingMode.Size)]
+        public void TestSortingParentDirectory(bool isAscending, SortingMode sortingColumn)
         {
             var parentDirectoryViewModel =  _autoMocker.CreateInstance<DirectoryViewModel>();
             parentDirectoryViewModel.IsParentDirectory = true;

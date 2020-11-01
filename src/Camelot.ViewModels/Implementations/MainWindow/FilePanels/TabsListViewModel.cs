@@ -236,7 +236,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             new SortingSettingsStateModel
             {
                 IsAscending = tabViewModel.SortingViewModel.IsSortingByAscendingEnabled,
-                SortingMode = (int) tabViewModel.SortingViewModel.SortingColumn
+                SortingMode = tabViewModel.SortingViewModel.SortingColumn
             };
     }
 }

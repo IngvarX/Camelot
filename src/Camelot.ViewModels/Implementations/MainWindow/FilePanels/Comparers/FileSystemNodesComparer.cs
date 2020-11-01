@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Enums;
+using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 
 namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Comparers
@@ -10,7 +10,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Comparers
         private readonly DirectoryViewModelsComparer _directoriesComparer;
         private readonly FileViewModelsComparer _filesComparer;
 
-        public FileSystemNodesComparer(bool isAscending, SortingColumn sortingColumn)
+        public FileSystemNodesComparer(bool isAscending, SortingMode sortingColumn)
         {
             _directoriesComparer = new DirectoryViewModelsComparer(isAscending, sortingColumn);
             _filesComparer = new FileViewModelsComparer(isAscending, sortingColumn);

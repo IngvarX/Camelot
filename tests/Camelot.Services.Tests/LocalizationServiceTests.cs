@@ -2,7 +2,6 @@ using System;
 using Camelot.DataAccess.Models;
 using Camelot.DataAccess.Repositories;
 using Camelot.DataAccess.UnitOfWork;
-using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Models.State;
 using Moq;
 using Xunit;

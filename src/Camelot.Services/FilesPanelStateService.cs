@@ -3,6 +3,7 @@ using System.Linq;
 using Camelot.DataAccess.Models;
 using Camelot.DataAccess.UnitOfWork;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Models.State;
 
 namespace Camelot.Services
@@ -62,7 +63,7 @@ namespace Camelot.Services
             new SortingSettingsStateModel
             {
                 IsAscending = model.IsAscending,
-                SortingMode = model.SortingMode
+                SortingMode = (SortingMode) model.SortingMode
             };
 
         private static PanelModel CreateFrom(PanelStateModel model) =>
@@ -83,7 +84,7 @@ namespace Camelot.Services
             new SortingSettings
             {
                 IsAscending = model.IsAscending,
-                SortingMode = model.SortingMode
+                SortingMode = (int) model.SortingMode
             };
     }
 }

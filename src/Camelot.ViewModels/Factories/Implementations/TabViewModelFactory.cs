@@ -2,7 +2,6 @@ using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models.State;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
-using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Enums;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 
 namespace Camelot.ViewModels.Factories.Implementations
@@ -23,11 +22,7 @@ namespace Camelot.ViewModels.Factories.Implementations
             return new TabViewModel(_pathService, fileSystemNodeViewModel, tabModel.Directory);
         }
 
-        private static IFileSystemNodesSortingViewModel Create(SortingSettingsStateModel sortingSettings)
-        {
-            var sortingColumn = (SortingColumn) sortingSettings.SortingMode;
-
-            return new FileSystemNodesSortingViewModel(sortingColumn, sortingSettings.IsAscending);
-        }
+        private static IFileSystemNodesSortingViewModel Create(SortingSettingsStateModel sortingSettings) =>
+            new FileSystemNodesSortingViewModel(sortingSettings.SortingMode, sortingSettings.IsAscending);
     }
 }

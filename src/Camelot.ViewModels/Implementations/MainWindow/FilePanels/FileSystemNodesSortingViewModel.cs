@@ -1,4 +1,4 @@
-using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Enums;
+using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -10,7 +10,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private bool _isSortingByAscendingEnabled;
 
         [Reactive]
-        public SortingColumn SortingColumn { get; set; }
+        public SortingMode SortingColumn { get; set; }
 
         public bool IsSortingByAscendingEnabled
         {
@@ -19,7 +19,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         }
 
         public FileSystemNodesSortingViewModel(
-            SortingColumn sortingColumn,
+            SortingMode sortingColumn,
             bool isSortingByAscendingEnabled)
         {
             SortingColumn = sortingColumn;

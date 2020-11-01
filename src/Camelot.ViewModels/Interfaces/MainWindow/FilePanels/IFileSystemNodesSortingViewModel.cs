@@ -1,11 +1,11 @@
-using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Enums;
+using Camelot.Services.Abstractions.Models.Enums;
 
 namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels
 {
     public interface IFileSystemNodesSortingViewModel
     {
-        SortingColumn SortingColumn { get; set; }
-        
+        SortingMode SortingColumn { get; set; }
+
         bool IsSortingByAscendingEnabled { get; }
 
         void ToggleSortingDirection();
