@@ -7,6 +7,7 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Camelot.Extensions;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Models.State;
 using Camelot.ViewModels.Configuration;
 using Camelot.ViewModels.Factories.Interfaces;
@@ -116,7 +117,11 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         {
             var rootDirectoryTab = new TabStateModel
             {
-                Directory = _directoryService.GetAppRootDirectory()
+                Directory = _directoryService.GetAppRootDirectory(),
+                SortingSettings = new SortingSettingsStateModel
+                {
+                    SortingMode = SortingMode.Date
+                }
             };
 
             return new List<TabStateModel> {rootDirectoryTab};
