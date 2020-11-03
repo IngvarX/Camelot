@@ -67,7 +67,7 @@ namespace Camelot.Services.Windows
 
             void TryAddApplicationModel(string applicationName)
             {
-                string runCommand;
+                string startCommand;
                 string displayName;
                 string displayIcon;
 
@@ -75,7 +75,7 @@ namespace Camelot.Services.Windows
 
                 if (isExecutable)
                 {
-                    runCommand = Win32Api.AssocQueryString(Win32Api.AssocF.Open_ByExeName, 
+                    startCommand = Win32Api.AssocQueryString(Win32Api.AssocF.Open_ByExeName, 
                         Win32Api.AssocStr.Command, applicationName);
                     displayName = Win32Api.AssocQueryString(Win32Api.AssocF.Open_ByExeName,
                         Win32Api.AssocStr.FriendlyAppName, applicationName);
@@ -84,12 +84,12 @@ namespace Camelot.Services.Windows
                 }
                 else
                 {
-                    runCommand = Win32Api.AssocQueryString(Win32Api.AssocStr.Command, applicationName);
+                    startCommand = Win32Api.AssocQueryString(Win32Api.AssocStr.Command, applicationName);
                     displayName = Win32Api.AssocQueryString(Win32Api.AssocStr.FriendlyAppName, applicationName);
                     displayIcon = Win32Api.AssocQueryString(Win32Api.AssocStr.DefaultIcon, applicationName);
                 }
 
-                if (string.IsNullOrWhiteSpace(displayName) || string.IsNullOrWhiteSpace(runCommand))
+                if (string.IsNullOrWhiteSpace(displayName) || string.IsNullOrWhiteSpace(startCommand))
                 {
                     return;
                 }
@@ -98,7 +98,7 @@ namespace Camelot.Services.Windows
                 {
                     DisplayName = displayName,
                     DisplayIcon = displayIcon,
-                    RunCommand = runCommand
+                    StartCommand = startCommand
                 });
             }
         }

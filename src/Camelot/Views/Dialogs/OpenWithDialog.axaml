@@ -14,7 +14,7 @@
 	</Design.DataContext>
 	
 	<Border Padding="20" Classes="defaultBackgroundBorder">
-		<Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,*">
+		<Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="*,*">
 			<StackPanel Orientation="Horizontal" Grid.ColumnSpan="2">
 				<DrawingPresenter Width="25" Height="25">
 					<DrawingPresenter.Drawing>
@@ -55,6 +55,37 @@
 					</DataTemplate>
 				</ItemsControl.ItemTemplate>
 			</ItemsControl>
+
+			<Expander Grid.Row="3" Grid.ColumnSpan="2" Margin="0,15,0,10">
+				<Expander.Content>
+					<ItemsControl Margin="10,10,0,0" Items="{Binding Applications}">
+						<ItemsControl.ItemsPanel>
+							<ItemsPanelTemplate>
+								<StackPanel Orientation="Vertical" />
+							</ItemsPanelTemplate>
+						</ItemsControl.ItemsPanel>
+
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<StackPanel Orientation="Horizontal">
+									<DrawingPresenter Width="25" Height="25">
+										<DrawingPresenter.Drawing>
+											<GeometryDrawing Brush="{DynamicResource AlternativeThemeForegroundBrush}"
+															 Geometry="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm160-14.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z" />
+										</DrawingPresenter.Drawing>
+									</DrawingPresenter>
+									<TextBlock Text="{Binding DisplayName}" Classes="overWriteDialogTextBlock" />
+								</StackPanel>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
+				</Expander.Content>
+
+				<Expander.Header>
+					<TextBlock Classes="overWriteDialogTextBlock" Text="{x:Static p:Resources.SelectOtherApplications}" />
+				</Expander.Header>
+			</Expander>
+
 		</Grid>
 	</Border>
 	

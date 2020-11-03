@@ -997,6 +997,15 @@ namespace Camelot.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Other Applications.
+        /// </summary>
+        public static string SelectOtherApplications {
+            get {
+                return ResourceManager.GetString("SelectOtherApplications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Settings.
         /// </summary>
         public static string SettingsHeader {

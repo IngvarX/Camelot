@@ -453,4 +453,7 @@
   <data name="RecommendedApplications" xml:space="preserve">
     <value>Recommended Applications</value>
   </data>
+  <data name="SelectOtherApplications" xml:space="preserve">
+    <value>Other Applications</value>
+  </data>
 </root>

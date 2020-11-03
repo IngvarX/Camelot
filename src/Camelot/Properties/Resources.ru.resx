@@ -447,4 +447,7 @@
   <data name="RecommendedApplications" xml:space="preserve">
     <value>Рекомендуемые программы</value>
   </data>
+  <data name="SelectOtherApplications" xml:space="preserve">
+    <value>Другие программы</value>
+  </data>
 </root>

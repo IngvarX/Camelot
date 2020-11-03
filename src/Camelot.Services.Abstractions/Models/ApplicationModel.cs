@@ -10,6 +10,6 @@
 
         public string InstallLocation { get; set; }
 
-        public string RunCommand { get; set; }
+        public string StartCommand { get; set; }
     }
 }
