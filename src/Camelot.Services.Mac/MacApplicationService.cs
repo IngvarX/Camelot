@@ -25,7 +25,7 @@ namespace Camelot.Services.Mac
             throw new System.NotImplementedException();
         }
 
-        public async Task<IEnumerable<ApplicationModel>> GetAllInstalledApplications()
+        public async Task<IEnumerable<ApplicationModel>> GetInstalledApplications()
         {
             var (command, arguments) = _terminalService.GetTerminalSettings();
 

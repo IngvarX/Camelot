@@ -14,7 +14,7 @@
 	</Design.DataContext>
 	
 	<Border Padding="20" Classes="defaultBackgroundBorder">
-		<Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="*,*">
+		<Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,*">
 			<StackPanel Orientation="Horizontal" Grid.ColumnSpan="2">
 				<DrawingPresenter Width="25" Height="25">
 					<DrawingPresenter.Drawing>
@@ -34,14 +34,8 @@
 	        <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Margin="0,15" Classes="overWriteDialogTextBlock"
                        Text="{x:Static p:Resources.RecommendedApplications}" />
 
-			<ItemsControl Grid.Row="2" Grid.ColumnSpan="2" Margin="10,10,0,0" Items="{Binding RecommendedApplications}">
-				<ItemsControl.ItemsPanel>
-					<ItemsPanelTemplate>
-						<StackPanel Orientation="Vertical" />
-					</ItemsPanelTemplate>
-				</ItemsControl.ItemsPanel>
-
-				<ItemsControl.ItemTemplate>
+			<ListBox Grid.Row="2" Grid.ColumnSpan="2" Margin="10,10,0,0" Items="{Binding RecommendedApplications}">
+				<ListBox.ItemTemplate>
 					<DataTemplate>
 						<StackPanel Orientation="Horizontal">
 							<DrawingPresenter Width="25" Height="25">
@@ -53,19 +47,13 @@
 							<TextBlock Text="{Binding DisplayName}" Classes="overWriteDialogTextBlock" />
 						</StackPanel>
 					</DataTemplate>
-				</ItemsControl.ItemTemplate>
-			</ItemsControl>
-
+				</ListBox.ItemTemplate>
+			</ListBox>
+			
 			<Expander Grid.Row="3" Grid.ColumnSpan="2" Margin="0,15,0,10">
 				<Expander.Content>
-					<ItemsControl Margin="10,10,0,0" Items="{Binding Applications}">
-						<ItemsControl.ItemsPanel>
-							<ItemsPanelTemplate>
-								<StackPanel Orientation="Vertical" />
-							</ItemsPanelTemplate>
-						</ItemsControl.ItemsPanel>
-
-						<ItemsControl.ItemTemplate>
+					<ListBox Items="{Binding Applications}">
+						<ListBox.ItemTemplate>
 							<DataTemplate>
 								<StackPanel Orientation="Horizontal">
 									<DrawingPresenter Width="25" Height="25">
@@ -77,8 +65,8 @@
 									<TextBlock Text="{Binding DisplayName}" Classes="overWriteDialogTextBlock" />
 								</StackPanel>
 							</DataTemplate>
-						</ItemsControl.ItemTemplate>
-					</ItemsControl>
+						</ListBox.ItemTemplate>
+					</ListBox>
 				</Expander.Content>
 
 				<Expander.Header>
@@ -86,6 +74,12 @@
 				</Expander.Header>
 			</Expander>
 
+			<CheckBox Grid.Row="4" Grid.ColumnSpan="2">
+				<CheckBox.Content>
+					<TextBlock Classes="overWriteDialogTextBlock" Margin="5,0,0,0"
+                               Text="{x:Static p:Resources.ApplyActionToTheAllFilesAndFolders}" />
+				</CheckBox.Content>
+			</CheckBox>
 		</Grid>
 	</Border>
 	

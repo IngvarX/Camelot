@@ -14,7 +14,7 @@ namespace Camelot.Services.Linux
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<ApplicationModel>> GetAllInstalledApplications()
+        public async Task<IEnumerable<ApplicationModel>> GetInstalledApplications()
         {
             var installedSoftwares = new List<ApplicationModel>();
 

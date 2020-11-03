@@ -8,6 +8,6 @@ namespace Camelot.Services.Abstractions
     {
         Task<IEnumerable<ApplicationModel>> GetAssociatedApplications(string fileExtension);
 
-        Task<IEnumerable<ApplicationModel>> GetAllInstalledApplications();
+        Task<IEnumerable<ApplicationModel>> GetInstalledApplications();
     }
 }

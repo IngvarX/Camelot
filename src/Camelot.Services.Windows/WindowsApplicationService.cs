@@ -27,16 +27,16 @@ namespace Camelot.Services.Windows
                 throw new ArgumentException($"{nameof(fileExtension)} should be file extension.");
             }
 
-            var associativeApplications = new Dictionary<string, ApplicationModel>();
+            var associatedApplications = new Dictionary<string, ApplicationModel>();
 
             foreach (var exeName in GetOpenWithList(fileExtension, Registry.CurrentUser, RegkeyFileExtsX32))
             {
-                TryAddApplicationModel(exeName);
+                TryAddApplication(exeName);
             }
 
             foreach (var progid in GetOpenWithProgids(fileExtension, Registry.CurrentUser, RegkeyFileExtsX32))
             {
-                TryAddApplicationModel(progid);
+                TryAddApplication(progid);
             }
 
             if (RuntimeInformation.ProcessArchitecture == Architecture.X64 ||
@@ -44,28 +44,28 @@ namespace Camelot.Services.Windows
             {
                 foreach (var exeName in GetOpenWithList(fileExtension, Registry.CurrentUser, RegkeyFileExtsX64))
                 {
-                    TryAddApplicationModel(exeName);
+                    TryAddApplication(exeName);
                 }
 
                 foreach (var progid in GetOpenWithProgids(fileExtension, Registry.CurrentUser, RegkeyFileExtsX64))
                 {
-                    TryAddApplicationModel(progid);
+                    TryAddApplication(progid);
                 }
             }
 
             foreach (var exeName in GetOpenWithList(fileExtension, Registry.ClassesRoot))
             {
-                TryAddApplicationModel(exeName);
+                TryAddApplication(exeName);
             }
 
             foreach (var progid in GetOpenWithProgids(fileExtension, Registry.ClassesRoot))
             {
-                TryAddApplicationModel(progid);
+                TryAddApplication(progid);
             }
 
-            return Task.FromResult<IEnumerable<ApplicationModel>>(associativeApplications.Values);
+            return Task.FromResult<IEnumerable<ApplicationModel>>(associatedApplications.Values);
 
-            void TryAddApplicationModel(string applicationName)
+            void TryAddApplication(string applicationName)
             {
                 string startCommand;
                 string displayName;
@@ -94,7 +94,7 @@ namespace Camelot.Services.Windows
                     return;
                 }
 
-                associativeApplications.TryAdd(displayName, new ApplicationModel
+                associatedApplications.TryAdd(displayName, new ApplicationModel
                 {
                     DisplayName = displayName,
                     DisplayIcon = displayIcon,
@@ -103,7 +103,7 @@ namespace Camelot.Services.Windows
             }
         }
 
-        public Task<IEnumerable<ApplicationModel>> GetAllInstalledApplications()
+        public Task<IEnumerable<ApplicationModel>> GetInstalledApplications()
         {
             var installedApplications = new Dictionary<string, ApplicationModel>();
 

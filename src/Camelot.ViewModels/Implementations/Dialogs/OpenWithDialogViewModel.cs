@@ -37,7 +37,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         {
             OpenFileExtension = parameter.FileExtension;
 
-            _applications.AddRange(await _applicationService.GetAllInstalledApplications());
+            _applications.AddRange(await _applicationService.GetInstalledApplications());
             _recommendedApplications.AddRange(await _applicationService.GetAssociatedApplications(OpenFileExtension));
         }
     }
