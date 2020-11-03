@@ -66,7 +66,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
             var viewModel = new DirectoryInformationDialogViewModel(directoryServiceMock.Object,
                 applicationDispatcherMock.Object, mainNodeInfoTabViewModelMock.Object);
             var parameter = new FileSystemNodeNavigationParameter(Directory);
-            viewModel.Activate(parameter);
+            await viewModel.ActivateAsync(parameter);
 
             await Task.WhenAny(taskCompletionSource.Task, Task.Delay(1000));
 

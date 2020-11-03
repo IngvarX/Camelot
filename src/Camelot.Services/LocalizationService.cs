@@ -2,7 +2,7 @@
 using Camelot.DataAccess.Models;
 using Camelot.DataAccess.UnitOfWork;
 using Camelot.Services.Abstractions;
-using Camelot.Services.Abstractions.Models;
+using Camelot.Services.Abstractions.Models.State;
 
 namespace Camelot.Services
 {
@@ -17,15 +17,16 @@ namespace Camelot.Services
             _unitOfWorkFactory = unitOfWorkFactory;
         }
 
-        public Language GetSavedLanguage()
+        public LanguageStateModel GetSavedLanguage()
         {
             using var uow = _unitOfWorkFactory.Create();
             var repository = uow.GetRepository<Language>();
+            var dbModel = repository.GetById(LanguageSettingsId);
 
-            return repository.GetById(LanguageSettingsId);
+            return CreateFrom(dbModel);
         }
 
-        public void SaveLanguage(LanguageModel languageModel)
+        public void SaveLanguage(LanguageStateModel languageModel)
         {
             if (languageModel is null)
             {
@@ -45,13 +46,25 @@ namespace Camelot.Services
             using var uow = _unitOfWorkFactory.Create();
             var repository = uow.GetRepository<Language>();
 
-            var language = new Language
-            {
-                Code = languageModel.Code,
-                Name = languageModel.Name
-            };
+            var language = CreateFrom(languageModel);
 
             repository.Upsert(LanguageSettingsId, language);
         }
+
+        private static LanguageStateModel CreateFrom(Language model) =>
+            model is null
+                ? null
+                : new LanguageStateModel
+                {
+                    Code = model.Code,
+                    Name = model.Name
+                };
+
+        private static Language CreateFrom(LanguageStateModel model) =>
+            new Language
+            {
+                Code = model.Code,
+                Name = model.Name
+            };
     }
 }

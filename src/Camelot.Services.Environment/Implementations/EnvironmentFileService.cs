@@ -33,10 +33,10 @@ namespace Camelot.Services.Environment.Implementations
         public void Create(string filePath) =>
             File.Create(filePath).Dispose();
 
-        public FileStream OpenRead(string filePath) =>
+        public Stream OpenRead(string filePath) =>
             File.OpenRead(filePath);
 
-        public FileStream OpenWrite(string filePath) =>
+        public Stream OpenWrite(string filePath) =>
             File.OpenWrite(filePath);
     }
 }

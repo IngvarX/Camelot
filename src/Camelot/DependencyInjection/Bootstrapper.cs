@@ -80,6 +80,7 @@ namespace Camelot.DependencyInjection
             RegisterServices(services, resolver);
             RegisterPlatformSpecificServices(services, resolver);
             RegisterViewModels(services, resolver);
+            RegisterPlatformSpecificViewModels(services, resolver);
         }
 
         private static void RegisterLogging(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
@@ -152,6 +153,15 @@ namespace Camelot.DependencyInjection
             var archiveTypeMapperConfiguration = new ArchiveTypeMapperConfiguration();
             configuration.GetSection("Archive").Bind(archiveTypeMapperConfiguration);
             services.RegisterConstant(archiveTypeMapperConfiguration);
+
+            var archiveTypeViewModelFactoryConfiguration = new ArchiveTypeViewModelFactoryConfiguration();
+            configuration.GetSection("ArchiveViewModelFactory").Bind(archiveTypeViewModelFactoryConfiguration);
+            services.RegisterConstant(archiveTypeViewModelFactoryConfiguration);
+
+
+            var operationsStatesConfiguration = new OperationsStatesConfiguration();
+            configuration.GetSection("OperationsStates").Bind(operationsStatesConfiguration);
+            services.RegisterConstant(operationsStatesConfiguration);
         }
 
         private static void RegisterEnvironmentServices(IMutableDependencyResolver services)
@@ -201,7 +211,12 @@ namespace Camelot.DependencyInjection
         {
             services.RegisterLazySingleton<IArchiveProcessorFactory>(() => new ArchiveProcessorFactory(
                 resolver.GetRequiredService<IFileService>(),
+                resolver.GetRequiredService<IDirectoryService>(),
+                resolver.GetRequiredService<IFileNameGenerationService>(),
                 resolver.GetRequiredService<IPathService>()
+            ));
+            services.Register<ICreateArchiveStateService>(() => new CreateArchiveStateService(
+                resolver.GetRequiredService<IUnitOfWorkFactory>()
             ));
             services.RegisterLazySingleton<IArchiveTypeMapper>(() => new ArchiveTypeMapper(
                 resolver.GetRequiredService<IPathService>(),
@@ -265,6 +280,9 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IEnvironmentPathService>()
             ));
             services.RegisterLazySingleton<IDialogService>(() => new DialogService(
+                resolver.GetRequiredService<IMainWindowProvider>()
+            ));
+            services.RegisterLazySingleton<ISystemDialogService>(() => new SystemDialogService(
                 resolver.GetRequiredService<IMainWindowProvider>()
             ));
             services.RegisterLazySingleton<IResourceProvider>(() => new ResourceProvider());
@@ -401,6 +419,42 @@ namespace Camelot.DependencyInjection
             services.RegisterLazySingleton<IApplicationService>(() => new WindowsApplicationService());
         }
 
+        private static void RegisterPlatformSpecificViewModels(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
+        {
+            var platformService = resolver.GetRequiredService<IPlatformService>();
+            var platform = platformService.GetPlatform();
+
+            if (platform == Platform.MacOs)
+            {
+                RegisterMacViewModels(services, resolver);
+            }
+        }
+
+        private static void RegisterMacViewModels(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
+        {
+            services.RegisterLazySingleton(() => new MacDirectoryOpeningBehavior(
+                resolver.GetRequiredService<FileOpeningBehavior>(),
+                resolver.GetRequiredService<DirectoryOpeningBehavior>()
+            ));
+            services.RegisterLazySingleton<IFileSystemNodeViewModelFactory>(() => new FileSystemNodeViewModelFactory(
+                resolver.GetRequiredService<FileOpeningBehavior>(),
+                resolver.GetRequiredService<MacDirectoryOpeningBehavior>(),
+                resolver.GetRequiredService<IFileSizeFormatter>(),
+                resolver.GetRequiredService<IPathService>(),
+                resolver.GetRequiredService<IOperationsService>(),
+                resolver.GetRequiredService<IClipboardOperationsService>(),
+                resolver.GetRequiredService<IFilesOperationsMediator>(),
+                resolver.GetRequiredService<FilePropertiesBehavior>(),
+                resolver.GetRequiredService<DirectoryPropertiesBehavior>(),
+                resolver.GetRequiredService<IDialogService>(),
+                resolver.GetRequiredService<ITrashCanService>(),
+                resolver.GetRequiredService<IFileService>(),
+                resolver.GetRequiredService<IDirectoryService>(),
+                resolver.GetRequiredService<IArchiveService>(),
+                resolver.GetRequiredService<ISystemDialogService>()
+            ));
+        }
+
         private static void RegisterViewModels(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
             services.RegisterLazySingleton<IFilesOperationsMediator>(() => new FilesOperationsMediator(
@@ -424,6 +478,9 @@ namespace Camelot.DependencyInjection
             services.RegisterLazySingleton<ITabViewModelFactory>(() => new TabViewModelFactory(
                 resolver.GetRequiredService<IPathService>()
             ));
+            services.Register<IArchiveTypeViewModelFactory>(() => new ArchiveTypeViewModelFactory(
+                resolver.GetRequiredService<ArchiveTypeViewModelFactoryConfiguration>()
+            ));
             services.RegisterLazySingleton(() => new FilePropertiesBehavior(
                 resolver.GetRequiredService<IDialogService>()
             ));
@@ -444,12 +501,20 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<ITrashCanService>(),
                 resolver.GetRequiredService<IFileService>(),
                 resolver.GetRequiredService<IDirectoryService>(),
-                resolver.GetRequiredService<IArchiveService>()
+                resolver.GetRequiredService<IArchiveService>(),
+                resolver.GetRequiredService<ISystemDialogService>()
             ));
             services.Register(() => new AboutDialogViewModel(
                 resolver.GetRequiredService<IApplicationVersionProvider>(),
                 resolver.GetRequiredService<IResourceOpeningService>(),
                 resolver.GetRequiredService<AboutDialogConfiguration>()
+            ));
+            services.Register(() => new CreateArchiveDialogViewModel(
+                resolver.GetRequiredService<IDirectoryService>(),
+                resolver.GetRequiredService<IFileService>(),
+                resolver.GetRequiredService<IArchiveTypeViewModelFactory>(),
+                resolver.GetRequiredService<ISystemDialogService>(),
+                resolver.GetRequiredService<ICreateArchiveStateService>()
             ));
             services.RegisterLazySingleton<IBitmapFactory>(() => new BitmapFactory());
             services.Register(() => new MainNodeInfoTabViewModel(
@@ -487,7 +552,8 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IOperationsStateService>(),
                 resolver.GetRequiredService<IOperationStateViewModelFactory>(),
                 resolver.GetRequiredService<IApplicationDispatcher>(),
-                resolver.GetRequiredService<IDialogService>()
+                resolver.GetRequiredService<IDialogService>(),
+                resolver.GetRequiredService<OperationsStatesConfiguration>()
             ));
             services.Register(() => new RemoveNodesConfirmationDialogViewModel(
                 resolver.GetRequiredService<IPathService>()
@@ -530,7 +596,12 @@ namespace Camelot.DependencyInjection
             services.RegisterLazySingleton<ITopOperationsViewModel>(() => new TopOperationsViewModel(
                 resolver.GetRequiredService<ITerminalService>(),
                 resolver.GetRequiredService<IDirectoryService>(),
-                resolver.GetRequiredService<IFilesOperationsMediator>()
+                resolver.GetRequiredService<IFilesOperationsMediator>(),
+                resolver.GetRequiredService<IDialogService>(),
+                resolver.GetRequiredService<IPathService>(),
+                resolver.GetRequiredService<IArchiveService>(),
+                resolver.GetRequiredService<INodesSelectionService>(),
+                resolver.GetRequiredService<ISystemDialogService>()
             ));
             services.RegisterLazySingleton<IFavouriteDirectoryViewModelFactory>(() => new FavouriteDirectoryViewModelFactory(
                 resolver.GetRequiredService<IFilesOperationsMediator>(),

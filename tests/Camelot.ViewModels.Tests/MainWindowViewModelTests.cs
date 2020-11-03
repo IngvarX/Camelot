@@ -125,5 +125,21 @@ namespace Camelot.ViewModels.Tests
             _autoMocker
                 .Verify<IFilesOperationsMediator>(m => m.ToggleSearchPanelVisibility(), Times.Once);
         }
+
+        [Fact]
+        public void TestSwitchPanelCommand()
+        {
+            var filePanelViewModelMock = new Mock<IFilesPanelViewModel>();
+            _autoMocker
+                .Setup<IFilesOperationsMediator, IFilesPanelViewModel>(m => m.InactiveFilesPanelViewModel)
+                .Returns(filePanelViewModelMock.Object);
+
+            var mainWindowViewModel = _autoMocker.CreateInstance<MainWindowViewModel>();
+
+            Assert.True(mainWindowViewModel.SwitchPanelCommand.CanExecute(null));
+            mainWindowViewModel.SwitchPanelCommand.Execute(null);
+
+            filePanelViewModelMock.Verify(m => m.Activate(), Times.Once);
+        }
     }
 }

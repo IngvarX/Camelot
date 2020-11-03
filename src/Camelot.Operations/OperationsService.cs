@@ -183,9 +183,11 @@ namespace Camelot.Operations
         private PackOperationSettings GetPackOperationSettings(IReadOnlyList<string> nodes, string outputFilePath, ArchiveType archiveType)
         {
             var (files, directories) = Split(nodes);
+            var sourceDirectory = _pathService.GetCommonRootDirectory(nodes);
             var targetDirectory = _pathService.GetParentDirectory(outputFilePath);
 
-            return new PackOperationSettings(directories, files, outputFilePath, targetDirectory, archiveType);
+            return new PackOperationSettings(directories, files, outputFilePath, sourceDirectory,
+                targetDirectory, archiveType);
         }
 
         private static ExtractArchiveOperationSettings GetExtractOperationSettings(

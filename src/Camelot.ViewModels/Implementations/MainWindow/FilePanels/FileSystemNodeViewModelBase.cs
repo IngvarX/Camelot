@@ -29,6 +29,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private readonly IDialogService _dialogService;
         private readonly ITrashCanService _trashCanService;
         private readonly IArchiveService _archiveService;
+        private readonly ISystemDialogService _systemDialogService;
 
         private IReadOnlyList<string> Files => new[] {FullPath};
 
@@ -77,7 +78,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             IFileSystemNodePropertiesBehavior fileSystemNodePropertiesBehavior,
             IDialogService dialogService,
             ITrashCanService trashCanService,
-            IArchiveService archiveService)
+            IArchiveService archiveService,
+            ISystemDialogService systemDialogService)
         {
             _fileSystemNodeOpeningBehavior = fileSystemNodeOpeningBehavior;
             _operationsService = operationsService;
@@ -87,6 +89,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             _dialogService = dialogService;
             _trashCanService = trashCanService;
             _archiveService = archiveService;
+            _systemDialogService = systemDialogService;
 
             OpenCommand = ReactiveCommand.Create(Open);
             OpenWithCommand = ReactiveCommand.Create(OpenWithAsync);
@@ -103,13 +106,24 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         private void Open() => _fileSystemNodeOpeningBehavior.Open(FullPath);
 
+        private async Task PackAsync()
+        {
+            var parameter = new CreateArchiveNavigationParameter(FullPath, true);
+            var dialogResult = await _dialogService.ShowDialogAsync<CreateArchiveDialogResult, CreateArchiveNavigationParameter>(
+                nameof(CreateArchiveDialogViewModel), parameter);
+            if (dialogResult is null)
+            {
+                return;
+            }
+
+            await _archiveService.PackAsync(Files, dialogResult.ArchivePath, dialogResult.ArchiveType);
+        }
+        
         private async Task OpenWithAsync()
         {
             var extension = Path.GetExtension(FullName);
             await _dialogService.ShowDialogAsync(nameof(OpenWithDialogViewModel), new OpenWithNavigationParameter(extension));
         }
-
-        private Task PackAsync() => throw new NotImplementedException();
 
         private async Task ExtractAsync(ExtractCommandType commandType)
         {
@@ -127,7 +141,11 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
                     await _archiveService.ExtractToNewDirectoryAsync(FullPath);
                     break;
                 case ExtractCommandType.SelectDirectory:
-                    // TODO:
+                    var directory = await _systemDialogService.GetDirectoryAsync();
+                    if (!string.IsNullOrWhiteSpace(directory))
+                    {
+                        await _archiveService.ExtractAsync(FullPath, directory);
+                    }
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(commandType), commandType, null);

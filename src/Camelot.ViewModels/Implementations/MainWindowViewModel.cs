@@ -39,6 +39,8 @@ namespace Camelot.ViewModels.Implementations
 
         public ICommand SearchCommand { get; }
 
+        public ICommand SwitchPanelCommand { get; }
+
         public MainWindowViewModel(
             IFilesOperationsMediator filesOperationsMediator,
             IOperationsViewModel operationsViewModel,
@@ -64,6 +66,7 @@ namespace Camelot.ViewModels.Implementations
             CreateNewTabCommand = ReactiveCommand.Create(CreateNewTab);
             CloseCurrentTabCommand = ReactiveCommand.Create(CloseActiveTab);
             SearchCommand = ReactiveCommand.Create(Search);
+            SwitchPanelCommand = ReactiveCommand.Create(SwitchPanel);
 
             filesOperationsMediator.Register(leftFilesPanelViewModel, rightFilesPanelViewModel);
         }
@@ -73,5 +76,7 @@ namespace Camelot.ViewModels.Implementations
         private void CloseActiveTab() => ActiveTabsListViewModel.CloseActiveTab();
 
         private void Search() => _filesOperationsMediator.ToggleSearchPanelVisibility();
+
+        private void SwitchPanel() => _filesOperationsMediator.InactiveFilesPanelViewModel.Activate();
     }
 }

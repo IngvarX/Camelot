@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models.EventArgs;
 using Camelot.Services.Environment.Interfaces;
@@ -16,6 +18,7 @@ namespace Camelot.Services.Tests
         private const string ParentDirectoryName = "Parent";
         private const string NewDirectoryName = "New";
         private const string NotExistingDirectoryName = "MissingDirectory";
+        private const string File = "File";
 
         private readonly AutoMocker _autoMocker;
 
@@ -105,6 +108,36 @@ namespace Camelot.Services.Tests
             var directory = directoryService.GetAppRootDirectory();
 
             Assert.Equal(ParentDirectoryName, directory);
+        }
+
+        [Fact]
+        public void TestGetFilesRecursively()
+        {
+            _autoMocker
+                .Setup<IEnvironmentDirectoryService, IEnumerable<string>>(m => m.EnumerateFilesRecursively(DirectoryName))
+                 .Returns(new[] {File})
+                .Verifiable();
+            var directoryService = _autoMocker.CreateInstance<DirectoryService>();
+            var files = directoryService.GetFilesRecursively(DirectoryName);
+
+            Assert.NotNull(files);
+            Assert.Single(files);
+            Assert.Equal(File, files.Single());
+        }
+
+        [Fact]
+        public void TestGetDirectoriesRecursively()
+        {
+            _autoMocker
+                .Setup<IEnvironmentDirectoryService, IEnumerable<string>>(m => m.EnumerateDirectoriesRecursively(DirectoryName))
+                .Returns(new[] {NewDirectoryName})
+                .Verifiable();
+            var directoryService = _autoMocker.CreateInstance<DirectoryService>();
+            var directories = directoryService.GetDirectoriesRecursively(DirectoryName);
+
+            Assert.NotNull(directories);
+            Assert.Single(directories);
+            Assert.Equal(NewDirectoryName, directories.Single());
         }
 
         [Fact]

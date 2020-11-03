@@ -1,6 +1,7 @@
 using Camelot.DataAccess.Models;
 using Camelot.DataAccess.UnitOfWork;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Models.State;
 using Camelot.Services.Environment.Interfaces;
 
 namespace Camelot.Services.AllPlatforms
@@ -29,28 +30,46 @@ namespace Camelot.Services.AllPlatforms
             _processService.Run(wrappedCommand, string.Format(wrappedArguments, escapedDirectory));
         }
 
-        public TerminalSettings GetTerminalSettings() => GetSavedSettings() ?? GetDefaultSettings();
+        public TerminalSettingsStateModel GetTerminalSettings() => GetSavedSettings() ?? GetDefaultSettings();
 
-        public void SetTerminalSettings(TerminalSettings terminalSettings)
+        public void SetTerminalSettings(TerminalSettingsStateModel terminalSettingsState)
         {
             using var uow = _unitOfWorkFactory.Create();
             var repository = uow.GetRepository<TerminalSettings>();
+            var dbModel = CreateFrom(terminalSettingsState);
 
-            repository.Upsert(TerminalSettingsId, terminalSettings);
+            repository.Upsert(TerminalSettingsId, dbModel);
         }
 
-        protected abstract TerminalSettings GetDefaultSettings();
+        protected abstract TerminalSettingsStateModel GetDefaultSettings();
 
         protected virtual (string, string) Wrap(string command, string arguments) => (command, arguments);
 
         protected virtual string Escape(string directory) => directory;
 
-        private TerminalSettings GetSavedSettings()
+        private TerminalSettingsStateModel GetSavedSettings()
         {
             using var uow = _unitOfWorkFactory.Create();
             var repository = uow.GetRepository<TerminalSettings>();
+            var dbModel = repository.GetById(TerminalSettingsId);
 
-            return repository.GetById(TerminalSettingsId);
+            return CreateFrom(dbModel);
         }
+
+        private static TerminalSettingsStateModel CreateFrom(TerminalSettings model) =>
+            model is null
+                ? null
+                : new TerminalSettingsStateModel
+                {
+                    Arguments = model.Arguments,
+                    Command = model.Command
+                };
+
+        private static TerminalSettings CreateFrom(TerminalSettingsStateModel stateModel) =>
+            new TerminalSettings
+            {
+                Arguments = stateModel.Arguments,
+                Command = stateModel.Command
+            };
     }
 }

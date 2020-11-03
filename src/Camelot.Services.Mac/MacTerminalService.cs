@@ -1,5 +1,5 @@
-using Camelot.DataAccess.Models;
 using Camelot.DataAccess.UnitOfWork;
+using Camelot.Services.Abstractions.Models.State;
 using Camelot.Services.AllPlatforms;
 using Camelot.Services.Environment.Interfaces;
 
@@ -15,8 +15,8 @@ namespace Camelot.Services.Mac
 
         }
 
-        protected override TerminalSettings GetDefaultSettings() =>
-            new TerminalSettings
+        protected override TerminalSettingsStateModel GetDefaultSettings() =>
+            new TerminalSettingsStateModel
             {
                 Command = "open",
                 Arguments = "-a Terminal \"{0}\""

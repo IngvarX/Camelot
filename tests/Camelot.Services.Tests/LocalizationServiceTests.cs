@@ -2,7 +2,7 @@ using System;
 using Camelot.DataAccess.Models;
 using Camelot.DataAccess.Repositories;
 using Camelot.DataAccess.UnitOfWork;
-using Camelot.Services.Abstractions.Models;
+using Camelot.Services.Abstractions.Models.State;
 using Moq;
 using Xunit;
 
@@ -60,7 +60,7 @@ namespace Camelot.Services.Tests
                 .Returns(unitOfWorkMock.Object);
 
             var localizationService = new LocalizationService(unitOfWorkFactoryMock.Object);
-            var languageModel = new LanguageModel(LanguageName, LanguageName, LanguageCode);
+            var languageModel = CreateFrom(LanguageName, LanguageCode);
             localizationService.SaveLanguage(languageModel);
 
             repositoryMock
@@ -75,10 +75,17 @@ namespace Camelot.Services.Tests
             var localizationService = new LocalizationService(unitOfWorkFactoryMock.Object);
 
             Assert.Throws<ArgumentNullException>(() => localizationService.SaveLanguage(null));
-            Assert.Throws<ArgumentException>(() => localizationService.SaveLanguage(new LanguageModel("", "", "")));
-            Assert.Throws<ArgumentException>(() => localizationService.SaveLanguage(new LanguageModel(null, "", "")));
-            Assert.Throws<ArgumentException>(() => localizationService.SaveLanguage(new LanguageModel("name", "", "")));
-            Assert.Throws<ArgumentException>(() => localizationService.SaveLanguage(new LanguageModel("name", null, "")));
+            Assert.Throws<ArgumentException>(() => localizationService.SaveLanguage(CreateFrom("", "")));
+            Assert.Throws<ArgumentException>(() => localizationService.SaveLanguage(CreateFrom(null, "")));
+            Assert.Throws<ArgumentException>(() => localizationService.SaveLanguage(CreateFrom("name", "")));
+            Assert.Throws<ArgumentException>(() => localizationService.SaveLanguage(CreateFrom("name", null)));
         }
+
+        private static LanguageStateModel CreateFrom(string name, string code) =>
+            new LanguageStateModel
+            {
+                Code = code,
+                Name = name
+            };
     }
 }

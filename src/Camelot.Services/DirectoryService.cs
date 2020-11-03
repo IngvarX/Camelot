@@ -107,12 +107,12 @@ namespace Camelot.Services
         public string GetAppRootDirectory() =>
             _pathService.GetPathRoot(_environmentDirectoryService.GetCurrentDirectory());
 
-        public IEnumerable<string> GetFilesRecursively(string directory) =>
+        public IReadOnlyList<string> GetFilesRecursively(string directory) =>
             _environmentDirectoryService
                 .EnumerateFilesRecursively(directory)
                 .ToArray();
 
-        public IEnumerable<string> GetDirectoriesRecursively(string directory) =>
+        public IReadOnlyList<string> GetDirectoriesRecursively(string directory) =>
             _environmentDirectoryService
                 .EnumerateDirectoriesRecursively(directory)
                 .ToArray();

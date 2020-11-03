@@ -1,7 +1,6 @@
+using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.ViewModels.Factories.Implementations;
-using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Comparers;
-using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Enums;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Moq;
 using Xunit;
@@ -11,9 +10,9 @@ namespace Camelot.ViewModels.Tests.Factories
     public class FileSystemNodeViewModelComparerFactoryTests
     {
         [Theory]
-        [InlineData(SortingColumn.Date, true)]
-        [InlineData(SortingColumn.Size, false)]
-        public void TestCreate(SortingColumn sortingColumn, bool isSortingByAscendingEnabled)
+        [InlineData(SortingMode.Date, true)]
+        [InlineData(SortingMode.Size, false)]
+        public void TestCreate(SortingMode sortingColumn, bool isSortingByAscendingEnabled)
         {
             var viewModelMock = new Mock<IFileSystemNodesSortingViewModel>();
             viewModelMock

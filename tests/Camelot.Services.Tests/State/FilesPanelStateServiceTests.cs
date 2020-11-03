@@ -5,10 +5,11 @@ using Camelot.DataAccess.Models;
 using Camelot.DataAccess.Repositories;
 using Camelot.DataAccess.UnitOfWork;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Models.State;
 using Moq;
 using Xunit;
 
-namespace Camelot.Services.Tests
+namespace Camelot.Services.Tests.State
 {
     public class FilesPanelStateServiceTests
     {
@@ -67,9 +68,12 @@ namespace Camelot.Services.Tests
 
             var tabs = Enumerable
                 .Range(0, 10)
-                .Select(_ => new TabModel())
+                .Select(_ => new TabStateModel
+                {
+                    SortingSettings = new SortingSettingsStateModel()
+                })
                 .ToList();
-            var state = new PanelModel {Tabs = tabs};
+            var state = new PanelStateModel {Tabs = tabs};
 
             filesPanelStateService.SavePanelState(state);
 
@@ -77,8 +81,7 @@ namespace Camelot.Services.Tests
 
             Assert.NotNull(savedState);
             Assert.NotNull(savedState.Tabs);
-            Assert.True(savedState.Tabs.Count == tabs.Count);
-            Assert.Equal(tabs, savedState.Tabs);
+            Assert.Equal(tabs.Count, savedState.Tabs.Count);
         }
 
         private static IUnitOfWorkFactory GetUnitOfWorkFactory(IMock<IRepository<PanelModel>> repositoryMock)

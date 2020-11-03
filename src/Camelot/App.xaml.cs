@@ -25,7 +25,7 @@ namespace Camelot
             {
                 desktop.MainWindow = new MainWindow
                 {
-                    DataContext = Locator.Current.GetRequiredService<MainWindowViewModel>()
+                    DataContext = GetRequiredService<MainWindowViewModel>()
                 };
             }
 
@@ -40,13 +40,15 @@ namespace Camelot
 
         private static void LoadLanguage()
         {
-            var localizationService = Locator.Current.GetRequiredService<ILocalizationService>();
-            var languageManager = Locator.Current.GetRequiredService<ILanguageManager>();
+            var localizationService = GetRequiredService<ILocalizationService>();
+            var languageManager = GetRequiredService<ILanguageManager>();
 
             if (localizationService.GetSavedLanguage() is { } savedLanguage)
             {
                 languageManager.SetLanguage(savedLanguage.Code);
             }
         }
+
+        private static T GetRequiredService<T>() => Locator.Current.GetRequiredService<T>();
     }
 }

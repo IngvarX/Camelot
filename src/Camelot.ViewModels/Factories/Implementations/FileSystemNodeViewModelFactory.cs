@@ -27,6 +27,7 @@ namespace Camelot.ViewModels.Factories.Implementations
         private readonly IFileService _fileService;
         private readonly IDirectoryService _directoryService;
         private readonly IArchiveService _archiveService;
+        private readonly ISystemDialogService _systemDialogService;
 
         public FileSystemNodeViewModelFactory(
             IFileSystemNodeOpeningBehavior fileOpeningBehavior,
@@ -42,7 +43,8 @@ namespace Camelot.ViewModels.Factories.Implementations
             ITrashCanService trashCanService,
             IFileService fileService,
             IDirectoryService directoryService,
-            IArchiveService archiveService)
+            IArchiveService archiveService,
+            ISystemDialogService systemDialogService)
         {
             _fileOpeningBehavior = fileOpeningBehavior;
             _directoryOpeningBehavior = directoryOpeningBehavior;
@@ -58,6 +60,7 @@ namespace Camelot.ViewModels.Factories.Implementations
             _fileService = fileService;
             _directoryService = directoryService;
             _archiveService = archiveService;
+            _systemDialogService = systemDialogService;
         }
 
         public IFileSystemNodeViewModel Create(string path)
@@ -90,7 +93,8 @@ namespace Camelot.ViewModels.Factories.Implementations
                 _filePropertiesBehavior,
                 _dialogService,
                 _trashCanService,
-                _archiveService)
+                _archiveService,
+                _systemDialogService)
             {
                 FullPath = fileModel.FullPath,
                 Size = fileModel.SizeBytes,
@@ -113,7 +117,8 @@ namespace Camelot.ViewModels.Factories.Implementations
                 _directoryPropertiesBehavior,
                 _dialogService,
                 _trashCanService,
-                _archiveService)
+                _archiveService,
+                _systemDialogService)
             {
                 FullPath = directoryModel.FullPath,
                 Name = directoryModel.Name,

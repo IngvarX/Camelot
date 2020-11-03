@@ -79,15 +79,17 @@ namespace Camelot.Operations.Tests
         }
 
         [Theory]
-        [InlineData(ArchiveType.Rar)]
         [InlineData(ArchiveType.Zip)]
-        [InlineData(ArchiveType.GZip)]
+        [InlineData(ArchiveType.Gz)]
         [InlineData(ArchiveType.Tar)]
         [InlineData(ArchiveType.SevenZip)]
         [InlineData(ArchiveType.TarGz)]
-        [InlineData(ArchiveType.TarBz)]
+        [InlineData(ArchiveType.TarBz2)]
+        [InlineData(ArchiveType.Bz2)]
         [InlineData(ArchiveType.TarXz)]
+        [InlineData(ArchiveType.Xz)]
         [InlineData(ArchiveType.TarLz)]
+        [InlineData(ArchiveType.Lz)]
         public async Task TestFilesPack(ArchiveType archiveType)
         {
             var operationMock = new Mock<IOperation>();
@@ -119,15 +121,17 @@ namespace Camelot.Operations.Tests
         }
 
         [Theory]
-        [InlineData(ArchiveType.Rar)]
         [InlineData(ArchiveType.Zip)]
-        [InlineData(ArchiveType.GZip)]
+        [InlineData(ArchiveType.Gz)]
         [InlineData(ArchiveType.Tar)]
         [InlineData(ArchiveType.SevenZip)]
         [InlineData(ArchiveType.TarGz)]
-        [InlineData(ArchiveType.TarBz)]
+        [InlineData(ArchiveType.TarBz2)]
+        [InlineData(ArchiveType.Bz2)]
         [InlineData(ArchiveType.TarXz)]
+        [InlineData(ArchiveType.Xz)]
         [InlineData(ArchiveType.TarLz)]
+        [InlineData(ArchiveType.Lz)]
         public async Task TestFilesExtract(ArchiveType archiveType)
         {
             var operationMock = new Mock<IOperation>();
@@ -321,6 +325,9 @@ namespace Camelot.Operations.Tests
             _autoMocker
                 .Setup<IPathService, string>(m => m.Combine(NewDirectoryName, string.Empty))
                 .Returns(NewDirectoryName);
+            _autoMocker
+                .Setup<IDirectoryService, IReadOnlyList<string>>(m => m.GetFilesRecursively(It.IsAny<string>()))
+                .Returns(new List<string>());
 
             var operationsService = _autoMocker.CreateInstance<OperationsService>();
 

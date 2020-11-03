@@ -13,6 +13,6 @@ namespace Camelot.Services.Behaviors
             _directoryService = directoryService;
         }
 
-        public void Open(string directory) => _directoryService.SelectedDirectory = directory;
+        public void Open(string node) => _directoryService.SelectedDirectory = node;
     }
 }

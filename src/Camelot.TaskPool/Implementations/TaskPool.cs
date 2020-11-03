@@ -22,7 +22,7 @@ namespace Camelot.TaskPool.Implementations
 
             Task
                 .Run(taskFactory)
-                .ContinueWith(task => _semaphoreSlim.Release())
+                .ContinueWith(_ => _semaphoreSlim.Release())
                 .Forget();
         }
     }

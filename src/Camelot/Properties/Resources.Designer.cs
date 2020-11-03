@@ -268,6 +268,15 @@ namespace Camelot.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create archive.
+        /// </summary>
+        public static string CreateArchive {
+            get {
+                return ResourceManager.GetString("CreateArchive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create directory.
         /// </summary>
         public static string CreateDirectoryTitle {
@@ -475,6 +484,15 @@ namespace Camelot.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to extract archive {0} to {1}.
+        /// </summary>
+        public static string FailedToExtractArchiveTo {
+            get {
+                return ResourceManager.GetString("FailedToExtractArchiveTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to move {0} to {1}.
         /// </summary>
         public static string FailedToMoveFileFromTo {
@@ -489,6 +507,24 @@ namespace Camelot.Properties {
         public static string FailedToMoveFilesAndDirectoriesTo {
             get {
                 return ResourceManager.GetString("FailedToMoveFilesAndDirectoriesTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to pack {0} files and {1} directories to {2}.
+        /// </summary>
+        public static string FailedToPackFilesAndDirectoriesTo {
+            get {
+                return ResourceManager.GetString("FailedToPackFilesAndDirectoriesTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to pack {0} to {1}.
+        /// </summary>
+        public static string FailedToPackTo {
+            get {
+                return ResourceManager.GetString("FailedToPackTo", resourceCulture);
             }
         }
         
@@ -763,6 +799,15 @@ namespace Camelot.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pack files.
+        /// </summary>
+        public static string PackFilesTitle {
+            get {
+                return ResourceManager.GetString("PackFilesTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Packing {0} files and {1} directories to (2).
         /// </summary>
         public static string PackingFilesAndDirectoriesTo {
@@ -777,6 +822,15 @@ namespace Camelot.Properties {
         public static string PackingFileTo {
             get {
                 return ResourceManager.GetString("PackingFileTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pack to the file:.
+        /// </summary>
+        public static string PackToTheFileWithColon {
+            get {
+                return ResourceManager.GetString("PackToTheFileWithColon", resourceCulture);
             }
         }
         

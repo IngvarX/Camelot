@@ -5,11 +5,13 @@ namespace Camelot.Services.Abstractions.Models.Enums
         Zip,
         Tar,
         TarGz,
-        TarBz,
+        Bz2,
+        TarBz2,
         TarXz,
+        Xz,
+        Lz,
         TarLz,
-        GZip,
-        Rar,
+        Gz,
         SevenZip
     }
 }

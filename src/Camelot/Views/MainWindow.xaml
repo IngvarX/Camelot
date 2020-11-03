@@ -20,6 +20,7 @@
         <KeyBinding Gesture="Meta+W" Command="{Binding CloseCurrentTabCommand}" />
         <KeyBinding Gesture="Ctrl+F" Command="{Binding SearchCommand}" />
         <KeyBinding Gesture="Meta+F" Command="{Binding SearchCommand}" />
+        <KeyBinding Gesture="Tab" Command="{Binding SwitchPanelCommand}" />
     </Window.KeyBindings>
 
     <Design.DataContext>

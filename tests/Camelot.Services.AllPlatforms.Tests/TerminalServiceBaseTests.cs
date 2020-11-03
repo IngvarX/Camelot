@@ -1,6 +1,7 @@
 using Camelot.DataAccess.Models;
 using Camelot.DataAccess.Repositories;
 using Camelot.DataAccess.UnitOfWork;
+using Camelot.Services.Abstractions.Models.State;
 using Camelot.Services.Environment.Interfaces;
 using Moq;
 using Xunit;
@@ -15,14 +16,15 @@ namespace Camelot.Services.AllPlatforms.Tests
         [Fact]
         public void TestSave()
         {
-            var terminalSettings = new TerminalSettings
+            var terminalSettings = new TerminalSettingsStateModel
             {
                 Command = Command,
                 Arguments = Arguments
             };
             var repositoryMock = new Mock<IRepository<TerminalSettings>>();
             repositoryMock
-                .Setup(m => m.Upsert(It.IsAny<string>(), terminalSettings))
+                .Setup(m => m.Upsert(It.IsAny<string>(),
+                    It.Is<TerminalSettings>(t => t.Arguments == terminalSettings.Arguments && t.Command == terminalSettings.Command)))
                 .Verifiable();
             var uowMock = new Mock<IUnitOfWork>();
             uowMock
@@ -38,7 +40,9 @@ namespace Camelot.Services.AllPlatforms.Tests
 
             terminalService.SetTerminalSettings(terminalSettings);
 
-            repositoryMock.Verify(m => m.Upsert(It.IsAny<string>(), terminalSettings));
+            repositoryMock.Verify(m => m.Upsert(It.IsAny<string>(),
+                It.Is<TerminalSettings>(t =>
+                    t.Arguments == terminalSettings.Arguments && t.Command == terminalSettings.Command)), Times.Once);
         }
 
         [Fact]
@@ -65,8 +69,9 @@ namespace Camelot.Services.AllPlatforms.Tests
 
             var terminalService = new TerminalService(processServiceMock.Object, uowFactoryMock.Object);
 
-            var terminalSettings = terminalService.GetTerminalSettings();
-            Assert.Equal(savedTerminalSettings, terminalSettings);
+            var (command, arguments) = terminalService.GetTerminalSettings();
+            Assert.Equal(savedTerminalSettings.Arguments, arguments);
+            Assert.Equal(savedTerminalSettings.Command, command);
         }
 
         [Fact]
@@ -100,7 +105,7 @@ namespace Camelot.Services.AllPlatforms.Tests
 
             }
 
-            protected override TerminalSettings GetDefaultSettings() => new TerminalSettings
+            protected override TerminalSettingsStateModel GetDefaultSettings() => new TerminalSettingsStateModel
             {
                 Command = Command,
                 Arguments = Arguments

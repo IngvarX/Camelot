@@ -1,4 +1,4 @@
-using Camelot.DataAccess.Models;
+using Camelot.Services.Abstractions.Models.State;
 
 namespace Camelot.Services.Abstractions
 {
@@ -6,8 +6,8 @@ namespace Camelot.Services.Abstractions
     {
         void Open(string directory);
 
-        TerminalSettings GetTerminalSettings();
+        TerminalSettingsStateModel GetTerminalSettings();
 
-        void SetTerminalSettings(TerminalSettings terminalSettings);
+        void SetTerminalSettings(TerminalSettingsStateModel terminalSettingsState);
     }
 }

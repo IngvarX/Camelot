@@ -23,8 +23,8 @@ namespace Camelot.Services.Environment.Interfaces
 
         void Create(string filePath);
 
-        FileStream OpenRead(string filePath);
+        Stream OpenRead(string filePath);
 
-        FileStream OpenWrite(string filePath);
+        Stream OpenWrite(string filePath);
     }
 }

@@ -8,8 +8,8 @@ using System.Windows.Input;
 using Camelot.Avalonia.Interfaces;
 using Camelot.Extensions;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.ViewModels.Factories.Interfaces;
-using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Enums;
 using Camelot.ViewModels.Interfaces.MainWindow;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using DynamicData;
@@ -139,7 +139,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
             ActivateCommand = ReactiveCommand.Create(Activate);
             RefreshCommand = ReactiveCommand.Create(ReloadFiles);
-            SortFilesCommand = ReactiveCommand.Create<SortingColumn>(SortFiles);
+            SortFilesCommand = ReactiveCommand.Create<SortingMode>(SortFiles);
             CopyToClipboardCommand = ReactiveCommand.CreateFromTask(CopyToClipboardAsync);
             PasteFromClipboardCommand = ReactiveCommand.CreateFromTask(PasteFromClipboardAsync);
 
@@ -172,15 +172,15 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             lastSelected?.OpenCommand.Execute(null);
         }
 
-        private void SortFiles(SortingColumn sortingColumn)
+        private void SortFiles(SortingMode sortingMode)
         {
-            if (SelectedTab.SortingViewModel.SortingColumn == sortingColumn)
+            if (SelectedTab.SortingViewModel.SortingColumn == sortingMode)
             {
                 SelectedTab.SortingViewModel.ToggleSortingDirection();
             }
             else
             {
-                SelectedTab.SortingViewModel.SortingColumn = sortingColumn;
+                SelectedTab.SortingViewModel.SortingColumn = sortingMode;
             }
 
             ReloadFiles();

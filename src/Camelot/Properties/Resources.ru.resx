@@ -417,6 +417,24 @@
   <data name="SelectDirectoryForExtraction" xml:space="preserve">
     <value>Выбрать каталог для разархивирвания</value>
   </data>
+  <data name="PackFilesTitle" xml:space="preserve">
+    <value>Архивировать файлы</value>
+  </data>
+  <data name="PackToTheFileWithColon" xml:space="preserve">
+    <value>Архивировать в файл:</value>
+  </data>
+  <data name="CreateArchive" xml:space="preserve">
+    <value>Создать архив</value>
+  </data>
+  <data name="FailedToExtractArchiveTo" xml:space="preserve">
+    <value>Не удалось распаковать архив {0} в {1}</value>
+  </data>
+  <data name="FailedToPackTo" xml:space="preserve">
+    <value>Не удалось архивировать {0} в {1}</value>
+  </data>
+  <data name="FailedToPackFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Не удалось архивировать {0} файлов и {1} каталогов в {2}</value>
+  </data>
   <data name="OpenWith" xml:space="preserve">
     <value>Открыть с помощью</value>
   </data>

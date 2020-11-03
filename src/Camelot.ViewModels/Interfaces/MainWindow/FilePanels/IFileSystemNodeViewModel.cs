@@ -4,7 +4,7 @@ namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels
 {
     public interface IFileSystemNodeViewModel
     {
-        string FullPath { get; set; }
+        string FullPath { get; }
 
         string Name { get; set; }
 

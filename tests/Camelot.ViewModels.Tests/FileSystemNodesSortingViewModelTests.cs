@@ -1,5 +1,5 @@
+using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
-using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Enums;
 using Xunit;
 
 namespace Camelot.ViewModels.Tests
@@ -7,9 +7,9 @@ namespace Camelot.ViewModels.Tests
     public class FileSystemNodesSortingViewModelTests
     {
         [Theory]
-        [InlineData(SortingColumn.Date, SortingColumn.Extension, true)]
-        [InlineData(SortingColumn.Name, SortingColumn.Size, false)]
-        public void Test(SortingColumn sortingColumn, SortingColumn newSortingColumn, bool isSortingByAscendingEnabled)
+        [InlineData(SortingMode.Date, SortingMode.Extension, true)]
+        [InlineData(SortingMode.Name, SortingMode.Size, false)]
+        public void Test(SortingMode sortingColumn, SortingMode newSortingColumn, bool isSortingByAscendingEnabled)
         {
             var viewModel = new FileSystemNodesSortingViewModel(sortingColumn, isSortingByAscendingEnabled);
             Assert.Equal(sortingColumn, viewModel.SortingColumn);

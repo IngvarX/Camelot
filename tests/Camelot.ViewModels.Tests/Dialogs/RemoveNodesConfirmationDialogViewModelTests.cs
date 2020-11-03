@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.ViewModels.Implementations.Dialogs;
 using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
@@ -47,7 +48,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public void TestProperties(bool isRemovingToTrash)
+        public async Task TestProperties(bool isRemovingToTrash)
         {
             var pathServiceMock = new Mock<IPathService>();
             pathServiceMock
@@ -56,7 +57,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
             var dialog = new RemoveNodesConfirmationDialogViewModel(pathServiceMock.Object);
 
             var files = new[] {FilePath};
-            dialog.Activate(new NodesRemovingNavigationParameter(files, isRemovingToTrash));
+            await dialog.ActivateAsync(new NodesRemovingNavigationParameter(files, isRemovingToTrash));
 
             Assert.Equal(new[] {FileName}, dialog.Files.ToArray());
             Assert.Equal(1, dialog.FilesCount);

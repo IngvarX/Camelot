@@ -1,5 +1,5 @@
-using Camelot.DataAccess.Models;
 using Camelot.DataAccess.UnitOfWork;
+using Camelot.Services.Abstractions.Models.State;
 using Camelot.Services.AllPlatforms;
 using Camelot.Services.Environment.Interfaces;
 using Camelot.Services.Linux.Enums;
@@ -23,7 +23,7 @@ namespace Camelot.Services.Linux
             _shellCommandWrappingService = shellCommandWrappingService;
         }
 
-        protected override TerminalSettings GetDefaultSettings()
+        protected override TerminalSettingsStateModel GetDefaultSettings()
         {
             var desktopEnvironment = _desktopEnvironmentService.GetDesktopEnvironment();
             var (command, arguments) = desktopEnvironment switch
@@ -32,7 +32,7 @@ namespace Camelot.Services.Linux
                 _ => ("x-terminal-emulator", @"--workdir \""{0}\""")
             };
 
-            return new TerminalSettings {Command = command, Arguments = arguments};
+            return CreateFrom(command, arguments);
         }
 
         protected override (string, string) Wrap(string command, string arguments) =>
@@ -40,5 +40,8 @@ namespace Camelot.Services.Linux
 
         protected override string Escape(string directory) =>
             directory.Replace("\"", @"\\\""");
+
+        private static TerminalSettingsStateModel CreateFrom(string command, string arguments) =>
+            new TerminalSettingsStateModel {Command = command, Arguments = arguments};
     }
 }

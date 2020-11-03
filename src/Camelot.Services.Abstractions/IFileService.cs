@@ -28,8 +28,8 @@ namespace Camelot.Services.Abstractions
 
         void CreateFile(string filePath);
 
-        FileStream OpenRead(string filePath);
+        Stream OpenRead(string filePath);
 
-        FileStream OpenWrite(string filePath);
+        Stream OpenWrite(string filePath);
     }
 }

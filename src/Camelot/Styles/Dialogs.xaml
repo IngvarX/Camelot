@@ -141,6 +141,11 @@
         <Setter Property="BorderBrush" Value="{DynamicResource TransparentButtonBorderBrush}" />
     </Style>
 
+    <Style Selector="Button.iconDialogButton">
+        <Setter Property="Background" Value="{DynamicResource OperationButtonBackgroundColorBrush}" />
+        <Setter Property="Padding" Value="10,0" />
+    </Style>
+
     <Style Selector="Button.transparentDialogButton:pointerover /template/ ContentPresenter">
         <Setter Property="BorderBrush" Value="{DynamicResource ThemeForegroundBrush}" />
     </Style>

@@ -5,9 +5,10 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using Camelot.DataAccess.Models;
 using Camelot.Extensions;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Models.Enums;
+using Camelot.Services.Abstractions.Models.State;
 using Camelot.ViewModels.Configuration;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
@@ -60,7 +61,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             {
                 var tabs = _tabs.Select(CreateFrom).ToList();
                 var selectedTabIndex = _tabs.IndexOf(_selectedTab);
-                var state = new PanelModel
+                var state = new PanelStateModel
                 {
                     Tabs = tabs,
                     SelectedTabIndex = selectedTabIndex
@@ -99,7 +100,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             SelectedTabChanged.Raise(this, EventArgs.Empty);
         }
 
-        private ObservableCollection<ITabViewModel> GetInitialTabs(IEnumerable<TabModel> tabModels)
+        private ObservableCollection<ITabViewModel> GetInitialTabs(IEnumerable<TabStateModel> tabModels)
         {
             var tabs = tabModels
                 .Where(tm => _directoryService.CheckIfExists(tm.Directory))
@@ -112,19 +113,23 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             return new ObservableCollection<ITabViewModel>(tabs.Select(CreateViewModelFrom));
         }
 
-        private List<TabModel> GetDefaultTabs()
+        private List<TabStateModel> GetDefaultTabs()
         {
-            var rootDirectoryTab = new TabModel
+            var rootDirectoryTab = new TabStateModel
             {
-                Directory = _directoryService.GetAppRootDirectory()
+                Directory = _directoryService.GetAppRootDirectory(),
+                SortingSettings = new SortingSettingsStateModel
+                {
+                    SortingMode = SortingMode.Date
+                }
             };
 
-            return new List<TabModel> {rootDirectoryTab};
+            return new List<TabStateModel> {rootDirectoryTab};
         }
 
         private ITabViewModel CreateViewModelFrom(string directory)
         {
-            var tabModel = new TabModel
+            var tabModel = new TabStateModel
             {
                 Directory = directory,
                 SortingSettings = GetSortingSettings(SelectedTab)
@@ -133,7 +138,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             return CreateViewModelFrom(tabModel);
         }
 
-        private ITabViewModel CreateViewModelFrom(TabModel tabModel)
+        private ITabViewModel CreateViewModelFrom(TabStateModel tabModel)
         {
             var tabViewModel = _tabViewModelFactory.Create(tabModel);
             SubscribeToEvents(tabViewModel);
@@ -225,18 +230,18 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             }
         }
 
-        private static TabModel CreateFrom(ITabViewModel tabViewModel) =>
-            new TabModel
+        private static TabStateModel CreateFrom(ITabViewModel tabViewModel) =>
+            new TabStateModel
             {
                 Directory = tabViewModel.CurrentDirectory,
                 SortingSettings = GetSortingSettings(tabViewModel)
             };
 
-        private static SortingSettings GetSortingSettings(ITabViewModel tabViewModel) =>
-            new SortingSettings
+        private static SortingSettingsStateModel GetSortingSettings(ITabViewModel tabViewModel) =>
+            new SortingSettingsStateModel
             {
                 IsAscending = tabViewModel.SortingViewModel.IsSortingByAscendingEnabled,
-                SortingMode = (int) tabViewModel.SortingViewModel.SortingColumn
+                SortingMode = tabViewModel.SortingViewModel.SortingColumn
             };
     }
 }

@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Models.Enums;
@@ -24,9 +25,9 @@ namespace Camelot.ViewModels.Tests.Dialogs
         [InlineData(true, false)]
         [InlineData(false, true)]
         [InlineData(false, false)]
-        public void TestProperties(bool shouldApplyToAll, bool areMultipleFilesAvailable)
+        public async Task TestProperties(bool shouldApplyToAll, bool areMultipleFilesAvailable)
         {
-            var dialog = Create(areMultipleFilesAvailable);
+            var dialog = await Create(areMultipleFilesAvailable);
             dialog.ShouldApplyToAll = shouldApplyToAll;
             dialog.NewFileName = NewFileName;
 
@@ -37,10 +38,10 @@ namespace Camelot.ViewModels.Tests.Dialogs
         }
 
         [Fact]
-        public void TestCanceled()
+        public async Task TestCanceled()
         {
             var callbackCalled = false;
-            var dialog = Create();
+            var dialog = await Create();
             dialog.CloseRequested += (sender, args) =>
             {
                 var result = args.Result;
@@ -58,10 +59,10 @@ namespace Camelot.ViewModels.Tests.Dialogs
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public void TestSkip(bool shouldApplyToAll)
+        public async Task TestSkip(bool shouldApplyToAll)
         {
             var callbackCalled = false;
-            var dialog = Create();
+            var dialog = await Create();
             dialog.ShouldApplyToAll = shouldApplyToAll;
             dialog.CloseRequested += (sender, args) =>
             {
@@ -84,10 +85,10 @@ namespace Camelot.ViewModels.Tests.Dialogs
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public void TestOverwrite(bool shouldApplyToAll)
+        public async Task TestOverwrite(bool shouldApplyToAll)
         {
             var callbackCalled = false;
-            var dialog = Create();
+            var dialog = await Create();
             dialog.ShouldApplyToAll = shouldApplyToAll;
             dialog.CloseRequested += (sender, args) =>
             {
@@ -110,10 +111,10 @@ namespace Camelot.ViewModels.Tests.Dialogs
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public void TestOverwriteIfOlder(bool shouldApplyToAll)
+        public async Task TestOverwriteIfOlder(bool shouldApplyToAll)
         {
             var callbackCalled = false;
-            var dialog = Create();
+            var dialog = await Create();
             dialog.ShouldApplyToAll = shouldApplyToAll;
             dialog.CloseRequested += (sender, args) =>
             {
@@ -136,10 +137,10 @@ namespace Camelot.ViewModels.Tests.Dialogs
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public void TestRename(bool shouldApplyToAll)
+        public async Task TestRename(bool shouldApplyToAll)
         {
             var callbackCalled = false;
-            var dialog = Create();
+            var dialog = await Create();
             dialog.ShouldApplyToAll = shouldApplyToAll;
             dialog.NewFileName = NewFileName;
             dialog.CloseRequested += (sender, args) =>
@@ -161,7 +162,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
             Assert.True(callbackCalled);
         }
 
-        private static OverwriteOptionsDialogViewModel Create(bool areMultipleFilesAvailable = true)
+        private static async Task<OverwriteOptionsDialogViewModel> Create(bool areMultipleFilesAvailable = true)
         {
             var fileServiceMock = new Mock<IFileService>();
             fileServiceMock
@@ -196,7 +197,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
                 fileNameGenerationService.Object, pathService.Object);
 
             var parameter = new OverwriteOptionsNavigationParameter(SourceFilePath, DestinationFilePath, areMultipleFilesAvailable);
-            dialog.Activate(parameter);
+            await dialog.ActivateAsync(parameter);
 
             return dialog;
         }
