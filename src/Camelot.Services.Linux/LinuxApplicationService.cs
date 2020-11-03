@@ -7,11 +7,16 @@ using Camelot.Services.Abstractions.Models;
 
 namespace Camelot.Services.Linux
 {
-    public class LinuxSoftwareService : ISoftwareService
+    public class LinuxApplicationService : IApplicationService
     {
-        public async Task<IEnumerable<SoftwareModel>> GetAllInstalledSoftwares()
+        public Task<IEnumerable<ApplicationModel>> GetAssociatedApplications(string fileExtension)
         {
-            var installedSoftwares = new List<SoftwareModel>();
+            throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<ApplicationModel>> GetAllInstalledApplications()
+        {
+            var installedSoftwares = new List<ApplicationModel>();
 
             foreach (var desktopFilePath in Directory.GetFiles("/usr/share/applications/", "*.desktop"))
             {
@@ -33,7 +38,7 @@ namespace Camelot.Services.Linux
                     continue;
                 }
 
-                installedSoftwares.Add(new SoftwareModel
+                installedSoftwares.Add(new ApplicationModel
                 {
                     DisplayName = displayName,
                     DisplayIcon = displayIcon

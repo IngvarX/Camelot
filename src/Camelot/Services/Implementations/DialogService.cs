@@ -43,7 +43,7 @@ namespace Camelot.Services.Implementations
             Bind(window, viewModel);
             if (viewModel is ParameterizedDialogViewModelBase<TResult, TParameter> parameterizedDialogViewModelBase)
             {
-                parameterizedDialogViewModelBase.Activate(parameter);
+                await parameterizedDialogViewModelBase.ActivateAsync(parameter);
             }
             else
             {

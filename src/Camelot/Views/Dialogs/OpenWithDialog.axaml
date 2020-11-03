@@ -1,0 +1,40 @@
+﻿<Window xmlns="https://github.com/avaloniaui"    
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:p="clr-namespace:Camelot.Properties"
+		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+		xmlns:dialogs="clr-namespace:Camelot.ViewModels.Implementations.Dialogs;assembly=Camelot.ViewModels"
+		Width="850" Height="400"
+		x:Class="Camelot.Views.Dialogs.OpenWithDialog"
+		Title="{x:Static p:Resources.OpenWithTitle}">
+
+	<Design.DataContext>
+		<dialogs:OpenWithDialogViewModel />
+	</Design.DataContext>
+	
+	<Border Padding="20" Classes="defaultBackgroundBorder">
+		<Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,*">
+			<StackPanel Orientation="Horizontal" Grid.ColumnSpan="2">
+				<DrawingPresenter Width="25" Height="25">
+					<DrawingPresenter.Drawing>
+						<GeometryDrawing Brush="{DynamicResource AlternativeThemeForegroundBrush}"
+                                         Geometry="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm160-14.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z" />
+					</DrawingPresenter.Drawing>
+				</DrawingPresenter>
+				<TextBlock Name="ReplaceTextBlock" Classes="boldStyleTextBlock">
+					<TextBlock.Text>
+						<MultiBinding StringFormat="{x:Static p:Resources.OpeningFiles}">
+                            <Binding Path="OpenFileExtension" />
+                        </MultiBinding>
+					</TextBlock.Text> 
+				</TextBlock>
+			</StackPanel>
+		
+	        <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Margin="0,15" Classes="overWriteDialogTextBlock"
+                       Text="{x:Static p:Resources.RecommendedApplications}" />
+
+		</Grid>
+	</Border>
+	
+</Window>

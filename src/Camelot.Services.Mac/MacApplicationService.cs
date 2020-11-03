@@ -9,34 +9,39 @@ using Camelot.Services.Environment.Interfaces;
 
 namespace Camelot.Services.Mac
 {
-    public class MacSoftwareService : ISoftwareService
+    public class MacApplicationService : IApplicationService
     {
         private readonly IProcessService _processService;
         private readonly ITerminalService _terminalService;
 
-        public MacSoftwareService(IProcessService processService, ITerminalService terminalService)
+        public MacApplicationService(IProcessService processService, ITerminalService terminalService)
         {
             _processService = processService;
             _terminalService = terminalService;
         }
 
-        public async Task<IEnumerable<SoftwareModel>> GetAllInstalledSoftwares()
+        public Task<IEnumerable<ApplicationModel>> GetAssociatedApplications(string fileExtension)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public async Task<IEnumerable<ApplicationModel>> GetAllInstalledApplications()
         {
             var (command, arguments) = _terminalService.GetTerminalSettings();
+
             var applicationsJson = await _processService.ExecuteAndGetOutputAsync(
                 command, string.Format(arguments, "system_profiler -json SPApplicationsDataType"));
-
             var applications = JsonSerializer.Deserialize<IList<MacApplicationDataType>>(applicationsJson);
 
-            var installedSoftwares = applications
-                .Select(app => new SoftwareModel
+            var installedApplications = applications
+                .Select(app => new ApplicationModel
                 {
                     DisplayName = app.Name,
                     DisplayVersion = app.Version,
                     InstallLocation = app.Path
                 });
 
-            return installedSoftwares;
+            return installedApplications;
         }
 
         private class MacApplicationDataType

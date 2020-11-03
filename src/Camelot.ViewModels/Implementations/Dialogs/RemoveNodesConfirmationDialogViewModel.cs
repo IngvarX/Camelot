@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Camelot.Services.Abstractions;
 using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
@@ -49,10 +50,12 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             CancelCommand = ReactiveCommand.Create(Cancel);
         }
 
-        public override void Activate(NodesRemovingNavigationParameter parameter)
+        public override Task ActivateAsync(NodesRemovingNavigationParameter parameter)
         {
             Files = parameter.Files.Select(_pathService.GetFileName);
             IsRemovingToTrash = parameter.IsRemovingToTrash;
+
+            return Task.CompletedTask;
         }
 
         private void Ok() => Close(CreateResult(true));

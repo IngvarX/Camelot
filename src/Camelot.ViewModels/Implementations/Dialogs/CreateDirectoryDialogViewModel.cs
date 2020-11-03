@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Camelot.Services.Abstractions;
 using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
@@ -38,8 +39,12 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             CancelCommand = ReactiveCommand.Create(Close);
         }
 
-        public override void Activate(CreateNodeNavigationParameter navigationParameter) =>
+        public override Task ActivateAsync(CreateNodeNavigationParameter navigationParameter)
+        {
             _directoryPath = navigationParameter.DirectoryPath;
+
+            return Task.CompletedTask;
+        }
 
         private void CreateDirectory() => Close(new CreateDirectoryDialogResult(DirectoryName));
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Camelot.Services.Abstractions;
@@ -48,6 +49,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         public ICommand OpenCommand { get; }
 
+        public ICommand OpenWithCommand { get; }
+
         public ICommand PackCommand { get; }
 
         public ICommand ExtractCommand { get; }
@@ -86,6 +89,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             _archiveService = archiveService;
 
             OpenCommand = ReactiveCommand.Create(Open);
+            OpenWithCommand = ReactiveCommand.Create(OpenWithAsync);
             PackCommand = ReactiveCommand.CreateFromTask(PackAsync);
             ExtractCommand = ReactiveCommand.CreateFromTask<ExtractCommandType>(ExtractAsync);
             StartRenamingCommand = ReactiveCommand.Create(StartRenaming);
@@ -98,6 +102,12 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         }
 
         private void Open() => _fileSystemNodeOpeningBehavior.Open(FullPath);
+
+        private async Task OpenWithAsync()
+        {
+            var extension = Path.GetExtension(FullName);
+            await _dialogService.ShowDialogAsync(nameof(OpenWithDialogViewModel), new OpenWithNavigationParameter(extension));
+        }
 
         private Task PackAsync() => throw new NotImplementedException();
 

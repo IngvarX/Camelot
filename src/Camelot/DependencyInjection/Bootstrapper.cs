@@ -342,7 +342,7 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IDesktopEnvironmentService>(),
                 resolver.GetRequiredService<IShellCommandWrappingService>()
             ));
-            services.RegisterLazySingleton<ISoftwareService>(() => new LinuxSoftwareService());
+            services.RegisterLazySingleton<IApplicationService>(() => new LinuxApplicationService());
         }
 
         private static void RegisterMacServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
@@ -367,7 +367,7 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IProcessService>(),
                 resolver.GetRequiredService<IUnitOfWorkFactory>()
             ));
-            services.RegisterLazySingleton<ISoftwareService>(() => new MacSoftwareService(
+            services.RegisterLazySingleton<IApplicationService>(() => new MacApplicationService(
                 resolver.GetRequiredService<IProcessService>(),
                 resolver.GetRequiredService<ITerminalService>()
             ));
@@ -398,7 +398,7 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IProcessService>(),
                 resolver.GetRequiredService<IUnitOfWorkFactory>()
             ));
-            services.RegisterLazySingleton<ISoftwareService>(() => new WindowsSoftwareService());
+            services.RegisterLazySingleton<IApplicationService>(() => new WindowsApplicationService());
         }
 
         private static void RegisterViewModels(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
@@ -506,6 +506,9 @@ namespace Camelot.DependencyInjection
             services.RegisterLazySingleton<IMenuViewModel>(() => new MenuViewModel(
                 resolver.GetRequiredService<IApplicationCloser>(),
                 resolver.GetRequiredService<IDialogService>()
+            ));
+            services.Register(() => new OpenWithDialogViewModel(
+                resolver.GetRequiredService<IApplicationService>()    
             ));
             services.Register<ISearchViewModel>(() => new SearchViewModel(
                 resolver.GetRequiredService<IRegexService>(),

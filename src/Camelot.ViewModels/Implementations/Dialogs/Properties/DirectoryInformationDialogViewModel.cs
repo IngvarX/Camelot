@@ -25,11 +25,13 @@ namespace Camelot.ViewModels.Implementations.Dialogs.Properties
             MainNodeInfoTabViewModel = mainNodeInfoTabViewModel;
         }
 
-        public override void Activate(FileSystemNodeNavigationParameter parameter)
+        public override Task ActivateAsync(FileSystemNodeNavigationParameter parameter)
         {
             var directoryModel = _directoryService.GetDirectory(parameter.NodePath);
 
             SetupMainTab(directoryModel);
+
+            return Task.CompletedTask;
         }
 
         private void SetupMainTab(NodeModelBase directoryModel)

@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
 using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
@@ -20,11 +21,13 @@ namespace Camelot.ViewModels.Implementations.Dialogs.Properties
             MainNodeInfoTabViewModel = mainNodeInfoTabViewModel;
         }
 
-        public override void Activate(FileSystemNodeNavigationParameter parameter)
+        public override Task ActivateAsync(FileSystemNodeNavigationParameter parameter)
         {
             var fileModel = _fileService.GetFile(parameter.NodePath);
 
             SetupMainTab(fileModel);
+
+            return Task.CompletedTask;
         }
 
         private void SetupMainTab(FileModel fileModel)
