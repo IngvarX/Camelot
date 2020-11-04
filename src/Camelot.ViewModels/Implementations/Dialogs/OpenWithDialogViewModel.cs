@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
@@ -16,11 +15,11 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 
         private readonly ObservableCollection<ApplicationModel> _recommendedApplications;
 
-        private readonly ObservableCollection<ApplicationModel> _applications;
+        private readonly ObservableCollection<ApplicationModel> _installedApplications;
 
         public IEnumerable<ApplicationModel> RecommendedApplications => _recommendedApplications;
 
-        public IEnumerable<ApplicationModel> Applications => _applications;
+        public IEnumerable<ApplicationModel> InstalledApplications => _installedApplications;
 
         [Reactive]
         public string OpenFileExtension { get; set; }
@@ -30,14 +29,14 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             _applicationService = applicationService;
 
             _recommendedApplications = new ObservableCollection<ApplicationModel>();
-            _applications = new ObservableCollection<ApplicationModel>();
+            _installedApplications = new ObservableCollection<ApplicationModel>();
         }
 
         public override async Task ActivateAsync(OpenWithNavigationParameter parameter)
         {
             OpenFileExtension = parameter.FileExtension;
 
-            _applications.AddRange(await _applicationService.GetInstalledApplications());
+            _installedApplications.AddRange(await _applicationService.GetInstalledApplications());
             _recommendedApplications.AddRange(await _applicationService.GetAssociatedApplications(OpenFileExtension));
         }
     }

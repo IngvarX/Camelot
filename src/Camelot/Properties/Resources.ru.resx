@@ -450,4 +450,10 @@
   <data name="SelectOtherApplications" xml:space="preserve">
     <value>Другие программы</value>
   </data>
+  <data name="Select" xml:space="preserve">
+    <value>Выбрать</value>
+  </data>
+  <data name="SetAsDefaultApplication" xml:space="preserve">
+    <value>Выбрать по умолчанию</value>
+  </data>
 </root>

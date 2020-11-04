@@ -456,4 +456,10 @@
   <data name="SelectOtherApplications" xml:space="preserve">
     <value>Other Applications</value>
   </data>
+  <data name="Select" xml:space="preserve">
+    <value>Select</value>
+  </data>
+  <data name="SetAsDefaultApplication" xml:space="preserve">
+    <value>Set as default</value>
+  </data>
 </root>

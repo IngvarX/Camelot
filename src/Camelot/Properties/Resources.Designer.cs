@@ -970,6 +970,15 @@ namespace Camelot.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select.
+        /// </summary>
+        public static string Select {
+            get {
+                return ResourceManager.GetString("Select", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select directory for extraction.
         /// </summary>
         public static string SelectDirectoryForExtraction {
@@ -1002,6 +1011,15 @@ namespace Camelot.Properties {
         public static string SelectOtherApplications {
             get {
                 return ResourceManager.GetString("SelectOtherApplications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set as default.
+        /// </summary>
+        public static string SetAsDefaultApplication {
+            get {
+                return ResourceManager.GetString("SetAsDefaultApplication", resourceCulture);
             }
         }
         

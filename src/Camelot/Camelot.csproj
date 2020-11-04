@@ -128,6 +128,9 @@
     <Compile Update="Views\Dialogs\Settings\GeneralSettingsView.xaml.cs">
       <DependentUpon>GeneralSettingsView.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\Dialogs\OpenWithDialog.xaml.cs">
+	  <DependentUpon>OpenWithDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\Main\Drives\DriveView.xaml.cs">
       <DependentUpon>DriveView.xaml</DependentUpon>
     </Compile>

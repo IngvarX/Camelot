@@ -67,37 +67,29 @@ namespace Camelot.Services.Windows
 
             void TryAddApplication(string applicationName)
             {
-                string startCommand;
-                string displayName;
-                string displayIcon;
-
-                var isExecutable = applicationName.Contains(".exe");
-
-                if (isExecutable)
+                var assocFlag = Win32Api.AssocF.None;
+                if (applicationName.Contains(".exe"))
                 {
-                    startCommand = Win32Api.AssocQueryString(Win32Api.AssocF.Open_ByExeName, 
-                        Win32Api.AssocStr.Command, applicationName);
-                    displayName = Win32Api.AssocQueryString(Win32Api.AssocF.Open_ByExeName,
-                        Win32Api.AssocStr.FriendlyAppName, applicationName);
-                    displayIcon = Win32Api.AssocQueryString(Win32Api.AssocF.Open_ByExeName,
-                        Win32Api.AssocStr.DefaultIcon, applicationName);
+                    assocFlag = Win32Api.AssocF.Open_ByExeName;
                 }
-                else
-                {
-                    startCommand = Win32Api.AssocQueryString(Win32Api.AssocStr.Command, applicationName);
-                    displayName = Win32Api.AssocQueryString(Win32Api.AssocStr.FriendlyAppName, applicationName);
-                    displayIcon = Win32Api.AssocQueryString(Win32Api.AssocStr.DefaultIcon, applicationName);
-                }
+
+                var startCommand = Win32Api.AssocQueryString(assocFlag, Win32Api.AssocStr.Command, applicationName);
+                var displayName = Win32Api.AssocQueryString(assocFlag, Win32Api.AssocStr.FriendlyAppName, applicationName);
 
                 if (string.IsNullOrWhiteSpace(displayName) || string.IsNullOrWhiteSpace(startCommand))
                 {
                     return;
                 }
 
+                var displayIcon = Win32Api.AssocQueryString(assocFlag, Win32Api.AssocStr.DefaultIcon, applicationName);
+                var executePath = Win32Api.AssocQueryString(assocFlag, Win32Api.AssocStr.Executable, applicationName);
+
                 associatedApplications.TryAdd(displayName, new ApplicationModel
                 {
+                    FileExtension = fileExtension,
                     DisplayName = displayName,
                     DisplayIcon = displayIcon,
+                    ExecutePath = executePath,
                     StartCommand = startCommand
                 });
             }
@@ -205,9 +197,6 @@ namespace Camelot.Services.Windows
                 var result = FindExecutableA(fileName, string.Empty, buffer);
                 return result >= 32 ? buffer.ToString() : null;
             }
-
-            public static string AssocQueryString(AssocStr association, string extension) 
-                => AssocQueryString(AssocF.None, association, extension);
 
             public static string AssocQueryString(AssocF assocF, AssocStr association, string assocString)
             {
