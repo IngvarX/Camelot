@@ -65,7 +65,11 @@ namespace Camelot.Services.Windows
 
             void TryAddApplication(string applicationName)
             {
-                associatedApplications.TryAdd(applicationName, FindApplication(applicationName));
+                var application = FindApplication(applicationName);
+                if (application != null)
+                {
+                    associatedApplications.TryAdd(applicationName, application);
+                }
             }
 
             static IEnumerable<string> GetOpenWithList(string fileExtension, RegistryKey rootKey,
@@ -129,14 +133,18 @@ namespace Camelot.Services.Windows
 
             foreach (var command in startCommandsCache)
             {
-                TryAddApplication(command.Value);
+                TryAddApplication(command.Key);
             }
 
             return Task.FromResult<IEnumerable<ApplicationModel>>(installedApplications.Values);
 
             void TryAddApplication(string applicationName)
             {
-                installedApplications.TryAdd(applicationName, FindApplication(applicationName));
+                var application = FindApplication(applicationName);
+                if (application != null)
+                {
+                    installedApplications.TryAdd(applicationName, application);
+                }
             }
 
             static Dictionary<string, string> GetCommandsCache(RegistryKey rootKey, string baseKeyName = "")
@@ -166,7 +174,7 @@ namespace Camelot.Services.Windows
             }
         }
 
-        private ApplicationModel FindApplication(string applicationName)
+        private static ApplicationModel FindApplication(string applicationName)
         {
             var assocFlag = Win32Api.AssocF.None;
             if (applicationName.Contains(".exe"))

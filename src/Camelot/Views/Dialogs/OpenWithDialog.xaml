@@ -53,7 +53,7 @@
 			
 			<Expander Grid.Row="3" Grid.ColumnSpan="2" Margin="0,15,0,10">
 				<Expander.Content>
-					<ListBox Items="{Binding InstalledApplications}" MaxHeight="150" ScrollViewer.VerticalScrollBarVisibility="Visible">
+					<ListBox Items="{Binding OtherApplications}" MaxHeight="150" ScrollViewer.VerticalScrollBarVisibility="Visible">
 						<ListBox.ItemTemplate>
 							<DataTemplate>
 								<StackPanel Orientation="Horizontal">

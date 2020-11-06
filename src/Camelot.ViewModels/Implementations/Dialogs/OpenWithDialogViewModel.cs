@@ -1,10 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
 using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
 using DynamicData;
+using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
 namespace Camelot.ViewModels.Implementations.Dialogs
@@ -15,11 +19,11 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 
         private readonly ObservableCollection<ApplicationModel> _recommendedApplications;
 
-        private readonly ObservableCollection<ApplicationModel> _installedApplications;
+        private readonly ObservableCollection<ApplicationModel> _otherApplications;
 
         public IEnumerable<ApplicationModel> RecommendedApplications => _recommendedApplications;
 
-        public IEnumerable<ApplicationModel> InstalledApplications => _installedApplications;
+        public IEnumerable<ApplicationModel> OtherApplications => _otherApplications;
 
         [Reactive]
         public ApplicationModel UsedApplication { get; set; }
@@ -36,7 +40,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             _applicationService = applicationService;
 
             _recommendedApplications = new ObservableCollection<ApplicationModel>();
-            _installedApplications = new ObservableCollection<ApplicationModel>();
+            _otherApplications = new ObservableCollection<ApplicationModel>();
 
             CancelCommand = ReactiveCommand.Create(Close);
             SelectCommand = ReactiveCommand.CreateFromTask(SelectApplicationAsync);
@@ -46,8 +50,8 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         {
             OpenFileExtension = parameter.FileExtension;
 
-            _installedApplications.AddRange(await _applicationService.GetInstalledApplications());
             _recommendedApplications.AddRange(await _applicationService.GetAssociatedApplications(OpenFileExtension));
+            _otherApplications.AddRange(await _applicationService.GetInstalledApplications());
 
             UsedApplication = _recommendedApplications.FirstOrDefault();
         }
