@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,13 +14,9 @@ namespace Camelot.Services.Windows
 {
     public class WindowsApplicationService : IApplicationService
     {
-        private const string RegkeyInstalledApplicationsX32 = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall";
+        private const string RegkeyFileExtensionsX32 = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FileExts";
 
-        private const string RegkeyInstalledApplicationsX64 = @"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall";
-
-        private const string RegkeyFileExtsX32 = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FileExts";
-
-        private const string RegkeyFileExtsX64 = @"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Explorer\FileExts";
+        private const string RegkeyFileExtensionsX64 = @"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Explorer\FileExts";
 
         public Task<IEnumerable<ApplicationModel>> GetAssociatedApplications(string fileExtension)
         {
@@ -29,12 +27,12 @@ namespace Camelot.Services.Windows
 
             var associatedApplications = new Dictionary<string, ApplicationModel>();
 
-            foreach (var exeName in GetOpenWithList(fileExtension, Registry.CurrentUser, RegkeyFileExtsX32))
+            foreach (var exeName in GetOpenWithList(fileExtension, Registry.CurrentUser, RegkeyFileExtensionsX32))
             {
                 TryAddApplication(exeName);
             }
 
-            foreach (var progid in GetOpenWithProgids(fileExtension, Registry.CurrentUser, RegkeyFileExtsX32))
+            foreach (var progid in GetOpenWithProgids(fileExtension, Registry.CurrentUser, RegkeyFileExtensionsX32))
             {
                 TryAddApplication(progid);
             }
@@ -42,12 +40,12 @@ namespace Camelot.Services.Windows
             if (RuntimeInformation.ProcessArchitecture == Architecture.X64 ||
                 RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
             {
-                foreach (var exeName in GetOpenWithList(fileExtension, Registry.CurrentUser, RegkeyFileExtsX64))
+                foreach (var exeName in GetOpenWithList(fileExtension, Registry.CurrentUser, RegkeyFileExtensionsX64))
                 {
                     TryAddApplication(exeName);
                 }
 
-                foreach (var progid in GetOpenWithProgids(fileExtension, Registry.CurrentUser, RegkeyFileExtsX64))
+                foreach (var progid in GetOpenWithProgids(fileExtension, Registry.CurrentUser, RegkeyFileExtensionsX64))
                 {
                     TryAddApplication(progid);
                 }
@@ -67,31 +65,47 @@ namespace Camelot.Services.Windows
 
             void TryAddApplication(string applicationName)
             {
-                var assocFlag = Win32Api.AssocF.None;
-                if (applicationName.Contains(".exe"))
+                associatedApplications.TryAdd(applicationName, FindApplication(applicationName));
+            }
+
+            static IEnumerable<string> GetOpenWithList(string fileExtension, RegistryKey rootKey,
+                string baseKeyName = "")
+            {
+                var results = new List<string>();
+
+                baseKeyName = @$"{baseKeyName?.TrimEnd('\\')}\{fileExtension}\OpenWithList";
+
+                using var baseKey = rootKey.OpenSubKey(baseKeyName);
+                if (!(baseKey?.GetValue("MRUList") is string mruList))
                 {
-                    assocFlag = Win32Api.AssocF.Open_ByExeName;
+                    return results;
                 }
 
-                var startCommand = Win32Api.AssocQueryString(assocFlag, Win32Api.AssocStr.Command, applicationName);
-                var displayName = Win32Api.AssocQueryString(assocFlag, Win32Api.AssocStr.FriendlyAppName, applicationName);
-
-                if (string.IsNullOrWhiteSpace(displayName) || string.IsNullOrWhiteSpace(startCommand))
+                foreach (var mru in mruList)
                 {
-                    return;
+                    if (baseKey.GetValue(mru.ToString()) is string name)
+                    {
+                        results.Add(name);
+                    }
                 }
 
-                var displayIcon = Win32Api.AssocQueryString(assocFlag, Win32Api.AssocStr.DefaultIcon, applicationName);
-                var executePath = Win32Api.AssocQueryString(assocFlag, Win32Api.AssocStr.Executable, applicationName);
+                return results;
+            }
 
-                associatedApplications.TryAdd(displayName, new ApplicationModel
+            static IEnumerable<string> GetOpenWithProgids(string fileExtension, RegistryKey rootKey,
+                string baseKeyName = "")
+            {
+                var results = new List<string>();
+
+                baseKeyName = @$"{baseKeyName?.TrimEnd('\\')}\{fileExtension}\OpenWithProgids";
+
+                using var baseKey = rootKey.OpenSubKey(baseKeyName);
+                if (baseKey != null)
                 {
-                    FileExtension = fileExtension,
-                    DisplayName = displayName,
-                    DisplayIcon = displayIcon,
-                    ExecutePath = executePath,
-                    StartCommand = startCommand
-                });
+                    results.AddRange(baseKey.GetValueNames());
+                }
+
+                return results;
             }
         }
 
@@ -99,121 +113,100 @@ namespace Camelot.Services.Windows
         {
             var installedApplications = new Dictionary<string, ApplicationModel>();
 
-            AddApplications(Registry.CurrentUser, RegkeyInstalledApplicationsX32);
-            AddApplications(Registry.LocalMachine, RegkeyInstalledApplicationsX32);
+            var startCommandsCache = GetCommandsCache(Registry.ClassesRoot)
+                .Union(GetCommandsCache(Registry.LocalMachine, @"SOFTWARE\Classes"))
+                .Union(GetCommandsCache(Registry.CurrentUser, @"SOFTWARE\Classes"))
+                .ToDictionary(pair => pair.Key, pair => pair.Value);
 
             if (RuntimeInformation.ProcessArchitecture == Architecture.X64 ||
                 RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
             {
-                AddApplications(Registry.CurrentUser, RegkeyInstalledApplicationsX64);
-                AddApplications(Registry.LocalMachine, RegkeyInstalledApplicationsX64);
+                startCommandsCache = startCommandsCache
+                    .Union(GetCommandsCache(Registry.LocalMachine, @"SOFTWARE\Wow6432Node\Classes"))
+                    .Union(GetCommandsCache(Registry.CurrentUser, @"SOFTWARE\Wow6432Node\Classes"))
+                    .ToDictionary(pair => pair.Key, pair => pair.Value);
+            }
+
+            foreach (var command in startCommandsCache)
+            {
+                TryAddApplication(command.Value);
             }
 
             return Task.FromResult<IEnumerable<ApplicationModel>>(installedApplications.Values);
 
-            void AddApplications(RegistryKey rootKey, string baseKeyName)
+            void TryAddApplication(string applicationName)
             {
-                using var baseApplicationsKey = rootKey.OpenSubKey(baseKeyName);
-                if (baseApplicationsKey == null)
+                installedApplications.TryAdd(applicationName, FindApplication(applicationName));
+            }
+
+            static Dictionary<string, string> GetCommandsCache(RegistryKey rootKey, string baseKeyName = "")
+            {
+                var result = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+
+                baseKeyName = $@"{baseKeyName?.TrimEnd('\\')}\Applications";
+
+                using var applicationsKeys = rootKey.OpenSubKey(baseKeyName);
+                if (applicationsKeys == null)
                 {
-                    return;
+                    return result;
                 }
 
-                foreach (var applicationKeyName in baseApplicationsKey.GetSubKeyNames())
+                foreach (var appExecuteFile in applicationsKeys.GetSubKeyNames())
                 {
-                    using var applicationKey = baseApplicationsKey.OpenSubKey(applicationKeyName);
-                    if (applicationKey == null)
+                    using var commandKey = rootKey.OpenSubKey($@"{baseKeyName}\{appExecuteFile}\Shell\Open\Command");
+
+                    var command = commandKey?.GetValue("") as string;
+                    if (!string.IsNullOrWhiteSpace(command))
                     {
-                        continue;
+                        result.TryAdd(appExecuteFile, command);
                     }
-
-                    var displayName = applicationKey.GetValue("DisplayName") as string;
-                    var installLocation = applicationKey.GetValue("InstallLocation") as string;
-
-                    if (string.IsNullOrWhiteSpace(displayName))
-                    {
-                        continue;
-                    }
-
-                    var displayIcon = applicationKey.GetValue("DisplayIcon") as string;
-                    var displayVersion = applicationKey.GetValue("DisplayVersion") as string;
-
-                    installedApplications.TryAdd(displayName, new ApplicationModel
-                    {
-                        DisplayIcon = displayIcon,
-                        DisplayName = displayName,
-                        DisplayVersion = displayVersion,
-                        InstallLocation = installLocation
-                    });
                 }
+
+                return result;
             }
         }
 
-        private static IEnumerable<string> GetOpenWithList(string fileExtension, RegistryKey rootKey,
-            string baseKeyName = "")
+        private ApplicationModel FindApplication(string applicationName)
         {
-            var results = new List<string>();
-
-            baseKeyName = @$"{baseKeyName?.TrimEnd('\\')}\{fileExtension}\OpenWithList";
-
-            using var registryKey = rootKey.OpenSubKey(baseKeyName);
-            if (!(registryKey?.GetValue("MRUList") is string mruList))
+            var assocFlag = Win32Api.AssocF.None;
+            if (applicationName.Contains(".exe"))
             {
-                return results;
+                assocFlag = Win32Api.AssocF.Open_ByExeName;
             }
 
-            foreach (var mru in mruList)
+            var startCommand = Win32Api.AssocQueryString(assocFlag, Win32Api.AssocStr.Command, applicationName);
+            var displayName = Win32Api.AssocQueryString(assocFlag, Win32Api.AssocStr.FriendlyAppName, applicationName);
+
+            if (string.IsNullOrWhiteSpace(displayName) || string.IsNullOrWhiteSpace(startCommand))
             {
-                if (registryKey.GetValue(mru.ToString()) is string name)
-                {
-                    results.Add(name);
-                }
+                return null;
             }
 
-            return results;
-        }
+            var executePath = Win32Api.AssocQueryString(assocFlag, Win32Api.AssocStr.Executable, applicationName);
 
-        private static IEnumerable<string> GetOpenWithProgids(string fileExtension, RegistryKey rootKey,
-            string baseKeyName = "")
-        {
-            var results = new List<string>();
-
-            baseKeyName = @$"{baseKeyName?.TrimEnd('\\')}\{fileExtension}\OpenWithProgids";
-
-            using var registryKey = rootKey.OpenSubKey(baseKeyName);
-            if (registryKey != null)
+            return new ApplicationModel
             {
-                results.AddRange(registryKey.GetValueNames());
-            }
-
-            return results;
+                DisplayName = displayName,
+                ExecutePath = executePath,
+                StartCommand = startCommand
+            };
         }
 
         private static class Win32Api
         {
-            public static string FindExecutable(string fileName)
-            {
-                var buffer = new StringBuilder(1024);
-                var result = FindExecutableA(fileName, string.Empty, buffer);
-                return result >= 32 ? buffer.ToString() : null;
-            }
-
             public static string AssocQueryString(AssocF assocF, AssocStr association, string assocString)
             {
                 var length = 0u;
-                var ret = AssocQueryString(assocF, association, assocString, null, null, ref length);
-                if (ret != 1)
+                var queryResult = AssocQueryString(assocF, association, assocString, null, null, ref length);
+                if (queryResult != 1)
                 {
                     return null;
                 }
 
                 var builder = new StringBuilder((int) length);
-                ret = AssocQueryString(assocF, association, assocString, null, builder, ref length);
-                return ret != 0 ? null : builder.ToString();
+                queryResult = AssocQueryString(assocF, association, assocString, null, builder, ref length);
+                return queryResult != 0 ? null : builder.ToString();
             }
-
-            [DllImport("shell32.dll", EntryPoint = "FindExecutable")]
-            private static extern long FindExecutableA(string lpFile, string lpDirectory, StringBuilder lpResult);
 
             [DllImport("Shlwapi.dll", SetLastError = true, CharSet = CharSet.Auto)]
             private static extern uint AssocQueryString(AssocF flags, AssocStr str, string pszAssoc, string pszExtra,

@@ -31,17 +31,20 @@ namespace Camelot.Services.Linux
                 }
 
                 var displayName = desktopEntry.GetValueOrDefault("Desktop Entry:Name");
-                var displayIcon = desktopEntry.GetValueOrDefault("Desktop Entry:Icon");
+                var startCommand = desktopEntry.GetValueOrDefault("Desktop Entry:Exec");
 
-                if (string.IsNullOrWhiteSpace(displayName))
+                if (string.IsNullOrWhiteSpace(displayName) || string.IsNullOrWhiteSpace(startCommand))
                 {
                     continue;
                 }
 
+                var executePath = desktopEntry.GetValueOrDefault("Desktop Entry:Path");
+                
                 installedSoftwares.Add(new ApplicationModel
                 {
                     DisplayName = displayName,
-                    DisplayIcon = displayIcon
+                    ExecutePath = executePath,
+                    StartCommand = startCommand
                 });
             }
 

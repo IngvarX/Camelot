@@ -37,8 +37,7 @@ namespace Camelot.Services.Mac
                 .Select(app => new ApplicationModel
                 {
                     DisplayName = app.Name,
-                    DisplayVersion = app.Version,
-                    InstallLocation = app.Path
+                    ExecutePath = app.Path
                 });
 
             return installedApplications;

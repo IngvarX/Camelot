@@ -22,7 +22,14 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         public IEnumerable<ApplicationModel> InstalledApplications => _installedApplications;
 
         [Reactive]
+        public ApplicationModel UsedApplication { get; set; }
+
+        [Reactive]
         public string OpenFileExtension { get; set; }
+
+        public ICommand CancelCommand { get; }
+
+        public ICommand SelectCommand { get; }
 
         public OpenWithDialogViewModel(IApplicationService applicationService)
         {
@@ -30,6 +37,9 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 
             _recommendedApplications = new ObservableCollection<ApplicationModel>();
             _installedApplications = new ObservableCollection<ApplicationModel>();
+
+            CancelCommand = ReactiveCommand.Create(Close);
+            SelectCommand = ReactiveCommand.CreateFromTask(SelectApplicationAsync);
         }
 
         public override async Task ActivateAsync(OpenWithNavigationParameter parameter)
@@ -38,6 +48,14 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 
             _installedApplications.AddRange(await _applicationService.GetInstalledApplications());
             _recommendedApplications.AddRange(await _applicationService.GetAssociatedApplications(OpenFileExtension));
+
+            UsedApplication = _recommendedApplications.FirstOrDefault();
+        }
+
+        private async Task SelectApplicationAsync(CancellationToken cancellationToken)
+        {
+            await Task.CompletedTask;
+            Close();
         }
     }
 }
