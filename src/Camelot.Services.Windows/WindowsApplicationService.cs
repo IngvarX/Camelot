@@ -27,38 +27,38 @@ namespace Camelot.Services.Windows
 
             var associatedApplications = new Dictionary<string, ApplicationModel>();
 
-            foreach (var exeName in GetOpenWithList(fileExtension, Registry.CurrentUser, RegkeyFileExtensionsX32))
+            foreach (var applicationFile in GetOpenWithList(fileExtension, Registry.CurrentUser, RegkeyFileExtensionsX32))
             {
-                TryAddApplication(exeName);
+                TryAddApplication(applicationFile);
             }
 
-            foreach (var progid in GetOpenWithProgids(fileExtension, Registry.CurrentUser, RegkeyFileExtensionsX32))
+            foreach (var applicationFile in GetOpenWithProgids(fileExtension, Registry.CurrentUser, RegkeyFileExtensionsX32))
             {
-                TryAddApplication(progid);
+                TryAddApplication(applicationFile);
             }
 
             if (RuntimeInformation.ProcessArchitecture == Architecture.X64 ||
                 RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
             {
-                foreach (var exeName in GetOpenWithList(fileExtension, Registry.CurrentUser, RegkeyFileExtensionsX64))
+                foreach (var applicationFile in GetOpenWithList(fileExtension, Registry.CurrentUser, RegkeyFileExtensionsX64))
                 {
-                    TryAddApplication(exeName);
+                    TryAddApplication(applicationFile);
                 }
 
-                foreach (var progid in GetOpenWithProgids(fileExtension, Registry.CurrentUser, RegkeyFileExtensionsX64))
+                foreach (var applicationFile in GetOpenWithProgids(fileExtension, Registry.CurrentUser, RegkeyFileExtensionsX64))
                 {
-                    TryAddApplication(progid);
+                    TryAddApplication(applicationFile);
                 }
             }
 
-            foreach (var exeName in GetOpenWithList(fileExtension, Registry.ClassesRoot))
+            foreach (var applicationFile in GetOpenWithList(fileExtension, Registry.ClassesRoot))
             {
-                TryAddApplication(exeName);
+                TryAddApplication(applicationFile);
             }
 
-            foreach (var progid in GetOpenWithProgids(fileExtension, Registry.ClassesRoot))
+            foreach (var applicationFile in GetOpenWithProgids(fileExtension, Registry.ClassesRoot))
             {
-                TryAddApplication(progid);
+                TryAddApplication(applicationFile);
             }
 
             return Task.FromResult<IEnumerable<ApplicationModel>>(associatedApplications.Values);
@@ -117,80 +117,81 @@ namespace Camelot.Services.Windows
         {
             var installedApplications = new Dictionary<string, ApplicationModel>();
 
-            var startCommandsCache = GetCommandsCache(Registry.ClassesRoot)
-                .Union(GetCommandsCache(Registry.LocalMachine, @"SOFTWARE\Classes"))
-                .Union(GetCommandsCache(Registry.CurrentUser, @"SOFTWARE\Classes"))
-                .ToDictionary(pair => pair.Key, pair => pair.Value);
+            var applicationsFiles = GetApplicationsFiles(Registry.ClassesRoot)
+                .Union(GetApplicationsFiles(Registry.LocalMachine, "SOFTWARE"))
+                .Union(GetApplicationsFiles(Registry.CurrentUser, "SOFTWARE"))
+                .ToImmutableHashSet();
 
             if (RuntimeInformation.ProcessArchitecture == Architecture.X64 ||
                 RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
             {
-                startCommandsCache = startCommandsCache
-                    .Union(GetCommandsCache(Registry.LocalMachine, @"SOFTWARE\Wow6432Node\Classes"))
-                    .Union(GetCommandsCache(Registry.CurrentUser, @"SOFTWARE\Wow6432Node\Classes"))
-                    .ToDictionary(pair => pair.Key, pair => pair.Value);
+                applicationsFiles = applicationsFiles
+                    .Union(GetApplicationsFiles(Registry.LocalMachine, @"SOFTWARE\Wow6432Node"))
+                    .Union(GetApplicationsFiles(Registry.CurrentUser, @"SOFTWARE\Wow6432Node"))
+                    .ToImmutableHashSet();
             }
 
-            foreach (var command in startCommandsCache)
+            foreach (var applicationFile in applicationsFiles)
             {
-                TryAddApplication(command.Key);
+                TryAddApplication(applicationFile);
             }
 
             return Task.FromResult<IEnumerable<ApplicationModel>>(installedApplications.Values);
 
-            void TryAddApplication(string applicationName)
+            void TryAddApplication(string applicationFile)
             {
-                var application = FindApplication(applicationName);
+                var application = FindApplication(applicationFile);
                 if (application != null)
                 {
-                    installedApplications.TryAdd(applicationName, application);
+                    installedApplications.TryAdd(applicationFile, application);
                 }
             }
 
-            static Dictionary<string, string> GetCommandsCache(RegistryKey rootKey, string baseKeyName = "")
+            static ImmutableHashSet<string> GetApplicationsFiles(RegistryKey rootKey, string baseKeyName = "")
             {
-                var result = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+                baseKeyName = baseKeyName?.TrimEnd('\\');
 
-                baseKeyName = $@"{baseKeyName?.TrimEnd('\\')}\Applications";
+                var applications = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
 
-                using var applicationsKeys = rootKey.OpenSubKey(baseKeyName);
-                if (applicationsKeys == null)
+                using var applicationsPathsKey = rootKey.OpenSubKey($@"{baseKeyName}\Microsoft\Windows\CurrentVersion\App Paths");
+                if (applicationsPathsKey != null)
                 {
-                    return result;
-                }
-
-                foreach (var appExecuteFile in applicationsKeys.GetSubKeyNames())
-                {
-                    using var commandKey = rootKey.OpenSubKey($@"{baseKeyName}\{appExecuteFile}\Shell\Open\Command");
-
-                    var command = commandKey?.GetValue("") as string;
-                    if (!string.IsNullOrWhiteSpace(command))
+                    foreach (var appExecuteFile in applicationsPathsKey.GetSubKeyNames())
                     {
-                        result.TryAdd(appExecuteFile, command);
+                        applications.Add(appExecuteFile);
                     }
                 }
 
-                return result;
+                using var applicationsKeys = rootKey.OpenSubKey($@"{baseKeyName}\Applications");
+                if (applicationsKeys != null)
+                {
+                    foreach (var appExecuteFile in applicationsKeys.GetSubKeyNames())
+                    {
+                        applications.Add(appExecuteFile);
+                    }
+                }
+
+                return applications.ToImmutableHashSet();
             }
         }
 
-        private static ApplicationModel FindApplication(string applicationName)
+        private static ApplicationModel FindApplication(string applicationFile)
         {
             var assocFlag = Win32Api.AssocF.None;
-            if (applicationName.Contains(".exe"))
+            if (applicationFile.Contains(".exe"))
             {
                 assocFlag = Win32Api.AssocF.Open_ByExeName;
             }
 
-            var startCommand = Win32Api.AssocQueryString(assocFlag, Win32Api.AssocStr.Command, applicationName);
-            var displayName = Win32Api.AssocQueryString(assocFlag, Win32Api.AssocStr.FriendlyAppName, applicationName);
+            var startCommand = Win32Api.AssocQueryString(assocFlag, Win32Api.AssocStr.Command, applicationFile);
+            var displayName = Win32Api.AssocQueryString(assocFlag, Win32Api.AssocStr.FriendlyAppName, applicationFile);
 
             if (string.IsNullOrWhiteSpace(displayName) || string.IsNullOrWhiteSpace(startCommand))
             {
                 return null;
             }
 
-            var executePath = Win32Api.AssocQueryString(assocFlag, Win32Api.AssocStr.Executable, applicationName);
+            var executePath = Win32Api.AssocQueryString(assocFlag, Win32Api.AssocStr.Executable, applicationFile);
 
             return new ApplicationModel
             {
