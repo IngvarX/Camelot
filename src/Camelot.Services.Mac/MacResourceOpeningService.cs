@@ -21,7 +21,7 @@ namespace Camelot.Services.Mac
             _processService.Run(command, arguments);
         }
 
-        public void OpenWith(string command, string resource)
+        public void OpenWith(string command, string arguments, string resource)
         {
             throw new System.NotImplementedException();
         }

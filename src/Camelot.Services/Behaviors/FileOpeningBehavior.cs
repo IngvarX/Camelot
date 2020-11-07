@@ -15,6 +15,6 @@ namespace Camelot.Services.Behaviors
         public void Open(string node) => _resourceOpeningService.Open(node);
 
         public void OpenWith(string command, string arguments, string node) =>
-            _resourceOpeningService.OpenWith(command, node);
+            _resourceOpeningService.OpenWith(command, arguments, node);
     }
 }

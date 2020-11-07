@@ -193,10 +193,11 @@ namespace Camelot.Services.Windows
             {
                 path = path.Replace($"\"{executePath}\"", "");
 
+                var argumentsCount = 0;
                 var matches = Regex.Matches(path, "%.", RegexOptions.Compiled);
                 foreach (Match match in matches)
                 {
-                    path = path.Replace(match.Value, $"\"{match.Value}\"");
+                    path = path.Replace(match.Value, $"\"{{{argumentsCount++}}}\"");
                 }
 
                 return path;

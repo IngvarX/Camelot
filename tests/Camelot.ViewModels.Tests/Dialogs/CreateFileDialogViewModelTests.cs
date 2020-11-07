@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.ViewModels.Implementations.Dialogs;
 using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
