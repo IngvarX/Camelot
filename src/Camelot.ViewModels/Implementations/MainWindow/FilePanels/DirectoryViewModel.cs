@@ -22,7 +22,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             ITrashCanService trashCanService,
             IArchiveService archiveService,
             ISystemDialogService systemDialogService,
-            IOpenWithApplicationService openWithApplicationService)
+            IOpenWithApplicationService openWithApplicationService,
+            IPathService pathService)
             : base(
                 fileSystemNodeOpeningBehavior,
                 operationsService,
@@ -33,7 +34,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
                 trashCanService,
                 archiveService,
                 systemDialogService,
-                openWithApplicationService)
+                openWithApplicationService,
+                pathService)
         {
 
         }

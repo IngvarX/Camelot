@@ -98,7 +98,8 @@ namespace Camelot.ViewModels.Factories.Implementations
                 _trashCanService,
                 _archiveService,
                 _systemDialogService,
-                _openWithApplicationService)
+                _openWithApplicationService,
+                _pathService)
             {
                 FullPath = fileModel.FullPath,
                 Size = fileModel.SizeBytes,
@@ -123,7 +124,8 @@ namespace Camelot.ViewModels.Factories.Implementations
                 _trashCanService,
                 _archiveService,
                 _systemDialogService,
-                _openWithApplicationService)
+                _openWithApplicationService,
+                _pathService)
             {
                 FullPath = directoryModel.FullPath,
                 Name = directoryModel.Name,

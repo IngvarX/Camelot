@@ -31,6 +31,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private readonly IArchiveService _archiveService;
         private readonly ISystemDialogService _systemDialogService;
         private readonly IOpenWithApplicationService _openWithApplicationService;
+        private readonly IPathService _pathService;
 
         private IReadOnlyList<string> Files => new[] {FullPath};
 
@@ -81,7 +82,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             ITrashCanService trashCanService,
             IArchiveService archiveService,
             ISystemDialogService systemDialogService, 
-            IOpenWithApplicationService openWithApplicationService)
+            IOpenWithApplicationService openWithApplicationService,
+            IPathService pathService)
         {
             _fileSystemNodeOpeningBehavior = fileSystemNodeOpeningBehavior;
             _operationsService = operationsService;
@@ -93,6 +95,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             _archiveService = archiveService;
             _systemDialogService = systemDialogService;
             _openWithApplicationService = openWithApplicationService;
+            _pathService = pathService;
 
             OpenCommand = ReactiveCommand.Create(Open);
             OpenWithCommand = ReactiveCommand.Create(OpenWithAsync);
@@ -124,7 +127,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         
         private async Task OpenWithAsync()
         {
-            var fileExtension = Path.GetExtension(FullName);
+            var fileExtension = _pathService.GetExtension(FullName);
             var selectedApplication = _openWithApplicationService.GetSelectedApplication(fileExtension);
             
             var parameter = new OpenWithNavigationParameter(fileExtension, selectedApplication);

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Camelot.DataAccess.Models;
+﻿using Camelot.DataAccess.Models;
 using Camelot.DataAccess.UnitOfWork;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;

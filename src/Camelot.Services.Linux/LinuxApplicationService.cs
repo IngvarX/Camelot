@@ -1,14 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
+using Camelot.Services.Abstractions.Specifications;
+using Camelot.Services.Environment.Interfaces;
 
 namespace Camelot.Services.Linux
 {
     public class LinuxApplicationService : IApplicationService
     {
+        private readonly IFileService _fileService;
+        private readonly IRegexService _regexService;
+
+        public LinuxApplicationService(
+            IFileService fileService,
+            IRegexService regexService)
+        {
+            _fileService = fileService;
+            _regexService = regexService;
+        }
+        
         public Task<IEnumerable<ApplicationModel>> GetAssociatedApplications(string fileExtension)
         {
             throw new NotImplementedException();
@@ -17,10 +32,14 @@ namespace Camelot.Services.Linux
         public async Task<IEnumerable<ApplicationModel>> GetInstalledApplications()
         {
             var installedSoftwares = new List<ApplicationModel>();
-
-            foreach (var desktopFilePath in Directory.GetFiles("/usr/share/applications/", "*.desktop"))
+            var specification = GetSpecification();
+            var desktopFilePaths = _fileService
+                .GetFiles("/usr/share/applications/", specification)
+                .Select(f => f.FullPath);
+            
+            foreach (var desktopFilePath in desktopFilePaths)
             {
-                await using var desktopFile = File.OpenRead(desktopFilePath);
+                await using var desktopFile = _fileService.OpenRead(desktopFilePath);
 
                 var desktopEntry = new IniFileReader().ReadFile(desktopFile);
 
@@ -49,6 +68,24 @@ namespace Camelot.Services.Linux
             }
 
             return installedSoftwares;
+        }
+        
+        private ISpecification<NodeModelBase> GetSpecification() => new DesktopFileSpecification(_regexService);
+        
+        private class DesktopFileSpecification : ISpecification<NodeModelBase>
+        {
+            private const string Pattern = "*.desktop";
+            
+            private readonly IRegexService _regexService;
+
+            public DesktopFileSpecification(
+                IRegexService regexService)
+            {
+                _regexService = regexService;
+            }
+
+            public bool IsSatisfiedBy(NodeModelBase nodeModel) =>
+                _regexService.CheckIfMatches(nodeModel.Name, Pattern, RegexOptions.CultureInvariant);
         }
 
         private class IniFileReader

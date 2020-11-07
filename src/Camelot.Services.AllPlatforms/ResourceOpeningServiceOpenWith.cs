@@ -1,33 +1,36 @@
-﻿using System.IO;
-using Camelot.Services.Abstractions;
+﻿using Camelot.Services.Abstractions;
 
 namespace Camelot.Services.AllPlatforms
 {
     public class ResourceOpeningServiceOpenWith : IResourceOpeningService
     {
         private readonly IOpenWithApplicationService _openWithApplicationService;
+        private readonly IPathService _pathService;
         private readonly IResourceOpeningService _resourceOpeningService;
 
         public ResourceOpeningServiceOpenWith(
             IResourceOpeningService resourceOpeningService, 
-            IOpenWithApplicationService openWithApplicationService)
+            IOpenWithApplicationService openWithApplicationService,
+            IPathService pathService)
         {
             _resourceOpeningService = resourceOpeningService;
             _openWithApplicationService = openWithApplicationService;
+            _pathService = pathService;
         }
 
         public void Open(string resource)
         {
-            var selectedApplication = _openWithApplicationService.GetSelectedApplication(Path.GetExtension(resource));
+            var extension = _pathService.GetExtension(resource);
+            var selectedApplication = _openWithApplicationService.GetSelectedApplication(extension);
 
-            if (selectedApplication != null)
+            if (selectedApplication is null)
             {
-                _resourceOpeningService.OpenWith(selectedApplication.ExecutePath, selectedApplication.Arguments,
-                    resource);
+                _resourceOpeningService.Open(resource);
             }
             else
             {
-                _resourceOpeningService.Open(resource);
+                _resourceOpeningService.OpenWith(selectedApplication.ExecutePath, selectedApplication.Arguments,
+                    resource);
             }
         }
 

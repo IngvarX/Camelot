@@ -357,7 +357,8 @@ namespace Camelot.DependencyInjection
                     resolver.GetRequiredService<IProcessService>(),
                     resolver.GetRequiredService<IShellCommandWrappingService>(),
                     resolver.GetRequiredService<IDesktopEnvironmentService>()),
-                resolver.GetRequiredService<IOpenWithApplicationService>()
+                resolver.GetRequiredService<IOpenWithApplicationService>(),
+                resolver.GetRequiredService<IPathService>()
             ));
             services.RegisterLazySingleton<ITerminalService>(() => new LinuxTerminalService(
                 resolver.GetRequiredService<IProcessService>(),
@@ -365,7 +366,10 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IDesktopEnvironmentService>(),
                 resolver.GetRequiredService<IShellCommandWrappingService>()
             ));
-            services.RegisterLazySingleton<IApplicationService>(() => new LinuxApplicationService());
+            services.RegisterLazySingleton<IApplicationService>(() => new LinuxApplicationService(
+                resolver.GetRequiredService<IFileService>(),
+                resolver.GetRequiredService<IRegexService>()
+            ));
         }
 
         private static void RegisterMacServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
@@ -382,7 +386,8 @@ namespace Camelot.DependencyInjection
             ));
             services.RegisterLazySingleton<IResourceOpeningService>(() => new ResourceOpeningServiceOpenWith(
                 new MacResourceOpeningService(resolver.GetRequiredService<IProcessService>()),
-                resolver.GetRequiredService<IOpenWithApplicationService>()
+                resolver.GetRequiredService<IOpenWithApplicationService>(),
+                resolver.GetRequiredService<IPathService>()
             ));
             services.RegisterLazySingleton<IHomeDirectoryProvider>(() => new UnixHomeDirectoryProvider(
                 resolver.GetRequiredService<IEnvironmentService>()
@@ -416,8 +421,12 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IWindowsTrashCanNodeNameGenerator>()
             ));
             services.RegisterLazySingleton<IResourceOpeningService>(() => new ResourceOpeningServiceOpenWith(
-                new WindowsResourceOpeningService(resolver.GetRequiredService<IProcessService>()),
-                resolver.GetRequiredService<IOpenWithApplicationService>()
+                new WindowsResourceOpeningService(
+                    resolver.GetRequiredService<IProcessService>(),
+                    resolver.GetRequiredService<IRegexService>()
+                ),
+                resolver.GetRequiredService<IOpenWithApplicationService>(),
+                resolver.GetRequiredService<IPathService>()
             ));
             services.RegisterLazySingleton<ITerminalService>(() => new WindowsTerminalService(
                 resolver.GetRequiredService<IProcessService>(),
