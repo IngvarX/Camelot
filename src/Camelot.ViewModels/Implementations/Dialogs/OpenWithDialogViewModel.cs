@@ -51,7 +51,8 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             OpenFileExtension = parameter.FileExtension;
 
             _recommendedApplications.AddRange(await _applicationService.GetAssociatedApplications(OpenFileExtension));
-            _otherApplications.AddRange(await _applicationService.GetInstalledApplications());
+            _otherApplications.AddRange((await _applicationService.GetInstalledApplications())
+                .Except(_recommendedApplications, new ApplicationModelComparer()));
 
             UsedApplication = _recommendedApplications.FirstOrDefault();
         }
