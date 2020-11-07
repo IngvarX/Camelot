@@ -44,7 +44,7 @@ namespace Camelot.Services.Linux
                 {
                     DisplayName = displayName,
                     ExecutePath = executePath,
-                    StartCommand = startCommand
+                    Arguments = startCommand
                 });
             }
 

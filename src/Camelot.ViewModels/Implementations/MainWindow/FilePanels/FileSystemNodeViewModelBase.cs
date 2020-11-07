@@ -121,8 +121,16 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         
         private async Task OpenWithAsync()
         {
-            var extension = Path.GetExtension(FullName);
-            await _dialogService.ShowDialogAsync(nameof(OpenWithDialogViewModel), new OpenWithNavigationParameter(extension));
+            var parameter = new OpenWithNavigationParameter(Path.GetExtension(FullName));
+            var dialogResult = await _dialogService.ShowDialogAsync<OpenWithDialogResult, OpenWithNavigationParameter>(
+                nameof(OpenWithDialogViewModel), parameter);
+            if (dialogResult is null)
+            {
+                return;
+            }
+
+            _fileSystemNodeOpeningBehavior.OpenWith(dialogResult.Application.ExecutePath,
+                dialogResult.Application.Arguments, FullPath);
         }
 
         private async Task ExtractAsync(ExtractCommandType commandType)

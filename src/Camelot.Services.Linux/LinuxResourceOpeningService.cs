@@ -38,6 +38,11 @@ namespace Camelot.Services.Linux
             _processService.Run(_openCommand, arguments);
         }
 
+        public void OpenWith(string command, string resource)
+        {
+            throw new NotImplementedException();
+        }
+
         private void Initialize()
         {
             (_openCommand, _openCommandArguments) = GetOpenCommandAndArguments();

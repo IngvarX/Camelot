@@ -1,19 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
 using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
+using Camelot.ViewModels.Implementations.Dialogs.Results;
 using DynamicData;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
 namespace Camelot.ViewModels.Implementations.Dialogs
 {
-    public class OpenWithDialogViewModel : ParameterizedDialogViewModelBase<OpenWithNavigationParameter>
+    public class OpenWithDialogViewModel : ParameterizedDialogViewModelBase<OpenWithDialogResult, OpenWithNavigationParameter>
     {
         private readonly IApplicationService _applicationService;
 
@@ -43,7 +43,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             _otherApplications = new ObservableCollection<ApplicationModel>();
 
             CancelCommand = ReactiveCommand.Create(Close);
-            SelectCommand = ReactiveCommand.CreateFromTask(SelectApplicationAsync);
+            SelectCommand = ReactiveCommand.Create(SelectApplication);
         }
 
         public override async Task ActivateAsync(OpenWithNavigationParameter parameter)
@@ -56,10 +56,6 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             UsedApplication = _recommendedApplications.FirstOrDefault();
         }
 
-        private async Task SelectApplicationAsync(CancellationToken cancellationToken)
-        {
-            await Task.CompletedTask;
-            Close();
-        }
+        private void SelectApplication() => Close(new OpenWithDialogResult(UsedApplication));
     }
 }

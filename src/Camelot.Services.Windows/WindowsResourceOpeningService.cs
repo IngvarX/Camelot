@@ -14,6 +14,9 @@ namespace Camelot.Services.Windows
         }
 
         public void Open(string resource) =>
-            _processService.Run("explorer", $"\"{resource}\"");
+            OpenWith("explorer", resource);
+
+        public void OpenWith(string command, string resource) 
+            => _processService.Run(command, $"\"{resource}\"");
     }
 }

@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
@@ -13,13 +15,13 @@ namespace Camelot.Services.Windows
 {
     public class WindowsApplicationService : IApplicationService
     {
-        private const string RegkeyFileExtensionsX32 = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FileExts";
+        private const string FileExtensionsX32RegistryKeyName = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FileExts";
 
-        private const string RegkeyFileExtensionsX64 = @"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Explorer\FileExts";
+        private const string FileExtensionsX64RegistryKeyName = @"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Explorer\FileExts";
 
-        private const string RegkeyAppPathX32 = @"SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths";
+        private const string AppPathX32RegistryKeyName = @"SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths";
 
-        private const string RegkeyAppPathX64 = @"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\App Paths";
+        private const string AppPathX64RegistryKeyName = @"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\App Paths";
 
         public Task<IEnumerable<ApplicationModel>> GetAssociatedApplications(string fileExtension)
         {
@@ -31,13 +33,13 @@ namespace Camelot.Services.Windows
             var associatedApplications = new Dictionary<string, ApplicationModel>();
 
             foreach (var applicationFile in GetOpenWithList(fileExtension, Registry.CurrentUser,
-                RegkeyFileExtensionsX32))
+                FileExtensionsX32RegistryKeyName))
             {
                 TryAddApplication(associatedApplications, applicationFile);
             }
 
             foreach (var applicationFile in GetOpenWithProgids(fileExtension, Registry.CurrentUser,
-                RegkeyFileExtensionsX32))
+                FileExtensionsX32RegistryKeyName))
             {
                 TryAddApplication(associatedApplications, applicationFile);
             }
@@ -46,13 +48,13 @@ namespace Camelot.Services.Windows
                 RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
             {
                 foreach (var applicationFile in GetOpenWithList(fileExtension, Registry.CurrentUser,
-                    RegkeyFileExtensionsX64))
+                    FileExtensionsX64RegistryKeyName))
                 {
                     TryAddApplication(associatedApplications, applicationFile);
                 }
 
                 foreach (var applicationFile in GetOpenWithProgids(fileExtension, Registry.CurrentUser,
-                    RegkeyFileExtensionsX64))
+                    FileExtensionsX64RegistryKeyName))
                 {
                     TryAddApplication(associatedApplications, applicationFile);
                 }
@@ -116,16 +118,16 @@ namespace Camelot.Services.Windows
             var installedApplications = new Dictionary<string, ApplicationModel>();
 
             var applicationsFiles = GetApplicationsFiles(Registry.ClassesRoot, "Applications")
-                .Union(GetApplicationsFiles(Registry.LocalMachine, RegkeyAppPathX32))
-                .Union(GetApplicationsFiles(Registry.CurrentUser, RegkeyAppPathX32))
+                .Union(GetApplicationsFiles(Registry.LocalMachine, AppPathX32RegistryKeyName))
+                .Union(GetApplicationsFiles(Registry.CurrentUser, AppPathX32RegistryKeyName))
                 .ToImmutableHashSet();
 
             if (RuntimeInformation.ProcessArchitecture == Architecture.X64 ||
                 RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
             {
                 applicationsFiles = applicationsFiles
-                    .Union(GetApplicationsFiles(Registry.LocalMachine, RegkeyAppPathX64))
-                    .Union(GetApplicationsFiles(Registry.CurrentUser, RegkeyAppPathX64))
+                    .Union(GetApplicationsFiles(Registry.LocalMachine, AppPathX64RegistryKeyName))
+                    .Union(GetApplicationsFiles(Registry.CurrentUser, AppPathX64RegistryKeyName))
                     .ToImmutableHashSet();
             }
 
@@ -158,7 +160,7 @@ namespace Camelot.Services.Windows
             var application = FindApplication(applicationFile);
             if (application != null)
             {
-                applications.TryAdd(applicationFile, application);
+                applications.TryAdd(application.DisplayName, application);
             }
         }
 
@@ -184,8 +186,21 @@ namespace Camelot.Services.Windows
             {
                 DisplayName = displayName,
                 ExecutePath = executePath,
-                StartCommand = startCommand
+                Arguments = ExtractArguments(startCommand)
             };
+
+            string ExtractArguments(string path)
+            {
+                path = path.Replace($"\"{executePath}\"", "");
+
+                var matches = Regex.Matches(path, "%.", RegexOptions.Compiled);
+                foreach (Match match in matches)
+                {
+                    path = path.Replace(match.Value, $"\"{match.Value}\"");
+                }
+
+                return path;
+            }
         }
 
         private static class Win32

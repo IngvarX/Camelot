@@ -1,3 +1,4 @@
+using System;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Behaviors;
 
@@ -14,5 +15,10 @@ namespace Camelot.Services.Behaviors
         }
 
         public void Open(string node) => _directoryService.SelectedDirectory = node;
+
+        public void OpenWith(string command, string arguments, string node)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
