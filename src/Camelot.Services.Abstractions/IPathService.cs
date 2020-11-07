@@ -20,6 +20,8 @@ namespace Camelot.Services.Abstractions
 
         string GetExtension(string path);
 
+        string GetExtensionWithDot(string path);
+
         string TrimPathSeparators(string path);
     }
 }

@@ -30,7 +30,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         public ApplicationModel UsedApplication { get; set; }
 
         [Reactive]
-        public string OpenFileExtension { get; set; }
+        public string OpenFileExtension { get; private set; }
 
         [Reactive]
         public bool IsDefaultApplication { get; set; }
@@ -69,10 +69,15 @@ namespace Camelot.ViewModels.Implementations.Dialogs
                     selectedApplication = FindApplication(_otherApplications, parameter.Application);
                     if (selectedApplication != null)
                     {
-                        _recommendedApplications.Insert(0, selectedApplication);
                         _otherApplications.Remove(selectedApplication);
                     }
                 }
+                else
+                {
+                    _recommendedApplications.Remove(selectedApplication);
+                }
+
+                _recommendedApplications.Insert(0, selectedApplication);
             }
 
             UsedApplication = selectedApplication;

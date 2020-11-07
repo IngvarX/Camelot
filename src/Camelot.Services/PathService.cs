@@ -86,6 +86,8 @@ namespace Camelot.Services
             return extension.StartsWith(".") ? extension.Substring(1) : extension;
         }
 
+        public string GetExtensionWithDot(string path) => "." + GetExtension(path);
+
         public string TrimPathSeparators(string path) => path == "/" ? path : path.TrimEnd('/').TrimEnd('\\');
     }
 }
