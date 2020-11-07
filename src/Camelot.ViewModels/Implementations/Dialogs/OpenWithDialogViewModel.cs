@@ -59,9 +59,13 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             _otherApplications.AddRange((await _applicationService.GetInstalledApplications())
                 .Except(_recommendedApplications, new ApplicationModelComparer()));
 
-            var selectedApplication = _recommendedApplications.FirstOrDefault();
+            ApplicationModel selectedApplication;
 
-            if (parameter.Application != null)
+            if (parameter.Application == null)
+            {
+                selectedApplication = _recommendedApplications.FirstOrDefault();
+            }
+            else
             {
                 selectedApplication = FindApplication(_recommendedApplications, parameter.Application);
                 if (selectedApplication == null)

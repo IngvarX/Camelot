@@ -32,9 +32,11 @@
 			</StackPanel>
 		
 	        <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Margin="0,15" Classes="overWriteDialogTextBlock"
+					   IsVisible="{Binding RecommendedApplications.Count}"
                        Text="{x:Static p:Resources.RecommendedApplications}" />
 
-			<ListBox Grid.Row="2" Grid.ColumnSpan="2" Margin="0,10,0,0" 
+			<ListBox Grid.Row="2" Grid.ColumnSpan="2" Margin="0,10,0,0"
+					 IsVisible="{Binding RecommendedApplications.Count}"
 					 SelectedItem="{Binding UsedApplication, Mode=TwoWay}" Items="{Binding RecommendedApplications}">
 				<ListBox.ItemTemplate>
 					<DataTemplate>
