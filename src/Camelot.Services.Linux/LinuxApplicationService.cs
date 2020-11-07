@@ -2,31 +2,26 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Specifications;
-using Camelot.Services.Environment.Interfaces;
 
 namespace Camelot.Services.Linux
 {
     public class LinuxApplicationService : IApplicationService
     {
         private readonly IFileService _fileService;
-        private readonly IRegexService _regexService;
 
         public LinuxApplicationService(
-            IFileService fileService,
-            IRegexService regexService)
+            IFileService fileService)
         {
             _fileService = fileService;
-            _regexService = regexService;
         }
         
         public Task<IEnumerable<ApplicationModel>> GetAssociatedApplications(string fileExtension)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(Enumerable.Empty<ApplicationModel>());
         }
 
         public async Task<IEnumerable<ApplicationModel>> GetInstalledApplications()
@@ -70,22 +65,13 @@ namespace Camelot.Services.Linux
             return installedSoftwares;
         }
         
-        private ISpecification<NodeModelBase> GetSpecification() => new DesktopFileSpecification(_regexService);
+        private static ISpecification<FileModel> GetSpecification() => new DesktopFileSpecification();
         
-        private class DesktopFileSpecification : ISpecification<NodeModelBase>
+        private class DesktopFileSpecification : ISpecification<FileModel>
         {
-            private const string Pattern = "*.desktop";
-            
-            private readonly IRegexService _regexService;
+            private const string Extension = "desktop";
 
-            public DesktopFileSpecification(
-                IRegexService regexService)
-            {
-                _regexService = regexService;
-            }
-
-            public bool IsSatisfiedBy(NodeModelBase nodeModel) =>
-                _regexService.CheckIfMatches(nodeModel.Name, Pattern, RegexOptions.CultureInvariant);
+            public bool IsSatisfiedBy(FileModel fileModel) => fileModel.Extension == Extension;
         }
 
         private class IniFileReader

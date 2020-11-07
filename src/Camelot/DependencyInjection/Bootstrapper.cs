@@ -367,8 +367,7 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IShellCommandWrappingService>()
             ));
             services.RegisterLazySingleton<IApplicationService>(() => new LinuxApplicationService(
-                resolver.GetRequiredService<IFileService>(),
-                resolver.GetRequiredService<IRegexService>()
+                resolver.GetRequiredService<IFileService>()
             ));
         }
 

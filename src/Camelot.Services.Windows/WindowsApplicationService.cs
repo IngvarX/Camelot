@@ -25,9 +25,9 @@ namespace Camelot.Services.Windows
 
         public Task<IEnumerable<ApplicationModel>> GetAssociatedApplications(string fileExtension)
         {
-            if (!Path.HasExtension(fileExtension))
+            if (string.IsNullOrWhiteSpace(fileExtension))
             {
-                throw new ArgumentException($"{nameof(fileExtension)} should be file extension.");
+                return Task.FromResult(Enumerable.Empty<ApplicationModel>());
             }
 
             var associatedApplications = new Dictionary<string, ApplicationModel>();
