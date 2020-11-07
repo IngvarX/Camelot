@@ -19,7 +19,7 @@ namespace Camelot.Services.Windows
 
         public void OpenWith(string command, string arguments, string resource)
         {
-            var hasPlaceholder = Regex.IsMatch(arguments, "{\\d+}", RegexOptions.Compiled);
+            var hasPlaceholder = Regex.IsMatch(arguments, "\"{\\d+}\"", RegexOptions.Compiled);
             if (hasPlaceholder == false)
             {
                 arguments = $"{arguments} \"{{0}}\"";

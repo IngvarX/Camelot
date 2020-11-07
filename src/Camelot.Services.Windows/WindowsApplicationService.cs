@@ -191,15 +191,12 @@ namespace Camelot.Services.Windows
 
             string ExtractArguments(string path)
             {
-                path = path.Replace($"\"{executePath}\"", "");
+                path = path
+                    .Replace("\"", "")
+                    .Replace(executePath, "")
+                    .TrimStart();
 
-                var argumentsCount = 0;
-                var matches = Regex.Matches(path, "%.", RegexOptions.Compiled);
-                foreach (Match match in matches)
-                {
-                    path = path.Replace(match.Value, $"\"{{{argumentsCount++}}}\"");
-                }
-
+                path = Regex.Replace(path, "%.", "", RegexOptions.Compiled);
                 return path;
             }
         }
