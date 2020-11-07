@@ -66,7 +66,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             RenameCommand = ReactiveCommand.Create(Rename);
         }
 
-        public override Task ActivateAsync(OverwriteOptionsNavigationParameter parameter)
+        public override void Activate(OverwriteOptionsNavigationParameter parameter)
         {
             var sourceFileModel = _fileService.GetFile(parameter.SourceFilePath);
             ReplaceWithFileViewModel = CreateFrom(sourceFileModel);
@@ -79,8 +79,6 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             DestinationDirectoryName = _pathService.GetFileName(destinationDirectory);
 
             AreMultipleFilesAvailable = parameter.AreMultipleFilesAvailable;
-
-            return Task.CompletedTask;
         }
 
         private void Skip() => Close(CreateFrom(OperationContinuationMode.Skip));

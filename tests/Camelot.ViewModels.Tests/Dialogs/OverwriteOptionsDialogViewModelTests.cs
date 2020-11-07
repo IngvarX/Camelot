@@ -25,9 +25,9 @@ namespace Camelot.ViewModels.Tests.Dialogs
         [InlineData(true, false)]
         [InlineData(false, true)]
         [InlineData(false, false)]
-        public async Task TestProperties(bool shouldApplyToAll, bool areMultipleFilesAvailable)
+        public void TestProperties(bool shouldApplyToAll, bool areMultipleFilesAvailable)
         {
-            var dialog = await Create(areMultipleFilesAvailable);
+            var dialog = Create(areMultipleFilesAvailable);
             dialog.ShouldApplyToAll = shouldApplyToAll;
             dialog.NewFileName = NewFileName;
 
@@ -38,10 +38,10 @@ namespace Camelot.ViewModels.Tests.Dialogs
         }
 
         [Fact]
-        public async Task TestCanceled()
+        public void TestCanceled()
         {
             var callbackCalled = false;
-            var dialog = await Create();
+            var dialog = Create();
             dialog.CloseRequested += (sender, args) =>
             {
                 var result = args.Result;
@@ -59,10 +59,10 @@ namespace Camelot.ViewModels.Tests.Dialogs
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public async Task TestSkip(bool shouldApplyToAll)
+        public void TestSkip(bool shouldApplyToAll)
         {
             var callbackCalled = false;
-            var dialog = await Create();
+            var dialog = Create();
             dialog.ShouldApplyToAll = shouldApplyToAll;
             dialog.CloseRequested += (sender, args) =>
             {
@@ -85,10 +85,10 @@ namespace Camelot.ViewModels.Tests.Dialogs
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public async Task TestOverwrite(bool shouldApplyToAll)
+        public void TestOverwrite(bool shouldApplyToAll)
         {
             var callbackCalled = false;
-            var dialog = await Create();
+            var dialog = Create();
             dialog.ShouldApplyToAll = shouldApplyToAll;
             dialog.CloseRequested += (sender, args) =>
             {
@@ -111,10 +111,10 @@ namespace Camelot.ViewModels.Tests.Dialogs
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public async Task TestOverwriteIfOlder(bool shouldApplyToAll)
+        public void TestOverwriteIfOlder(bool shouldApplyToAll)
         {
             var callbackCalled = false;
-            var dialog = await Create();
+            var dialog = Create();
             dialog.ShouldApplyToAll = shouldApplyToAll;
             dialog.CloseRequested += (sender, args) =>
             {
@@ -137,10 +137,10 @@ namespace Camelot.ViewModels.Tests.Dialogs
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public async Task TestRename(bool shouldApplyToAll)
+        public void TestRename(bool shouldApplyToAll)
         {
             var callbackCalled = false;
-            var dialog = await Create();
+            var dialog = Create();
             dialog.ShouldApplyToAll = shouldApplyToAll;
             dialog.NewFileName = NewFileName;
             dialog.CloseRequested += (sender, args) =>
@@ -162,7 +162,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
             Assert.True(callbackCalled);
         }
 
-        private static async Task<OverwriteOptionsDialogViewModel> Create(bool areMultipleFilesAvailable = true)
+        private static OverwriteOptionsDialogViewModel Create(bool areMultipleFilesAvailable = true)
         {
             var fileServiceMock = new Mock<IFileService>();
             fileServiceMock
@@ -197,7 +197,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
                 fileNameGenerationService.Object, pathService.Object);
 
             var parameter = new OverwriteOptionsNavigationParameter(SourceFilePath, DestinationFilePath, areMultipleFilesAvailable);
-            await dialog.ActivateAsync(parameter);
+            dialog.Activate(parameter);
 
             return dialog;
         }

@@ -50,12 +50,10 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             CancelCommand = ReactiveCommand.Create(Cancel);
         }
 
-        public override Task ActivateAsync(NodesRemovingNavigationParameter parameter)
+        public override void Activate(NodesRemovingNavigationParameter parameter)
         {
             Files = parameter.Files.Select(_pathService.GetFileName);
             IsRemovingToTrash = parameter.IsRemovingToTrash;
-
-            return Task.CompletedTask;
         }
 
         private void Ok() => Close(CreateResult(true));

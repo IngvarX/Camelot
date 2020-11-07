@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Camelot.Services.Abstractions;
@@ -13,7 +14,7 @@ using ReactiveUI.Fody.Helpers;
 
 namespace Camelot.ViewModels.Implementations.Dialogs
 {
-    public class OpenWithDialogViewModel : ParameterizedDialogViewModelBase<OpenWithDialogResult, OpenWithNavigationParameter>
+    public class OpenWithDialogViewModel : ParameterizedDialogViewModelBaseAsync<OpenWithDialogResult, OpenWithNavigationParameter>
     {
         private readonly IApplicationService _applicationService;
 
@@ -46,7 +47,8 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             SelectCommand = ReactiveCommand.Create(SelectApplication);
         }
 
-        public override async Task ActivateAsync(OpenWithNavigationParameter parameter)
+        public override async Task ActivateAsync(OpenWithNavigationParameter parameter,
+            CancellationToken cancellationToken = default)
         {
             OpenFileExtension = parameter.FileExtension;
 

@@ -17,7 +17,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
         [InlineData(null)]
         [InlineData("")]
         [InlineData(" ")]
-        public async Task TestDirectoryWithWhiteSpaceCreation(string directoryName)
+        public void TestDirectoryWithWhiteSpaceCreation(string directoryName)
         {
             var directoryServiceMock = new Mock<IDirectoryService>();
             var fileServiceMock = new Mock<IFileService>();
@@ -25,7 +25,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
 
             var dialog = new CreateDirectoryDialogViewModel(
                 directoryServiceMock.Object, fileServiceMock.Object, pathServiceMock.Object);
-            await dialog.ActivateAsync(new CreateNodeNavigationParameter(DirectoryPath));
+            dialog.Activate(new CreateNodeNavigationParameter(DirectoryPath));
 
             Assert.False(dialog.CreateCommand.CanExecute(null));
 
@@ -38,7 +38,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
         [InlineData(false, true)]
         [InlineData(true, false)]
         [InlineData(true, true)]
-        public async Task TestDirectoryWithExistingNodeNameCreation(bool fileExists, bool dirExists)
+        public void TestDirectoryWithExistingNodeNameCreation(bool fileExists, bool dirExists)
         {
             var directoryServiceMock = new Mock<IDirectoryService>();
             directoryServiceMock
@@ -55,7 +55,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
 
             var dialog = new CreateDirectoryDialogViewModel(
                 directoryServiceMock.Object, fileServiceMock.Object, pathServiceMock.Object);
-            await dialog.ActivateAsync(new CreateNodeNavigationParameter(DirectoryPath));
+            dialog.Activate(new CreateNodeNavigationParameter(DirectoryPath));
 
             dialog.DirectoryName = DirectoryName;
 
@@ -63,7 +63,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
         }
 
         [Fact]
-        public async Task TestDirectoryCreation()
+        public void TestDirectoryCreation()
         {
             var directoryServiceMock = new Mock<IDirectoryService>();
             var fileServiceMock = new Mock<IFileService>();
@@ -71,7 +71,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
 
             var dialog = new CreateDirectoryDialogViewModel(
                 directoryServiceMock.Object, fileServiceMock.Object, pathServiceMock.Object);
-            await dialog.ActivateAsync(new CreateNodeNavigationParameter(DirectoryPath));
+            dialog.Activate(new CreateNodeNavigationParameter(DirectoryPath));
 
             var isCallbackCalled = false;
             dialog.CloseRequested += (sender, args) =>
@@ -93,7 +93,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
         }
 
         [Fact]
-        public async Task TestCancel()
+        public void TestCancel()
         {
             var directoryServiceMock = new Mock<IDirectoryService>();
             var fileServiceMock = new Mock<IFileService>();
@@ -101,7 +101,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
 
             var dialog = new CreateDirectoryDialogViewModel(
                 directoryServiceMock.Object, fileServiceMock.Object, pathServiceMock.Object);
-            await dialog.ActivateAsync(new CreateNodeNavigationParameter(DirectoryPath));
+            dialog.Activate(new CreateNodeNavigationParameter(DirectoryPath));
 
             var isCallbackCalled = false;
             dialog.CloseRequested += (sender, args) =>

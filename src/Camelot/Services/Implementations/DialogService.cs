@@ -41,14 +41,18 @@ namespace Camelot.Services.Implementations
             var window = CreateView<TResult>(viewModelName);
             var viewModel = CreateViewModel<TResult>(viewModelName);
             Bind(window, viewModel);
-            if (viewModel is ParameterizedDialogViewModelBase<TResult, TParameter> parameterizedDialogViewModelBase)
+
+            switch (viewModel)
             {
-                await parameterizedDialogViewModelBase.ActivateAsync(parameter);
-            }
-            else
-            {
-                throw new InvalidOperationException(
-                    $"{viewModel.GetType().FullName} doesn't support passing parameters!");
+                case ParameterizedDialogViewModelBase<TResult, TParameter> parameterizedDialogViewModelBase:
+                    parameterizedDialogViewModelBase.Activate(parameter);
+                    break;
+                case ParameterizedDialogViewModelBaseAsync<TResult, TParameter> parameterizedDialogViewModelBaseAsync:
+                    await parameterizedDialogViewModelBaseAsync.ActivateAsync(parameter);
+                    break;
+                default:
+                    throw new InvalidOperationException(
+                        $"{viewModel.GetType().FullName} doesn't support passing parameters!");
             }
 
             return await ShowDialogAsync(window);

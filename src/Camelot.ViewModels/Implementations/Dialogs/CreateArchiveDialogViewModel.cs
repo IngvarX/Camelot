@@ -71,7 +71,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             ArchivePath = string.Empty;
         }
 
-        public override Task ActivateAsync(CreateArchiveNavigationParameter parameter)
+        public override void Activate(CreateArchiveNavigationParameter parameter)
         {
             var archiveTypeViewModels = parameter.IsPackingSingleFile
                 ? _archiveTypeViewModelFactory.CreateForSingleFile()
@@ -80,8 +80,6 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             SelectedArchiveType = GetSelectedArchiveType();
 
             ArchivePath = $"{parameter.DefaultArchivePath}.{SelectedArchiveType.Name}";
-
-            return Task.CompletedTask;
         }
 
         private async Task SelectPathAsync()

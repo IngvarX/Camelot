@@ -33,7 +33,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
         }
 
         [Fact]
-        public async Task TestActivation()
+        public void TestActivation()
         {
             var fileModel = new FileModel {FullPath = File, SizeBytes = Size};
             var fileServiceMock = new Mock<IFileService>();
@@ -51,7 +51,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
             var viewModel = new FileInformationDialogViewModel(fileServiceMock.Object,
                 mainNodeInfoTabViewModelMock.Object);
             var parameter = new FileSystemNodeNavigationParameter(File);
-            await viewModel.ActivateAsync(parameter);
+            viewModel.Activate(parameter);
 
             mainNodeInfoTabViewModelMock.Verify(m => m.SetSize(Size), Times.Once);
             mainNodeInfoTabViewModelMock.Verify(m => m.Activate(fileModel, false), Times.Once);

@@ -17,7 +17,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
         [InlineData(null)]
         [InlineData("")]
         [InlineData(" ")]
-        public async Task TestFileWithWhiteSpaceCreation(string fileName)
+        public void TestFileWithWhiteSpaceCreation(string fileName)
         {
             var directoryServiceMock = new Mock<IDirectoryService>();
             var fileServiceMock = new Mock<IFileService>();
@@ -25,7 +25,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
 
             var dialog = new CreateFileDialogViewModel(
                 directoryServiceMock.Object, fileServiceMock.Object, pathServiceMock.Object);
-            await dialog.ActivateAsync(new CreateNodeNavigationParameter(DirectoryPath));
+            dialog.Activate(new CreateNodeNavigationParameter(DirectoryPath));
 
             Assert.False(dialog.CreateCommand.CanExecute(null));
 
@@ -35,7 +35,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
         }
 
         [Fact]
-        public async Task TestDirectoryWithExistingDirectoryNameCreation()
+        public void TestDirectoryWithExistingDirectoryNameCreation()
         {
             var directoryServiceMock = new Mock<IDirectoryService>();
             directoryServiceMock
@@ -49,7 +49,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
 
             var dialog = new CreateFileDialogViewModel(
                 directoryServiceMock.Object, fileServiceMock.Object, pathServiceMock.Object);
-            await dialog.ActivateAsync(new CreateNodeNavigationParameter(DirectoryPath));
+            dialog.Activate(new CreateNodeNavigationParameter(DirectoryPath));
 
             dialog.FileName = FileName;
 
@@ -60,7 +60,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
         [InlineData(false, true)]
         [InlineData(true, false)]
         [InlineData(true, true)]
-        public async Task TestFileWithExistingFileNameCreation(bool fileExists, bool dirExists)
+        public void TestFileWithExistingFileNameCreation(bool fileExists, bool dirExists)
         {
             var directoryServiceMock = new Mock<IDirectoryService>();
             directoryServiceMock
@@ -77,7 +77,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
 
             var dialog = new CreateFileDialogViewModel(
                 directoryServiceMock.Object, fileServiceMock.Object, pathServiceMock.Object);
-            await dialog.ActivateAsync(new CreateNodeNavigationParameter(DirectoryPath));
+            dialog.Activate(new CreateNodeNavigationParameter(DirectoryPath));
 
             dialog.FileName = FileName;
 
@@ -85,7 +85,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
         }
 
         [Fact]
-        public async Task TestDirectoryCreation()
+        public void TestDirectoryCreation()
         {
             var directoryServiceMock = new Mock<IDirectoryService>();
             var fileServiceMock = new Mock<IFileService>();
@@ -93,7 +93,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
 
             var dialog = new CreateFileDialogViewModel(
                 directoryServiceMock.Object, fileServiceMock.Object, pathServiceMock.Object);
-            await dialog.ActivateAsync(new CreateNodeNavigationParameter(DirectoryPath));
+            dialog.Activate(new CreateNodeNavigationParameter(DirectoryPath));
 
             var isCallbackCalled = false;
             dialog.CloseRequested += (sender, args) =>
@@ -115,7 +115,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
         }
 
         [Fact]
-        public async Task TestCancel()
+        public void TestCancel()
         {
             var directoryServiceMock = new Mock<IDirectoryService>();
             var fileServiceMock = new Mock<IFileService>();
@@ -123,7 +123,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
 
             var dialog = new CreateFileDialogViewModel(
                 directoryServiceMock.Object, fileServiceMock.Object, pathServiceMock.Object);
-            await dialog.ActivateAsync(new CreateNodeNavigationParameter(DirectoryPath));
+            dialog.Activate(new CreateNodeNavigationParameter(DirectoryPath));
 
             var isCallbackCalled = false;
             dialog.CloseRequested += (sender, args) =>
