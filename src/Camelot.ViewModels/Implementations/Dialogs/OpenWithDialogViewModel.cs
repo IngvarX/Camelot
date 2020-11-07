@@ -32,6 +32,9 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         [Reactive]
         public string OpenFileExtension { get; set; }
 
+        [Reactive]
+        public bool IsDefaultApplication { get; set; }
+
         public ICommand CancelCommand { get; }
 
         public ICommand SelectCommand { get; }
@@ -56,9 +59,29 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             _otherApplications.AddRange((await _applicationService.GetInstalledApplications())
                 .Except(_recommendedApplications, new ApplicationModelComparer()));
 
-            UsedApplication = _recommendedApplications.FirstOrDefault();
+            var selectedApplication = _recommendedApplications.FirstOrDefault();
+
+            if (parameter.Application != null)
+            {
+                selectedApplication = FindApplication(_recommendedApplications, parameter.Application);
+                if (selectedApplication == null)
+                {
+                    selectedApplication = FindApplication(_otherApplications, parameter.Application);
+                    if (selectedApplication != null)
+                    {
+                        _recommendedApplications.Insert(0, selectedApplication);
+                        _otherApplications.Remove(selectedApplication);
+                    }
+                }
+            }
+
+            UsedApplication = selectedApplication;
+
+            static ApplicationModel FindApplication(IEnumerable<ApplicationModel> applications, ApplicationModel application) => 
+                applications.FirstOrDefault(m => m.DisplayName == application.DisplayName);
         }
 
-        private void SelectApplication() => Close(new OpenWithDialogResult(UsedApplication));
+        private void SelectApplication() =>
+            Close(new OpenWithDialogResult(OpenFileExtension, UsedApplication, IsDefaultApplication));
     }
 }

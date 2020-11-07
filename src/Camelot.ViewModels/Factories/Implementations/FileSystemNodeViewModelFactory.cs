@@ -28,6 +28,7 @@ namespace Camelot.ViewModels.Factories.Implementations
         private readonly IDirectoryService _directoryService;
         private readonly IArchiveService _archiveService;
         private readonly ISystemDialogService _systemDialogService;
+        private readonly IOpenWithApplicationService _openWithApplicationService;
 
         public FileSystemNodeViewModelFactory(
             IFileSystemNodeOpeningBehavior fileOpeningBehavior,
@@ -44,7 +45,8 @@ namespace Camelot.ViewModels.Factories.Implementations
             IFileService fileService,
             IDirectoryService directoryService,
             IArchiveService archiveService,
-            ISystemDialogService systemDialogService)
+            ISystemDialogService systemDialogService, 
+            IOpenWithApplicationService openWithApplicationService)
         {
             _fileOpeningBehavior = fileOpeningBehavior;
             _directoryOpeningBehavior = directoryOpeningBehavior;
@@ -61,6 +63,7 @@ namespace Camelot.ViewModels.Factories.Implementations
             _directoryService = directoryService;
             _archiveService = archiveService;
             _systemDialogService = systemDialogService;
+            _openWithApplicationService = openWithApplicationService;
         }
 
         public IFileSystemNodeViewModel Create(string path)
@@ -94,7 +97,8 @@ namespace Camelot.ViewModels.Factories.Implementations
                 _dialogService,
                 _trashCanService,
                 _archiveService,
-                _systemDialogService)
+                _systemDialogService,
+                _openWithApplicationService)
             {
                 FullPath = fileModel.FullPath,
                 Size = fileModel.SizeBytes,
@@ -118,7 +122,8 @@ namespace Camelot.ViewModels.Factories.Implementations
                 _dialogService,
                 _trashCanService,
                 _archiveService,
-                _systemDialogService)
+                _systemDialogService,
+                _openWithApplicationService)
             {
                 FullPath = directoryModel.FullPath,
                 Name = directoryModel.Name,

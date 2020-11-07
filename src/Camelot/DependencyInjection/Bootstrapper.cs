@@ -298,6 +298,9 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IDirectoryService>(),
                 resolver.GetRequiredService<IPathService>()
             ));
+            services.RegisterLazySingleton<IOpenWithApplicationService>(() => new OpenWithApplicationService(
+                resolver.GetRequiredService<IUnitOfWorkFactory>()    
+            ));
         }
 
         private static void RegisterPlatformSpecificServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
@@ -349,10 +352,12 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IEnvironmentService>()
             ));
             services.RegisterLazySingleton<IShellCommandWrappingService>(() => new ShellCommandWrappingService());
-            services.RegisterLazySingleton<IResourceOpeningService>(() => new LinuxResourceOpeningService(
-                resolver.GetRequiredService<IProcessService>(),
-                resolver.GetRequiredService<IShellCommandWrappingService>(),
-                resolver.GetRequiredService<IDesktopEnvironmentService>()
+            services.RegisterLazySingleton<IResourceOpeningService>(() => new ResourceOpeningServiceOpenWith(
+                new LinuxResourceOpeningService(
+                    resolver.GetRequiredService<IProcessService>(),
+                    resolver.GetRequiredService<IShellCommandWrappingService>(),
+                    resolver.GetRequiredService<IDesktopEnvironmentService>()),
+                resolver.GetRequiredService<IOpenWithApplicationService>()
             ));
             services.RegisterLazySingleton<ITerminalService>(() => new LinuxTerminalService(
                 resolver.GetRequiredService<IProcessService>(),
@@ -375,8 +380,9 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IDirectoryService>(),
                 resolver.GetRequiredService<IHomeDirectoryProvider>()
             ));
-            services.RegisterLazySingleton<IResourceOpeningService>(() => new MacResourceOpeningService(
-                resolver.GetRequiredService<IProcessService>()
+            services.RegisterLazySingleton<IResourceOpeningService>(() => new ResourceOpeningServiceOpenWith(
+                new MacResourceOpeningService(resolver.GetRequiredService<IProcessService>()),
+                resolver.GetRequiredService<IOpenWithApplicationService>()
             ));
             services.RegisterLazySingleton<IHomeDirectoryProvider>(() => new UnixHomeDirectoryProvider(
                 resolver.GetRequiredService<IEnvironmentService>()
@@ -409,8 +415,9 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IWindowsRemovedFileMetadataBuilderFactory>(),
                 resolver.GetRequiredService<IWindowsTrashCanNodeNameGenerator>()
             ));
-            services.RegisterLazySingleton<IResourceOpeningService>(() => new WindowsResourceOpeningService(
-                resolver.GetRequiredService<IProcessService>()
+            services.RegisterLazySingleton<IResourceOpeningService>(() => new ResourceOpeningServiceOpenWith(
+                new WindowsResourceOpeningService(resolver.GetRequiredService<IProcessService>()),
+                resolver.GetRequiredService<IOpenWithApplicationService>()
             ));
             services.RegisterLazySingleton<ITerminalService>(() => new WindowsTerminalService(
                 resolver.GetRequiredService<IProcessService>(),
@@ -451,7 +458,8 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IFileService>(),
                 resolver.GetRequiredService<IDirectoryService>(),
                 resolver.GetRequiredService<IArchiveService>(),
-                resolver.GetRequiredService<ISystemDialogService>()
+                resolver.GetRequiredService<ISystemDialogService>(),
+                resolver.GetRequiredService<IOpenWithApplicationService>()
             ));
         }
 
@@ -502,7 +510,8 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IFileService>(),
                 resolver.GetRequiredService<IDirectoryService>(),
                 resolver.GetRequiredService<IArchiveService>(),
-                resolver.GetRequiredService<ISystemDialogService>()
+                resolver.GetRequiredService<ISystemDialogService>(),
+                resolver.GetRequiredService<IOpenWithApplicationService>()
             ));
             services.Register(() => new AboutDialogViewModel(
                 resolver.GetRequiredService<IApplicationVersionProvider>(),

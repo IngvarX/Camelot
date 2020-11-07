@@ -30,6 +30,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private readonly ITrashCanService _trashCanService;
         private readonly IArchiveService _archiveService;
         private readonly ISystemDialogService _systemDialogService;
+        private readonly IOpenWithApplicationService _openWithApplicationService;
 
         private IReadOnlyList<string> Files => new[] {FullPath};
 
@@ -79,7 +80,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             IDialogService dialogService,
             ITrashCanService trashCanService,
             IArchiveService archiveService,
-            ISystemDialogService systemDialogService)
+            ISystemDialogService systemDialogService, 
+            IOpenWithApplicationService openWithApplicationService)
         {
             _fileSystemNodeOpeningBehavior = fileSystemNodeOpeningBehavior;
             _operationsService = operationsService;
@@ -90,6 +92,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             _trashCanService = trashCanService;
             _archiveService = archiveService;
             _systemDialogService = systemDialogService;
+            _openWithApplicationService = openWithApplicationService;
 
             OpenCommand = ReactiveCommand.Create(Open);
             OpenWithCommand = ReactiveCommand.Create(OpenWithAsync);
@@ -121,7 +124,10 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         
         private async Task OpenWithAsync()
         {
-            var parameter = new OpenWithNavigationParameter(Path.GetExtension(FullName));
+            var fileExtension = Path.GetExtension(FullName);
+            var selectedApplication = _openWithApplicationService.GetSelectedApplication(fileExtension);
+            
+            var parameter = new OpenWithNavigationParameter(fileExtension, selectedApplication);
             var dialogResult = await _dialogService.ShowDialogAsync<OpenWithDialogResult, OpenWithNavigationParameter>(
                 nameof(OpenWithDialogViewModel), parameter);
             if (dialogResult is null)
@@ -131,6 +137,11 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
             _fileSystemNodeOpeningBehavior.OpenWith(dialogResult.Application.ExecutePath,
                 dialogResult.Application.Arguments, FullPath);
+
+            if (dialogResult.IsDefaultApplication)
+            {
+                _openWithApplicationService.SaveSelectedApplication(dialogResult.FileExtension, dialogResult.Application);
+            }
         }
 
         private async Task ExtractAsync(ExtractCommandType commandType)
