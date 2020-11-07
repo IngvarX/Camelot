@@ -5,6 +5,8 @@ namespace Camelot.DataAccess.Models
 {
     public class OpenWithApplicationSettings
     {
+        public static OpenWithApplicationSettings Empty => new OpenWithApplicationSettings();
+        
         public Dictionary<string, Application> ApplicationByExtension { get; set; } =
             new Dictionary<string, Application>(StringComparer.OrdinalIgnoreCase);
     }

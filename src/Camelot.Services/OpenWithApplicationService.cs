@@ -1,4 +1,5 @@
 ﻿using Camelot.DataAccess.Models;
+using Camelot.DataAccess.Repositories;
 using Camelot.DataAccess.UnitOfWork;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
@@ -7,7 +8,7 @@ namespace Camelot.Services
 {
     public class OpenWithApplicationService : IOpenWithApplicationService
     {
-        private const string OpenWithApplicationSettingsId = nameof(OpenWithApplicationSettings);
+        private const string OpenWithApplicationSettingsId = "OpenWithApplicationSettings";
 
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
@@ -21,13 +22,11 @@ namespace Camelot.Services
             using var uow = _unitOfWorkFactory.Create();
             var repository = uow.GetRepository<OpenWithApplicationSettings>();
 
-            var applicationSettings = repository.GetById(OpenWithApplicationSettingsId);
-            if (applicationSettings.ApplicationByExtension.TryGetValue(fileExtension, out var application))
-            {
-                return CreateFrom(application);
-            }
-
-            return null;
+            var applicationSettings = GetSettings(repository);
+            
+            return applicationSettings.ApplicationByExtension.TryGetValue(fileExtension, out var application)
+                ? CreateFrom(application)
+                : null;
         }
 
         public void SaveSelectedApplication(string fileExtension, ApplicationModel selectedApplication)
@@ -35,20 +34,15 @@ namespace Camelot.Services
             using var uow = _unitOfWorkFactory.Create();
             var repository = uow.GetRepository<OpenWithApplicationSettings>();
 
-            var applicationSettings = repository.GetById(OpenWithApplicationSettingsId)
-                                      ?? new OpenWithApplicationSettings();
+            var applicationSettings = GetSettings(repository);
 
-            if (applicationSettings.ApplicationByExtension.ContainsKey(fileExtension))
-            {
-                applicationSettings.ApplicationByExtension[fileExtension] = CreateFrom(selectedApplication);
-            }
-            else
-            {
-                applicationSettings.ApplicationByExtension.Add(fileExtension, CreateFrom(selectedApplication));
-            }
+            applicationSettings.ApplicationByExtension[fileExtension] = CreateFrom(selectedApplication);
 
             repository.Upsert(OpenWithApplicationSettingsId, applicationSettings);
         }
+
+        private static OpenWithApplicationSettings GetSettings(IRepository<OpenWithApplicationSettings> repository) =>
+            repository.GetById(OpenWithApplicationSettingsId) ?? OpenWithApplicationSettings.Empty;
 
         private static Application CreateFrom(ApplicationModel application) =>
             application is null
