@@ -127,7 +127,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         
         private async Task OpenWithAsync()
         {
-            var fileExtension = _pathService.GetExtensionWithDot(FullName);
+            var fileExtension = _pathService.GetExtension(FullName);
             var selectedApplication = _openWithApplicationService.GetSelectedApplication(fileExtension);
             
             var parameter = new OpenWithNavigationParameter(fileExtension, selectedApplication);

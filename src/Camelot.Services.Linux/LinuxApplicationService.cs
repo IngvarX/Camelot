@@ -39,7 +39,7 @@ namespace Camelot.Services.Linux
                 var desktopEntry = new IniFileReader().ReadFile(desktopFile);
 
                 var desktopType = desktopEntry.GetValueOrDefault("Desktop Entry:Type");
-                if (desktopType == null || !desktopType.Equals("Application", StringComparison.OrdinalIgnoreCase))
+                if (desktopType is null || !desktopType.Equals("Application", StringComparison.OrdinalIgnoreCase))
                 {
                     continue;
                 }
@@ -52,19 +52,30 @@ namespace Camelot.Services.Linux
                     continue;
                 }
 
-                var executePath = desktopEntry.GetValueOrDefault("Desktop Entry:Path");
+                var executePath = ExtractExecutePath(startCommand);
+                if (string.IsNullOrWhiteSpace(executePath))
+                {
+                    continue;
+                }
+                
+                var arguments = ExtractArguments(startCommand);
                 
                 installedSoftwares.Add(new ApplicationModel
                 {
                     DisplayName = displayName,
                     ExecutePath = executePath,
-                    Arguments = startCommand
+                    Arguments = arguments
                 });
             }
 
             return installedSoftwares;
         }
-        
+
+        private static string ExtractArguments(string startCommand) => "{0}"; // TODO: fix %F => {0}
+
+        private static string ExtractExecutePath(string startCommand) =>
+            startCommand.Split().FirstOrDefault();
+
         private static ISpecification<FileModel> GetSpecification() => new DesktopFileSpecification();
         
         private class DesktopFileSpecification : ISpecification<FileModel>

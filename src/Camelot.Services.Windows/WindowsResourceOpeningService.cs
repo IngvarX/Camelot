@@ -23,7 +23,7 @@ namespace Camelot.Services.Windows
                 resource = "\"" + resource + "\"";
             }
 
-            _processService.Run(command, string.Format(arguments!, resource).TrimStart());
+            _processService.Run(command, string.Format(arguments, resource).TrimStart());
         }
     }
 }

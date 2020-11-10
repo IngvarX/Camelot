@@ -40,7 +40,10 @@ namespace Camelot.Services.Linux
 
         public void OpenWith(string command, string arguments, string resource)
         {
-            throw new NotImplementedException();
+            var escapedArguments = string.Format(arguments, $"'{resource.Replace("'", "\'")}'");
+            var (wrappedCommand, wrappedArguments) = WrapWithNohup(command, escapedArguments);
+            
+            _processService.Run(wrappedCommand, wrappedArguments);
         }
 
         private void Initialize()
@@ -75,7 +78,7 @@ namespace Camelot.Services.Linux
                 case DesktopEnvironment.Unknown:
                     return ("xdg-open", "\"{0}\"");
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(desktopEnvironment));
+                    throw new ArgumentOutOfRangeException(nameof(desktopEnvironment), desktopEnvironment, null);
             }
         }
 
