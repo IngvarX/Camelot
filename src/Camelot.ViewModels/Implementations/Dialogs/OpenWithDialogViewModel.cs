@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
+using Camelot.ViewModels.Implementations.Dialogs.Comparers;
 using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
 using Camelot.ViewModels.Implementations.Dialogs.Results;
 using DynamicData;
@@ -55,9 +56,13 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         {
             OpenFileExtension = parameter.FileExtension;
 
-            _recommendedApplications.AddRange(await _applicationService.GetAssociatedApplications(OpenFileExtension));
-            _otherApplications.AddRange((await _applicationService.GetInstalledApplications())
-                .Except(_recommendedApplications, new ApplicationModelComparer()));
+            var associatedApps = await _applicationService.GetAssociatedApplications(OpenFileExtension);
+            _recommendedApplications.AddRange(associatedApps);
+
+            var installedApps = await _applicationService.GetInstalledApplications();
+            var comparer = GetAppsComparer();
+            _otherApplications.AddRange(installedApps
+                .Except(_recommendedApplications, comparer));
 
             ApplicationModel selectedApplication;
 
@@ -86,9 +91,13 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 
             UsedApplication = selectedApplication;
 
-            static ApplicationModel FindApplication(IEnumerable<ApplicationModel> applications, ApplicationModel application) => 
+            static ApplicationModel FindApplication(IEnumerable<ApplicationModel> applications, ApplicationModel application) =>
                 applications.FirstOrDefault(m => m.DisplayName == application.DisplayName);
         }
+
+        private static IEqualityComparer<ApplicationModel> GetAppsComparer() =>
+            new ApplicationModelComparer();
+        
 
         private void SelectApplication() =>
             Close(new OpenWithDialogResult(OpenFileExtension, UsedApplication, IsDefaultApplication));
