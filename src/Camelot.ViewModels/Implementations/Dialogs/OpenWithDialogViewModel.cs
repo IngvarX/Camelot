@@ -61,8 +61,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 
             var installedApps = await _applicationService.GetInstalledApplications();
             var comparer = GetAppsComparer();
-            _otherApplications.AddRange(installedApps
-                .Except(_recommendedApplications, comparer));
+            _otherApplications.AddRange(installedApps.Except(_recommendedApplications, comparer));
 
             ApplicationModel selectedApplication;
 
@@ -98,7 +97,6 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         private static IEqualityComparer<ApplicationModel> GetAppsComparer() =>
             new ApplicationModelComparer();
         
-
         private void SelectApplication() =>
             Close(new OpenWithDialogResult(OpenFileExtension, UsedApplication, IsDefaultApplication));
     }

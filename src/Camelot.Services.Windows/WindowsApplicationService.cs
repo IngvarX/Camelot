@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -28,6 +27,11 @@ namespace Camelot.Services.Windows
             if (string.IsNullOrWhiteSpace(fileExtension))
             {
                 return Task.FromResult(Enumerable.Empty<ApplicationModel>());
+            }
+
+            if (!fileExtension.StartsWith("."))
+            {
+                fileExtension = $".{fileExtension}";
             }
 
             var associatedApplications = new Dictionary<string, ApplicationModel>();
