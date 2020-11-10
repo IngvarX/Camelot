@@ -421,8 +421,7 @@ namespace Camelot.DependencyInjection
             ));
             services.RegisterLazySingleton<IResourceOpeningService>(() => new ResourceOpeningServiceOpenWith(
                 new WindowsResourceOpeningService(
-                    resolver.GetRequiredService<IProcessService>(),
-                    resolver.GetRequiredService<IRegexService>()
+                    resolver.GetRequiredService<IProcessService>()
                 ),
                 resolver.GetRequiredService<IOpenWithApplicationService>(),
                 resolver.GetRequiredService<IPathService>()

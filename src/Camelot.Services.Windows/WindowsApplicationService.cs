@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.IO;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -196,7 +196,13 @@ namespace Camelot.Services.Windows
                     .Replace(executePath, "")
                     .TrimStart();
 
-                path = Regex.Replace(path, "%.", "", RegexOptions.Compiled);
+                var argumentsCount = 0;
+                var matches = Regex.Matches(path, "%.", RegexOptions.Compiled);
+                foreach (Match match in matches)
+                {
+                    path = path.Replace(match.Value, $"{{{argumentsCount++}}}");
+                }
+
                 return path;
             }
         }
