@@ -5,7 +5,7 @@ namespace Camelot.Services.Mac
 {
     public class MacResourceOpeningService : IResourceOpeningService
     {
-        private const string OpenCommand = "Open";
+        private const string OpenCommand = "open";
 
         private readonly IProcessService _processService;
 

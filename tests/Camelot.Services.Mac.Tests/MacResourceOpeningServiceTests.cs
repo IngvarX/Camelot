@@ -1,29 +1,34 @@
 ﻿using Camelot.Services.Environment.Interfaces;
 using Moq;
+using Moq.AutoMock;
 using Xunit;
 
 namespace Camelot.Services.Mac.Tests
 {
     public class MacResourceOpeningServiceTests
     {
-        private const string FileName = "File.txt";
+        private readonly AutoMocker _autoMocker;
 
-        [Fact]
-        public void TestFileServiceOpeningMacOs()
+        public MacResourceOpeningServiceTests()
         {
-            const string command = "open";
-            var arguments = $"\"{FileName}\"";
+            _autoMocker = new AutoMocker();
+        }
 
-            var processServiceMock = new Mock<IProcessService>();
-            processServiceMock
-                .Setup(m => m.Run(command, arguments))
+        [Theory]
+        [InlineData("File.txt", "open", "\"File.txt\"")]
+        [InlineData("File.app", "open", "-a \"File.app\"")]
+        public void TestFileOpeningMacOs(string fileName, string command, string arguments)
+        {
+            _autoMocker
+                .Setup<IProcessService>(m => m.Run(command, arguments))
                 .Verifiable();
 
-            var fileOpeningService = new MacResourceOpeningService(processServiceMock.Object);
+            var fileOpeningService = _autoMocker.CreateInstance<MacResourceOpeningService>();
 
-            fileOpeningService.Open(FileName);
+            fileOpeningService.Open(fileName);
 
-            processServiceMock.Verify(m => m.Run(command, arguments), Times.Once());
+            _autoMocker
+                .Verify<IProcessService>(m => m.Run(command, arguments), Times.Once);
         }
     }
 }
