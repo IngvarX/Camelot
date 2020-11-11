@@ -5,6 +5,8 @@ namespace Camelot.Services.Mac
 {
     public class MacResourceOpeningService : IResourceOpeningService
     {
+        private const string OpenCommand = "Open";
+
         private readonly IProcessService _processService;
 
         public MacResourceOpeningService(
@@ -15,15 +17,18 @@ namespace Camelot.Services.Mac
 
         public void Open(string resource)
         {
-            const string command = "open";
             var arguments = resource.EndsWith(".app") ? $"-a \"{resource}\"" : $"\"{resource}\"";
 
-            _processService.Run(command, arguments);
+            _processService.Run(OpenCommand, arguments);
         }
 
         public void OpenWith(string command, string arguments, string resource)
         {
-            throw new System.NotImplementedException();
+            // Macos uses following file opening format:
+            // open -a "<APP>" <RESOURCE>
+            var escapedArguments = $"-a \"{command}\" \"{resource}\"";
+
+            _processService.Run(OpenCommand, escapedArguments);
         }
     }
 }

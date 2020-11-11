@@ -299,7 +299,7 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IPathService>()
             ));
             services.RegisterLazySingleton<IOpenWithApplicationService>(() => new OpenWithApplicationService(
-                resolver.GetRequiredService<IUnitOfWorkFactory>()    
+                resolver.GetRequiredService<IUnitOfWorkFactory>()
             ));
         }
 
@@ -396,8 +396,7 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IUnitOfWorkFactory>()
             ));
             services.RegisterLazySingleton<IApplicationService>(() => new MacApplicationService(
-                resolver.GetRequiredService<IProcessService>(),
-                resolver.GetRequiredService<ITerminalService>()
+                resolver.GetRequiredService<IDirectoryService>()
             ));
         }
 
@@ -590,7 +589,7 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IDialogService>()
             ));
             services.Register(() => new OpenWithDialogViewModel(
-                resolver.GetRequiredService<IApplicationService>()    
+                resolver.GetRequiredService<IApplicationService>()
             ));
             services.Register<ISearchViewModel>(() => new SearchViewModel(
                 resolver.GetRequiredService<IRegexService>(),

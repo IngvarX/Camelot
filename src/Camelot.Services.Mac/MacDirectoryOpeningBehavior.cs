@@ -22,9 +22,11 @@ namespace Camelot.Services.Mac
             behavior.Open(directory);
         }
 
-        public void OpenWith(string command, string arguments, string node)
+        public void OpenWith(string command, string arguments, string directory)
         {
-            throw new System.NotImplementedException();
+            var behavior = GetBehavior(directory);
+
+            behavior.OpenWith(command, arguments, directory);
         }
 
         // .app directory is Macos application, so open it as a file

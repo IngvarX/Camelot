@@ -1,58 +1,49 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
-using Camelot.Services.Environment.Interfaces;
 
 namespace Camelot.Services.Mac
 {
     public class MacApplicationService : IApplicationService
     {
-        private readonly IProcessService _processService;
-        private readonly ITerminalService _terminalService;
+        private readonly IDirectoryService _directoryService;
 
-        public MacApplicationService(IProcessService processService, ITerminalService terminalService)
+        public MacApplicationService(
+            IDirectoryService directoryService)
         {
-            _processService = processService;
-            _terminalService = terminalService;
+            _directoryService = directoryService;
         }
 
         public Task<IEnumerable<ApplicationModel>> GetAssociatedApplications(string fileExtension)
         {
-            throw new System.NotImplementedException();
+            return Task.FromResult(Enumerable.Empty<ApplicationModel>());
         }
 
-        public async Task<IEnumerable<ApplicationModel>> GetInstalledApplications()
+        public Task<IEnumerable<ApplicationModel>> GetInstalledApplications()
         {
-            var (command, arguments) = _terminalService.GetTerminalSettings();
+            var userApps = GetUserApps();
+            var systemApps = GetSystemApps();
 
-            var applicationsJson = await _processService.ExecuteAndGetOutputAsync(
-                command, string.Format(arguments, "system_profiler -json SPApplicationsDataType"));
-            var applications = JsonSerializer.Deserialize<IList<MacApplicationDataType>>(applicationsJson);
+            return Task.FromResult(userApps.Concat(systemApps));
+        }
 
-            var installedApplications = applications
-                .Select(app => new ApplicationModel
+        private IEnumerable<ApplicationModel> GetUserApps() => GetApps("/Applications/");
+
+        private IEnumerable<ApplicationModel> GetSystemApps() => GetApps("/System/Applications/");
+
+        private IEnumerable<ApplicationModel> GetApps(string directory) =>
+            _directoryService
+                .GetChildDirectories(directory)
+                .Select(d => new ApplicationModel
                 {
-                    DisplayName = app.Name,
-                    ExecutePath = app.Path
+                    DisplayName = ExtractName(d.Name),
+                    ExecutePath = d.FullPath,
+                    Arguments = "{0}"
                 });
 
-            return installedApplications;
-        }
-
-        private class MacApplicationDataType
-        {
-            [JsonPropertyName("_name")]
-            public string Name { get; set; }
-
-            [JsonPropertyName("path")]
-            public string Path { get; set; }
-
-            [JsonPropertyName("version")]
-            public string Version { get; set; }
-        }
+        private static string ExtractName(string directory) =>
+            directory.Replace(".app", string.Empty);
     }
 }
