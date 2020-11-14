@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
@@ -20,18 +21,20 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         private readonly IApplicationService _applicationService;
 
         private readonly ObservableCollection<ApplicationModel> _recommendedApplications;
-
         private readonly ObservableCollection<ApplicationModel> _otherApplications;
 
         public IEnumerable<ApplicationModel> RecommendedApplications => _recommendedApplications;
 
-        public IEnumerable<ApplicationModel> OtherApplications => _otherApplications;
+        public IEnumerable<ApplicationModel> OtherApplications => _otherApplications.Where(Filter);
 
         [Reactive]
         public ApplicationModel UsedApplication { get; set; }
 
         [Reactive]
         public string OpenFileExtension { get; private set; }
+
+        [Reactive]
+        public string ApplicationName { get; set; }
 
         [Reactive]
         public bool IsDefaultApplication { get; set; }
@@ -49,6 +52,10 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 
             CancelCommand = ReactiveCommand.Create(Close);
             SelectCommand = ReactiveCommand.Create(SelectApplication);
+
+            this
+                .WhenAnyValue(vm => vm.ApplicationName)
+                .Subscribe(_ => this.RaisePropertyChanged(nameof(OtherApplications)));
         }
 
         public override async Task ActivateAsync(OpenWithNavigationParameter parameter,
@@ -61,7 +68,10 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 
             var installedApps = await _applicationService.GetInstalledApplications();
             var comparer = GetAppsComparer();
-            _otherApplications.AddRange(installedApps.Except(_recommendedApplications, comparer));
+            var otherApps = installedApps
+                .Except(_recommendedApplications, comparer)
+                .OrderBy(a => a.DisplayName);
+            _otherApplications.AddRange(otherApps);
 
             ApplicationModel selectedApplication;
 
@@ -94,9 +104,13 @@ namespace Camelot.ViewModels.Implementations.Dialogs
                 applications.FirstOrDefault(m => m.DisplayName == application.DisplayName);
         }
 
+        private bool Filter(ApplicationModel model) =>
+            string.IsNullOrEmpty(ApplicationName)
+            || model.DisplayName.Contains(ApplicationName, StringComparison.InvariantCultureIgnoreCase);
+
         private static IEqualityComparer<ApplicationModel> GetAppsComparer() =>
             new ApplicationModelComparer();
-        
+
         private void SelectApplication() =>
             Close(new OpenWithDialogResult(OpenFileExtension, UsedApplication, IsDefaultApplication));
     }

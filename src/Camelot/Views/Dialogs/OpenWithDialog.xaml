@@ -1,4 +1,4 @@
-﻿<Window xmlns="https://github.com/avaloniaui"    
+﻿<Window xmlns="https://github.com/avaloniaui"
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -12,7 +12,7 @@
 	<Design.DataContext>
 		<dialogs:OpenWithDialogViewModel />
 	</Design.DataContext>
-	
+
 	<Border Padding="20" Classes="defaultBackgroundBorder">
 		<Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,*">
 			<StackPanel Orientation="Horizontal" Grid.ColumnSpan="2">
@@ -27,10 +27,10 @@
 						<MultiBinding StringFormat="{x:Static p:Resources.OpeningFiles}">
                             <Binding Path="OpenFileExtension" />
                         </MultiBinding>
-					</TextBlock.Text> 
+					</TextBlock.Text>
 				</TextBlock>
 			</StackPanel>
-		
+
 	        <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Margin="0,15" Classes="overWriteDialogTextBlock"
 					   IsVisible="{Binding RecommendedApplications.Count}"
                        Text="{x:Static p:Resources.RecommendedApplications}" />
@@ -52,25 +52,28 @@
 					</DataTemplate>
 				</ListBox.ItemTemplate>
 			</ListBox>
-			
+
 			<Expander Grid.Row="3" Grid.ColumnSpan="2" Margin="0,15,0,10">
 				<Expander.Content>
-					<ListBox Items="{Binding OtherApplications}" MaxHeight="150" ScrollViewer.VerticalScrollBarVisibility="Visible"
-							 SelectedItem="{Binding UsedApplication, Mode=TwoWay}">
-						<ListBox.ItemTemplate>
-							<DataTemplate>
-								<StackPanel Orientation="Horizontal">
-									<DrawingPresenter Width="25" Height="25">
-										<DrawingPresenter.Drawing>
-											<GeometryDrawing Brush="{DynamicResource AlternativeThemeForegroundBrush}"
-															 Geometry="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm160-14.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z" />
-										</DrawingPresenter.Drawing>
-									</DrawingPresenter>
-									<TextBlock Text="{Binding DisplayName}" Classes="overWriteDialogTextBlock" />
-								</StackPanel>
-							</DataTemplate>
-						</ListBox.ItemTemplate>
-					</ListBox>
+					<Grid RowDefinitions="Auto,Auto">
+						<ListBox Items="{Binding OtherApplications}" MaxHeight="150" ScrollViewer.VerticalScrollBarVisibility="Visible"
+						         SelectedItem="{Binding UsedApplication, Mode=TwoWay}">
+							<ListBox.ItemTemplate>
+								<DataTemplate>
+									<StackPanel Orientation="Horizontal">
+										<DrawingPresenter Width="25" Height="25">
+											<DrawingPresenter.Drawing>
+												<GeometryDrawing Brush="{DynamicResource AlternativeThemeForegroundBrush}"
+																 Geometry="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm160-14.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z" />
+											</DrawingPresenter.Drawing>
+										</DrawingPresenter>
+										<TextBlock Text="{Binding DisplayName}" Classes="overWriteDialogTextBlock" />
+									</StackPanel>
+								</DataTemplate>
+							</ListBox.ItemTemplate>
+						</ListBox>
+						<TextBox Grid.Row="1" Text="{Binding ApplicationName}" />
+					</Grid>
 				</Expander.Content>
 
 				<Expander.Header>
@@ -86,7 +89,7 @@
 
 			<Grid Row="5" ColumnSpan="2" HorizontalAlignment="Center" Margin="0,15,0,0">
 				<StackPanel Orientation="Horizontal">
-					<Button Content="{x:Static p:Resources.Cancel}" Classes="dialogButton transparentDialogButton" 
+					<Button Content="{x:Static p:Resources.Cancel}" Classes="dialogButton transparentDialogButton"
 							Command="{Binding CancelCommand}" />
 					<Button Content="{x:Static p:Resources.Select}" Classes="dialogButton"
 							Command="{Binding SelectCommand}" />
@@ -94,5 +97,5 @@
 			</Grid>
 		</Grid>
 	</Border>
-	
+
 </Window>
