@@ -48,7 +48,7 @@ namespace Camelot.Services.Abstractions.Models.Operations
 
         public OperationInfo(PackOperationSettings settings)
         {
-            OperationType = OperationType.Extract;
+            OperationType = OperationType.Pack;
             Files = settings.InputTopLevelFiles;
             Directories = settings.InputTopLevelDirectories;
             TotalFilesCount = Files.Count;

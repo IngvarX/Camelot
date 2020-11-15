@@ -88,7 +88,7 @@
                         <Grid IsVisible="{Binding OperationType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:OperationType.Pack}}">
                             <TextBlock Classes="activeOperationTextBlock operationStatusTextBlock" IsVisible="{Binding IsProcessingSingleFile}">
                                 <TextBlock.Text>
-                                    <MultiBinding StringFormat="{x:Static p:Resources.PackedFileTo}">
+                                    <MultiBinding StringFormat="{x:Static p:Resources.PackingFileTo}">
                                         <Binding Path="SourceFile" />
                                         <Binding Path="TargetDirectory" />
                                     </MultiBinding>
