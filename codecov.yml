@@ -28,3 +28,4 @@ ignore:
   - "src/Camelot.ViewModels/Factories/Implementations/BitmapFactory.cs"
   - "src/Camelot.FileSystemWatcher/Implementations/FileSystemWatcherFactory.cs"
   - "src/Camelot.FileSystemWatcher/Implementations/FileSystemWatcherAdapter.cs"
+  - "src/Camelot.Services.Windows/WinApi/*"
