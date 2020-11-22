@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,22 +13,27 @@ namespace Camelot.Services.Linux
     {
         private readonly IFileService _fileService;
 
+        private List<LinuxApplicationModel> _desktopEntries;
+
         public LinuxApplicationService(IFileService fileService)
         {
             _fileService = fileService;
         }
-        
+
         public async Task<IEnumerable<ApplicationModel>> GetAssociatedApplications(string fileExtension)
         {
-            var desktopEntries = await GetDesktopEntries();
-
+            var desktopEntries = await GetCachedDesktopEntriesAsync();
             var applications = desktopEntries
                 .Where(m => m.Extensions.Contains(fileExtension));
+
             return applications;
         }
 
-        public async Task<IEnumerable<ApplicationModel>> GetInstalledApplications() 
-            => await GetDesktopEntries();
+        public async Task<IEnumerable<ApplicationModel>> GetInstalledApplications() =>
+            await GetCachedDesktopEntriesAsync();
+
+        private async Task<List<LinuxApplicationModel>> GetCachedDesktopEntriesAsync() =>
+            _desktopEntries ??= await GetDesktopEntries();
 
         private static string ExtractArguments(string startCommand) => "{0}"; // TODO: fix %F => {0}
 
@@ -48,7 +52,7 @@ namespace Camelot.Services.Linux
 
             var iniReader = new IniReader();
 
-            var mimeTypesFile = _fileService.OpenRead("D:\\Download\\mime.types");
+            var mimeTypesFile = _fileService.OpenRead("/etc/mime.types");
             var mimeTypesExtensions = await new MimeTypesReader().Read(mimeTypesFile);
 
             foreach (var desktopFilePath in desktopFilePaths)
@@ -79,7 +83,7 @@ namespace Camelot.Services.Linux
                 var arguments = ExtractArguments(startCommand);
 
                 var extensions = new List<string>();
-                var mimeTypes = desktopEntry.GetValueOrDefault("Desktop Entry:MimeType")?.Split(',');
+                var mimeTypes = desktopEntry.GetValueOrDefault("Desktop Entry:MimeType")?.Split(';', StringSplitOptions.RemoveEmptyEntries);
                 if (mimeTypes != null)
                 {
                     foreach (var mimeType in mimeTypes)
@@ -105,7 +109,7 @@ namespace Camelot.Services.Linux
         }
 
         private static ISpecification<FileModel> GetSpecification() => new DesktopFileSpecification();
-        
+
         private class DesktopFileSpecification : ISpecification<FileModel>
         {
             private const string Extension = "desktop";
