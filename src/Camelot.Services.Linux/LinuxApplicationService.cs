@@ -117,7 +117,9 @@ namespace Camelot.Services.Linux
             IReadOnlyDictionary<string, List<string>> mimeTypesExtensions)
         {
             var extensions = new HashSet<string>();
-            var mimeTypes = desktopEntry.GetValueOrDefault("Desktop Entry:MimeType")?.Split(';', StringSplitOptions.RemoveEmptyEntries);
+
+            var mimeTypes = desktopEntry.GetValueOrDefault("Desktop Entry:MimeType")
+                ?.Split(';', StringSplitOptions.RemoveEmptyEntries);
             if (mimeTypes is null)
             {
                 return extensions;
