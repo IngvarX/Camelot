@@ -1,26 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Specifications;
+using Camelot.Services.Linux.Interfaces;
 
 namespace Camelot.Services.Linux
 {
     public class LinuxApplicationService : IApplicationService
     {
         private readonly IFileService _fileService;
+        private readonly IIniReader _iniReader;
+        private readonly IMimeTypesReader _mimeTypesReader;
 
         private List<LinuxApplicationModel> _desktopEntries;
 
-        public LinuxApplicationService(IFileService fileService)
+        public LinuxApplicationService(
+            IFileService fileService,
+            IIniReader iniReader,
+            IMimeTypesReader mimeTypesReader)
         {
             _fileService = fileService;
+            _iniReader = iniReader;
+            _mimeTypesReader = mimeTypesReader;
         }
 
-        public async Task<IEnumerable<ApplicationModel>> GetAssociatedApplications(string fileExtension)
+        public async Task<IEnumerable<ApplicationModel>> GetAssociatedApplicationsAsync(string fileExtension)
         {
             var desktopEntries = await GetCachedDesktopEntriesAsync();
             var applications = desktopEntries
@@ -29,7 +36,7 @@ namespace Camelot.Services.Linux
             return applications;
         }
 
-        public async Task<IEnumerable<ApplicationModel>> GetInstalledApplications() =>
+        public async Task<IEnumerable<ApplicationModel>> GetInstalledApplicationsAsync() =>
             await GetCachedDesktopEntriesAsync();
 
         private async Task<List<LinuxApplicationModel>> GetCachedDesktopEntriesAsync() =>
@@ -45,20 +52,16 @@ namespace Camelot.Services.Linux
             var desktopEntryFiles = new List<LinuxApplicationModel>();
 
             var specification = GetSpecification();
-
             var desktopFilePaths = _fileService
                 .GetFiles("/usr/share/applications/", specification)
                 .Select(f => f.FullPath);
 
-            var iniReader = new IniReader();
-
-            var mimeTypesFile = _fileService.OpenRead("/etc/mime.types");
-            var mimeTypesExtensions = await new MimeTypesReader().Read(mimeTypesFile);
+            var mimeTypesExtensions = await GetMimeTypesAsync();
 
             foreach (var desktopFilePath in desktopFilePaths)
             {
                 await using var desktopFile = _fileService.OpenRead(desktopFilePath);
-                var desktopEntry = await iniReader.Read(desktopFile);
+                var desktopEntry = await GetDesktopEntryAsync(desktopFilePath);
 
                 var desktopType = desktopEntry.GetValueOrDefault("Desktop Entry:Type");
                 if (desktopType is null || !desktopType.Equals("Application", StringComparison.OrdinalIgnoreCase))
@@ -81,20 +84,7 @@ namespace Camelot.Services.Linux
                 }
 
                 var arguments = ExtractArguments(startCommand);
-
-                var extensions = new List<string>();
-                var mimeTypes = desktopEntry.GetValueOrDefault("Desktop Entry:MimeType")?.Split(';', StringSplitOptions.RemoveEmptyEntries);
-                if (mimeTypes != null)
-                {
-                    foreach (var mimeType in mimeTypes)
-                    {
-                        var extensionsByMimeType = mimeTypesExtensions.GetValueOrDefault(mimeType);
-                        if (extensionsByMimeType != null)
-                        {
-                            extensions.AddRange(extensionsByMimeType);
-                        }
-                    }
-                }
+                var extensions = GetExtensions(desktopEntry, mimeTypesExtensions);
 
                 desktopEntryFiles.Add(new LinuxApplicationModel
                 {
@@ -108,120 +98,52 @@ namespace Camelot.Services.Linux
             return desktopEntryFiles;
         }
 
+        private async Task<IReadOnlyDictionary<string, string>> GetDesktopEntryAsync(string desktopFilePath)
+        {
+            await using var desktopFile = _fileService.OpenRead(desktopFilePath);
+
+            return await _iniReader.ReadAsync(desktopFile);
+        }
+
+        private async Task<IReadOnlyDictionary<string, List<string>>> GetMimeTypesAsync()
+        {
+            var mimeTypesFile = _fileService.OpenRead("/etc/mime.types");
+
+            return await _mimeTypesReader.ReadAsync(mimeTypesFile);
+        }
+
+        private static IEnumerable<string> GetExtensions(
+            IReadOnlyDictionary<string, string> desktopEntry,
+            IReadOnlyDictionary<string, List<string>> mimeTypesExtensions)
+        {
+            var extensions = new HashSet<string>();
+            var mimeTypes = desktopEntry.GetValueOrDefault("Desktop Entry:MimeType")?.Split(';', StringSplitOptions.RemoveEmptyEntries);
+            if (mimeTypes is null)
+            {
+                return extensions;
+            }
+
+            foreach (var mimeType in mimeTypes)
+            {
+                var extensionsByMimeType = mimeTypesExtensions.GetValueOrDefault(mimeType);
+                extensionsByMimeType?.ForEach(e => extensions.Add(e));
+            }
+
+            return extensions;
+        }
+
         private static ISpecification<FileModel> GetSpecification() => new DesktopFileSpecification();
 
         private class DesktopFileSpecification : ISpecification<FileModel>
         {
-            private const string Extension = "desktop";
+            private const string DesktopFileExtension = "desktop";
 
-            public bool IsSatisfiedBy(FileModel fileModel) => fileModel.Extension == Extension;
+            public bool IsSatisfiedBy(FileModel fileModel) => fileModel.Extension == DesktopFileExtension;
         }
 
         private class LinuxApplicationModel : ApplicationModel
         {
             public IEnumerable<string> Extensions { get; set; }
-        }
-
-        private class MimeTypesReader
-        {
-            public async Task<Dictionary<string, List<string>>> Read(Stream stream)
-            {
-                var data = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
-
-                using var streamReader = new StreamReader(stream);
-                while (streamReader.Peek() != -1)
-                {
-                    var rawLine = await streamReader.ReadLineAsync();
-                    var line = rawLine?.Trim();
-
-                    if (string.IsNullOrWhiteSpace(line))
-                    {
-                        continue;
-                    }
-
-                    if (!char.IsLetter(line[0]))
-                    {
-                        continue;
-                    }
-
-                    var separator = line.Split(new[] { '\t', ' ' }, StringSplitOptions.RemoveEmptyEntries);
-
-                    var key = separator[0];
-                    if (!key.Contains("/"))
-                    {
-                        continue;
-                    }
-
-                    var values = separator.Skip(1);
-
-                    if (!data.ContainsKey(key))
-                    {
-                        data[key] = new List<string>(values);
-                    }
-                    else
-                    {
-                        data[key].AddRange(values);
-                    }
-                }
-
-                return data;
-            }
-        }
-
-        private class IniReader
-        {
-            public async Task<Dictionary<string, string>> Read(Stream stream)
-            {
-                const string keyDelimiter = ":";
-
-                var data = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-
-                using var reader = new StreamReader(stream);
-                var sectionPrefix = string.Empty;
-
-                while (reader.Peek() != -1)
-                {
-                    var rawLine = await reader.ReadLineAsync();
-                    var line = rawLine?.Trim();
-
-                    if (string.IsNullOrWhiteSpace(line))
-                    {
-                        continue;
-                    }
-
-                    switch (line[0])
-                    {
-                        case ';':
-                        case '#':
-                        case '/':
-                            continue;
-                        case '[' when line[^1] == ']':
-                            sectionPrefix = line.Substring(1, line.Length - 2) + keyDelimiter;
-                            continue;
-                    }
-
-                    var separator = line.IndexOf('=');
-                    if (separator < 0)
-                    {
-                        continue;
-                    }
-
-                    var key = sectionPrefix + line.Substring(0, separator).Trim();
-                    var value = line.Substring(separator + 1).Trim();
-
-                    if (value.Length > 1 && value[0] == '"' && value[^1] == '"')
-                    {
-                        value = value.Substring(1, value.Length - 2);
-                    }
-
-                    if (!data.ContainsKey(key))
-                    {
-                        data[key] = value;
-                    }
-                }
-
-                return data;
-            }
         }
     }
 }

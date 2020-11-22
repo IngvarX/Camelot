@@ -366,8 +366,12 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IDesktopEnvironmentService>(),
                 resolver.GetRequiredService<IShellCommandWrappingService>()
             ));
+            services.RegisterLazySingleton<IMimeTypesReader>(() => new MimeTypesReader());
+            services.RegisterLazySingleton<IIniReader>(() => new IniReader());
             services.RegisterLazySingleton<IApplicationService>(() => new LinuxApplicationService(
-                resolver.GetRequiredService<IFileService>()
+                resolver.GetRequiredService<IFileService>(),
+                resolver.GetRequiredService<IIniReader>(),
+                resolver.GetRequiredService<IMimeTypesReader>()
             ));
         }
 

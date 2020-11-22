@@ -15,14 +15,11 @@ namespace Camelot.Services.Windows
     public class WindowsApplicationService : IApplicationService
     {
         private const string FileExtensionsX32RegistryKeyName = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FileExts";
-
         private const string FileExtensionsX64RegistryKeyName = @"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Explorer\FileExts";
-
         private const string AppPathX32RegistryKeyName = @"SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths";
-
         private const string AppPathX64RegistryKeyName = @"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\App Paths";
 
-        public Task<IEnumerable<ApplicationModel>> GetAssociatedApplications(string fileExtension)
+        public Task<IEnumerable<ApplicationModel>> GetAssociatedApplicationsAsync(string fileExtension)
         {
             if (string.IsNullOrWhiteSpace(fileExtension))
             {
@@ -117,7 +114,7 @@ namespace Camelot.Services.Windows
             }
         }
 
-        public Task<IEnumerable<ApplicationModel>> GetInstalledApplications()
+        public Task<IEnumerable<ApplicationModel>> GetInstalledApplicationsAsync()
         {
             var installedApplications = new Dictionary<string, ApplicationModel>();
 

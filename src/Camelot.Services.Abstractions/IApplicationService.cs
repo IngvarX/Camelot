@@ -6,8 +6,8 @@ namespace Camelot.Services.Abstractions
 {
     public interface IApplicationService
     {
-        Task<IEnumerable<ApplicationModel>> GetAssociatedApplications(string fileExtension);
+        Task<IEnumerable<ApplicationModel>> GetAssociatedApplicationsAsync(string fileExtension);
 
-        Task<IEnumerable<ApplicationModel>> GetInstalledApplications();
+        Task<IEnumerable<ApplicationModel>> GetInstalledApplicationsAsync();
     }
 }

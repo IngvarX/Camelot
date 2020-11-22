@@ -63,10 +63,10 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         {
             OpenFileExtension = parameter.FileExtension;
 
-            var associatedApps = await _applicationService.GetAssociatedApplications(OpenFileExtension);
+            var associatedApps = await _applicationService.GetAssociatedApplicationsAsync(OpenFileExtension);
             _recommendedApplications.AddRange(associatedApps);
 
-            var installedApps = await _applicationService.GetInstalledApplications();
+            var installedApps = await _applicationService.GetInstalledApplicationsAsync();
             var comparer = GetAppsComparer();
             var otherApps = installedApps
                 .Except(_recommendedApplications, comparer)
@@ -75,14 +75,14 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 
             ApplicationModel selectedApplication;
 
-            if (parameter.Application == null)
+            if (parameter.Application is null)
             {
                 selectedApplication = _recommendedApplications.FirstOrDefault();
             }
             else
             {
                 selectedApplication = FindApplication(_recommendedApplications, parameter.Application);
-                if (selectedApplication == null)
+                if (selectedApplication is null)
                 {
                     selectedApplication = FindApplication(_otherApplications, parameter.Application);
                     if (selectedApplication != null)

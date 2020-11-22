@@ -16,12 +16,12 @@ namespace Camelot.Services.Mac
             _directoryService = directoryService;
         }
 
-        public Task<IEnumerable<ApplicationModel>> GetAssociatedApplications(string fileExtension)
+        public Task<IEnumerable<ApplicationModel>> GetAssociatedApplicationsAsync(string fileExtension)
         {
             return Task.FromResult(Enumerable.Empty<ApplicationModel>());
         }
 
-        public Task<IEnumerable<ApplicationModel>> GetInstalledApplications()
+        public Task<IEnumerable<ApplicationModel>> GetInstalledApplicationsAsync()
         {
             var userApps = GetUserApps();
             var systemApps = GetSystemApps();
