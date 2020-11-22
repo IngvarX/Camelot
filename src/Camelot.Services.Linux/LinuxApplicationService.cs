@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,30 +14,47 @@ namespace Camelot.Services.Linux
     {
         private readonly IFileService _fileService;
 
-        public LinuxApplicationService(
-            IFileService fileService)
+        public LinuxApplicationService(IFileService fileService)
         {
             _fileService = fileService;
         }
         
-        public Task<IEnumerable<ApplicationModel>> GetAssociatedApplications(string fileExtension)
+        public async Task<IEnumerable<ApplicationModel>> GetAssociatedApplications(string fileExtension)
         {
-            return Task.FromResult(Enumerable.Empty<ApplicationModel>());
+            var desktopEntries = await GetDesktopEntries();
+
+            var applications = desktopEntries
+                .Where(m => m.Extensions.Contains(fileExtension));
+            return applications;
         }
 
-        public async Task<IEnumerable<ApplicationModel>> GetInstalledApplications()
+        public async Task<IEnumerable<ApplicationModel>> GetInstalledApplications() 
+            => await GetDesktopEntries();
+
+        private static string ExtractArguments(string startCommand) => "{0}"; // TODO: fix %F => {0}
+
+        private static string ExtractExecutePath(string startCommand) =>
+            startCommand.Split().FirstOrDefault();
+
+        private async Task<List<LinuxApplicationModel>> GetDesktopEntries()
         {
-            var installedSoftwares = new List<ApplicationModel>();
+            var desktopEntryFiles = new List<LinuxApplicationModel>();
+
             var specification = GetSpecification();
+
             var desktopFilePaths = _fileService
                 .GetFiles("/usr/share/applications/", specification)
                 .Select(f => f.FullPath);
-            
+
+            var iniReader = new IniReader();
+
+            var mimeTypesFile = _fileService.OpenRead("D:\\Download\\mime.types");
+            var mimeTypesExtensions = await new MimeTypesReader().Read(mimeTypesFile);
+
             foreach (var desktopFilePath in desktopFilePaths)
             {
                 await using var desktopFile = _fileService.OpenRead(desktopFilePath);
-
-                var desktopEntry = new IniFileReader().ReadFile(desktopFile);
+                var desktopEntry = await iniReader.Read(desktopFile);
 
                 var desktopType = desktopEntry.GetValueOrDefault("Desktop Entry:Type");
                 if (desktopType is null || !desktopType.Equals("Application", StringComparison.OrdinalIgnoreCase))
@@ -57,24 +75,34 @@ namespace Camelot.Services.Linux
                 {
                     continue;
                 }
-                
+
                 var arguments = ExtractArguments(startCommand);
-                
-                installedSoftwares.Add(new ApplicationModel
+
+                var extensions = new List<string>();
+                var mimeTypes = desktopEntry.GetValueOrDefault("Desktop Entry:MimeType")?.Split(',');
+                if (mimeTypes != null)
+                {
+                    foreach (var mimeType in mimeTypes)
+                    {
+                        var extensionsByMimeType = mimeTypesExtensions.GetValueOrDefault(mimeType);
+                        if (extensionsByMimeType != null)
+                        {
+                            extensions.AddRange(extensionsByMimeType);
+                        }
+                    }
+                }
+
+                desktopEntryFiles.Add(new LinuxApplicationModel
                 {
                     DisplayName = displayName,
                     ExecutePath = executePath,
-                    Arguments = arguments
+                    Arguments = arguments,
+                    Extensions = extensions
                 });
             }
 
-            return installedSoftwares;
+            return desktopEntryFiles;
         }
-
-        private static string ExtractArguments(string startCommand) => "{0}"; // TODO: fix %F => {0}
-
-        private static string ExtractExecutePath(string startCommand) =>
-            startCommand.Split().FirstOrDefault();
 
         private static ISpecification<FileModel> GetSpecification() => new DesktopFileSpecification();
         
@@ -85,9 +113,60 @@ namespace Camelot.Services.Linux
             public bool IsSatisfiedBy(FileModel fileModel) => fileModel.Extension == Extension;
         }
 
-        private class IniFileReader
+        private class LinuxApplicationModel : ApplicationModel
         {
-            public Dictionary<string, string> ReadFile(Stream stream)
+            public IEnumerable<string> Extensions { get; set; }
+        }
+
+        private class MimeTypesReader
+        {
+            public async Task<Dictionary<string, List<string>>> Read(Stream stream)
+            {
+                var data = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
+
+                using var streamReader = new StreamReader(stream);
+                while (streamReader.Peek() != -1)
+                {
+                    var rawLine = await streamReader.ReadLineAsync();
+                    var line = rawLine?.Trim();
+
+                    if (string.IsNullOrWhiteSpace(line))
+                    {
+                        continue;
+                    }
+
+                    if (!char.IsLetter(line[0]))
+                    {
+                        continue;
+                    }
+
+                    var separator = line.Split(new[] { '\t', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                    var key = separator[0];
+                    if (!key.Contains("/"))
+                    {
+                        continue;
+                    }
+
+                    var values = separator.Skip(1);
+
+                    if (!data.ContainsKey(key))
+                    {
+                        data[key] = new List<string>(values);
+                    }
+                    else
+                    {
+                        data[key].AddRange(values);
+                    }
+                }
+
+                return data;
+            }
+        }
+
+        private class IniReader
+        {
+            public async Task<Dictionary<string, string>> Read(Stream stream)
             {
                 const string keyDelimiter = ":";
 
@@ -98,7 +177,7 @@ namespace Camelot.Services.Linux
 
                 while (reader.Peek() != -1)
                 {
-                    var rawLine = reader.ReadLine();
+                    var rawLine = await reader.ReadLineAsync();
                     var line = rawLine?.Trim();
 
                     if (string.IsNullOrWhiteSpace(line))
