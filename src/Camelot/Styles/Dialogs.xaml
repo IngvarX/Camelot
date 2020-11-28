@@ -38,6 +38,10 @@
         <Setter Property="TextWrapping" Value="Wrap" />
     </Style>
 
+    <Style Selector="TextBlock.openWithDialogTextBlock">
+        <Setter Property="FontSize" Value="18" />
+    </Style>
+
     <Style Selector="TextBlock.boldStyleTextBlock">
         <Setter Property="FontWeight" Value="Bold" />
     </Style>

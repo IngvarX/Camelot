@@ -18,6 +18,6 @@
             </DrawingPresenter.Drawing>
         </DrawingPresenter>
 
-        <TextBlock Text="{Binding DisplayName}" Classes="overWriteDialogTextBlock" />
+        <TextBlock Text="{Binding DisplayName}" Classes="openWithDialogTextBlock" />
     </StackPanel>
 </UserControl>

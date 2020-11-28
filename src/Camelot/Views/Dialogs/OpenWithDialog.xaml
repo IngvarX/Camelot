@@ -33,7 +33,7 @@
 				</TextBlock>
 			</StackPanel>
 
-	        <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Margin="0,15" Classes="overWriteDialogTextBlock"
+	        <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Margin="0,15" Classes="openWithDialogTextBlock"
 					   IsVisible="{Binding RecommendedApplications.Count}"
                        Text="{x:Static p:Resources.RecommendedApplications}" />
 
@@ -75,13 +75,13 @@
 				</Expander.Content>
 
 				<Expander.Header>
-					<TextBlock Classes="overWriteDialogTextBlock" Text="{x:Static p:Resources.SelectOtherApplications}" />
+					<TextBlock Classes="openWithDialogTextBlock" Text="{x:Static p:Resources.SelectOtherApplications}" />
 				</Expander.Header>
 			</Expander>
 
 			<CheckBox Grid.Row="4" Grid.ColumnSpan="2" IsChecked="{Binding IsDefaultApplication}">
 				<CheckBox.Content>
-					<TextBlock Classes="overWriteDialogTextBlock" Margin="5,0,0,0" Text="{x:Static p:Resources.SetAsDefaultApplication}" />
+					<TextBlock Classes="openWithDialogTextBlock" Margin="5,0,0,0" Text="{x:Static p:Resources.SetAsDefaultApplication}" />
 				</CheckBox.Content>
 			</CheckBox>
 
