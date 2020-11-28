@@ -137,6 +137,9 @@
     <Compile Update="Views\Main\Directories\FavouriteDirectoriesListView.xaml.cs">
       <DependentUpon>FavouriteDirectoriesListView.xaml.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\Dialogs\OpenWith\ApplicationView.xaml.cs">
+      <DependentUpon>ApplicationView.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.9.12" />

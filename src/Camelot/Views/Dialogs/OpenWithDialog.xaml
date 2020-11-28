@@ -5,7 +5,8 @@
 		xmlns:p="clr-namespace:Camelot.Properties"
 		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 		xmlns:dialogs="clr-namespace:Camelot.ViewModels.Implementations.Dialogs;assembly=Camelot.ViewModels"
-		Width="850" Height="500"
+		xmlns:openWith="clr-namespace:Camelot.Views.Dialogs.OpenWith"
+		Width="850" Height="580"
 		x:Class="Camelot.Views.Dialogs.OpenWithDialog"
 		Title="{x:Static p:Resources.OpenWithTitle}">
 
@@ -22,6 +23,7 @@
                                          Geometry="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm160-14.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z" />
 					</DrawingPresenter.Drawing>
 				</DrawingPresenter>
+
 				<TextBlock Classes="boldStyleTextBlock dialogTitleTextBlock">
 					<TextBlock.Text>
 						<MultiBinding StringFormat="{x:Static p:Resources.OpeningFiles}">
@@ -35,20 +37,12 @@
 					   IsVisible="{Binding RecommendedApplications.Count}"
                        Text="{x:Static p:Resources.RecommendedApplications}" />
 
-			<ListBox Grid.Row="2" Grid.ColumnSpan="2" Margin="0,10,0,0"
+			<ListBox Grid.Row="2" Grid.ColumnSpan="2" Margin="0,10,0,0" MaxHeight="120"
 					 IsVisible="{Binding RecommendedApplications.Count}"
 					 SelectedItem="{Binding UsedApplication, Mode=TwoWay}" Items="{Binding RecommendedApplications}">
 				<ListBox.ItemTemplate>
 					<DataTemplate>
-						<StackPanel Orientation="Horizontal">
-							<DrawingPresenter Width="25" Height="25">
-								<DrawingPresenter.Drawing>
-									<GeometryDrawing Brush="{DynamicResource AlternativeThemeForegroundBrush}"
-													 Geometry="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm160-14.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z" />
-								</DrawingPresenter.Drawing>
-							</DrawingPresenter>
-							<TextBlock Text="{Binding DisplayName}" Classes="overWriteDialogTextBlock" />
-						</StackPanel>
+						<openWith:ApplicationView />
 					</DataTemplate>
 				</ListBox.ItemTemplate>
 			</ListBox>
@@ -56,19 +50,12 @@
 			<Expander Grid.Row="3" Grid.ColumnSpan="2" Margin="0,15,0,10">
 				<Expander.Content>
 					<Grid RowDefinitions="Auto,Auto">
-						<ListBox Items="{Binding OtherApplications}" MaxHeight="150" ScrollViewer.VerticalScrollBarVisibility="Visible"
+						<ListBox Items="{Binding OtherApplications}"
+						         MaxHeight="120" ScrollViewer.VerticalScrollBarVisibility="Visible"
 						         SelectedItem="{Binding UsedApplication, Mode=TwoWay}">
 							<ListBox.ItemTemplate>
 								<DataTemplate>
-									<StackPanel Orientation="Horizontal">
-										<DrawingPresenter Width="25" Height="25">
-											<DrawingPresenter.Drawing>
-												<GeometryDrawing Brush="{DynamicResource AlternativeThemeForegroundBrush}"
-																 Geometry="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm160-14.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z" />
-											</DrawingPresenter.Drawing>
-										</DrawingPresenter>
-										<TextBlock Text="{Binding DisplayName}" Classes="overWriteDialogTextBlock" />
-									</StackPanel>
+									<openWith:ApplicationView />
 								</DataTemplate>
 							</ListBox.ItemTemplate>
 						</ListBox>
