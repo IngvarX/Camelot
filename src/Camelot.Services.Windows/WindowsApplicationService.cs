@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
+using Camelot.Services.Environment.Interfaces;
 using Camelot.Services.Windows.WinApi;
 using Microsoft.Win32;
 
@@ -18,6 +19,14 @@ namespace Camelot.Services.Windows
         private const string FileExtensionsX64RegistryKeyName = @"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Explorer\FileExts";
         private const string AppPathX32RegistryKeyName = @"SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths";
         private const string AppPathX64RegistryKeyName = @"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\App Paths";
+
+        private readonly IEnvironmentService _environmentService;
+
+        public WindowsApplicationService(
+            IEnvironmentService environmentService)
+        {
+            _environmentService = environmentService;
+        }
 
         public Task<IEnumerable<ApplicationModel>> GetAssociatedApplicationsAsync(string fileExtension)
         {
@@ -45,8 +54,7 @@ namespace Camelot.Services.Windows
                 TryAddApplication(associatedApplications, applicationFile);
             }
 
-            if (RuntimeInformation.ProcessArchitecture == Architecture.X64 ||
-                RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
+            if (_environmentService.Is64BitProcess)
             {
                 foreach (var applicationFile in GetOpenWithList(fileExtension, Registry.CurrentUser,
                     FileExtensionsX64RegistryKeyName))
@@ -123,8 +131,7 @@ namespace Camelot.Services.Windows
                 .Union(GetApplicationsFiles(Registry.CurrentUser, AppPathX32RegistryKeyName))
                 .ToImmutableHashSet();
 
-            if (RuntimeInformation.ProcessArchitecture == Architecture.X64 ||
-                RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
+            if (_environmentService.Is64BitProcess)
             {
                 applicationsFiles = applicationsFiles
                     .Union(GetApplicationsFiles(Registry.LocalMachine, AppPathX64RegistryKeyName))
@@ -170,7 +177,7 @@ namespace Camelot.Services.Windows
             var assocFlag = Win32.AssocF.None;
             if (applicationFile.Contains(".exe"))
             {
-                assocFlag = Win32.AssocF.Open_ByExeName;
+                assocFlag = Win32.AssocF.OpenByExeName;
             }
 
             var displayName = Win32.AssocQueryString(assocFlag, Win32.AssocStr.FriendlyAppName, applicationFile);

@@ -36,7 +36,7 @@ namespace Camelot.Services.Windows.WinApi
         public enum AssocF
         {
             None = 0,
-            Open_ByExeName = 0x2
+            OpenByExeName = 0x2
         }
     }
 }

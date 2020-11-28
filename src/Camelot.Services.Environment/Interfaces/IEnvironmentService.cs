@@ -6,6 +6,8 @@ namespace Camelot.Services.Environment.Interfaces
 
         int ProcessorsCount { get; }
 
+        bool Is64BitProcess { get; }
+
         string GetEnvironmentVariable(string variableName);
     }
 }

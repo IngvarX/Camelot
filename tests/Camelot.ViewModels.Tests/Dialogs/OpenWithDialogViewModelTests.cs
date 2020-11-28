@@ -30,6 +30,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
             await dialog.ActivateAsync(parameter);
 
             Assert.Null(dialog.ApplicationName);
+            Assert.False(dialog.IsDefaultApplication);
             Assert.Equal(parameter.FileExtension, dialog.OpenFileExtension);
             Assert.Null(dialog.SelectedApplication);
             Assert.Empty(dialog.RecommendedApplications);
