@@ -433,7 +433,9 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IProcessService>(),
                 resolver.GetRequiredService<IUnitOfWorkFactory>()
             ));
-            services.RegisterLazySingleton<IApplicationService>(() => new WindowsApplicationService());
+            services.RegisterLazySingleton<IApplicationService>(() => new WindowsApplicationService(
+                resolver.GetRequiredService<IEnvironmentService>()
+            ));
         }
 
         private static void RegisterPlatformSpecificViewModels(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
