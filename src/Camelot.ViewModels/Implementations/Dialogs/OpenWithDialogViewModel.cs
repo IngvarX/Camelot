@@ -28,7 +28,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         public IEnumerable<ApplicationModel> OtherApplications => _otherApplications.Where(Filter);
 
         [Reactive]
-        public ApplicationModel UsedApplication { get; set; }
+        public ApplicationModel SelectedApplication { get; set; }
 
         [Reactive]
         public string OpenFileExtension { get; private set; }
@@ -98,7 +98,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
                 _recommendedApplications.Insert(0, selectedApplication);
             }
 
-            UsedApplication = selectedApplication;
+            SelectedApplication = selectedApplication;
 
             static ApplicationModel FindApplication(IEnumerable<ApplicationModel> applications, ApplicationModel application) =>
                 applications.FirstOrDefault(m => m.DisplayName == application.DisplayName);
@@ -112,6 +112,6 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             new ApplicationModelComparer();
 
         private void SelectApplication() =>
-            Close(new OpenWithDialogResult(OpenFileExtension, UsedApplication, IsDefaultApplication));
+            Close(new OpenWithDialogResult(OpenFileExtension, SelectedApplication, IsDefaultApplication));
     }
 }

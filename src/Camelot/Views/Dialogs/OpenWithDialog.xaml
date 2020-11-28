@@ -39,7 +39,7 @@
 
 			<ListBox Grid.Row="2" Grid.ColumnSpan="2" Margin="0,10,0,0" MaxHeight="120"
 					 IsVisible="{Binding RecommendedApplications.Count}"
-					 SelectedItem="{Binding UsedApplication, Mode=TwoWay}" Items="{Binding RecommendedApplications}">
+					 SelectedItem="{Binding SelectedApplication, Mode=TwoWay}" Items="{Binding RecommendedApplications}">
 				<ListBox.ItemTemplate>
 					<DataTemplate>
 						<openWith:ApplicationView />
@@ -53,7 +53,7 @@
 						<ListBox Items="{Binding OtherApplications}"
 						         Height="120" ScrollViewer.VerticalScrollBarVisibility="Visible"
 						         Grid.ColumnSpan="2"
-						         SelectedItem="{Binding UsedApplication, Mode=TwoWay}">
+						         SelectedItem="{Binding SelectedApplication, Mode=TwoWay}">
 							<ListBox.ItemTemplate>
 								<DataTemplate>
 									<openWith:ApplicationView />

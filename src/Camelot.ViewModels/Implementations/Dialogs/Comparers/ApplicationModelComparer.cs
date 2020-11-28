@@ -8,6 +8,6 @@ namespace Camelot.ViewModels.Implementations.Dialogs.Comparers
         public bool Equals(ApplicationModel x, ApplicationModel y) =>
             x?.DisplayName == y?.DisplayName;
 
-        public int GetHashCode(ApplicationModel obj) => obj.DisplayName.GetHashCode();
+        public int GetHashCode(ApplicationModel model) => model.DisplayName.GetHashCode();
     }
 }
