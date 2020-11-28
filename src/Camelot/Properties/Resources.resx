@@ -462,4 +462,7 @@
   <data name="SetAsDefaultApplication" xml:space="preserve">
     <value>Set as default</value>
   </data>
+  <data name="SearchForApplications" xml:space="preserve">
+    <value>Search for applications</value>
+  </data>
 </root>
