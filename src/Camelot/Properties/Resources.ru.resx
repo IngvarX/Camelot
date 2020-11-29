@@ -459,4 +459,10 @@
   <data name="SearchForApplications" xml:space="preserve">
     <value>Поиск приложений</value>
   </data>
+  <data name="DirectoryTemplate" xml:space="preserve">
+    <value>&lt;DIR&gt;</value>
+  </data>
+  <data name="Github" xml:space="preserve">
+    <value>Github</value>
+  </data>
 </root>
