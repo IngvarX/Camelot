@@ -105,7 +105,7 @@
 
                             <TextBlock Classes="operationStatusTextBlock successTextBlock" IsVisible="{Binding !IsProcessingSingleFile}">
                                 <TextBlock.Text>
-                                    <MultiBinding StringFormat="{x:Static p:Resources.DeletedFilesAndDirectories}">
+                                    <MultiBinding StringFormat="{x:Static p:Resources.PackedFilesAndDirectoriesTo}">
                                         <Binding Path="SourceFilesCount" />
                                         <Binding Path="SourceDirectoriesCount" />
                                         <Binding Path="SourceDirectory" />
@@ -209,7 +209,7 @@
 
                             <TextBlock Classes="operationStatusTextBlock errorTextBlock" IsVisible="{Binding !IsProcessingSingleFile}">
                                 <TextBlock.Text>
-                                    <MultiBinding StringFormat="{x:Static p:Resources.DeletedFilesAndDirectories}">
+                                    <MultiBinding StringFormat="{x:Static p:Resources.FailedToPackFilesAndDirectoriesTo}">
                                         <Binding Path="SourceFilesCount" />
                                         <Binding Path="SourceDirectoriesCount" />
                                         <Binding Path="TargetDirectory" />
