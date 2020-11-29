@@ -158,10 +158,13 @@ namespace Camelot.DependencyInjection
             configuration.GetSection("ArchiveViewModelFactory").Bind(archiveTypeViewModelFactoryConfiguration);
             services.RegisterConstant(archiveTypeViewModelFactoryConfiguration);
 
-
             var operationsStatesConfiguration = new OperationsStatesConfiguration();
             configuration.GetSection("OperationsStates").Bind(operationsStatesConfiguration);
             services.RegisterConstant(operationsStatesConfiguration);
+
+            var openWithDialogConfiguration = new OpenWithDialogConfiguration();
+            configuration.GetSection("OpenWithDialog").Bind(openWithDialogConfiguration);
+            services.RegisterConstant(openWithDialogConfiguration);
         }
 
         private static void RegisterEnvironmentServices(IMutableDependencyResolver services)
@@ -595,7 +598,8 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IDialogService>()
             ));
             services.Register(() => new OpenWithDialogViewModel(
-                resolver.GetRequiredService<IApplicationService>()
+                resolver.GetRequiredService<IApplicationService>(),
+                resolver.GetRequiredService<OpenWithDialogConfiguration>()
             ));
             services.Register<ISearchViewModel>(() => new SearchViewModel(
                 resolver.GetRequiredService<IRegexService>(),

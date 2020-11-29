@@ -39,20 +39,20 @@ namespace Camelot.ViewModels.Tests.Dialogs
         [Fact]
         public void TestCanceled()
         {
-            var callbackCalled = false;
+            var isCallbackCalled = false;
             var dialog = Create();
             dialog.CloseRequested += (sender, args) =>
             {
                 var result = args.Result;
                 if (result is null)
                 {
-                    callbackCalled = true;
+                    isCallbackCalled = true;
                 }
             };
 
             dialog.CancelCommand.Execute(null);
 
-            Assert.True(callbackCalled);
+            Assert.True(isCallbackCalled);
         }
 
         [Theory]
@@ -60,7 +60,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
         [InlineData(false)]
         public void TestSkip(bool shouldApplyToAll)
         {
-            var callbackCalled = false;
+            var isCallbackCalled = false;
             var dialog = Create();
             dialog.ShouldApplyToAll = shouldApplyToAll;
             dialog.CloseRequested += (sender, args) =>
@@ -69,7 +69,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
                 Assert.NotNull(result);
                 if (result.Options.Mode is OperationContinuationMode.Skip)
                 {
-                    callbackCalled = true;
+                    isCallbackCalled = true;
                 }
 
                 Assert.Equal(shouldApplyToAll, result.Options.ApplyToAll);
@@ -78,7 +78,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
 
             dialog.SkipCommand.Execute(null);
 
-            Assert.True(callbackCalled);
+            Assert.True(isCallbackCalled);
         }
 
         [Theory]
@@ -86,7 +86,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
         [InlineData(false)]
         public void TestOverwrite(bool shouldApplyToAll)
         {
-            var callbackCalled = false;
+            var isCallbackCalled = false;
             var dialog = Create();
             dialog.ShouldApplyToAll = shouldApplyToAll;
             dialog.CloseRequested += (sender, args) =>
@@ -95,7 +95,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
                 Assert.NotNull(result);
                 if (result.Options.Mode is OperationContinuationMode.Overwrite)
                 {
-                    callbackCalled = true;
+                    isCallbackCalled = true;
                 }
 
                 Assert.Equal(shouldApplyToAll, result.Options.ApplyToAll);
@@ -104,7 +104,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
 
             dialog.ReplaceCommand.Execute(null);
 
-            Assert.True(callbackCalled);
+            Assert.True(isCallbackCalled);
         }
 
         [Theory]
@@ -112,7 +112,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
         [InlineData(false)]
         public void TestOverwriteIfOlder(bool shouldApplyToAll)
         {
-            var callbackCalled = false;
+            var isCallbackCalled = false;
             var dialog = Create();
             dialog.ShouldApplyToAll = shouldApplyToAll;
             dialog.CloseRequested += (sender, args) =>
@@ -121,7 +121,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
                 Assert.NotNull(result);
                 if (result.Options.Mode is OperationContinuationMode.OverwriteIfOlder)
                 {
-                    callbackCalled = true;
+                    isCallbackCalled = true;
                 }
 
                 Assert.Equal(shouldApplyToAll, result.Options.ApplyToAll);
@@ -130,7 +130,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
 
             dialog.ReplaceIfOlderCommand.Execute(null);
 
-            Assert.True(callbackCalled);
+            Assert.True(isCallbackCalled);
         }
 
         [Theory]
@@ -138,7 +138,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
         [InlineData(false)]
         public void TestRename(bool shouldApplyToAll)
         {
-            var callbackCalled = false;
+            var isCallbackCalled = false;
             var dialog = Create();
             dialog.ShouldApplyToAll = shouldApplyToAll;
             dialog.NewFileName = NewFileName;
@@ -148,7 +148,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
                 Assert.NotNull(result);
                 if (result.Options.Mode is OperationContinuationMode.Rename)
                 {
-                    callbackCalled = true;
+                    isCallbackCalled = true;
                 }
 
                 Assert.Equal(shouldApplyToAll, result.Options.ApplyToAll);
@@ -158,7 +158,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
 
             dialog.RenameCommand.Execute(null);
 
-            Assert.True(callbackCalled);
+            Assert.True(isCallbackCalled);
         }
 
         private static OverwriteOptionsDialogViewModel Create(bool areMultipleFilesAvailable = true)

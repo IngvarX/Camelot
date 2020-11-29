@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
+using Camelot.ViewModels.Configuration;
 using Camelot.ViewModels.Implementations.Dialogs.Comparers;
 using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
 using Camelot.ViewModels.Implementations.Dialogs.Results;
@@ -43,7 +45,9 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 
         public ICommand SelectCommand { get; }
 
-        public OpenWithDialogViewModel(IApplicationService applicationService)
+        public OpenWithDialogViewModel(
+            IApplicationService applicationService,
+            OpenWithDialogConfiguration configuration)
         {
             _applicationService = applicationService;
 
@@ -55,6 +59,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 
             this
                 .WhenAnyValue(vm => vm.ApplicationName)
+                .Throttle(TimeSpan.FromMilliseconds(configuration.SearchTimeoutMs))
                 .Subscribe(_ => this.RaisePropertyChanged(nameof(OtherApplications)));
         }
 
