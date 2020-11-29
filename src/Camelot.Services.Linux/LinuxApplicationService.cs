@@ -6,6 +6,7 @@ using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Specifications;
 using Camelot.Services.Linux.Interfaces;
+using Camelot.Services.Linux.Specifications;
 
 namespace Camelot.Services.Linux
 {
@@ -135,13 +136,6 @@ namespace Camelot.Services.Linux
         }
 
         private static ISpecification<FileModel> GetSpecification() => new DesktopFileSpecification();
-
-        private class DesktopFileSpecification : ISpecification<FileModel>
-        {
-            private const string DesktopFileExtension = "desktop";
-
-            public bool IsSatisfiedBy(FileModel fileModel) => fileModel.Extension == DesktopFileExtension;
-        }
 
         private class LinuxApplicationModel : ApplicationModel
         {
