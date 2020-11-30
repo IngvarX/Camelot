@@ -29,23 +29,23 @@ namespace Camelot.Services.Linux
                     continue;
                 }
 
-                var separator = line.Split(new[] {'\t', ' '}, StringSplitOptions.RemoveEmptyEntries);
+                var mimeTypeInfo = line.Split(new[] {'\t', ' '}, StringSplitOptions.RemoveEmptyEntries);
 
-                var key = separator[0];
+                var key = mimeTypeInfo[0];
                 if (!key.Contains("/"))
                 {
                     continue;
                 }
 
-                var values = separator.Skip(1);
+                var values = mimeTypeInfo.Skip(1);
 
-                if (!data.ContainsKey(key))
+                if (data.ContainsKey(key))
                 {
-                    data[key] = new List<string>(values);
+                    data[key].AddRange(values);
                 }
                 else
                 {
-                    data[key].AddRange(values);
+                    data[key] = new List<string>(values);
                 }
             }
 
