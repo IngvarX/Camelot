@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
@@ -24,7 +23,7 @@ namespace Camelot.Services.Linux
         public LinuxApplicationService(
             IFileService fileService,
             IIniReader iniReader,
-            IMimeTypesReader mimeTypesReader, 
+            IMimeTypesReader mimeTypesReader,
             IEnvironmentPathService environmentPathService)
         {
             _fileService = fileService;
@@ -44,9 +43,8 @@ namespace Camelot.Services.Linux
             var defaultApplicationIndex = applications.FindIndex(m => m.IsDefaultApplication);
             if (defaultApplicationIndex != -1)
             {
-                var firstApplication = applications[0];
-                applications[0] = applications[defaultApplicationIndex];
-                applications[defaultApplicationIndex] = firstApplication;
+                (applications[0], applications[defaultApplicationIndex]) =
+                    (applications[defaultApplicationIndex], applications[0]);
             }
 
             return applications;
@@ -104,7 +102,8 @@ namespace Camelot.Services.Linux
                 var extensions = GetExtensions(desktopEntry, mimeTypesExtensions);
 
                 var desktopFileName = _environmentPathService.GetFileName(desktopFilePath);
-                var isDefaultApplication = defaultApplications[desktopFileName].IsSubsetOf(extensions);
+                var isDefaultApplication = defaultApplications.ContainsKey(desktopFileName) &&
+                                           defaultApplications[desktopFileName].IsSubsetOf(extensions);
 
                 desktopEntryFiles.Add(new LinuxApplicationModel
                 {
@@ -119,13 +118,6 @@ namespace Camelot.Services.Linux
             return desktopEntryFiles;
         }
 
-        private async Task<IReadOnlyDictionary<string, string>> GetDesktopEntryAsync(string desktopFilePath)
-        {
-            await using var desktopFile = _fileService.OpenRead(desktopFilePath);
-
-            return await _iniReader.ReadAsync(desktopFile);
-        }
-
         private async Task<IReadOnlyDictionary<string, List<string>>> GetMimeTypesAsync()
         {
             var mimeTypesFile = _fileService.OpenRead("/etc/mime.types");
@@ -137,21 +129,35 @@ namespace Camelot.Services.Linux
             IReadOnlyDictionary<string, List<string>> mimeTypesExtensions)
         {
             var defaultApplicationsByExtensions = new Dictionary<string, HashSet<string>>();
+            var defaultsApplicationsListByMimeType = await GetDesktopEntryAsync("/usr/share/applications/defaults.list");
 
-            var defaultsApplicationsListFile = _fileService.OpenRead("/usr/share/applications/defaults.list");
-            var defaultsApplicationsListByMimeType = await _iniReader.ReadAsync(defaultsApplicationsListFile);
-
-            foreach (var defaultApplication in defaultsApplicationsListByMimeType)
+            foreach (var (key, value) in defaultsApplicationsListByMimeType)
             {
-                var mimeType = defaultApplication.Key.Split(":").LastOrDefault();
+                var mimeType = key.Split(":").LastOrDefault();
 
-                if (mimeTypesExtensions.TryGetValue(mimeType!, out var extensions))
+                if (mimeType is null || !mimeTypesExtensions.TryGetValue(mimeType, out var extensions))
                 {
-                    defaultApplicationsByExtensions.Add(defaultApplication.Value, new HashSet<string>(extensions));
+                    continue;
+                }
+
+                if (defaultApplicationsByExtensions.ContainsKey(value))
+                {
+                    defaultApplicationsByExtensions[value].UnionWith(extensions);
+                }
+                else
+                {
+                    defaultApplicationsByExtensions.Add(value, new HashSet<string>(extensions));
                 }
             }
 
             return defaultApplicationsByExtensions;
+        }
+
+        private async Task<IReadOnlyDictionary<string, string>> GetDesktopEntryAsync(string desktopFilePath)
+        {
+            await using var desktopFile = _fileService.OpenRead(desktopFilePath);
+
+            return await _iniReader.ReadAsync(desktopFile);
         }
 
         private static HashSet<string> GetExtensions(

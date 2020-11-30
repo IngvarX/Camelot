@@ -374,7 +374,8 @@ namespace Camelot.DependencyInjection
             services.RegisterLazySingleton<IApplicationService>(() => new LinuxApplicationService(
                 resolver.GetRequiredService<IFileService>(),
                 resolver.GetRequiredService<IIniReader>(),
-                resolver.GetRequiredService<IMimeTypesReader>()
+                resolver.GetRequiredService<IMimeTypesReader>(),
+                resolver.GetRequiredService<IEnvironmentPathService>()
             ));
         }
 
