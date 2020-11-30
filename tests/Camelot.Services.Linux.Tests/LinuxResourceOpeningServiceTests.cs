@@ -11,6 +11,8 @@ namespace Camelot.Services.Linux.Tests
     public class LinuxResourceOpeningServiceTests
     {
         private const string FileName = "File.txt";
+        private const string Command = "Command";
+        private const string Arguments = "Arguments";
 
         private readonly AutoMocker _autoMocker;
 
@@ -84,6 +86,29 @@ namespace Camelot.Services.Linux.Tests
             void Open() => fileOpeningService.Open(FileName);
 
             Assert.Throws<ArgumentOutOfRangeException>(Open);
+        }
+
+        [Theory]
+        [InlineData("gedit", "{0}", "file.txt", "gedit", "\\\"file.txt\\\"")]
+        [InlineData("gedit", "{0}", "'file.txt", "gedit", "\\\"'file.txt\\\"")]
+        [InlineData("gedit", "{0}", "\"file.txt", "gedit", "\\\"\\\\\\\"file.txt\\\"")]
+        public void TestOpenWith(string command, string arguments, string resource,
+            string commandToWrap, string argumentsToWrap)
+        {
+            _autoMocker
+                .Setup<IProcessService>(m => m.Run(Command, Arguments))
+                .Verifiable();
+            _autoMocker
+                .Setup<IShellCommandWrappingService, (string, string)>(m => m.WrapWithNohup(commandToWrap, argumentsToWrap))
+                .Returns((Command, Arguments));
+
+            var fileOpeningService = _autoMocker.CreateInstance<LinuxResourceOpeningService>();
+
+            fileOpeningService.OpenWith(command, arguments, resource);
+
+            _autoMocker
+                .Verify<IProcessService>(m => m.Run(Command, Arguments),
+                    Times.Once);
         }
     }
 }
