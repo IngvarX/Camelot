@@ -376,7 +376,7 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IFileService>(),
                 resolver.GetRequiredService<IIniReader>(),
                 resolver.GetRequiredService<IMimeTypesReader>(),
-                resolver.GetRequiredService<IEnvironmentPathService>()
+                resolver.GetRequiredService<IPathService>()
             ));
         }
 
