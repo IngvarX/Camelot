@@ -30,5 +30,21 @@ namespace Camelot.Services.Mac.Tests
             _autoMocker
                 .Verify<IProcessService>(m => m.Run(command, arguments), Times.Once);
         }
+        
+        [Theory]
+        [InlineData("File.txt", "Terminal", "open", "-a \"Terminal\" \"File.txt\"")]
+        public void TestFileOpeningWithMacOs(string fileName, string app, string command, string arguments)
+        {
+            _autoMocker
+                .Setup<IProcessService>(m => m.Run(command, arguments))
+                .Verifiable();
+
+            var fileOpeningService = _autoMocker.CreateInstance<MacResourceOpeningService>();
+
+            fileOpeningService.OpenWith(app, "", fileName);
+
+            _autoMocker
+                .Verify<IProcessService>(m => m.Run(command, arguments), Times.Once);
+        }
     }
 }

@@ -9,16 +9,10 @@ namespace Camelot.Services.Tests
     public class ResourcesOpeningTests
     {
         private const string FileName = "File.txt";
+        private const string Command = "Command";
+        private const string Arguments = "Args";
 
         private static string CurrentDirectory => Directory.GetCurrentDirectory();
-
-        public ResourcesOpeningTests()
-        {
-            if (!File.Exists(FileName))
-            {
-                File.WriteAllText(FileName, FileName);
-            }
-        }
 
         [Fact]
         public void TestDirectoryOpening()
@@ -31,7 +25,8 @@ namespace Camelot.Services.Tests
             var directoryOpeningBehavior = new DirectoryOpeningBehavior(directoryServiceMock.Object);
             directoryOpeningBehavior.Open(CurrentDirectory);
 
-            directoryServiceMock.VerifySet(c => c.SelectedDirectory = CurrentDirectory, Times.Once());
+            directoryServiceMock
+                .VerifySet(c => c.SelectedDirectory = CurrentDirectory, Times.Once);
         }
 
         [Fact]
@@ -45,7 +40,24 @@ namespace Camelot.Services.Tests
             var fileOpeningBehavior = new FileOpeningBehavior(fileOpeningServiceMock.Object);
             fileOpeningBehavior.Open(FileName);
 
-            fileOpeningServiceMock.Verify(m => m.Open(It.IsAny<string>()), Times.Once());
+            fileOpeningServiceMock
+                .Verify(m => m.Open(FileName), Times.Once);
+        }
+        
+        [Fact]
+        public void TestFileOpeningWith()
+        {
+            var fileOpeningServiceMock = new Mock<IResourceOpeningService>();
+            fileOpeningServiceMock
+                .Setup(m => m.OpenWith(Command, Arguments, FileName))
+                .Verifiable();
+
+            var fileOpeningBehavior = new FileOpeningBehavior(fileOpeningServiceMock.Object);
+            fileOpeningBehavior.OpenWith(Command, Arguments, FileName);
+
+            fileOpeningServiceMock
+                .Verify(m => m.OpenWith(Command, Arguments, FileName),
+                    Times.Once);
         }
     }
 }

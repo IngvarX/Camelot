@@ -25,7 +25,7 @@ namespace Camelot.Services.Mac
         public void OpenWith(string command, string arguments, string resource)
         {
             // Macos uses following file opening format:
-            // open -a "<APP>" <RESOURCE>
+            // open -a "<APP>" "<RESOURCE>"
             var escapedArguments = $"-a \"{command}\" \"{resource}\"";
 
             _processService.Run(OpenCommand, escapedArguments);
