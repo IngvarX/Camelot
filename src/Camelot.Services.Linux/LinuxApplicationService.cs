@@ -16,7 +16,7 @@ namespace Camelot.Services.Linux
         private readonly IFileService _fileService;
         private readonly IIniReader _iniReader;
         private readonly IMimeTypesReader _mimeTypesReader;
-        private readonly IEnvironmentPathService _environmentPathService;
+        private readonly IPathService _pathService;
 
         private List<LinuxApplicationModel> _desktopEntries;
 
@@ -24,12 +24,12 @@ namespace Camelot.Services.Linux
             IFileService fileService,
             IIniReader iniReader,
             IMimeTypesReader mimeTypesReader,
-            IEnvironmentPathService environmentPathService)
+            IPathService pathService)
         {
             _fileService = fileService;
             _iniReader = iniReader;
             _mimeTypesReader = mimeTypesReader;
-            _environmentPathService = environmentPathService;
+            _pathService = pathService;
         }
 
         public async Task<IEnumerable<ApplicationModel>> GetAssociatedApplicationsAsync(string fileExtension)
@@ -75,7 +75,6 @@ namespace Camelot.Services.Linux
 
             foreach (var desktopFilePath in desktopFilePaths)
             {
-                await using var desktopFile = _fileService.OpenRead(desktopFilePath);
                 var desktopEntry = await GetDesktopEntryAsync(desktopFilePath);
 
                 var desktopType = desktopEntry.GetValueOrDefault("Desktop Entry:Type");
@@ -101,7 +100,7 @@ namespace Camelot.Services.Linux
                 var arguments = ExtractArguments(startCommand);
                 var extensions = GetExtensions(desktopEntry, mimeTypesExtensions);
 
-                var desktopFileName = _environmentPathService.GetFileName(desktopFilePath);
+                var desktopFileName = _pathService.GetFileName(desktopFilePath);
                 var isDefaultApplication = defaultApplications.ContainsKey(desktopFileName) &&
                                            defaultApplications[desktopFileName].IsSubsetOf(extensions);
 
