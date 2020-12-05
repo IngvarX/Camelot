@@ -34,6 +34,7 @@ using Camelot.Services.Mac;
 using Camelot.Services.Windows;
 using Camelot.Services.Windows.Builders;
 using Camelot.Services.Windows.Interfaces;
+using Camelot.Services.Windows.WinApi;
 using Camelot.TaskPool.Interfaces;
 using Camelot.ViewModels.Configuration;
 using Camelot.ViewModels.Factories.Implementations;
@@ -438,8 +439,13 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IUnitOfWorkFactory>()
             ));
             services.RegisterLazySingleton<IApplicationService>(() => new WindowsApplicationService(
-                resolver.GetRequiredService<IEnvironmentService>()
+                resolver.GetRequiredService<IEnvironmentService>(),
+                resolver.GetRequiredService<IRegexService>(),
+                resolver.GetRequiredService<IApplicationInfoProvider>(),
+                resolver.GetRequiredService<IRegistryService>()
             ));
+            services.RegisterLazySingleton<IApplicationInfoProvider>(() => new WindowsApplicationInfoProvider());
+            services.RegisterLazySingleton<IRegistryService>(() => new WindowsRegistryService());
         }
 
         private static void RegisterPlatformSpecificViewModels(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)

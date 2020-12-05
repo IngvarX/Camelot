@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace Camelot.Services.Environment.Interfaces
@@ -7,5 +8,7 @@ namespace Camelot.Services.Environment.Interfaces
         bool ValidateRegex(string regex);
 
         bool CheckIfMatches(string input, string pattern, RegexOptions options);
+
+        IList<Match> GetMatches(string input, string pattern, RegexOptions options);
     }
 }

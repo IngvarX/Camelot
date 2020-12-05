@@ -54,14 +54,14 @@ namespace Camelot.Services.Linux
             await GetCachedDesktopEntriesAsync();
 
         private async Task<List<LinuxApplicationModel>> GetCachedDesktopEntriesAsync() =>
-            _desktopEntries ??= await GetDesktopEntries();
+            _desktopEntries ??= await GetDesktopEntriesAsync();
 
         private static string ExtractArguments(string startCommand) => "{0}"; // TODO: fix %F => {0}
 
         private static string ExtractExecutePath(string startCommand) =>
             startCommand.Split().FirstOrDefault();
 
-        private async Task<List<LinuxApplicationModel>> GetDesktopEntries()
+        private async Task<List<LinuxApplicationModel>> GetDesktopEntriesAsync()
         {
             var desktopEntryFiles = new List<LinuxApplicationModel>();
 

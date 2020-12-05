@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Camelot.Services.Environment.Interfaces;
 
@@ -28,5 +29,8 @@ namespace Camelot.Services.Environment.Implementations
 
         public bool CheckIfMatches(string input, string pattern, RegexOptions options) =>
             Regex.IsMatch(input, pattern, options);
+
+        public IList<Match> GetMatches(string input, string pattern, RegexOptions options) =>
+            Regex.Matches(input, pattern, options);
     }
 }
