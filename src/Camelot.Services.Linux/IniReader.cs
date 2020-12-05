@@ -8,10 +8,10 @@ namespace Camelot.Services.Linux
 {
     public class IniReader : IIniReader
     {
+        private const string KeyDelimiter = ":";
+        
         public async Task<IReadOnlyDictionary<string, string>> ReadAsync(Stream stream)
         {
-            const string keyDelimiter = ":";
-
             var data = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
             using var reader = new StreamReader(stream);
@@ -34,7 +34,7 @@ namespace Camelot.Services.Linux
                     case '/':
                         continue;
                     case '[' when line[^1] == ']':
-                        sectionPrefix = line.Substring(1, line.Length - 2) + keyDelimiter;
+                        sectionPrefix = line.Substring(1, line.Length - 2) + KeyDelimiter;
                         continue;
                 }
 
@@ -52,10 +52,7 @@ namespace Camelot.Services.Linux
                     value = value.Substring(1, value.Length - 2);
                 }
 
-                if (!data.ContainsKey(key))
-                {
-                    data[key] = value;
-                }
+                data[key] = value;
             }
 
             return data;
