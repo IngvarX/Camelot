@@ -339,3 +339,4 @@ ASALocalRun/
 *.db
 
 *.DS_Store*
+/src/Camelot/Directory.Build.props
