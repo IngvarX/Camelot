@@ -109,13 +109,14 @@ namespace Camelot.Services.Linux.Tests
         }
         
         [Theory]
-        [InlineData("Application", AppName, AppExec, Extension, 1)]
-        [InlineData("Application", "", AppExec, Extension, 0)]
-        [InlineData("Application", AppName, "", Extension, 0)]
-        [InlineData("App", AppName, AppExec, Extension, 0)]
-        [InlineData("Application", AppName, AppExec, "test", 0)]
+        [InlineData("Application", AppName, AppExec, Extension, 1, FileName)]
+        [InlineData("Application", "", AppExec, Extension, 0, FileName)]
+        [InlineData("Application", "", AppExec, Extension, 0, "App")]
+        [InlineData("Application", AppName, "", Extension, 0, FileName)]
+        [InlineData("App", AppName, AppExec, Extension, 0, "123")]
+        [InlineData("Application", AppName, AppExec, "test", 0, FileName)]
         public async Task TestGetAssociatedApplicationsAsync(string entryType, string appName, string appExec,
-            string extension, int appsCount)
+            string extension, int appsCount, string desktopFileName)
         {
             var files = new[]
             {
@@ -165,6 +166,8 @@ namespace Camelot.Services.Linux.Tests
                 .Setup<IIniReader, Task<IReadOnlyDictionary<string, string>>>(m => m.ReadAsync(defaultsListFileStream))
                 .ReturnsAsync(new Dictionary<string, string>
                 {
+                    {"Default Applications:application/csv", "test.desktop"},
+                    {"Default Applications:application/json", desktopFileName}
                 });
             _autoMocker
                 .Setup<IPathService, string>(m => m.GetFileName(FullPath))
