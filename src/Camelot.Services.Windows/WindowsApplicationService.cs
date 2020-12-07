@@ -55,6 +55,31 @@ namespace Camelot.Services.Windows
             return Task.FromResult<IEnumerable<ApplicationModel>>(associatedApplications.Values);
         }
 
+        public Task<IEnumerable<ApplicationModel>> GetInstalledApplicationsAsync()
+        {
+            var installedApplications = new Dictionary<string, ApplicationModel>();
+
+            var applicationsFiles = GetApplicationsFiles(RootRegistryKey.ClassesRoot, "Applications")
+                .Union(GetApplicationsFiles(RootRegistryKey.LocalMachine, AppPathX32RegistryKeyName))
+                .Union(GetApplicationsFiles(RootRegistryKey.CurrentUser, AppPathX32RegistryKeyName))
+                .ToImmutableHashSet();
+
+            if (_environmentService.Is64BitProcess)
+            {
+                applicationsFiles = applicationsFiles
+                    .Union(GetApplicationsFiles(RootRegistryKey.LocalMachine, AppPathX64RegistryKeyName))
+                    .Union(GetApplicationsFiles(RootRegistryKey.CurrentUser, AppPathX64RegistryKeyName))
+                    .ToImmutableHashSet();
+            }
+
+            foreach (var applicationFile in applicationsFiles)
+            {
+                TryAddApplication(installedApplications, applicationFile);
+            }
+
+            return Task.FromResult<IEnumerable<ApplicationModel>>(installedApplications.Values);
+        }
+        
         private void TryAddApplications(string s, IDictionary<string, ApplicationModel> associatedApplications)
         {
             foreach (var applicationFile in GetOpenWithList(s, RootRegistryKey.CurrentUser,
@@ -93,31 +118,6 @@ namespace Camelot.Services.Windows
             {
                 TryAddApplication(associatedApplications, applicationFile);
             }
-        }
-
-        public Task<IEnumerable<ApplicationModel>> GetInstalledApplicationsAsync()
-        {
-            var installedApplications = new Dictionary<string, ApplicationModel>();
-
-            var applicationsFiles = GetApplicationsFiles(RootRegistryKey.ClassesRoot, "Applications")
-                .Union(GetApplicationsFiles(RootRegistryKey.LocalMachine, AppPathX32RegistryKeyName))
-                .Union(GetApplicationsFiles(RootRegistryKey.CurrentUser, AppPathX32RegistryKeyName))
-                .ToImmutableHashSet();
-
-            if (_environmentService.Is64BitProcess)
-            {
-                applicationsFiles = applicationsFiles
-                    .Union(GetApplicationsFiles(RootRegistryKey.LocalMachine, AppPathX64RegistryKeyName))
-                    .Union(GetApplicationsFiles(RootRegistryKey.CurrentUser, AppPathX64RegistryKeyName))
-                    .ToImmutableHashSet();
-            }
-
-            foreach (var applicationFile in applicationsFiles)
-            {
-                TryAddApplication(installedApplications, applicationFile);
-            }
-
-            return Task.FromResult<IEnumerable<ApplicationModel>>(installedApplications.Values);
         }
         
         private IEnumerable<string> GetApplicationsFiles(RootRegistryKey rootKey, string baseKeyName)
