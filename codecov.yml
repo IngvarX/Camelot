@@ -29,3 +29,5 @@ ignore:
   - "src/Camelot.FileSystemWatcher/Implementations/FileSystemWatcherFactory.cs"
   - "src/Camelot.FileSystemWatcher/Implementations/FileSystemWatcherAdapter.cs"
   - "src/Camelot.Services.Windows/WinApi/*"
+  - "src/Camelot.Services.Mac/Configuration/*"
+  - "src/Camelot.Services.Linux/Configuration/*"
