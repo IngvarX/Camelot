@@ -16,13 +16,7 @@ namespace Camelot.Services.Environment.Implementations
         public async Task<string> ExecuteAndGetOutputAsync(string command, string arguments)
         {
             var process = GetProcess(command, arguments, true);
-
-            var taskCompletionSource = new TaskCompletionSource<Task<object>>();
-            process.EnableRaisingEvents = true;
-            process.Exited += (sender, args) => taskCompletionSource.TrySetResult(null);
             process.Start();
-
-            await taskCompletionSource.Task;
 
             return await process.StandardOutput.ReadToEndAsync();
         }

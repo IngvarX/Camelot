@@ -31,6 +31,8 @@ using Camelot.Services.Linux.Configuration;
 using Camelot.Services.Linux.Interfaces;
 using Camelot.Services.Linux.Interfaces.Builders;
 using Camelot.Services.Mac;
+using Camelot.Services.Mac.Configuration;
+using Camelot.Services.Mac.Interfaces;
 using Camelot.Services.Windows;
 using Camelot.Services.Windows.Builders;
 using Camelot.Services.Windows.Interfaces;
@@ -166,6 +168,10 @@ namespace Camelot.DependencyInjection
             var openWithDialogConfiguration = new OpenWithDialogConfiguration();
             configuration.GetSection("OpenWithDialog").Bind(openWithDialogConfiguration);
             services.RegisterConstant(openWithDialogConfiguration);
+
+            var utiToExtensionsMappingConfiguration = new UtiToExtensionsMappingConfiguration();
+            configuration.GetSection("UtiToExtensionsMapping").Bind(utiToExtensionsMappingConfiguration);
+            services.RegisterConstant(utiToExtensionsMappingConfiguration);
         }
 
         private static void RegisterEnvironmentServices(IMutableDependencyResolver services)
@@ -404,8 +410,16 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IProcessService>(),
                 resolver.GetRequiredService<IUnitOfWorkFactory>()
             ));
-            services.RegisterLazySingleton<IApplicationService>(() => new MacApplicationService(
+            services.Register<IApplicationsListLoader>(() => new MacApplicationsListLoader(
                 resolver.GetRequiredService<IDirectoryService>()
+            ));
+            services.Register<IApplicationsAssociationsLoader>(() => new MacApplicationsAssociationsLoader(
+                resolver.GetRequiredService<IProcessService>(),
+                resolver.GetRequiredService<UtiToExtensionsMappingConfiguration>()
+            ));
+            services.RegisterLazySingleton<IApplicationService>(() => new MacApplicationService(
+                resolver.GetRequiredService<IApplicationsListLoader>(),
+                resolver.GetRequiredService<IApplicationsAssociationsLoader>()
             ));
         }
 

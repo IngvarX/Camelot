@@ -1,59 +1,47 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Linq;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
+using Camelot.Services.Mac.Interfaces;
 
 namespace Camelot.Services.Mac
 {
     public class MacApplicationService : IApplicationService
     {
-        private readonly IDirectoryService _directoryService;
-        
+        private readonly IApplicationsListLoader _applicationsListLoader;
+        private readonly IApplicationsAssociationsLoader _applicationsAssociationsLoader;
+
+        private IReadOnlyDictionary<string, ISet<ApplicationModel>> _associatedApplications;
         private IImmutableSet<ApplicationModel> _installedApplications;
 
         public MacApplicationService(
-            IDirectoryService directoryService)
+            IApplicationsListLoader applicationsListLoader,
+            IApplicationsAssociationsLoader applicationsAssociationsLoader)
         {
-            _directoryService = directoryService;
+            _applicationsListLoader = applicationsListLoader;
+            _applicationsAssociationsLoader = applicationsAssociationsLoader;
         }
 
-        public Task<IEnumerable<ApplicationModel>> GetAssociatedApplicationsAsync(string fileExtension)
+        public async Task<IEnumerable<ApplicationModel>> GetAssociatedApplicationsAsync(string fileExtension)
         {
-            return Task.FromResult(Enumerable.Empty<ApplicationModel>());
+            _associatedApplications ??= await LoadAssociatedApplicationsAsync();
+
+            return _associatedApplications.GetValueOrDefault(fileExtension, new HashSet<ApplicationModel>());
         }
 
         public Task<IEnumerable<ApplicationModel>> GetInstalledApplicationsAsync()
         {
-            _installedApplications ??= GetInstalledApplications();
+            _installedApplications ??= _applicationsListLoader.GetInstalledApplications();
 
             return Task.FromResult((IEnumerable<ApplicationModel>) _installedApplications);
         }
-
-        private IImmutableSet<ApplicationModel> GetInstalledApplications()
+        
+        private async Task<IReadOnlyDictionary<string, ISet<ApplicationModel>>> LoadAssociatedApplicationsAsync()
         {
-            var userApps = GetUserApps();
-            var systemApps = GetSystemApps();
-
-            return userApps.Concat(systemApps).ToImmutableHashSet();
+            var installedApps = await GetInstalledApplicationsAsync();
+            
+            return await _applicationsAssociationsLoader.LoadAssociatedApplicationsAsync(installedApps);
         }
-
-        private IEnumerable<ApplicationModel> GetUserApps() => GetApps("/Applications/");
-
-        private IEnumerable<ApplicationModel> GetSystemApps() => GetApps("/System/Applications/");
-
-        private IEnumerable<ApplicationModel> GetApps(string directory) =>
-            _directoryService
-                .GetChildDirectories(directory)
-                .Select(d => new ApplicationModel
-                {
-                    DisplayName = ExtractName(d.Name),
-                    ExecutePath = d.FullPath,
-                    Arguments = "{0}"
-                });
-
-        private static string ExtractName(string directory) =>
-            directory.Replace(".app", string.Empty);
     }
 }

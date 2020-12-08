@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Specifications;
-using Camelot.Services.Environment.Interfaces;
 using Camelot.Services.Linux.Interfaces;
 using Camelot.Services.Linux.Specifications;
 
