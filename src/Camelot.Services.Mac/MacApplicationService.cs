@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
@@ -9,6 +10,8 @@ namespace Camelot.Services.Mac
     public class MacApplicationService : IApplicationService
     {
         private readonly IDirectoryService _directoryService;
+        
+        private IImmutableSet<ApplicationModel> _installedApplications;
 
         public MacApplicationService(
             IDirectoryService directoryService)
@@ -23,10 +26,17 @@ namespace Camelot.Services.Mac
 
         public Task<IEnumerable<ApplicationModel>> GetInstalledApplicationsAsync()
         {
+            _installedApplications ??= GetInstalledApplications();
+
+            return Task.FromResult((IEnumerable<ApplicationModel>) _installedApplications);
+        }
+
+        private IImmutableSet<ApplicationModel> GetInstalledApplications()
+        {
             var userApps = GetUserApps();
             var systemApps = GetSystemApps();
 
-            return Task.FromResult(userApps.Concat(systemApps));
+            return userApps.Concat(systemApps).ToImmutableHashSet();
         }
 
         private IEnumerable<ApplicationModel> GetUserApps() => GetApps("/Applications/");
