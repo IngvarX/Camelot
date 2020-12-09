@@ -43,11 +43,12 @@ namespace Camelot.Views.Main
             var addedItems = args
                 .RemovedItems
                 .Cast<IFileSystemNodeViewModel>()
+                .Where(i => !(i is IDirectoryViewModel directoryViewModel && directoryViewModel.IsParentDirectory))
                 .ToArray();
 
             if (!ViewModel.IsActive)
             {
-                // data grid inserted items in inactive fle panel
+                // data grid inserted items in inactive file panel
                 // remove them if any
                 if (addedItems.Any())
                 {
@@ -58,7 +59,6 @@ namespace Camelot.Views.Main
             }
 
             // TODO: fix after avalonia update
-
             ViewModel.SelectedFileSystemNodes.AddRange(addedItems);
 
             var removedItems = args
