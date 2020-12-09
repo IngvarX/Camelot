@@ -280,7 +280,8 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IResourceOpeningService>()
             ));
             services.RegisterLazySingleton(() => new DirectoryOpeningBehavior(
-                resolver.GetRequiredService<IDirectoryService>()
+                resolver.GetRequiredService<IDirectoryService>(),
+                resolver.GetRequiredService<IResourceOpeningService>()
             ));
             services.RegisterLazySingleton<ILocalizationService>(() => new LocalizationService(
                 resolver.GetRequiredService<IUnitOfWorkFactory>()
