@@ -137,9 +137,6 @@ namespace Camelot.Views.Main
         private static void StopEditing(IFileSystemNodeViewModel viewModel) =>
             viewModel.IsWaitingForEdit = viewModel.IsEditing = false;
 
-        private void ClearSelection()
-        {
-            FilesDataGrid.SelectedItems.Clear();
-        }
+        private void ClearSelection() => FilesDataGrid.SelectedItems.Clear();
     }
 }
