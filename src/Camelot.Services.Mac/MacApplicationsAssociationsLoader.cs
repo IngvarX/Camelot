@@ -13,10 +13,10 @@ namespace Camelot.Services.Mac
     public class MacApplicationsAssociationsLoader : IApplicationsAssociationsLoader
     {
         private const string Command = "/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister";
-        private const string Arguments = "-dump Bundle ";
+        private const string Arguments = "-dump Bundle";
         private const string PathSubstring = "path:";
         private const string UtiSubstring = "claimed UTIs:";
-        
+
         private readonly IProcessService _processService;
         private readonly UtiToExtensionsMappingConfiguration _configuration;
 
@@ -27,17 +27,17 @@ namespace Camelot.Services.Mac
             _processService = processService;
             _configuration = configuration;
         }
-        
+
         public async Task<IReadOnlyDictionary<string, ISet<ApplicationModel>>> LoadAssociatedApplicationsAsync(
             IEnumerable<ApplicationModel> installedApps)
         {
             var output = await _processService.ExecuteAndGetOutputAsync(Command, Arguments);
             var result = new Dictionary<string, ISet<ApplicationModel>>();
             var installedAppsDictionary = installedApps.ToDictionary(a => a.ExecutePath, a => a);
-            
+
             var lines = output.Split('\n');
             string currentAppName = null;
-            
+
             foreach (var line in lines)
             {
                 if (line.StartsWith(PathSubstring))
@@ -51,7 +51,7 @@ namespace Camelot.Services.Mac
                     {
                         continue;
                     }
-                    
+
                     var utis = ExtractUtis(line);
                     var extensions = utis.SelectMany(MapToExtension).ToImmutableHashSet();
 
@@ -75,10 +75,12 @@ namespace Camelot.Services.Mac
             var startIndex = line.IndexOf('/');
             var endIndex = line.IndexOf('(') - 2;
 
-            return line.Substring(startIndex, endIndex - startIndex + 1);
+            return startIndex < 0 || endIndex < 0
+                ? null :
+                line.Substring(startIndex, endIndex - startIndex + 1).Trim();
         }
-        
-        private static IEnumerable<string> ExtractUtis(string line) => 
+
+        private static IEnumerable<string> ExtractUtis(string line) =>
             line
                 .Substring(UtiSubstring.Length)
                 .Trim()
