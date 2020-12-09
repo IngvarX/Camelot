@@ -178,7 +178,7 @@ namespace Camelot.ViewModels.Tests
 
             var filesPanelViewModel = _autoMocker.CreateInstance<FilesPanelViewModel>();
             var isActivationCallbackCalled = false;
-            filesPanelViewModel.ActivatedEvent += (sender, args) => isActivationCallbackCalled = true;
+            filesPanelViewModel.Activated += (sender, args) => isActivationCallbackCalled = true;
 
             Assert.True(filesPanelViewModel.ActivateCommand.CanExecute(null));
             filesPanelViewModel.ActivateCommand.Execute(null);
@@ -186,7 +186,7 @@ namespace Camelot.ViewModels.Tests
             tabViewModelMock.VerifySet(m => m.IsGloballyActive = true, Times.AtLeastOnce);
 
             var isDeactivationCallbackCalled = false;
-            filesPanelViewModel.DeactivatedEvent += (sender, args) => isDeactivationCallbackCalled = true;
+            filesPanelViewModel.Deactivated += (sender, args) => isDeactivationCallbackCalled = true;
             filesPanelViewModel.Deactivate();
             Assert.True(isDeactivationCallbackCalled);
             tabViewModelMock.VerifySet(m => m.IsGloballyActive = false, Times.Once);

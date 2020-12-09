@@ -41,7 +41,7 @@ namespace Camelot.ViewModels.Services.Implementations
 
         private void SubscribeToEvents(IFilesPanelViewModel filesPanelViewModel)
         {
-            filesPanelViewModel.ActivatedEvent += FilesPanelViewModelOnActivatedEvent;
+            filesPanelViewModel.Activated += FilesPanelViewModelOnActivatedEvent;
             filesPanelViewModel.CurrentDirectoryChanged += FilesPanelViewModelOnCurrentDirectoryChanged;
         }
 

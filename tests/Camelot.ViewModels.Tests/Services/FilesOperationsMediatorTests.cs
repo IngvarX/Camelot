@@ -114,7 +114,7 @@ namespace Camelot.ViewModels.Tests.Services
             mediator.Register(activeFilesPanelViewModelMock.Object, inactiveFilesPanelViewModelMock.Object);
 
             inactiveFilesPanelViewModelMock
-                .Raise(m => m.ActivatedEvent += null, EventArgs.Empty);
+                .Raise(m => m.Activated += null, EventArgs.Empty);
             Assert.Equal(inactiveFilesPanelViewModelMock.Object, mediator.ActiveFilesPanelViewModel);
             Assert.Equal(activeFilesPanelViewModelMock.Object, mediator.InactiveFilesPanelViewModel);
             directoryServiceMock

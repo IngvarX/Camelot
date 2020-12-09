@@ -89,9 +89,9 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         public string SelectedFilesSize => _fileSizeFormatter.GetFormattedSize(SelectedFiles.Sum(f => f.Size));
 
-        public event EventHandler<EventArgs> ActivatedEvent;
+        public event EventHandler<EventArgs> Activated;
 
-        public event EventHandler<EventArgs> DeactivatedEvent;
+        public event EventHandler<EventArgs> Deactivated;
 
         public event EventHandler<EventArgs> CurrentDirectoryChanged;
 
@@ -154,7 +154,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
                 return;
             }
 
-            ActivatedEvent.Raise(this, EventArgs.Empty);
+            Activated.Raise(this, EventArgs.Empty);
 
             SelectedTab.IsGloballyActive = true;
         }
@@ -165,7 +165,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             SelectedFileSystemNodes.Clear();
             _nodesSelectionService.UnselectNodes(selectedFiles);
 
-            DeactivatedEvent.Raise(this, EventArgs.Empty);
+            Deactivated.Raise(this, EventArgs.Empty);
 
             SelectedTab.IsGloballyActive = false;
         }

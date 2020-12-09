@@ -16,7 +16,7 @@ namespace Camelot.Views.Main
     {
         private DataGrid FilesDataGrid => this.FindControl<DataGrid>("FilesDataGrid");
 
-        private FilesPanelViewModel ViewModel => (FilesPanelViewModel)DataContext;
+        private FilesPanelViewModel ViewModel => (FilesPanelViewModel) DataContext;
 
         public FilesPanelView()
         {
@@ -30,13 +30,13 @@ namespace Camelot.Views.Main
 
         private void OnDataContextChanged(object sender, EventArgs e)
         {
-            ViewModel.DeactivatedEvent += ViewModelOnDeactivatedEvent;
-            ViewModel.ActivatedEvent += ViewModelOnActivatedEvent;
+            ViewModel.Deactivated += ViewModelOnDeactivated;
+            ViewModel.Activated += ViewModelOnActivated;
         }
 
-        private void ViewModelOnDeactivatedEvent(object sender, EventArgs e) => ClearSelection();
+        private void ViewModelOnDeactivated(object sender, EventArgs e) => ClearSelection();
 
-        private void ViewModelOnActivatedEvent(object sender, EventArgs e) => FilesDataGrid.Focus();
+        private void ViewModelOnActivated(object sender, EventArgs e) => FilesDataGrid.Focus();
 
         private void OnDataGridSelectionChanged(object sender, SelectionChangedEventArgs args)
         {
@@ -104,6 +104,8 @@ namespace Camelot.Views.Main
 
         private void OnDataGridCellPointerPressed(object sender, DataGridCellPointerPressedEventArgs args) =>
             ActivateViewModel();
+
+        private void OnDirectoryTextBoxGotFocus(object sender, GotFocusEventArgs args) => ActivateViewModel();
 
         private void ActivateViewModel() => ViewModel.ActivateCommand.Execute(null);
 

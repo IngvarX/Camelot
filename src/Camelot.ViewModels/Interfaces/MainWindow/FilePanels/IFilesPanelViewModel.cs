@@ -10,7 +10,7 @@ namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels
 
         string CurrentDirectory { get; set; }
 
-        event EventHandler<EventArgs> ActivatedEvent;
+        event EventHandler<EventArgs> Activated;
 
         event EventHandler<EventArgs> CurrentDirectoryChanged;
 
