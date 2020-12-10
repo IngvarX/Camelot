@@ -16,6 +16,8 @@ namespace Camelot.Views.Main
     {
         private DataGrid FilesDataGrid => this.FindControl<DataGrid>("FilesDataGrid");
 
+        private TextBox DirectoryTextBox => this.FindControl<TextBox>("DirectoryTextBox");
+
         private FilesPanelViewModel ViewModel => (FilesPanelViewModel) DataContext;
 
         public FilesPanelView()
@@ -36,7 +38,13 @@ namespace Camelot.Views.Main
 
         private void ViewModelOnDeactivated(object sender, EventArgs e) => ClearSelection();
 
-        private void ViewModelOnActivated(object sender, EventArgs e) => FilesDataGrid.Focus();
+        private void ViewModelOnActivated(object sender, EventArgs e)
+        {
+            if (!DirectoryTextBox.IsFocused)
+            {
+                FilesDataGrid.Focus();
+            }
+        }
 
         private void OnDataGridSelectionChanged(object sender, SelectionChangedEventArgs args)
         {

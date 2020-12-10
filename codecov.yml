@@ -31,3 +31,4 @@ ignore:
   - "src/Camelot.Services.Windows/WinApi/*"
   - "src/Camelot.Services.Mac/Configuration/*"
   - "src/Camelot.Services.Linux/Configuration/*"
+  - "src/Camelot.Services/Configuration/*"

@@ -57,7 +57,7 @@
                 </DrawingPresenter>
             </Button>
 
-            <TextBox Classes="directoryTextBox" GotFocus="OnDirectoryTextBoxGotFocus"
+            <TextBox Name="DirectoryTextBox" Classes="directoryTextBox" GotFocus="OnDirectoryTextBoxGotFocus"
                      Text="{Binding CurrentDirectory, Mode=TwoWay}" />
         </DockPanel>
 

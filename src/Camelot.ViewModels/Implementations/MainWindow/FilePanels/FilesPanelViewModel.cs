@@ -149,11 +149,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         public void Activate()
         {
-            if (SelectedTab.IsGloballyActive)
-            {
-                return;
-            }
-
             Activated.Raise(this, EventArgs.Empty);
 
             SelectedTab.IsGloballyActive = true;
