@@ -37,11 +37,11 @@ namespace Camelot.Services.Windows.Tests
             var service = _autoMocker.CreateInstance<WindowsApplicationService>();
 
             var apps = await service.GetAssociatedApplicationsAsync(extension);
-            
+
             Assert.NotNull(apps);
             Assert.Empty(apps);
         }
-        
+
         [Fact]
         public async Task TestGetAssociatedApplicationsAsyncCurrUser32List()
         {
@@ -52,7 +52,7 @@ namespace Camelot.Services.Windows.Tests
             subKeyMock
                 .Setup(m => m.GetValue(Code))
                 .Returns(AppName);
-            
+
             var registryKeyMock = new Mock<IRegistryKey>();
             registryKeyMock
                 .Setup(m =>
@@ -75,11 +75,11 @@ namespace Camelot.Services.Windows.Tests
             _autoMocker
                 .Setup<IRegexService, IList<Match>>(m => m.GetMatches(It.IsAny<string>(), "%.", RegexOptions.Compiled))
                 .Returns(new Match[0]);
-            
+
             var service = _autoMocker.CreateInstance<WindowsApplicationService>();
 
             var apps = await service.GetAssociatedApplicationsAsync(Extension);
-            
+
             Assert.NotNull(apps);
 
             var appsArray = apps.ToArray();
@@ -90,7 +90,7 @@ namespace Camelot.Services.Windows.Tests
             Assert.Equal(AppCommand, app.Arguments);
             Assert.Equal(ExecutePath, app.ExecutePath);
         }
-        
+
         [Fact]
         public async Task TestGetAssociatedApplicationsAsyncCurrUser32Progids()
         {
@@ -121,11 +121,11 @@ namespace Camelot.Services.Windows.Tests
             _autoMocker
                 .Setup<IRegexService, IList<Match>>(m => m.GetMatches(It.IsAny<string>(), "%.", RegexOptions.Compiled))
                 .Returns(new Match[0]);
-            
+
             var service = _autoMocker.CreateInstance<WindowsApplicationService>();
 
             var apps = await service.GetAssociatedApplicationsAsync(Extension);
-            
+
             Assert.NotNull(apps);
 
             var appsArray = apps.ToArray();
@@ -136,7 +136,7 @@ namespace Camelot.Services.Windows.Tests
             Assert.Equal(AppCommand, app.Arguments);
             Assert.Equal(ExecutePath, app.ExecutePath);
         }
-        
+
         [Theory]
         [InlineData(true, 1)]
         [InlineData(false, 0)]
@@ -149,7 +149,7 @@ namespace Camelot.Services.Windows.Tests
             subKeyMock
                 .Setup(m => m.GetValue(Code))
                 .Returns(AppName);
-            
+
             var registryKeyMock = new Mock<IRegistryKey>();
             registryKeyMock
                 .Setup(m =>
@@ -175,11 +175,11 @@ namespace Camelot.Services.Windows.Tests
             _autoMocker
                 .Setup<IEnvironmentService, bool>(m => m.Is64BitProcess)
                 .Returns(is64BitProcess);
-            
+
             var service = _autoMocker.CreateInstance<WindowsApplicationService>();
 
             var apps = await service.GetAssociatedApplicationsAsync(Extension);
-            
+
             Assert.NotNull(apps);
 
             var appsArray = apps.ToArray();
@@ -193,7 +193,7 @@ namespace Camelot.Services.Windows.Tests
                 Assert.Equal(ExecutePath, app.ExecutePath);
             }
         }
-        
+
         [Theory]
         [InlineData(true, 1)]
         [InlineData(false, 0)]
@@ -229,11 +229,11 @@ namespace Camelot.Services.Windows.Tests
             _autoMocker
                 .Setup<IEnvironmentService, bool>(m => m.Is64BitProcess)
                 .Returns(is64BitProcess);
-            
+
             var service = _autoMocker.CreateInstance<WindowsApplicationService>();
 
             var apps = await service.GetAssociatedApplicationsAsync(Extension);
-            
+
             var appsArray = apps.ToArray();
             Assert.Equal(resultsCount, appsArray.Length);
 
@@ -245,7 +245,7 @@ namespace Camelot.Services.Windows.Tests
                 Assert.Equal(ExecutePath, app.ExecutePath);
             }
         }
-        
+
         [Fact]
         public async Task TestGetAssociatedApplicationsAsyncClassesRootList()
         {
@@ -256,7 +256,7 @@ namespace Camelot.Services.Windows.Tests
             subKeyMock
                 .Setup(m => m.GetValue(Code))
                 .Returns(AppName);
-            
+
             var registryKeyMock = new Mock<IRegistryKey>();
             registryKeyMock
                 .Setup(m =>
@@ -279,11 +279,11 @@ namespace Camelot.Services.Windows.Tests
             _autoMocker
                 .Setup<IRegexService, IList<Match>>(m => m.GetMatches(It.IsAny<string>(), "%.", RegexOptions.Compiled))
                 .Returns(new Match[0]);
-            
+
             var service = _autoMocker.CreateInstance<WindowsApplicationService>();
 
             var apps = await service.GetAssociatedApplicationsAsync(Extension);
-            
+
             Assert.NotNull(apps);
 
             var appsArray = apps.ToArray();
@@ -294,7 +294,7 @@ namespace Camelot.Services.Windows.Tests
             Assert.Equal(AppCommand, app.Arguments);
             Assert.Equal(ExecutePath, app.ExecutePath);
         }
-        
+
         [Fact]
         public async Task TestGetAssociatedApplicationsAsyncClassesRootProgids()
         {
@@ -325,11 +325,11 @@ namespace Camelot.Services.Windows.Tests
             _autoMocker
                 .Setup<IRegexService, IList<Match>>(m => m.GetMatches(It.IsAny<string>(), "%.", RegexOptions.Compiled))
                 .Returns(new Match[0]);
-            
+
             var service = _autoMocker.CreateInstance<WindowsApplicationService>();
 
             var apps = await service.GetAssociatedApplicationsAsync(Extension);
-            
+
             Assert.NotNull(apps);
 
             var appsArray = apps.ToArray();
@@ -339,6 +339,76 @@ namespace Camelot.Services.Windows.Tests
             Assert.Equal(AppName, app.DisplayName);
             Assert.Equal(AppCommand, app.Arguments);
             Assert.Equal(ExecutePath, app.ExecutePath);
+        }
+
+        [Theory]
+        [InlineData(false, "Applications", 1, RootRegistryKey.ClassesRoot)]
+        [InlineData(false, @"SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths", 1, RootRegistryKey.LocalMachine)]
+        [InlineData(false, @"SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths", 1, RootRegistryKey.CurrentUser)]
+        [InlineData(false, @"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\App Paths", 0, RootRegistryKey.LocalMachine)]
+        [InlineData(true, @"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\App Paths", 1, RootRegistryKey.LocalMachine)]
+        [InlineData(true, @"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\App Paths", 1, RootRegistryKey.CurrentUser)]
+        [InlineData(false, @"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\App Paths", 0, RootRegistryKey.CurrentUser)]
+        public async Task TestGetInstalledApplicationsAsyncClassesRoot(bool is64BitProcess,
+            string registryKey, int resultsCount, RootRegistryKey key)
+        {
+            var subKeyMock = new Mock<IRegistryKey>();
+            subKeyMock
+                .Setup(m => m.GetSubKeyNames())
+                .Returns(new[] {AppName});
+
+            var emptySubKeyMock = new Mock<IRegistryKey>();
+            emptySubKeyMock
+                .Setup(m => m.GetSubKeyNames())
+                .Returns(new string[0]);
+            var emptyKeyMock = new Mock<IRegistryKey>();
+            emptyKeyMock
+                .Setup(m =>
+                    m.OpenSubKey(It.IsAny<string>()))
+                .Returns(new Mock<IRegistryKey>().Object);
+
+            var registryKeyMock = new Mock<IRegistryKey>();
+            registryKeyMock
+                .Setup(m =>
+                    m.OpenSubKey(It.IsAny<string>()))
+                .Returns(emptySubKeyMock.Object);
+            registryKeyMock
+                .Setup(m =>
+                    m.OpenSubKey(registryKey))
+                .Returns(subKeyMock.Object);
+
+            _autoMocker
+                .Setup<IRegistryService, IRegistryKey>(m => m.GetRegistryKey(It.IsAny<RootRegistryKey>()))
+                .Returns(emptyKeyMock.Object);
+            _autoMocker
+                .Setup<IRegistryService, IRegistryKey>(m => m.GetRegistryKey(key))
+                .Returns(registryKeyMock.Object);
+            _autoMocker
+                .Setup<IApplicationInfoProvider, (string Name, string StartCommand, string ExecutePath)>(m => m.GetInfo(AppName))
+                .Returns((AppName, AppCommand, ExecutePath));
+            _autoMocker
+                .Setup<IRegexService, IList<Match>>(m => m.GetMatches(It.IsAny<string>(), "%.", RegexOptions.Compiled))
+                .Returns(new Match[0]);
+            _autoMocker
+                .Setup<IEnvironmentService, bool>(m => m.Is64BitProcess)
+                .Returns(is64BitProcess);
+
+            var service = _autoMocker.CreateInstance<WindowsApplicationService>();
+
+            var apps = await service.GetInstalledApplicationsAsync();
+
+            Assert.NotNull(apps);
+
+            var appsArray = apps.ToArray();
+            Assert.Equal(resultsCount, appsArray.Length);
+
+            if (resultsCount == 1)
+            {
+                var app = appsArray.Single();
+                Assert.Equal(AppName, app.DisplayName);
+                Assert.Equal(AppCommand, app.Arguments);
+                Assert.Equal(ExecutePath, app.ExecutePath);
+            }
         }
     }
 }
