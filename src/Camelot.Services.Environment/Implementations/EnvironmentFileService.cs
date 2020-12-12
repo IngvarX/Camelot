@@ -15,9 +15,6 @@ namespace Camelot.Services.Environment.Implementations
         public bool CheckIfExists(string filePath) =>
             File.Exists(filePath);
 
-        public void Copy(string source, string destination, bool overwrite) =>
-            File.Copy(source, destination, overwrite);
-
         public void Move(string oldFilePath, string newFilePath) =>
             File.Move(oldFilePath, newFilePath);
 

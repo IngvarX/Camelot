@@ -64,29 +64,63 @@ namespace Camelot.Services.Tests
             Assert.Equal(exists, result);
         }
 
-        [Theory]
-        [InlineData(true, true, false)]
-        [InlineData(true, false, true)]
-        [InlineData(false, true, false)]
-        [InlineData(false, false, true)]
-        public async Task TestCopy(bool overwrite, bool throws, bool expected)
+        [Fact]
+        public async Task TestCopyNoOverwrite()
         {
             _autoMocker
-                .Setup<IEnvironmentFileService>(m => m.Copy(FileName, NewFileName, overwrite))
+                .Setup<IEnvironmentFileService>(m => m.OpenRead(FileName))
+                .Verifiable();
+            _autoMocker
+                .Setup<IEnvironmentFileService, bool>(m => m.CheckIfExists(NewFileName))
+                .Returns(true);
+
+            var fileService = _autoMocker.CreateInstance<FileService>();
+            var result = await fileService.CopyAsync(FileName, NewFileName, false);
+
+            Assert.False(result);
+
+            _autoMocker
+                .Verify<IEnvironmentFileService>(m => m.OpenRead(FileName),
+                Times.Never);
+        }
+
+        [Theory]
+        [InlineData(true, false)]
+        [InlineData(false, true)]
+        public async Task TestCopy(bool throws, bool expected)
+        {
+            var inStream = new MemoryStream();
+            var outStream = new MemoryStream();
+
+            _autoMocker
+                .Setup<IEnvironmentFileService, Stream>(m => m.OpenRead(FileName))
+                .Returns(inStream)
+                .Verifiable();
+            _autoMocker
+                .Setup<IEnvironmentFileService, Stream>(m => m.OpenWrite(NewFileName))
+                .Returns(outStream)
                 .Verifiable();
             if (throws)
             {
                 _autoMocker
-                    .Setup<IEnvironmentFileService>(m => m.Copy(FileName, NewFileName, overwrite))
+                    .Setup<IEnvironmentFileService>(m => m.OpenRead(FileName))
                     .Throws<InvalidOperationException>();
             }
 
             var fileService = _autoMocker.CreateInstance<FileService>();
-            var result = await fileService.CopyAsync(FileName, NewFileName, overwrite);
+            var result = await fileService.CopyAsync(FileName, NewFileName, false);
 
             Assert.Equal(expected, result);
-            _autoMocker
-                .Verify<IEnvironmentFileService>(m => m.Copy(FileName, NewFileName, overwrite));
+
+            if (!throws)
+            {
+                _autoMocker
+                    .Verify<IEnvironmentFileService, Stream>(m => m.OpenRead(FileName),
+                        Times.Once);
+                _autoMocker
+                    .Verify<IEnvironmentFileService, Stream>(m => m.OpenWrite(NewFileName),
+                        Times.Once);
+            }
         }
 
         [Theory]

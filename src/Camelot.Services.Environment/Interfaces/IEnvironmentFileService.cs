@@ -11,8 +11,6 @@ namespace Camelot.Services.Environment.Interfaces
 
         bool CheckIfExists(string filePath);
 
-        void Copy(string source, string destination, bool overwrite);
-
         void Move(string oldFilePath, string newFilePath);
 
         void Delete(string filePath);

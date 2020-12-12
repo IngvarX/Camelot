@@ -44,21 +44,28 @@ namespace Camelot.Services
 
         public bool CheckIfExists(string file) => _environmentFileService.CheckIfExists(file);
 
-        public Task<bool> CopyAsync(string source, string destination, bool overwrite)
+        public async Task<bool> CopyAsync(string source, string destination, bool overwrite)
         {
+            if (CheckIfExists(destination) && !overwrite)
+            {
+                return false;
+            }
+
             try
             {
-                _environmentFileService.Copy(source, destination, overwrite);
+                await using var readStream = _environmentFileService.OpenRead(source);
+                await using var writeStream = _environmentFileService.OpenWrite(destination);
+                await readStream.CopyToAsync(writeStream);
             }
             catch (Exception ex)
             {
                 _logger.LogError(
                     $"Failed to copy file {source} to {destination} (overwrite: {overwrite}) with error {ex}");
 
-                return Task.FromResult(false);
+                return false;
             }
 
-            return Task.FromResult(true);
+            return true;
         }
 
         public bool Remove(string file)
