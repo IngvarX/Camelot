@@ -13,13 +13,11 @@ using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Models.EventArgs;
 using Camelot.Services.Abstractions.Models.Operations;
 using Camelot.Services.Abstractions.Operations;
-using Camelot.TaskPool.Interfaces;
 
 namespace Camelot.Operations
 {
     public class CompositeOperation : OperationBase, ICompositeOperation
     {
-        private readonly ITaskPool _taskPool;
         private readonly IFileNameGenerationService _fileNameGenerationService;
         private readonly IReadOnlyList<OperationGroup> _groupedOperationsToExecute;
 
@@ -43,12 +41,10 @@ namespace Camelot.Operations
         public event EventHandler<EventArgs> Blocked;
 
         public CompositeOperation(
-            ITaskPool taskPool,
             IFileNameGenerationService fileNameGenerationService,
             IReadOnlyList<OperationGroup> groupedOperationsToExecute,
             OperationInfo operationInfo)
         {
-            _taskPool = taskPool;
             _fileNameGenerationService = fileNameGenerationService;
             _groupedOperationsToExecute = groupedOperationsToExecute;
             Info = operationInfo;
@@ -140,7 +136,7 @@ namespace Camelot.Operations
                     var currentOperation = operationsGroup[i];
                     SubscribeToEvents(currentOperation);
 
-                    await _taskPool.ExecuteAsync(() => currentOperation.RunAsync(cancellationToken));
+                    RunOperation(currentOperation, cancellationToken);
                 }
 
                 var groupExecutionResult = await _taskCompletionSource.Task;
@@ -155,6 +151,9 @@ namespace Camelot.Operations
             _currentOperationsGroup = null;
             SetFinalProgress();
         }
+
+        private static void RunOperation(IInternalOperation operation, CancellationToken cancellationToken) =>
+            Task.Run(() => operation.RunAsync(cancellationToken), cancellationToken).Forget();
 
         private async void OperationOnStateChanged(object sender, OperationStateChangedEventArgs e)
         {

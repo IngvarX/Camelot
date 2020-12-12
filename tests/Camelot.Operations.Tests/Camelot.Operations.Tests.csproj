@@ -21,7 +21,6 @@
     <ItemGroup>
         <ProjectReference Include="..\..\src\Camelot.Operations\Camelot.Operations.csproj" />
         <ProjectReference Include="..\..\src\Camelot.Services\Camelot.Services.csproj" />
-        <ProjectReference Include="..\..\src\Camelot.TaskPool\Camelot.TaskPool.csproj" />
     </ItemGroup>
 
 </Project>

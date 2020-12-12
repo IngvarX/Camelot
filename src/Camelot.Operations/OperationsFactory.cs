@@ -7,14 +7,12 @@ using Camelot.Services.Abstractions.Archive;
 using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Models.Operations;
 using Camelot.Services.Abstractions.Operations;
-using Camelot.TaskPool.Interfaces;
 using Microsoft.Extensions.Logging;
 
 namespace Camelot.Operations
 {
     public class OperationsFactory : IOperationsFactory
     {
-        private readonly ITaskPool _taskPool;
         private readonly IDirectoryService _directoryService;
         private readonly IFileService _fileService;
         private readonly IPathService _pathService;
@@ -23,7 +21,6 @@ namespace Camelot.Operations
         private readonly IArchiveProcessorFactory _archiveProcessorFactory;
 
         public OperationsFactory(
-            ITaskPool taskPool,
             IDirectoryService directoryService,
             IFileService fileService,
             IPathService pathService,
@@ -31,7 +28,6 @@ namespace Camelot.Operations
             ILogger logger,
             IArchiveProcessorFactory archiveProcessorFactory)
         {
-            _taskPool = taskPool;
             _directoryService = directoryService;
             _fileService = fileService;
             _pathService = pathService;
@@ -163,7 +159,7 @@ namespace Camelot.Operations
         private ICompositeOperation CreateCompositeOperation(
             IReadOnlyList<OperationGroup> operations,
             OperationInfo operationInfo) =>
-            new CompositeOperation(_taskPool, _fileNameGenerationService, operations, operationInfo);
+            new CompositeOperation(_fileNameGenerationService, operations, operationInfo);
 
         private IOperation CreateOperation(ICompositeOperation compositeOperation) =>
             new AsyncOperationStateMachine(compositeOperation, _logger);

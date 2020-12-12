@@ -8,7 +8,6 @@ using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Models.Operations;
 using Camelot.Services.Abstractions.Operations;
-using Camelot.TaskPool.Interfaces;
 using Moq;
 using Moq.AutoMock;
 using Xunit;
@@ -29,10 +28,6 @@ namespace Camelot.Operations.Tests
         public OperationsTests()
         {
             _autoMocker = new AutoMocker();
-
-            _autoMocker
-                .Setup<ITaskPool, Task>(m => m.ExecuteAsync(It.IsAny<Func<Task>>()))
-                .Returns<Func<Task>>(x => x());
         }
 
         [Theory]

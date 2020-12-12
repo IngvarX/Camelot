@@ -37,7 +37,6 @@ using Camelot.Services.Windows;
 using Camelot.Services.Windows.Builders;
 using Camelot.Services.Windows.Interfaces;
 using Camelot.Services.Windows.WinApi;
-using Camelot.TaskPool.Interfaces;
 using Camelot.ViewModels.Configuration;
 using Camelot.ViewModels.Factories.Implementations;
 using Camelot.ViewModels.Factories.Interfaces;
@@ -78,7 +77,6 @@ namespace Camelot.DependencyInjection
             RegisterEnvironmentServices(services);
             RegisterAvaloniaServices(services);
             RegisterFileSystemWatcherServices(services, resolver);
-            RegisterTaskPool(services, resolver);
             RegisterDataAccess(services, resolver);
             RegisterServices(services, resolver);
             RegisterPlatformSpecificServices(services, resolver);
@@ -201,13 +199,6 @@ namespace Camelot.DependencyInjection
             ));
         }
 
-        private static void RegisterTaskPool(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
-        {
-            services.RegisterLazySingleton<ITaskPool>(() => new TaskPool.Implementations.TaskPool(
-                resolver.GetRequiredService<IEnvironmentService>()
-            ));
-        }
-
         private static void RegisterDataAccess(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
             services.RegisterLazySingleton<IUnitOfWorkFactory>(() => new LiteDbUnitOfWorkFactory(
@@ -250,7 +241,6 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<DriveServiceConfiguration>()
             ));
             services.RegisterLazySingleton<IOperationsFactory>(() => new OperationsFactory(
-                resolver.GetRequiredService<ITaskPool>(),
                 resolver.GetRequiredService<IDirectoryService>(),
                 resolver.GetRequiredService<IFileService>(),
                 resolver.GetRequiredService<IPathService>(),
