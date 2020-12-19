@@ -77,7 +77,7 @@
 
         <DataGrid x:Name="FilesDataGrid" Grid.Row="2" Grid.RowSpan="2"
                   Items="{Binding FileSystemNodes}"
-                  CanUserSortColumns="False" IsReadOnly="True"
+                  CanUserSortColumns="False" IsReadOnly="True" CanUserResizeColumns="True"
                   HorizontalScrollBarVisibility="Disabled"
                   AlternatingRowBackground="{DynamicResource AlternativeThemeBackgroundBrush}"
                   VerticalScrollBarVisibility="Visible"
@@ -169,7 +169,7 @@
                 <DataGridTemplateColumn Width="5*">
                     <DataGridTemplateColumn.Header>
                         <Button Command="{Binding SortFilesCommand}"
-                                CommandParameter="{x:Static enums:SortingMode.Name}">
+                                CommandParameter="{x:Static enums:SortingMode.Name}" Classes="columnHeaderButton">
                             <Grid ColumnDefinitions="*,Auto,Auto,*">
                                 <controls:DataGridHeaderArrowView
                                     IsVisible="{Binding SelectedTab.SortingViewModel.SortingColumn, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:SortingMode.Name}}" />
@@ -222,7 +222,7 @@
                 <DataGridTemplateColumn Width="1*">
                     <DataGridTemplateColumn.Header>
                         <Button Command="{Binding SortFilesCommand}"
-                                CommandParameter="{x:Static enums:SortingMode.Extension}">
+                                CommandParameter="{x:Static enums:SortingMode.Extension}" Classes="columnHeaderButton">
                             <Grid ColumnDefinitions="*,Auto,Auto,*">
                                 <controls:DataGridHeaderArrowView
                                     IsVisible="{Binding SelectedTab.SortingViewModel.SortingColumn, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:SortingMode.Extension}}" />
@@ -253,7 +253,7 @@
                 <DataGridTemplateColumn Width="1*">
                     <DataGridTemplateColumn.Header>
                         <Button Command="{Binding SortFilesCommand}"
-                                CommandParameter="{x:Static enums:SortingMode.Size}">
+                                CommandParameter="{x:Static enums:SortingMode.Size}" Classes="columnHeaderButton">
                             <Grid ColumnDefinitions="*,Auto,Auto,*">
                                 <controls:DataGridHeaderArrowView
                                     IsVisible="{Binding SelectedTab.SortingViewModel.SortingColumn, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:SortingMode.Size}}" />
@@ -283,7 +283,7 @@
                 <DataGridTemplateColumn Width="2*">
                     <DataGridTemplateColumn.Header>
                         <Button Command="{Binding SortFilesCommand}"
-                                CommandParameter="{x:Static enums:SortingMode.Date}">
+                                CommandParameter="{x:Static enums:SortingMode.Date}" Classes="columnHeaderButton">
                             <Grid ColumnDefinitions="*,Auto,Auto,*">
                                 <controls:DataGridHeaderArrowView
                                     IsVisible="{Binding SelectedTab.SortingViewModel.SortingColumn, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:SortingMode.Date}}" />

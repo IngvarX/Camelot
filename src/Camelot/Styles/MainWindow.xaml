@@ -10,6 +10,10 @@
         <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundBrush}" />
     </Style>
 
+    <Style Selector="Button.columnHeaderButton">
+        <Setter Property="Margin" Value="5,0" />
+    </Style>
+
     <Style Selector="TextBlock.operationTextBlock">
         <Setter Property="FontFamily" Value="SansSerif" />
         <Setter Property="FontSize" Value="16" />
