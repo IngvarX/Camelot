@@ -19,71 +19,48 @@ namespace Camelot.DependencyInjection
     {
         public static void RegisterConfiguration(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
-            var configuration = new ConfigurationBuilder()
+            var configuration = BuildConfiguration();
+
+            RegisterAboutDialogConfiguration(services, configuration);
+            RegisterDatabaseConfiguration(services, resolver, configuration);
+            RegisterFileSystemWatcherConfiguration(services, configuration);
+            RegisterImagePreviewConfiguration(services, configuration);
+            RegisterFilePanelConfiguration(services, configuration);
+            RegisterSearchViewModelConfiguration(services, configuration);
+            RegisterDriveServiceConfiguration(services, configuration);
+            RegisterUnmountedDrivesConfiguration(services, configuration);
+            RegisterLoggingConfiguration(services, configuration);
+            RegisterArchiveTypeMapperConfiguration(services, configuration);
+            RegisterArchiveTypeViewModelFactoryConfiguration(services, configuration);
+            RegisterOperationsStatesConfiguration(services, configuration);
+            RegisterOpenWithDialogConfiguration(services, configuration);
+            RegisterUtiToExtensionsMappingConfiguration(services, configuration);
+        }
+
+        private static IConfiguration BuildConfiguration() =>
+            new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .Build();
 
-            var aboutDialogConfiguration = new AboutDialogConfiguration();
-            configuration.GetSection("About").Bind(aboutDialogConfiguration);
-            services.RegisterConstant(aboutDialogConfiguration);
+        private static void RegisterAboutDialogConfiguration(IMutableDependencyResolver services,
+            IConfiguration configuration)
+        {
+            var config = new AboutDialogConfiguration();
+            configuration.GetSection("About").Bind(config);
+            services.RegisterConstant(config);
+        }
 
+        private static void RegisterDatabaseConfiguration(IMutableDependencyResolver services,
+            IReadonlyDependencyResolver resolver, IConfiguration configuration)
+        {
             var databaseConfiguration = new DatabaseConfiguration
             {
                 ConnectionString = GetDatabaseConnectionString(configuration, resolver)
             };
             services.RegisterConstant(databaseConfiguration);
-
-            var fileSystemWatcherConfiguration = new FileSystemWatcherConfiguration();
-            configuration.GetSection("FileSystemWatcher").Bind(fileSystemWatcherConfiguration);
-            services.RegisterConstant(fileSystemWatcherConfiguration);
-
-            var imagePreviewConfiguration = new ImagePreviewConfiguration();
-            configuration.GetSection("ImagePreview").Bind(imagePreviewConfiguration);
-            services.RegisterConstant(imagePreviewConfiguration);
-
-            var filePanelConfiguration = new FilePanelConfiguration();
-            configuration.GetSection("FilePanel").Bind(filePanelConfiguration);
-            services.RegisterConstant(filePanelConfiguration);
-
-            var searchViewModelConfiguration = new SearchViewModelConfiguration();
-            configuration.GetSection("SearchPanel").Bind(searchViewModelConfiguration);
-            searchViewModelConfiguration.InvalidRegexResourceName = nameof(Resources.InvalidRegex);
-            services.RegisterConstant(searchViewModelConfiguration);
-
-            var driveServiceConfiguration = new DriveServiceConfiguration();
-            configuration.GetSection("Drives").Bind(driveServiceConfiguration);
-            services.RegisterConstant(driveServiceConfiguration);
-
-            var unmountedDrivesConfiguration = new UnmountedDrivesConfiguration();
-            configuration.GetSection("UnmountedDrives").Bind(unmountedDrivesConfiguration);
-            services.RegisterConstant(unmountedDrivesConfiguration);
-
-            var loggingConfiguration = new LoggingConfiguration();
-            configuration.GetSection("Logging").Bind(loggingConfiguration);
-            services.RegisterConstant(loggingConfiguration);
-
-            var archiveTypeMapperConfiguration = new ArchiveTypeMapperConfiguration();
-            configuration.GetSection("Archive").Bind(archiveTypeMapperConfiguration);
-            services.RegisterConstant(archiveTypeMapperConfiguration);
-
-            var archiveTypeViewModelFactoryConfiguration = new ArchiveTypeViewModelFactoryConfiguration();
-            configuration.GetSection("ArchiveViewModelFactory").Bind(archiveTypeViewModelFactoryConfiguration);
-            services.RegisterConstant(archiveTypeViewModelFactoryConfiguration);
-
-            var operationsStatesConfiguration = new OperationsStatesConfiguration();
-            configuration.GetSection("OperationsStates").Bind(operationsStatesConfiguration);
-            services.RegisterConstant(operationsStatesConfiguration);
-
-            var openWithDialogConfiguration = new OpenWithDialogConfiguration();
-            configuration.GetSection("OpenWithDialog").Bind(openWithDialogConfiguration);
-            services.RegisterConstant(openWithDialogConfiguration);
-
-            var utiToExtensionsMappingConfiguration = new UtiToExtensionsMappingConfiguration();
-            configuration.GetSection("UtiToExtensionsMapping").Bind(utiToExtensionsMappingConfiguration);
-            services.RegisterConstant(utiToExtensionsMappingConfiguration);
         }
 
-        private static string GetDatabaseConnectionString(IConfigurationRoot configuration,
+        private static string GetDatabaseConnectionString(IConfiguration configuration,
             IReadonlyDependencyResolver resolver)
         {
             var platformService = resolver.GetRequiredService<IPlatformService>();
@@ -109,6 +86,103 @@ namespace Camelot.DependencyInjection
             }
 
             return string.Format(connectionString, Path.Combine(dbDirectory, databaseName));
+        }
+
+        private static void RegisterFileSystemWatcherConfiguration(IMutableDependencyResolver services,
+            IConfiguration configuration)
+        {
+            var config = new FileSystemWatcherConfiguration();
+            configuration.GetSection("FileSystemWatcher").Bind(config);
+            services.RegisterConstant(config);
+        }
+
+        private static void RegisterImagePreviewConfiguration(IMutableDependencyResolver services,
+            IConfiguration configuration)
+        {
+            var config = new ImagePreviewConfiguration();
+            configuration.GetSection("ImagePreview").Bind(config);
+            services.RegisterConstant(config);
+        }
+
+        private static void RegisterFilePanelConfiguration(IMutableDependencyResolver services,
+            IConfiguration configuration)
+        {
+            var config = new FilePanelConfiguration();
+            configuration.GetSection("FilePanel").Bind(config);
+            services.RegisterConstant(config);
+        }
+
+        private static void RegisterSearchViewModelConfiguration(IMutableDependencyResolver services,
+            IConfiguration configuration)
+        {
+            var config = new SearchViewModelConfiguration();
+            configuration.GetSection("SearchPanel").Bind(config);
+            config.InvalidRegexResourceName = nameof(Resources.InvalidRegex);
+            services.RegisterConstant(config);
+        }
+
+        private static void RegisterDriveServiceConfiguration(IMutableDependencyResolver services,
+            IConfiguration configuration)
+        {
+            var config = new DriveServiceConfiguration();
+            configuration.GetSection("Drives").Bind(config);
+            services.RegisterConstant(config);
+        }
+
+        private static void RegisterUnmountedDrivesConfiguration(IMutableDependencyResolver services,
+            IConfiguration configuration)
+        {
+            var config = new UnmountedDrivesConfiguration();
+            configuration.GetSection("UnmountedDrives").Bind(config);
+            services.RegisterConstant(config);
+        }
+
+        private static void RegisterLoggingConfiguration(IMutableDependencyResolver services,
+            IConfiguration configuration)
+        {
+            var config = new LoggingConfiguration();
+            configuration.GetSection("Logging").Bind(config);
+            services.RegisterConstant(config);
+        }
+
+        private static void RegisterArchiveTypeMapperConfiguration(IMutableDependencyResolver services,
+            IConfiguration configuration)
+        {
+            var config = new ArchiveTypeMapperConfiguration();
+            configuration.GetSection("Archive").Bind(config);
+            services.RegisterConstant(config);
+        }
+
+        private static void RegisterArchiveTypeViewModelFactoryConfiguration(IMutableDependencyResolver services,
+            IConfiguration configuration)
+        {
+            var config = new ArchiveTypeViewModelFactoryConfiguration();
+            configuration.GetSection("ArchiveViewModelFactory").Bind(config);
+            services.RegisterConstant(config);
+        }
+
+        private static void RegisterOperationsStatesConfiguration(IMutableDependencyResolver services,
+            IConfiguration configuration)
+        {
+            var config = new OperationsStatesConfiguration();
+            configuration.GetSection("OperationsStates").Bind(config);
+            services.RegisterConstant(config);
+        }
+
+        private static void RegisterOpenWithDialogConfiguration(IMutableDependencyResolver services,
+            IConfiguration configuration)
+        {
+            var config = new OpenWithDialogConfiguration();
+            configuration.GetSection("OpenWithDialog").Bind(config);
+            services.RegisterConstant(config);
+        }
+
+        private static void RegisterUtiToExtensionsMappingConfiguration(IMutableDependencyResolver services,
+            IConfiguration configuration)
+        {
+            var config = new UtiToExtensionsMappingConfiguration();
+            configuration.GetSection("UtiToExtensionsMapping").Bind(config);
+            services.RegisterConstant(config);
         }
     }
 }
