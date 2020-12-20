@@ -145,7 +145,7 @@ _TeamCity*
 
 # NCrunch
 _NCrunch_*
-.*crunch*.local.xml
+re.*crunch*.local.xml
 nCrunchTemp_*
 
 # MightyMoose
@@ -339,4 +339,5 @@ ASALocalRun/
 *.db
 
 *.DS_Store*
-/src/Camelot/Directory.Build.props
+*.txt
+*.props
