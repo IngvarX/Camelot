@@ -98,7 +98,7 @@
                                 <TextBlock.Text>
                                     <MultiBinding StringFormat="{x:Static p:Resources.PackedFileTo}">
                                         <Binding Path="SourceFile" />
-                                        <Binding Path="SourceDirectory" />
+                                        <Binding Path="TargetDirectory" />
                                     </MultiBinding>
                                 </TextBlock.Text>
                             </TextBlock>
