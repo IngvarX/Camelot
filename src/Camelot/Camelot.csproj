@@ -6,6 +6,11 @@
     <Version>0.2.0</Version>
   </PropertyGroup>
   <PropertyGroup>
+    <AssemblyName>camelot</AssemblyName>
+    <PackagePrefix>$([System.Text.RegularExpressions.Regex]::Replace($(AssemblyName), "\B[A-Z]", "-$0").ToLower())</PackagePrefix>
+    <PackageName>$(PackagePrefix)_$(Version)</PackageName>
+  </PropertyGroup>
+  <PropertyGroup>
     <CFBundleName>Camelot</CFBundleName>
     <CFBundleDisplayName>Camelot</CFBundleDisplayName>
     <CFBundleIdentifier>com.camelot</CFBundleIdentifier>
