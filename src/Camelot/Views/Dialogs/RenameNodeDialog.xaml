@@ -1,0 +1,27 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:p="clr-namespace:Camelot.Properties"
+        xmlns:dialogs="clr-namespace:Camelot.ViewModels.Implementations.Dialogs;assembly=Camelot.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="Camelot.Views.Dialogs.RenameNodeDialog"
+        Width="400" Height="200"
+        Title="{x:Static p:Resources.Rename}">
+
+    <Design.DataContext>
+        <dialogs:RenameNodeDialogViewModel />
+    </Design.DataContext>
+
+    <Grid RowDefinitions="Auto,Auto,Auto" Margin="10" HorizontalAlignment="Center">
+        <TextBlock Classes="dialogTextBlock" Text="{x:Static p:Resources.EnterNewNameWithColon}" />
+
+        <TextBox Grid.Row="1" x:Name="NodeNameTextBox" Text="{Binding NodeName}"
+                 KeyUp="OnNodeNameTextBoxKeyUp" />
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Classes="dialogButton transparentDialogButton" Content="{x:Static p:Resources.Cancel}" Command="{Binding CancelCommand}" />
+            <Button Classes="dialogButton" Content="{x:Static p:Resources.Rename}" Command="{Binding RenameCommand}" />
+        </StackPanel>
+    </Grid>
+</Window>

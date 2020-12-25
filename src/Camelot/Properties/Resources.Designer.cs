@@ -740,5 +740,11 @@ namespace Camelot.Properties {
                 return ResourceManager.GetString("SearchForApplications", resourceCulture);
             }
         }
+        
+        public static string EnterNewNameWithColon {
+            get {
+                return ResourceManager.GetString("EnterNewNameWithColon", resourceCulture);
+            }
+        }
     }
 }

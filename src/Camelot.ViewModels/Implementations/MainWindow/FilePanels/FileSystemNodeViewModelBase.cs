@@ -58,9 +58,9 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         public ICommand ExtractCommand { get; }
 
-        public ICommand StartRenamingCommand { get; }
-
         public ICommand RenameCommand { get; }
+
+        public ICommand RenameInDialogCommand { get; }
 
         public ICommand CopyToClipboardCommand { get; }
 
@@ -81,7 +81,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             IDialogService dialogService,
             ITrashCanService trashCanService,
             IArchiveService archiveService,
-            ISystemDialogService systemDialogService, 
+            ISystemDialogService systemDialogService,
             IOpenWithApplicationService openWithApplicationService,
             IPathService pathService)
         {
@@ -101,8 +101,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             OpenWithCommand = ReactiveCommand.Create(OpenWithAsync);
             PackCommand = ReactiveCommand.CreateFromTask(PackAsync);
             ExtractCommand = ReactiveCommand.CreateFromTask<ExtractCommandType>(ExtractAsync);
-            StartRenamingCommand = ReactiveCommand.Create(StartRenaming);
             RenameCommand = ReactiveCommand.Create(Rename);
+            RenameInDialogCommand = ReactiveCommand.CreateFromTask(RenameInDialogAsync);
             CopyToClipboardCommand = ReactiveCommand.CreateFromTask(CopyToClipboardAsync);
             DeleteCommand = ReactiveCommand.CreateFromTask(DeleteAsync);
             CopyCommand = ReactiveCommand.CreateFromTask(CopyAsync);
@@ -124,12 +124,12 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
             await _archiveService.PackAsync(Files, dialogResult.ArchivePath, dialogResult.ArchiveType);
         }
-        
+
         private async Task OpenWithAsync()
         {
             var fileExtension = _pathService.GetExtension(FullName);
             var selectedApplication = _openWithApplicationService.GetSelectedApplication(fileExtension);
-            
+
             var parameter = new OpenWithNavigationParameter(fileExtension, selectedApplication);
             var dialogResult = await _dialogService.ShowDialogAsync<OpenWithDialogResult, OpenWithNavigationParameter>(
                 nameof(OpenWithDialogViewModel), parameter);
@@ -190,6 +190,15 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             }
         }
 
+        private async Task RenameInDialogAsync()
+        {
+            var newPath = await ShowRenameDialogAsync();
+            if (newPath != null)
+            {
+                _operationsService.Rename(FullPath, newPath);
+            }
+        }
+
         private Task CopyToClipboardAsync() => _clipboardOperationsService.CopyFilesAsync(Files);
 
         private async Task DeleteAsync()
@@ -215,6 +224,16 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
                     nameof(RemoveNodesConfirmationDialogViewModel), navigationParameter);
 
             return result?.IsConfirmed ?? false;
+        }
+
+        private async Task<string> ShowRenameDialogAsync()
+        {
+            var navigationParameter = new RenameNodeNavigationParameter(FullPath);
+            var result = await _dialogService
+                .ShowDialogAsync<RenameNodeDialogResult, RenameNodeNavigationParameter>(
+                    nameof(RenameNodeDialogViewModel), navigationParameter);
+
+            return result?.NodeName;
         }
     }
 }

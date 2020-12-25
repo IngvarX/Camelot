@@ -465,4 +465,7 @@
   <data name="SearchForApplications" xml:space="preserve">
     <value>Search for applications</value>
   </data>
+  <data name="EnterNewNameWithColon" xml:space="preserve">
+    <value>Enter new name:</value>
+  </data>
 </root>

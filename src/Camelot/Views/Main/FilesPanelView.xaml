@@ -100,7 +100,7 @@
                             <MenuItem Header="{x:Static p:Resources.SelectDirectoryForExtraction}"
                                       Command="{Binding ExtractCommand}" CommandParameter="{x:Static enumsViewModels:ExtractCommandType.SelectDirectory}" />
                         </MenuItem>
-                        <MenuItem Header="{x:Static p:Resources.Rename}" Command="{Binding StartRenamingCommand}" />
+                        <MenuItem Header="{x:Static p:Resources.Rename}" Command="{Binding RenameInDialogCommand}" />
                         <MenuItem Header="{x:Static p:Resources.Copy}" Command="{Binding CopyCommand}" />
                         <MenuItem Header="{x:Static p:Resources.Move}" Command="{Binding MoveCommand}" />
                         <MenuItem Header="{x:Static p:Resources.Delete}" Command="{Binding DeleteCommand}"/>

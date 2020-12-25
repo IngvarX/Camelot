@@ -465,4 +465,7 @@
   <data name="Github" xml:space="preserve">
     <value>Github</value>
   </data>
+  <data name="EnterNewNameWithColon" xml:space="preserve">
+    <value>Введите новое имя:</value>
+  </data>
 </root>
