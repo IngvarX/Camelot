@@ -168,13 +168,12 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
                     {
                         await _archiveService.ExtractAsync(FullPath, directory);
                     }
+
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(commandType), commandType, null);
             }
         }
-
-        private void StartRenaming() => IsEditing = true;
 
         private void Rename()
         {
