@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=v0.2
+Name=Camelot
+GenericName=Camelot
+Comment=Cross-platform file manager written in C#
+Categories=Utility;FileTools;FileManager;
+Exec=camelot
+Icon=camelot
+Terminal=false
+MimeType=inode/directory;
+Type=Application
+
