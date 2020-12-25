@@ -126,7 +126,8 @@ namespace Camelot.ViewModels.Tests
             Assert.Single(tabsListViewModel.Tabs);
 
             _autoMocker
-                .Verify<IFilesPanelStateService>(m => m.SavePanelState(It.IsAny<PanelStateModel>()), Times.AtLeast(2));
+                .Verify<IFilesPanelStateService>(m => m.SavePanelState(It.IsAny<PanelStateModel>()),
+                    Times.AtLeast(1));
         }
 
         [Fact]

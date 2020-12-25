@@ -10,10 +10,12 @@ using Camelot.ViewModels.Implementations.Dialogs;
 using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
 using Camelot.ViewModels.Implementations.Dialogs.Results;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
+using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Enums;
 using Camelot.ViewModels.Interfaces.Behaviors;
 using Camelot.ViewModels.Services.Interfaces;
 using Moq;
 using Moq.AutoMock;
+using ReactiveUI;
 using Xunit;
 
 namespace Camelot.ViewModels.Tests
@@ -234,6 +236,70 @@ namespace Camelot.ViewModels.Tests
                 .Verify<ITrashCanService>(m => m.MoveToTrashAsync(It.Is<IReadOnlyList<string>>(
                         f => f.Single() == FullPath), It.IsAny<CancellationToken>()),
                     Times.Exactly(removingCallsCount));
+        }
+
+        [Theory]
+        [InlineData(false, ExtractCommandType.CurrentDirectory, 0, 0, 0, "dir")]
+        [InlineData(false, ExtractCommandType.NewDirectory, 0, 0, 0, "dir")]
+        [InlineData(false, ExtractCommandType.SelectDirectory, 0, 0, 0, "dir")]
+        [InlineData(true, ExtractCommandType.CurrentDirectory, 1, 0, 0, "dir")]
+        [InlineData(true, ExtractCommandType.NewDirectory, 0, 1, 0, "dir")]
+        [InlineData(true, ExtractCommandType.SelectDirectory, 0, 0, 1, "dir")]
+        [InlineData(true, ExtractCommandType.SelectDirectory, 0, 0, 0, null)]
+        [InlineData(true, ExtractCommandType.SelectDirectory, 0, 0, 0, "")]
+        [InlineData(true, ExtractCommandType.SelectDirectory, 0, 0, 0, "   \t")]
+        public void TestExtractCommand(bool isArchive, ExtractCommandType command,
+            int extractCallsCount, int extractToNewDirCount, int extractWithDirCallsCount, string directory)
+        {
+            _autoMocker
+                .Setup<IArchiveService, bool>(m => m.CheckIfNodeIsArchive(FullPath))
+                .Returns(isArchive);
+            _autoMocker
+                .Setup<IArchiveService>(m => m.ExtractAsync(FullPath, null))
+                .Verifiable();
+            _autoMocker
+                .Setup<IArchiveService>(m => m.ExtractAsync(FullPath, directory))
+                .Verifiable();
+            _autoMocker
+                .Setup<IArchiveService>(m => m.ExtractToNewDirectoryAsync(FullPath))
+                .Verifiable();
+            _autoMocker
+                .Setup<ISystemDialogService, Task<string>>(m => m.GetDirectoryAsync(null))
+                .Returns(Task.FromResult(directory));
+
+            var viewModel = _autoMocker.CreateInstance<NodeViewModel>();
+            viewModel.FullPath = FullPath;
+
+            Assert.True(viewModel.ExtractCommand.CanExecute(command));
+
+            viewModel.ExtractCommand.Execute(command);
+
+            _autoMocker
+                .Verify<IArchiveService>(m => m.ExtractAsync(FullPath, null),
+                    Times.Exactly(extractCallsCount));
+            _autoMocker
+                .Verify<IArchiveService>(m => m.ExtractAsync(FullPath, directory),
+                    Times.Exactly(extractWithDirCallsCount));
+            _autoMocker
+                .Verify<IArchiveService>(m => m.ExtractToNewDirectoryAsync(FullPath),
+                    Times.Exactly(extractToNewDirCount));
+        }
+
+        [Fact]
+        public void TestExtractCommandThrows()
+        {
+            _autoMocker
+                .Setup<IArchiveService, bool>(m => m.CheckIfNodeIsArchive(FullPath))
+                .Returns(true);
+
+            var viewModel = _autoMocker.CreateInstance<NodeViewModel>();
+            viewModel.FullPath = FullPath;
+
+            const ExtractCommandType command = (ExtractCommandType) 42;
+
+            void ExecuteCommand() => viewModel.ExtractCommand.Execute(command);
+
+            Assert.Throws<UnhandledErrorException>(ExecuteCommand);
         }
 
         private class NodeViewModel : FileSystemNodeViewModelBase
