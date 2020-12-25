@@ -35,7 +35,7 @@ namespace Camelot
         private void LoadTheme()
         {
             // TODO: load themes on start from db
-            Styles.Add(new DarkTheme());
+            Styles.Add(new LightTheme());
         }
 
         private static void LoadLanguage()

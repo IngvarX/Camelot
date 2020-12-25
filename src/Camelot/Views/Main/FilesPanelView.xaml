@@ -20,14 +20,7 @@
         <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
     </UserControl.Resources>
 
-    <Grid Classes="defaultBackgroundColorGrid">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+    <Grid Classes="defaultBackgroundColorGrid" RowDefinitions="Auto,Auto,*,Auto,Auto">
 
         <DockPanel Margin="7,0,0,0">
             <Button Classes="iconButton">
