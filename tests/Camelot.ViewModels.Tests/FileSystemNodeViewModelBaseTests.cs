@@ -1,9 +1,14 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Archive;
 using Camelot.Services.Abstractions.Behaviors;
 using Camelot.Services.Abstractions.Operations;
+using Camelot.ViewModels.Implementations.Dialogs;
+using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
+using Camelot.ViewModels.Implementations.Dialogs.Results;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.Behaviors;
 using Camelot.ViewModels.Services.Interfaces;
@@ -75,6 +80,27 @@ namespace Camelot.ViewModels.Tests
 
             _autoMocker
                 .Verify<IFileSystemNodePropertiesBehavior>(m => m.ShowPropertiesAsync(FullPath),
+                    Times.Once);
+        }
+
+        [Fact]
+        public void TestCopyToClipboardCommand()
+        {
+            _autoMocker
+                .Setup<IClipboardOperationsService>(m => m.CopyFilesAsync(
+                    It.Is<IReadOnlyList<string>>(f => f.Single() == FullPath)))
+                .Verifiable();
+
+            var viewModel = _autoMocker.CreateInstance<NodeViewModel>();
+            viewModel.FullPath = FullPath;
+
+            Assert.True(viewModel.CopyToClipboardCommand.CanExecute(null));
+
+            viewModel.CopyToClipboardCommand.Execute(null);
+
+            _autoMocker
+                .Verify<IClipboardOperationsService>(m => m.CopyFilesAsync(
+                        It.Is<IReadOnlyList<string>>(f => f.Single() == FullPath)),
                     Times.Once);
         }
 
@@ -151,6 +177,63 @@ namespace Camelot.ViewModels.Tests
             _autoMocker
                 .Verify<IOperationsService, bool>(m => m.Rename(FullPath, newName),
                     Times.Exactly(renameTimesCalled));
+        }
+
+        [Theory]
+        [InlineData(null, 0)]
+        [InlineData("new", 1)]
+        public void TestRenameInDialogCommand(string newName, int renameTimesCalled)
+        {
+            var result = newName is null ? null : new RenameNodeDialogResult(newName);
+            _autoMocker
+                .Setup<IDialogService, Task<RenameNodeDialogResult>>(m => m.ShowDialogAsync<RenameNodeDialogResult, RenameNodeNavigationParameter>(
+                    nameof(RenameNodeDialogViewModel), It.Is<RenameNodeNavigationParameter>(
+                        p => p.NodePath == FullPath)))
+                .Returns(Task.FromResult(result));
+            _autoMocker
+                .Setup<IOperationsService, bool>(m => m.Rename(FullPath, newName))
+                .Verifiable();
+
+            var viewModel = _autoMocker.CreateInstance<NodeViewModel>();
+            viewModel.FullPath = FullPath;
+
+            Assert.True(viewModel.RenameInDialogCommand.CanExecute(null));
+
+            viewModel.RenameInDialogCommand.Execute(null);
+
+            _autoMocker
+                .Verify<IOperationsService, bool>(m => m.Rename(FullPath, newName),
+                    Times.Exactly(renameTimesCalled));
+        }
+
+        [Theory]
+        [InlineData(true, 1)]
+        [InlineData(false, 0)]
+        [InlineData(null, 0)]
+        public void TestDeleteCommand(bool? shouldRemove, int removingCallsCount)
+        {
+            var result = shouldRemove.HasValue ? new RemoveNodesConfirmationDialogResult(shouldRemove.Value) : null;
+            _autoMocker
+                .Setup<IDialogService, Task<RemoveNodesConfirmationDialogResult>>(m => m.ShowDialogAsync<RemoveNodesConfirmationDialogResult, NodesRemovingNavigationParameter>(
+                        nameof(RemoveNodesConfirmationDialogViewModel), It.Is<NodesRemovingNavigationParameter>(
+                            p => p.IsRemovingToTrash && p.Files.Single() == FullPath)))
+                .Returns(Task.FromResult(result));
+            _autoMocker
+                .Setup<ITrashCanService>(m => m.MoveToTrashAsync(It.Is<IReadOnlyList<string>>(
+                    f => f.Single() == FullPath), It.IsAny<CancellationToken>()))
+                .Verifiable();
+
+            var viewModel = _autoMocker.CreateInstance<NodeViewModel>();
+            viewModel.FullPath = FullPath;
+
+            Assert.True(viewModel.DeleteCommand.CanExecute(null));
+
+            viewModel.DeleteCommand.Execute(null);
+
+            _autoMocker
+                .Verify<ITrashCanService>(m => m.MoveToTrashAsync(It.Is<IReadOnlyList<string>>(
+                        f => f.Single() == FullPath), It.IsAny<CancellationToken>()),
+                    Times.Exactly(removingCallsCount));
         }
 
         private class NodeViewModel : FileSystemNodeViewModelBase
