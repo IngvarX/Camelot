@@ -46,7 +46,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 
         private bool CheckIfNameIsValid(string name)
         {
-            if (string.IsNullOrEmpty(name))
+            if (string.IsNullOrWhiteSpace(name))
             {
                 return false;
             }
