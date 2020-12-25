@@ -1,7 +1,7 @@
 using Camelot.Services.Abstractions;
 using Camelot.ViewModels.Implementations.Dialogs;
 using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
-using Moq;
+using Moq.AutoMock;
 using Xunit;
 
 namespace Camelot.ViewModels.Tests.Dialogs
@@ -12,18 +12,20 @@ namespace Camelot.ViewModels.Tests.Dialogs
         private const string DirectoryName = "Name";
         private const string NewDirectoryPath = "Directory/Name";
 
+        private readonly AutoMocker _autoMocker;
+
+        public CreateDirectoryDialogViewModelTests()
+        {
+            _autoMocker = new AutoMocker();
+        }
+
         [Theory]
         [InlineData(null)]
         [InlineData("")]
         [InlineData(" ")]
         public void TestDirectoryWithWhiteSpaceCreation(string directoryName)
         {
-            var directoryServiceMock = new Mock<IDirectoryService>();
-            var fileServiceMock = new Mock<IFileService>();
-            var pathServiceMock = new Mock<IPathService>();
-
-            var dialog = new CreateDirectoryDialogViewModel(
-                directoryServiceMock.Object, fileServiceMock.Object, pathServiceMock.Object);
+            var dialog = _autoMocker.CreateInstance<CreateDirectoryDialogViewModel>();
             dialog.Activate(new CreateNodeNavigationParameter(DirectoryPath));
 
             Assert.False(dialog.CreateCommand.CanExecute(null));
@@ -39,21 +41,17 @@ namespace Camelot.ViewModels.Tests.Dialogs
         [InlineData(true, true)]
         public void TestDirectoryWithExistingNodeNameCreation(bool fileExists, bool dirExists)
         {
-            var directoryServiceMock = new Mock<IDirectoryService>();
-            directoryServiceMock
-                .Setup(m => m.CheckIfExists(NewDirectoryPath))
+            _autoMocker
+                .Setup<IDirectoryService, bool>(m => m.CheckIfExists(NewDirectoryPath))
                 .Returns(dirExists);
-            var fileServiceMock = new Mock<IFileService>();
-            fileServiceMock
-                .Setup(m => m.CheckIfExists(NewDirectoryPath))
+            _autoMocker
+                .Setup<IFileService, bool>(m => m.CheckIfExists(NewDirectoryPath))
                 .Returns(fileExists);
-            var pathServiceMock = new Mock<IPathService>();
-            pathServiceMock
-                .Setup(m => m.Combine(DirectoryPath, DirectoryName))
+            _autoMocker
+                .Setup<IPathService, string>(m => m.Combine(DirectoryPath, DirectoryName))
                 .Returns(NewDirectoryPath);
 
-            var dialog = new CreateDirectoryDialogViewModel(
-                directoryServiceMock.Object, fileServiceMock.Object, pathServiceMock.Object);
+            var dialog = _autoMocker.CreateInstance<CreateDirectoryDialogViewModel>();
             dialog.Activate(new CreateNodeNavigationParameter(DirectoryPath));
 
             dialog.DirectoryName = DirectoryName;
@@ -64,12 +62,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
         [Fact]
         public void TestDirectoryCreation()
         {
-            var directoryServiceMock = new Mock<IDirectoryService>();
-            var fileServiceMock = new Mock<IFileService>();
-            var pathServiceMock = new Mock<IPathService>();
-
-            var dialog = new CreateDirectoryDialogViewModel(
-                directoryServiceMock.Object, fileServiceMock.Object, pathServiceMock.Object);
+            var dialog = _autoMocker.CreateInstance<CreateDirectoryDialogViewModel>();
             dialog.Activate(new CreateNodeNavigationParameter(DirectoryPath));
 
             var isCallbackCalled = false;
@@ -94,12 +87,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
         [Fact]
         public void TestCancel()
         {
-            var directoryServiceMock = new Mock<IDirectoryService>();
-            var fileServiceMock = new Mock<IFileService>();
-            var pathServiceMock = new Mock<IPathService>();
-
-            var dialog = new CreateDirectoryDialogViewModel(
-                directoryServiceMock.Object, fileServiceMock.Object, pathServiceMock.Object);
+            var dialog = _autoMocker.CreateInstance<CreateDirectoryDialogViewModel>();
             dialog.Activate(new CreateNodeNavigationParameter(DirectoryPath));
 
             var isCallbackCalled = false;
