@@ -16,7 +16,7 @@ source=("git+https://github.com/IngvarX/${_gitname}.git")
 sha256sums=("SKIP")
 
 pkgver() {
-  cd $_pkgname
+  cd $_pkgname/$srcdir/$_gitname
   echo "$(grep -E "<Version>.*</Version>" src/Camelot/Camelot.csproj | sed 's/.*<Version>\(.*\)<\/Version>/\1/').$(git rev-list --count HEAD)"
 }
 
@@ -38,5 +38,5 @@ package() {
   install -Dm644 "${srcdir}/${_gitname}/src/Camelot/Assets/logo.png" "${pkgdir}/usr/share/icons/hicolor/512x512/apps/$pkgname.png"
 
   # .desktop
-  install -Dm644 "${srcdir}/${_gitname}/${pkgname}.desktop" "${pkgdir}/usr/share/applications/${pkgname}.desktop"
+  install -Dm644 "${srcdir}/${_gitname}/camelot.desktop" "${pkgdir}/usr/share/applications/${pkgname}.desktop"
 }
