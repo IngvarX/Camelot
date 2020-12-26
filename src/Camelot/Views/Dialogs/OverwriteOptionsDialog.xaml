@@ -5,7 +5,7 @@
         xmlns:p="clr-namespace:Camelot.Properties"
         xmlns:dialogs="clr-namespace:Camelot.ViewModels.Implementations.Dialogs;assembly=Camelot.ViewModels"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        Width="850" Height="400"
+        Width="850" Height="420"
         x:Class="Camelot.Views.Dialogs.OverwriteOptionsDialog"
         Title="{x:Static p:Resources.OverwriteOptionsTitle}">
 
