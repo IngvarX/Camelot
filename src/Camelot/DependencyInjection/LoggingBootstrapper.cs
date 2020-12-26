@@ -12,7 +12,6 @@ namespace Camelot.DependencyInjection
     {
         public static void RegisterLogging(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
-
             services.RegisterLazySingleton(() =>
             {
                 var config = resolver.GetRequiredService<LoggingConfiguration>();
@@ -39,11 +38,16 @@ namespace Camelot.DependencyInjection
             {
                 var environmentService = resolver.GetRequiredService<IEnvironmentService>();
 
-                logDirectory = $"{environmentService.GetEnvironmentVariable("HOME")}/.config/camelot";
+                logDirectory = $"{environmentService.GetEnvironmentVariable("HOME")}/.config/camelot/logs";
             }
             else
             {
                 logDirectory = Directory.GetCurrentDirectory();
+            }
+
+            if (!Directory.Exists(logDirectory))
+            {
+                Directory.CreateDirectory(logDirectory);
             }
 
             return Path.Combine(logDirectory, config.LogFileName);

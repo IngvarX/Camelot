@@ -4,7 +4,7 @@ using Splat;
 
 namespace Camelot.DependencyInjection
 {
-    public class AvaloniaServicesBootstrapper
+    public static class AvaloniaServicesBootstrapper
     {
         public static void RegisterAvaloniaServices(IMutableDependencyResolver services)
         {
