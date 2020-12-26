@@ -114,15 +114,11 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         private async Task PackAsync()
         {
-            var parameter = new CreateArchiveNavigationParameter(FullPath, true);
-            var dialogResult = await _dialogService.ShowDialogAsync<CreateArchiveDialogResult, CreateArchiveNavigationParameter>(
-                nameof(CreateArchiveDialogViewModel), parameter);
-            if (dialogResult is null)
+            var dialogResult = await ShowPackDialogAsync();
+            if (dialogResult != null)
             {
-                return;
+                await _archiveService.PackAsync(Files, dialogResult.ArchivePath, dialogResult.ArchiveType);
             }
-
-            await _archiveService.PackAsync(Files, dialogResult.ArchivePath, dialogResult.ArchiveType);
         }
 
         private async Task OpenWithAsync()
@@ -214,6 +210,14 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private Task MoveAsync() => _operationsService.MoveAsync(Files, _filesOperationsMediator.OutputDirectory);
 
         private Task ShowPropertiesAsync() => _fileSystemNodePropertiesBehavior.ShowPropertiesAsync(FullPath);
+
+        private async Task<CreateArchiveDialogResult> ShowPackDialogAsync()
+        {
+            var parameter = new CreateArchiveNavigationParameter(FullPath, true);
+
+            return await _dialogService.ShowDialogAsync<CreateArchiveDialogResult, CreateArchiveNavigationParameter>(
+                nameof(CreateArchiveDialogViewModel), parameter);
+        }
 
         private async Task<bool> ShowRemoveConfirmationDialogAsync()
         {

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Archive;
 using Camelot.Services.Abstractions.Behaviors;
+using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Operations;
 using Camelot.ViewModels.Implementations.Dialogs;
 using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
@@ -300,6 +301,40 @@ namespace Camelot.ViewModels.Tests
             void ExecuteCommand() => viewModel.ExtractCommand.Execute(command);
 
             Assert.Throws<UnhandledErrorException>(ExecuteCommand);
+        }
+
+        [Theory]
+        [InlineData(true, "path", ArchiveType.Bz2, 1)]
+        [InlineData(true, "path2", ArchiveType.Zip, 1)]
+        [InlineData(false, "path3", ArchiveType.TarGz, 0)]
+        [InlineData(true, "path4", ArchiveType.Tar, 1)]
+        public void TestPackCommand(bool returnResult, string archivePath, ArchiveType archiveType,
+            int timesCalled)
+        {
+            _autoMocker
+                .Setup<IArchiveService>(m => m.PackAsync(
+                    It.Is<IReadOnlyList<string>>(f => f.Single() == FullPath),
+                    archivePath, archiveType))
+                .Verifiable();
+            var result = returnResult ? new CreateArchiveDialogResult(archivePath, archiveType) : null;
+            _autoMocker
+                .Setup<IDialogService, Task<CreateArchiveDialogResult>>(m => m.ShowDialogAsync<CreateArchiveDialogResult, CreateArchiveNavigationParameter>(
+                        nameof(CreateArchiveDialogViewModel), It.Is<CreateArchiveNavigationParameter>(
+                            p => p.IsPackingSingleFile && p.DefaultArchivePath == FullPath)))
+                .Returns(Task.FromResult(result));
+
+            var viewModel = _autoMocker.CreateInstance<NodeViewModel>();
+            viewModel.FullPath = FullPath;
+
+            Assert.True(viewModel.PackCommand.CanExecute(null));
+
+            viewModel.PackCommand.Execute(null);
+
+            _autoMocker
+                .Verify<IArchiveService>(m => m.PackAsync(
+                        It.Is<IReadOnlyList<string>>(f => f.Single() == FullPath),
+                        archivePath, archiveType),
+                    Times.Exactly(timesCalled));
         }
 
         private class NodeViewModel : FileSystemNodeViewModelBase
