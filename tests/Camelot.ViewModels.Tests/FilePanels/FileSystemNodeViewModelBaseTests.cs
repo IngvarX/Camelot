@@ -20,7 +20,7 @@ using Moq.AutoMock;
 using ReactiveUI;
 using Xunit;
 
-namespace Camelot.ViewModels.Tests
+namespace Camelot.ViewModels.Tests.FilePanels
 {
     public class FileSystemNodeViewModelBaseTests
     {

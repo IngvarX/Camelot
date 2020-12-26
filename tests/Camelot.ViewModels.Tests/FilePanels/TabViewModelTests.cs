@@ -4,7 +4,7 @@ using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Moq;
 using Xunit;
 
-namespace Camelot.ViewModels.Tests
+namespace Camelot.ViewModels.Tests.FilePanels
 {
     public class TabViewModelTests
     {

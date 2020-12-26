@@ -4,7 +4,7 @@ using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Comparers;
 using Moq.AutoMock;
 using Xunit;
 
-namespace Camelot.ViewModels.Tests
+namespace Camelot.ViewModels.Tests.FilePanels
 {
     public class FileSystemNodesComparerTests
     {

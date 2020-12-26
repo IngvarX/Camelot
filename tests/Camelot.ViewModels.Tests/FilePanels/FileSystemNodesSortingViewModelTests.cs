@@ -2,7 +2,7 @@ using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
 using Xunit;
 
-namespace Camelot.ViewModels.Tests
+namespace Camelot.ViewModels.Tests.FilePanels
 {
     public class FileSystemNodesSortingViewModelTests
     {
