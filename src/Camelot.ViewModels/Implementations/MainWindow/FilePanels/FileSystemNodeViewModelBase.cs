@@ -123,12 +123,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         private async Task OpenWithAsync()
         {
-            var fileExtension = _pathService.GetExtension(FullName);
-            var selectedApplication = _openWithApplicationService.GetSelectedApplication(fileExtension);
-
-            var parameter = new OpenWithNavigationParameter(fileExtension, selectedApplication);
-            var dialogResult = await _dialogService.ShowDialogAsync<OpenWithDialogResult, OpenWithNavigationParameter>(
-                nameof(OpenWithDialogViewModel), parameter);
+            var dialogResult = await ShowOpenWithDialogAsync();
             if (dialogResult is null)
             {
                 return;
@@ -217,6 +212,16 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
             return await _dialogService.ShowDialogAsync<CreateArchiveDialogResult, CreateArchiveNavigationParameter>(
                 nameof(CreateArchiveDialogViewModel), parameter);
+        }
+
+        private async Task<OpenWithDialogResult> ShowOpenWithDialogAsync()
+        {
+            var fileExtension = _pathService.GetExtension(FullName);
+            var selectedApplication = _openWithApplicationService.GetSelectedApplication(fileExtension);
+            var parameter = new OpenWithNavigationParameter(fileExtension, selectedApplication);
+
+            return await _dialogService.ShowDialogAsync<OpenWithDialogResult, OpenWithNavigationParameter>(
+                nameof(OpenWithDialogViewModel), parameter);
         }
 
         private async Task<bool> ShowRemoveConfirmationDialogAsync()

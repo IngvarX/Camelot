@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Archive;
 using Camelot.Services.Abstractions.Behaviors;
+using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Operations;
 using Camelot.ViewModels.Implementations.Dialogs;
@@ -24,6 +25,8 @@ namespace Camelot.ViewModels.Tests
     public class FileSystemNodeViewModelBaseTests
     {
         private const string FullPath = "FullPath";
+        private const string Extension = "Extension";
+        private const string FullName = "FullName";
         private const string DestinationDirectory = "DestDir";
 
         private readonly AutoMocker _autoMocker;
@@ -335,6 +338,57 @@ namespace Camelot.ViewModels.Tests
                         It.Is<IReadOnlyList<string>>(f => f.Single() == FullPath),
                         archivePath, archiveType),
                     Times.Exactly(timesCalled));
+        }
+
+        [Theory]
+        [InlineData(false, true, 0, 0)]
+        [InlineData(true, true, 1, 1)]
+        [InlineData(true, false, 1, 0)]
+        public void TestOpenWithCommand(bool returnResult, bool isDefaultApplication,
+            int openWithTimesCalled, int saveSelectedAppCalled)
+        {
+            var app = new ApplicationModel
+            {
+                ExecutePath = "path",
+                Arguments = "args"
+            };
+            var result = returnResult ? new OpenWithDialogResult(Extension, app, isDefaultApplication) : null;
+            _autoMocker
+                .Setup<IDialogService, Task<OpenWithDialogResult>>(m => m.ShowDialogAsync<OpenWithDialogResult, OpenWithNavigationParameter>(
+                    nameof(OpenWithDialogViewModel), It.Is<OpenWithNavigationParameter>(
+                        p => p.FileExtension == Extension && p.Application == app)))
+                .Returns(Task.FromResult(result));
+            _autoMocker
+                .Setup<IPathService, string>(m => m.GetExtension(FullName))
+                .Returns(Extension);
+            _autoMocker
+                .Setup<IOpenWithApplicationService, ApplicationModel>(m => m.GetSelectedApplication(Extension))
+                .Returns(app);
+            _autoMocker
+                .Setup<IFileSystemNodeOpeningBehavior>(m => m.OpenWith(
+                    app.ExecutePath, app.Arguments, FullPath))
+                .Verifiable();
+            _autoMocker
+                .Setup<IOpenWithApplicationService>(m => m.SaveSelectedApplication(
+                    Extension, app))
+                .Verifiable();
+
+            var viewModel = _autoMocker.CreateInstance<NodeViewModel>();
+            viewModel.FullPath = FullPath;
+            viewModel.FullName = FullName;
+
+            Assert.True(viewModel.OpenWithCommand.CanExecute(null));
+
+            viewModel.OpenWithCommand.Execute(null);
+
+            _autoMocker
+                .Verify<IFileSystemNodeOpeningBehavior>(m => m.OpenWith(
+                        app.ExecutePath, app.Arguments, FullPath),
+                    Times.Exactly(openWithTimesCalled));
+            _autoMocker
+                .Verify<IOpenWithApplicationService>(m => m.SaveSelectedApplication(
+                        Extension, app),
+                    Times.Exactly(saveSelectedAppCalled));
         }
 
         private class NodeViewModel : FileSystemNodeViewModelBase
