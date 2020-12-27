@@ -1,7 +1,7 @@
 pkgname=camelot-git
 _gitname="Camelot"
 _outputfolder="Release"
-pkgrel=1
+pkgrel=2
 pkgver=v0.2.0
 url="https://github.com/IngvarX/Camelot"
 pkgdesc="Cross-platform file manager written in C#"
@@ -29,7 +29,7 @@ package() {
   mkdir -p "${pkgdir}/usr/share/"
   cp -r "${srcdir}/${_gitname}/${_outputfolder}/" "${pkgdir}/usr/share/${pkgname}"
   mkdir -p "${pkgdir}/usr/bin/"
-  ln -s "/usr/share/${pkgname}/${_gitname}" "${pkgdir}/usr/bin/${pkgname}"
+  ln -s "/usr/share/${pkgname}/camelot" "${pkgdir}/usr/bin/${pkgname}"
 
   # License
   install -Dm644 "${srcdir}/${_gitname}/LICENSE.md" "${pkgdir}/usr/share/licenses/$pkgname/LICENSE.md"
