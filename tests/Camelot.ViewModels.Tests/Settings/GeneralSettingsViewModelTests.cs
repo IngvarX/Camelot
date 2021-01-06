@@ -8,38 +8,46 @@ namespace Camelot.ViewModels.Tests.Settings
     public class GeneralSettingsViewModelTests
     {
         [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public void TestProperties(bool isChanged)
+        [InlineData(true, true, true)]
+        [InlineData(false, true, true)]
+        [InlineData(true, false, true)]
+        [InlineData(false, false, false)]
+        public void TestProperties(bool isLanguageChanged, bool isThemeChanged, bool isChanged)
         {
-            var settingsViewModelMock = new Mock<ISettingsViewModel>();
-            settingsViewModelMock
+            var languageSettingsViewModelMock = new Mock<ISettingsViewModel>();
+            languageSettingsViewModelMock
                 .SetupGet(m => m.IsChanged)
-                .Returns(isChanged);
-            var viewModel = new GeneralSettingsViewModel(settingsViewModelMock.Object);
+                .Returns(isLanguageChanged);
+            var themeSettingsViewModelMock = new Mock<ISettingsViewModel>();
+            themeSettingsViewModelMock
+                .SetupGet(m => m.IsChanged)
+                .Returns(isThemeChanged);
+            var viewModel = new GeneralSettingsViewModel(languageSettingsViewModelMock.Object,
+                themeSettingsViewModelMock.Object);
 
-            Assert.Equal(settingsViewModelMock.Object, viewModel.LanguageSettingsViewModel);
+            Assert.Equal(languageSettingsViewModelMock.Object, viewModel.LanguageSettingsViewModel);
+            Assert.Equal(themeSettingsViewModelMock.Object, viewModel.ThemeViewModel);
             Assert.Equal(isChanged, viewModel.IsChanged);
         }
 
         [Fact]
         public void TestMethods()
         {
-            var settingsViewModelMock = new Mock<ISettingsViewModel>();
-            settingsViewModelMock
-                .Setup(m => m.Activate())
-                .Verifiable();
-            settingsViewModelMock
-                .Setup(m => m.SaveChanges())
-                .Verifiable();
-            var viewModel = new GeneralSettingsViewModel(settingsViewModelMock.Object);
+            var languageSettingsViewModelMock = new Mock<ISettingsViewModel>();
+            var themeSettingsViewModelMock = new Mock<ISettingsViewModel>();
+            var viewModel = new GeneralSettingsViewModel(themeSettingsViewModelMock.Object,
+                languageSettingsViewModelMock.Object);
 
             viewModel.Activate();
-            settingsViewModelMock
+            languageSettingsViewModelMock
+                .Verify(m => m.Activate(), Times.Once);
+            themeSettingsViewModelMock
                 .Verify(m => m.Activate(), Times.Once);
 
             viewModel.SaveChanges();
-            settingsViewModelMock
+            languageSettingsViewModelMock
+                .Verify(m => m.SaveChanges(), Times.Once);
+            themeSettingsViewModelMock
                 .Verify(m => m.SaveChanges(), Times.Once);
         }
     }
