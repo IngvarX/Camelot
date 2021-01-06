@@ -1,12 +1,15 @@
-using Avalonia;
+using System;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Camelot.DependencyInjection;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Styles.Themes;
+using Camelot.ViewModels.Configuration;
 using Camelot.ViewModels.Implementations;
 using Camelot.Views;
 using Splat;
+using Application = Avalonia.Application;
 
 namespace Camelot
 {
@@ -34,8 +37,23 @@ namespace Camelot
 
         private void LoadTheme()
         {
-            // TODO: load themes on start from db
-            Styles.Add(new LightTheme());
+            var themeService = GetRequiredService<IThemeService>();
+            var themesConfig = GetRequiredService<ThemesConfiguration>();
+
+            var themeSettings = themeService.GetThemeSettings();
+            var selectedTheme = themeSettings?.SelectedTheme ?? themesConfig.DefaultTheme;
+
+            switch (selectedTheme)
+            {
+                case Theme.Dark:
+                    Styles.Add(new DarkTheme());
+                    break;
+                case Theme.Light:
+                    Styles.Add(new LightTheme());
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(selectedTheme), selectedTheme, null);
+            }
         }
 
         private static void LoadLanguage()

@@ -468,4 +468,7 @@
   <data name="EnterNewNameWithColon" xml:space="preserve">
     <value>Enter new name:</value>
   </data>
+  <data name="ThemeWithColon" xml:space="preserve">
+    <value>Theme:</value>
+  </data>
 </root>

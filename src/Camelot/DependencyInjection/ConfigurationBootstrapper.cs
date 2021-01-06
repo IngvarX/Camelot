@@ -35,6 +35,7 @@ namespace Camelot.DependencyInjection
             RegisterOperationsStatesConfiguration(services, configuration);
             RegisterOpenWithDialogConfiguration(services, configuration);
             RegisterUtiToExtensionsMappingConfiguration(services, configuration);
+            RegisterThemesConfiguration(services, configuration);
         }
 
         private static IConfiguration BuildConfiguration() =>
@@ -182,6 +183,14 @@ namespace Camelot.DependencyInjection
         {
             var config = new UtiToExtensionsMappingConfiguration();
             configuration.GetSection("UtiToExtensionsMapping").Bind(config);
+            services.RegisterConstant(config);
+        }
+        
+        private static void RegisterThemesConfiguration(IMutableDependencyResolver services,
+            IConfiguration configuration)
+        {
+            var config = new ThemesConfiguration();
+            configuration.GetSection("Themes").Bind(config);
             services.RegisterConstant(config);
         }
     }

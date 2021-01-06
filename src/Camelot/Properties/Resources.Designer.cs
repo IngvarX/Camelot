@@ -746,5 +746,11 @@ namespace Camelot.Properties {
                 return ResourceManager.GetString("EnterNewNameWithColon", resourceCulture);
             }
         }
+        
+        public static string ThemeWithColon {
+            get {
+                return ResourceManager.GetString("ThemeWithColon", resourceCulture);
+            }
+        }
     }
 }

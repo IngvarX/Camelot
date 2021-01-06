@@ -39,41 +39,23 @@ namespace Camelot.DependencyInjection
     {
         public static void RegisterViewModels(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
+            RegisterFactories(services, resolver);
             RegisterCommonViewModels(services, resolver);
             RegisterPlatformSpecificViewModels(services, resolver);
         }
 
-        private static void RegisterCommonViewModels(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
+        private static void RegisterFactories(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
-            services.RegisterLazySingleton<IFilesOperationsMediator>(() => new FilesOperationsMediator(
-                resolver.GetRequiredService<IDirectoryService>()
-            ));
             services.RegisterLazySingleton<IFileSystemNodeViewModelComparerFactory>(() => new FileSystemNodeViewModelComparerFactory());
-            services.Register(() => new TerminalSettingsViewModel(
-                resolver.GetRequiredService<ITerminalService>()
-            ));
-            services.Register(() => new GeneralSettingsViewModel(
-                resolver.GetRequiredService<LanguageSettingsViewModel>()
-            ));
-            services.Register(() => new LanguageSettingsViewModel(
-                resolver.GetRequiredService<ILocalizationService>(),
-                resolver.GetRequiredService<ILanguageManager>()
-            ));
-            services.Register(() => new SettingsDialogViewModel(
-                resolver.GetRequiredService<GeneralSettingsViewModel>(),
-                resolver.GetRequiredService<TerminalSettingsViewModel>()
-            ));
             services.RegisterLazySingleton<ITabViewModelFactory>(() => new TabViewModelFactory(
                 resolver.GetRequiredService<IPathService>()
             ));
+            services.RegisterLazySingleton<IThemeViewModelFactory>(() => new ThemeViewModelFactory(
+                resolver.GetRequiredService<IResourceProvider>(),
+                resolver.GetRequiredService<ThemesConfiguration>()
+            ));
             services.Register<IArchiveTypeViewModelFactory>(() => new ArchiveTypeViewModelFactory(
                 resolver.GetRequiredService<ArchiveTypeViewModelFactoryConfiguration>()
-            ));
-            services.RegisterLazySingleton(() => new FilePropertiesBehavior(
-                resolver.GetRequiredService<IDialogService>()
-            ));
-            services.RegisterLazySingleton(() => new DirectoryPropertiesBehavior(
-                resolver.GetRequiredService<IDialogService>()
             ));
             services.RegisterLazySingleton<IFileSystemNodeViewModelFactory>(() => new FileSystemNodeViewModelFactory(
                 resolver.GetRequiredService<FileOpeningBehavior>(),
@@ -93,6 +75,57 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<ISystemDialogService>(),
                 resolver.GetRequiredService<IOpenWithApplicationService>()
             ));
+            services.RegisterLazySingleton<IBitmapFactory>(() => new BitmapFactory());
+            services.Register(() => new MainNodeInfoTabViewModel(
+                resolver.GetRequiredService<IFileSizeFormatter>(),
+                resolver.GetRequiredService<IPathService>(),
+                resolver.GetRequiredService<IBitmapFactory>(),
+                resolver.GetRequiredService<ImagePreviewConfiguration>()
+            ));
+            services.RegisterLazySingleton<IDriveViewModelFactory>(() => new DriveViewModelFactory(
+                resolver.GetRequiredService<IFileSizeFormatter>(),
+                resolver.GetRequiredService<IPathService>(),
+                resolver.GetRequiredService<IFilesOperationsMediator>(),
+                resolver.GetRequiredService<IUnmountedDriveService>()
+            ));
+            services.RegisterLazySingleton<IFavouriteDirectoryViewModelFactory>(() => new FavouriteDirectoryViewModelFactory(
+                resolver.GetRequiredService<IFilesOperationsMediator>(),
+                resolver.GetRequiredService<IDirectoryService>()
+            ));
+            services.RegisterLazySingleton<IFavouriteDirectoriesListViewModel>(() => new FavouriteDirectoriesListViewModel(
+                resolver.GetRequiredService<IFavouriteDirectoryViewModelFactory>(),
+                resolver.GetRequiredService<IHomeDirectoryProvider>()
+            ));
+        }
+
+        private static void RegisterCommonViewModels(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
+        {
+            services.RegisterLazySingleton<IFilesOperationsMediator>(() => new FilesOperationsMediator(
+                resolver.GetRequiredService<IDirectoryService>()
+            ));
+            services.Register(() => new TerminalSettingsViewModel(
+                resolver.GetRequiredService<ITerminalService>()
+            ));
+            services.Register(() => new GeneralSettingsViewModel(
+                resolver.GetRequiredService<LanguageSettingsViewModel>()
+            ));
+            services.Register(() => new LanguageSettingsViewModel(
+                resolver.GetRequiredService<ILocalizationService>(),
+                resolver.GetRequiredService<ILanguageManager>()
+            ));
+            services.Register(() => new ThemeSettingsViewModel(
+                resolver.GetRequiredService<IThemeService>()
+            ));
+            services.Register(() => new SettingsDialogViewModel(
+                resolver.GetRequiredService<GeneralSettingsViewModel>(),
+                resolver.GetRequiredService<TerminalSettingsViewModel>()
+            ));
+            services.RegisterLazySingleton(() => new FilePropertiesBehavior(
+                resolver.GetRequiredService<IDialogService>()
+            ));
+            services.RegisterLazySingleton(() => new DirectoryPropertiesBehavior(
+                resolver.GetRequiredService<IDialogService>()
+            ));
             services.Register(() => new AboutDialogViewModel(
                 resolver.GetRequiredService<IApplicationVersionProvider>(),
                 resolver.GetRequiredService<IResourceOpeningService>(),
@@ -104,13 +137,6 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IArchiveTypeViewModelFactory>(),
                 resolver.GetRequiredService<ISystemDialogService>(),
                 resolver.GetRequiredService<ICreateArchiveStateService>()
-            ));
-            services.RegisterLazySingleton<IBitmapFactory>(() => new BitmapFactory());
-            services.Register(() => new MainNodeInfoTabViewModel(
-                resolver.GetRequiredService<IFileSizeFormatter>(),
-                resolver.GetRequiredService<IPathService>(),
-                resolver.GetRequiredService<IBitmapFactory>(),
-                resolver.GetRequiredService<ImagePreviewConfiguration>()
             ));
             services.Register(() => new DirectoryInformationDialogViewModel(
                 resolver.GetRequiredService<IDirectoryService>(),
@@ -152,9 +178,6 @@ namespace Camelot.DependencyInjection
             services.Register(() => new RemoveNodesConfirmationDialogViewModel(
                 resolver.GetRequiredService<IPathService>()
             ));
-            services.RegisterLazySingleton<IOperationStateViewModelFactory>(() => new OperationStateViewModelFactory(
-                resolver.GetRequiredService<IPathService>()
-            ));
             services.Register<IOperationsViewModel>(() => new OperationsViewModel(
                 resolver.GetRequiredService<IFilesOperationsMediator>(),
                 resolver.GetRequiredService<IOperationsService>(),
@@ -177,12 +200,6 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IApplicationDispatcher>(),
                 resolver.GetRequiredService<SearchViewModelConfiguration>()
             ));
-            services.RegisterLazySingleton<IDriveViewModelFactory>(() => new DriveViewModelFactory(
-                resolver.GetRequiredService<IFileSizeFormatter>(),
-                resolver.GetRequiredService<IPathService>(),
-                resolver.GetRequiredService<IFilesOperationsMediator>(),
-                resolver.GetRequiredService<IUnmountedDriveService>()
-            ));
             services.RegisterLazySingleton<IDrivesListViewModel>(() => new DrivesListViewModel(
                 resolver.GetRequiredService<IDriveService>(),
                 resolver.GetRequiredService<IDriveViewModelFactory>(),
@@ -198,13 +215,8 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<INodesSelectionService>(),
                 resolver.GetRequiredService<ISystemDialogService>()
             ));
-            services.RegisterLazySingleton<IFavouriteDirectoryViewModelFactory>(() => new FavouriteDirectoryViewModelFactory(
-                resolver.GetRequiredService<IFilesOperationsMediator>(),
-                resolver.GetRequiredService<IDirectoryService>()
-            ));
-            services.RegisterLazySingleton<IFavouriteDirectoriesListViewModel>(() => new FavouriteDirectoriesListViewModel(
-                resolver.GetRequiredService<IFavouriteDirectoryViewModelFactory>(),
-                resolver.GetRequiredService<IHomeDirectoryProvider>()
+            services.RegisterLazySingleton<IOperationStateViewModelFactory>(() => new OperationStateViewModelFactory(
+                resolver.GetRequiredService<IPathService>()
             ));
             services.RegisterLazySingleton(() => new MainWindowViewModel(
                 resolver.GetRequiredService<IFilesOperationsMediator>(),
@@ -251,12 +263,11 @@ namespace Camelot.DependencyInjection
             return filesPanelViewModel;
         }
 
-               private static void RegisterPlatformSpecificViewModels(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
+        private static void RegisterPlatformSpecificViewModels(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
             var platformService = resolver.GetRequiredService<IPlatformService>();
             var platform = platformService.GetPlatform();
-
-            if (platform == Platform.MacOs)
+            if (platform is Platform.MacOs)
             {
                 RegisterMacViewModels(services, resolver);
             }

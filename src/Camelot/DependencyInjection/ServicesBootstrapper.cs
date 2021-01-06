@@ -110,6 +110,9 @@ namespace Camelot.DependencyInjection
             services.RegisterLazySingleton<ILocalizationService>(() => new LocalizationService(
                 resolver.GetRequiredService<IUnitOfWorkFactory>()
             ));
+            services.RegisterLazySingleton<IThemeService>(() => new ThemeService(
+                resolver.GetRequiredService<IUnitOfWorkFactory>()
+            ));
             services.RegisterLazySingleton<IFileSizeFormatter>(() => new FileSizeFormatter());
             services.RegisterLazySingleton<IPathService>(() => new PathService(
                 resolver.GetRequiredService<IEnvironmentPathService>()
