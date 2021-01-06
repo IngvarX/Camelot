@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.ViewModels.Configuration;
 using Camelot.ViewModels.Factories.Interfaces;
@@ -9,19 +11,26 @@ namespace Camelot.ViewModels.Factories.Implementations
     public class ThemeViewModelFactory : IThemeViewModelFactory
     {
         private readonly IResourceProvider _resourceProvider;
-        private readonly ThemesConfiguration _themesConfiguration;
+        private readonly ThemesNamesConfiguration _themesNamesConfiguration;
 
         public ThemeViewModelFactory(
             IResourceProvider resourceProvider,
-            ThemesConfiguration themesConfiguration)
+            ThemesNamesConfiguration themesNamesConfiguration)
         {
             _resourceProvider = resourceProvider;
-            _themesConfiguration = themesConfiguration;
+            _themesNamesConfiguration = themesNamesConfiguration;
         }
 
-        public ThemeViewModel Create(Theme theme)
+        public IReadOnlyList<ThemeViewModel> CreateAll() =>
+            _themesNamesConfiguration
+                .ThemeToResourceMapping
+                .Keys
+                .Select(Create)
+                .ToArray();
+
+        private ThemeViewModel Create(Theme theme)
         {
-            var themeResourceName = _themesConfiguration.ThemeToResourceMapping[theme];
+            var themeResourceName = _themesNamesConfiguration.ThemeToResourceMapping[theme];
             var themeTranslatedName = _resourceProvider.GetResourceByName(themeResourceName);
 
             return new ThemeViewModel(theme, themeTranslatedName);

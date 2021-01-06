@@ -4,6 +4,7 @@ using Avalonia.Markup.Xaml;
 using Camelot.DependencyInjection;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models.Enums;
+using Camelot.Services.Configuration;
 using Camelot.Styles.Themes;
 using Camelot.ViewModels.Configuration;
 using Camelot.ViewModels.Implementations;
@@ -38,10 +39,7 @@ namespace Camelot
         private void LoadTheme()
         {
             var themeService = GetRequiredService<IThemeService>();
-            var themesConfig = GetRequiredService<ThemesConfiguration>();
-
-            var themeSettings = themeService.GetThemeSettings();
-            var selectedTheme = themeSettings?.SelectedTheme ?? themesConfig.DefaultTheme;
+            var selectedTheme = themeService.GetCurrentTheme();
 
             switch (selectedTheme)
             {

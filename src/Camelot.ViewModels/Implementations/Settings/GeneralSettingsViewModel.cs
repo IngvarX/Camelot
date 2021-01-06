@@ -1,26 +1,35 @@
-﻿using Camelot.ViewModels.Interfaces.Settings;
+﻿using System.Linq;
+using Camelot.Extensions;
+using Camelot.ViewModels.Interfaces.Settings;
 
 namespace Camelot.ViewModels.Implementations.Settings
 {
     public class GeneralSettingsViewModel : ViewModelBase, ISettingsViewModel
     {
+        private readonly ISettingsViewModel[] _settingsViewModels;
+
         public ISettingsViewModel LanguageSettingsViewModel { get; }
 
-        public bool IsChanged => LanguageSettingsViewModel.IsChanged;
+        public ISettingsViewModel ThemeViewModel { get; }
 
-        public GeneralSettingsViewModel(ISettingsViewModel languageSettingsViewModel)
+        public bool IsChanged => _settingsViewModels.Any(vm => vm.IsChanged);
+
+        public GeneralSettingsViewModel(
+            ISettingsViewModel languageSettingsViewModel,
+            ISettingsViewModel themeViewModel)
         {
             LanguageSettingsViewModel = languageSettingsViewModel;
+            ThemeViewModel = themeViewModel;
+
+            _settingsViewModels = new[]
+            {
+                languageSettingsViewModel,
+                themeViewModel
+            };
         }
 
-        public void Activate()
-        {
-            LanguageSettingsViewModel.Activate();
-        }
+        public void Activate() => _settingsViewModels.ForEach(vm => vm.Activate());
 
-        public void SaveChanges()
-        {
-            LanguageSettingsViewModel.SaveChanges();
-        }
+        public void SaveChanges() => _settingsViewModels.ForEach(vm => vm.SaveChanges());
     }
 }

@@ -5,6 +5,7 @@ using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Archive;
 using Camelot.Services.Abstractions.Operations;
 using Camelot.Services.Behaviors;
+using Camelot.Services.Configuration;
 using Camelot.Services.Environment.Enums;
 using Camelot.Services.Environment.Interfaces;
 using Camelot.Services.Mac;
@@ -52,7 +53,7 @@ namespace Camelot.DependencyInjection
             ));
             services.RegisterLazySingleton<IThemeViewModelFactory>(() => new ThemeViewModelFactory(
                 resolver.GetRequiredService<IResourceProvider>(),
-                resolver.GetRequiredService<ThemesConfiguration>()
+                resolver.GetRequiredService<ThemesNamesConfiguration>()
             ));
             services.Register<IArchiveTypeViewModelFactory>(() => new ArchiveTypeViewModelFactory(
                 resolver.GetRequiredService<ArchiveTypeViewModelFactoryConfiguration>()
@@ -107,14 +108,16 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<ITerminalService>()
             ));
             services.Register(() => new GeneralSettingsViewModel(
-                resolver.GetRequiredService<LanguageSettingsViewModel>()
+                resolver.GetRequiredService<LanguageSettingsViewModel>(),
+                resolver.GetRequiredService<ThemeSettingsViewModel>()
             ));
             services.Register(() => new LanguageSettingsViewModel(
                 resolver.GetRequiredService<ILocalizationService>(),
                 resolver.GetRequiredService<ILanguageManager>()
             ));
             services.Register(() => new ThemeSettingsViewModel(
-                resolver.GetRequiredService<IThemeService>()
+                resolver.GetRequiredService<IThemeService>(),
+                resolver.GetRequiredService<IThemeViewModelFactory>()
             ));
             services.Register(() => new SettingsDialogViewModel(
                 resolver.GetRequiredService<GeneralSettingsViewModel>(),

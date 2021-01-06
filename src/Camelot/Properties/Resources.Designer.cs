@@ -752,5 +752,17 @@ namespace Camelot.Properties {
                 return ResourceManager.GetString("ThemeWithColon", resourceCulture);
             }
         }
+        
+        public static string DarkThemeName {
+            get {
+                return ResourceManager.GetString("DarkThemeName", resourceCulture);
+            }
+        }
+        
+        public static string LightThemeName {
+            get {
+                return ResourceManager.GetString("LightThemeName", resourceCulture);
+            }
+        }
     }
 }

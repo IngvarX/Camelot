@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;

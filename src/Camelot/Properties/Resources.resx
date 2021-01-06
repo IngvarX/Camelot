@@ -471,4 +471,10 @@
   <data name="ThemeWithColon" xml:space="preserve">
     <value>Theme:</value>
   </data>
+  <data name="DarkThemeName" xml:space="preserve">
+    <value>Dark</value>
+  </data>
+  <data name="LightThemeName" xml:space="preserve">
+    <value>Light</value>
+  </data>
 </root>

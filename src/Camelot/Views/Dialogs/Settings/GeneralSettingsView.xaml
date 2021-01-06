@@ -13,5 +13,6 @@
 
     <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*">
         <general:LanguageSettingsView DataContext="{Binding LanguageSettingsViewModel}" />
+        <general:ThemeSettingsView Grid.Row="1" DataContext="{Binding ThemeViewModel}" />
     </Grid>
 </UserControl>

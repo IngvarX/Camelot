@@ -35,7 +35,8 @@ namespace Camelot.DependencyInjection
             RegisterOperationsStatesConfiguration(services, configuration);
             RegisterOpenWithDialogConfiguration(services, configuration);
             RegisterUtiToExtensionsMappingConfiguration(services, configuration);
-            RegisterThemesConfiguration(services, configuration);
+            RegisterDefaultThemeConfiguration(services, configuration);
+            RegisterThemesNamesConfiguration(services, configuration);
         }
 
         private static IConfiguration BuildConfiguration() =>
@@ -185,11 +186,19 @@ namespace Camelot.DependencyInjection
             configuration.GetSection("UtiToExtensionsMapping").Bind(config);
             services.RegisterConstant(config);
         }
-        
-        private static void RegisterThemesConfiguration(IMutableDependencyResolver services,
+
+        private static void RegisterDefaultThemeConfiguration(IMutableDependencyResolver services,
             IConfiguration configuration)
         {
-            var config = new ThemesConfiguration();
+            var config = new DefaultThemeConfiguration();
+            configuration.GetSection("Themes").Bind(config);
+            services.RegisterConstant(config);
+        }
+
+        private static void RegisterThemesNamesConfiguration(IMutableDependencyResolver services,
+            IConfiguration configuration)
+        {
+            var config = new ThemesNamesConfiguration();
             configuration.GetSection("Themes").Bind(config);
             services.RegisterConstant(config);
         }

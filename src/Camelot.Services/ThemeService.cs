@@ -4,6 +4,7 @@ using Camelot.DataAccess.UnitOfWork;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Models.Enums;
+using Camelot.Services.Configuration;
 
 namespace Camelot.Services
 {
@@ -12,10 +13,14 @@ namespace Camelot.Services
         private const string ThemeSettingsId = "ThemeSettings";
 
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly DefaultThemeConfiguration _defaultThemeConfiguration;
 
-        public ThemeService(IUnitOfWorkFactory unitOfWorkFactory)
+        public ThemeService(
+            IUnitOfWorkFactory unitOfWorkFactory,
+            DefaultThemeConfiguration defaultThemeConfiguration)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
+            _defaultThemeConfiguration = defaultThemeConfiguration;
         }
 
         public ThemeSettingsModel GetThemeSettings()
@@ -40,6 +45,13 @@ namespace Camelot.Services
             var themeSettings = CreateFrom(themeSettingsModel);
 
             repository.Upsert(ThemeSettingsId, themeSettings);
+        }
+
+        public Theme GetCurrentTheme()
+        {
+            var themeSettings = GetThemeSettings();
+
+            return themeSettings?.SelectedTheme ?? _defaultThemeConfiguration.DefaultTheme;
         }
 
         private static ThemeSettingsModel CreateFrom(ThemeSettings dbModel) =>

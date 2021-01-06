@@ -111,7 +111,8 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IUnitOfWorkFactory>()
             ));
             services.RegisterLazySingleton<IThemeService>(() => new ThemeService(
-                resolver.GetRequiredService<IUnitOfWorkFactory>()
+                resolver.GetRequiredService<IUnitOfWorkFactory>(),
+                resolver.GetRequiredService<DefaultThemeConfiguration>()
             ));
             services.RegisterLazySingleton<IFileSizeFormatter>(() => new FileSizeFormatter());
             services.RegisterLazySingleton<IPathService>(() => new PathService(
