@@ -11,7 +11,7 @@
         <settings:ThemeSettingsViewModel />
     </Design.DataContext>
 
-    <Grid ColumnDefinitions="Auto,*" Margin="10">
+    <Grid ColumnDefinitions="150,*" Margin="10">
         <TextBlock Classes="settingsTabTextBlock" Margin="5,8,10,0" Text="{x:Static p:Resources.ThemeWithColon}" />
         <ComboBox Grid.Column="1" Items="{Binding Themes}" Margin="0,4,0,0" Width="200"
                   SelectedItem="{Binding CurrentTheme, Mode=TwoWay}">

@@ -57,10 +57,10 @@ namespace Camelot
         private static void LoadLanguage()
         {
             var localizationService = GetRequiredService<ILocalizationService>();
-            var languageManager = GetRequiredService<ILanguageManager>();
-
             if (localizationService.GetSavedLanguage() is { } savedLanguage)
             {
+                var languageManager = GetRequiredService<ILanguageManager>();
+
                 languageManager.SetLanguage(savedLanguage.Code);
             }
         }

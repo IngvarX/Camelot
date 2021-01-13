@@ -27,14 +27,7 @@
         <implementations:MainWindowViewModel />
     </Design.DataContext>
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-
+    <Grid RowDefinitions="Auto,Auto,*,Auto">
         <Grid Classes="topPanelGrid" ColumnDefinitions="Auto,Auto,*,Auto">
             <main:MenuView DataContext="{Binding MenuViewModel}" />
             <operationsStates:OperationsStatesListView Grid.Column="1" DataContext="{Binding OperationsStateViewModel}" />
@@ -46,12 +39,7 @@
             <favouriteDirectories:FavouriteDirectoriesListView Grid.Column="1" DataContext="{Binding FavouriteDirectoriesListViewModel}" />
         </Grid>
 
-        <Grid Grid.Row="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-
+        <Grid Grid.Row="2" ColumnDefinitions="*,*">
             <main:FilesPanelView DataContext="{Binding LeftFilesPanelViewModel}" />
             <main:FilesPanelView Grid.Column="1" DataContext="{Binding RightFilesPanelViewModel}" />
         </Grid>

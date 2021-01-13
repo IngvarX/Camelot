@@ -73,6 +73,7 @@
         <SolidColorBrush x:Key="OperationErrorBrush" Color="{DynamicResource OperationErrorColor}" />
         <SolidColorBrush x:Key="DialogOverlayBrush" Color="{DynamicResource BlackColor}" />
         <SolidColorBrush x:Key="ProgressBarForegroundBrush" Color="{DynamicResource SuccessBackgroundColor}" />
+        <SolidColorBrush x:Key="OperationButtonForegroundBrush" Color="{DynamicResource WhiteColor}" />
         <SolidColorBrush x:Key="ProgressBarBackgroundBrush" Color="{DynamicResource WhiteColor}"
                          Opacity="0.1" />
         <SolidColorBrush x:Key="DialogButtonPressedBrush" Color="{DynamicResource DarkOrangeColor}" />

@@ -13,7 +13,7 @@
         <dialogs:OverwriteOptionsDialogViewModel />
     </Design.DataContext>
 
-    <Border Padding="20" Classes="defaultBackgroundBorder">
+    <Border Padding="20">
         <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,*">
             <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2">
                 <DrawingPresenter Width="25" Height="25">

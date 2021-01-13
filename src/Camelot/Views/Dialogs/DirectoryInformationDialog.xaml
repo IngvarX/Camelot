@@ -14,7 +14,7 @@
         <properties:DirectoryInformationDialogViewModel />
     </Design.DataContext>
 
-    <Border Padding="20" Classes="defaultBackgroundBorder">
+    <Border Padding="20">
         <TabControl Classes="propertiesDialogTabControl">
             <TabItem Header="{x:Static p:Resources.General}">
                 <controls:MainNodeInfoTabView DataContext="{Binding MainNodeInfoTabViewModel}" />

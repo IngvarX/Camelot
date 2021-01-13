@@ -14,7 +14,7 @@
         <dialogs:SettingsDialogViewModel />
     </Design.DataContext>
 
-    <Border Padding="10" Classes="defaultBackgroundBorder">
+    <Border Padding="10">
         <Grid RowDefinitions="*,Auto">
             <TabControl TabStripPlacement="Left" SelectedIndex="{Binding SelectedIndex}">
                 <TabItem VerticalContentAlignment="Center">
