@@ -12,6 +12,7 @@
         <Setter Property="Margin" Value="20,10" />
         <Setter Property="Padding" Value="15,10" />
         <Setter Property="Background" Value="{DynamicResource HighlightBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource DialogButtonForegroundBrush}" />
     </Style>
 
     <Style Selector="Button.dialogButton /template/ ContentPresenter">
@@ -143,6 +144,7 @@
         <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="BorderBrush" Value="{DynamicResource TransparentButtonBorderBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundBrush}" />
     </Style>
 
     <Style Selector="Button.iconDialogButton">

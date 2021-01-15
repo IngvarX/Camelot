@@ -63,7 +63,10 @@
         <SolidColorBrush x:Key="OperationButtonPressedBackgroundColorBrush" Color="{DynamicResource OperationButtonPressedBackgroundColor}" />
         <SolidColorBrush x:Key="MainWindowForegroundBrush" Color="{DynamicResource BlackColor}"
                          Opacity="0.8" />
-        <SolidColorBrush x:Key="InactiveTabForegroundBrush" Color="{DynamicResource InactiveTabBackgroundColor}" />
+        <SolidColorBrush x:Key="InactiveTabForegroundBrush" Color="{DynamicResource BlackColor}"
+                         Opacity="0.7" />
+        <SolidColorBrush x:Key="OperationButtonHotkeyBrush" Color="{DynamicResource WhiteColor}"
+                         Opacity="0.6" />
         <SolidColorBrush x:Key="TopPanelGridBackgroundBrush" Color="{DynamicResource MenuBackgroundColor}" />
         <SolidColorBrush x:Key="SuccessBrush" Color="{DynamicResource SuccessColor}" />
         <SolidColorBrush x:Key="SuccessBackgroundBrush" Color="{DynamicResource SuccessBackgroundColor}" />
@@ -76,6 +79,8 @@
         <SolidColorBrush x:Key="OperationButtonForegroundBrush" Color="{DynamicResource WhiteColor}" />
         <SolidColorBrush x:Key="ProgressBarBackgroundBrush" Color="{DynamicResource BlackColor}"
                          Opacity="0.1" />
+        <SolidColorBrush x:Key="DialogButtonForegroundBrush" Color="{DynamicResource WhiteColor}"
+                         Opacity="0.8" />
         <SolidColorBrush x:Key="IconDialogButtonForegroundBrush" Color="{DynamicResource WhiteColor}"
                          Opacity="0.9" />
         <SolidColorBrush x:Key="DialogButtonPressedBrush" Color="{DynamicResource DarkOrangeColor}" />

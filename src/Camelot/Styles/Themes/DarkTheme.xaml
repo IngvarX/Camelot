@@ -57,10 +57,14 @@
         <SolidColorBrush x:Key="AlternativeThemeBackgroundBrush" Color="{DynamicResource AlternativeMainBackgroundColor}" />
         <SolidColorBrush x:Key="AlternativeThemeForegroundBrush" Color="{DynamicResource WhiteColor}"
                          Opacity="0.7" />
+        <SolidColorBrush x:Key="OperationButtonHotkeyBrush" Color="{DynamicResource WhiteColor}"
+                         Opacity="0.8" />
         <SolidColorBrush x:Key="OperationButtonBackgroundColorBrush" Color="{DynamicResource OperationButtonBackgroundColor}" />
         <SolidColorBrush x:Key="OperationButtonHoverBackgroundColorBrush" Color="{DynamicResource OperationButtonHoverBackgroundColor}" />
         <SolidColorBrush x:Key="OperationButtonPressedBackgroundColorBrush" Color="{DynamicResource OperationButtonPressedBackgroundColor}" />
         <SolidColorBrush x:Key="MainWindowForegroundBrush" Color="{DynamicResource WhiteColor}" />
+        <SolidColorBrush x:Key="DialogButtonForegroundBrush" Color="{DynamicResource WhiteColor}"
+                         Opacity="0.8" />
         <SolidColorBrush x:Key="InactiveTabBackgroundBrush" Color="{DynamicResource BlackColor}"
                          Opacity="0.2" />
         <SolidColorBrush x:Key="InactiveTabForegroundBrush" Color="{DynamicResource WhiteColor}"
