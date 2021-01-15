@@ -176,16 +176,12 @@
     </Style>
 
     <Style Selector="Grid.inactiveTabGrid">
-        <Setter Property="Background" Value="{DynamicResource ThemeControlLowBrush}" />
+        <Setter Property="Background" Value="{DynamicResource InactiveTabBackgroundBrush}" />
     </Style>
 
     <Style Selector="TextBlock.inactiveTabNameTextBlock">
         <Setter Property="Foreground" Value="{DynamicResource InactiveTabForegroundBrush}" />
     </Style>
-    <!-- -->
-    <!-- <Style Selector="DockPanel#MenuDockPanel"> -->
-    <!--     <Setter Property="Background" Value="{DynamicResource MenuBackgroundColorBrush}" /> -->
-    <!-- </Style> -->
 
     <Style Selector="Menu.smallContextMenu TextBlock">
         <Setter Property="FontSize" Value="14" />
