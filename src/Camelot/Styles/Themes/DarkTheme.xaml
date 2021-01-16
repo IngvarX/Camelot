@@ -73,6 +73,8 @@
         <SolidColorBrush x:Key="TopPanelGridBackgroundBrush" Color="{DynamicResource MenuBackgroundColor}"
                          Opacity="0.2" />
         <SolidColorBrush x:Key="SuccessBrush" Color="{DynamicResource SuccessColor}" />
+        <SolidColorBrush x:Key="SearchIconForegroundBrush" Color="{DynamicResource WhiteColor}"
+                         Opacity="0.7" />
         <SolidColorBrush x:Key="SuccessBackgroundBrush" Color="{DynamicResource SuccessBackgroundColor}" />
         <SolidColorBrush x:Key="SuccessHoverBackgroundBrush" Color="{DynamicResource SuccessHoverBackgroundColor}" />
         <SolidColorBrush x:Key="SuccessPressedBackgroundBrush" Color="{DynamicResource SuccessPressedBackgroundColor}" />

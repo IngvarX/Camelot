@@ -39,7 +39,8 @@
 
 			<ListBox Grid.Row="2" Grid.ColumnSpan="2" Margin="0,10,0,0" MaxHeight="120"
 					 IsVisible="{Binding RecommendedApplications.Count}"
-					 SelectedItem="{Binding SelectedApplication, Mode=TwoWay}" Items="{Binding RecommendedApplications}">
+					 SelectedItem="{Binding SelectedApplication, Mode=TwoWay}"
+					 Items="{Binding RecommendedApplications}">
 				<ListBox.ItemTemplate>
 					<DataTemplate>
 						<openWith:ApplicationView />
