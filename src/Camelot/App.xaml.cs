@@ -4,9 +4,7 @@ using Avalonia.Markup.Xaml;
 using Camelot.DependencyInjection;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models.Enums;
-using Camelot.Services.Configuration;
 using Camelot.Styles.Themes;
-using Camelot.ViewModels.Configuration;
 using Camelot.ViewModels.Implementations;
 using Camelot.Views;
 using Splat;
@@ -19,8 +17,8 @@ namespace Camelot
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
-            LoadTheme();
-            LoadLanguage();
+
+            LoadSettings();
         }
 
         public override void OnFrameworkInitializationCompleted()
@@ -34,6 +32,12 @@ namespace Camelot
             }
 
             base.OnFrameworkInitializationCompleted();
+        }
+
+        private void LoadSettings()
+        {
+            LoadTheme();
+            LoadLanguage();
         }
 
         private void LoadTheme()
