@@ -38,7 +38,7 @@
 
     <Style Selector="Border.tabBorder">
         <Setter Property="CornerRadius" Value="4,4,0,0" />
-        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderThickness" Value="1,1,1,0" />
         <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderLowBrush}" />
     </Style>
 
@@ -167,6 +167,10 @@
 
     <Style Selector="Rectangle.tabRectangleActive">
         <Setter Property="Fill" Value="{DynamicResource ThemeAccentBrush}" />
+    </Style>
+
+    <Style Selector="Rectangle.tabRectangleInactive">
+        <Setter Property="Fill" Value="{DynamicResource ThemeBorderLowBrush}" />
     </Style>
 
     <Style Selector="Border.selectionBorder">

@@ -13,30 +13,35 @@
 
     <StackPanel Orientation="Vertical">
         <Border Classes="tabBorder">
-            <Button Classes="tabButton" Command="{Binding ActivateCommand}">
-                <Button.Content>
-                    <Grid>
-                        <Grid Classes="activeTabGrid" Height="40" IsVisible="{Binding IsActive}">
-                            <TextBlock Classes="tabNameTextBlock"
-                                       Text="{Binding DirectoryName}" />
+            <Grid>
+                <Button Classes="tabButton" Command="{Binding ActivateCommand}">
+                    <Button.Content>
+                        <Grid>
+                            <Grid Height="40" IsVisible="{Binding IsActive}">
+                                <TextBlock Classes="tabNameTextBlock"
+                                           Text="{Binding DirectoryName}" />
+                            </Grid>
+                            <Grid Classes="inactiveTabGrid" Height="40" IsVisible="{Binding !IsActive}">
+                                <TextBlock Classes="tabNameTextBlock inactiveTabNameTextBlock"
+                                           Text="{Binding DirectoryName}" />
+                            </Grid>
                         </Grid>
-                        <Grid Classes="inactiveTabGrid" Height="40" IsVisible="{Binding !IsActive}">
-                            <TextBlock Classes="tabNameTextBlock inactiveTabNameTextBlock"
-                                       Text="{Binding DirectoryName}" />
-                        </Grid>
-                    </Grid>
-                </Button.Content>
+                    </Button.Content>
 
-                <Button.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="{x:Static p:Resources.NewTab}" Command="{Binding NewTabCommand}" />
-                        <MenuItem Header="{x:Static p:Resources.CloseTab}" Command="{Binding CloseTabCommand}" />
-                        <MenuItem Header="{x:Static p:Resources.CloseTabsToTheLeft}" Command="{Binding CloseTabsToTheLeftCommand}" />
-                        <MenuItem Header="{x:Static p:Resources.CloseTabsToTheRight}" Command="{Binding CloseTabsToTheRightCommand}" />
-                        <MenuItem Header="{x:Static p:Resources.CloseAllButThis}" Command="{Binding CloseAllTabsButThisCommand}" />
-                    </ContextMenu>
-                </Button.ContextMenu>
-            </Button>
+                    <Button.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="{x:Static p:Resources.NewTab}" Command="{Binding NewTabCommand}" />
+                            <MenuItem Header="{x:Static p:Resources.CloseTab}" Command="{Binding CloseTabCommand}" />
+                            <MenuItem Header="{x:Static p:Resources.CloseTabsToTheLeft}" Command="{Binding CloseTabsToTheLeftCommand}" />
+                            <MenuItem Header="{x:Static p:Resources.CloseTabsToTheRight}" Command="{Binding CloseTabsToTheRightCommand}" />
+                            <MenuItem Header="{x:Static p:Resources.CloseAllButThis}" Command="{Binding CloseAllTabsButThisCommand}" />
+                        </ContextMenu>
+                    </Button.ContextMenu>
+                </Button>
+
+                <Rectangle Classes="tabRectangle tabRectangleInactive" Height="1" Margin="0,40,0,0"
+                           IsVisible="{Binding !IsActive}" />
+            </Grid>
         </Border>
 
         <Grid>
