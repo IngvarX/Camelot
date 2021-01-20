@@ -32,7 +32,7 @@
         <SolidColorBrush x:Key="ThemeForegroundBrush" Color="{DynamicResource BlackColor}"
                          Opacity="0.8" />
         <SolidColorBrush x:Key="HighlightBrush" Color="{DynamicResource OrangeColor}" />
-        <SolidColorBrush x:Key="HighlightForegroundBrush" Color="{DynamicResource BlackColor}"
+        <SolidColorBrush x:Key="HighlightForegroundBrush" Color="{DynamicResource WhiteColor}"
                          Opacity="0.9" />
         <SolidColorBrush x:Key="ThemeAccentBrush4" Color="{DynamicResource OrangeColor}" />
         <SolidColorBrush x:Key="ThemeAccentBrush3" Color="{DynamicResource BrightOrangeColor}" />

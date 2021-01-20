@@ -174,6 +174,10 @@
         <Setter Property="Background" Value="{DynamicResource HighlightBrush}" />
     </Style>
 
+    <Style Selector="ListBoxItem:selected TextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource HighlightForegroundBrush}"/>
+    </Style>
+
     <!-- Reused styles -->
 
     <Style Selector="Grid.defaultBackgroundColorGrid">
