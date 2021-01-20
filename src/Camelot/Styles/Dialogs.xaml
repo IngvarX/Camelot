@@ -86,7 +86,7 @@
                 <DataTemplate>
                     <StackPanel Orientation="Vertical">
                         <Border Classes="tabBorder">
-                            <Grid Classes="activeTabGrid" Height="40">
+                            <Grid Height="40">
                                 <TextBlock Classes="tabNameTextBlock"
                                            Text="{Binding Path=Header, RelativeSource={RelativeSource AncestorType=TabItem}}" />
                             </Grid>
