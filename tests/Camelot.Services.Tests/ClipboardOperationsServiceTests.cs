@@ -1,38 +1,43 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Camelot.Avalonia.Interfaces;
 using Camelot.Services.Abstractions.Operations;
 using Camelot.Services.Environment.Interfaces;
 using Moq;
+using Moq.AutoMock;
 using Xunit;
 
 namespace Camelot.Services.Tests
 {
     public class ClipboardOperationsServiceTests
     {
+        private const string Directory = "Dir";
+
+        private readonly AutoMocker _autoMocker;
+
+        public ClipboardOperationsServiceTests()
+        {
+            _autoMocker = new AutoMocker();
+        }
+
         [Theory]
         [InlineData("file.txt", "file://file.txt")]
         [InlineData("file42.txt", "file://file42.txt")]
         public async Task TestCopy(string sourceFilePath, string clipboardString)
         {
-            var clipboardServiceMock = new Mock<IClipboardService>();
-            clipboardServiceMock
-                .Setup(m => m.SetTextAsync(clipboardString))
+            _autoMocker
+                .Setup<IClipboardService>(m => m.SetTextAsync(clipboardString))
                 .Verifiable();
-            var operationsServiceMock = new Mock<IOperationsService>();
-            var environmentServiceMock = new Mock<IEnvironmentService>();
-            environmentServiceMock
-                .SetupGet(m => m.NewLine)
+            _autoMocker
+                .Setup<IEnvironmentService, string>(m => m.NewLine)
                 .Returns(System.Environment.NewLine);
 
-            var clipboardOperationsService = new ClipboardOperationsService(
-                clipboardServiceMock.Object,
-                operationsServiceMock.Object,
-                environmentServiceMock.Object
-            );
+            var clipboardOperationsService = _autoMocker.CreateInstance<ClipboardOperationsService>();
 
             await clipboardOperationsService.CopyFilesAsync(new[] {sourceFilePath});
 
-            clipboardServiceMock.Verify(m => m.SetTextAsync(clipboardString), Times.Once());
+            _autoMocker
+                .Verify<IClipboardService>(m => m.SetTextAsync(clipboardString), Times.Once);
         }
 
         [Theory]
@@ -40,27 +45,41 @@ namespace Camelot.Services.Tests
         [InlineData("file42.txt", "file://file42.txt")]
         public async Task TestPaste(string sourceFilePath, string clipboardString)
         {
-            const string directory = "Dir";
 
-            var clipboardServiceMock = new Mock<IClipboardService>();
-            clipboardServiceMock
-                .Setup(m => m.GetTextAsync())
+            _autoMocker
+                .Setup<IClipboardService, Task<string>>(m => m.GetTextAsync())
                 .ReturnsAsync(clipboardString);
-            var operationsServiceMock = new Mock<IOperationsService>();
-            operationsServiceMock
-                .Setup(m => m.CopyAsync(new[] {sourceFilePath}, directory))
+            _autoMocker
+                .Setup<IOperationsService>(m => m.CopyAsync(new[] {sourceFilePath}, Directory))
                 .Verifiable();
-            var environmentServiceMock = new Mock<IEnvironmentService>();
 
-            var clipboardOperationsService = new ClipboardOperationsService(
-                clipboardServiceMock.Object,
-                operationsServiceMock.Object,
-                environmentServiceMock.Object
-            );
+            var clipboardOperationsService = _autoMocker.CreateInstance<ClipboardOperationsService>();
 
-            await clipboardOperationsService.PasteFilesAsync(directory);
+            await clipboardOperationsService.PasteFilesAsync(Directory);
 
-            operationsServiceMock.Verify(m => m.CopyAsync(new[] {sourceFilePath}, directory), Times.Once());
+            _autoMocker
+                .Verify<IOperationsService>(m => m.CopyAsync(new[] {sourceFilePath}, Directory), Times.Once);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(" \t   \t\n")]
+        [InlineData("test")]
+        public async Task TestPasteInvalidData(string text)
+        {
+            _autoMocker
+                .Setup<IClipboardService, Task<string>>(m => m.GetTextAsync())
+                .ReturnsAsync(text);
+
+            var clipboardOperationsService = _autoMocker.CreateInstance<ClipboardOperationsService>();
+
+            await clipboardOperationsService.PasteFilesAsync(Directory);
+
+            _autoMocker
+                .Verify<IOperationsService>(m => m.CopyAsync(It.IsAny<IReadOnlyList<string>>(), Directory),
+                    Times.Never);
         }
     }
 }

@@ -37,14 +37,21 @@ namespace Camelot.Services
         public async Task PasteFilesAsync(string destinationDirectory)
         {
             var selectedFilesString = await _clipboardService.GetTextAsync();
+            if (string.IsNullOrWhiteSpace(selectedFilesString))
+            {
+                return;
+            }
+
             var startIndex = UrlPrefix.Length;
             var files = selectedFilesString
                 .Split()
                 .Where(t => t.StartsWith(UrlPrefix))
                 .Select(f => f.Substring(startIndex))
                 .ToArray();
-
-            await _operationsService.CopyAsync(files, destinationDirectory);
+            if (files.Any())
+            {
+                await _operationsService.CopyAsync(files, destinationDirectory);
+            }
         }
     }
 }
