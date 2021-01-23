@@ -49,7 +49,7 @@ namespace Camelot.Views.Main
         private void OnDataGridSelectionChanged(object sender, SelectionChangedEventArgs args)
         {
             var addedItems = args
-                .RemovedItems
+                .AddedItems
                 .Cast<IFileSystemNodeViewModel>()
                 .Where(i => !(i is IDirectoryViewModel directoryViewModel && directoryViewModel.IsParentDirectory))
                 .ToArray();
@@ -66,11 +66,10 @@ namespace Camelot.Views.Main
                 return;
             }
 
-            // TODO: fix after avalonia update
             ViewModel.SelectedFileSystemNodes.AddRange(addedItems);
 
             var removedItems = args
-                .AddedItems
+                .RemovedItems
                 .Cast<IFileSystemNodeViewModel>()
                 .ToArray();
             ViewModel.SelectedFileSystemNodes.RemoveMany(removedItems);

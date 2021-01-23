@@ -2,7 +2,6 @@
 using System.Threading;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Logging.Serilog;
 using Avalonia.ReactiveUI;
 using Camelot.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -54,7 +53,7 @@ namespace Camelot
             => AppBuilder
                 .Configure<App>()
                 .UsePlatformDetect()
-                .LogToDebug()
+                .LogToTrace()
                 .UseReactiveUI();
     }
 }
