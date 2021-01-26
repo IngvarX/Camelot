@@ -12,7 +12,7 @@
     </Design.DataContext>
 
     <StackPanel Orientation="Horizontal" Margin="0,0,5,0">
-        <Button Classes="topOperationButton" Margin="0,0,10,0"
+        <Button Classes="topOperationButton"
                 Command="{Binding SearchCommand}">
             <StackPanel Orientation="Horizontal">
                 <Image Width="18" Height="18" Margin="0,1,10,3">
@@ -30,10 +30,10 @@
             </StackPanel>
         </Button>
 
-        <Button Classes="topOperationButton" Margin="10,0,0,0"
+        <Button Classes="topOperationButton"
                 Command="{Binding OpenTerminalCommand}">
             <StackPanel Orientation="Horizontal">
-                <Image Width="20" Height="20" Margin="0,3,10,0">
+                <Image Width="20" Height="20" Margin="0,0,10,0">
                     <Image.Source>
                         <DrawingImage>
                             <DrawingImage.Drawing>
@@ -48,10 +48,10 @@
             </StackPanel>
         </Button>
 
-        <Button Classes="topOperationButton" Margin="20,0,0,0"
+        <Button Classes="topOperationButton"
                 Command="{Binding PackCommand}">
             <StackPanel Orientation="Horizontal">
-                <Image Width="15" Height="15" Margin="0,2,10,0">
+                <Image Width="15" Height="15" Margin="0,3,10,0">
                     <Image.Source>
                         <DrawingImage>
                             <DrawingImage.Drawing>
@@ -66,10 +66,10 @@
             </StackPanel>
         </Button>
 
-        <Button Classes="topOperationButton" Margin="20,5,10,3"
+        <Button Classes="topOperationButton"
                 Command="{Binding ExtractCommand}">
             <StackPanel Orientation="Horizontal">
-                <Image Width="20" Height="20" Margin="0,0,10,2">
+                <Image Width="20" Height="20" Margin="0,0,10,0">
                     <Image.Source>
                         <DrawingImage>
                             <DrawingImage.Drawing>
