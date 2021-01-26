@@ -16,12 +16,16 @@
     <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,Auto"
           Margin="10" HorizontalAlignment="Center">
         <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2">
-            <DrawingPresenter Width="25" Height="25">
-                <DrawingPresenter.Drawing>
-                    <GeometryDrawing Brush="{DynamicResource AlternativeThemeForegroundBrush}"
-                                     Geometry="M509.5 184.6L458.9 32.8C452.4 13.2 434.1 0 413.4 0H272v192h238.7c-.4-2.5-.4-5-1.2-7.4zM240 0H98.6c-20.7 0-39 13.2-45.5 32.8L2.5 184.6c-.8 2.4-.8 4.9-1.2 7.4H240V0zM0 224v240c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V224H0z" />
-                </DrawingPresenter.Drawing>
-            </DrawingPresenter>
+            <Image Width="25" Height="25">
+                <Image.Source>
+                    <DrawingImage>
+                        <DrawingImage.Drawing>
+                            <GeometryDrawing Brush="{DynamicResource AlternativeThemeForegroundBrush}"
+                                             Geometry="M509.5 184.6L458.9 32.8C452.4 13.2 434.1 0 413.4 0H272v192h238.7c-.4-2.5-.4-5-1.2-7.4zM240 0H98.6c-20.7 0-39 13.2-45.5 32.8L2.5 184.6c-.8 2.4-.8 4.9-1.2 7.4H240V0zM0 224v240c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V224H0z" />
+                        </DrawingImage.Drawing>
+                    </DrawingImage>
+                </Image.Source>
+            </Image>
             <TextBlock Classes="boldStyleTextBlock dialogTitleTextBlock" Text="{x:Static p:Resources.CreateArchive}" />
         </StackPanel>
 
@@ -30,12 +34,16 @@
 
         <Button Grid.Row="2" Margin="0,0,10,0" Classes="dialogButton iconDialogButton"
                 Command="{Binding SelectPathCommand}">
-            <DrawingPresenter Width="20" Height="20">
-                <DrawingPresenter.Drawing>
-                    <GeometryDrawing Brush="{DynamicResource IconDialogButtonForegroundBrush}"
-                                     Geometry="M464 128H272l-64-64H48C21.49 64 0 85.49 0 112v288c0 26.51 21.49 48 48 48h416c26.51 0 48-21.49 48-48V176c0-26.51-21.49-48-48-48z"/>
-                </DrawingPresenter.Drawing>
-            </DrawingPresenter>
+            <Image Width="20" Height="20">
+                <Image.Source>
+                    <DrawingImage>
+                        <DrawingImage.Drawing>
+                            <GeometryDrawing Brush="{DynamicResource IconDialogButtonForegroundBrush}"
+                                             Geometry="M464 128H272l-64-64H48C21.49 64 0 85.49 0 112v288c0 26.51 21.49 48 48 48h416c26.51 0 48-21.49 48-48V176c0-26.51-21.49-48-48-48z"/>
+                        </DrawingImage.Drawing>
+                    </DrawingImage>
+                </Image.Source>
+            </Image>
         </Button>
         <TextBox Grid.Row="2" Grid.Column="1" Width="500"
                  Text="{Binding ArchivePath}" />

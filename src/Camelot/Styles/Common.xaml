@@ -46,11 +46,15 @@
                                       ClickMode="Press"
                                       Focusable="False"
                                       IsChecked="{TemplateBinding IsDropDownOpen, Mode=TwoWay}">
-                            <DrawingPresenter Width="10" Height="10">
-                                <DrawingPresenter.Drawing>
-                                    <GeometryDrawing Brush="{DynamicResource InactiveTabForegroundBrush}" Geometry="M143 352.3L7 216.3c-9.4-9.4-9.4-24.6 0-33.9l22.6-22.6c9.4-9.4 24.6-9.4 33.9 0l96.4 96.4 96.4-96.4c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9l-136 136c-9.2 9.4-24.4 9.4-33.8 0z" />
-                                </DrawingPresenter.Drawing>
-                            </DrawingPresenter>
+                            <Image Width="10" Height="10">
+                                <Image.Source>
+                                    <DrawingImage>
+                                        <DrawingImage.Drawing>
+                                            <GeometryDrawing Brush="{DynamicResource InactiveTabForegroundBrush}" Geometry="M143 352.3L7 216.3c-9.4-9.4-9.4-24.6 0-33.9l22.6-22.6c9.4-9.4 24.6-9.4 33.9 0l96.4 96.4 96.4-96.4c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9l-136 136c-9.2 9.4-24.4 9.4-33.8 0z" />
+                                        </DrawingImage.Drawing>
+                                    </DrawingImage>
+                                </Image.Source>
+                            </Image>
                         </ToggleButton>
 
                         <Popup Name="PART_Popup"

@@ -15,12 +15,16 @@
         <Button Classes="topOperationButton" Margin="0,0,10,0"
                 Command="{Binding SearchCommand}">
             <StackPanel Orientation="Horizontal">
-                <DrawingPresenter Width="18" Height="18" Margin="0,1,10,0">
-                    <DrawingPresenter.Drawing>
-                        <GeometryDrawing Brush="{DynamicResource MainWindowForegroundBrush}"
-                                         Geometry="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/>
-                    </DrawingPresenter.Drawing>
-                </DrawingPresenter>
+                <Image Width="18" Height="18" Margin="0,1,10,0">
+                    <Image.Source>
+                        <DrawingImage>
+                            <DrawingImage.Drawing>
+                                <GeometryDrawing Brush="{DynamicResource MainWindowForegroundBrush}"
+                                                 Geometry="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/>
+                            </DrawingImage.Drawing>
+                        </DrawingImage>
+                    </Image.Source>
+                </Image>
 
                 <TextBlock Text="{x:Static p:Resources.Search}" />
             </StackPanel>
@@ -29,12 +33,16 @@
         <Button Classes="topOperationButton" Margin="10,0,0,0"
                 Command="{Binding OpenTerminalCommand}">
             <StackPanel Orientation="Horizontal">
-                <DrawingPresenter Width="20" Height="20" Margin="0,3,10,0">
-                    <DrawingPresenter.Drawing>
-                        <GeometryDrawing Brush="{DynamicResource MainWindowForegroundBrush}"
-                                         Geometry="M257.981 272.971L63.638 467.314c-9.373 9.373-24.569 9.373-33.941 0L7.029 444.647c-9.357-9.357-9.375-24.522-.04-33.901L161.011 256 6.99 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L257.981 239.03c9.373 9.372 9.373 24.568 0 33.941zM640 456v-32c0-13.255-10.745-24-24-24H312c-13.255 0-24 10.745-24 24v32c0 13.255 10.745 24 24 24h304c13.255 0 24-10.745 24-24z"/>
-                    </DrawingPresenter.Drawing>
-                </DrawingPresenter>
+                <Image Width="20" Height="20" Margin="0,3,10,0">
+                    <Image.Source>
+                        <DrawingImage>
+                            <DrawingImage.Drawing>
+                                <GeometryDrawing Brush="{DynamicResource MainWindowForegroundBrush}"
+                                                 Geometry="M257.981 272.971L63.638 467.314c-9.373 9.373-24.569 9.373-33.941 0L7.029 444.647c-9.357-9.357-9.375-24.522-.04-33.901L161.011 256 6.99 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L257.981 239.03c9.373 9.372 9.373 24.568 0 33.941zM640 456v-32c0-13.255-10.745-24-24-24H312c-13.255 0-24 10.745-24 24v32c0 13.255 10.745 24 24 24h304c13.255 0 24-10.745 24-24z"/>
+                            </DrawingImage.Drawing>
+                        </DrawingImage>
+                    </Image.Source>
+                </Image>
 
                 <TextBlock Text="{x:Static p:Resources.Terminal}" />
             </StackPanel>
@@ -43,12 +51,16 @@
         <Button Classes="topOperationButton" Margin="20,0,0,0"
                 Command="{Binding PackCommand}">
             <StackPanel Orientation="Horizontal">
-                <DrawingPresenter Width="15" Height="15" Margin="0,2,10,0">
-                    <DrawingPresenter.Drawing>
-                        <GeometryDrawing Brush="{DynamicResource MainWindowForegroundBrush}"
-                                         Geometry="M509.5 184.6L458.9 32.8C452.4 13.2 434.1 0 413.4 0H272v192h238.7c-.4-2.5-.4-5-1.2-7.4zM240 0H98.6c-20.7 0-39 13.2-45.5 32.8L2.5 184.6c-.8 2.4-.8 4.9-1.2 7.4H240V0zM0 224v240c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V224H0z" />
-                    </DrawingPresenter.Drawing>
-                </DrawingPresenter>
+                <Image Width="15" Height="15" Margin="0,2,10,0">
+                    <Image.Source>
+                        <DrawingImage>
+                            <DrawingImage.Drawing>
+                                <GeometryDrawing Brush="{DynamicResource MainWindowForegroundBrush}"
+                                                 Geometry="M509.5 184.6L458.9 32.8C452.4 13.2 434.1 0 413.4 0H272v192h238.7c-.4-2.5-.4-5-1.2-7.4zM240 0H98.6c-20.7 0-39 13.2-45.5 32.8L2.5 184.6c-.8 2.4-.8 4.9-1.2 7.4H240V0zM0 224v240c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V224H0z" />
+                            </DrawingImage.Drawing>
+                        </DrawingImage>
+                    </Image.Source>
+                </Image>
 
                 <TextBlock Text="{x:Static p:Resources.Pack}" />
             </StackPanel>
@@ -57,12 +69,16 @@
         <Button Classes="topOperationButton" Margin="20,0,10,0"
                 Command="{Binding ExtractCommand}">
             <StackPanel Orientation="Horizontal">
-                <DrawingPresenter Width="20" Height="20" Margin="0,5,10,0">
-                    <DrawingPresenter.Drawing>
-                        <GeometryDrawing Brush="{DynamicResource MainWindowForegroundBrush}"
-                                         Geometry="M425.7 256c-16.9 0-32.8-9-41.4-23.4L320 126l-64.2 106.6c-8.7 14.5-24.6 23.5-41.5 23.5-4.5 0-9-.6-13.3-1.9L64 215v178c0 14.7 10 27.5 24.2 31l216.2 54.1c10.2 2.5 20.9 2.5 31 0L551.8 424c14.2-3.6 24.2-16.4 24.2-31V215l-137 39.1c-4.3 1.3-8.8 1.9-13.3 1.9zm212.6-112.2L586.8 41c-3.1-6.2-9.8-9.8-16.7-8.9L320 64l91.7 152.1c3.8 6.3 11.4 9.3 18.5 7.3l197.9-56.5c9.9-2.9 14.7-13.9 10.2-23.1zM53.2 41L1.7 143.8c-4.6 9.2.3 20.2 10.1 23l197.9 56.5c7.1 2 14.7-1 18.5-7.3L320 64 69.8 32.1c-6.9-.8-13.5 2.7-16.6 8.9z" />
-                    </DrawingPresenter.Drawing>
-                </DrawingPresenter>
+                <Image Width="20" Height="20" Margin="0,5,10,0">
+                    <Image.Source>
+                        <DrawingImage>
+                            <DrawingImage.Drawing>
+                                <GeometryDrawing Brush="{DynamicResource MainWindowForegroundBrush}"
+                                                 Geometry="M425.7 256c-16.9 0-32.8-9-41.4-23.4L320 126l-64.2 106.6c-8.7 14.5-24.6 23.5-41.5 23.5-4.5 0-9-.6-13.3-1.9L64 215v178c0 14.7 10 27.5 24.2 31l216.2 54.1c10.2 2.5 20.9 2.5 31 0L551.8 424c14.2-3.6 24.2-16.4 24.2-31V215l-137 39.1c-4.3 1.3-8.8 1.9-13.3 1.9zm212.6-112.2L586.8 41c-3.1-6.2-9.8-9.8-16.7-8.9L320 64l91.7 152.1c3.8 6.3 11.4 9.3 18.5 7.3l197.9-56.5c9.9-2.9 14.7-13.9 10.2-23.1zM53.2 41L1.7 143.8c-4.6 9.2.3 20.2 10.1 23l197.9 56.5c7.1 2 14.7-1 18.5-7.3L320 64 69.8 32.1c-6.9-.8-13.5 2.7-16.6 8.9z" />
+                            </DrawingImage.Drawing>
+                        </DrawingImage>
+                    </Image.Source>
+                </Image>
 
                 <TextBlock Text="{x:Static p:Resources.Extract}" />
             </StackPanel>
