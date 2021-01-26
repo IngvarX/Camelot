@@ -92,6 +92,8 @@
                          Opacity="0.2" />
         <SolidColorBrush x:Key="SearchIconForegroundBrush" Color="{DynamicResource BlackColor}"
                          Opacity="0.7" />
+        <SolidColorBrush x:Key="SettingsDialogForegroundBrush" Color="{DynamicResource BlackColor}"
+                         Opacity="0.8" />
 
         <!-- Theme resources -->
         <system:Double x:Key="ThemeDisabledOpacity">0.5</system:Double>
