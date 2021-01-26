@@ -15,9 +15,11 @@ Camelot is light cross-platform twin-panel file manager written in C#
 
 Download release from [releases page](https://github.com/IngvarX/Camelot/releases)
 
+For more info check [installation documentation](/docs/INSTALL.md)
+
 ## Build
 
-Dotnet Core SDK 3.1 is required.
+.Net Core SDK 3.1 is required.
 
 ```
 git clone https://github.com/IngvarX/Camelot.git
