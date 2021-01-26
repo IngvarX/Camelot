@@ -15,7 +15,7 @@
         <Button Classes="topOperationButton" Margin="0,0,10,0"
                 Command="{Binding SearchCommand}">
             <StackPanel Orientation="Horizontal">
-                <Image Width="18" Height="18" Margin="0,1,10,0">
+                <Image Width="18" Height="18" Margin="0,1,10,3">
                     <Image.Source>
                         <DrawingImage>
                             <DrawingImage.Drawing>
@@ -66,10 +66,10 @@
             </StackPanel>
         </Button>
 
-        <Button Classes="topOperationButton" Margin="20,0,10,0"
+        <Button Classes="topOperationButton" Margin="20,5,10,3"
                 Command="{Binding ExtractCommand}">
             <StackPanel Orientation="Horizontal">
-                <Image Width="20" Height="20" Margin="0,5,10,0">
+                <Image Width="20" Height="20" Margin="0,0,10,2">
                     <Image.Source>
                         <DrawingImage>
                             <DrawingImage.Drawing>
