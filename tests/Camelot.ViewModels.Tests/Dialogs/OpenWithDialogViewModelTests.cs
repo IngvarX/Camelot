@@ -32,7 +32,8 @@ namespace Camelot.ViewModels.Tests.Dialogs
             Assert.Null(dialog.ApplicationName);
             Assert.False(dialog.IsDefaultApplication);
             Assert.Equal(parameter.FileExtension, dialog.OpenFileExtension);
-            Assert.Null(dialog.SelectedApplication);
+            Assert.Null(dialog.SelectedDefaultApplication);
+            Assert.Null(dialog.SelectedOtherApplication);
             Assert.Empty(dialog.RecommendedApplications);
             Assert.Empty(dialog.OtherApplications);
             Assert.False(dialog.IsDefaultApplication);
@@ -56,7 +57,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
             var parameter = new OpenWithNavigationParameter(FileExtension, null);
             await dialog.ActivateAsync(parameter);
 
-            Assert.Equal(application, dialog.SelectedApplication);
+            Assert.Equal(application, dialog.SelectedDefaultApplication);
             Assert.Single(dialog.RecommendedApplications);
             Assert.Equal(application, dialog.RecommendedApplications.Single());
             Assert.Empty(dialog.OtherApplications);
@@ -88,7 +89,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
             var parameter = new OpenWithNavigationParameter(FileExtension, selectedApplication);
             await dialog.ActivateAsync(parameter);
 
-            Assert.Equal(selectedApplication, dialog.SelectedApplication);
+            Assert.Equal(selectedApplication, dialog.SelectedDefaultApplication);
             Assert.Equal(2, dialog.RecommendedApplications.Count());
             Assert.Equal(selectedApplication, dialog.RecommendedApplications.First());
             Assert.Equal(recommendedApplication, dialog.RecommendedApplications.Last());
@@ -122,7 +123,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
             var parameter = new OpenWithNavigationParameter(FileExtension, selectedApplication);
             await dialog.ActivateAsync(parameter);
 
-            Assert.Equal(selectedApplication, dialog.SelectedApplication);
+            Assert.Equal(selectedApplication, dialog.SelectedDefaultApplication);
             Assert.Equal(2, dialog.RecommendedApplications.Count());
             Assert.Equal(selectedApplication, dialog.RecommendedApplications.First());
             Assert.Equal(recommendedApplication, dialog.RecommendedApplications.Last());
@@ -181,7 +182,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
             };
 
             dialog.IsDefaultApplication = isDefaultApplication;
-            dialog.SelectedApplication = dialog.RecommendedApplications.First();
+            dialog.SelectedDefaultApplication = dialog.RecommendedApplications.First();
             dialog.SelectCommand.Execute(null);
 
             Assert.True(isCallbackCalled);

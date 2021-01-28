@@ -25,12 +25,17 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         private readonly ObservableCollection<ApplicationModel> _recommendedApplications;
         private readonly ObservableCollection<ApplicationModel> _otherApplications;
 
+        private ApplicationModel SelectedApplication => SelectedDefaultApplication ?? SelectedOtherApplication;
+
         public IEnumerable<ApplicationModel> RecommendedApplications => _recommendedApplications;
 
         public IEnumerable<ApplicationModel> OtherApplications => _otherApplications.Where(Filter);
 
         [Reactive]
-        public ApplicationModel SelectedApplication { get; set; }
+        public ApplicationModel SelectedDefaultApplication { get; set; }
+
+        [Reactive]
+        public ApplicationModel SelectedOtherApplication { get; set; }
 
         [Reactive]
         public string OpenFileExtension { get; private set; }
@@ -103,7 +108,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
                 _recommendedApplications.Insert(0, selectedApplication);
             }
 
-            SelectedApplication = selectedApplication;
+            SelectedDefaultApplication = selectedApplication;
 
             static ApplicationModel FindApplication(IEnumerable<ApplicationModel> applications, ApplicationModel application) =>
                 applications.FirstOrDefault(m => m.DisplayName == application.DisplayName);
