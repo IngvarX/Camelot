@@ -7,8 +7,8 @@
     <Style.Resources>
 
         <!-- Colors -->
-        <Color x:Key="OrangeColor">#ff9334</Color>
-        <Color x:Key="BrightOrangeColor">#ce701e</Color>
+        <Color x:Key="OrangeColor">#ce701e</Color>
+        <Color x:Key="BrightOrangeColor">#ff9334</Color>
         <Color x:Key="DarkOrangeColor">#b46219</Color>
         <Color x:Key="WhiteColor">#ffffff</Color>
         <Color x:Key="BlackColor">#000000</Color>
@@ -31,12 +31,12 @@
         <SolidColorBrush x:Key="ThemeBackgroundBrush" Color="{DynamicResource MainBackgroundColor}" />
         <SolidColorBrush x:Key="ThemeForegroundBrush" Color="{DynamicResource BlackColor}"
                          Opacity="0.8" />
-        <SolidColorBrush x:Key="HighlightBrush" Color="{DynamicResource OrangeColor}" />
+        <SolidColorBrush x:Key="HighlightBrush" Color="{DynamicResource BrightOrangeColor}" />
         <SolidColorBrush x:Key="HighlightForegroundBrush" Color="{DynamicResource BlackColor}"
                          Opacity="0.9" />
-        <SolidColorBrush x:Key="ThemeAccentBrush4" Color="{DynamicResource OrangeColor}" />
-        <SolidColorBrush x:Key="ThemeAccentBrush3" Color="{DynamicResource OrangeColor}" />
-        <SolidColorBrush x:Key="ThemeAccentBrush2" Color="{DynamicResource OrangeColor}" />
+        <SolidColorBrush x:Key="ThemeAccentBrush4" Color="{DynamicResource BrightOrangeColor}" />
+        <SolidColorBrush x:Key="ThemeAccentBrush3" Color="{DynamicResource BrightOrangeColor}" />
+        <SolidColorBrush x:Key="ThemeAccentBrush2" Color="{DynamicResource BrightOrangeColor}" />
         <SolidColorBrush x:Key="ThemeControlLowBrush" Color="{DynamicResource WhiteColor}" />
         <SolidColorBrush x:Key="ThemeBorderLowBrush" Color="{DynamicResource BlackColor}"
                          Opacity="0.4" />
