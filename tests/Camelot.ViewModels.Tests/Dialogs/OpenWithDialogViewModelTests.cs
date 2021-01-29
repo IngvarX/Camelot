@@ -37,6 +37,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
             Assert.Empty(dialog.RecommendedApplications);
             Assert.Empty(dialog.OtherApplications);
             Assert.False(dialog.IsDefaultApplication);
+            Assert.False(dialog.SelectCommand.CanExecute(null));
         }
 
         [Fact]
@@ -218,6 +219,32 @@ namespace Camelot.ViewModels.Tests.Dialogs
 
             await Task.Delay(100);
             Assert.Equal(count, dialog.OtherApplications.Count());
+        }
+
+        [Fact]
+        public async Task TestSelectCommandCanBeExecuted()
+        {
+            var appsNames = new[] {"App", "AnotherApp", "OneMoreApp"};
+            var apps = appsNames.Select(n => new ApplicationModel
+            {
+                DisplayName = n
+            });
+            _autoMocker
+                .Setup<IApplicationService, Task<IEnumerable<ApplicationModel>>>(m => m.GetInstalledApplicationsAsync())
+                .ReturnsAsync(apps);
+            _autoMocker
+                .Setup<IApplicationService, Task<IEnumerable<ApplicationModel>>>(m => m.GetAssociatedApplicationsAsync(FileExtension))
+                .ReturnsAsync(new[] {apps.First()});
+
+            var dialog = _autoMocker.CreateInstance<OpenWithDialogViewModel>();
+            var parameter = new OpenWithNavigationParameter(FileExtension, null);
+            await dialog.ActivateAsync(parameter);
+
+            Assert.True(dialog.SelectCommand.CanExecute(null));
+            dialog.SelectedDefaultApplication = null;
+            Assert.False(dialog.SelectCommand.CanExecute(null));
+            dialog.SelectedOtherApplication = dialog.OtherApplications.First();
+            Assert.True(dialog.SelectCommand.CanExecute(null));
         }
     }
 }

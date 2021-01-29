@@ -59,8 +59,12 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             _recommendedApplications = new ObservableCollection<ApplicationModel>();
             _otherApplications = new ObservableCollection<ApplicationModel>();
 
+            var canSelect = this.WhenAnyValue(x => x.SelectedDefaultApplication,
+                x => x.SelectedOtherApplication,
+                CheckIfSelectedApplicationIsValid);
+
             CancelCommand = ReactiveCommand.Create(Close);
-            SelectCommand = ReactiveCommand.Create(SelectApplication);
+            SelectCommand = ReactiveCommand.Create(SelectApplication, canSelect);
 
             this
                 .WhenAnyValue(vm => vm.ApplicationName)
@@ -110,6 +114,8 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 
             SelectedDefaultApplication = selectedApplication;
 
+            this.RaisePropertyChanged(nameof(OtherApplications));
+
             static ApplicationModel FindApplication(IEnumerable<ApplicationModel> applications, ApplicationModel application) =>
                 applications.FirstOrDefault(m => m.DisplayName == application.DisplayName);
         }
@@ -123,5 +129,8 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 
         private void SelectApplication() =>
             Close(new OpenWithDialogResult(OpenFileExtension, SelectedApplication, IsDefaultApplication));
+
+        private static bool CheckIfSelectedApplicationIsValid(ApplicationModel defaultApp, ApplicationModel otherApp) =>
+            (defaultApp ?? otherApp) != null;
     }
 }
