@@ -35,10 +35,13 @@
         <SolidColorBrush x:Key="HighlightForegroundBrush" Color="{DynamicResource BlackColor}"
                          Opacity="0.9" />
         <SolidColorBrush x:Key="ThemeAccentBrush4" Color="{DynamicResource OrangeColor}" />
-        <SolidColorBrush x:Key="ThemeAccentBrush3" Color="{DynamicResource BrightOrangeColor}" />
+        <SolidColorBrush x:Key="ThemeAccentBrush3" Color="{DynamicResource OrangeColor}" />
+        <SolidColorBrush x:Key="ThemeAccentBrush2" Color="{DynamicResource OrangeColor}" />
         <SolidColorBrush x:Key="ThemeControlLowBrush" Color="{DynamicResource WhiteColor}" />
         <SolidColorBrush x:Key="ThemeBorderLowBrush" Color="{DynamicResource BlackColor}"
                          Opacity="0.4" />
+        <SolidColorBrush x:Key="SearchPanelForegroundBrush" Color="{DynamicResource WhiteColor}"
+                         Opacity="0.9" />
         <SolidColorBrush x:Key="ThemeControlMidBrush" Color="{DynamicResource AlternativeMainBackgroundColor}" />
         <SolidColorBrush x:Key="ThemeControlMidHighBrush" Color="{DynamicResource BlackColor}"
                          Opacity="0.3" />
@@ -53,6 +56,7 @@
         <SolidColorBrush x:Key="ThemeForegroundLowBrush" Color="{DynamicResource BlackColor}"
                          Opacity="0.3" />
         <SolidColorBrush x:Key="ErrorBrush" Color="{DynamicResource ErrorColor}" />
+        <SolidColorBrush x:Key="ThemeControlHighlightMidBrush" Color="Transparent" />
 
         <!-- Custom brushes -->
         <SolidColorBrush x:Key="AlternativeThemeBackgroundBrush" Color="{DynamicResource AlternativeMainBackgroundColor}" />

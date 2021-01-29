@@ -81,7 +81,7 @@
     <Style Selector="TextBlock.selectionInfoTextBlock">
         <Setter Property="FontFamily" Value="SansSerif" />
         <Setter Property="FontSize" Value="16" />
-        <Setter Property="Foreground" Value="{DynamicResource HighlightForegroundBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource SearchPanelForegroundBrush}" />
     </Style>
 
     <Style Selector="TextBlock.tabNameTextBlock">

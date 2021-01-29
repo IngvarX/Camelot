@@ -60,6 +60,8 @@
                          Opacity="0.7" />
         <SolidColorBrush x:Key="OperationButtonHotkeyBrush" Color="{DynamicResource WhiteColor}"
                          Opacity="0.8" />
+        <SolidColorBrush x:Key="SearchPanelForegroundBrush" Color="{DynamicResource WhiteColor}"
+                         Opacity="0.9" />
         <SolidColorBrush x:Key="OperationButtonBackgroundColorBrush" Color="{DynamicResource OperationButtonBackgroundColor}" />
         <SolidColorBrush x:Key="OperationButtonHoverBackgroundColorBrush" Color="{DynamicResource OperationButtonHoverBackgroundColor}" />
         <SolidColorBrush x:Key="OperationButtonPressedBackgroundColorBrush" Color="{DynamicResource OperationButtonPressedBackgroundColor}" />
