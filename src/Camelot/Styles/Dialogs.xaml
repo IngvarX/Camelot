@@ -11,7 +11,7 @@
     <Style Selector="Button.dialogButton">
         <Setter Property="FontSize" Value="18" />
         <Setter Property="Margin" Value="20,10" />
-        <Setter Property="Padding" Value="15,10" />
+        <Setter Property="Padding" Value="12,5" />
         <Setter Property="Background" Value="{DynamicResource HighlightBrush}" />
         <Setter Property="Foreground" Value="{DynamicResource DialogButtonForegroundBrush}" />
     </Style>

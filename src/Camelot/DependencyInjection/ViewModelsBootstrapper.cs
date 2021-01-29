@@ -5,7 +5,6 @@ using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Archive;
 using Camelot.Services.Abstractions.Operations;
 using Camelot.Services.Behaviors;
-using Camelot.Services.Configuration;
 using Camelot.Services.Environment.Enums;
 using Camelot.Services.Environment.Interfaces;
 using Camelot.Services.Mac;
