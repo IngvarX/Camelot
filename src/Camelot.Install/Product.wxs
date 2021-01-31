@@ -24,11 +24,11 @@
 	<Fragment>
 		<Directory Id="TARGETDIR" Name="SourceDir">
 			<Directory Id="ProgramMenuFolder">
-                <Directory Id="InstallProgramMenuFolder" Name="Camelot" />
+                		<Directory Id="InstallProgramMenuFolder" Name="Camelot" />
 			</Directory>
         
 			<Directory Id="ProgramFilesFolder">
-                <Directory Id="INSTALLFOLDER" Name="Camelot" />
+                		<Directory Id="INSTALLFOLDER" Name="Camelot" />
 			</Directory>
 		</Directory>
 	</Fragment>
