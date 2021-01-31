@@ -32,7 +32,7 @@
       <DoNotHarvest>True</DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
-      <Runtime>win10-x64</Runtime>
+      <Runtime>win-x64</Runtime>
       <TargetFrameworkIdentifier>netcoreapp3.1</TargetFrameworkIdentifier>
     </ProjectReference>
   </ItemGroup>
@@ -42,12 +42,24 @@
     <Error Text="The WiX Toolset v3.11 (or newer) build tools must be installed to build this project. To download the WiX Toolset, see http://wixtoolset.org/releases/" />
   </Target>
   <Target Name="BeforeBuild">
-    <Exec WorkingDirectory="%(ProjectReference.RootDir)%(ProjectReference.Directory)" Command="dotnet publish -c $(Configuration) -f %(ProjectReference.TargetFrameworkIdentifier) -r %(ProjectReference.Runtime)" />
+    <Exec WorkingDirectory="%(ProjectReference.RootDir)%(ProjectReference.Directory)" Command="dotnet publish -c $(Configuration) -f %(ProjectReference.TargetFrameworkIdentifier) -r %(ProjectReference.Runtime) -p:PublishSingleFile=true -p:PublishReadyToRun=true --self-contained=true" />
     <ItemGroup>
       <LinkerBindInputPaths Include="%(ProjectReference.RootDir)%(ProjectReference.Directory)bin\$(Configuration)\%(ProjectReference.TargetFrameworkIdentifier)\%(ProjectReference.Runtime)\publish" />
-      <DefineConstants Include="BasePath=%(ProjectReference.RootDir)%(ProjectReference.Directory)bin\$(Configuration)\%(ProjectReference.TargetFrameworkIdentifier)\%(ProjectReference.Runtime)\publish" />
     </ItemGroup>
-    <HeatDirectory DirectoryRefId="INSTALLFOLDER" OutputFile="obj\$(Configuration)\%(ProjectReference.Name).wxs" Directory="%(ProjectReference.RootDir)%(ProjectReference.Directory)bin\$(Configuration)\%(ProjectReference.TargetFrameworkIdentifier)\%(ProjectReference.Runtime)\publish" ComponentGroupName="SourceComponentGroup" ToolPath="$(WixToolPath)" AutogenerateGuids="true" SuppressCom="True" SuppressRegistry="True" SuppressFragments="true" SuppressRootDirectory="true" />
+    <PropertyGroup>
+      <DefineConstants>BasePath=%(ProjectReference.RootDir)%(ProjectReference.Directory)bin\$(Configuration)\%(ProjectReference.TargetFrameworkIdentifier)\%(ProjectReference.Runtime)\publish</DefineConstants>
+    </PropertyGroup>
+    <HeatDirectory DirectoryRefId="INSTALLFOLDER" 
+                   OutputFile="obj\$(Configuration)\%(ProjectReference.Name).wxs" 
+                   Directory="%(ProjectReference.RootDir)%(ProjectReference.Directory)bin\$(Configuration)\%(ProjectReference.TargetFrameworkIdentifier)\%(ProjectReference.Runtime)\publish" 
+                   PreprocessorVariable="var.BasePath" 
+                   ComponentGroupName="SourceComponentGroup" 
+                   ToolPath="$(WixToolPath)" 
+                   AutogenerateGuids="true" 
+                   SuppressCom="True" 
+                   SuppressRegistry="True" 
+                   SuppressFragments="true" 
+                   SuppressRootDirectory="true" />
     <ItemGroup>
       <Compile Include="obj\$(Configuration)\%(ProjectReference.Name).wxs" />
     </ItemGroup>
