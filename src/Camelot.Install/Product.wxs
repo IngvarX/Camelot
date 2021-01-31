@@ -14,7 +14,7 @@
 	<Fragment>
 		<Directory Id="TARGETDIR" Name="SourceDir">
 			<Directory Id="ProgramFilesFolder">
-				<Directory Id="INSTALLFOLDER" Name="Camelot.Install" />
+				<Directory Id="INSTALLFOLDER" Name="Camelot" />
 			</Directory>
 		</Directory>
 	</Fragment>
