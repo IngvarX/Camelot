@@ -11,7 +11,9 @@
         <Property Id="ARPPRODUCTICON">app.icon</Property>
         <Property Id="ARPHELPLINK">https://github.com/IngvarX/Camelot/issues</Property>
         <Property Id="ARPURLINFOABOUT">https://github.com/IngvarX/Camelot</Property>
-        <UIRef Id="WixUI_Minimal" />
+        <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER"></Property>
+        
+        <UIRef Id="WixUI_InstallDir" />
 
         <Feature Id="ProductFeature" Title="Camelot" Level="1">
 			<ComponentGroupRef Id="ProductComponents" />
