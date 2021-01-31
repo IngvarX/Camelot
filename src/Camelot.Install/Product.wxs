@@ -6,18 +6,18 @@
 		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." Schedule="afterInstallInitialize" />
 		<MediaTemplate EmbedCab="yes" />
 
-        <Icon Id="app.icon" SourceFile="$(var.Camelot.ProjectDir)Assets\logo.ico" />
+		<Icon Id="app.icon" SourceFile="$(var.Camelot.ProjectDir)Assets\logo.ico" />
 
-        <Property Id="ARPPRODUCTICON">app.icon</Property>
-        <Property Id="ARPHELPLINK">https://github.com/IngvarX/Camelot/issues</Property>
-        <Property Id="ARPURLINFOABOUT">https://github.com/IngvarX/Camelot</Property>
-        <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER"></Property>
-        
-        <UIRef Id="WixUI_InstallDir" />
+		<Property Id="ARPPRODUCTICON">app.icon</Property>
+		<Property Id="ARPHELPLINK">https://github.com/IngvarX/Camelot/issues</Property>
+		<Property Id="ARPURLINFOABOUT">https://github.com/IngvarX/Camelot</Property>
+		<Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER"></Property>
 
-        <Feature Id="ProductFeature" Title="Camelot" Level="1">
+		<UIRef Id="WixUI_InstallDir" />
+
+		<Feature Id="ProductFeature" Title="Camelot" Level="1">
 			<ComponentGroupRef Id="ProductComponents" />
-            <ComponentGroupRef Id="SourceComponentGroup" />
+			<ComponentGroupRef Id="SourceComponentGroup" />
 		</Feature>
 	</Product>
 
@@ -35,21 +35,21 @@
 
 	<Fragment>
 		<ComponentGroup Id="ProductComponents">
-            <ComponentRef Id="MainAppShortcut" />
+            		<ComponentRef Id="MainAppShortcut" />
 		</ComponentGroup>
 
-        <DirectoryRef Id="INSTALLFOLDER" FileSource="$(var.BasePath)">
-            <Component Id="MainAppShortcut" Guid="{FFC9BB04-7381-4EA8-81C8-17F932C202B7}">
-                <Shortcut Id="MainAppShortcut"
-                          Name="Camelot"
-                          Target="[INSTALLFOLDER]Camelot.exe"
-                          Directory="InstallProgramMenuFolder"
-                          WorkingDirectory="INSTALLFOLDER"
-                          Icon="app.icon" />
+        	<DirectoryRef Id="INSTALLFOLDER" FileSource="$(var.BasePath)">
+			<Component Id="MainAppShortcut" Guid="{FFC9BB04-7381-4EA8-81C8-17F932C202B7}">
+				<Shortcut Id="MainAppShortcut"
+					  Name="Camelot"
+					  Target="[INSTALLFOLDER]Camelot.exe"
+					  Directory="InstallProgramMenuFolder"
+					  WorkingDirectory="INSTALLFOLDER"
+					  Icon="app.icon" />
 
-                <RegistryValue Id="RegShortcutKet" Root="HKCU" Key="SOFTWARE\Camelot" Name="Shortcut" Value="1" Type="integer" KeyPath="yes" />
-                <RemoveFolder Id="RemoveStartMenu" Directory="InstallProgramMenuFolder" On="uninstall" />
-            </Component>
-        </DirectoryRef>
+				<RegistryValue Id="RegShortcutKet" Root="HKCU" Key="SOFTWARE\Camelot" Name="Shortcut" Value="1" Type="integer" KeyPath="yes" />
+				<RemoveFolder Id="RemoveStartMenu" Directory="InstallProgramMenuFolder" On="uninstall" />
+			</Component>
+		</DirectoryRef>
 	</Fragment>
 </Wix>
