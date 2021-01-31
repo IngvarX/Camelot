@@ -9,6 +9,7 @@
         <Icon Id="app.icon" SourceFile="$(var.Camelot.ProjectDir)Assets\logo.ico" />
 
         <Property Id="ARPPRODUCTICON">app.icon</Property>
+        <Property Id="ARPHELPLINK">https://github.com/IngvarX/Camelot/issues</Property>
         <Property Id="ARPURLINFOABOUT">https://github.com/IngvarX/Camelot</Property>
         <UIRef Id="WixUI_Minimal" />
 
