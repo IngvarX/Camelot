@@ -10,6 +10,11 @@
     <OutputType>Package</OutputType>
     <Name>Camelot.Installer</Name>
   </PropertyGroup>
+  <PropertyGroup>
+    <WixToolPath>..\..\tools\wix\</WixToolPath>
+    <WixTargetsPath>$(WixToolPath)Wix.targets</WixTargetsPath>
+    <WixTasksPath>$(WixToolPath)wixtasks.dll</WixTasksPath>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
