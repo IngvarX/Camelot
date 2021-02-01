@@ -1,8 +1,8 @@
 pkgname=camelot-git
 _gitname="Camelot"
 _outputfolder="Release"
-pkgrel=2
-pkgver=v0.2.0
+pkgrel=1
+pkgver=v0.2.1
 url="https://github.com/IngvarX/Camelot"
 pkgdesc="Cross-platform file manager written in C#"
 arch=("any")
