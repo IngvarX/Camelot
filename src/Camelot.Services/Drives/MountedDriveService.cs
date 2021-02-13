@@ -7,6 +7,7 @@ using Camelot.Services.Abstractions.Drives;
 using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Models.EventArgs;
 using Camelot.Services.Environment.Interfaces;
+using DriveInfo = Camelot.Services.Environment.Models.DriveInfo;
 
 namespace Camelot.Services.Drives
 {
@@ -53,6 +54,19 @@ namespace Camelot.Services.Drives
                 .Where(dm => !newRoots.Contains(dm.RootDirectory))
                 .ToArray();
 
+            foreach (var driveModel in _mountedDrives.Except(removedDrives))
+            {
+                var newDriveModel = drives.Single(d => d.RootDirectory == driveModel.RootDirectory);
+                if (!CheckIfDiffer(driveModel, newDriveModel))
+                {
+                    continue;
+                }
+
+                Update(driveModel, newDriveModel);
+
+                DriveUpdated.Raise(this, CreateFrom(driveModel));
+            }
+
             foreach (var driveModel in addedDrives)
             {
                 _mountedDrives.Add(driveModel);
@@ -66,8 +80,6 @@ namespace Camelot.Services.Drives
 
                 DriveRemoved.Raise(this, CreateFrom(driveModel));
             }
-
-            // TODO: updated drives
         }
 
         private IReadOnlyList<DriveModel> GetMountedDrives() =>
@@ -75,26 +87,15 @@ namespace Camelot.Services.Drives
                 .GetMountedDrives()
                 .Where(Filter)
                 .Select(CreateFrom)
-                .WhereNotNull()
                 .ToArray();
 
-        private static DriveModel CreateFrom(DriveInfo driveInfo)
+        private static DriveModel CreateFrom(DriveInfo driveInfo) => new DriveModel
         {
-            try
-            {
-                return new DriveModel
-                {
-                    Name = driveInfo.Name,
-                    RootDirectory = driveInfo.RootDirectory.FullName,
-                    FreeSpaceBytes = driveInfo.AvailableFreeSpace,
-                    TotalSpaceBytes = driveInfo.TotalSize
-                };
-            }
-            catch
-            {
-                return null;
-            }
-        }
+            Name = driveInfo.Name,
+            RootDirectory = driveInfo.RootDirectory,
+            FreeSpaceBytes = driveInfo.FreeSpaceBytes,
+            TotalSpaceBytes = driveInfo.TotalSpaceBytes
+        };
 
         private static bool Filter(DriveInfo driveInfo)
         {
@@ -103,8 +104,8 @@ namespace Camelot.Services.Drives
                 return driveInfo.DriveType != DriveType.Ram
                        && driveInfo.DriveType != DriveType.Unknown
                        && driveInfo.DriveFormat != "fuse"
-                       && !driveInfo.RootDirectory.FullName.StartsWith("/snap/")
-                       && !driveInfo.RootDirectory.FullName.StartsWith("/sys/");
+                       && !driveInfo.RootDirectory.StartsWith("/snap/")
+                       && !driveInfo.RootDirectory.StartsWith("/sys/");
             }
             catch
             {
@@ -114,5 +115,17 @@ namespace Camelot.Services.Drives
 
         private static MountedDriveEventArgs CreateFrom(DriveModel driveModel) =>
             new MountedDriveEventArgs(driveModel);
+
+        private static bool CheckIfDiffer(DriveModel oldDriveModel, DriveModel newDriveModel) =>
+            oldDriveModel.Name != newDriveModel.Name
+            || oldDriveModel.FreeSpaceBytes != newDriveModel.FreeSpaceBytes
+            || oldDriveModel.TotalSpaceBytes != newDriveModel.TotalSpaceBytes;
+
+        private static void Update(DriveModel driveModel, DriveModel newDriveModel)
+        {
+            driveModel.Name = newDriveModel.Name;
+            driveModel.FreeSpaceBytes = newDriveModel.FreeSpaceBytes;
+            driveModel.TotalSpaceBytes = newDriveModel.TotalSpaceBytes;
+        }
     }
 }

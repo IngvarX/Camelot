@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Camelot.Avalonia.Interfaces;
 using Camelot.Extensions;
@@ -103,8 +102,12 @@ namespace Camelot.ViewModels.Implementations.MainWindow.Drives
 
         private void UpdateDrive(DriveModel driveModel)
         {
-            var viewModel = _mountedDrivesDictionary[driveModel] as IMountedDriveViewModel;
-            // TODO: update
+            if (_mountedDrivesDictionary[driveModel] is IMountedDriveViewModel viewModel)
+            {
+                viewModel.Name = driveModel.Name;
+                viewModel.FreeSpaceBytes = driveModel.FreeSpaceBytes;
+                viewModel.TotalSpaceBytes = driveModel.TotalSpaceBytes;
+            }
         }
 
         private void AddDrive(UnmountedDriveModel unmountedDriveModel)

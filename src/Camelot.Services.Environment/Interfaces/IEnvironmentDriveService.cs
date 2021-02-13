@@ -1,9 +1,10 @@
-using System.IO;
+using System.Collections.Generic;
+using Camelot.Services.Environment.Models;
 
 namespace Camelot.Services.Environment.Interfaces
 {
     public interface IEnvironmentDriveService
     {
-        DriveInfo[] GetMountedDrives();
+        IReadOnlyList<DriveInfo> GetMountedDrives();
     }
 }

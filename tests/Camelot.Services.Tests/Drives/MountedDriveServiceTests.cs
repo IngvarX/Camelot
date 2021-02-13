@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 using Camelot.Services.Drives;
 using Camelot.Services.Environment.Interfaces;
 using Moq.AutoMock;
 using Xunit;
+using DriveInfo = Camelot.Services.Environment.Models.DriveInfo;
+using IoDriveInfo = System.IO.DriveInfo;
 
 namespace Camelot.Services.Tests.Drives
 {
@@ -20,9 +22,9 @@ namespace Camelot.Services.Tests.Drives
         [Fact]
         public void TestGetDrives()
         {
-            var drives = DriveInfo.GetDrives();
+            var drives = GetDrives();
             _autoMocker
-                .Setup<IEnvironmentDriveService, DriveInfo[]>(m => m.GetMountedDrives())
+                .Setup<IEnvironmentDriveService, IReadOnlyList<DriveInfo>>(m => m.GetMountedDrives())
                 .Returns(drives);
 
             var driveService = _autoMocker.CreateInstance<MountedDriveService>();
@@ -35,7 +37,7 @@ namespace Camelot.Services.Tests.Drives
         public void TestAddDrives()
         {
             _autoMocker
-                .Setup<IEnvironmentDriveService, DriveInfo[]>(m => m.GetMountedDrives())
+                .Setup<IEnvironmentDriveService, IReadOnlyList<DriveInfo>>(m => m.GetMountedDrives())
                 .Returns(Array.Empty<DriveInfo>())
                 .Verifiable();
 
@@ -44,9 +46,9 @@ namespace Camelot.Services.Tests.Drives
             Assert.NotNull(driveService.MountedDrives);
             Assert.Empty(driveService.MountedDrives);
 
-            var drives = DriveInfo.GetDrives();
+            var drives = GetDrives();
             _autoMocker
-                .Setup<IEnvironmentDriveService, DriveInfo[]>(m => m.GetMountedDrives())
+                .Setup<IEnvironmentDriveService, IReadOnlyList<DriveInfo>>(m => m.GetMountedDrives())
                 .Returns(drives);
 
             var isCallbackCalled = false;
@@ -62,9 +64,9 @@ namespace Camelot.Services.Tests.Drives
         [Fact]
         public void TestRemoveDrives()
         {
-            var drives = DriveInfo.GetDrives();
+            var drives = GetDrives();
             _autoMocker
-                .Setup<IEnvironmentDriveService, DriveInfo[]>(m => m.GetMountedDrives())
+                .Setup<IEnvironmentDriveService, IReadOnlyList<DriveInfo>>(m => m.GetMountedDrives())
                 .Returns(drives);
 
             var driveService = _autoMocker.CreateInstance<MountedDriveService>();
@@ -73,7 +75,7 @@ namespace Camelot.Services.Tests.Drives
             Assert.NotEmpty(driveService.MountedDrives);
 
             _autoMocker
-                .Setup<IEnvironmentDriveService, DriveInfo[]>(m => m.GetMountedDrives())
+                .Setup<IEnvironmentDriveService, IReadOnlyList<DriveInfo>>(m => m.GetMountedDrives())
                 .Returns(Array.Empty<DriveInfo>())
                 .Verifiable();
 
@@ -88,26 +90,84 @@ namespace Camelot.Services.Tests.Drives
         }
 
         [Fact]
-        public void TestGetFileDrive()
+        public void TestUpdateDrives()
         {
-            var drives = DriveInfo.GetDrives();
+            var drives = GetDrives();
             _autoMocker
-                .Setup<IEnvironmentDriveService, DriveInfo[]>(m => m.GetMountedDrives())
+                .Setup<IEnvironmentDriveService, IReadOnlyList<DriveInfo>>(m => m.GetMountedDrives())
                 .Returns(drives);
 
             var driveService = _autoMocker.CreateInstance<MountedDriveService>();
 
-            var filePath = Assembly.GetEntryAssembly().Location;
+            Assert.NotNull(driveService.MountedDrives);
+            Assert.NotEmpty(driveService.MountedDrives);
+
+            var callbackCalledCount = 0;
+            driveService.DriveUpdated += (sender, args) => callbackCalledCount++;
+
+            drives[0].FreeSpaceBytes++;
+            driveService.ReloadMountedDrives();
+
+            drives[1].FreeSpaceBytes++;
+            driveService.ReloadMountedDrives();
+
+            drives[2].Name = "newName";
+            driveService.ReloadMountedDrives();
+
+            Assert.NotNull(driveService.MountedDrives);
+            Assert.NotEmpty(driveService.MountedDrives);
+            Assert.Equal(3, callbackCalledCount);
+        }
+
+        [Theory]
+        [InlineData("/home/a/b/c/text.txt", "/home/a/b/c")]
+        [InlineData("/home/a/b/text.txt", "/home/a/b")]
+        [InlineData("/home/a/text.txt", "/home/a")]
+        public void TestGetFileDrive(string filePath, string rootDirectory)
+        {
+            var drives = GetDrives();
+            _autoMocker
+                .Setup<IEnvironmentDriveService, IReadOnlyList<DriveInfo>>(m => m.GetMountedDrives())
+                .Returns(drives);
+
+            var driveService = _autoMocker.CreateInstance<MountedDriveService>();
+
             var drive = driveService.GetFileDrive(filePath);
 
             Assert.NotNull(drive);
             Assert.NotNull(drive.Name);
             Assert.NotNull(drive.RootDirectory);
 
-            Assert.NotEmpty(drive.Name);
-            Assert.NotEmpty(drive.RootDirectory);
-            Assert.True(drive.FreeSpaceBytes > 0);
-            Assert.True(drive.TotalSpaceBytes > 0);
+            Assert.Equal(rootDirectory, drive.RootDirectory);
         }
+
+        private static DriveInfo[] GetDrives() =>
+            new[]
+            {
+                new DriveInfo
+                {
+                    RootDirectory = "/home/a",
+                    Name = "A name",
+                    TotalSpaceBytes = 42,
+                    FreeSpaceBytes = 21,
+                    DriveType = DriveType.Fixed
+                },
+                new DriveInfo
+                {
+                    RootDirectory = "/home/a/b",
+                    Name = "A name",
+                    TotalSpaceBytes = 42,
+                    FreeSpaceBytes = 21,
+                    DriveType = DriveType.Fixed
+                },
+                new DriveInfo
+                {
+                    RootDirectory = "/home/a/b/c",
+                    Name = "A name",
+                    TotalSpaceBytes = 42,
+                    FreeSpaceBytes = 21,
+                    DriveType = DriveType.Fixed
+                }
+            };
     }
 }

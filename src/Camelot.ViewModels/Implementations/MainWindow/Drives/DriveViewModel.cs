@@ -12,17 +12,54 @@ namespace Camelot.ViewModels.Implementations.MainWindow.Drives
         private readonly IFileSizeFormatter _fileSizeFormatter;
         private readonly IPathService _pathService;
         private readonly IFilesOperationsMediator _filesOperationsMediator;
-        private readonly DriveModel _driveModel;
 
-        public string DriveName => _pathService.GetFileName(_driveModel.Name);
+        private readonly string _rootDirectory;
 
-        public string AvailableSizeAsNumber => _fileSizeFormatter.GetSizeAsNumber(_driveModel.FreeSpaceBytes);
+        private string _name;
+        private long _freeSpaceBytes;
+        private long _totalSpaceBytes;
 
-        public string AvailableFormattedSize => _fileSizeFormatter.GetFormattedSize(_driveModel.FreeSpaceBytes);
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                _name = value;
+                this.RaisePropertyChanged(nameof(DriveName));
+            }
+        }
 
-        public string TotalSizeAsNumber => _fileSizeFormatter.GetSizeAsNumber(_driveModel.TotalSpaceBytes);
+        public long FreeSpaceBytes
+        {
+            get => _freeSpaceBytes;
+            set
+            {
+                _freeSpaceBytes = value;
+                this.RaisePropertyChanged(nameof(AvailableSizeAsNumber));
+                this.RaisePropertyChanged(nameof(AvailableFormattedSize));
+            }
+        }
 
-        public string TotalFormattedSize => _fileSizeFormatter.GetFormattedSize(_driveModel.TotalSpaceBytes);
+        public long TotalSpaceBytes
+        {
+            get => _totalSpaceBytes;
+            set
+            {
+                _totalSpaceBytes = value;
+                this.RaisePropertyChanged(nameof(TotalSizeAsNumber));
+                this.RaisePropertyChanged(nameof(TotalFormattedSize));
+            }
+        }
+
+        public string DriveName => _pathService.GetFileName(Name);
+
+        public string AvailableSizeAsNumber => _fileSizeFormatter.GetSizeAsNumber(FreeSpaceBytes);
+
+        public string AvailableFormattedSize => _fileSizeFormatter.GetFormattedSize(FreeSpaceBytes);
+
+        public string TotalSizeAsNumber => _fileSizeFormatter.GetSizeAsNumber(TotalSpaceBytes);
+
+        public string TotalFormattedSize => _fileSizeFormatter.GetFormattedSize(TotalSpaceBytes);
 
         public ICommand OpenCommand { get; }
 
@@ -35,12 +72,17 @@ namespace Camelot.ViewModels.Implementations.MainWindow.Drives
             _fileSizeFormatter = fileSizeFormatter;
             _pathService = pathService;
             _filesOperationsMediator = filesOperationsMediator;
-            _driveModel = driveModel;
+
+            _rootDirectory = driveModel.RootDirectory;
+
+            Name = driveModel.Name;
+            FreeSpaceBytes = driveModel.FreeSpaceBytes;
+            TotalSpaceBytes = driveModel.TotalSpaceBytes;
 
             OpenCommand = ReactiveCommand.Create(Open);
         }
 
         private void Open() =>
-            _filesOperationsMediator.ActiveFilesPanelViewModel.CurrentDirectory = _driveModel.RootDirectory;
+            _filesOperationsMediator.ActiveFilesPanelViewModel.CurrentDirectory = _rootDirectory;
     }
 }
