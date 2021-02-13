@@ -31,8 +31,12 @@ namespace Camelot.Services.AllPlatforms
             var oldRoots = _unmountedDrives.Select(d => d.FullName).ToHashSet();
             var newRoots = unmountedDrives.Select(d => d.FullName).ToHashSet();
 
-            var addedDrives = unmountedDrives.Where(udm => !oldRoots.Contains(udm.FullName));
-            var removedDrives = UnmountedDrives.Where(udm => !newRoots.Contains(udm.FullName));
+            var addedDrives = unmountedDrives
+                .Where(udm => !oldRoots.Contains(udm.FullName))
+                .ToArray();
+            var removedDrives = UnmountedDrives
+                .Where(udm => !newRoots.Contains(udm.FullName))
+                .ToArray();
 
             foreach (var unmountedDriveModel in addedDrives)
             {

@@ -46,8 +46,12 @@ namespace Camelot.Services.Drives
             var drives = GetMountedDrives();
             var newRoots = drives.Select(d => d.RootDirectory).ToHashSet();
 
-            var addedDrives = drives.Where(dm => !oldRoots.Contains(dm.RootDirectory));
-            var removedDrives = MountedDrives.Where(dm => !newRoots.Contains(dm.RootDirectory));
+            var addedDrives = drives
+                .Where(dm => !oldRoots.Contains(dm.RootDirectory))
+                .ToArray();
+            var removedDrives = MountedDrives
+                .Where(dm => !newRoots.Contains(dm.RootDirectory))
+                .ToArray();
 
             foreach (var driveModel in addedDrives)
             {

@@ -12,27 +12,26 @@ namespace Camelot.Services.AllPlatforms.Tests
         private const string Arguments = "Args";
         private const string Resource = "Resource";
         private const string Extension = "json";
-        
+
         private readonly AutoMocker _autoMocker;
 
         public ResourceOpeningServiceOpenWithTests()
         {
             _autoMocker = new AutoMocker();
-            
         }
-        
+
         [Fact]
         public void TestOpenNoSelectedApp()
         {
             var service = _autoMocker.CreateInstance<ResourceOpeningServiceOpenWith>();
-            
+
             service.Open(Resource);
-            
+
             _autoMocker
                 .Verify<IResourceOpeningService>(m => m.Open(Resource),
                     Times.Once);
         }
-        
+
         [Fact]
         public void TestOpenWithSelectedApp()
         {
@@ -47,11 +46,11 @@ namespace Camelot.Services.AllPlatforms.Tests
             _autoMocker
                 .Setup<IOpenWithApplicationService, ApplicationModel>(m => m.GetSelectedApplication(Extension))
                 .Returns(application);
-            
+
             var service = _autoMocker.CreateInstance<ResourceOpeningServiceOpenWith>();
-            
+
             service.Open(Resource);
-            
+
             _autoMocker
                 .Verify<IResourceOpeningService>(m => m.OpenWith(Command, Arguments, Resource),
                     Times.Once);
@@ -65,9 +64,9 @@ namespace Camelot.Services.AllPlatforms.Tests
                 .Verifiable();
 
             var service = _autoMocker.CreateInstance<ResourceOpeningServiceOpenWith>();
-            
+
             service.OpenWith(Command, Arguments, Resource);
-            
+
             _autoMocker
                 .Verify<IResourceOpeningService>(m => m.OpenWith(Command, Arguments, Resource),
                     Times.Once);

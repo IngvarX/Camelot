@@ -19,7 +19,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.Drives
         private readonly IDriveViewModelFactory _driveViewModelFactory;
         private readonly IApplicationDispatcher _applicationDispatcher;
 
-        private readonly ObservableCollection<IDriveViewModel> _drives;
         private readonly Dictionary<DriveModel, IDriveViewModel> _mountedDrivesDictionary;
         private readonly Dictionary<UnmountedDriveModel, IDriveViewModel> _unmountedDrivesDictionary;
 
@@ -38,7 +37,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.Drives
             _driveViewModelFactory = driveViewModelFactory;
             _applicationDispatcher = applicationDispatcher;
 
-            _drives = new ObservableCollection<IDriveViewModel>();
             _mountedDrivesDictionary = new Dictionary<DriveModel, IDriveViewModel>();
             _unmountedDrivesDictionary = new Dictionary<UnmountedDriveModel, IDriveViewModel>();
 
@@ -73,7 +71,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.Drives
             _unmountedDriveService.DriveRemoved += UnmountedDriveServiceOnDriveRemoved;
         }
 
-        private void MountedDriveServiceOnDriveAdded(object sender, MountedDriveEventArgs e) => AddDrive(e.DriveModel);
+        private void MountedDriveServiceOnDriveAdded(object sender, MountedDriveEventArgs e) =>
+            AddDrive(e.DriveModel);
 
         private void MountedDriveServiceOnDriveRemoved(object sender, MountedDriveEventArgs e) =>
             RemoveDrive(e.DriveModel);
@@ -123,7 +122,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.Drives
             UpdateDrivesList();
         }
 
-        private IDriveViewModel CreateFrom(DriveModel driveModel) => _driveViewModelFactory.Create(driveModel);
+        private IDriveViewModel CreateFrom(DriveModel driveModel) =>
+            _driveViewModelFactory.Create(driveModel);
 
         private IDriveViewModel CreateFrom(UnmountedDriveModel unmountedDriveModel) =>
             _driveViewModelFactory.Create(unmountedDriveModel);

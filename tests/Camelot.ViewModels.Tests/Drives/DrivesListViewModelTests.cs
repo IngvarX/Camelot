@@ -68,46 +68,5 @@ namespace Camelot.ViewModels.Tests.Drives
             Assert.Equal(drives.Length, actualDrivesViewModels.Length);
             Assert.Equal(actualDrivesViewModels, driveViewModels);
         }
-
-        // [Fact]
-        // public void TestDrivesUpdate()
-        // {
-        //     var driveServiceMock = new Mock<IMountedDriveService>();
-        //     driveServiceMock
-        //         .SetupGet(m => m.MountedDrives)
-        //         .Returns(new List<DriveModel>());
-        //     var driveViewModelFactoryMock = new Mock<IDriveViewModelFactory>();
-        //     var applicationDispatcherMock = new Mock<IApplicationDispatcher>();
-        //     applicationDispatcherMock
-        //         .Setup(m => m.Dispatch(It.IsAny<Action>()))
-        //         .Callback<Action>(action => action());
-        //     driveServiceMock
-        //         .SetupGet(m => m.UnmountedDrives)
-        //         .Returns(new UnmountedDriveModel[0]);
-        //
-        //     var viewModel = new DrivesListViewModel(driveServiceMock.Object,
-        //         driveViewModelFactoryMock.Object, applicationDispatcherMock.Object);
-        //
-        //     Assert.NotNull(viewModel.Drives);
-        //     Assert.Empty(viewModel.Drives);
-        //
-        //     var driveModel = new DriveModel
-        //     {
-        //         RootDirectory = "B"
-        //     };
-        //     driveServiceMock
-        //         .SetupGet(m => m.MountedDrives)
-        //         .Returns(new[] {driveModel});
-        //     var driveViewModelMock = new Mock<IDriveViewModel>();
-        //     driveViewModelFactoryMock
-        //         .Setup(m => m.Create(driveModel))
-        //         .Returns(driveViewModelMock.Object);
-        //
-        //     driveServiceMock
-        //         .Raise(m => m.DrivesListChanged += null, EventArgs.Empty);
-        //
-        //     Assert.NotNull(viewModel.Drives);
-        //     Assert.Single(viewModel.Drives);
-        // }
     }
 }
