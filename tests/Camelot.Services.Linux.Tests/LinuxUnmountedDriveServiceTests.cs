@@ -23,7 +23,8 @@ namespace Camelot.Services.Linux.Tests
         {
             var service = _autoMocker.CreateInstance<LinuxUnmountedDriveService>();
 
-            var drives = await service.GetUnmountedDrivesAsync();
+            await service.ReloadUnmountedDrivesAsync();
+            var drives = service.UnmountedDrives;
 
             Assert.NotNull(drives);
             Assert.Empty(drives);
@@ -54,7 +55,8 @@ namespace Camelot.Services.Linux.Tests
 
             var service = _autoMocker.CreateInstance<LinuxUnmountedDriveService>();
 
-            var drives = await service.GetUnmountedDrivesAsync();
+            await service.ReloadUnmountedDrivesAsync();
+            var drives = service.UnmountedDrives;
 
             Assert.NotNull(drives);
 
@@ -80,7 +82,8 @@ namespace Camelot.Services.Linux.Tests
 
             var service = _autoMocker.CreateInstance<LinuxUnmountedDriveService>();
 
-            var drives = await service.GetUnmountedDrivesAsync();
+            await service.ReloadUnmountedDrivesAsync();
+            var drives = service.UnmountedDrives;
 
             Assert.NotNull(drives);
             Assert.Empty(drives);

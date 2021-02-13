@@ -43,12 +43,12 @@ namespace Camelot.ViewModels.Implementations.MainWindow.Drives
             _unmountedDrivesDictionary = new Dictionary<UnmountedDriveModel, IDriveViewModel>();
 
             SubscribeToEvents();
-            ReloadDrives();
+            LoadDrives();
 
             drivesUpdateService.Start();
         }
 
-        private void ReloadDrives()
+        private void LoadDrives()
         {
             _mountedDriveService.MountedDrives.ForEach(AddDrive);
             _unmountedDriveService.UnmountedDrives.ForEach(AddDrive);

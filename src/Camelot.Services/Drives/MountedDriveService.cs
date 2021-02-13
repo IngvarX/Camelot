@@ -2,13 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Timers;
 using Camelot.Extensions;
 using Camelot.Services.Abstractions.Drives;
 using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Models.EventArgs;
-using Camelot.Services.Configuration;
 using Camelot.Services.Environment.Interfaces;
 
 namespace Camelot.Services.Drives
@@ -33,6 +30,8 @@ namespace Camelot.Services.Drives
             _environmentDriveService = environmentDriveService;
 
             _mountedDrives = new List<DriveModel>();
+
+            ReloadMountedDrives();
         }
 
         public DriveModel GetFileDrive(string filePath) =>

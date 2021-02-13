@@ -12,7 +12,8 @@ namespace Camelot.Services.Windows.Tests
         public async Task TestGetUnmountedDrives()
         {
             var service = new WindowsUnmountedDriveService();
-            var models = await service.GetUnmountedDrivesAsync();
+            await service.ReloadUnmountedDrivesAsync();
+            var models = service.UnmountedDrives;
 
             Assert.NotNull(models);
             Assert.Empty(models);
