@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Camelot.Avalonia.Interfaces;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Drives;
 using Camelot.Services.Abstractions.Models;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Implementations.MainWindow.Drives;
@@ -32,7 +33,7 @@ namespace Camelot.ViewModels.Tests.Drives
                     RootDirectory = "C"
                 }
             };
-            var driveServiceMock = new Mock<IDriveService>();
+            var driveServiceMock = new Mock<IMountedDriveService>();
             driveServiceMock
                 .SetupGet(m => m.MountedDrives)
                 .Returns(drives);
@@ -67,7 +68,7 @@ namespace Camelot.ViewModels.Tests.Drives
         [Fact]
         public void TestDrivesUpdate()
         {
-            var driveServiceMock = new Mock<IDriveService>();
+            var driveServiceMock = new Mock<IMountedDriveService>();
             driveServiceMock
                 .SetupGet(m => m.MountedDrives)
                 .Returns(new List<DriveModel>());

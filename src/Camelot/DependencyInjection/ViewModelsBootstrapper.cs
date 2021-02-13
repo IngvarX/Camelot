@@ -3,6 +3,7 @@ using Camelot.DataAccess.UnitOfWork;
 using Camelot.Services;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Archive;
+using Camelot.Services.Abstractions.Drives;
 using Camelot.Services.Abstractions.Operations;
 using Camelot.Services.Behaviors;
 using Camelot.Services.Environment.Enums;
@@ -203,7 +204,9 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<SearchViewModelConfiguration>()
             ));
             services.RegisterLazySingleton<IDrivesListViewModel>(() => new DrivesListViewModel(
-                resolver.GetRequiredService<IDriveService>(),
+                resolver.GetRequiredService<IMountedDriveService>(),
+                resolver.GetRequiredService<IUnmountedDriveService>(),
+                resolver.GetRequiredService<IDrivesUpdateService>(),
                 resolver.GetRequiredService<IDriveViewModelFactory>(),
                 resolver.GetRequiredService<IApplicationDispatcher>()
             ));

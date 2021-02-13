@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Camelot.Extensions;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Drives;
 using Camelot.Services.Abstractions.Operations;
 using Camelot.Services.AllPlatforms;
 using Camelot.Services.Environment.Interfaces;
@@ -21,7 +22,7 @@ namespace Camelot.Services.Linux
         private readonly IEnvironmentService _environmentService;
 
         public LinuxTrashCanService(
-            IDriveService driveService,
+            IMountedDriveService mountedDriveService,
             IOperationsService operationsService,
             IPathService pathService,
             IFileService fileService,
@@ -30,7 +31,7 @@ namespace Camelot.Services.Linux
             IDateTimeProvider dateTimeProvider,
             ILinuxRemovedFileMetadataBuilderFactory removedFileMetadataBuilderFactory,
             IHomeDirectoryProvider homeDirectoryProvider)
-            : base(driveService, operationsService, pathService)
+            : base(mountedDriveService, operationsService, pathService)
         {
             _pathService = pathService;
             _fileService = fileService;

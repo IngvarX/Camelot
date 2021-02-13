@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Drives;
 using Camelot.Services.Abstractions.Models;
+using Camelot.Services.AllPlatforms;
 using Camelot.Services.Environment.Interfaces;
 using Camelot.Services.Linux.Configuration;
 
 namespace Camelot.Services.Linux
 {
-    public class LinuxUnmountedDriveService : IUnmountedDriveService
+    public class LinuxUnmountedDriveService : UnmountedDriveServiceBase
     {
         private const string FindDrivesCommand = "lsblk";
         private const string FindDriveArguments = "--noheadings --raw -o NAME,MOUNTPOINT";
@@ -30,7 +32,14 @@ namespace Camelot.Services.Linux
             _configuration = configuration;
         }
 
-        public async Task<IReadOnlyList<UnmountedDriveModel>> GetUnmountedDrivesAsync()
+        public override void Mount(string drive)
+        {
+            var arguments = string.Format(MountDriveArguments, drive);
+
+            _processService.Run(MountDriveCommand, arguments);
+        }
+
+        protected override async Task<IReadOnlyList<UnmountedDriveModel>> GetUnmountedDrivesAsync()
         {
             if (!_configuration.IsEnabled)
             {
@@ -45,13 +54,6 @@ namespace Camelot.Services.Linux
             {
                 return Array.Empty<UnmountedDriveModel>();
             }
-        }
-
-        public void Mount(string drive)
-        {
-            var arguments = string.Format(MountDriveArguments, drive);
-
-            _processService.Run(MountDriveCommand, arguments);
         }
 
         private async Task<IReadOnlyList<UnmountedDriveModel>> GetUnmountedDrivesUsingLsblkAsync()

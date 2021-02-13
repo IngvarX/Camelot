@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Drives;
 using Camelot.Services.Abstractions.Operations;
 using Camelot.Services.AllPlatforms;
 using Camelot.Services.Environment.Interfaces;
@@ -16,14 +17,14 @@ namespace Camelot.Services.Mac
         private readonly IHomeDirectoryProvider _homeDirectoryProvider;
 
         public MacTrashCanService(
-            IDriveService driveService,
+            IMountedDriveService mountedDriveService,
             IOperationsService operationsService,
             IPathService pathService,
             IFileService fileService,
             IEnvironmentService environmentService,
             IDirectoryService directoryService,
             IHomeDirectoryProvider homeDirectoryProvider)
-            : base(driveService, operationsService, pathService)
+            : base(mountedDriveService, operationsService, pathService)
         {
             _pathService = pathService;
             _fileService = fileService;

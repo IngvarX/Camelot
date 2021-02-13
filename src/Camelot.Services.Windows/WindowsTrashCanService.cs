@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Camelot.Extensions;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Drives;
 using Camelot.Services.Abstractions.Operations;
 using Camelot.Services.AllPlatforms;
 using Camelot.Services.Environment.Interfaces;
@@ -25,7 +26,7 @@ namespace Camelot.Services.Windows
         private string _sid;
 
         public WindowsTrashCanService(
-            IDriveService driveService,
+            IMountedDriveService mountedDriveService,
             IOperationsService operationsService,
             IPathService pathService,
             IFileService fileService,
@@ -33,7 +34,7 @@ namespace Camelot.Services.Windows
             IProcessService processService,
             IWindowsRemovedFileMetadataBuilderFactory removedFileMetadataBuilderFactory,
             IWindowsTrashCanNodeNameGenerator trashCanNodeNameGenerator)
-            : base(driveService, operationsService, pathService)
+            : base(mountedDriveService, operationsService, pathService)
         {
             _pathService = pathService;
             _fileService = fileService;

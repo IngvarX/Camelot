@@ -3,22 +3,23 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Drives;
 using Camelot.Services.Abstractions.Operations;
 
 namespace Camelot.Services.AllPlatforms
 {
     public abstract class TrashCanServiceBase : ITrashCanService
     {
-        private readonly IDriveService _driveService;
+        private readonly IMountedDriveService _mountedDriveService;
         private readonly IOperationsService _operationsService;
         private readonly IPathService _pathService;
 
         protected TrashCanServiceBase(
-            IDriveService driveService,
+            IMountedDriveService mountedDriveService,
             IOperationsService operationsService,
             IPathService pathService)
         {
-            _driveService = driveService;
+            _mountedDriveService = mountedDriveService;
             _operationsService = operationsService;
             _pathService = pathService;
         }
@@ -83,6 +84,6 @@ namespace Camelot.Services.AllPlatforms
         }
 
         private string GetVolume(IEnumerable<string> files) =>
-            _driveService.GetFileDrive(files.First()).RootDirectory;
+            _mountedDriveService.GetFileDrive(files.First()).RootDirectory;
     }
 }

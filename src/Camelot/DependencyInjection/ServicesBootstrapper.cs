@@ -6,12 +6,14 @@ using Camelot.Operations;
 using Camelot.Services;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Archive;
+using Camelot.Services.Abstractions.Drives;
 using Camelot.Services.Abstractions.Operations;
 using Camelot.Services.AllPlatforms;
 using Camelot.Services.Archive;
 using Camelot.Services.Archives;
 using Camelot.Services.Behaviors;
 using Camelot.Services.Configuration;
+using Camelot.Services.Drives;
 using Camelot.Services.Environment.Enums;
 using Camelot.Services.Environment.Implementations;
 using Camelot.Services.Environment.Interfaces;
@@ -69,8 +71,11 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<ILogger>()
             ));
             services.RegisterLazySingleton<IDateTimeProvider>(() => new DateTimeProvider());
-            services.RegisterLazySingleton<IDriveService>(() => new DriveService(
-                resolver.GetRequiredService<IEnvironmentDriveService>(),
+            services.RegisterLazySingleton<IMountedDriveService>(() => new MountedDriveService(
+                resolver.GetRequiredService<IEnvironmentDriveService>()
+            ));
+            services.RegisterLazySingleton<IDrivesUpdateService>(() => new DrivesUpdateService(
+                resolver.GetRequiredService<IMountedDriveService>(),
                 resolver.GetRequiredService<IUnmountedDriveService>(),
                 resolver.GetRequiredService<DriveServiceConfiguration>()
             ));
@@ -174,7 +179,7 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<UnmountedDrivesConfiguration>()
             ));
             services.RegisterLazySingleton<ITrashCanService>(() => new LinuxTrashCanService(
-                resolver.GetRequiredService<IDriveService>(),
+                resolver.GetRequiredService<IMountedDriveService>(),
                 resolver.GetRequiredService<IOperationsService>(),
                 resolver.GetRequiredService<IPathService>(),
                 resolver.GetRequiredService<IFileService>(),
@@ -219,7 +224,7 @@ namespace Camelot.DependencyInjection
         {
             services.RegisterLazySingleton<IUnmountedDriveService>(() => new MacUnmountedDriveService());
             services.RegisterLazySingleton<ITrashCanService>(() => new MacTrashCanService(
-                resolver.GetRequiredService<IDriveService>(),
+                resolver.GetRequiredService<IMountedDriveService>(),
                 resolver.GetRequiredService<IOperationsService>(),
                 resolver.GetRequiredService<IPathService>(),
                 resolver.GetRequiredService<IFileService>(),
@@ -261,7 +266,7 @@ namespace Camelot.DependencyInjection
             ));
             services.RegisterLazySingleton<IUnmountedDriveService>(() => new WindowsUnmountedDriveService());
             services.RegisterLazySingleton<ITrashCanService>(() => new WindowsTrashCanService(
-                resolver.GetRequiredService<IDriveService>(),
+                resolver.GetRequiredService<IMountedDriveService>(),
                 resolver.GetRequiredService<IOperationsService>(),
                 resolver.GetRequiredService<IPathService>(),
                 resolver.GetRequiredService<IFileService>(),

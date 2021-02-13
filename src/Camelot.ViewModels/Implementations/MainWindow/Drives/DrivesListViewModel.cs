@@ -1,58 +1,134 @@
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Camelot.Avalonia.Interfaces;
-using Camelot.Services.Abstractions;
+using Camelot.Extensions;
+using Camelot.Services.Abstractions.Drives;
+using Camelot.Services.Abstractions.Models;
+using Camelot.Services.Abstractions.Models.EventArgs;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Interfaces.MainWindow.Drives;
-using DynamicData;
+using ReactiveUI;
 
 namespace Camelot.ViewModels.Implementations.MainWindow.Drives
 {
     public class DrivesListViewModel : ViewModelBase, IDrivesListViewModel
     {
-        private readonly IDriveService _driveService;
+        private readonly IMountedDriveService _mountedDriveService;
+        private readonly IUnmountedDriveService _unmountedDriveService;
         private readonly IDriveViewModelFactory _driveViewModelFactory;
         private readonly IApplicationDispatcher _applicationDispatcher;
-        private readonly ObservableCollection<IDriveViewModel> _drives;
 
-        public IEnumerable<IDriveViewModel> Drives => _drives;
+        private readonly ObservableCollection<IDriveViewModel> _drives;
+        private readonly Dictionary<DriveModel, IDriveViewModel> _mountedDrivesDictionary;
+        private readonly Dictionary<UnmountedDriveModel, IDriveViewModel> _unmountedDrivesDictionary;
+
+        public IEnumerable<IDriveViewModel> Drives =>
+            _mountedDrivesDictionary.Values.Concat(_unmountedDrivesDictionary.Values);
 
         public DrivesListViewModel(
-            IDriveService driveService,
+            IMountedDriveService mountedDriveService,
+            IUnmountedDriveService unmountedDriveService,
+            IDrivesUpdateService drivesUpdateService,
             IDriveViewModelFactory driveViewModelFactory,
             IApplicationDispatcher applicationDispatcher)
         {
-            _driveService = driveService;
+            _mountedDriveService = mountedDriveService;
+            _unmountedDriveService = unmountedDriveService;
             _driveViewModelFactory = driveViewModelFactory;
             _applicationDispatcher = applicationDispatcher;
+
             _drives = new ObservableCollection<IDriveViewModel>();
+            _mountedDrivesDictionary = new Dictionary<DriveModel, IDriveViewModel>();
+            _unmountedDrivesDictionary = new Dictionary<UnmountedDriveModel, IDriveViewModel>();
 
             SubscribeToEvents();
             ReloadDrives();
-        }
 
-        private void DriveServiceOnDrivesListChanged(object sender, EventArgs args) =>
-            ReloadDrives();
+            drivesUpdateService.Start();
+        }
 
         private void ReloadDrives()
         {
-            var mountedDrives = _driveService
-                .MountedDrives
-                .Select(_driveViewModelFactory.Create);
-            var unmountedDrives = _driveService
-                .UnmountedDrives
-                .Select(_driveViewModelFactory.Create);
-            var drives = mountedDrives.Concat(unmountedDrives).ToArray();
-
-            _applicationDispatcher.Dispatch(() =>
-            {
-                _drives.Clear();
-                _drives.AddRange(drives);
-            });
+            _mountedDriveService.MountedDrives.ForEach(AddDrive);
+            _unmountedDriveService.UnmountedDrives.ForEach(AddDrive);
         }
 
-        private void SubscribeToEvents() => _driveService.DrivesListChanged += DriveServiceOnDrivesListChanged;
+        private void SubscribeToEvents()
+        {
+            SubscribeToMountedDriveServiceEvents();
+            SubscribeToUnmountedDriveServiceEvents();
+        }
+
+        private void SubscribeToMountedDriveServiceEvents()
+        {
+            _mountedDriveService.DriveAdded += MountedDriveServiceOnDriveAdded;
+            _mountedDriveService.DriveRemoved += MountedDriveServiceOnDriveRemoved;
+            _mountedDriveService.DriveUpdated += MountedDriveServiceOnDriveUpdated;
+        }
+
+        private void SubscribeToUnmountedDriveServiceEvents()
+        {
+            _unmountedDriveService.DriveAdded += UnmountedDriveServiceOnDriveAdded;
+            _unmountedDriveService.DriveRemoved += UnmountedDriveServiceOnDriveRemoved;
+        }
+
+        private void MountedDriveServiceOnDriveAdded(object sender, MountedDriveEventArgs e) => AddDrive(e.DriveModel);
+
+        private void MountedDriveServiceOnDriveRemoved(object sender, MountedDriveEventArgs e) =>
+            RemoveDrive(e.DriveModel);
+
+        private void MountedDriveServiceOnDriveUpdated(object sender, MountedDriveEventArgs e) =>
+            UpdateDrive(e.DriveModel);
+
+        private void UnmountedDriveServiceOnDriveAdded(object sender, UnmountedDriveEventArgs e) =>
+            AddDrive(e.UnmountedDriveModel);
+
+        private void UnmountedDriveServiceOnDriveRemoved(object sender, UnmountedDriveEventArgs e) =>
+            RemoveDrive(e.UnmountedDriveModel);
+
+        private void AddDrive(DriveModel driveModel)
+        {
+            var driveViewModel = CreateFrom(driveModel);
+            _mountedDrivesDictionary[driveModel] = driveViewModel;
+
+            UpdateDrivesList();
+        }
+
+        private void RemoveDrive(DriveModel driveModel)
+        {
+            _mountedDrivesDictionary.Remove(driveModel);
+
+            UpdateDrivesList();
+        }
+
+        private void UpdateDrive(DriveModel driveModel)
+        {
+            var viewModel = _mountedDrivesDictionary[driveModel] as IMountedDriveViewModel;
+            // TODO: update
+        }
+
+        private void AddDrive(UnmountedDriveModel unmountedDriveModel)
+        {
+            var driveViewModel = CreateFrom(unmountedDriveModel);
+            _unmountedDrivesDictionary[unmountedDriveModel] = driveViewModel;
+
+            UpdateDrivesList();
+        }
+
+        private void RemoveDrive(UnmountedDriveModel unmountedDriveModel)
+        {
+            _unmountedDrivesDictionary.Remove(unmountedDriveModel);
+
+            UpdateDrivesList();
+        }
+
+        private IDriveViewModel CreateFrom(DriveModel driveModel) => _driveViewModelFactory.Create(driveModel);
+
+        private IDriveViewModel CreateFrom(UnmountedDriveModel unmountedDriveModel) =>
+            _driveViewModelFactory.Create(unmountedDriveModel);
+
+        private void UpdateDrivesList() =>
+            _applicationDispatcher.Dispatch(() => this.RaisePropertyChanged(nameof(Drives)));
     }
 }

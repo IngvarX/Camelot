@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Drives;
 using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Operations;
 using Camelot.Services.Environment.Interfaces;
@@ -36,7 +37,7 @@ namespace Camelot.Services.Linux.Tests
         {
             var now = DateTime.UtcNow;
             _autoMocker
-                .Setup<IDriveService, DriveModel>(m => m.GetFileDrive(It.IsAny<string>()))
+                .Setup<IMountedDriveService, DriveModel>(m => m.GetFileDrive(It.IsAny<string>()))
                 .Returns(new DriveModel {RootDirectory = volume});
             _autoMocker
                 .Setup<IOperationsService>(m => m.MoveAsync(

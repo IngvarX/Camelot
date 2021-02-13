@@ -7,7 +7,7 @@ using ReactiveUI;
 
 namespace Camelot.ViewModels.Implementations.MainWindow.Drives
 {
-    public class DriveViewModel : ViewModelBase, IDriveViewModel
+    public class DriveViewModel : ViewModelBase, IDriveViewModel, IMountedDriveViewModel
     {
         private readonly IFileSizeFormatter _fileSizeFormatter;
         private readonly IPathService _pathService;

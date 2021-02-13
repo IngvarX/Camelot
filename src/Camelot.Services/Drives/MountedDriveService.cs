@@ -5,42 +5,34 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 using Camelot.Extensions;
-using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Drives;
 using Camelot.Services.Abstractions.Models;
+using Camelot.Services.Abstractions.Models.EventArgs;
 using Camelot.Services.Configuration;
 using Camelot.Services.Environment.Interfaces;
 
-namespace Camelot.Services
+namespace Camelot.Services.Drives
 {
-    public class DriveService : IDriveService
+    public class MountedDriveService : IMountedDriveService
     {
         private readonly IEnvironmentDriveService _environmentDriveService;
-        private readonly IUnmountedDriveService _unmountedDriveService;
 
         private readonly List<DriveModel> _mountedDrives;
-        private readonly List<UnmountedDriveModel> _unmountedDrives;
-        private readonly Timer _timer;
 
         public IReadOnlyList<DriveModel> MountedDrives => _mountedDrives;
 
-        public IReadOnlyList<UnmountedDriveModel> UnmountedDrives => _unmountedDrives;
+        public event EventHandler<MountedDriveEventArgs> DriveAdded;
 
-        public event EventHandler<EventArgs> DrivesListChanged;
+        public event EventHandler<MountedDriveEventArgs> DriveRemoved;
 
-        public DriveService(
-            IEnvironmentDriveService environmentDriveService,
-            IUnmountedDriveService unmountedDriveService,
-            DriveServiceConfiguration configuration)
+        public event EventHandler<MountedDriveEventArgs> DriveUpdated;
+
+        public MountedDriveService(
+            IEnvironmentDriveService environmentDriveService)
         {
             _environmentDriveService = environmentDriveService;
-            _unmountedDriveService = unmountedDriveService;
 
             _mountedDrives = new List<DriveModel>();
-            _unmountedDrives = new List<UnmountedDriveModel>();
-            _timer = new Timer(configuration.DrivesListRefreshIntervalMs);
-
-            ReloadDrivesAsync().Forget();
-            SetupTimer();
         }
 
         public DriveModel GetFileDrive(string filePath) =>
@@ -48,21 +40,7 @@ namespace Camelot.Services
                 .OrderByDescending(d => d.RootDirectory.Length)
                 .First(d => filePath.StartsWith(d.RootDirectory));
 
-        private void SetupTimer()
-        {
-            _timer.Elapsed += TimerOnElapsed;
-            _timer.Start();
-        }
-
-        private async void TimerOnElapsed(object sender, ElapsedEventArgs e) => await ReloadDrivesAsync();
-
-        private async Task ReloadDrivesAsync()
-        {
-            ReloadMountedDrives();
-            await ReloadUnmountedDrivesAsync();
-        }
-
-        private void ReloadMountedDrives()
+        public void ReloadMountedDrives()
         {
             var oldRoots = _mountedDrives.Select(d => d.RootDirectory).ToHashSet();
 
@@ -72,32 +50,21 @@ namespace Camelot.Services
             var addedDrives = drives.Where(dm => !oldRoots.Contains(dm.RootDirectory));
             var removedDrives = MountedDrives.Where(dm => !newRoots.Contains(dm.RootDirectory));
 
-            if (addedDrives.Any() || removedDrives.Any())
+            foreach (var driveModel in addedDrives)
             {
-                _mountedDrives.Clear();
-                _mountedDrives.AddRange(drives);
+                _mountedDrives.Add(driveModel);
 
-                DrivesListChanged.Raise(this, EventArgs.Empty);
+                DriveAdded.Raise(this, CreateFrom(driveModel));
             }
-        }
 
-        private async Task ReloadUnmountedDrivesAsync()
-        {
-            var unmountedDrives = await _unmountedDriveService.GetUnmountedDrivesAsync();
-
-            var oldRoots = _unmountedDrives.Select(d => d.FullName).ToHashSet();
-            var newRoots = unmountedDrives.Select(d => d.FullName).ToHashSet();
-
-            var addedDrives = unmountedDrives.Where(udm => !oldRoots.Contains(udm.FullName));
-            var removedDrives = UnmountedDrives.Where(udm => !newRoots.Contains(udm.FullName));
-
-            if (addedDrives.Any() || removedDrives.Any())
+            foreach (var driveModel in removedDrives)
             {
-                _unmountedDrives.Clear();
-                _unmountedDrives.AddRange(unmountedDrives);
+                _mountedDrives.Remove(driveModel);
 
-                DrivesListChanged.Raise(this, EventArgs.Empty);
+                DriveRemoved.Raise(this, CreateFrom(driveModel));
             }
+
+            // TODO: updated drives
         }
 
         private IReadOnlyList<DriveModel> GetMountedDrives() =>
@@ -141,5 +108,8 @@ namespace Camelot.Services
                 return false;
             }
         }
+
+        private static MountedDriveEventArgs CreateFrom(DriveModel driveModel) =>
+            new MountedDriveEventArgs(driveModel);
     }
 }

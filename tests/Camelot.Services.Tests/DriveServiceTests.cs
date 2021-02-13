@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Configuration;
+using Camelot.Services.Drives;
 using Camelot.Services.Environment.Interfaces;
 using Moq;
 using Xunit;
@@ -33,7 +34,7 @@ namespace Camelot.Services.Tests
             {
                 DrivesListRefreshIntervalMs = 10_000
             };
-            var driveService = new DriveService(envDriveServiceMock.Object, unmountedDriveServiceMock.Object,
+            var driveService = new MountedDriveService(envDriveServiceMock.Object, unmountedDriveServiceMock.Object,
                 configuration);
 
             Assert.NotNull(driveService.MountedDrives);
@@ -66,7 +67,7 @@ namespace Camelot.Services.Tests
             {
                 DrivesListRefreshIntervalMs = 10
             };
-            var driveService = new DriveService(envDriveServiceMock.Object, unmountedDriveServiceMock.Object,
+            var driveService = new MountedDriveService(envDriveServiceMock.Object, unmountedDriveServiceMock.Object,
                 configuration);
 
             await Task.Delay(300);
@@ -115,7 +116,7 @@ namespace Camelot.Services.Tests
             {
                 DrivesListRefreshIntervalMs = 10_000
             };
-            var driveService = new DriveService(envDriveServiceMock.Object, unmountedDriveServiceMock.Object,
+            var driveService = new MountedDriveService(envDriveServiceMock.Object, unmountedDriveServiceMock.Object,
                 configuration);
 
             var filePath = Assembly.GetEntryAssembly().Location;

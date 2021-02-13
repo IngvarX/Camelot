@@ -2,16 +2,22 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Drives;
 using Camelot.Services.Abstractions.Models;
+using Camelot.Services.AllPlatforms;
 
 namespace Camelot.Services.Mac
 {
-    public class MacUnmountedDriveService : IUnmountedDriveService
+    public class MacUnmountedDriveService : UnmountedDriveServiceBase
     {
-        // TODO: load drives
-        public Task<IReadOnlyList<UnmountedDriveModel>> GetUnmountedDrivesAsync() =>
-            Task.FromResult((IReadOnlyList<UnmountedDriveModel>) Array.Empty<UnmountedDriveModel>());
+        public override void Mount(string drive)
+        {
+            throw new NotImplementedException();
+        }
 
-        public void Mount(string drive) => throw new NotImplementedException();
+        protected override Task<IReadOnlyList<UnmountedDriveModel>> GetUnmountedDrivesAsync()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
