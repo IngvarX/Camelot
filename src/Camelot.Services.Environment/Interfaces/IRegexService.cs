@@ -10,5 +10,7 @@ namespace Camelot.Services.Environment.Interfaces
         bool CheckIfMatches(string input, string pattern, RegexOptions options);
 
         IList<Match> GetMatches(string input, string pattern, RegexOptions options);
+
+        string Replace(string input, string pattern, string replacement, RegexOptions options);
     }
 }

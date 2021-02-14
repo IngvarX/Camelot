@@ -32,5 +32,8 @@ namespace Camelot.Services.Environment.Implementations
 
         public IList<Match> GetMatches(string input, string pattern, RegexOptions options) =>
             Regex.Matches(input, pattern, options);
+
+        public string Replace(string input, string pattern, string replacement, RegexOptions options) =>
+            Regex.Replace(input, pattern, replacement, options);
     }
 }

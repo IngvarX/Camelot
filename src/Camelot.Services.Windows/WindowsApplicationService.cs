@@ -57,12 +57,8 @@ namespace Camelot.Services.Windows
             return Task.FromResult<IEnumerable<ApplicationModel>>(associatedApplications.Values);
         }
 
-        public async Task<IEnumerable<ApplicationModel>> GetInstalledApplicationsAsync()
-        {
+        public async Task<IEnumerable<ApplicationModel>> GetInstalledApplicationsAsync() =>
             _cachedApplications ??= await LoadInstalledApplicationsAsync();
-
-            return _cachedApplications;
-        }
 
         private Task<IEnumerable<ApplicationModel>> LoadInstalledApplicationsAsync()
         {

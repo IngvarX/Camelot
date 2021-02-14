@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Specifications;
+using Camelot.Services.Environment.Interfaces;
 using Camelot.Services.Linux.Interfaces;
 using Moq;
 using Moq.AutoMock;
@@ -20,15 +22,15 @@ namespace Camelot.Services.Linux.Tests
         private const string AppExec = "camelot";
         private const string MimeType = "application/json";
         private const string Extension = "json";
-        
+
         private readonly AutoMocker _autoMocker;
 
         public LinuxApplicationServiceTests()
         {
             _autoMocker = new AutoMocker();
-            
+
         }
-        
+
         [Theory]
         [InlineData("Application", AppName, AppExec, 1)]
         [InlineData("Application", "", AppExec, 0)]
@@ -47,7 +49,7 @@ namespace Camelot.Services.Linux.Tests
             await using var fileStream = new MemoryStream();
             await using var mimeFileStream = new MemoryStream();
             await using var defaultsListFileStream = new MemoryStream();
-            
+
             _autoMocker
                 .Setup<IFileService, IReadOnlyList<FileModel>>(m => m.GetFiles(It.IsAny<string>(), It.IsAny<ISpecification<FileModel>>()))
                 .Returns(files)
@@ -73,6 +75,14 @@ namespace Camelot.Services.Linux.Tests
                     }
                 });
             _autoMocker
+                .Setup<IRegexService, string>(m =>
+                    m.Replace(It.IsAny<string>(), "%[F|U]", "{0}", RegexOptions.IgnoreCase))
+                .Returns("{0}");
+            _autoMocker
+                .Setup<IFileService, IReadOnlyList<FileModel>>(m =>
+                    m.GetFiles(It.IsAny<IReadOnlyList<string>>()))
+                .Returns(new FileModel[0]);
+            _autoMocker
                 .Setup<IIniReader, Task<IReadOnlyDictionary<string, string>>>(m => m.ReadAsync(fileStream))
                 .ReturnsAsync(new Dictionary<string, string>
                 {
@@ -89,25 +99,25 @@ namespace Camelot.Services.Linux.Tests
             _autoMocker
                 .Setup<IPathService, string>(m => m.GetFileName(FullPath))
                 .Returns(FileName);
-            
+
             var service = _autoMocker.CreateInstance<LinuxApplicationService>();
             var apps = await service.GetInstalledApplicationsAsync();
-            
+
             Assert.NotNull(apps);
             var appsArray = apps.ToArray();
-            
+
             Assert.Equal(appsCount, appsArray.Length);
 
             if (appsCount == 1)
             {
                 var app = appsArray.Single();
-                
+
                 Assert.Equal(AppName, app.DisplayName);
                 Assert.Equal("{0}", app.Arguments);
                 Assert.Equal(AppExec, app.ExecutePath);
             }
         }
-        
+
         [Theory]
         [InlineData("Application", AppName, AppExec, Extension, 1, FileName)]
         [InlineData("Application", "", AppExec, Extension, 0, FileName)]
@@ -128,7 +138,7 @@ namespace Camelot.Services.Linux.Tests
             await using var fileStream = new MemoryStream();
             await using var mimeFileStream = new MemoryStream();
             await using var defaultsListFileStream = new MemoryStream();
-            
+
             _autoMocker
                 .Setup<IFileService, IReadOnlyList<FileModel>>(m => m.GetFiles(It.IsAny<string>(), It.IsAny<ISpecification<FileModel>>()))
                 .Returns(files)
@@ -154,6 +164,18 @@ namespace Camelot.Services.Linux.Tests
                     }
                 });
             _autoMocker
+                .Setup<IRegexService, string>(m =>
+                    m.Replace(It.IsAny<string>(), "%[F|U]", "{0}", RegexOptions.IgnoreCase))
+                .Returns("{0}");
+            _autoMocker
+                .Setup<IFileService, IReadOnlyList<FileModel>>(m =>
+                    m.GetFiles(It.IsAny<IReadOnlyList<string>>()))
+                .Returns(new FileModel[0]);
+            _autoMocker
+                .Setup<IFileService, IReadOnlyList<FileModel>>(m =>
+                    m.GetFiles(It.IsAny<IReadOnlyList<string>>()))
+                .Returns(new FileModel[0]);
+            _autoMocker
                 .Setup<IIniReader, Task<IReadOnlyDictionary<string, string>>>(m => m.ReadAsync(fileStream))
                 .ReturnsAsync(new Dictionary<string, string>
                 {
@@ -172,25 +194,25 @@ namespace Camelot.Services.Linux.Tests
             _autoMocker
                 .Setup<IPathService, string>(m => m.GetFileName(FullPath))
                 .Returns(FileName);
-            
+
             var service = _autoMocker.CreateInstance<LinuxApplicationService>();
             var apps = await service.GetAssociatedApplicationsAsync(extension);
-            
+
             Assert.NotNull(apps);
             var appsArray = apps.ToArray();
-            
+
             Assert.Equal(appsCount, appsArray.Length);
 
             if (appsCount == 1)
             {
                 var app = appsArray.Single();
-                
+
                 Assert.Equal(AppName, app.DisplayName);
                 Assert.Equal("{0}", app.Arguments);
                 Assert.Equal(AppExec, app.ExecutePath);
             }
         }
-        
+
         [Fact]
         public async Task TestGetInstalledApplicationsAsyncMultiple()
         {
@@ -199,17 +221,25 @@ namespace Camelot.Services.Linux.Tests
                 .Returns(new FileModel[0])
                 .Verifiable();
             _autoMocker
+                .Setup<IFileService, IReadOnlyList<FileModel>>(m =>
+                    m.GetFiles(It.IsAny<IReadOnlyList<string>>()))
+                .Returns(new FileModel[0])
+                .Verifiable();
+            _autoMocker
                 .Setup<IIniReader, Task<IReadOnlyDictionary<string, string>>>(m => m.ReadAsync(It.IsAny<Stream>()))
                 .ReturnsAsync(new Dictionary<string, string>());
-            
+
             var service = _autoMocker.CreateInstance<LinuxApplicationService>();
             for (var i = 0; i < 10; i++)
             {
                 await service.GetInstalledApplicationsAsync();
             }
-            
+
             _autoMocker
                 .Verify<IFileService>(m => m.GetFiles(It.IsAny<string>(), It.IsAny<ISpecification<FileModel>>()),
+                    Times.Once);
+            _autoMocker
+                .Verify<IFileService>(m => m.GetFiles(It.IsAny<IReadOnlyList<string>>()),
                     Times.Once);
         }
     }

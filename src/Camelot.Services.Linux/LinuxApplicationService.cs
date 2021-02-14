@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Specifications;
+using Camelot.Services.Environment.Interfaces;
 using Camelot.Services.Linux.Interfaces;
 using Camelot.Services.Linux.Specifications;
 
@@ -13,7 +15,10 @@ namespace Camelot.Services.Linux
     public class LinuxApplicationService : IApplicationService
     {
         private readonly IFileService _fileService;
+        private readonly IDirectoryService _directoryService;
+        private readonly IHomeDirectoryProvider _homeDirectoryProvider;
         private readonly IIniReader _iniReader;
+        private readonly IRegexService _regexService;
         private readonly IMimeTypesReader _mimeTypesReader;
         private readonly IPathService _pathService;
 
@@ -21,12 +26,18 @@ namespace Camelot.Services.Linux
 
         public LinuxApplicationService(
             IFileService fileService,
+            IDirectoryService directoryService,
+            IHomeDirectoryProvider homeDirectoryProvider,
             IIniReader iniReader,
+            IRegexService regexService,
             IMimeTypesReader mimeTypesReader,
             IPathService pathService)
         {
             _fileService = fileService;
+            _directoryService = directoryService;
+            _homeDirectoryProvider = homeDirectoryProvider;
             _iniReader = iniReader;
+            _regexService = regexService;
             _mimeTypesReader = mimeTypesReader;
             _pathService = pathService;
         }
@@ -55,7 +66,8 @@ namespace Camelot.Services.Linux
         private async Task<List<LinuxApplicationModel>> GetCachedDesktopEntriesAsync() =>
             _desktopEntries ??= await GetDesktopEntriesAsync();
 
-        private static string ExtractArguments(string startCommand) => "{0}"; // TODO: fix %F => {0}
+        private string ExtractArguments(string startCommand) =>
+            _regexService.Replace(startCommand, "%[F|U]", "{0}", RegexOptions.IgnoreCase);
 
         private static string ExtractExecutePath(string startCommand) =>
             startCommand.Split().FirstOrDefault();
@@ -65,9 +77,9 @@ namespace Camelot.Services.Linux
             var desktopEntryFiles = new List<LinuxApplicationModel>();
 
             var specification = GetSpecification();
-            var desktopFilePaths = _fileService
-                .GetFiles("/usr/share/applications/", specification)
-                .Select(f => f.FullPath);
+            var globalDesktopFiles = GetGlobalDesktopFiles(specification);
+            var localDesktopFiles = GetLocalDesktopFiles(specification);
+            var desktopFilePaths = globalDesktopFiles.Concat(localDesktopFiles).Select(f => f.FullPath);
 
             var mimeTypesExtensions = await GetMimeTypesAsync();
             var defaultApplications = await GetDefaultApplicationsAsync(mimeTypesExtensions);
@@ -114,6 +126,21 @@ namespace Camelot.Services.Linux
             }
 
             return desktopEntryFiles;
+        }
+
+        private IEnumerable<FileModel> GetGlobalDesktopFiles(ISpecification<FileModel> specification) =>
+            _fileService
+                .GetFiles("/usr/share/applications/", specification);
+
+        private IEnumerable<FileModel> GetLocalDesktopFiles(ISpecification<FileModel> specification)
+        {
+            var homeDirectory = _homeDirectoryProvider.HomeDirectoryPath;
+            var localDesktopFilesDirectory = _pathService.Combine(homeDirectory, ".local/share/applications");
+            var files = _directoryService.GetFilesRecursively(localDesktopFilesDirectory);
+
+            return _fileService
+                .GetFiles(files)
+                .Where(specification.IsSatisfiedBy);
         }
 
         private async Task<IReadOnlyDictionary<string, List<string>>> GetMimeTypesAsync()
