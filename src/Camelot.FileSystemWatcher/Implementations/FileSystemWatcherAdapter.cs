@@ -24,15 +24,9 @@ namespace Camelot.FileSystemWatcher.Implementations
             SubscribeToEvents();
         }
 
-        public void StartRaisingEvents()
-        {
-            _fileSystemWatcher.EnableRaisingEvents = true;
-        }
+        public void StartRaisingEvents() => _fileSystemWatcher.EnableRaisingEvents = true;
 
-        public void StopRaisingEvents()
-        {
-            _fileSystemWatcher.EnableRaisingEvents = false;
-        }
+        public void StopRaisingEvents() => _fileSystemWatcher.EnableRaisingEvents = false;
 
         public void Dispose()
         {

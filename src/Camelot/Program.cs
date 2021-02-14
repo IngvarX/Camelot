@@ -25,8 +25,9 @@ namespace Camelot
                     return;
                 }
 
-                RegisterDependencies();
                 SubscribeToDomainUnhandledEvents();
+                RegisterDependencies();
+                RunBackgroundTasks();
 
                 BuildAvaloniaApp()
                     .StartWithClassicDesktopLifetime(args, ShutdownMode.OnMainWindowClose);
@@ -37,9 +38,6 @@ namespace Camelot
             }
         }
 
-        private static void RegisterDependencies() =>
-            Bootstrapper.Register(Locator.CurrentMutable, Locator.Current);
-
         private static void SubscribeToDomainUnhandledEvents() =>
             AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
             {
@@ -48,6 +46,12 @@ namespace Camelot
 
                 logger.LogCritical($"Unhandled application error: {ex}");
             };
+
+        private static void RegisterDependencies() =>
+            Bootstrapper.Register(Locator.CurrentMutable, Locator.Current);
+
+        private static void RunBackgroundTasks() =>
+            BackgroundTasksRunner.Start(Locator.Current);
 
         private static AppBuilder BuildAvaloniaApp()
             => AppBuilder

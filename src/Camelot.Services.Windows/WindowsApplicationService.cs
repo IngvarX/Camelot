@@ -24,6 +24,8 @@ namespace Camelot.Services.Windows
         private readonly IApplicationInfoProvider _applicationInfoProvider;
         private readonly IRegistryService _registryService;
 
+        private IEnumerable<ApplicationModel> _cachedApplications;
+
         public WindowsApplicationService(
             IEnvironmentService environmentService,
             IRegexService regexService,
@@ -55,7 +57,14 @@ namespace Camelot.Services.Windows
             return Task.FromResult<IEnumerable<ApplicationModel>>(associatedApplications.Values);
         }
 
-        public Task<IEnumerable<ApplicationModel>> GetInstalledApplicationsAsync()
+        public async Task<IEnumerable<ApplicationModel>> GetInstalledApplicationsAsync()
+        {
+            _cachedApplications ??= await LoadInstalledApplicationsAsync();
+
+            return _cachedApplications;
+        }
+
+        private Task<IEnumerable<ApplicationModel>> LoadInstalledApplicationsAsync()
         {
             var installedApplications = new Dictionary<string, ApplicationModel>();
 
@@ -79,7 +88,7 @@ namespace Camelot.Services.Windows
 
             return Task.FromResult<IEnumerable<ApplicationModel>>(installedApplications.Values);
         }
-        
+
         private void TryAddApplications(string s, IDictionary<string, ApplicationModel> associatedApplications)
         {
             foreach (var applicationFile in GetOpenWithList(s, RootRegistryKey.CurrentUser,
@@ -119,7 +128,7 @@ namespace Camelot.Services.Windows
                 TryAddApplication(associatedApplications, applicationFile);
             }
         }
-        
+
         private IEnumerable<string> GetApplicationsFiles(RootRegistryKey rootKey, string baseKeyName)
         {
             var applications = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
@@ -132,7 +141,7 @@ namespace Camelot.Services.Windows
 
             return applications.ToImmutableHashSet();
         }
-        
+
         private IEnumerable<string> GetOpenWithList(string fileExtension, RootRegistryKey rootKey,
             string baseKeyName = "")
         {
@@ -156,7 +165,7 @@ namespace Camelot.Services.Windows
 
             return results;
         }
-        
+
         private IEnumerable<string> GetOpenWithProgids(string fileExtension, RootRegistryKey rootKey,
             string baseKeyName = "")
         {
@@ -189,7 +198,7 @@ namespace Camelot.Services.Windows
             {
                 return null;
             }
-            
+
             return new ApplicationModel
             {
                 DisplayName = info.Name,
@@ -197,7 +206,7 @@ namespace Camelot.Services.Windows
                 Arguments = ExtractArguments(info.StartCommand, info.ExecutePath)
             };
         }
-        
+
         private string ExtractArguments(string path, string executePath)
         {
             path = path
@@ -206,7 +215,7 @@ namespace Camelot.Services.Windows
                 .TrimStart();
 
             var argumentsCount = 0;
-                
+
             return _regexService
                 .GetMatches(path, "%.", RegexOptions.Compiled)
                 .Aggregate(path, (current, match) => current.Replace(match.Value, $"{{{argumentsCount++}}}"));
