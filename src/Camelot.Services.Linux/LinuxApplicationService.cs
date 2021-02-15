@@ -66,12 +66,6 @@ namespace Camelot.Services.Linux
         private async Task<List<LinuxApplicationModel>> GetCachedDesktopEntriesAsync() =>
             _desktopEntries ??= await GetDesktopEntriesAsync();
 
-        private string ExtractArguments(string startCommand) =>
-            _regexService.Replace(startCommand, "%[F|U]", "{0}", RegexOptions.IgnoreCase);
-
-        private static string ExtractExecutePath(string startCommand) =>
-            startCommand.Split().FirstOrDefault();
-
         private async Task<List<LinuxApplicationModel>> GetDesktopEntriesAsync()
         {
             var desktopEntryFiles = new List<LinuxApplicationModel>();
@@ -102,13 +96,12 @@ namespace Camelot.Services.Linux
                     continue;
                 }
 
-                var executePath = ExtractExecutePath(startCommand);
+                var (executePath, arguments) = ExtractExecutePathAndArguments(startCommand);
                 if (string.IsNullOrWhiteSpace(executePath))
                 {
                     continue;
                 }
 
-                var arguments = ExtractArguments(startCommand);
                 var extensions = GetExtensions(desktopEntry, mimeTypesExtensions);
 
                 var desktopFileName = _pathService.GetFileName(desktopFilePath);
@@ -126,6 +119,21 @@ namespace Camelot.Services.Linux
             }
 
             return desktopEntryFiles;
+        }
+
+        private (string, string) ExtractExecutePathAndArguments(string startCommand)
+        {
+            var executePath = startCommand.Split().FirstOrDefault();
+            if (executePath is null)
+            {
+                return default;
+            }
+
+            var startIndex = Math.Min(executePath.Length + 1, startCommand.Length);
+            var arguments = _regexService.Replace(startCommand.Substring(startIndex),
+                "%[F|U]", "{0}", RegexOptions.IgnoreCase);
+
+            return (executePath, arguments);
         }
 
         private IEnumerable<FileModel> GetGlobalDesktopFiles(ISpecification<FileModel> specification) =>
