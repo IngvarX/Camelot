@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="2562F49C-1CC1-4A5B-A51F-2A1422DE4A8D" 
+             Name="Camelot" 
+             Language="1033" 
+             Version="1.0.0.0" 
+             Manufacturer="Camelot Team" 
+             UpgradeCode="68ec3de1-4a92-4786-bfbb-8f2d89fc874c">
+		<Package InstallerVersion="200"
+                 Manufacturer="!(bind.property.Manufacturer)"
+                 Compressed="yes"
+                 Platform="x64"
+                 InstallScope="perMachine" />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." Schedule="afterInstallInitialize" />
+		<MediaTemplate EmbedCab="yes" />
+
+		<Icon Id="app.icon" SourceFile="$(var.Camelot.ProjectDir)Assets\logo.ico" />
+
+		<Property Id="ARPPRODUCTICON">app.icon</Property>
+		<Property Id="ARPHELPLINK">https://github.com/IngvarX/Camelot/issues</Property>
+		<Property Id="ARPURLINFOABOUT">https://github.com/IngvarX/Camelot</Property>
+        <Property Id="ARPNOREPAIR">1</Property>
+		<Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER"></Property>
+
+		<UIRef Id="WixUI_InstallDir" />
+
+		<Feature Id="ProductFeature" Title="!(bind.property.ProductName)" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+			<ComponentGroupRef Id="SourceComponentGroup" />
+		</Feature>
+	</Product>
+    
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramMenuFolder">
+				<Directory Id="InstallProgramMenuFolder" Name="!(bind.property.ProductName)" />
+			</Directory>
+        
+			<Directory Id="ProgramFiles64Folder">
+                <Directory Id="INSTALLFOLDER" Name="!(bind.property.ProductName)" />
+			</Directory>
+		</Directory>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents">
+			<ComponentRef Id="MainAppShortcut" />
+		</ComponentGroup>
+		<DirectoryRef Id="INSTALLFOLDER" FileSource="$(var.BasePath)">
+			<Component Id="MainAppShortcut" Guid="{FFC9BB04-7381-4EA8-81C8-17F932C202B7}">
+				<Shortcut Id="MainAppShortcut"
+                          Name="!(bind.property.ProductName)"
+                          Target="[INSTALLFOLDER]!(bind.property.ProductName).exe"
+                          Directory="InstallProgramMenuFolder"
+                          WorkingDirectory="INSTALLFOLDER"
+                          Icon="app.icon" />
+
+				<RegistryValue Id="RegShortcutKet" 
+                               Root="HKCU" 
+                               Key="SOFTWARE\!(bind.property.Manufacturer)\!(bind.property.ProductName)" 
+                               Name="Shortcut" 
+                               Value="1" 
+                               Type="integer" 
+                               KeyPath="yes" />
+				<RemoveFolder Id="RemoveStartMenu" Directory="InstallProgramMenuFolder" On="uninstall" />
+			</Component>
+		</DirectoryRef>
+	</Fragment>
+</Wix>
