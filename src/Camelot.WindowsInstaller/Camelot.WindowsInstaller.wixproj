@@ -8,7 +8,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <OutputName>Camelot</OutputName>
     <OutputType>Package</OutputType>
-    <Name>Camelot.Installer</Name>
+    <Name>Camelot.WindowsInstaller</Name>
 	<DefineSolutionProperties>false</DefineSolutionProperties>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">

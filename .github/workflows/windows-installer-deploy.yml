@@ -44,6 +44,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} 
-        asset_path: ./src/Camelot.Install/bin/Release/Camelot.msi
+        asset_path: ./src/Camelot.WindowsInstaller/bin/Release/Camelot.msi
         asset_name: Camelot.msi
         asset_content_type: application/octet-stream .msi

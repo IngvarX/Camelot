@@ -74,7 +74,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Camelot.Services.Archives",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Camelot.Services.Archives.Tests", "tests\Camelot.Services.Archives.Tests\Camelot.Services.Archives.Tests.csproj", "{59D6D13A-17F7-4CCB-AAD7-3748BD559F1F}"
 EndProject
-Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Camelot.Install", "src\Camelot.Install\Camelot.Install.wixproj", "{4AF845FA-DAEA-4B6C-A751-09E8DE6EEF0E}"
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Camelot.WindowsInstaller", "src\Camelot.WindowsInstaller\Camelot.WindowsInstaller.wixproj", "{4AF845FA-DAEA-4B6C-A751-09E8DE6EEF0E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
