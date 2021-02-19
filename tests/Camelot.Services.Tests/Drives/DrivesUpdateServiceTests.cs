@@ -21,9 +21,16 @@ namespace Camelot.Services.Tests.Drives
         public async Task TestReload()
         {
             _autoMocker.Use(new DriveServiceConfiguration {DrivesListRefreshIntervalMs = 10});
+
+            var taskCompletionSource = new TaskCompletionSource<bool>();
+
+            _autoMocker
+                .Setup<IUnmountedDriveService>(m => m.ReloadUnmountedDrivesAsync())
+                .Callback(() => taskCompletionSource.SetResult(true));
+
             var service = _autoMocker.CreateInstance<DrivesUpdateService>();
 
-            await Task.Delay(100);
+            await Task.Delay(1000);
 
             _autoMocker
                 .Verify<IMountedDriveService>(m => m.ReloadMountedDrives(), Times.Never);
@@ -32,7 +39,14 @@ namespace Camelot.Services.Tests.Drives
 
             service.Start();
 
-            await Task.Delay(100);
+            var task = await Task.WhenAny(Task.Delay(2000), taskCompletionSource.Task);
+            if (task != taskCompletionSource.Task)
+            {
+                taskCompletionSource.SetResult(false);
+            }
+
+            var result = await taskCompletionSource.Task;
+            Assert.True(result);
 
             _autoMocker
                 .Verify<IMountedDriveService>(m => m.ReloadMountedDrives(), Times.AtLeastOnce);
