@@ -33,6 +33,8 @@ using Camelot.Services.Windows.WinApi;
 using Camelot.ViewModels.Services.Interfaces;
 using Splat;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
+using LinuxUnmountedDrivesConfiguration = Camelot.Services.Linux.Configuration.UnmountedDrivesConfiguration;
+using MacUnmountedDrivesConfiguration = Camelot.Services.Mac.Configuration.UnmountedDrivesConfiguration;
 
 namespace Camelot.DependencyInjection
 {
@@ -173,7 +175,7 @@ namespace Camelot.DependencyInjection
             services.RegisterLazySingleton<IUnmountedDriveService>(() => new LinuxUnmountedDriveService(
                 resolver.GetRequiredService<IProcessService>(),
                 resolver.GetRequiredService<IEnvironmentService>(),
-                resolver.GetRequiredService<UnmountedDrivesConfiguration>()
+                resolver.GetRequiredService<LinuxUnmountedDrivesConfiguration>()
             ));
             services.RegisterLazySingleton<ITrashCanService>(() => new LinuxTrashCanService(
                 resolver.GetRequiredService<IMountedDriveService>(),
@@ -226,7 +228,11 @@ namespace Camelot.DependencyInjection
 
         private static void RegisterMacServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
-            services.RegisterLazySingleton<IUnmountedDriveService>(() => new MacUnmountedDriveService());
+            services.RegisterLazySingleton<IUnmountedDriveService>(() => new MacUnmountedDriveService(
+                resolver.GetRequiredService<IProcessService>(),
+                resolver.GetRequiredService<IEnvironmentService>(),
+                resolver.GetRequiredService<MacUnmountedDrivesConfiguration>()
+            ));
             services.RegisterLazySingleton<ITrashCanService>(() => new MacTrashCanService(
                 resolver.GetRequiredService<IMountedDriveService>(),
                 resolver.GetRequiredService<IOperationsService>(),

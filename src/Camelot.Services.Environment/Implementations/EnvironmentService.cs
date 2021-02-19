@@ -7,8 +7,6 @@ namespace Camelot.Services.Environment.Implementations
     {
         public string NewLine => SysEnv.NewLine;
 
-        public int ProcessorsCount => SysEnv.ProcessorCount;
-
         public bool Is64BitProcess => SysEnv.Is64BitProcess;
 
         public string GetEnvironmentVariable(string variableName) =>

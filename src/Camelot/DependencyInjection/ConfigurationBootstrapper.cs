@@ -7,11 +7,12 @@ using Camelot.Properties;
 using Camelot.Services.Configuration;
 using Camelot.Services.Environment.Enums;
 using Camelot.Services.Environment.Interfaces;
-using Camelot.Services.Linux.Configuration;
 using Camelot.Services.Mac.Configuration;
 using Camelot.ViewModels.Configuration;
 using Microsoft.Extensions.Configuration;
 using Splat;
+using LinuxUnmountedDrivesConfiguration = Camelot.Services.Linux.Configuration.UnmountedDrivesConfiguration;
+using MacUnmountedDrivesConfiguration = Camelot.Services.Mac.Configuration.UnmountedDrivesConfiguration;
 
 namespace Camelot.DependencyInjection
 {
@@ -134,8 +135,23 @@ namespace Camelot.DependencyInjection
         private static void RegisterUnmountedDrivesConfiguration(IMutableDependencyResolver services,
             IConfiguration configuration)
         {
-            var config = new UnmountedDrivesConfiguration();
-            configuration.GetSection("UnmountedDrives").Bind(config);
+            RegisterLinuxUnmountedDrivesConfiguration(services, configuration);
+            RegisterMacUnmountedDrivesConfiguration(services, configuration);
+        }
+
+        private static void RegisterLinuxUnmountedDrivesConfiguration(IMutableDependencyResolver services,
+            IConfiguration configuration)
+        {
+            var config = new LinuxUnmountedDrivesConfiguration();
+            configuration.GetSection("UnmountedDrives:Linux").Bind(config);
+            services.RegisterConstant(config);
+        }
+
+        private static void RegisterMacUnmountedDrivesConfiguration(IMutableDependencyResolver services,
+            IConfiguration configuration)
+        {
+            var config = new MacUnmountedDrivesConfiguration();
+            configuration.GetSection("UnmountedDrives:Mac").Bind(config);
             services.RegisterConstant(config);
         }
 

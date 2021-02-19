@@ -11,10 +11,10 @@ namespace Camelot.Services.Linux
 {
     public class LinuxUnmountedDriveService : UnmountedDriveServiceBase
     {
-        private const string FindDrivesCommand = "lsblk";
-        private const string FindDriveArguments = "--noheadings --raw -o NAME,MOUNTPOINT";
         private const string MountDriveCommand = "udisksctl";
         private const string MountDriveArguments = "mount -b {0}";
+        private const string FindDrivesCommand = "lsblk";
+        private const string FindDrivesArguments = "--noheadings --raw -o NAME,MOUNTPOINT";
 
         private readonly IProcessService _processService;
         private readonly IEnvironmentService _environmentService;
@@ -56,7 +56,7 @@ namespace Camelot.Services.Linux
 
         private async Task<IReadOnlyList<UnmountedDriveModel>> GetUnmountedDrivesUsingLsblkAsync()
         {
-            var drives = await _processService.ExecuteAndGetOutputAsync(FindDrivesCommand, FindDriveArguments);
+            var drives = await _processService.ExecuteAndGetOutputAsync(FindDrivesCommand, FindDrivesArguments);
 
             return drives
                 .Split(_environmentService.NewLine, StringSplitOptions.RemoveEmptyEntries)
