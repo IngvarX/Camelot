@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions.Drives;
 using Camelot.Services.Configuration;
@@ -24,17 +25,15 @@ namespace Camelot.Services.Tests.Drives
 
             var taskCompletionSource = new TaskCompletionSource<bool>();
 
+            var callsCount = 0;
+
             _autoMocker
                 .Setup<IUnmountedDriveService>(m => m.ReloadUnmountedDrivesAsync())
                 .Callback(() =>
                 {
-                    try
+                    if (Interlocked.Increment(ref callsCount) == 1)
                     {
                         taskCompletionSource.SetResult(true);
-                    }
-                    catch
-                    {
-                        // ignore
                     }
                 });
 
