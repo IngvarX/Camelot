@@ -58,8 +58,8 @@ namespace Camelot.Services.Mac
 
         private async Task<IReadOnlyList<UnmountedDriveModel>> LoadUnmountedDrivesAsync()
         {
-            var allDrives = await GetDrivesUsingDiskutilAsync();
-            var mountedDrives = await GetMountedDrivesUsingDfAsync();
+            var allDrives = await GetAllDrivesAsync();
+            var mountedDrives = await GetMountedDrivesAsync();
 
             return allDrives
                 .Except(mountedDrives)
@@ -67,17 +67,17 @@ namespace Camelot.Services.Mac
                 .ToArray();
         }
 
-        private async Task<IEnumerable<string>> GetDrivesUsingDiskutilAsync()
+        private async Task<IEnumerable<string>> GetAllDrivesAsync()
         {
             var drives = await _processService.ExecuteAndGetOutputAsync(ListAllDrivesCommand, ListAllDrivesArguments);
 
             return drives
                 .Split(_environmentService.NewLine, StringSplitOptions.RemoveEmptyEntries)
                 .Select(s => s.Split()[0])
-                .Where(d => d.StartsWith("/dev/"));
+                .Where(d => d.StartsWith("/dev/") && !d.StartsWith("/dev/disk0"));
         }
 
-        private async Task<IEnumerable<string>> GetMountedDrivesUsingDfAsync()
+        private async Task<IEnumerable<string>> GetMountedDrivesAsync()
         {
             var drives = await _processService.ExecuteAndGetOutputAsync(ListMountedDrivesCommand, ListMountedDrivesArguments);
 
@@ -97,8 +97,11 @@ namespace Camelot.Services.Mac
         private static UnmountedDriveModel CreateFrom(string driveName) =>
             new UnmountedDriveModel
             {
-                Name = driveName,
+                Name = GetShortName(driveName),
                 FullName = driveName
             };
+
+        private static string GetShortName(string fullName) =>
+            fullName.Substring(fullName.LastIndexOf("/", StringComparison.InvariantCulture) + 1);
     }
 }
