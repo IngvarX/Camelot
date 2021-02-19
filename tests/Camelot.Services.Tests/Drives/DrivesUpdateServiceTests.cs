@@ -26,7 +26,17 @@ namespace Camelot.Services.Tests.Drives
 
             _autoMocker
                 .Setup<IUnmountedDriveService>(m => m.ReloadUnmountedDrivesAsync())
-                .Callback(() => taskCompletionSource.SetResult(true));
+                .Callback(() =>
+                {
+                    try
+                    {
+                        taskCompletionSource.SetResult(true);
+                    }
+                    catch
+                    {
+                        // ignore
+                    }
+                });
 
             var service = _autoMocker.CreateInstance<DrivesUpdateService>();
 
