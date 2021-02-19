@@ -1,14 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Camelot.Services.Drives;
 using Camelot.Services.Environment.Interfaces;
 using Moq.AutoMock;
 using Xunit;
 using DriveInfo = Camelot.Services.Environment.Models.DriveInfo;
-using IoDriveInfo = System.IO.DriveInfo;
 
-namespace Camelot.Services.Tests.Drives
+namespace Camelot.Services.AllPlatforms.Tests
 {
     public class MountedDriveServiceTests
     {
@@ -169,5 +167,16 @@ namespace Camelot.Services.Tests.Drives
                     DriveType = DriveType.Fixed
                 }
             };
+
+        private class MountedDriveService : MountedDriveServiceBase
+        {
+            public MountedDriveService(IEnvironmentDriveService environmentDriveService)
+                : base(environmentDriveService)
+            {
+
+            }
+
+            public override void Unmount(string drive) => throw new NotImplementedException();
+        }
     }
 }

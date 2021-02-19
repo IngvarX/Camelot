@@ -51,5 +51,11 @@
                 </TextBlock>
             </Grid>
         </ToolTip.Tip>
+
+        <Button.ContextMenu>
+            <ContextMenu>
+                <MenuItem Header="{x:Static p:Resources.Unmount}" Command="{Binding UnmountCommand}" />
+            </ContextMenu>
+        </Button.ContextMenu>
     </Button>
 </UserControl>

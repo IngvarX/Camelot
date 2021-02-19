@@ -9,9 +9,9 @@ using Camelot.Services.Abstractions.Models.EventArgs;
 using Camelot.Services.Environment.Interfaces;
 using DriveInfo = Camelot.Services.Environment.Models.DriveInfo;
 
-namespace Camelot.Services.Drives
+namespace Camelot.Services.AllPlatforms
 {
-    public class MountedDriveService : IMountedDriveService
+    public abstract class MountedDriveServiceBase : IMountedDriveService
     {
         private readonly IEnvironmentDriveService _environmentDriveService;
 
@@ -25,7 +25,7 @@ namespace Camelot.Services.Drives
 
         public event EventHandler<MountedDriveEventArgs> DriveUpdated;
 
-        public MountedDriveService(
+        protected MountedDriveServiceBase(
             IEnvironmentDriveService environmentDriveService)
         {
             _environmentDriveService = environmentDriveService;
@@ -81,6 +81,8 @@ namespace Camelot.Services.Drives
                 DriveRemoved.Raise(this, CreateFrom(driveModel));
             }
         }
+
+        public abstract void Unmount(string drive);
 
         private IReadOnlyList<DriveModel> GetMountedDrives() =>
             _environmentDriveService

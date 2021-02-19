@@ -18,5 +18,7 @@ namespace Camelot.Services.Abstractions.Drives
         DriveModel GetFileDrive(string filePath);
 
         void ReloadMountedDrives();
+
+        void Unmount(string drive);
     }
 }

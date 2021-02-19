@@ -14,21 +14,25 @@ namespace Camelot.ViewModels.Factories.Implementations
         private readonly IPathService _pathService;
         private readonly IFilesOperationsMediator _filesOperationsMediator;
         private readonly IUnmountedDriveService _unmountedDriveService;
+        private readonly IMountedDriveService _mountedDriveService;
 
         public DriveViewModelFactory(
             IFileSizeFormatter fileSizeFormatter,
             IPathService pathService,
             IFilesOperationsMediator filesOperationsMediator,
-            IUnmountedDriveService unmountedDriveService)
+            IUnmountedDriveService unmountedDriveService,
+            IMountedDriveService mountedDriveService)
         {
             _fileSizeFormatter = fileSizeFormatter;
             _pathService = pathService;
             _filesOperationsMediator = filesOperationsMediator;
             _unmountedDriveService = unmountedDriveService;
+            _mountedDriveService = mountedDriveService;
         }
 
         public IDriveViewModel Create(DriveModel driveModel) =>
-            new DriveViewModel(_fileSizeFormatter, _pathService, _filesOperationsMediator, driveModel);
+            new DriveViewModel(_fileSizeFormatter, _pathService, _filesOperationsMediator,
+                _mountedDriveService, driveModel);
 
         public IDriveViewModel Create(UnmountedDriveModel unmountedDriveModel) =>
             new UnmountedDriveViewModel(_unmountedDriveService, unmountedDriveModel);

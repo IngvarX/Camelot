@@ -477,4 +477,7 @@
   <data name="LightThemeName" xml:space="preserve">
     <value>Светлая</value>
   </data>
+  <data name="Unmount" xml:space="preserve">
+    <value>Размонтировать</value>
+  </data>
 </root>

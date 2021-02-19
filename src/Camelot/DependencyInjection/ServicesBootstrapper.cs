@@ -71,9 +71,6 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<ILogger>()
             ));
             services.RegisterLazySingleton<IDateTimeProvider>(() => new DateTimeProvider());
-            services.RegisterLazySingleton<IMountedDriveService>(() => new MountedDriveService(
-                resolver.GetRequiredService<IEnvironmentDriveService>()
-            ));
             services.RegisterLazySingleton<IDrivesUpdateService>(() => new DrivesUpdateService(
                 resolver.GetRequiredService<IMountedDriveService>(),
                 resolver.GetRequiredService<IUnmountedDriveService>(),
@@ -221,6 +218,10 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IMimeTypesReader>(),
                 resolver.GetRequiredService<IPathService>()
             ));
+            services.RegisterLazySingleton<IMountedDriveService>(() => new LinuxMountedDriveService(
+                resolver.GetRequiredService<IEnvironmentDriveService>(),
+                resolver.GetRequiredService<IProcessService>()
+            ));
         }
 
         private static void RegisterMacServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
@@ -257,6 +258,10 @@ namespace Camelot.DependencyInjection
             services.RegisterLazySingleton<IApplicationService>(() => new MacApplicationService(
                 resolver.GetRequiredService<IApplicationsListLoader>(),
                 resolver.GetRequiredService<IApplicationsAssociationsLoader>()
+            ));
+            services.RegisterLazySingleton<IMountedDriveService>(() => new MacMountedDriveService(
+                resolver.GetRequiredService<IEnvironmentDriveService>(),
+                resolver.GetRequiredService<IProcessService>()
             ));
         }
 
@@ -297,6 +302,10 @@ namespace Camelot.DependencyInjection
             ));
             services.RegisterLazySingleton<IApplicationInfoProvider>(() => new WindowsApplicationInfoProvider());
             services.RegisterLazySingleton<IRegistryService>(() => new WindowsRegistryService());
+            services.RegisterLazySingleton<IMountedDriveService>(() => new WindowsMountedDriveService(
+                resolver.GetRequiredService<IEnvironmentDriveService>(),
+                resolver.GetRequiredService<IProcessService>()
+            ));
         }
     }
 }

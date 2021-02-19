@@ -28,7 +28,6 @@ namespace Camelot.Services.Linux.Tests
         public LinuxApplicationServiceTests()
         {
             _autoMocker = new AutoMocker();
-
         }
 
         [Theory]
