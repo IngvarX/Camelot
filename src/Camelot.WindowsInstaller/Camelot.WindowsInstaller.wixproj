@@ -39,7 +39,7 @@
     <Compile Include="Product.wxs" />
   </ItemGroup>
   <ItemGroup>
-    <WixExtension Include="WixUIExtension">  
+    <WixExtension Include="WixUIExtension">
       <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
       <Name>WixUIExtension</Name>
     </WixExtension>
@@ -55,6 +55,9 @@
       <Runtime>win-x64</Runtime>
       <TargetFrameworkIdentifier>netcoreapp3.1</TargetFrameworkIdentifier>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="RemoveExeComponent.xslt" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" Condition=" '$(WixTargetsPath)' != '' " />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets" Condition=" '$(WixTargetsPath)' == '' AND Exists('$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets') " />
@@ -72,7 +75,8 @@
     </PropertyGroup>
     <HeatDirectory DirectoryRefId="INSTALLFOLDER" 
                    OutputFile="obj\$(Configuration)\%(ProjectReference.Name).wxs" 
-                   Directory="%(ProjectReference.RootDir)%(ProjectReference.Directory)bin\$(Configuration)\%(ProjectReference.TargetFrameworkIdentifier)\%(ProjectReference.Runtime)\publish" 
+                   Directory="%(ProjectReference.RootDir)%(ProjectReference.Directory)bin\$(Configuration)\%(ProjectReference.TargetFrameworkIdentifier)\%(ProjectReference.Runtime)\publish"
+				   Transforms="$(ProjectDir)RemoveExeComponent.xslt" 
                    PreprocessorVariable="var.BasePath" 
                    ComponentGroupName="SourceComponentGroup" 
                    ToolPath="$(WixToolPath)" 
