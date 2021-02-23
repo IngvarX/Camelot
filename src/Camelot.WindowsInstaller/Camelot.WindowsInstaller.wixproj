@@ -76,7 +76,7 @@
     <HeatDirectory DirectoryRefId="INSTALLFOLDER" 
                    OutputFile="obj\$(Configuration)\%(ProjectReference.Name).wxs" 
                    Directory="%(ProjectReference.RootDir)%(ProjectReference.Directory)bin\$(Configuration)\%(ProjectReference.TargetFrameworkIdentifier)\%(ProjectReference.Runtime)\publish"
-		   Transforms="$(ProjectDir)RemoveExeComponent.xslt" 
+				   Transforms="$(ProjectDir)RemoveExeComponent.xslt" 
                    PreprocessorVariable="var.BasePath" 
                    ComponentGroupName="SourceComponentGroup" 
                    ToolPath="$(WixToolPath)" 
