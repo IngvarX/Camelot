@@ -123,8 +123,11 @@ namespace Camelot.Services.Linux
 
         private (string, string) ExtractExecutePathAndArguments(string startCommand)
         {
-            var executePath = startCommand.Split().FirstOrDefault();
-            if (executePath is null)
+            var executePath = startCommand.StartsWith("\"")
+                ? startCommand.Substring(1, startCommand.IndexOf('\"', 1) - 1).Replace(" ", "\\ ")
+                : startCommand.Split().FirstOrDefault();
+
+            if (string.IsNullOrWhiteSpace(executePath))
             {
                 return default;
             }
