@@ -23,6 +23,7 @@
         <Property Id="ARPNOREPAIR">1</Property>
 		<Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER"></Property>
 
+        <WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)LICENSE.rtf" />
 		<UIRef Id="WixUI_InstallDir" />
 
 		<Feature Id="ProductFeature" Title="!(bind.property.ProductName)" Level="1">
