@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Archive;
@@ -135,7 +136,7 @@ namespace Camelot.Operations.Tests
                     return;
                 }
 
-                callbackCallsCount++;
+                Interlocked.Increment(ref callbackCallsCount);
 
                 var (sourceFilePath, _) = operation.CurrentBlockedFile;
                 var options = OperationContinuationOptions.CreateContinuationOptions(sourceFilePath, applyToAll, mode);

@@ -228,7 +228,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
             var apps = appsNames.Select(n => new ApplicationModel
             {
                 DisplayName = n
-            });
+            }).ToArray();
             _autoMocker
                 .Setup<IApplicationService, Task<IEnumerable<ApplicationModel>>>(m => m.GetInstalledApplicationsAsync())
                 .ReturnsAsync(apps);

@@ -82,12 +82,12 @@ namespace Camelot.Operations
 
         public Task PauseAsync()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public Task UnpauseAsync()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public async Task CancelAsync()

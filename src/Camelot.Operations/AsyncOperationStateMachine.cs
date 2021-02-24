@@ -82,9 +82,6 @@ namespace Camelot.Operations
                 _ when State != expectedState =>
                     throw new InvalidOperationException($"Inner state {State} is not {expectedState}"),
 
-                _ when State == requestedState =>
-                    throw new InvalidOperationException($"Inner state {State} is the same as requested state"),
-
                 (OperationState.NotStarted, OperationState.InProgress) =>
                     WrapAsync(_compositeOperation.RunAsync, OperationState.InProgress, OperationState.Finished),
 
