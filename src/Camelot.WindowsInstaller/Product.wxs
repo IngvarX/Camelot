@@ -3,7 +3,7 @@
 	<Product Id="2562F49C-1CC1-4A5B-A51F-2A1422DE4A8D" 
              Name="Camelot" 
              Language="1033" 
-             Version="1.0.0.0" 
+             Version="!(bind.fileVersion.CamelotAppId)" 
              Manufacturer="Camelot Team" 
              UpgradeCode="68ec3de1-4a92-4786-bfbb-8f2d89fc874c">
 		<Package InstallerVersion="200"
@@ -23,6 +23,7 @@
         <Property Id="ARPNOREPAIR">1</Property>
 		<Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER"></Property>
 
+        <WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)LICENSE.rtf" />
 		<UIRef Id="WixUI_InstallDir" />
 
 		<Feature Id="ProductFeature" Title="!(bind.property.ProductName)" Level="1">
@@ -46,9 +47,14 @@
 	<Fragment>
 		<ComponentGroup Id="ProductComponents">
 			<ComponentRef Id="MainAppShortcut" />
+			<ComponentRef Id="CamelotAppComponent" />
 		</ComponentGroup>
 		<DirectoryRef Id="INSTALLFOLDER" FileSource="$(var.BasePath)">
-			<Component Id="MainAppShortcut" Guid="{FFC9BB04-7381-4EA8-81C8-17F932C202B7}">
+            <Component Id="CamelotAppComponent" Guid="*">
+                <File Id="CamelotAppId" KeyPath="yes" Source="camelot.exe" />
+            </Component>
+
+            <Component Id="MainAppShortcut" Guid="{FFC9BB04-7381-4EA8-81C8-17F932C202B7}">
 				<Shortcut Id="MainAppShortcut"
                           Name="!(bind.property.ProductName)"
                           Target="[INSTALLFOLDER]!(bind.property.ProductName).exe"
@@ -65,6 +71,6 @@
                                KeyPath="yes" />
 				<RemoveFolder Id="RemoveStartMenu" Directory="InstallProgramMenuFolder" On="uninstall" />
 			</Component>
-		</DirectoryRef>
+        </DirectoryRef>
 	</Fragment>
 </Wix>
