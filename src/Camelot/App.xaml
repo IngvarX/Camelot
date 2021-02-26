@@ -1,11 +1,24 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:views="clr-namespace:Camelot.Views"
+             xmlns:p="clr-namespace:Camelot.Properties"
+             xmlns:viewModels="clr-namespace:Camelot.ViewModels.Implementations;assembly=Camelot.ViewModels"
+             Name="Camelot"
              x:Class="Camelot.App">
 
     <Application.DataTemplates>
         <views:ViewLocator />
     </Application.DataTemplates>
+
+    <Design.DataContext>
+        <viewModels:MainWindowViewModel />
+    </Design.DataContext>
+
+    <NativeMenu.Menu >
+        <NativeMenu>
+            <NativeMenuItem Header="{x:Static p:Resources.AboutCamelotTitle}" Command="{Binding MenuViewModel.AboutCommand}" />
+        </NativeMenu>
+    </NativeMenu.Menu>
 
     <Application.Styles>
         <StyleInclude Source="avares://Avalonia.Themes.Default/DefaultTheme.xaml" />

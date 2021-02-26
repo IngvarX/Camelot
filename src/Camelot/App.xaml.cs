@@ -25,9 +25,10 @@ namespace Camelot
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
+                DataContext = GetRequiredService<MainWindowViewModel>();
                 desktop.MainWindow = new MainWindow
                 {
-                    DataContext = GetRequiredService<MainWindowViewModel>()
+                    DataContext = DataContext
                 };
             }
 
