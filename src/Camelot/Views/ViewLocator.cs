@@ -7,11 +7,14 @@ namespace Camelot.Views
 {
     public class ViewLocator : IDataTemplate
     {
-        public bool SupportsRecycling => false;
-
         public IControl Build(object data)
         {
             var fullName = data.GetType().FullName;
+            if (fullName is null)
+            {
+                throw new InvalidOperationException($"Full name for type was not found");
+            }
+
             var name = fullName
                 .Replace("ViewModel", "View")
                 .Replace("Camelot", "Camelot.ViewModels");

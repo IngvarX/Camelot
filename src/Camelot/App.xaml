@@ -14,7 +14,7 @@
         <viewModels:MainWindowViewModel />
     </Design.DataContext>
 
-    <NativeMenu.Menu >
+    <NativeMenu.Menu>
         <NativeMenu>
             <NativeMenuItem Header="{x:Static p:Resources.AboutCamelotTitle}" Command="{Binding MenuViewModel.AboutCommand}" />
         </NativeMenu>
