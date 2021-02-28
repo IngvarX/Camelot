@@ -36,5 +36,25 @@ namespace Camelot.Services.Mac.Tests
             _autoMocker
                 .Verify<IProcessService>(m => m.Run(command, arguments), Times.Once);
         }
+
+        [Theory]
+        [InlineData("/home/test", "diskutil", "eject /home/test")]
+        [InlineData("/home/camelot", "diskutil", "eject /home/camelot")]
+        [InlineData("/dev/disk1", "diskutil", "eject /dev/disk1")]
+        public void TestEject(string drive, string command, string arguments)
+        {
+            _autoMocker
+                .Setup<IProcessService>(m => m.Run(command, arguments))
+                .Verifiable();
+            _autoMocker
+                .Setup<IEnvironmentDriveService, IReadOnlyList<DriveInfo>>(m => m.GetMountedDrives())
+                .Returns(Array.Empty<DriveInfo>());
+
+            var service = _autoMocker.CreateInstance<MacMountedDriveService>();
+            service.Eject(drive);
+
+            _autoMocker
+                .Verify<IProcessService>(m => m.Run(command, arguments), Times.Once);
+        }
     }
 }

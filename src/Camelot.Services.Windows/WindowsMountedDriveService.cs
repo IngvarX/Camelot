@@ -1,3 +1,4 @@
+using System;
 using Camelot.Services.AllPlatforms;
 using Camelot.Services.Environment.Interfaces;
 
@@ -25,9 +26,6 @@ namespace Camelot.Services.Windows
             _processService.Run(UnmountDriveCommand, arguments);
         }
 
-        public override void Eject(string driveRootDirectory)
-        {
-            throw new System.NotImplementedException();
-        }
+        public override void Eject(string driveRootDirectory) => throw new NotSupportedException();
     }
 }
