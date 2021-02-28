@@ -55,6 +55,7 @@
         <Button.ContextMenu>
             <ContextMenu>
                 <MenuItem Header="{x:Static p:Resources.Unmount}" Command="{Binding UnmountCommand}" />
+                <MenuItem Header="{x:Static p:Resources.Eject}" Command="{Binding EjectCommand}" />
             </ContextMenu>
         </Button.ContextMenu>
     </Button>

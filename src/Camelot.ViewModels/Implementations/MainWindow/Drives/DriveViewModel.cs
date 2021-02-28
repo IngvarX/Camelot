@@ -67,6 +67,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.Drives
 
         public ICommand UnmountCommand { get; }
 
+        public ICommand EjectCommand { get; }
+
         public DriveViewModel(
             IFileSizeFormatter fileSizeFormatter,
             IPathService pathService,
@@ -87,6 +89,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.Drives
 
             OpenCommand = ReactiveCommand.Create(Open);
             UnmountCommand = ReactiveCommand.Create(Unmount);
+            EjectCommand = ReactiveCommand.Create(Eject);
         }
 
         private void Open() =>
@@ -94,5 +97,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.Drives
 
 
         private void Unmount() => _mountedDriveService.Unmount(_rootDirectory);
+
+        private void Eject() => _mountedDriveService.Eject(_rootDirectory);
     }
 }

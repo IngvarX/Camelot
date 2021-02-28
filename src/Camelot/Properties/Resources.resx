@@ -480,4 +480,7 @@
   <data name="Unmount" xml:space="preserve">
     <value>Unmount</value>
   </data>
+  <data name="Eject" xml:space="preserve">
+    <value>Eject</value>
+  </data>
 </root>

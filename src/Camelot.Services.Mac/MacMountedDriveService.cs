@@ -7,6 +7,8 @@ namespace Camelot.Services.Mac
     {
         private const string UnmountDriveCommand = "diskutil";
         private const string UnmountDriveArguments = "unmount {0}";
+        private const string EjectDriveCommand = "diskutil";
+        private const string EjectDriveArguments = "eject {0}";
 
         private readonly IProcessService _processService;
 
@@ -18,11 +20,18 @@ namespace Camelot.Services.Mac
             _processService = processService;
         }
 
-        public override void Unmount(string drive)
+        public override void Unmount(string driveRootDirectory)
         {
-            var arguments = string.Format(UnmountDriveArguments, drive);
+            var arguments = string.Format(UnmountDriveArguments, driveRootDirectory);
 
             _processService.Run(UnmountDriveCommand, arguments);
+        }
+
+        public override void Eject(string driveRootDirectory)
+        {
+            var arguments = string.Format(EjectDriveArguments, driveRootDirectory);
+
+            _processService.Run(EjectDriveCommand, arguments);
         }
     }
 }

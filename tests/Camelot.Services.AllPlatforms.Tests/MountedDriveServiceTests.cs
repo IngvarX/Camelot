@@ -176,7 +176,9 @@ namespace Camelot.Services.AllPlatforms.Tests
 
             }
 
-            public override void Unmount(string drive) => throw new NotImplementedException();
+            public override void Unmount(string driveRootDirectory) => throw new NotImplementedException();
+
+            public override void Eject(string driveRootDirectory) => throw new NotImplementedException();
         }
     }
 }

@@ -82,7 +82,9 @@ namespace Camelot.Services.AllPlatforms
             }
         }
 
-        public abstract void Unmount(string drive);
+        public abstract void Unmount(string driveRootDirectory);
+
+        public abstract void Eject(string driveRootDirectory);
 
         private IReadOnlyList<DriveModel> GetMountedDrives() =>
             _environmentDriveService

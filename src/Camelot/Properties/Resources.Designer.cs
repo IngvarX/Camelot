@@ -770,5 +770,11 @@ namespace Camelot.Properties {
                 return ResourceManager.GetString("Unmount", resourceCulture);
             }
         }
+        
+        public static string Eject {
+            get {
+                return ResourceManager.GetString("Eject", resourceCulture);
+            }
+        }
     }
 }

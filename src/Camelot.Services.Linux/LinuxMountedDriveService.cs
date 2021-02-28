@@ -7,6 +7,8 @@ namespace Camelot.Services.Linux
     {
         private const string UnmountDriveCommand = "umount";
         private const string UnmountDriveArguments = "{0}";
+        private const string EjectDriveCommand = "eject";
+        private const string EjectDriveArguments = "{0}";
 
         private readonly IProcessService _processService;
 
@@ -18,11 +20,18 @@ namespace Camelot.Services.Linux
             _processService = processService;
         }
 
-        public override void Unmount(string drive)
+        public override void Unmount(string driveRootDirectory)
         {
-            var arguments = string.Format(UnmountDriveArguments, drive);
+            var arguments = string.Format(UnmountDriveArguments, driveRootDirectory);
 
             _processService.Run(UnmountDriveCommand, arguments);
+        }
+
+        public override void Eject(string driveRootDirectory)
+        {
+            var arguments = string.Format(EjectDriveArguments, driveRootDirectory);
+
+            _processService.Run(EjectDriveCommand, arguments);
         }
     }
 }

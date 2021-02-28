@@ -19,6 +19,8 @@ namespace Camelot.Services.Abstractions.Drives
 
         void ReloadMountedDrives();
 
-        void Unmount(string drive);
+        void Unmount(string driveRootDirectory);
+
+        void Eject(string driveRootDirectory);
     }
 }

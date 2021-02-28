@@ -18,11 +18,16 @@ namespace Camelot.Services.Windows
             _processService = processService;
         }
 
-        public override void Unmount(string drive)
+        public override void Unmount(string driveRootDirectory)
         {
-            var arguments = string.Format(UnmountDriveArguments, drive);
+            var arguments = string.Format(UnmountDriveArguments, driveRootDirectory);
 
             _processService.Run(UnmountDriveCommand, arguments);
+        }
+
+        public override void Eject(string driveRootDirectory)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
