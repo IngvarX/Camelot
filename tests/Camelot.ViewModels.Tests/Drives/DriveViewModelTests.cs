@@ -1,4 +1,5 @@
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Drives;
 using Camelot.Services.Abstractions.Models;
 using Camelot.ViewModels.Implementations.MainWindow.Drives;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
@@ -83,6 +84,25 @@ namespace Camelot.ViewModels.Tests.Drives
 
             filePanelViewModelMock
                 .VerifySet(m => m.CurrentDirectory = driveModel.RootDirectory, Times.Once);
+        }
+
+        [Fact]
+        public void TestUnmountCommand()
+        {
+            var driveModel = new DriveModel
+            {
+                RootDirectory = "/test"
+            };
+            _autoMocker.Use(driveModel);
+
+            var viewModel = _autoMocker.CreateInstance<DriveViewModel>();
+
+            Assert.True(viewModel.UnmountCommand.CanExecute(null));
+            viewModel.UnmountCommand.Execute(null);
+
+            _autoMocker
+                .Verify<IMountedDriveService>(m => m.Unmount(driveModel.RootDirectory),
+                    Times.Once);
         }
     }
 }
