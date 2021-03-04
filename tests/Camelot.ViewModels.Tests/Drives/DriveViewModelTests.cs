@@ -114,5 +114,24 @@ namespace Camelot.ViewModels.Tests.Drives
                 .Verify<IMountedDriveService>(m => m.Unmount(driveModel.RootDirectory),
                     Times.Once);
         }
+
+        [Fact]
+        public void TestEjectCommand()
+        {
+            var driveModel = new DriveModel
+            {
+                RootDirectory = "/test"
+            };
+            _autoMocker.Use(driveModel);
+
+            var viewModel = _autoMocker.CreateInstance<DriveViewModel>();
+
+            Assert.True(viewModel.EjectCommand.CanExecute(null));
+            viewModel.EjectCommand.Execute(null);
+
+            _autoMocker
+                .Verify<IMountedDriveService>(m => m.EjectAsync(driveModel.RootDirectory),
+                    Times.Once);
+        }
     }
 }
