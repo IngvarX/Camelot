@@ -1,8 +1,11 @@
+using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Drives;
 using Camelot.Services.Abstractions.Models;
+using Camelot.Services.Environment.Enums;
+using Camelot.Services.Environment.Interfaces;
 using Camelot.ViewModels.Interfaces.MainWindow.Drives;
 using Camelot.ViewModels.Services.Interfaces;
 using ReactiveUI;
@@ -64,6 +67,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.Drives
 
         public string TotalFormattedSize => _fileSizeFormatter.GetFormattedSize(TotalSpaceBytes);
 
+        public bool IsEjectAvailable { get; }
+
         public ICommand OpenCommand { get; }
 
         public ICommand UnmountCommand { get; }
@@ -75,6 +80,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.Drives
             IPathService pathService,
             IFilesOperationsMediator filesOperationsMediator,
             IMountedDriveService mountedDriveService,
+            IPlatformService platformService,
             DriveModel driveModel)
         {
             _fileSizeFormatter = fileSizeFormatter;
@@ -87,11 +93,20 @@ namespace Camelot.ViewModels.Implementations.MainWindow.Drives
             Name = driveModel.Name;
             FreeSpaceBytes = driveModel.FreeSpaceBytes;
             TotalSpaceBytes = driveModel.TotalSpaceBytes;
+            IsEjectAvailable = CheckIfEjectAvailable(platformService);
 
             OpenCommand = ReactiveCommand.Create(Open);
             UnmountCommand = ReactiveCommand.Create(Unmount);
             EjectCommand = ReactiveCommand.CreateFromTask(EjectAsync);
         }
+
+        private static bool CheckIfEjectAvailable(IPlatformService platformService) =>
+            platformService.GetPlatform() switch
+            {
+                Platform.Linux => true,
+                Platform.MacOs => true,
+                _ => false
+            };
 
         private void Open() =>
             _filesOperationsMediator.ActiveFilesPanelViewModel.CurrentDirectory = _rootDirectory;

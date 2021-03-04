@@ -1,6 +1,8 @@
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Drives;
 using Camelot.Services.Abstractions.Models;
+using Camelot.Services.Environment.Enums;
+using Camelot.Services.Environment.Interfaces;
 using Camelot.ViewModels.Implementations.MainWindow.Drives;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Services.Interfaces;
@@ -19,8 +21,12 @@ namespace Camelot.ViewModels.Tests.Drives
             _autoMocker = new AutoMocker();
         }
 
-        [Fact]
-        public void TestProperties()
+        [Theory]
+        [InlineData(true, Platform.Linux)]
+        [InlineData(true, Platform.MacOs)]
+        [InlineData(false, Platform.Windows)]
+        [InlineData(false, Platform.Unknown)]
+        public void TestProperties(bool isEjectAvailable, Platform platform)
         {
             const string name = "tst";
             var driveModel = new DriveModel
@@ -44,6 +50,9 @@ namespace Camelot.ViewModels.Tests.Drives
             _autoMocker
                 .Setup<IFilesOperationsMediator, IFilesPanelViewModel>(m => m.ActiveFilesPanelViewModel)
                 .Returns(filePanelViewModelMock.Object);
+            _autoMocker
+                .Setup<IPlatformService, Platform>(m => m.GetPlatform())
+                .Returns(platform);
 
             var viewModel = _autoMocker.CreateInstance<DriveViewModel>();
 
@@ -52,6 +61,7 @@ namespace Camelot.ViewModels.Tests.Drives
             Assert.Equal("21 B", viewModel.AvailableFormattedSize);
             Assert.Equal("42", viewModel.TotalSizeAsNumber);
             Assert.Equal("42 B", viewModel.TotalFormattedSize);
+            Assert.Equal(isEjectAvailable, viewModel.IsEjectAvailable);
             Assert.Equal(driveModel.Name, viewModel.Name);
             Assert.Equal(driveModel.TotalSpaceBytes, viewModel.TotalSpaceBytes);
             Assert.Equal(driveModel.FreeSpaceBytes, viewModel.FreeSpaceBytes);

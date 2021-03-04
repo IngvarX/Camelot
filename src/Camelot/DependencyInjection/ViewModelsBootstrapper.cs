@@ -88,7 +88,8 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IPathService>(),
                 resolver.GetRequiredService<IFilesOperationsMediator>(),
                 resolver.GetRequiredService<IUnmountedDriveService>(),
-                resolver.GetRequiredService<IMountedDriveService>()
+                resolver.GetRequiredService<IMountedDriveService>(),
+                resolver.GetRequiredService<IPlatformService>()
             ));
             services.RegisterLazySingleton<IFavouriteDirectoryViewModelFactory>(() => new FavouriteDirectoryViewModelFactory(
                 resolver.GetRequiredService<IFilesOperationsMediator>(),

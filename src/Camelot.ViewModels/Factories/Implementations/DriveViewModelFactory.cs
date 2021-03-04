@@ -1,6 +1,7 @@
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Drives;
 using Camelot.Services.Abstractions.Models;
+using Camelot.Services.Environment.Interfaces;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Implementations.MainWindow.Drives;
 using Camelot.ViewModels.Interfaces.MainWindow.Drives;
@@ -15,24 +16,27 @@ namespace Camelot.ViewModels.Factories.Implementations
         private readonly IFilesOperationsMediator _filesOperationsMediator;
         private readonly IUnmountedDriveService _unmountedDriveService;
         private readonly IMountedDriveService _mountedDriveService;
+        private readonly IPlatformService _platformService;
 
         public DriveViewModelFactory(
             IFileSizeFormatter fileSizeFormatter,
             IPathService pathService,
             IFilesOperationsMediator filesOperationsMediator,
             IUnmountedDriveService unmountedDriveService,
-            IMountedDriveService mountedDriveService)
+            IMountedDriveService mountedDriveService,
+            IPlatformService platformService)
         {
             _fileSizeFormatter = fileSizeFormatter;
             _pathService = pathService;
             _filesOperationsMediator = filesOperationsMediator;
             _unmountedDriveService = unmountedDriveService;
             _mountedDriveService = mountedDriveService;
+            _platformService = platformService;
         }
 
         public IDriveViewModel Create(DriveModel driveModel) =>
             new DriveViewModel(_fileSizeFormatter, _pathService, _filesOperationsMediator,
-                _mountedDriveService, driveModel);
+                _mountedDriveService, _platformService, driveModel);
 
         public IDriveViewModel Create(UnmountedDriveModel unmountedDriveModel) =>
             new UnmountedDriveViewModel(_unmountedDriveService, unmountedDriveModel);
