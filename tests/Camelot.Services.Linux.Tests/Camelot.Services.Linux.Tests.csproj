@@ -23,6 +23,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\src\Camelot.Services.Linux\Camelot.Services.Linux.csproj" />
+      <ProjectReference Include="..\Camelot.Tests.Common\Camelot.Tests.Common.csproj" />
     </ItemGroup>
 
 </Project>
