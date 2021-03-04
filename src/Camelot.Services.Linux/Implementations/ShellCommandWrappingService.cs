@@ -1,6 +1,6 @@
 using Camelot.Services.Linux.Interfaces;
 
-namespace Camelot.Services.Linux
+namespace Camelot.Services.Linux.Implementations
 {
     public class ShellCommandWrappingService : IShellCommandWrappingService
     {

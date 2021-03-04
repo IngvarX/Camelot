@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Camelot.Services.AllPlatforms;
 using Camelot.Services.Environment.Interfaces;
 
@@ -26,6 +27,7 @@ namespace Camelot.Services.Windows
             _processService.Run(UnmountDriveCommand, arguments);
         }
 
-        public override void Eject(string driveRootDirectory) => throw new NotSupportedException();
+        public override Task EjectAsync(string driveRootDirectory) => 
+            throw new NotSupportedException("Eject on Windows is not supported");
     }
 }

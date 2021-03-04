@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Drives;
@@ -89,15 +90,14 @@ namespace Camelot.ViewModels.Implementations.MainWindow.Drives
 
             OpenCommand = ReactiveCommand.Create(Open);
             UnmountCommand = ReactiveCommand.Create(Unmount);
-            EjectCommand = ReactiveCommand.Create(Eject);
+            EjectCommand = ReactiveCommand.CreateFromTask(EjectAsync);
         }
 
         private void Open() =>
             _filesOperationsMediator.ActiveFilesPanelViewModel.CurrentDirectory = _rootDirectory;
 
-
         private void Unmount() => _mountedDriveService.Unmount(_rootDirectory);
 
-        private void Eject() => _mountedDriveService.Eject(_rootDirectory);
+        private Task EjectAsync() => _mountedDriveService.EjectAsync(_rootDirectory);
     }
 }

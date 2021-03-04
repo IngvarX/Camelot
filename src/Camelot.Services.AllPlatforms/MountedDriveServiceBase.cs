@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Camelot.Extensions;
 using Camelot.Services.Abstractions.Drives;
 using Camelot.Services.Abstractions.Models;
@@ -84,7 +85,7 @@ namespace Camelot.Services.AllPlatforms
 
         public abstract void Unmount(string driveRootDirectory);
 
-        public abstract void Eject(string driveRootDirectory);
+        public abstract Task EjectAsync(string driveRootDirectory);
 
         private IReadOnlyList<DriveModel> GetMountedDrives() =>
             _environmentDriveService

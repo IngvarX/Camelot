@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Camelot.Services.Environment.Interfaces;
 using Camelot.Services.Environment.Models;
 using Moq;
@@ -41,7 +42,7 @@ namespace Camelot.Services.Mac.Tests
         [InlineData("/home/test", "diskutil", "eject /home/test")]
         [InlineData("/home/camelot", "diskutil", "eject /home/camelot")]
         [InlineData("/dev/disk1", "diskutil", "eject /dev/disk1")]
-        public void TestEject(string drive, string command, string arguments)
+        public async Task TestEject(string drive, string command, string arguments)
         {
             _autoMocker
                 .Setup<IProcessService>(m => m.Run(command, arguments))
@@ -51,7 +52,7 @@ namespace Camelot.Services.Mac.Tests
                 .Returns(Array.Empty<DriveInfo>());
 
             var service = _autoMocker.CreateInstance<MacMountedDriveService>();
-            service.Eject(drive);
+            await service.EjectAsync(drive);
 
             _autoMocker
                 .Verify<IProcessService>(m => m.Run(command, arguments), Times.Once);

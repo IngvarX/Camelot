@@ -21,6 +21,7 @@ using Camelot.Services.Implementations;
 using Camelot.Services.Linux;
 using Camelot.Services.Linux.Builders;
 using Camelot.Services.Linux.Configuration;
+using Camelot.Services.Linux.Implementations;
 using Camelot.Services.Linux.Interfaces;
 using Camelot.Services.Linux.Interfaces.Builders;
 using Camelot.Services.Mac;
@@ -191,6 +192,10 @@ namespace Camelot.DependencyInjection
             services.RegisterLazySingleton<IHomeDirectoryProvider>(() => new UnixHomeDirectoryProvider(
                 resolver.GetRequiredService<IEnvironmentService>()
             ));
+            services.RegisterLazySingleton<IDriveNameService>(() => new DriveNameService(
+                resolver.GetRequiredService<IProcessService>(),
+                resolver.GetRequiredService<IEnvironmentService>()
+            ));
             services.RegisterLazySingleton<IDesktopEnvironmentService>(() => new DesktopEnvironmentService(
                 resolver.GetRequiredService<IEnvironmentService>()
             ));
@@ -222,7 +227,9 @@ namespace Camelot.DependencyInjection
             ));
             services.RegisterLazySingleton<IMountedDriveService>(() => new LinuxMountedDriveService(
                 resolver.GetRequiredService<IEnvironmentDriveService>(),
-                resolver.GetRequiredService<IProcessService>()
+                resolver.GetRequiredService<IProcessService>(),
+                resolver.GetRequiredService<IDriveNameService>(),
+                resolver.GetRequiredService<ILogger>()
             ));
         }
 

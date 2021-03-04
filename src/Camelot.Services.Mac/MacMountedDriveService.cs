@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Camelot.Services.AllPlatforms;
 using Camelot.Services.Environment.Interfaces;
 
@@ -27,11 +28,13 @@ namespace Camelot.Services.Mac
             _processService.Run(UnmountDriveCommand, arguments);
         }
 
-        public override void Eject(string driveRootDirectory)
+        public override Task EjectAsync(string driveRootDirectory)
         {
             var arguments = string.Format(EjectDriveArguments, driveRootDirectory);
 
             _processService.Run(EjectDriveCommand, arguments);
+            
+            return Task.CompletedTask;
         }
     }
 }

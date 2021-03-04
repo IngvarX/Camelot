@@ -4,7 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Camelot.Services.Linux.Interfaces;
 
-namespace Camelot.Services.Linux
+namespace Camelot.Services.Linux.Implementations
 {
     public class IniReader : IIniReader
     {

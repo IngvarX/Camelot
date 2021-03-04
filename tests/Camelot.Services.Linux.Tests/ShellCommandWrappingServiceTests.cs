@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using Camelot.Services.Linux.Implementations;
+using Xunit;
 
 namespace Camelot.Services.Linux.Tests
 {

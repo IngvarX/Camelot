@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using Camelot.Services.Environment.Interfaces;
 using Moq.AutoMock;
 using Xunit;
@@ -178,7 +179,7 @@ namespace Camelot.Services.AllPlatforms.Tests
 
             public override void Unmount(string driveRootDirectory) => throw new NotImplementedException();
 
-            public override void Eject(string driveRootDirectory) => throw new NotImplementedException();
+            public override Task EjectAsync(string driveRootDirectory) => throw new NotImplementedException();
         }
     }
 }

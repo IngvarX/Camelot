@@ -2,6 +2,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Camelot.Services.Linux.Implementations;
 using Moq.AutoMock;
 using Xunit;
 

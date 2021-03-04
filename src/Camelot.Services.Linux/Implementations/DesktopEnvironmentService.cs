@@ -2,7 +2,7 @@ using Camelot.Services.Environment.Interfaces;
 using Camelot.Services.Linux.Enums;
 using Camelot.Services.Linux.Interfaces;
 
-namespace Camelot.Services.Linux
+namespace Camelot.Services.Linux.Implementations
 {
     public class DesktopEnvironmentService : IDesktopEnvironmentService
     {
