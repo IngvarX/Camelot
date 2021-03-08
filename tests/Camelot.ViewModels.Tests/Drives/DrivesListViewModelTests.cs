@@ -16,6 +16,9 @@ namespace Camelot.ViewModels.Tests.Drives
 {
     public class DrivesListViewModelTests
     {
+        private const string FirstName = "sdc1";
+        private const string SecondName = "sdc2";
+
         private readonly AutoMocker _autoMocker;
 
         public DrivesListViewModelTests()
@@ -141,6 +144,50 @@ namespace Camelot.ViewModels.Tests.Drives
 
             Assert.NotNull(viewModel.Drives);
             Assert.Empty(viewModel.Drives);
+        }
+
+        [Fact]
+        public void TestUpdateMountedDrive()
+        {
+            var model = new DriveModel
+            {
+                Name = FirstName
+            };
+            _autoMocker
+                .Setup<IMountedDriveService, IReadOnlyList<DriveModel>>(m => m.MountedDrives)
+                .Returns(new[] {model});
+            _autoMocker
+                .Setup<IUnmountedDriveService, IReadOnlyList<UnmountedDriveModel>>(m => m.UnmountedDrives)
+                .Returns(new UnmountedDriveModel[0]);
+
+            var driveViewModelMock = new Mock<IDriveViewModel>();
+            var mountedDriveViewModelMock = driveViewModelMock.As<IMountedDriveViewModel>();
+            mountedDriveViewModelMock
+                .SetupSet(m => m.Name = SecondName)
+                .Verifiable();
+            var driveViewModel = driveViewModelMock.Object;
+            _autoMocker
+                .Setup<IDriveViewModelFactory, IDriveViewModel>(m =>
+                    m.Create(It.Is<DriveModel>(dm => dm.Name == FirstName)))
+                .Returns(driveViewModel);
+
+            var viewModel = _autoMocker.CreateInstance<DrivesListViewModel>();
+
+            Assert.NotNull(viewModel.Drives);
+            Assert.Single(viewModel.Drives);
+            Assert.Equal(driveViewModel, viewModel.Drives.Single());
+
+            model.Name = SecondName;
+            _autoMocker
+                .GetMock<IMountedDriveService>()
+                .Raise(m => m.DriveUpdated += null, new MountedDriveEventArgs(model));
+
+            Assert.NotNull(viewModel.Drives);
+            Assert.Single(viewModel.Drives);
+            Assert.Equal(driveViewModel, viewModel.Drives.Single());
+
+            mountedDriveViewModelMock
+                .VerifySet(m => m.Name = SecondName, Times.Once);
         }
 
         [Fact]

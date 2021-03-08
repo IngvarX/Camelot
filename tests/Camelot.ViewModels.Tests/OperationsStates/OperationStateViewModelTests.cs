@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Camelot.Services.Abstractions;
@@ -120,6 +121,25 @@ namespace Camelot.ViewModels.Tests.OperationsStates
             _autoMocker
                 .GetMock<IOperation>()
                 .Raise(o => o.ProgressChanged += null, new OperationProgressChangedEventArgs(0.5));
+
+            Assert.Equal(0, viewModel.Progress);
+        }
+
+        [Fact]
+        public void TestIncorrectState()
+        {
+            var viewModel = _autoMocker.CreateInstance<OperationStateViewModel>();
+
+            Assert.Equal(0, viewModel.Progress);
+
+            const OperationState operationState = (OperationState) 42;
+            var args = new OperationStateChangedEventArgs(operationState);
+
+            void RaiseEvent() => _autoMocker
+                .GetMock<IOperation>()
+                .Raise(o => o.StateChanged += null, args);
+
+            Assert.Throws<ArgumentOutOfRangeException>(RaiseEvent);
 
             Assert.Equal(0, viewModel.Progress);
         }
