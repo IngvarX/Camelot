@@ -131,20 +131,33 @@ namespace Camelot.ViewModels.Tests.FilePanels
                     Times.AtLeast(1));
         }
 
-        [Fact]
-        public void TestCreateOnOtherPanel()
+        [Theory]
+        [InlineData(true, 0, 1)]
+        [InlineData(false, 1, 0)]
+        public void TestCreateOnOtherPanel(bool isActive, int activeCallsCount, int inactiveCallsCount)
         {
             var tabViewModelMock = new Mock<ITabViewModel>();
-            var filePanelMock = new Mock<IFilesPanelViewModel>();
-            var tabsListMock = new Mock<ITabsListViewModel>();
+            var inactiveFilePanelMock = new Mock<IFilesPanelViewModel>();
+            var activeFilePanelMock = new Mock<IFilesPanelViewModel>();
+            var inactiveTabsListMock = new Mock<ITabsListViewModel>();
+            var activeTabsListMock = new Mock<ITabsListViewModel>();
 
             tabViewModelMock
                 .SetupGet(m => m.CurrentDirectory)
                 .Returns(AppRootDirectory);
-            filePanelMock
+            tabViewModelMock
+                .SetupGet(m => m.IsGloballyActive)
+                .Returns(isActive);
+            inactiveFilePanelMock
                 .SetupGet(m => m.TabsListViewModel)
-                .Returns(tabsListMock.Object);
-            tabsListMock
+                .Returns(inactiveTabsListMock.Object);
+            inactiveTabsListMock
+                .Setup(m => m.CreateNewTab(AppRootDirectory))
+                .Verifiable();
+            activeFilePanelMock
+                .SetupGet(m => m.TabsListViewModel)
+                .Returns(activeTabsListMock.Object);
+            activeTabsListMock
                 .Setup(m => m.CreateNewTab(AppRootDirectory))
                 .Verifiable();
 
@@ -153,7 +166,10 @@ namespace Camelot.ViewModels.Tests.FilePanels
                 .Returns(tabViewModelMock.Object);
             _autoMocker
                 .Setup<IFilesOperationsMediator, IFilesPanelViewModel>(m => m.InactiveFilesPanelViewModel)
-                .Returns(filePanelMock.Object);
+                .Returns(inactiveFilePanelMock.Object);
+            _autoMocker
+                .Setup<IFilesOperationsMediator, IFilesPanelViewModel>(m => m.ActiveFilesPanelViewModel)
+                .Returns(activeFilePanelMock.Object);
             _autoMocker
                 .Setup<IFilesPanelStateService, PanelStateModel>(m => m.GetPanelState())
                 .Returns(new PanelStateModel
@@ -173,7 +189,10 @@ namespace Camelot.ViewModels.Tests.FilePanels
             tabViewModelMock.Raise(m => m.NewTabOnOtherPanelRequested += null, EventArgs.Empty);
             Assert.Single(tabsListViewModel.Tabs);
 
-            tabsListMock.Verify(m => m.CreateNewTab(AppRootDirectory), Times.Once);
+            inactiveTabsListMock
+                .Verify(m => m.CreateNewTab(AppRootDirectory), Times.Exactly(inactiveCallsCount));
+            activeTabsListMock
+                .Verify(m => m.CreateNewTab(AppRootDirectory), Times.Exactly(activeCallsCount));
         }
 
         [Fact]

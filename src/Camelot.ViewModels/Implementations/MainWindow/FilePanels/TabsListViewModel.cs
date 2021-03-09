@@ -233,9 +233,11 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         private void CreateNewTabOnOtherPanel(ITabViewModel tabViewModel)
         {
-            var viewModel = _filesOperationsMediator.InactiveFilesPanelViewModel.TabsListViewModel;
+            var viewModel = SelectedTab.IsGloballyActive
+                ? _filesOperationsMediator.InactiveFilesPanelViewModel
+                : _filesOperationsMediator.ActiveFilesPanelViewModel;
 
-            viewModel.CreateNewTab(tabViewModel.CurrentDirectory);
+            viewModel.TabsListViewModel.CreateNewTab(tabViewModel.CurrentDirectory);
         }
 
         private void CloseTab(ITabViewModel tabViewModel)
