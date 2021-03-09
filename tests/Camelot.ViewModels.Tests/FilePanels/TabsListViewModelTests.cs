@@ -6,6 +6,7 @@ using Camelot.Services.Abstractions.Models.State;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
+using Camelot.ViewModels.Services.Interfaces;
 using Moq;
 using Moq.AutoMock;
 using Xunit;
@@ -128,6 +129,51 @@ namespace Camelot.ViewModels.Tests.FilePanels
             _autoMocker
                 .Verify<IFilesPanelStateService>(m => m.SavePanelState(It.IsAny<PanelStateModel>()),
                     Times.AtLeast(1));
+        }
+
+        [Fact]
+        public void TestCreateOnOtherPanel()
+        {
+            var tabViewModelMock = new Mock<ITabViewModel>();
+            var filePanelMock = new Mock<IFilesPanelViewModel>();
+            var tabsListMock = new Mock<ITabsListViewModel>();
+
+            tabViewModelMock
+                .SetupGet(m => m.CurrentDirectory)
+                .Returns(AppRootDirectory);
+            filePanelMock
+                .SetupGet(m => m.TabsListViewModel)
+                .Returns(tabsListMock.Object);
+            tabsListMock
+                .Setup(m => m.CreateNewTab(AppRootDirectory))
+                .Verifiable();
+
+            _autoMocker
+                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<TabStateModel>()))
+                .Returns(tabViewModelMock.Object);
+            _autoMocker
+                .Setup<IFilesOperationsMediator, IFilesPanelViewModel>(m => m.InactiveFilesPanelViewModel)
+                .Returns(filePanelMock.Object);
+            _autoMocker
+                .Setup<IFilesPanelStateService, PanelStateModel>(m => m.GetPanelState())
+                .Returns(new PanelStateModel
+                {
+                    Tabs = new List<TabStateModel>
+                    {
+                        new TabStateModel {Directory = AppRootDirectory}
+                    }
+                });
+            _autoMocker
+                .Setup<IDirectoryService, bool>(m => m.CheckIfExists(AppRootDirectory))
+                .Returns(true);
+
+            var tabsListViewModel = _autoMocker.CreateInstance<TabsListViewModel>();
+            Assert.Single(tabsListViewModel.Tabs);
+
+            tabViewModelMock.Raise(m => m.NewTabOnOtherPanelRequested += null, EventArgs.Empty);
+            Assert.Single(tabsListViewModel.Tabs);
+
+            tabsListMock.Verify(m => m.CreateNewTab(AppRootDirectory), Times.Once);
         }
 
         [Fact]
