@@ -2,6 +2,7 @@ using Camelot.Services.Abstractions;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Moq;
+using Moq.AutoMock;
 using Xunit;
 
 namespace Camelot.ViewModels.Tests.FilePanels
@@ -11,20 +12,21 @@ namespace Camelot.ViewModels.Tests.FilePanels
         private const string CurrentDirectory = "CurrDir";
         private const string CurrentDirectoryName = "CurrDirName";
 
+        private readonly AutoMocker _autoMocker;
         private readonly TabViewModel _tabViewModel;
 
         public TabViewModelTests()
         {
-            var pathServiceMock = new Mock<IPathService>();
-            pathServiceMock
-                .Setup(m => m.TrimPathSeparators(CurrentDirectory))
+            _autoMocker = new AutoMocker();
+            _autoMocker
+                .Setup<IPathService, string>(m => m.TrimPathSeparators(CurrentDirectory))
                 .Returns(CurrentDirectory);
-            pathServiceMock
-                .Setup(m => m.GetFileName(CurrentDirectory))
+            _autoMocker
+                .Setup<IPathService, string>(m => m.GetFileName(CurrentDirectory))
                 .Returns(CurrentDirectoryName);
-            var sortingViewModelMock = new Mock<IFileSystemNodesSortingViewModel>();
+            _autoMocker.Use(CurrentDirectory);
 
-            _tabViewModel = new TabViewModel(pathServiceMock.Object, sortingViewModelMock.Object, CurrentDirectory);
+            _tabViewModel = _autoMocker.CreateInstance<TabViewModel>();
         }
 
         [Fact]
@@ -45,6 +47,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
         {
             var activationRequested = false;
             _tabViewModel.ActivationRequested += (sender, args) => activationRequested = true;
+            Assert.True(_tabViewModel.ActivateCommand.CanExecute(null));
             _tabViewModel.ActivateCommand.Execute(null);
 
             Assert.True(activationRequested);
@@ -55,7 +58,19 @@ namespace Camelot.ViewModels.Tests.FilePanels
         {
             var newTabRequested = false;
             _tabViewModel.NewTabRequested += (sender, args) => newTabRequested = true;
+            Assert.True(_tabViewModel.NewTabCommand.CanExecute(null));
             _tabViewModel.NewTabCommand.Execute(null);
+
+            Assert.True(newTabRequested);
+        }
+
+        [Fact]
+        public void TestNewTabOnSecondPanelCommand()
+        {
+            var newTabRequested = false;
+            _tabViewModel.NewTabOnOtherPanelRequested += (sender, args) => newTabRequested = true;
+            Assert.True(_tabViewModel.NewTabOnOtherPanelCommand.CanExecute(null));
+            _tabViewModel.NewTabOnOtherPanelCommand.Execute(null);
 
             Assert.True(newTabRequested);
         }
@@ -65,6 +80,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
         {
             var closeRequested = false;
             _tabViewModel.CloseRequested += (sender, args) => closeRequested = true;
+            Assert.True(_tabViewModel.CloseTabCommand.CanExecute(null));
             _tabViewModel.CloseTabCommand.Execute(null);
 
             Assert.True(closeRequested);
@@ -75,6 +91,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
         {
             var closeTabsToTheLeftRequested = false;
             _tabViewModel.ClosingTabsToTheLeftRequested += (sender, args) => closeTabsToTheLeftRequested = true;
+            Assert.True(_tabViewModel.CloseTabsToTheLeftCommand.CanExecute(null));
             _tabViewModel.CloseTabsToTheLeftCommand.Execute(null);
 
             Assert.True(closeTabsToTheLeftRequested);
@@ -85,6 +102,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
         {
             var closeTabsToTheRightRequested = false;
             _tabViewModel.ClosingTabsToTheRightRequested += (sender, args) => closeTabsToTheRightRequested = true;
+            Assert.True(_tabViewModel.CloseTabsToTheRightCommand.CanExecute(null));
             _tabViewModel.CloseTabsToTheRightCommand.Execute(null);
 
             Assert.True(closeTabsToTheRightRequested);
@@ -95,6 +113,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
         {
             var closeAllTabsButThisRequested = false;
             _tabViewModel.ClosingAllTabsButThisRequested += (sender, args) => closeAllTabsButThisRequested = true;
+            Assert.True(_tabViewModel.CloseAllTabsButThisCommand.CanExecute(null));
             _tabViewModel.CloseAllTabsButThisCommand.Execute(null);
 
             Assert.True(closeAllTabsButThisRequested);
@@ -104,23 +123,23 @@ namespace Camelot.ViewModels.Tests.FilePanels
         public void TestSortingViewModelAndDirectory()
         {
             const string directory = "dir";
-            var pathServiceMock = new Mock<IPathService>();
-            pathServiceMock
-                .Setup(m => m.TrimPathSeparators(directory))
+            _autoMocker
+                .Setup<IPathService, string>(m => m.TrimPathSeparators(directory))
                 .Returns(directory)
                 .Verifiable();
-            pathServiceMock
-                .Setup(m => m.GetFileName(directory))
+            _autoMocker
+                .Setup<IPathService, string>(m => m.GetFileName(directory))
                 .Returns(directory)
                 .Verifiable();
-            var sortingViewModelMock = new Mock<IFileSystemNodesSortingViewModel>();
+            _autoMocker.Use(directory);
 
-            var tabViewModel = new TabViewModel(pathServiceMock.Object, sortingViewModelMock.Object, directory);
-            Assert.Equal(sortingViewModelMock.Object, tabViewModel.SortingViewModel);
+            var tabViewModel = _autoMocker.CreateInstance<TabViewModel>();
 
             Assert.Equal(directory, tabViewModel.DirectoryName);
-            pathServiceMock.Verify(m => m.TrimPathSeparators(directory), Times.Once);
-            pathServiceMock.Verify(m => m.GetFileName(directory), Times.Once);
+            _autoMocker
+                .Verify<IPathService>(m => m.TrimPathSeparators(directory), Times.Once);
+            _autoMocker
+                .Verify<IPathService>(m => m.GetFileName(directory), Times.Once);
         }
     }
 }

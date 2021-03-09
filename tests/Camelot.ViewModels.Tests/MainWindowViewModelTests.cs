@@ -67,7 +67,7 @@ namespace Camelot.ViewModels.Tests
         {
             var tabsListViewModelMock = new Mock<ITabsListViewModel>();
             tabsListViewModelMock
-                .Setup(m => m.CreateNewTab())
+                .Setup(m => m.CreateNewTab(null))
                 .Verifiable();
             var filePanelViewModelMock = new Mock<IFilesPanelViewModel>();
             filePanelViewModelMock
@@ -83,7 +83,7 @@ namespace Camelot.ViewModels.Tests
             mainWindowViewModel.CreateNewTabCommand.Execute(null);
 
             tabsListViewModelMock
-                .Verify(m => m.CreateNewTab(), Times.Once);
+                .Verify(m => m.CreateNewTab(null), Times.Once);
         }
 
         [Fact]
