@@ -25,7 +25,7 @@ jobs:
         ./wix311.exe /install /quiet /norestart
     - name: Build Windows Installer
       run: |
-        cd src/Camelot.Install
+        cd src/Camelot.WindowsInstaller
         msbuild -p:Configuration=Release -p:platform=x64
     - name: Create Release
       id: create_release
