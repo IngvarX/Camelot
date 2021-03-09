@@ -776,5 +776,11 @@ namespace Camelot.Properties {
                 return ResourceManager.GetString("Eject", resourceCulture);
             }
         }
+        
+        public static string DuplicateOnOtherPanel {
+            get {
+                return ResourceManager.GetString("DuplicateOnOtherPanel", resourceCulture);
+            }
+        }
     }
 }

@@ -38,6 +38,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         public event EventHandler<EventArgs> NewTabRequested;
 
+        public event EventHandler<EventArgs> NewTabOnOtherPanelRequested;
+
         public event EventHandler<EventArgs> CloseRequested;
 
         public event EventHandler<EventArgs> ClosingTabsToTheLeftRequested;
@@ -49,6 +51,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         public ICommand ActivateCommand { get; }
 
         public ICommand NewTabCommand { get; }
+
+        public ICommand NewTabOnOtherPanelCommand { get; }
 
         public ICommand CloseTabCommand { get; }
 
@@ -69,6 +73,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
             ActivateCommand = ReactiveCommand.Create(RequestActivation);
             NewTabCommand = ReactiveCommand.Create(RequestNewTab);
+            NewTabOnOtherPanelCommand = ReactiveCommand.Create(RequestNewTabOnOtherPanel);
             CloseTabCommand = ReactiveCommand.Create(RequestClosing);
             CloseTabsToTheLeftCommand = ReactiveCommand.Create(RequestClosingTabsToTheLeft);
             CloseTabsToTheRightCommand = ReactiveCommand.Create(RequestClosingTabsToTheRight);
@@ -78,6 +83,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private void RequestActivation() => ActivationRequested.Raise(this, EventArgs.Empty);
 
         private void RequestNewTab() => NewTabRequested.Raise(this, EventArgs.Empty);
+
+        private void RequestNewTabOnOtherPanel() => NewTabOnOtherPanelRequested.Raise(this, EventArgs.Empty);
 
         private void RequestClosing() => CloseRequested.Raise(this, EventArgs.Empty);
 

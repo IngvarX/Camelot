@@ -483,4 +483,7 @@
   <data name="Eject" xml:space="preserve">
     <value>Извлечь</value>
   </data>
+  <data name="DuplicateOnOtherPanel" xml:space="preserve">
+    <value>Дублировать на другой панели</value>
+  </data>
 </root>

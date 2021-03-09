@@ -12,6 +12,7 @@ using Camelot.Services.Abstractions.Models.State;
 using Camelot.ViewModels.Configuration;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
+using Camelot.ViewModels.Services.Interfaces;
 using ReactiveUI;
 
 namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
@@ -21,6 +22,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private readonly IFilesPanelStateService _filesPanelStateService;
         private readonly IDirectoryService _directoryService;
         private readonly ITabViewModelFactory _tabViewModelFactory;
+        private readonly IFilesOperationsMediator _filesOperationsMediator;
         private readonly ObservableCollection<ITabViewModel> _tabs;
 
         private ITabViewModel _selectedTab;
@@ -39,11 +41,13 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             IFilesPanelStateService filesPanelStateService,
             IDirectoryService directoryService,
             ITabViewModelFactory tabViewModelFactory,
+            IFilesOperationsMediator filesOperationsMediator,
             FilePanelConfiguration filePanelConfiguration)
         {
             _filesPanelStateService = filesPanelStateService;
             _directoryService = directoryService;
             _tabViewModelFactory = tabViewModelFactory;
+            _filesOperationsMediator = filesOperationsMediator;
 
             _tabs = SetupTabs();
 
@@ -52,7 +56,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
                 .Subscribe(_ => SaveState());
         }
 
-        public void CreateNewTab() => CreateNewTab(SelectedTab);
+        public void CreateNewTab(string directory = null) => CreateNewTab(SelectedTab, directory);
 
         public void CloseActiveTab() => CloseTab(SelectedTab);
 
@@ -164,6 +168,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         {
             tabViewModel.ActivationRequested += TabViewModelOnActivationRequested;
             tabViewModel.NewTabRequested += TabViewModelOnNewTabRequested;
+            tabViewModel.NewTabOnOtherPanelRequested += TabViewModelOnNewTabOnOtherPanelRequested;
             tabViewModel.CloseRequested += TabViewModelOnCloseRequested;
             tabViewModel.ClosingTabsToTheLeftRequested += TabViewModelOnClosingTabsToTheLeftRequested;
             tabViewModel.ClosingTabsToTheRightRequested += TabViewModelOnClosingTabsToTheRightRequested;
@@ -174,6 +179,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         {
             tabViewModel.ActivationRequested -= TabViewModelOnActivationRequested;
             tabViewModel.NewTabRequested -= TabViewModelOnNewTabRequested;
+            tabViewModel.NewTabOnOtherPanelRequested -= TabViewModelOnNewTabOnOtherPanelRequested;
             tabViewModel.CloseRequested -= TabViewModelOnCloseRequested;
             tabViewModel.ClosingTabsToTheLeftRequested -= TabViewModelOnClosingTabsToTheLeftRequested;
             tabViewModel.ClosingTabsToTheRightRequested -= TabViewModelOnClosingTabsToTheRightRequested;
@@ -183,6 +189,9 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private void TabViewModelOnActivationRequested(object sender, EventArgs e) => SelectTab((ITabViewModel) sender);
 
         private void TabViewModelOnNewTabRequested(object sender, EventArgs e) => CreateNewTab((ITabViewModel) sender);
+
+        private void TabViewModelOnNewTabOnOtherPanelRequested(object sender, EventArgs e) =>
+            CreateNewTabOnOtherPanel((ITabViewModel) sender);
 
         private void TabViewModelOnCloseRequested(object sender, EventArgs e) => CloseTab((ITabViewModel) sender);
 
@@ -214,12 +223,19 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             tabsToClose.ForEach(Remove);
         }
 
-        private void CreateNewTab(ITabViewModel tabViewModel)
+        private void CreateNewTab(ITabViewModel tabViewModel, string directory = null)
         {
             var tabPosition = _tabs.IndexOf(tabViewModel);
-            var newTabViewModel = CreateViewModelFrom(tabViewModel.CurrentDirectory);
+            var newTabViewModel = CreateViewModelFrom(directory ?? tabViewModel.CurrentDirectory);
 
             _tabs.Insert(tabPosition, newTabViewModel);
+        }
+
+        private void CreateNewTabOnOtherPanel(ITabViewModel tabViewModel)
+        {
+            var viewModel = _filesOperationsMediator.InactiveFilesPanelViewModel.TabsListViewModel;
+
+            viewModel.CreateNewTab(tabViewModel.CurrentDirectory);
         }
 
         private void CloseTab(ITabViewModel tabViewModel)

@@ -8,7 +8,7 @@ namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels
 
         event EventHandler<EventArgs> SelectedTabChanged;
 
-        void CreateNewTab();
+        void CreateNewTab(string directory = null);
 
         void CloseActiveTab();
 
