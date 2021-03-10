@@ -51,7 +51,7 @@ namespace Camelot.Views.Main
             var addedItems = args
                 .AddedItems
                 .Cast<IFileSystemNodeViewModel>()
-                .Where(i => !(i is IDirectoryViewModel directoryViewModel && directoryViewModel.IsParentDirectory))
+                .Where(i => !(i is IDirectoryViewModel {IsParentDirectory: true}))
                 .ToArray();
 
             if (!ViewModel.IsActive)
@@ -119,7 +119,10 @@ namespace Camelot.Views.Main
         private void OnNameTextBlockTapped(object sender, RoutedEventArgs args)
         {
             var textBlock = (TextBlock) sender;
-            var viewModel = (IFileSystemNodeViewModel) textBlock.DataContext;
+            if (!(textBlock.DataContext is IFileSystemNodeViewModel viewModel))
+            {
+                return;
+            }
 
             if (viewModel.IsWaitingForEdit)
             {
@@ -138,9 +141,10 @@ namespace Camelot.Views.Main
         private void OnFullNameTextBoxLostFocus(object sender, RoutedEventArgs args)
         {
             var textBox = (TextBox) sender;
-            var viewModel = (IFileSystemNodeViewModel) textBox.DataContext;
-
-            viewModel.IsEditing = false;
+            if (textBox.DataContext is IFileSystemNodeViewModel viewModel)
+            {
+                viewModel.IsEditing = false;
+            }
         }
 
         private static void StopEditing(IFileSystemNodeViewModel viewModel) =>
