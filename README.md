@@ -41,6 +41,10 @@ For publishing instructions please check [scripts](/scripts/) directory.
 ![Camelot on Windows](/docs/Windows.png)
 *Camelot on Windows*
 
+## Translate
+
+All translations are available on [Weblate](https://hosted.weblate.org/projects/camelot/main/)
+
 ## Credits
 
 UI designed by [pkrasicki](https://github.com/pkrasicki)
