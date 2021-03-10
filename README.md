@@ -43,10 +43,14 @@ For publishing instructions please check [scripts](/scripts/) directory.
 
 ## Translate
 
-All translations are available on [Weblate](https://hosted.weblate.org/projects/camelot/main/)
+<a href="https://hosted.weblate.org/engage/camelot/">
+<img src="https://hosted.weblate.org/widgets/camelot/-/CamelotApp/open-graph.png" alt="Translation status" />
+</a>
 
 ## Credits
 
 UI designed by [pkrasicki](https://github.com/pkrasicki)
 
 Icon made by [Freepik](https://www.flaticon.com/authors/freepik) from [www.flaticon.com](https://www.flaticon.com/)
+
+Translations hosted by [Weblate](https://hosted.weblate.org/)
