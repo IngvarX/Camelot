@@ -45,7 +45,7 @@ namespace Camelot.ViewModels.Factories.Implementations
             IFileService fileService,
             IDirectoryService directoryService,
             IArchiveService archiveService,
-            ISystemDialogService systemDialogService, 
+            ISystemDialogService systemDialogService,
             IOpenWithApplicationService openWithApplicationService)
         {
             _fileOpeningBehavior = fileOpeningBehavior;
@@ -99,7 +99,8 @@ namespace Camelot.ViewModels.Factories.Implementations
                 _archiveService,
                 _systemDialogService,
                 _openWithApplicationService,
-                _pathService)
+                _pathService,
+                false)
             {
                 FullPath = fileModel.FullPath,
                 Size = fileModel.SizeBytes,
@@ -125,7 +126,8 @@ namespace Camelot.ViewModels.Factories.Implementations
                 _archiveService,
                 _systemDialogService,
                 _openWithApplicationService,
-                _pathService)
+                _pathService,
+                true)
             {
                 FullPath = directoryModel.FullPath,
                 Name = directoryModel.Name,

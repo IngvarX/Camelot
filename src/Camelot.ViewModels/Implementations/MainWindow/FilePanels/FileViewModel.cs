@@ -40,7 +40,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             IArchiveService archiveService,
             ISystemDialogService systemDialogService,
             IOpenWithApplicationService openWithApplicationService,
-            IPathService pathService)
+            IPathService pathService,
+            bool shouldShowOpenSubmenu)
             : base(
                 fileSystemNodeOpeningBehavior,
                 operationsService,
@@ -53,7 +54,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
                 systemDialogService,
                 openWithApplicationService,
                 pathService,
-                false)
+                shouldShowOpenSubmenu)
         {
             _fileSizeFormatter = fileSizeFormatter;
         }
