@@ -68,6 +68,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             string directory)
         {
             _pathService = pathService;
+
             SortingViewModel = fileSystemNodesSortingViewModel;
             CurrentDirectory = directory;
 

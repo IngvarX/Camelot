@@ -20,7 +20,6 @@ using Camelot.Services.Environment.Interfaces;
 using Camelot.Services.Implementations;
 using Camelot.Services.Linux;
 using Camelot.Services.Linux.Builders;
-using Camelot.Services.Linux.Configuration;
 using Camelot.Services.Linux.Implementations;
 using Camelot.Services.Linux.Interfaces;
 using Camelot.Services.Linux.Interfaces.Builders;
