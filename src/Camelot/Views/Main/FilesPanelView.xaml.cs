@@ -109,12 +109,25 @@ namespace Camelot.Views.Main
             ViewModel.OperationsViewModel.MoveToTrashCommand.Execute(null);
         }
 
-        private void OnDataGridCellPointerPressed(object sender, DataGridCellPointerPressedEventArgs args) =>
+        private void OnDataGridCellPointerPressed(object sender, DataGridCellPointerPressedEventArgs args)
+        {
             ActivateViewModel();
+
+            var point = args.PointerPressedEventArgs.GetCurrentPoint(this);
+            if (point.Properties.IsMiddleButtonPressed &&
+                args.Cell.DataContext is IDirectoryViewModel directoryViewModel)
+            {
+                args.PointerPressedEventArgs.Handled = true;
+
+                directoryViewModel.OpenInNewTabCommand.Execute(null);
+            }
+        }
 
         private void OnDirectoryTextBoxGotFocus(object sender, GotFocusEventArgs args) => ActivateViewModel();
 
         private void ActivateViewModel() => ViewModel.ActivateCommand.Execute(null);
+
+
 
         private void OnNameTextBlockTapped(object sender, RoutedEventArgs args)
         {

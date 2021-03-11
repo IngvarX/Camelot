@@ -56,7 +56,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
                 .Subscribe(_ => SaveState());
         }
 
-        public void CreateNewTab(string directory = null) => CreateNewTab(SelectedTab, directory);
+        public void CreateNewTab(string directory = null) =>
+            CreateNewTab(SelectedTab, directory, false);
 
         public void CloseActiveTab() => CloseTab(SelectedTab);
 
@@ -223,13 +224,16 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             tabsToClose.ForEach(Remove);
         }
 
-        private void CreateNewTab(ITabViewModel tabViewModel, string directory = null)
+        private void CreateNewTab(ITabViewModel tabViewModel, string directory = null, bool switchToTab = true)
         {
             var insertIndex = _tabs.IndexOf(tabViewModel) + 1;
             var newTabViewModel = CreateViewModelFrom(directory ?? tabViewModel.CurrentDirectory);
 
             _tabs.Insert(insertIndex, newTabViewModel);
-            SelectTab(newTabViewModel);
+            if (switchToTab)
+            {
+                SelectTab(newTabViewModel);
+            }
         }
 
         private void CreateNewTabOnOtherPanel(ITabViewModel tabViewModel)
