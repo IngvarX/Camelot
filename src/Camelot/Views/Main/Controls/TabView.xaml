@@ -14,7 +14,8 @@
     <StackPanel Orientation="Vertical">
         <Border Classes="tabBorder">
             <Grid>
-                <Button Classes="tabButton" Command="{Binding ActivateCommand}">
+                <Button Classes="tabButton" PointerReleased="ButtonOnPointerReleased"
+                        Command="{Binding ActivateCommand}">
                     <Button.Content>
                         <Grid>
                             <Grid Height="40" IsVisible="{Binding IsActive}">

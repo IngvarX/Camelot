@@ -1,5 +1,8 @@
 using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 
 namespace Camelot.Views.Main.Controls
 {
@@ -11,5 +14,20 @@ namespace Camelot.Views.Main.Controls
         }
 
         private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
+
+        private void ButtonOnPointerReleased(object sender, PointerReleasedEventArgs e)
+        {
+            if (e.InitialPressMouseButton != MouseButton.Middle)
+            {
+                return;
+            }
+
+            e.Handled = true;
+
+            if (DataContext is ITabViewModel viewModel)
+            {
+                viewModel.CloseTabCommand.Execute(null);
+            }
+        }
     }
 }

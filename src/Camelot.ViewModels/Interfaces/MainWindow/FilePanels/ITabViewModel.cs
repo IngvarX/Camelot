@@ -1,4 +1,5 @@
 using System;
+using System.Windows.Input;
 
 namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels
 {
@@ -25,5 +26,7 @@ namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels
         event EventHandler<EventArgs> ClosingTabsToTheRightRequested;
 
         event EventHandler<EventArgs> ClosingAllTabsButThisRequested;
+
+        ICommand CloseTabCommand { get; }
     }
 }
