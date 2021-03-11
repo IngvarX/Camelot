@@ -15,11 +15,13 @@ Download precompiled binary from [releases page](https://github.com/IngvarX/Came
 Latest version:
 
 [camelot-git](https://aur.archlinux.org/packages/camelot-git/)
+
 [![camelot-git](https://img.shields.io/aur/last-modified/camelot-git?style=for-the-badge)](https://aur.archlinux.org/packages/camelot-git/)
 
 Stable release:
 
 [camelot](https://aur.archlinux.org/packages/camelot/)
+
 [![camelot](https://img.shields.io/aur/last-modified/camelot?style=for-the-badge)](https://aur.archlinux.org/packages/camelot/)
 
 ## Build from sources (all platforms)

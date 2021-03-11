@@ -52,7 +52,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
                 archiveService,
                 systemDialogService,
                 openWithApplicationService,
-                pathService)
+                pathService,
+                false)
         {
             _fileSizeFormatter = fileSizeFormatter;
         }

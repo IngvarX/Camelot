@@ -782,5 +782,17 @@ namespace Camelot.Properties {
                 return ResourceManager.GetString("DuplicateOnOtherPanel", resourceCulture);
             }
         }
+        
+        public static string OpenInNewTab {
+            get {
+                return ResourceManager.GetString("OpenInNewTab", resourceCulture);
+            }
+        }
+        
+        public static string OpenInNewTabOnOtherPanel {
+            get {
+                return ResourceManager.GetString("OpenInNewTabOnOtherPanel", resourceCulture);
+            }
+        }
     }
 }

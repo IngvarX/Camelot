@@ -225,10 +225,11 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         private void CreateNewTab(ITabViewModel tabViewModel, string directory = null)
         {
-            var tabPosition = _tabs.IndexOf(tabViewModel);
+            var insertIndex = _tabs.IndexOf(tabViewModel) + 1;
             var newTabViewModel = CreateViewModelFrom(directory ?? tabViewModel.CurrentDirectory);
 
-            _tabs.Insert(tabPosition, newTabViewModel);
+            _tabs.Insert(insertIndex, newTabViewModel);
+            SelectTab(newTabViewModel);
         }
 
         private void CreateNewTabOnOtherPanel(ITabViewModel tabViewModel)

@@ -416,7 +416,8 @@ namespace Camelot.ViewModels.Tests.FilePanels
                     archiveService,
                     systemDialogService,
                     openWithApplicationService,
-                    pathService)
+                    pathService,
+                    false)
             {
 
             }

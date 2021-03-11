@@ -486,4 +486,10 @@
   <data name="DuplicateOnOtherPanel" xml:space="preserve">
     <value>Дублировать на другой панели</value>
   </data>
+  <data name="OpenInNewTab" xml:space="preserve">
+    <value>Открыть в новой вкладке</value>
+  </data>
+  <data name="OpenInNewTabOnOtherPanel" xml:space="preserve">
+    <value>Открыть в новой вкладке на другой панели</value>
+  </data>
 </root>

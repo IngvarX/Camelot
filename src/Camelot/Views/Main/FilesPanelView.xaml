@@ -94,8 +94,14 @@
             <DataGrid.Resources>
                 <Template x:Key="RowContextMenu">
                     <ContextMenu Classes="smallContextMenu">
-                        <MenuItem Header="{x:Static p:Resources.Open}" Command="{Binding OpenCommand}" />
-			            <MenuItem Header="{x:Static p:Resources.OpenWith}" Command="{Binding OpenWithCommand}" />
+                        <MenuItem Header="{x:Static p:Resources.Open}" Command="{Binding OpenCommand}" IsVisible="{Binding !ShouldShowOpenSubmenu}" />
+                        <MenuItem Header="{x:Static p:Resources.OpenWith}" Command="{Binding OpenWithCommand}" IsVisible="{Binding !ShouldShowOpenSubmenu}" />
+                        <MenuItem Header="{x:Static p:Resources.Open}" IsVisible="{Binding ShouldShowOpenSubmenu}">
+                            <MenuItem Header="{x:Static p:Resources.Open}" Command="{Binding OpenCommand}" />
+                            <MenuItem Header="{x:Static p:Resources.OpenWith}" Command="{Binding OpenWithCommand}" />
+                            <MenuItem Header="{x:Static p:Resources.OpenInNewTab}" Command="{Binding OpenInNewTabCommand}" />
+                            <MenuItem Header="{x:Static p:Resources.OpenInNewTabOnOtherPanel}" Command="{Binding OpenInNewTabOnOtherPanelCommand}" />
+                        </MenuItem>
                         <MenuItem Header="{x:Static p:Resources.Pack}" Command="{Binding PackCommand}" />
                         <MenuItem Header="{x:Static p:Resources.Extract}" IsVisible="{Binding IsArchive}" >
                             <MenuItem Header="{x:Static p:Resources.ExtractArchiveHere}"

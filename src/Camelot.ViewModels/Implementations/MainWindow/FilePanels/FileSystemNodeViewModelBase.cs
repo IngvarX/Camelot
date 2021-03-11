@@ -49,6 +49,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         public bool IsWaitingForEdit { get; set; }
 
+        public bool ShouldShowOpenSubmenu { get; }
+
         public ICommand OpenCommand { get; }
 
         public ICommand OpenWithCommand { get; }
@@ -82,7 +84,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             IArchiveService archiveService,
             ISystemDialogService systemDialogService,
             IOpenWithApplicationService openWithApplicationService,
-            IPathService pathService)
+            IPathService pathService,
+            bool shouldShowOpenSubmenu)
         {
             _fileSystemNodeOpeningBehavior = fileSystemNodeOpeningBehavior;
             _operationsService = operationsService;
@@ -95,6 +98,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             _systemDialogService = systemDialogService;
             _openWithApplicationService = openWithApplicationService;
             _pathService = pathService;
+
+            ShouldShowOpenSubmenu = shouldShowOpenSubmenu;
 
             OpenCommand = ReactiveCommand.Create(Open);
             OpenWithCommand = ReactiveCommand.Create(OpenWithAsync);

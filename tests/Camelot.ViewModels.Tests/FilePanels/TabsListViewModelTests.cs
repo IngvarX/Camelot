@@ -295,7 +295,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
 
             firstTabMock.Raise(m => m.NewTabRequested += null, EventArgs.Empty);
             Assert.Equal(2, tabsListViewModel.Tabs.Count());
-            Assert.Equal(firstTabMock.Object, tabsListViewModel.SelectedTab);
+            Assert.NotEqual(firstTabMock.Object, tabsListViewModel.SelectedTab);
 
             firstTabMock.Raise(m => m.CloseRequested += null, EventArgs.Empty);
             Assert.Single(tabsListViewModel.Tabs);
