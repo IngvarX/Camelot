@@ -16,6 +16,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
         public DirectoryViewModelTests()
         {
             _autoMocker = new AutoMocker();
+            _autoMocker.Use(true);
         }
 
         [Fact]

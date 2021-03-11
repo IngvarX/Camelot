@@ -23,6 +23,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
             _autoMocker
                 .Setup<IFileSizeFormatter, string>(m => m.GetFormattedSize(size))
                 .Returns(formattedSize);
+            _autoMocker.Use(false);
 
             var viewModel = _autoMocker.CreateInstance<FileViewModel>();
             viewModel.Size = size;

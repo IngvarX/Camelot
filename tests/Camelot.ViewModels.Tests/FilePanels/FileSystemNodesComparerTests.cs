@@ -22,6 +22,8 @@ namespace Camelot.ViewModels.Tests.FilePanels
         [InlineData(false, SortingMode.Size)]
         public void TestSortingParentDirectory(bool isAscending, SortingMode sortingColumn)
         {
+            _autoMocker.Use(true);
+
             var parentDirectoryViewModel =  _autoMocker.CreateInstance<DirectoryViewModel>();
             parentDirectoryViewModel.IsParentDirectory = true;
             var directoryViewModel =  _autoMocker.CreateInstance<DirectoryViewModel>();

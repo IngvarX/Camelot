@@ -34,6 +34,19 @@ namespace Camelot.ViewModels.Tests.FilePanels
         public FileSystemNodeViewModelBaseTests()
         {
             _autoMocker = new AutoMocker();
+            _autoMocker.Use(false);
+        }
+
+        [Theory]
+        [InlineData(true, true)]
+        [InlineData(false, false)]
+        public void TestShouldShowOpenSubmenu(bool shouldShow, bool expected)
+        {
+            _autoMocker.Use(shouldShow);
+
+            var viewModel = _autoMocker.CreateInstance<NodeViewModel>();
+
+            Assert.Equal(expected, viewModel.ShouldShowOpenSubmenu);
         }
 
         [Theory]
@@ -404,7 +417,8 @@ namespace Camelot.ViewModels.Tests.FilePanels
                 IArchiveService archiveService,
                 ISystemDialogService systemDialogService,
                 IOpenWithApplicationService openWithApplicationService,
-                IPathService pathService)
+                IPathService pathService,
+                bool shouldShowSubmenu)
                 : base(
                     fileSystemNodeOpeningBehavior,
                     operationsService,
@@ -417,7 +431,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
                     systemDialogService,
                     openWithApplicationService,
                     pathService,
-                    false)
+                    shouldShowSubmenu)
             {
 
             }
