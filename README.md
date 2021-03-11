@@ -8,6 +8,9 @@ Camelot is light cross-platform twin-panel file manager written in C#
 [![License](https://img.shields.io/github/license/IngvarX/Camelot?style=for-the-badge)](https://raw.githubusercontent.com/IngvarX/Camelot/master/LICENSE.md)
 [![Build Status](https://img.shields.io/travis/com/IngvarX/Camelot?style=for-the-badge)](https://travis-ci.com/github/IngvarX/Camelot)
 [![Codecov](https://img.shields.io/codecov/c/github/IngvarX/Camelot?style=for-the-badge)](https://codecov.io/gh/IngvarX/Camelot)
+[![Gitter](https://img.shields.io/gitter/room/IngvarX/Camelot?style=for-the-badge)](https://gitter.im/IngvarX-Camelot/community)
+[![Release](https://img.shields.io/github/v/release/IngvarX/Camelot?style=for-the-badge)](https://github.com/IngvarX/Camelot/releases)
+[![C#](https://img.shields.io/github/languages/top/IngvarX/Camelot?style=for-the-badge)](https://github.com/IngvarX/Camelot/search?l=c%23)
 
 ## Supported OS: Linux, macOS, Windows
 

@@ -4,11 +4,23 @@
 
 Download precompiled binary from [releases page](https://github.com/IngvarX/Camelot/releases)
 
+[![Release](https://img.shields.io/github/v/release/IngvarX/Camelot?style=for-the-badge)](https://github.com/IngvarX/Camelot/releases)
+
 ## Package (Linux)
 
 **RPM and DEB:** precompiled rpm and deb packages are availbale on [releases page](https://github.com/IngvarX/Camelot/releases)
 
-**AUR:** [camelot-git](https://aur.archlinux.org/packages/camelot-git/) and [camelot](https://aur.archlinux.org/packages/camelot/) packages are available
+**AUR:**
+
+Latest version:
+
+[camelot-git](https://aur.archlinux.org/packages/camelot-git/)
+[![camelot-git](https://img.shields.io/aur/last-modified/camelot-git?style=for-the-badge)](https://aur.archlinux.org/packages/camelot-git/)
+
+Stable release:
+
+[camelot](https://aur.archlinux.org/packages/camelot/)
+[![camelot](https://img.shields.io/aur/last-modified/camelot?style=for-the-badge)](https://aur.archlinux.org/packages/camelot/)
 
 ## Build from sources (all platforms)
 
