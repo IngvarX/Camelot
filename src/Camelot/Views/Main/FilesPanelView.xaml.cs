@@ -112,22 +112,24 @@ namespace Camelot.Views.Main
         private void OnDataGridCellPointerPressed(object sender, DataGridCellPointerPressedEventArgs args)
         {
             ActivateViewModel();
-
-            var point = args.PointerPressedEventArgs.GetCurrentPoint(this);
-            if (point.Properties.IsMiddleButtonPressed &&
-                args.Cell.DataContext is IDirectoryViewModel directoryViewModel)
-            {
-                args.PointerPressedEventArgs.Handled = true;
-
-                directoryViewModel.OpenInNewTabCommand.Execute(null);
-            }
+            ProcessPointerClickInCell(args.PointerPressedEventArgs, args.Cell);
         }
 
         private void OnDirectoryTextBoxGotFocus(object sender, GotFocusEventArgs args) => ActivateViewModel();
 
         private void ActivateViewModel() => ViewModel.ActivateCommand.Execute(null);
 
+        private void ProcessPointerClickInCell(PointerEventArgs args, IDataContextProvider cell)
+        {
+            var point = args.GetCurrentPoint(this);
+            if (point.Properties.IsMiddleButtonPressed &&
+                cell.DataContext is IDirectoryViewModel directoryViewModel)
+            {
+                args.Handled = true;
 
+                directoryViewModel.OpenInNewTabCommand.Execute(null);
+            }
+        }
 
         private void OnNameTextBlockTapped(object sender, RoutedEventArgs args)
         {
