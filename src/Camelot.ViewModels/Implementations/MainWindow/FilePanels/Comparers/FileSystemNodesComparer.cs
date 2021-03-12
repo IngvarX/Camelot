@@ -17,14 +17,12 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Comparers
         }
 
         public int Compare(IFileSystemNodeViewModel x, IFileSystemNodeViewModel y) =>
-            x switch
+            (x, y) switch
             {
-                FileViewModel fileViewModel => y is DirectoryViewModel
-                    ? 1
-                    : _filesComparer.Compare(fileViewModel, (FileViewModel) y),
-                DirectoryViewModel directoryViewModel => y is FileViewModel
-                    ? -1
-                    : _directoriesComparer.Compare(directoryViewModel, (DirectoryViewModel) y),
+                (FileViewModel a, FileViewModel b) => _filesComparer.Compare(a, b),
+                (DirectoryViewModel a, DirectoryViewModel b) => _directoriesComparer.Compare(a, b),
+                (FileViewModel _, DirectoryViewModel _) => 1,
+                (DirectoryViewModel _, FileViewModel _) => -1,
                 _ => throw new InvalidOperationException()
             };
     }

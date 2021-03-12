@@ -7,7 +7,6 @@ using Camelot.Services.Abstractions.Operations;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Comparers;
 using Camelot.ViewModels.Interfaces.Behaviors;
-using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Services.Interfaces;
 using Moq.AutoMock;
 using Xunit;
@@ -21,28 +20,6 @@ namespace Camelot.ViewModels.Tests.FilePanels.Comparers
         public FileSystemNodesComparerTests()
         {
             _autoMocker = new AutoMocker();
-        }
-
-        [Theory]
-        [InlineData(true, SortingMode.Date)]
-        [InlineData(false, SortingMode.Name)]
-        [InlineData(true, SortingMode.Extension)]
-        [InlineData(false, SortingMode.Size)]
-        public void TestSortingParentDirectory(bool isAscending, SortingMode sortingColumn)
-        {
-            _autoMocker.Use(true);
-
-            var parentDirectoryViewModel =  _autoMocker.CreateInstance<DirectoryViewModel>();
-            parentDirectoryViewModel.IsParentDirectory = true;
-            var directoryViewModel =  _autoMocker.CreateInstance<DirectoryViewModel>();
-
-            var comparer = new FileSystemNodesComparer(isAscending, sortingColumn);
-
-            var result = comparer.Compare(parentDirectoryViewModel, directoryViewModel);
-            Assert.True(result < 0);
-
-            result = comparer.Compare(directoryViewModel, parentDirectoryViewModel);
-            Assert.True(result > 0);
         }
 
         [Theory]
@@ -75,8 +52,8 @@ namespace Camelot.ViewModels.Tests.FilePanels.Comparers
         {
             _autoMocker.Use(true);
 
-            var directoryViewModel =  _autoMocker.CreateInstance<DirectoryViewModel>();
-            var nodeViewModel =  _autoMocker.CreateInstance<NodeViewModel>();
+            var directoryViewModel = _autoMocker.CreateInstance<DirectoryViewModel>();
+            var nodeViewModel = _autoMocker.CreateInstance<NodeViewModel>();
 
             var comparer = new FileSystemNodesComparer(isAscending, sortingColumn);
 
@@ -86,7 +63,7 @@ namespace Camelot.ViewModels.Tests.FilePanels.Comparers
 
             void CompareReversed() => comparer.Compare(directoryViewModel, nodeViewModel);
 
-            Assert.Throws<InvalidCastException>(CompareReversed);
+            Assert.Throws<InvalidOperationException>(CompareReversed);
         }
 
         private class NodeViewModel : FileSystemNodeViewModelBase
