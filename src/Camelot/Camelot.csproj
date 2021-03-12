@@ -145,6 +145,9 @@
     <Compile Update="Views\Dialogs\OpenWith\ApplicationView.xaml.cs">
       <DependentUpon>ApplicationView.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\Dialogs\Settings\General\ThemeSettingsView.xaml.cs">
+      <DependentUpon>ThemeSettingsView.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.10.0" />

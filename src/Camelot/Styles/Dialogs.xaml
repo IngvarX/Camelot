@@ -8,6 +8,10 @@
         <Setter Property="Foreground" Value="{DynamicResource SettingsDialogForegroundBrush}" />
     </Style>
 
+    <Style Selector="ComboBox.settingsComboBox">
+        <Setter Property="Margin" Value="0,4,0,0" />
+    </Style>
+
     <Style Selector="Button.dialogButton">
         <Setter Property="FontSize" Value="18" />
         <Setter Property="Margin" Value="20,10" />

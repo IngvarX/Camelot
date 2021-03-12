@@ -42,8 +42,7 @@ namespace Camelot.ViewModels.Implementations.Settings.General
             }
 
             _isActivated = true;
-
-            _languages = new ObservableCollection<LanguageModel>(_languageManager.AllLanguages);
+            _languages = new ObservableCollection<LanguageModel>(GetSortedLanguages());
 
             var savedLanguage = _localizationService.GetSavedLanguage();
             var currentLanguage = _languageManager.CurrentLanguage;
@@ -59,6 +58,9 @@ namespace Camelot.ViewModels.Implementations.Settings.General
             var languageStateModel = GetLanguageStateModel();
             _localizationService.SaveLanguage(languageStateModel);
         }
+
+        private IEnumerable<LanguageModel> GetSortedLanguages() =>
+            _languageManager.AllLanguages.OrderBy(l => l.Name);
 
         private LanguageStateModel GetLanguageStateModel() =>
             new LanguageStateModel
