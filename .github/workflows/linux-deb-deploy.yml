@@ -1,0 +1,38 @@
+name: Deploy Linux Deb Package
+
+on:
+  push:
+    tags:
+    - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.101
+    - name: Install dotnet-deb
+      run: |
+        dotnet tool install --tool-path src/Camelot dotnet-deb
+    - name: Build Debian Package
+      run: |
+        cd src/Camelot
+        ./dotnet-deb install
+        ./dotnet-deb --configuration Release
+    - name: Archive Artifact
+      run: |
+        cd src/Camelot/bin/Release/netcoreapp3.1
+        tar -czvf CamelotLinuxDeb.tar.gz camelot*.deb
+    - name: Upload Release Asset
+      id: upload-release-asset 
+      uses: svenstaro/upload-release-action@v2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        tag: ${{ github.ref }}
+        file: ./src/Camelot/bin/Release/netcoreapp3.1/CamelotLinuxDeb.tar.gz
+        asset_name: CamelotLinuxDeb.tar.gz

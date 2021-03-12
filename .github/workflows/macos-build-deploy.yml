@@ -1,0 +1,41 @@
+name: Deploy Macos Build
+
+on:
+  push:
+    tags:
+    - 'v*'
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.101
+    - name: Build Macos App
+      run: |
+        cd src/Camelot
+        dotnet restore -r osx-x64
+        dotnet msbuild -t:BundleApp -p:RuntimeIdentifier=osx-x64 -property:Configuration=Release
+        mkdir Assets/logo.iconset
+        cp Assets/logo.png Assets/logo.iconset/icon_512x512.png
+        iconutil -c icns Assets/logo.iconset
+        cp Assets/logo.icns bin/Release/netcoreapp3.1/osx-x64/publish/Camelot.app/Contents/Resources/logo.icns
+        rm Assets/logo.icns
+        rm -rf Assets/logo.iconset
+    - name: Archive Artifact
+      run: |
+        cd src/Camelot/bin/Release/netcoreapp3.1/osx-x64/publish
+        zip -r CamelotMacos.zip Camelot.app
+    - name: Upload Release Asset
+      id: upload-release-asset 
+      uses: svenstaro/upload-release-action@v2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        tag: ${{ github.ref }}
+        file: ./src/Camelot/bin/Release/netcoreapp3.1/osx-x64/publish/CamelotMacos.zip
+        asset_name: CamelotMacos.zip
