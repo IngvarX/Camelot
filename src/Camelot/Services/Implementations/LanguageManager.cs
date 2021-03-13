@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading;
+using Camelot.Configuration;
 using Camelot.Extensions;
-using Camelot.Properties;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
 
@@ -11,6 +12,7 @@ namespace Camelot.Services.Implementations
 {
     public class LanguageManager : ILanguageManager
     {
+        private readonly LanguagesConfiguration _configuration;
         private readonly Lazy<Dictionary<string, LanguageModel>> _availableLanguages;
 
         public LanguageModel DefaultLanguage { get; }
@@ -19,8 +21,9 @@ namespace Camelot.Services.Implementations
 
         public IEnumerable<LanguageModel> AllLanguages => _availableLanguages.Value.Values;
 
-        public LanguageManager()
+        public LanguageManager(LanguagesConfiguration configuration)
         {
+            _configuration = configuration;
             _availableLanguages = new Lazy<Dictionary<string, LanguageModel>>(GetAvailableLanguages);
 
             DefaultLanguage = CreateLanguageModel(CultureInfo.GetCultureInfo("en"));
@@ -38,32 +41,11 @@ namespace Camelot.Services.Implementations
 
         public void SetLanguage(LanguageModel languageModel) => SetLanguage(languageModel.Code);
 
-        private Dictionary<string, LanguageModel> GetAvailableLanguages()
-        {
-            var languages = new Dictionary<string, LanguageModel>
-            {
-                { DefaultLanguage.Code, DefaultLanguage }
-            };
-
-            foreach (var cultureInfo in CultureInfo.GetCultures(CultureTypes.AllCultures))
-            {
-                if (cultureInfo.Equals(CultureInfo.InvariantCulture))
-                {
-                    continue;
-                }
-
-                var resourceSet = Resources.ResourceManager.GetResourceSet(cultureInfo, true, false);
-                if (resourceSet is null)
-                {
-                    continue;
-                }
-
-                var languageModel = CreateLanguageModel(cultureInfo);
-                languages.TryAdd(languageModel.Code, languageModel);
-            }
-
-            return languages;
-        }
+        private Dictionary<string, LanguageModel> GetAvailableLanguages() =>
+            _configuration
+                .AvailableLocales
+                .Select(locale => CreateLanguageModel(new CultureInfo(locale)))
+                .ToDictionary(lm => lm.Code, lm => lm);
 
         private LanguageModel CreateLanguageModel(CultureInfo cultureInfo) =>
             cultureInfo is null

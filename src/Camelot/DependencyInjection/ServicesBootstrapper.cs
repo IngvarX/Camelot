@@ -1,5 +1,6 @@
 using System;
 using Camelot.Avalonia.Interfaces;
+using Camelot.Configuration;
 using Camelot.DataAccess.UnitOfWork;
 using Camelot.FileSystemWatcher.Interfaces;
 using Camelot.Operations;
@@ -129,7 +130,9 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IMainWindowProvider>()
             ));
             services.RegisterLazySingleton<IResourceProvider>(() => new ResourceProvider());
-            services.RegisterLazySingleton<ILanguageManager>(() => new LanguageManager());
+            services.RegisterLazySingleton<ILanguageManager>(() => new LanguageManager(
+                resolver.GetRequiredService<LanguagesConfiguration>()
+            ));
             services.RegisterLazySingleton<IClipboardOperationsService>(() => new ClipboardOperationsService(
                 resolver.GetRequiredService<IClipboardService>(),
                 resolver.GetRequiredService<IOperationsService>(),
