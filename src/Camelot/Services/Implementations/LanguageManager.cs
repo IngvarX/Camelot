@@ -11,16 +11,20 @@ namespace Camelot.Services.Implementations
 {
     public class LanguageManager : ILanguageManager
     {
-        private readonly Lazy<Dictionary<string, LanguageModel>> _availableLanguages =
-            new Lazy<Dictionary<string, LanguageModel>>(GetAvailableLanguages);
+        private readonly Lazy<Dictionary<string, LanguageModel>> _availableLanguages;
 
-        private static readonly LanguageModel _defaultLanguage = CreateLanguageModel(CultureInfo.GetCultureInfo("en"));
-
-        public LanguageModel DefaultLanguage => _defaultLanguage;
+        public LanguageModel DefaultLanguage { get; }
 
         public LanguageModel CurrentLanguage => CreateLanguageModel(Thread.CurrentThread.CurrentUICulture);
 
         public IEnumerable<LanguageModel> AllLanguages => _availableLanguages.Value.Values;
+
+        public LanguageManager()
+        {
+            _availableLanguages = new Lazy<Dictionary<string, LanguageModel>>(GetAvailableLanguages);
+
+            DefaultLanguage = CreateLanguageModel(CultureInfo.GetCultureInfo("en"));
+        }
 
         public void SetLanguage(string languageCode)
         {
@@ -32,14 +36,13 @@ namespace Camelot.Services.Implementations
             Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(languageCode);
         }
 
-        public void SetLanguage(LanguageModel languageModel) =>
-            Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(languageModel.Code);
+        public void SetLanguage(LanguageModel languageModel) => SetLanguage(languageModel.Code);
 
-        private static Dictionary<string, LanguageModel> GetAvailableLanguages()
+        private Dictionary<string, LanguageModel> GetAvailableLanguages()
         {
             var languages = new Dictionary<string, LanguageModel>
             {
-                { _defaultLanguage.Code, _defaultLanguage }
+                { DefaultLanguage.Code, DefaultLanguage }
             };
 
             foreach (var cultureInfo in CultureInfo.GetCultures(CultureTypes.AllCultures))
@@ -62,9 +65,9 @@ namespace Camelot.Services.Implementations
             return languages;
         }
 
-        private static LanguageModel CreateLanguageModel(CultureInfo cultureInfo) =>
+        private LanguageModel CreateLanguageModel(CultureInfo cultureInfo) =>
             cultureInfo is null
-                ? _defaultLanguage
+                ? DefaultLanguage
                 : new LanguageModel(cultureInfo.EnglishName, cultureInfo.NativeName.ToTitleCase(),
                     cultureInfo.TwoLetterISOLanguageName);
     }
