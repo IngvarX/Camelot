@@ -415,6 +415,57 @@ namespace Camelot.ViewModels.Tests.FilePanels
             Assert.Equal(secondTab.Object, tabsListViewModel.Tabs.Last());
         }
 
+        [Fact]
+        public void TestSelectTabsCommands()
+        {
+            var tabs = new List<Mock<ITabViewModel>>();
+            _autoMocker
+                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.Is<TabStateModel>(tm => tm.Directory == AppRootDirectory)))
+                .Returns(() =>
+                {
+                    var mock = Create();
+                    tabs.Add(mock);
+
+                    return mock.Object;
+                });
+            _autoMocker
+                .Setup<IDirectoryService, bool>(m => m.CheckIfExists(AppRootDirectory))
+                .Returns(true);
+            _autoMocker
+                .Setup<IFilesPanelStateService, PanelStateModel>(m => m.GetPanelState())
+                .Returns(new PanelStateModel
+                {
+                    Tabs = new List<TabStateModel>
+                    {
+                        new TabStateModel {Directory = AppRootDirectory},
+                        new TabStateModel {Directory = AppRootDirectory},
+                        new TabStateModel {Directory = AppRootDirectory}
+                    }
+                });
+
+            var tabsListViewModel = _autoMocker.CreateInstance<TabsListViewModel>();
+
+            Assert.Equal(tabs[0].Object, tabsListViewModel.SelectedTab);
+
+            for (var i = 0; i < 10; i++)
+            {
+                Assert.True(tabsListViewModel.SelectTabToTheRightCommand.CanExecute(null));
+                tabsListViewModel.SelectTabToTheRightCommand.Execute(null);
+
+                var index = Math.Min(tabs.Count - 1, i + 1);
+                Assert.Equal(tabs[index].Object, tabsListViewModel.SelectedTab);
+            }
+
+            for (var i = 0; i < 10; i++)
+            {
+                Assert.True(tabsListViewModel.SelectTabToTheLeftCommand.CanExecute(null));
+                tabsListViewModel.SelectTabToTheLeftCommand.Execute(null);
+
+                var index = Math.Max(tabs.Count - i - 2, 0);
+                Assert.Equal(tabs[index].Object, tabsListViewModel.SelectedTab);
+            }
+        }
+
         private static Mock<ITabViewModel> Create()
         {
             var sortingViewModelMock = new Mock<IFileSystemNodesSortingViewModel>();

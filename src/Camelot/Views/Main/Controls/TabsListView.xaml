@@ -14,6 +14,7 @@
     <ItemsControl Margin="10,10,0,0"
                   Items="{Binding Tabs}"
                   PointerWheelChanged="TabsListOnPointerWheelChanged">
+
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
                 <StackPanel Orientation="Horizontal" />
