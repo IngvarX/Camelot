@@ -40,7 +40,7 @@ namespace Camelot.Services.Linux
 
         public void OpenWith(string command, string arguments, string resource)
         {
-            var escapedArguments = string.Format(arguments,
+            var escapedArguments = string.Format(arguments.Replace("\"", "\\\""),
                 $"\\\"{resource.Replace("\"", "\\\\\\\"")}\\\"");
             var (wrappedCommand, wrappedArguments) = WrapWithNohup(command, escapedArguments);
 

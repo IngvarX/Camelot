@@ -92,6 +92,7 @@ namespace Camelot.Services.Linux.Tests
         [InlineData("gedit", "{0}", "file.txt", "gedit", "\\\"file.txt\\\"")]
         [InlineData("gedit", "{0}", "'file.txt", "gedit", "\\\"'file.txt\\\"")]
         [InlineData("gedit", "{0}", "\"file.txt", "gedit", "\\\"\\\\\\\"file.txt\\\"")]
+        [InlineData("command", "--param \"test\" {0}", "file.txt", "command", "--param \\\"test\\\" \\\"file.txt\\\"")]
         public void TestOpenWith(string command, string arguments, string resource,
             string commandToWrap, string argumentsToWrap)
         {
