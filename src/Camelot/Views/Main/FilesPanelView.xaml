@@ -66,20 +66,8 @@
                      Text="{Binding CurrentDirectory, Mode=TwoWay}" />
         </DockPanel>
 
-        <ItemsControl Grid.Row="1" Margin="10,10,0,0" Items="{Binding TabsListViewModel.Tabs}"
-                      PointerWheelChanged="TabsListOnPointerWheelChanged">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel Orientation="Horizontal"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <controls:TabView />
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+        <controls:TabsListView Grid.Row="1"
+                               DataContext="{Binding TabsListViewModel}" />
 
         <DataGrid x:Name="FilesDataGrid" Grid.Row="2"
                   Items="{Binding FileSystemNodes}"
