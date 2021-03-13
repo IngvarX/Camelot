@@ -13,6 +13,10 @@
         Icon="/Assets/logo.png"
         Title="Camelot">
 
+    <Design.DataContext>
+        <implementations:MainWindowViewModel />
+    </Design.DataContext>
+
     <Window.KeyBindings>
         <KeyBinding Gesture="Ctrl+T" Command="{Binding CreateNewTabCommand}" />
         <KeyBinding Gesture="Meta+T" Command="{Binding CreateNewTabCommand}" />
@@ -20,12 +24,10 @@
         <KeyBinding Gesture="Meta+W" Command="{Binding CloseCurrentTabCommand}" />
         <KeyBinding Gesture="Ctrl+F" Command="{Binding SearchCommand}" />
         <KeyBinding Gesture="Meta+F" Command="{Binding SearchCommand}" />
+        <KeyBinding Gesture="Ctrl+Tab" Command="{Binding ActiveTabsListViewModel.SelectTabToTheRightCommand}" />
+        <KeyBinding Gesture="Ctrl+Shift+Tab" Command="{Binding ActiveTabsListViewModel.SelectTabToTheLeftCommand}" />
         <KeyBinding Gesture="Tab" Command="{Binding SwitchPanelCommand}" />
     </Window.KeyBindings>
-
-    <Design.DataContext>
-        <implementations:MainWindowViewModel />
-    </Design.DataContext>
 
     <Grid RowDefinitions="Auto,Auto,*,Auto">
         <Grid Classes="topPanelGrid" ColumnDefinitions="Auto,Auto,*,Auto">
