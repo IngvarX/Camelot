@@ -1,4 +1,5 @@
 using System;
+using System.Windows.Input;
 
 namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels
 {
@@ -7,6 +8,10 @@ namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels
         ITabViewModel SelectedTab { get; }
 
         event EventHandler<EventArgs> SelectedTabChanged;
+
+        ICommand SelectTabToTheLeftCommand { get; }
+
+        ICommand SelectTabToTheRightCommand { get; }
 
         void CreateNewTab(string directory = null);
 

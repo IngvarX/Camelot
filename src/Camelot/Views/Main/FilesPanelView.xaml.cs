@@ -166,5 +166,15 @@ namespace Camelot.Views.Main
             viewModel.IsWaitingForEdit = viewModel.IsEditing = false;
 
         private void ClearSelection() => FilesDataGrid.SelectedItems.Clear();
+
+        private void TabsListOnPointerWheelChanged(object sender, PointerWheelEventArgs e)
+        {
+            var tabsListViewModel = ViewModel.TabsListViewModel;
+            var command = e.Delta.Y > 0
+                ? tabsListViewModel.SelectTabToTheLeftCommand
+                : tabsListViewModel.SelectTabToTheRightCommand;
+
+            command.Execute(null);
+        }
     }
 }

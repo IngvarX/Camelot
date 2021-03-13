@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Camelot.Extensions;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models.Enums;
@@ -37,6 +38,10 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         public event EventHandler<EventArgs> SelectedTabChanged;
 
+        public ICommand SelectTabToTheLeftCommand { get; }
+
+        public ICommand SelectTabToTheRightCommand { get; }
+
         public TabsListViewModel(
             IFilesPanelStateService filesPanelStateService,
             IDirectoryService directoryService,
@@ -50,6 +55,9 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             _filesOperationsMediator = filesOperationsMediator;
 
             _tabs = SetupTabs();
+
+            SelectTabToTheLeftCommand = ReactiveCommand.Create(SelectTabToTheLeft);
+            SelectTabToTheRightCommand = ReactiveCommand.Create(SelectTabToTheRight);
 
             this.WhenAnyValue(x => x.SelectedTab.CurrentDirectory, x => x.SelectedTab)
                 .Throttle(TimeSpan.FromMilliseconds(filePanelConfiguration.SaveTimeoutMs))
@@ -65,7 +73,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             Task.Factory.StartNew(() =>
             {
                 var tabs = _tabs.Select(CreateFrom).ToList();
-                var selectedTabIndex = _tabs.IndexOf(_selectedTab);
+                var selectedTabIndex = GetSelectedTabIndex();
                 var state = new PanelStateModel
                 {
                     Tabs = tabs,
@@ -74,6 +82,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
                 _filesPanelStateService.SavePanelState(state);
             }, TaskCreationOptions.LongRunning);
+
 
         private ObservableCollection<ITabViewModel> SetupTabs()
         {
@@ -90,6 +99,24 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             SelectTab(tabs[index]);
 
             return tabs;
+        }
+
+        private void SelectTabToTheLeft()
+        {
+            var index = GetSelectedTabIndex();
+            if (index > 0)
+            {
+                SelectTab(_tabs[index - 1]);
+            }
+        }
+
+        private void SelectTabToTheRight()
+        {
+            var index = GetSelectedTabIndex();
+            if (index < _tabs.Count - 1)
+            {
+                SelectTab(_tabs[index + 1]);
+            }
         }
 
         private void SelectTab(ITabViewModel tabViewModel)
@@ -266,5 +293,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
                 IsAscending = tabViewModel.SortingViewModel.IsSortingByAscendingEnabled,
                 SortingMode = tabViewModel.SortingViewModel.SortingColumn
             };
+
+        private int GetSelectedTabIndex() => _tabs.IndexOf(SelectedTab);
     }
 }
