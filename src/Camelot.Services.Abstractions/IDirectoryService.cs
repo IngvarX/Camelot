@@ -26,8 +26,6 @@ namespace Camelot.Services.Abstractions
 
         bool CheckIfExists(string directory);
 
-        string GetAppRootDirectory();
-
         IReadOnlyList<string> GetFilesRecursively(string directory);
 
         IReadOnlyList<string> GetDirectoriesRecursively(string directory);

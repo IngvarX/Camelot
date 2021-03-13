@@ -24,6 +24,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private readonly IDirectoryService _directoryService;
         private readonly ITabViewModelFactory _tabViewModelFactory;
         private readonly IFilesOperationsMediator _filesOperationsMediator;
+        private readonly IHomeDirectoryProvider _homeDirectoryProvider;
         private readonly ObservableCollection<ITabViewModel> _tabs;
 
         private ITabViewModel _selectedTab;
@@ -47,12 +48,14 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             IDirectoryService directoryService,
             ITabViewModelFactory tabViewModelFactory,
             IFilesOperationsMediator filesOperationsMediator,
+            IHomeDirectoryProvider homeDirectoryProvider,
             FilePanelConfiguration filePanelConfiguration)
         {
             _filesPanelStateService = filesPanelStateService;
             _directoryService = directoryService;
             _tabViewModelFactory = tabViewModelFactory;
             _filesOperationsMediator = filesOperationsMediator;
+            _homeDirectoryProvider = homeDirectoryProvider;
 
             _tabs = SetupTabs();
 
@@ -149,7 +152,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         {
             var rootDirectoryTab = new TabStateModel
             {
-                Directory = _directoryService.GetAppRootDirectory(),
+                Directory = _homeDirectoryProvider.HomeDirectoryPath,
                 SortingSettings = new SortingSettingsStateModel
                 {
                     SortingMode = SortingMode.Date

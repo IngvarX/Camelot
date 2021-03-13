@@ -104,9 +104,6 @@ namespace Camelot.Services
         public bool CheckIfExists(string directory) =>
             _environmentDirectoryService.CheckIfExists(directory);
 
-        public string GetAppRootDirectory() =>
-            _pathService.GetPathRoot(_environmentDirectoryService.GetCurrentDirectory());
-
         public IReadOnlyList<string> GetFilesRecursively(string directory) =>
             _environmentDirectoryService
                 .EnumerateFilesRecursively(directory)

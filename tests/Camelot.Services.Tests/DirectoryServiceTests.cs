@@ -96,21 +96,6 @@ namespace Camelot.Services.Tests
         }
 
         [Fact]
-        public void TestGetRootParentDirectory()
-        {
-            _autoMocker
-                .Setup<IEnvironmentDirectoryService, string>(m => m.GetCurrentDirectory())
-                .Returns(DirectoryName);
-            _autoMocker
-                .Setup<IPathService, string>(m => m.GetPathRoot(DirectoryName))
-                .Returns(ParentDirectoryName);
-            var directoryService = _autoMocker.CreateInstance<DirectoryService>();
-            var directory = directoryService.GetAppRootDirectory();
-
-            Assert.Equal(ParentDirectoryName, directory);
-        }
-
-        [Fact]
         public void TestGetFilesRecursively()
         {
             _autoMocker

@@ -41,7 +41,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
                 .Verifiable();
 
             _autoMocker
-                .Setup<IDirectoryService, string>(m => m.GetAppRootDirectory())
+                .Setup<IHomeDirectoryProvider, string>(m => m.HomeDirectoryPath)
                 .Returns(AppRootDirectory)
                 .Verifiable();
             _autoMocker
@@ -51,7 +51,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
             var tabsListViewModel = _autoMocker.CreateInstance<TabsListViewModel>();
 
             _autoMocker.Verify<IFilesPanelStateService, PanelStateModel>(m => m.GetPanelState(), Times.Once);
-            _autoMocker.Verify<IDirectoryService, string>(m => m.GetAppRootDirectory(), Times.Once);
+            _autoMocker.Verify<IHomeDirectoryProvider, string>(m => m.HomeDirectoryPath, Times.Once);
 
             Assert.Single(tabsListViewModel.Tabs);
             Assert.Equal(tabViewModel, tabsListViewModel.SelectedTab);
@@ -210,7 +210,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
                 .Setup<IDirectoryService, bool>(m => m.CheckIfExists(AppRootDirectory))
                 .Returns(true);
             _autoMocker
-                .Setup<IDirectoryService, string>(m => m.GetAppRootDirectory())
+                .Setup<IHomeDirectoryProvider, string>(m => m.HomeDirectoryPath)
                 .Returns(AppRootDirectory);
             _autoMocker
                 .Setup<IFilesPanelStateService, PanelStateModel>(m => m.GetPanelState())

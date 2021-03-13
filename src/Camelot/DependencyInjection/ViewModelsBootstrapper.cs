@@ -251,6 +251,7 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IDirectoryService>(),
                 resolver.GetRequiredService<ITabViewModelFactory>(),
                 resolver.GetRequiredService<IFilesOperationsMediator>(),
+                resolver.GetRequiredService<IHomeDirectoryProvider>(),
                 resolver.GetRequiredService<FilePanelConfiguration>()
             );
             var filesPanelViewModel = new FilesPanelViewModel(
