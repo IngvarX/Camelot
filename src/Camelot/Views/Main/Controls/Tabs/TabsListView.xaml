@@ -12,7 +12,7 @@
         <filePanels:TabsListViewModel />
     </Design.DataContext>
 
-    <Grid ColumnDefinitions="Auto,*,Auto">
+    <Grid ColumnDefinitions="Auto,*,Auto" Margin="10,10,0,0">
         <Button Name="LeftArrowButton"
             Classes="iconButton tabScrollButton" Click="LeftButtonOnClick">
             <Image Width="20" Height="20">
@@ -29,8 +29,7 @@
 
         <ScrollViewer Name="TabsScrollViewer"
                       Grid.Column="0" Grid.ColumnSpan="3">
-            <ItemsControl Margin="10,10,0,0"
-                          Items="{Binding Tabs}"
+            <ItemsControl Items="{Binding Tabs}"
                           PointerWheelChanged="TabsListOnPointerWheelChanged">
 
                 <ItemsControl.ItemsPanel>

@@ -96,6 +96,8 @@
                          Opacity="0.15" />
         <SolidColorBrush x:Key="TransparentButtonBorderBrush" Color="{DynamicResource WhiteColor}"
                          Opacity="0.6" />
+        <SolidColorBrush x:Key="TabArrowButtonBackgroundBrush" Color="{DynamicResource BlackColor}"
+                         Opacity="0.4" />
 
         <!-- Theme resources -->
         <system:Double x:Key="ThemeDisabledOpacity">0.5</system:Double>

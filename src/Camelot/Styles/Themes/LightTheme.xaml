@@ -57,6 +57,8 @@
                          Opacity="0.3" />
         <SolidColorBrush x:Key="ErrorBrush" Color="{DynamicResource ErrorColor}" />
         <SolidColorBrush x:Key="ThemeControlHighlightMidBrush" Color="Transparent" />
+        <SolidColorBrush x:Key="TabArrowButtonBackgroundBrush" Color="{DynamicResource WhiteColor}"
+                         Opacity="0.6" />
 
         <!-- Custom brushes -->
         <SolidColorBrush x:Key="AlternativeThemeBackgroundBrush" Color="{DynamicResource AlternativeMainBackgroundColor}" />
