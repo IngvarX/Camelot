@@ -24,7 +24,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
         {
             var tabListMock = new Mock<ITabsListViewModel>();
             tabListMock
-                .Setup(m => m.CreateNewTab(FullPath))
+                .Setup(m => m.CreateNewTab(FullPath, false))
                 .Verifiable();
             var filesPanelMock = new Mock<IFilesPanelViewModel>();
             filesPanelMock
@@ -41,7 +41,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
             viewModel.OpenInNewTabCommand.Execute(null);
 
             tabListMock
-                .Verify(m => m.CreateNewTab(FullPath), Times.Once);
+                .Verify(m => m.CreateNewTab(FullPath, false), Times.Once);
         }
 
         [Fact]
@@ -49,7 +49,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
         {
             var tabListMock = new Mock<ITabsListViewModel>();
             tabListMock
-                .Setup(m => m.CreateNewTab(FullPath))
+                .Setup(m => m.CreateNewTab(FullPath, false))
                 .Verifiable();
             var filesPanelMock = new Mock<IFilesPanelViewModel>();
             filesPanelMock
@@ -66,7 +66,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
             viewModel.OpenInNewTabOnOtherPanelCommand.Execute(null);
 
             tabListMock
-                .Verify(m => m.CreateNewTab(FullPath), Times.Once);
+                .Verify(m => m.CreateNewTab(FullPath, false), Times.Once);
         }
     }
 }

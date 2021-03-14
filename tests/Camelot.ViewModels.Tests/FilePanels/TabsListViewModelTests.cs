@@ -152,13 +152,13 @@ namespace Camelot.ViewModels.Tests.FilePanels
                 .SetupGet(m => m.TabsListViewModel)
                 .Returns(inactiveTabsListMock.Object);
             inactiveTabsListMock
-                .Setup(m => m.CreateNewTab(AppRootDirectory))
+                .Setup(m => m.CreateNewTab(AppRootDirectory, false))
                 .Verifiable();
             activeFilePanelMock
                 .SetupGet(m => m.TabsListViewModel)
                 .Returns(activeTabsListMock.Object);
             activeTabsListMock
-                .Setup(m => m.CreateNewTab(AppRootDirectory))
+                .Setup(m => m.CreateNewTab(AppRootDirectory, false))
                 .Verifiable();
 
             _autoMocker
@@ -190,9 +190,9 @@ namespace Camelot.ViewModels.Tests.FilePanels
             Assert.Single(tabsListViewModel.Tabs);
 
             inactiveTabsListMock
-                .Verify(m => m.CreateNewTab(AppRootDirectory), Times.Exactly(inactiveCallsCount));
+                .Verify(m => m.CreateNewTab(AppRootDirectory, false), Times.Exactly(inactiveCallsCount));
             activeTabsListMock
-                .Verify(m => m.CreateNewTab(AppRootDirectory), Times.Exactly(activeCallsCount));
+                .Verify(m => m.CreateNewTab(AppRootDirectory, false), Times.Exactly(activeCallsCount));
         }
 
         [Fact]
