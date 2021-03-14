@@ -3,7 +3,7 @@ using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 
-namespace Camelot.Views.Main.Controls
+namespace Camelot.Views.Main.Controls.Tabs
 {
     public class TabView : UserControl
     {

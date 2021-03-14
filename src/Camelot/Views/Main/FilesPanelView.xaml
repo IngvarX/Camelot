@@ -9,6 +9,7 @@
              xmlns:converters="clr-namespace:Camelot.Converters"
              xmlns:enums="clr-namespace:Camelot.Services.Abstractions.Models.Enums;assembly=Camelot.Services.Abstractions"
              xmlns:enumsViewModels="clr-namespace:Camelot.ViewModels.Implementations.MainWindow.FilePanels.Enums;assembly=Camelot.ViewModels"
+             xmlns:tabs="clr-namespace:Camelot.Views.Main.Controls.Tabs"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Camelot.Views.Main.FilesPanelView">
 
@@ -66,7 +67,7 @@
                      Text="{Binding CurrentDirectory, Mode=TwoWay}" />
         </DockPanel>
 
-        <controls:TabsListView Grid.Row="1"
+        <tabs:TabsListView Grid.Row="1"
                                DataContext="{Binding TabsListViewModel}" />
 
         <DataGrid x:Name="FilesDataGrid" Grid.Row="2"

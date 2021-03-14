@@ -4,8 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:filePanels="clr-namespace:Camelot.ViewModels.Implementations.MainWindow.FilePanels;assembly=Camelot.ViewModels"
              xmlns:controls="clr-namespace:Camelot.Views.Main.Controls"
+             xmlns:tabs="clr-namespace:Camelot.Views.Main.Controls.Tabs"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Camelot.Views.Main.Controls.TabsListView">
+             x:Class="Camelot.Views.Main.Controls.Tabs.TabsListView">
 
     <Design.DataContext>
         <filePanels:TabsListViewModel />
@@ -39,7 +40,7 @@
 
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <controls:TabView />
+                        <tabs:TabView />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
