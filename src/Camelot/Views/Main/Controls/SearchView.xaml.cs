@@ -12,13 +12,16 @@ namespace Camelot.Views.Main.Controls
         public SearchView()
         {
             InitializeComponent();
-            Initialized += OnInitialized;
+        }
+
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+
+            ViewModel.SearchSettingsChanged += ViewModelOnSearchSettingsChanged;
         }
 
         private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
-
-        private void OnInitialized(object sender, EventArgs e) =>
-            ViewModel.SearchSettingsChanged += ViewModelOnSearchSettingsChanged;
 
         private void ViewModelOnSearchSettingsChanged(object sender, EventArgs e)
         {

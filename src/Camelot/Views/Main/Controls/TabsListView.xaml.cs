@@ -1,6 +1,9 @@
+using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using Camelot.Extensions;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 
 namespace Camelot.Views.Main.Controls
@@ -8,6 +11,8 @@ namespace Camelot.Views.Main.Controls
     public class TabsListView : UserControl
     {
         private ITabsListViewModel ViewModel => (ITabsListViewModel) DataContext;
+
+        private ScrollViewer ScrollViewer => this.FindControl<ScrollViewer>("TabsScrollViewer");
 
         public TabsListView()
         {
@@ -24,5 +29,11 @@ namespace Camelot.Views.Main.Controls
 
             command.Execute(null);
         }
+
+        private void LeftButtonOnClick(object sender, RoutedEventArgs e) =>
+            Enumerable.Repeat(0, 5).ForEach(_ => ScrollViewer.LineLeft());
+
+        private void RightButtonOnClick(object sender, RoutedEventArgs e) =>
+            Enumerable.Repeat(0, 5).ForEach(_ => ScrollViewer.LineRight());
     }
 }
