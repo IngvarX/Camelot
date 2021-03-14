@@ -1,3 +1,4 @@
+using System.Linq;
 using Camelot.ViewModels.Implementations;
 using Camelot.ViewModels.Interfaces.MainWindow;
 using Camelot.ViewModels.Interfaces.MainWindow.Directories;
@@ -140,6 +141,68 @@ namespace Camelot.ViewModels.Tests
             mainWindowViewModel.SwitchPanelCommand.Execute(null);
 
             filePanelViewModelMock.Verify(m => m.Activate(), Times.Once);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(3)]
+        [InlineData(5)]
+        [InlineData(100)]
+        public void TestGoToTabCommand(int tabIndex)
+        {
+            var tabListViewModelMock = new Mock<ITabsListViewModel>();
+            tabListViewModelMock
+                .Setup(m => m.SelectTab(tabIndex))
+                .Verifiable();
+            var filePanelViewModelMock = new Mock<IFilesPanelViewModel>();
+            filePanelViewModelMock
+                .Setup(m => m.TabsListViewModel)
+                .Returns(tabListViewModelMock.Object);
+            _autoMocker
+                .Setup<IFilesOperationsMediator, IFilesPanelViewModel>(m => m.ActiveFilesPanelViewModel)
+                .Returns(filePanelViewModelMock.Object);
+
+            var mainWindowViewModel = _autoMocker.CreateInstance<MainWindowViewModel>();
+
+            Assert.True(mainWindowViewModel.GoToTabCommand.CanExecute(null));
+            mainWindowViewModel.GoToTabCommand.Execute(tabIndex);
+
+            tabListViewModelMock
+                .Verify(m => m.SelectTab(tabIndex), Times.Once);
+        }
+
+        [Theory]
+        [InlineData(1, 0)]
+        [InlineData(3, 2)]
+        [InlineData(5, 4)]
+        [InlineData(100, 99)]
+        public void TestGoToLastTabCommand(int tabsCount, int tabIndex)
+        {
+            var tabs = Enumerable
+                .Repeat(new Mock<ITabViewModel>().Object, tabsCount)
+                .ToArray();
+            var tabListViewModelMock = new Mock<ITabsListViewModel>();
+            tabListViewModelMock
+                .Setup(m => m.SelectTab(tabIndex))
+                .Verifiable();
+            tabListViewModelMock
+                .Setup(m => m.Tabs)
+                .Returns(tabs);
+            var filePanelViewModelMock = new Mock<IFilesPanelViewModel>();
+            filePanelViewModelMock
+                .Setup(m => m.TabsListViewModel)
+                .Returns(tabListViewModelMock.Object);
+            _autoMocker
+                .Setup<IFilesOperationsMediator, IFilesPanelViewModel>(m => m.ActiveFilesPanelViewModel)
+                .Returns(filePanelViewModelMock.Object);
+
+            var mainWindowViewModel = _autoMocker.CreateInstance<MainWindowViewModel>();
+
+            Assert.True(mainWindowViewModel.GoToLastTabCommand.CanExecute(null));
+            mainWindowViewModel.GoToLastTabCommand.Execute(null);
+
+            tabListViewModelMock
+                .Verify(m => m.SelectTab(tabIndex), Times.Once);
         }
     }
 }

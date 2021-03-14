@@ -466,6 +466,74 @@ namespace Camelot.ViewModels.Tests.FilePanels
             }
         }
 
+        [Fact]
+        public void TestSelectValidTab()
+        {
+            var tabsCount = new Random().Next(2, 10);
+
+            var tabViewModel = new Mock<ITabViewModel>().Object;
+            _autoMocker
+                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<TabStateModel>()))
+                .Returns(tabViewModel);
+            _autoMocker
+                .Setup<IFilesPanelStateService, PanelStateModel>(m => m.GetPanelState())
+                .Returns(new PanelStateModel
+                {
+                    Tabs = Enumerable
+                        .Repeat(new TabStateModel {Directory = AppRootDirectory}, tabsCount)
+                        .ToList()
+                })
+                .Verifiable();
+
+            _autoMocker
+                .Setup<IDirectoryService, bool>(m => m.CheckIfExists(AppRootDirectory))
+                .Returns(true);
+
+            var tabsListViewModel = _autoMocker.CreateInstance<TabsListViewModel>();
+
+            Assert.Equal(tabsListViewModel.Tabs[0], tabsListViewModel.SelectedTab);
+
+            for (var i = 0; i < tabsCount; i++)
+            {
+                tabsListViewModel.SelectTab(i);
+                Assert.Equal(tabsListViewModel.Tabs[i], tabsListViewModel.SelectedTab);
+            }
+        }
+
+        [Fact]
+        public void TestSelectInvalidTab()
+        {
+            var tabsCount = new Random().Next(2, 10);
+
+            var tabViewModel = new Mock<ITabViewModel>().Object;
+            _autoMocker
+                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<TabStateModel>()))
+                .Returns(tabViewModel);
+            _autoMocker
+                .Setup<IFilesPanelStateService, PanelStateModel>(m => m.GetPanelState())
+                .Returns(new PanelStateModel
+                {
+                    Tabs = Enumerable
+                        .Repeat(new TabStateModel {Directory = AppRootDirectory}, tabsCount)
+                        .ToList()
+                })
+                .Verifiable();
+
+            _autoMocker
+                .Setup<IDirectoryService, bool>(m => m.CheckIfExists(AppRootDirectory))
+                .Returns(true);
+
+            var tabsListViewModel = _autoMocker.CreateInstance<TabsListViewModel>();
+
+            var tab = tabsListViewModel.Tabs[0];
+            Assert.Equal(tab, tabsListViewModel.SelectedTab);
+
+            tabsListViewModel.SelectTab(-1);
+            Assert.Equal(tab, tabsListViewModel.SelectedTab);
+
+            tabsListViewModel.SelectTab(tabsCount + 13);
+            Assert.Equal(tab, tabsListViewModel.SelectedTab);        }
+
         private static Mock<ITabViewModel> Create()
         {
             var sortingViewModelMock = new Mock<IFileSystemNodesSortingViewModel>();
