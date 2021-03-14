@@ -13,7 +13,7 @@ namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels
 
         ICommand SelectTabToTheRightCommand { get; }
 
-        void CreateNewTab(string directory = null);
+        void CreateNewTab(string directory = null, bool switchTo = false);
 
         void CloseActiveTab();
 

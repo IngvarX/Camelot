@@ -67,8 +67,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
                 .Subscribe(_ => SaveState());
         }
 
-        public void CreateNewTab(string directory = null) =>
-            CreateNewTab(SelectedTab, directory, false);
+        public void CreateNewTab(string directory = null, bool switchTo = false) =>
+            CreateNewTab(SelectedTab, directory, switchTo);
 
         public void CloseActiveTab() => CloseTab(SelectedTab);
 

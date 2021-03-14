@@ -71,7 +71,7 @@ namespace Camelot.ViewModels.Implementations
             filesOperationsMediator.Register(leftFilesPanelViewModel, rightFilesPanelViewModel);
         }
 
-        private void CreateNewTab() => ActiveTabsListViewModel.CreateNewTab();
+        private void CreateNewTab() => ActiveTabsListViewModel.CreateNewTab(switchTo: true);
 
         private void CloseActiveTab() => ActiveTabsListViewModel.CloseActiveTab();
 
