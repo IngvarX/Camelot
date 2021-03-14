@@ -65,6 +65,52 @@
             </KeyBinding.CommandParameter>
         </KeyBinding>
         <KeyBinding Gesture="Ctrl+D0" Command="{Binding GoToLastTabCommand}" />
+        <KeyBinding Gesture="Ctrl+NumPad1" Command="{Binding GoToTabCommand}">
+            <KeyBinding.CommandParameter>
+                <system:Int32>0</system:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Gesture="Ctrl+NumPad2" Command="{Binding GoToTabCommand}">
+            <KeyBinding.CommandParameter>
+                <system:Int32>1</system:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Gesture="Ctrl+NumPad3" Command="{Binding GoToTabCommand}">
+            <KeyBinding.CommandParameter>
+                <system:Int32>2</system:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Gesture="Ctrl+NumPad4" Command="{Binding GoToTabCommand}">
+            <KeyBinding.CommandParameter>
+                <system:Int32>3</system:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Gesture="Ctrl+NumPad5" Command="{Binding GoToTabCommand}">
+            <KeyBinding.CommandParameter>
+                <system:Int32>4</system:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Gesture="Ctrl+NumPad6" Command="{Binding GoToTabCommand}">
+            <KeyBinding.CommandParameter>
+                <system:Int32>5</system:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Gesture="Ctrl+NumPad7" Command="{Binding GoToTabCommand}">
+            <KeyBinding.CommandParameter>
+                <system:Int32>6</system:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Gesture="Ctrl+NumPad8" Command="{Binding GoToTabCommand}">
+            <KeyBinding.CommandParameter>
+                <system:Int32>7</system:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Gesture="Ctrl+NumPad9" Command="{Binding GoToTabCommand}">
+            <KeyBinding.CommandParameter>
+                <system:Int32>8</system:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Gesture="Ctrl+NumPad0" Command="{Binding GoToLastTabCommand}" />
         <KeyBinding Gesture="Ctrl+T" Command="{Binding CreateNewTabCommand}" />
         <KeyBinding Gesture="Meta+T" Command="{Binding CreateNewTabCommand}" />
         <KeyBinding Gesture="Ctrl+W" Command="{Binding CloseCurrentTabCommand}" />
