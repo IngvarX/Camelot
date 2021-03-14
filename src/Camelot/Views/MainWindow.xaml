@@ -7,6 +7,7 @@
         xmlns:operationsStates="clr-namespace:Camelot.Views.Main.OperationsStates"
         xmlns:drives="clr-namespace:Camelot.Views.Main.Drives"
         xmlns:favouriteDirectories="clr-namespace:Camelot.Views.Main.FavouriteDirectories"
+        xmlns:system="clr-namespace:System;assembly=System.Runtime"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Camelot.Views.MainWindow"
         MinWidth="900" MinHeight="480"
@@ -18,6 +19,52 @@
     </Design.DataContext>
 
     <Window.KeyBindings>
+        <KeyBinding Gesture="Ctrl+D1" Command="{Binding GoToTabCommand}">
+            <KeyBinding.CommandParameter>
+                <system:Int32>0</system:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Gesture="Ctrl+D2" Command="{Binding GoToTabCommand}">
+            <KeyBinding.CommandParameter>
+                <system:Int32>1</system:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Gesture="Ctrl+D3" Command="{Binding GoToTabCommand}">
+            <KeyBinding.CommandParameter>
+                <system:Int32>2</system:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Gesture="Ctrl+D4" Command="{Binding GoToTabCommand}">
+            <KeyBinding.CommandParameter>
+                <system:Int32>3</system:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Gesture="Ctrl+D5" Command="{Binding GoToTabCommand}">
+            <KeyBinding.CommandParameter>
+                <system:Int32>4</system:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Gesture="Ctrl+D6" Command="{Binding GoToTabCommand}">
+            <KeyBinding.CommandParameter>
+                <system:Int32>5</system:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Gesture="Ctrl+D7" Command="{Binding GoToTabCommand}">
+            <KeyBinding.CommandParameter>
+                <system:Int32>6</system:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Gesture="Ctrl+D8" Command="{Binding GoToTabCommand}">
+            <KeyBinding.CommandParameter>
+                <system:Int32>7</system:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Gesture="Ctrl+D9" Command="{Binding GoToTabCommand}">
+            <KeyBinding.CommandParameter>
+                <system:Int32>8</system:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Gesture="Ctrl+D0" Command="{Binding GoToLastTabCommand}" />
         <KeyBinding Gesture="Ctrl+T" Command="{Binding CreateNewTabCommand}" />
         <KeyBinding Gesture="Meta+T" Command="{Binding CreateNewTabCommand}" />
         <KeyBinding Gesture="Ctrl+W" Command="{Binding CloseCurrentTabCommand}" />

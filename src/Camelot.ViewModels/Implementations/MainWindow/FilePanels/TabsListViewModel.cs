@@ -25,11 +25,12 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private readonly ITabViewModelFactory _tabViewModelFactory;
         private readonly IFilesOperationsMediator _filesOperationsMediator;
         private readonly IHomeDirectoryProvider _homeDirectoryProvider;
+
         private readonly ObservableCollection<ITabViewModel> _tabs;
 
         private ITabViewModel _selectedTab;
 
-        public IEnumerable<ITabViewModel> Tabs => _tabs;
+        public IReadOnlyList<ITabViewModel> Tabs => _tabs;
 
         public ITabViewModel SelectedTab
         {
@@ -71,6 +72,14 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             CreateNewTab(SelectedTab, directory, switchTo);
 
         public void CloseActiveTab() => CloseTab(SelectedTab);
+
+        public void SelectTab(int index)
+        {
+            if (index >= 0 && index < _tabs.Count)
+            {
+                SelectTab(_tabs[index]);
+            }
+        }
 
         public void SaveState() =>
             Task.Factory.StartNew(() =>

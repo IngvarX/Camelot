@@ -41,6 +41,10 @@ namespace Camelot.ViewModels.Implementations
 
         public ICommand SwitchPanelCommand { get; }
 
+        public ICommand GoToTabCommand { get; }
+
+        public ICommand GoToLastTabCommand { get; }
+
         public MainWindowViewModel(
             IFilesOperationsMediator filesOperationsMediator,
             IOperationsViewModel operationsViewModel,
@@ -67,6 +71,8 @@ namespace Camelot.ViewModels.Implementations
             CloseCurrentTabCommand = ReactiveCommand.Create(CloseActiveTab);
             SearchCommand = ReactiveCommand.Create(Search);
             SwitchPanelCommand = ReactiveCommand.Create(SwitchPanel);
+            GoToTabCommand = ReactiveCommand.Create<int>(GoToTab);
+            GoToLastTabCommand = ReactiveCommand.Create(GoToLastTab);
 
             filesOperationsMediator.Register(leftFilesPanelViewModel, rightFilesPanelViewModel);
         }
@@ -78,5 +84,9 @@ namespace Camelot.ViewModels.Implementations
         private void Search() => _filesOperationsMediator.ToggleSearchPanelVisibility();
 
         private void SwitchPanel() => _filesOperationsMediator.InactiveFilesPanelViewModel.Activate();
+
+        private void GoToTab(int tabIndex) => ActiveTabsListViewModel.SelectTab(tabIndex);
+
+        private void GoToLastTab() => ActiveTabsListViewModel.SelectTab(ActiveTabsListViewModel.Tabs.Count - 1);
     }
 }
