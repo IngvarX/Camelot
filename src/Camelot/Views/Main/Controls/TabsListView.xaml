@@ -12,7 +12,7 @@
     </Design.DataContext>
 
     <Grid ColumnDefinitions="Auto,*,Auto">
-        <Button Classes="tabScrollButton" Click="LeftButtonOnClick">
+        <Button Classes="iconButton tabScrollButton" Click="LeftButtonOnClick">
             <Image Width="20" Height="20">
                 <Image.Source>
                     <DrawingImage>
@@ -45,7 +45,7 @@
             </ItemsControl>
         </ScrollViewer>
 
-        <Button Grid.Column="2" Classes="tabScrollButton" Click="RightButtonOnClick">
+        <Button Grid.Column="2" Classes="iconButton tabScrollButton" Click="RightButtonOnClick">
             <Image Width="20" Height="20">
                 <Image.Source>
                     <DrawingImage>
