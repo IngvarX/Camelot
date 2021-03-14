@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -58,4 +58,226 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="SelectFromFilesAndDirectories" xml:space="preserve">
+    <value>{0} dosya ({1}) ve {2} dizin</value>
+  </data>
+  <data name="ReplaceWith" xml:space="preserve">
+    <value>Şununla değiştir</value>
+  </data>
+  <data name="ReplaceIfOlder" xml:space="preserve">
+    <value>Daha eskiyse değiştir</value>
+  </data>
+  <data name="ReplaceFileDestinationDirectory" xml:space="preserve">
+    <value>Aynı ada sahip başka bir dosya "{0}" içinde zaten var Onu değiştirmek istiyor musunuz?</value>
+  </data>
+  <data name="ReplaceFile" xml:space="preserve">
+    <value>Dosyayı değiştir</value>
+  </data>
+  <data name="Replace" xml:space="preserve">
+    <value>Değiştir</value>
+  </data>
+  <data name="Rename" xml:space="preserve">
+    <value>Yeniden adlandır</value>
+  </data>
+  <data name="RemovingFilesToTrash" xml:space="preserve">
+    <value>Bu {0} dosyayı çöp kutusuna atmak istiyor musunuz?</value>
+  </data>
+  <data name="RemovingFilesAndDirectoriesFrom" xml:space="preserve">
+    <value>{0} dosya ve {1} dizini {2} dizininden kaldırılıyor</value>
+  </data>
+  <data name="RemovingFileFromTo" xml:space="preserve">
+    <value>{0}, {1} konumundan kaldırılıyor</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Kaldır</value>
+  </data>
+  <data name="PermanentlyRemoveFiles" xml:space="preserve">
+    <value>Bu {0} dosyaları kalıcı olarak kaldırmak istiyor musunuz?</value>
+  </data>
+  <data name="PathWithColon" xml:space="preserve">
+    <value>Yol:</value>
+  </data>
+  <data name="OverwriteOptionsTitle" xml:space="preserve">
+    <value>Üzerine yazma seçenekleri</value>
+  </data>
+  <data name="OriginalFile" xml:space="preserve">
+    <value>Orijinal dosya</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Aç</value>
+  </data>
+  <data name="NewTab" xml:space="preserve">
+    <value>Yeni sekme</value>
+  </data>
+  <data name="NewDirectory" xml:space="preserve">
+    <value>Yeni Dizin</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>İsim</value>
+  </data>
+  <data name="MovingFromFilesAndDirectoriesTo" xml:space="preserve">
+    <value>{0} dosya ve {1} dizini {2} konumuna taşınıyor</value>
+  </data>
+  <data name="MovingFileFromTo" xml:space="preserve">
+    <value>{0}, {1} konumuna taşınıyor</value>
+  </data>
+  <data name="MovedFilesFromAndDirectoriesTo" xml:space="preserve">
+    <value>{0} dosya ve {1} dizini {2} klasörüne taşındı</value>
+  </data>
+  <data name="MovedFileFromTo" xml:space="preserve">
+    <value>{0}, {1} konumuna taşındı</value>
+  </data>
+  <data name="Move" xml:space="preserve">
+    <value>Taşı</value>
+  </data>
+  <data name="Maintainers" xml:space="preserve">
+    <value>Geliştiriciler</value>
+  </data>
+  <data name="LastModified" xml:space="preserve">
+    <value>Son güncelleme</value>
+  </data>
+  <data name="LastModificationWithColon" xml:space="preserve">
+    <value>Son güncelleme:</value>
+  </data>
+  <data name="LastAccessWithColon" xml:space="preserve">
+    <value>Son erişim:</value>
+  </data>
+  <data name="LanguageWithColon" xml:space="preserve">
+    <value>Dil:</value>
+  </data>
+  <data name="HelpHeader" xml:space="preserve">
+    <value>_Yardım</value>
+  </data>
+  <data name="Github" xml:space="preserve">
+    <value>GitHub</value>
+  </data>
+  <data name="General" xml:space="preserve">
+    <value>Genel</value>
+  </data>
+  <data name="FilesRemovingConfirmationTitle" xml:space="preserve">
+    <value>Dosyaların kaldırılmasını onaylayın</value>
+  </data>
+  <data name="FileInformationTitle" xml:space="preserve">
+    <value>Dosya-bilgisi</value>
+  </data>
+  <data name="FileHeader" xml:space="preserve">
+    <value>_Dosya</value>
+  </data>
+  <data name="FailedToMoveFilesAndDirectoriesTo" xml:space="preserve">
+    <value>{0} dosya ve {1} dizini {2} konumuna taşınamadı</value>
+  </data>
+  <data name="FailedToMoveFileFromTo" xml:space="preserve">
+    <value>{0}, {1} konumuna taşınamadı</value>
+  </data>
+  <data name="FailedToDeleteFilesAndDirectoriesFrom" xml:space="preserve">
+    <value>{2} dizininden {0} dosya ve {1} dizini silinemedi</value>
+  </data>
+  <data name="FailedToDeleteFileFromTo" xml:space="preserve">
+    <value>{0}, {1} konumundan silinemedi</value>
+  </data>
+  <data name="FailedCopyFromFilesAndDirectoriesTo" xml:space="preserve">
+    <value>{0} dosyaları ve {1} dizini {2} konumuna kopyalanamadı</value>
+  </data>
+  <data name="FailedCopyFileFromTo" xml:space="preserve">
+    <value>{0}, {1} konumuna kopyalanamadı</value>
+  </data>
+  <data name="Extension" xml:space="preserve">
+    <value>Uzantı</value>
+  </data>
+  <data name="ExitHeader" xml:space="preserve">
+    <value>_Çıkış</value>
+  </data>
+  <data name="EnterDirectoryNameWithColon" xml:space="preserve">
+    <value>Dizin ismini girin:</value>
+  </data>
+  <data name="DirectoryTemplate" xml:space="preserve">
+    <value>&lt;DIR&gt;</value>
+  </data>
+  <data name="DirectoryInformationTitle" xml:space="preserve">
+    <value>Dizin bilgisi</value>
+  </data>
+  <data name="Directory" xml:space="preserve">
+    <value>Dizin</value>
+  </data>
+  <data name="DeletedFilesAndDirectories" xml:space="preserve">
+    <value>{0} dosya ve {1} dizin {2} klasörüne silindi</value>
+  </data>
+  <data name="CopyingFileFromTo" xml:space="preserve">
+    <value>{0}, {1} konumuna kopyalanıyor</value>
+  </data>
+  <data name="CopiedFileFromTo" xml:space="preserve">
+    <value>{0}, {1} konumuna kopyalandı</value>
+  </data>
+  <data name="DeletedFileFromTo" xml:space="preserve">
+    <value>{0}, {1} konumundan silindi</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Sil</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Tarih</value>
+  </data>
+  <data name="CreationDateWithColon" xml:space="preserve">
+    <value>Oluşturma Tarihi:</value>
+  </data>
+  <data name="CreateDirectoryTitle" xml:space="preserve">
+    <value>Dizin oluştur</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Oluştur</value>
+  </data>
+  <data name="CopyToClipboard" xml:space="preserve">
+    <value>Panoya kopyala</value>
+  </data>
+  <data name="CopyingFilesFromAndDirectoriesTo" xml:space="preserve">
+    <value>{0} dosya ve {1} dizin {2} klasörüne kopyalanıyor</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Kopyala</value>
+  </data>
+  <data name="CopiedFilesFromAndDirectoriesTo" xml:space="preserve">
+    <value>{0} dosya ve {1} dizin {2} klasörüne kopyalandı</value>
+  </data>
+  <data name="ConfigurationHeader" xml:space="preserve">
+    <value>_Yapılandırma</value>
+  </data>
+  <data name="CommandWithColon" xml:space="preserve">
+    <value>Komut:</value>
+  </data>
+  <data name="CloseTabsToTheRight" xml:space="preserve">
+    <value>Sağdaki sekmeleri kapat</value>
+  </data>
+  <data name="CloseTabsToTheLeft" xml:space="preserve">
+    <value>Soldaki sekmeleri kapat</value>
+  </data>
+  <data name="CloseTab" xml:space="preserve">
+    <value>Sekmeyi kapat</value>
+  </data>
+  <data name="CloseAllButThis" xml:space="preserve">
+    <value>Bu hariç hepsini kapat</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Kapat</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>İptal</value>
+  </data>
+  <data name="ArgumentsWithColon" xml:space="preserve">
+    <value>Argümanlar:</value>
+  </data>
+  <data name="ApplyActionToTheAllFilesAndFolders" xml:space="preserve">
+    <value>Bu eylemi tüm dosya ve klasörlere uygula</value>
+  </data>
+  <data name="Apply" xml:space="preserve">
+    <value>Uygula</value>
+  </data>
+  <data name="AboutPage" xml:space="preserve">
+    <value>Camelot, C# ile yazılmış çift panelli dosya yöneticisidir</value>
+  </data>
+  <data name="AboutHeader" xml:space="preserve">
+    <value>_Hakkında</value>
+  </data>
+  <data name="AboutCamelotTitle" xml:space="preserve">
+    <value>Camelot Hakkında</value>
+  </data>
 </root>
