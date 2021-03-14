@@ -22,6 +22,13 @@ namespace Camelot.Views.Main.Controls.Tabs
             InitializeComponent();
         }
 
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+
+            ScrollViewer.ScrollChanged += ScrollViewerOnScrollChanged;
+        }
+
         private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
 
         private void TabsListOnPointerWheelChanged(object sender, PointerWheelEventArgs e)
@@ -39,5 +46,14 @@ namespace Camelot.Views.Main.Controls.Tabs
 
         private static void Scroll(Action scrollAction) =>
             Enumerable.Repeat(0, ScrollsCount).ForEach(_ => scrollAction());
+
+        private void ScrollViewerOnScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            var leftButton = this.FindControl<Button>("LeftArrowButton");
+            var rightButton = this.FindControl<Button>("RightArrowButton");
+
+            leftButton.IsVisible = ScrollViewer.Offset.X > 0;
+            rightButton.IsVisible = ScrollViewer.Offset.X < ScrollViewer.Extent.Width - ScrollViewer.Viewport.Width;
+        }
     }
 }
