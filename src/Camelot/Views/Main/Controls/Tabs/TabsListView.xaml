@@ -15,7 +15,7 @@
     <Grid ColumnDefinitions="Auto,*,Auto">
         <Button Name="LeftArrowButton"
             Classes="iconButton tabScrollButton" Click="LeftButtonOnClick">
-            <Image Width="20" Height="25">
+            <Image Width="20" Height="20">
                 <Image.Source>
                     <DrawingImage>
                         <DrawingImage.Drawing>

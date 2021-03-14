@@ -94,6 +94,7 @@
 
     <Style Selector="Button.tabScrollButton">
         <Setter Property="ZIndex" Value="10" />
+        <Setter Property="Padding" Value="0,7,0,0" />
     </Style>
 
     <Style Selector="ScrollViewer#TabsScrollViewer">
