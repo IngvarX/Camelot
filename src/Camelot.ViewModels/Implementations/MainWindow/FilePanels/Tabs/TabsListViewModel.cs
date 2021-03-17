@@ -81,12 +81,12 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
             }
         }
 
-        public void InsertBeforeTab(ITabViewModel currentTabViewModel, ITabViewModel newTabViewModel)
+        public void InsertBeforeTab(ITabViewModel tabViewModel, ITabViewModel tabViewModelToInsert)
         {
-            var oppositePanelTargetTabIndex = GetTabIndex(currentTabViewModel);
+            var oppositePanelTargetTabIndex = GetTabIndex(tabViewModel);
 
-            _tabs.Insert(oppositePanelTargetTabIndex, newTabViewModel);
-            SubscribeToEvents(newTabViewModel);
+            _tabs.Insert(oppositePanelTargetTabIndex, tabViewModelToInsert);
+            SubscribeToEvents(tabViewModelToInsert);
         }
 
         public void SaveState() =>

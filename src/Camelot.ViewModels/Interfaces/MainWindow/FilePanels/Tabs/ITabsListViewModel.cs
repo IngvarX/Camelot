@@ -22,7 +22,7 @@ namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs
 
         void SelectTab(int index);
 
-        void InsertBeforeTab(ITabViewModel currentTabViewModel, ITabViewModel newTabViewModel);
+        void InsertBeforeTab(ITabViewModel tabViewModel, ITabViewModel tabViewModelToInsert);
 
         void SaveState();
     }

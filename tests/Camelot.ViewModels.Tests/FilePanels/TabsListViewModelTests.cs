@@ -85,7 +85,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
 
             _autoMocker.Verify<IFilesPanelStateService, PanelStateModel>(m => m.GetPanelState(), Times.Once);
 
-            Assert.Equal(tabsCount, tabsListViewModel.Tabs.Count());
+            Assert.Equal(tabsCount, tabsListViewModel.Tabs.Count);
         }
 
         [Fact]
@@ -120,7 +120,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
             Assert.Single(tabsListViewModel.Tabs);
 
             tabsListViewModel.CreateNewTab();
-            Assert.Equal(2, tabsListViewModel.Tabs.Count());
+            Assert.Equal(2, tabsListViewModel.Tabs.Count);
 
             tabsListViewModel.CloseActiveTab();
             Assert.Single(tabsListViewModel.Tabs);
@@ -295,7 +295,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
             currentTabMock = Create();
 
             firstTabMock.Raise(m => m.NewTabRequested += null, EventArgs.Empty);
-            Assert.Equal(2, tabsListViewModel.Tabs.Count());
+            Assert.Equal(2, tabsListViewModel.Tabs.Count);
             Assert.NotEqual(firstTabMock.Object, tabsListViewModel.SelectedTab);
 
             firstTabMock.Raise(m => m.CloseRequested += null, EventArgs.Empty);
@@ -373,7 +373,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
             var secondTab = tabs[1];
             secondTab.Raise(m => m.ClosingTabsToTheLeftRequested += null, EventArgs.Empty);
 
-            Assert.Equal(2, tabsListViewModel.Tabs.Count());
+            Assert.Equal(2, tabsListViewModel.Tabs.Count);
             Assert.Equal(secondTab.Object, tabsListViewModel.SelectedTab);
             Assert.Equal(tabs[2].Object, tabsListViewModel.Tabs.Last());
         }
@@ -411,7 +411,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
             var secondTab = tabs[1];
             secondTab.Raise(m => m.ClosingTabsToTheRightRequested += null, EventArgs.Empty);
 
-            Assert.Equal(2, tabsListViewModel.Tabs.Count());
+            Assert.Equal(2, tabsListViewModel.Tabs.Count);
             Assert.Equal(tabs[0].Object, tabsListViewModel.SelectedTab);
             Assert.Equal(secondTab.Object, tabsListViewModel.Tabs.Last());
         }
@@ -533,7 +533,132 @@ namespace Camelot.ViewModels.Tests.FilePanels
             Assert.Equal(tab, tabsListViewModel.SelectedTab);
 
             tabsListViewModel.SelectTab(tabsCount + 13);
-            Assert.Equal(tab, tabsListViewModel.SelectedTab);        }
+            Assert.Equal(tab, tabsListViewModel.SelectedTab);
+        }
+
+        [Fact]
+        public void TestMoveRequestedMoveLeft()
+        {
+            var tabs = new List<Mock<ITabViewModel>>();
+            _autoMocker
+                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.Is<TabStateModel>(tm => tm.Directory == AppRootDirectory)))
+                .Returns(() =>
+                {
+                    var mock = Create();
+                    tabs.Add(mock);
+
+                    return mock.Object;
+                });
+            _autoMocker
+                .Setup<IDirectoryService, bool>(m => m.CheckIfExists(AppRootDirectory))
+                .Returns(true);
+            _autoMocker
+                .Setup<IFilesPanelStateService, PanelStateModel>(m => m.GetPanelState())
+                .Returns(new PanelStateModel
+                {
+                    Tabs = new List<TabStateModel>
+                    {
+                        new TabStateModel {Directory = AppRootDirectory},
+                        new TabStateModel {Directory = AppRootDirectory},
+                        new TabStateModel {Directory = AppRootDirectory}
+                    }
+                });
+
+            var tabsListViewModel = _autoMocker.CreateInstance<TabsListViewModel>();
+
+            var firstTab = tabs[0].Object;
+            var secondTabMock = tabs[1];
+            var thirdTab = tabs[2].Object;
+            var args = new MoveRequestedEventArgs(firstTab);
+            secondTabMock.Raise(m => m.MoveRequested += null, args);
+
+            Assert.Equal(3, tabsListViewModel.Tabs.Count);
+            Assert.Equal(secondTabMock.Object, tabsListViewModel.Tabs[0]);
+            Assert.Equal(firstTab, tabsListViewModel.Tabs[1]);
+            Assert.Equal(thirdTab, tabsListViewModel.Tabs[2]);
+        }
+
+        [Fact]
+        public void TestMoveRequestedMoveRight()
+        {
+            var tabs = new List<Mock<ITabViewModel>>();
+            _autoMocker
+                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.Is<TabStateModel>(tm => tm.Directory == AppRootDirectory)))
+                .Returns(() =>
+                {
+                    var mock = Create();
+                    tabs.Add(mock);
+
+                    return mock.Object;
+                });
+            _autoMocker
+                .Setup<IDirectoryService, bool>(m => m.CheckIfExists(AppRootDirectory))
+                .Returns(true);
+            _autoMocker
+                .Setup<IFilesPanelStateService, PanelStateModel>(m => m.GetPanelState())
+                .Returns(new PanelStateModel
+                {
+                    Tabs = new List<TabStateModel>
+                    {
+                        new TabStateModel {Directory = AppRootDirectory},
+                        new TabStateModel {Directory = AppRootDirectory},
+                        new TabStateModel {Directory = AppRootDirectory}
+                    }
+                });
+
+            var tabsListViewModel = _autoMocker.CreateInstance<TabsListViewModel>();
+
+            var firstTab = tabs[0].Object;
+            var secondTabMock = tabs[1];
+            var thirdTab = tabs[2].Object;
+            var args = new MoveRequestedEventArgs(thirdTab);
+            secondTabMock.Raise(m => m.MoveRequested += null, args);
+
+            Assert.Equal(3, tabsListViewModel.Tabs.Count);
+            Assert.Equal(secondTabMock.Object, tabsListViewModel.Tabs[2]);
+            Assert.Equal(firstTab, tabsListViewModel.Tabs[0]);
+            Assert.Equal(thirdTab, tabsListViewModel.Tabs[1]);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        public void TestInsertBeforeTab(int insertIndex)
+        {
+            var tabs = new List<Mock<ITabViewModel>>();
+            _autoMocker
+                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.Is<TabStateModel>(tm => tm.Directory == AppRootDirectory)))
+                .Returns(() =>
+                {
+                    var mock = Create();
+                    tabs.Add(mock);
+
+                    return mock.Object;
+                });
+            _autoMocker
+                .Setup<IDirectoryService, bool>(m => m.CheckIfExists(AppRootDirectory))
+                .Returns(true);
+            _autoMocker
+                .Setup<IFilesPanelStateService, PanelStateModel>(m => m.GetPanelState())
+                .Returns(new PanelStateModel
+                {
+                    Tabs = new List<TabStateModel>
+                    {
+                        new TabStateModel {Directory = AppRootDirectory},
+                        new TabStateModel {Directory = AppRootDirectory},
+                        new TabStateModel {Directory = AppRootDirectory}
+                    }
+                });
+
+            var tabsListViewModel = _autoMocker.CreateInstance<TabsListViewModel>();
+
+            var insertViewModel = new Mock<ITabViewModel>().Object;
+            var currentTabViewModel = tabsListViewModel.Tabs[insertIndex];
+            tabsListViewModel.InsertBeforeTab(currentTabViewModel, insertViewModel);
+
+            Assert.Equal(insertViewModel, tabsListViewModel.Tabs[insertIndex]);
+        }
 
         private static Mock<ITabViewModel> Create()
         {
