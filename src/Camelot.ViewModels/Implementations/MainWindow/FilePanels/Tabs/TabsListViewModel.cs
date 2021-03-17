@@ -81,6 +81,14 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
             }
         }
 
+        public void InsertBeforeTab(ITabViewModel currentTabViewModel, ITabViewModel newTabViewModel)
+        {
+            var oppositePanelTargetTabIndex = GetTabIndex(currentTabViewModel);
+
+            _tabs.Insert(oppositePanelTargetTabIndex, newTabViewModel);
+            SubscribeToEvents(newTabViewModel);
+        }
+
         public void SaveState() =>
             Task.Factory.StartNew(() =>
             {
@@ -225,6 +233,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
             tabViewModel.ClosingTabsToTheLeftRequested -= TabViewModelOnClosingTabsToTheLeftRequested;
             tabViewModel.ClosingTabsToTheRightRequested -= TabViewModelOnClosingTabsToTheRightRequested;
             tabViewModel.ClosingAllTabsButThisRequested -= TabViewModelOnClosingAllTabsButThisRequested;
+            tabViewModel.MoveRequested -= TabViewModelOnMoveRequested;
         }
 
         private void TabViewModelOnActivationRequested(object sender, EventArgs e) => SelectTab((ITabViewModel) sender);
@@ -269,15 +278,21 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
             var (sourceTab, targetTab) = ((ITabViewModel) sender, e.Target);
             var (sourceTabIndex, targetTabIndex) = (GetTabIndex(sourceTab), GetTabIndex(targetTab));
 
-            MoveTab(sourceTabIndex, targetTabIndex);
-        }
+            if (targetTabIndex == -1) // drag n drop to opposite panel. remove tab from current panel and add to opposite
+            {
+                Remove(sourceTab);
 
-        private void MoveTab(int sourceTabIndex, int targetTabIndex)
-        {
-            var tab = _tabs[sourceTabIndex];
+                var oppositePanel = SelectedTab.IsGloballyActive
+                    ? _filesOperationsMediator.InactiveFilesPanelViewModel
+                    : _filesOperationsMediator.ActiveFilesPanelViewModel;
 
-            _tabs.RemoveAt(sourceTabIndex);
-            _tabs.Insert(targetTabIndex, tab);
+                oppositePanel.TabsListViewModel.InsertBeforeTab(targetTab, sourceTab);
+            }
+            else // same panel, just move tab to appropriate position
+            {
+                _tabs.RemoveAt(sourceTabIndex);
+                _tabs.Insert(targetTabIndex, sourceTab);
+            }
         }
 
         private void CreateNewTab(ITabViewModel tabViewModel, string directory = null, bool switchToTab = true)

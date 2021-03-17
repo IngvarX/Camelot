@@ -36,25 +36,25 @@ namespace Camelot.Views.Main.Controls.Tabs
             var grid = this.Find<Grid>("TabGrid");
             grid.PointerPressed += DoDrag;
 
-            AddHandler(DragDrop.DropEvent, Drop);
-            AddHandler(DragDrop.DragOverEvent, DragOver);
+            AddHandler(DragDrop.DropEvent, OnDrop);
         }
 
         private async void DoDrag(object sender, PointerPressedEventArgs e)
         {
+            if (!e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
+            {
+                return;
+            }
+
             var dragData = new DataObject();
             dragData.Set(DataFormat, ViewModel);
 
             await DragDrop.DoDragDrop(e, dragData, DragDropEffects.Copy);
+
             ViewModel.ActivateCommand.Execute(null);
         }
 
-        private void DragOver(object sender, DragEventArgs e)
-        {
-
-        }
-
-        private void Drop(object sender, DragEventArgs e)
+        private void OnDrop(object sender, DragEventArgs e)
         {
             if (e.Data.Contains(DataFormat)
                 && e.Data.Get(DataFormat) is ITabViewModel tabViewModel
