@@ -137,7 +137,7 @@
       <DependentUpon>DriveView.xaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Main\Directories\FavouriteDirectoriesListView.xaml.cs">
-      <DependentUpon>FavouriteDirectoriesListView.xaml.xaml</DependentUpon>
+      <DependentUpon>FavouriteDirectoriesListView.xaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Dialogs\OpenWith\ApplicationView.xaml.cs">
       <DependentUpon>ApplicationView.xaml</DependentUpon>
