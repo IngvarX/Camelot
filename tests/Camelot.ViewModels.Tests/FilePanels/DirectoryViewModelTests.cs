@@ -1,5 +1,6 @@
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
+using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs;
 using Camelot.ViewModels.Services.Interfaces;
 using Moq;
 using Moq.AutoMock;

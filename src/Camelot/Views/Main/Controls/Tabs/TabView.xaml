@@ -3,12 +3,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:p="clr-namespace:Camelot.Properties"
-             xmlns:filePanels="clr-namespace:Camelot.ViewModels.Implementations.MainWindow.FilePanels;assembly=Camelot.ViewModels"
+             xmlns:tabs="clr-namespace:Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs;assembly=Camelot.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Camelot.Views.Main.Controls.Tabs.TabView">
 
     <Design.DataContext>
-        <filePanels:TabViewModel />
+        <tabs:TabViewModel />
     </Design.DataContext>
 
     <StackPanel Orientation="Vertical">
@@ -17,7 +17,7 @@
                 <Button Classes="tabButton" PointerReleased="ButtonOnPointerReleased"
                         Command="{Binding ActivateCommand}">
                     <Button.Content>
-                        <Grid>
+                        <Grid Name="TabGrid" DragDrop.AllowDrop="True">
                             <Grid Height="40" IsVisible="{Binding IsActive}">
                                 <TextBlock Classes="tabNameTextBlock"
                                            Text="{Binding DirectoryName}" />

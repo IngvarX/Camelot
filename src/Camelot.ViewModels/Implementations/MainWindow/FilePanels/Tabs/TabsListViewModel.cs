@@ -12,11 +12,11 @@ using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Models.State;
 using Camelot.ViewModels.Configuration;
 using Camelot.ViewModels.Factories.Interfaces;
-using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
+using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs;
 using Camelot.ViewModels.Services.Interfaces;
 using ReactiveUI;
 
-namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
+namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
 {
     public class TabsListViewModel : ViewModelBase, ITabsListViewModel
     {
@@ -213,6 +213,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             tabViewModel.ClosingTabsToTheLeftRequested += TabViewModelOnClosingTabsToTheLeftRequested;
             tabViewModel.ClosingTabsToTheRightRequested += TabViewModelOnClosingTabsToTheRightRequested;
             tabViewModel.ClosingAllTabsButThisRequested += TabViewModelOnClosingAllTabsButThisRequested;
+            tabViewModel.MoveRequested += TabViewModelOnMoveRequested;
         }
 
         private void UnsubscribeFromEvents(ITabViewModel tabViewModel)
@@ -263,6 +264,22 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             tabsToClose.ForEach(Remove);
         }
 
+        private void TabViewModelOnMoveRequested(object sender, MoveRequestedEventArgs e)
+        {
+            var (sourceTab, targetTab) = ((ITabViewModel) sender, e.Target);
+            var (sourceTabIndex, targetTabIndex) = (GetTabIndex(sourceTab), GetTabIndex(targetTab));
+
+            MoveTab(sourceTabIndex, targetTabIndex);
+        }
+
+        private void MoveTab(int sourceTabIndex, int targetTabIndex)
+        {
+            var tab = _tabs[sourceTabIndex];
+
+            _tabs.RemoveAt(sourceTabIndex);
+            _tabs.Insert(targetTabIndex, tab);
+        }
+
         private void CreateNewTab(ITabViewModel tabViewModel, string directory = null, bool switchToTab = true)
         {
             var insertIndex = _tabs.IndexOf(tabViewModel) + 1;
@@ -306,6 +323,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
                 SortingMode = tabViewModel.SortingViewModel.SortingColumn
             };
 
-        private int GetSelectedTabIndex() => _tabs.IndexOf(SelectedTab);
+        private int GetSelectedTabIndex() => GetTabIndex(SelectedTab);
+
+        private int GetTabIndex(ITabViewModel tabViewModel) => _tabs.IndexOf(tabViewModel);
     }
 }

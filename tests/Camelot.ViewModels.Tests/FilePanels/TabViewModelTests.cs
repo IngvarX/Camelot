@@ -1,5 +1,6 @@
 using Camelot.Services.Abstractions;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
+using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs;
 using Moq;
 using Moq.AutoMock;
 using Xunit;

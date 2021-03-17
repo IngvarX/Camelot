@@ -2,7 +2,9 @@ using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models.State;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
+using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
+using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs;
 
 namespace Camelot.ViewModels.Factories.Implementations
 {

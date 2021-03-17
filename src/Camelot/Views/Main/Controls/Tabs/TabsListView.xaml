@@ -2,14 +2,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:filePanels="clr-namespace:Camelot.ViewModels.Implementations.MainWindow.FilePanels;assembly=Camelot.ViewModels"
-             xmlns:controls="clr-namespace:Camelot.Views.Main.Controls"
              xmlns:tabs="clr-namespace:Camelot.Views.Main.Controls.Tabs"
+             xmlns:tabsViewModels="clr-namespace:Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs;assembly=Camelot.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Camelot.Views.Main.Controls.Tabs.TabsListView">
 
     <Design.DataContext>
-        <filePanels:TabsListViewModel />
+        <tabsViewModels:TabsListViewModel />
     </Design.DataContext>
 
     <Grid ColumnDefinitions="Auto,*,Auto" Margin="10,10,0,0">

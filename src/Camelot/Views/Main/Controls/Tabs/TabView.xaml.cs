@@ -1,15 +1,21 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Markup.Xaml;
-using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
+using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs;
 
 namespace Camelot.Views.Main.Controls.Tabs
 {
     public class TabView : UserControl
     {
+        private const string DataFormat = "Tab";
+
+        private ITabViewModel ViewModel => (ITabViewModel) DataContext;
+
         public TabView()
         {
             InitializeComponent();
+
+            SetupDragAndDrop();
         }
 
         private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
@@ -22,10 +28,39 @@ namespace Camelot.Views.Main.Controls.Tabs
             }
 
             e.Handled = true;
+            ViewModel.CloseTabCommand.Execute(null);
+        }
 
-            if (DataContext is ITabViewModel viewModel)
+        private void SetupDragAndDrop()
+        {
+            var grid = this.Find<Grid>("TabGrid");
+            grid.PointerPressed += DoDrag;
+
+            AddHandler(DragDrop.DropEvent, Drop);
+            AddHandler(DragDrop.DragOverEvent, DragOver);
+        }
+
+        private async void DoDrag(object sender, PointerPressedEventArgs e)
+        {
+            var dragData = new DataObject();
+            dragData.Set(DataFormat, ViewModel);
+
+            await DragDrop.DoDragDrop(e, dragData, DragDropEffects.Copy);
+            ViewModel.ActivateCommand.Execute(null);
+        }
+
+        private void DragOver(object sender, DragEventArgs e)
+        {
+
+        }
+
+        private void Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.Contains(DataFormat)
+                && e.Data.Get(DataFormat) is ITabViewModel tabViewModel
+                && tabViewModel != ViewModel)
             {
-                viewModel.CloseTabCommand.Execute(null);
+                tabViewModel.RequestMoveCommand.Execute(ViewModel);
             }
         }
     }

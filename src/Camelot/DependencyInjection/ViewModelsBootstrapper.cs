@@ -20,6 +20,7 @@ using Camelot.ViewModels.Implementations.MainWindow;
 using Camelot.ViewModels.Implementations.MainWindow.Drives;
 using Camelot.ViewModels.Implementations.MainWindow.FavouriteDirectories;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
+using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs;
 using Camelot.ViewModels.Implementations.MainWindow.OperationsStates;
 using Camelot.ViewModels.Implementations.Menu;
 using Camelot.ViewModels.Implementations.Settings;

@@ -1,4 +1,5 @@
 using System;
+using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs;
 
 namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels
 {

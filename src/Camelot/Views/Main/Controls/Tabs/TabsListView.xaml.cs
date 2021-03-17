@@ -6,6 +6,7 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Camelot.Extensions;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
+using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs;
 
 namespace Camelot.Views.Main.Controls.Tabs
 {

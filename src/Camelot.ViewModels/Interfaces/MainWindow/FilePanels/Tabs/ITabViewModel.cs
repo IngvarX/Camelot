@@ -1,7 +1,7 @@
 using System;
 using System.Windows.Input;
 
-namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels
+namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs
 {
     public interface ITabViewModel
     {
@@ -27,6 +27,12 @@ namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels
 
         event EventHandler<EventArgs> ClosingAllTabsButThisRequested;
 
+        event EventHandler<MoveRequestedEventArgs> MoveRequested;
+
+        ICommand ActivateCommand { get; }
+
         ICommand CloseTabCommand { get; }
+
+        ICommand RequestMoveCommand { get; }
     }
 }

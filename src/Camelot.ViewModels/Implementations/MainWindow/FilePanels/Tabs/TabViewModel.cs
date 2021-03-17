@@ -3,10 +3,11 @@ using System.Windows.Input;
 using Camelot.Extensions;
 using Camelot.Services.Abstractions;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
+using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
+namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
 {
     public class TabViewModel : ViewModelBase, ITabViewModel
     {
@@ -48,6 +49,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         public event EventHandler<EventArgs> ClosingAllTabsButThisRequested;
 
+        public event EventHandler<MoveRequestedEventArgs> MoveRequested;
+
         public ICommand ActivateCommand { get; }
 
         public ICommand NewTabCommand { get; }
@@ -61,6 +64,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         public ICommand CloseTabsToTheRightCommand { get; }
 
         public ICommand CloseAllTabsButThisCommand { get; }
+
+        public ICommand RequestMoveCommand { get; }
 
         public TabViewModel(
             IPathService pathService,
@@ -79,6 +84,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             CloseTabsToTheLeftCommand = ReactiveCommand.Create(RequestClosingTabsToTheLeft);
             CloseTabsToTheRightCommand = ReactiveCommand.Create(RequestClosingTabsToTheRight);
             CloseAllTabsButThisCommand = ReactiveCommand.Create(RequestClosingAllTabsButThis);
+            RequestMoveCommand = ReactiveCommand.Create<ITabViewModel>(RequestMoveTo);
         }
 
         private void RequestActivation() => ActivationRequested.Raise(this, EventArgs.Empty);
@@ -94,5 +100,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private void RequestClosingTabsToTheRight() => ClosingTabsToTheRightRequested.Raise(this, EventArgs.Empty);
 
         private void RequestClosingAllTabsButThis() => ClosingAllTabsButThisRequested.Raise(this, EventArgs.Empty);
+
+        private void RequestMoveTo(ITabViewModel target) => MoveRequested.Raise(this, new MoveRequestedEventArgs(target));
     }
 }

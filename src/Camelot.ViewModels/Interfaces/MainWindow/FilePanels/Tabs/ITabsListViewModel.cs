@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Input;
 
-namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels
+namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs
 {
     public interface ITabsListViewModel
     {

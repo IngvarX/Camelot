@@ -7,6 +7,7 @@ using Camelot.Services.Abstractions.Specifications;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
+using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs;
 using Moq;
 using Moq.AutoMock;
 using Xunit;
