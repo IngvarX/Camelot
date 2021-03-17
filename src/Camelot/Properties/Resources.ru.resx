@@ -462,8 +462,8 @@
   <data name="DirectoryTemplate" xml:space="preserve">
     <value>&lt;DIR&gt;</value>
   </data>
-  <data name="Github" xml:space="preserve">
-    <value>Github</value>
+  <data name="GitHub" xml:space="preserve">
+    <value>GitHub</value>
   </data>
   <data name="EnterNewNameWithColon" xml:space="preserve">
     <value>Введите новое имя:</value>
@@ -483,7 +483,7 @@
   <data name="Eject" xml:space="preserve">
     <value>Извлечь</value>
   </data>
-  <data name="DuplicateOnOtherPanel" xml:space="preserve">
+  <data name="DuplicateOnOppositePanel" xml:space="preserve">
     <value>Дублировать на другой панели</value>
   </data>
   <data name="OpenInNewTab" xml:space="preserve">

@@ -216,7 +216,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
         {
             tabViewModel.ActivationRequested += TabViewModelOnActivationRequested;
             tabViewModel.NewTabRequested += TabViewModelOnNewTabRequested;
-            tabViewModel.NewTabOnOtherPanelRequested += TabViewModelOnNewTabOnOtherPanelRequested;
+            tabViewModel.NewTabOnOppositePanelRequested += TabViewModelOnNewTabOnOppositePanelRequested;
             tabViewModel.CloseRequested += TabViewModelOnCloseRequested;
             tabViewModel.ClosingTabsToTheLeftRequested += TabViewModelOnClosingTabsToTheLeftRequested;
             tabViewModel.ClosingTabsToTheRightRequested += TabViewModelOnClosingTabsToTheRightRequested;
@@ -228,7 +228,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
         {
             tabViewModel.ActivationRequested -= TabViewModelOnActivationRequested;
             tabViewModel.NewTabRequested -= TabViewModelOnNewTabRequested;
-            tabViewModel.NewTabOnOtherPanelRequested -= TabViewModelOnNewTabOnOtherPanelRequested;
+            tabViewModel.NewTabOnOppositePanelRequested -= TabViewModelOnNewTabOnOppositePanelRequested;
             tabViewModel.CloseRequested -= TabViewModelOnCloseRequested;
             tabViewModel.ClosingTabsToTheLeftRequested -= TabViewModelOnClosingTabsToTheLeftRequested;
             tabViewModel.ClosingTabsToTheRightRequested -= TabViewModelOnClosingTabsToTheRightRequested;
@@ -240,8 +240,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
 
         private void TabViewModelOnNewTabRequested(object sender, EventArgs e) => CreateNewTab((ITabViewModel) sender);
 
-        private void TabViewModelOnNewTabOnOtherPanelRequested(object sender, EventArgs e) =>
-            CreateNewTabOnOtherPanel((ITabViewModel) sender);
+        private void TabViewModelOnNewTabOnOppositePanelRequested(object sender, EventArgs e) =>
+            CreateNewTabOnOppositePanel((ITabViewModel) sender);
 
         private void TabViewModelOnCloseRequested(object sender, EventArgs e) => CloseTab((ITabViewModel) sender);
 
@@ -307,7 +307,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
             }
         }
 
-        private void CreateNewTabOnOtherPanel(ITabViewModel tabViewModel)
+        private void CreateNewTabOnOppositePanel(ITabViewModel tabViewModel)
         {
             var viewModel = SelectedTab.IsGloballyActive
                 ? _filesOperationsMediator.InactiveFilesPanelViewModel

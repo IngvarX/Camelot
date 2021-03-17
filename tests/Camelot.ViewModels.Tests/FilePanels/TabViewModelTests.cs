@@ -1,6 +1,6 @@
 using Camelot.Services.Abstractions;
-using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs;
+using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs;
 using Moq;
 using Moq.AutoMock;
 using Xunit;
@@ -65,12 +65,12 @@ namespace Camelot.ViewModels.Tests.FilePanels
         }
 
         [Fact]
-        public void TestNewTabOnSecondPanelCommand()
+        public void TestNewTabOnOppositePanelCommand()
         {
             var newTabRequested = false;
-            _tabViewModel.NewTabOnOtherPanelRequested += (sender, args) => newTabRequested = true;
-            Assert.True(_tabViewModel.NewTabOnOtherPanelCommand.CanExecute(null));
-            _tabViewModel.NewTabOnOtherPanelCommand.Execute(null);
+            _tabViewModel.NewTabOnOppositePanelRequested += (sender, args) => newTabRequested = true;
+            Assert.True(_tabViewModel.NewTabOnOppositePanelCommand.CanExecute(null));
+            _tabViewModel.NewTabOnOppositePanelCommand.Execute(null);
 
             Assert.True(newTabRequested);
         }
@@ -117,6 +117,18 @@ namespace Camelot.ViewModels.Tests.FilePanels
             _tabViewModel.CloseAllTabsButThisCommand.Execute(null);
 
             Assert.True(closeAllTabsButThisRequested);
+        }
+
+        [Fact]
+        public void TestRequestMoveCommand()
+        {
+            var tab = new Mock<ITabViewModel>().Object;
+            var callbackCalled = false;
+            _tabViewModel.MoveRequested += (sender, args) => callbackCalled = args.Target == tab;
+            Assert.True(_tabViewModel.RequestMoveCommand.CanExecute(null));
+            _tabViewModel.RequestMoveCommand.Execute(tab);
+
+            Assert.True(callbackCalled);
         }
 
         [Fact]

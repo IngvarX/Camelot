@@ -246,8 +246,8 @@
   <data name="General" xml:space="preserve">
     <value>General</value>
   </data>
-  <data name="Github" xml:space="preserve">
-    <value>Github</value>
+  <data name="GitHub" xml:space="preserve">
+    <value>GitHub</value>
   </data>
   <data name="HelpHeader" xml:space="preserve">
     <value>_Help</value>
@@ -483,8 +483,8 @@
   <data name="Eject" xml:space="preserve">
     <value>Eject</value>
   </data>
-  <data name="DuplicateOnOtherPanel" xml:space="preserve">
-    <value>Duplicate on other panel</value>
+  <data name="DuplicateOnOppositePanel" xml:space="preserve">
+    <value>Duplicate on opposite panel</value>
   </data>
   <data name="OpenInNewTab" xml:space="preserve">
     <value>Open in new tab</value>

@@ -303,9 +303,9 @@ namespace Camelot.Properties {
             }
         }
         
-        public static string Github {
+        public static string GitHub {
             get {
-                return ResourceManager.GetString("Github", resourceCulture);
+                return ResourceManager.GetString("GitHub", resourceCulture);
             }
         }
         
@@ -777,9 +777,9 @@ namespace Camelot.Properties {
             }
         }
         
-        public static string DuplicateOnOtherPanel {
+        public static string DuplicateOnOppositePanel {
             get {
-                return ResourceManager.GetString("DuplicateOnOtherPanel", resourceCulture);
+                return ResourceManager.GetString("DuplicateOnOppositePanel", resourceCulture);
             }
         }
         

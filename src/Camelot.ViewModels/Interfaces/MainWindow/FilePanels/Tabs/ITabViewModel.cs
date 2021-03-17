@@ -17,7 +17,7 @@ namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs
 
         event EventHandler<EventArgs> NewTabRequested;
 
-        event EventHandler<EventArgs> NewTabOnOtherPanelRequested;
+        event EventHandler<EventArgs> NewTabOnOppositePanelRequested;
 
         event EventHandler<EventArgs> CloseRequested;
 

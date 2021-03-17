@@ -4,7 +4,6 @@ using System.Linq;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models.State;
 using Camelot.ViewModels.Factories.Interfaces;
-using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs;
@@ -188,7 +187,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
             var tabsListViewModel = _autoMocker.CreateInstance<TabsListViewModel>();
             Assert.Single(tabsListViewModel.Tabs);
 
-            tabViewModelMock.Raise(m => m.NewTabOnOtherPanelRequested += null, EventArgs.Empty);
+            tabViewModelMock.Raise(m => m.NewTabOnOppositePanelRequested += null, EventArgs.Empty);
             Assert.Single(tabsListViewModel.Tabs);
 
             inactiveTabsListMock
