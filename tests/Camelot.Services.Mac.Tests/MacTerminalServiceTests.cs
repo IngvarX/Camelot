@@ -3,6 +3,7 @@ using Camelot.DataAccess.Repositories;
 using Camelot.DataAccess.UnitOfWork;
 using Camelot.Services.Environment.Interfaces;
 using Moq;
+using Moq.AutoMock;
 using Xunit;
 
 namespace Camelot.Services.Mac.Tests
@@ -10,6 +11,13 @@ namespace Camelot.Services.Mac.Tests
     public class MacTerminalServiceTests
     {
         private const string Directory = "Dir";
+
+        private readonly AutoMocker _autoMocker;
+
+        public MacTerminalServiceTests()
+        {
+            _autoMocker = new AutoMocker();
+        }
 
         [Fact]
         public void TestOpening()
@@ -21,21 +29,18 @@ namespace Camelot.Services.Mac.Tests
             uowMock
                 .Setup(m => m.GetRepository<TerminalSettings>())
                 .Returns(new Mock<IRepository<TerminalSettings>>().Object);
-            var uowFactoryMock = new Mock<IUnitOfWorkFactory>();
-            uowFactoryMock
-                .Setup(m => m.Create())
+            _autoMocker
+                .Setup<IUnitOfWorkFactory, IUnitOfWork>(m => m.Create())
                 .Returns(uowMock.Object);
-            var processServiceMock = new Mock<IProcessService>();
-            processServiceMock
-                .Setup(m => m.Run(command, args))
+            _autoMocker
+                .Setup<IProcessService>(m => m.Run(command, args))
                 .Verifiable();
 
-            var terminalService = new MacTerminalService(processServiceMock.Object,
-                uowFactoryMock.Object);
+            var terminalService = _autoMocker.CreateInstance<MacTerminalService>();
 
             terminalService.Open(Directory);
 
-            processServiceMock.Verify(m => m.Run(command, args), Times.Once);
+            _autoMocker.Verify<IProcessService>(m => m.Run(command, args), Times.Once);
         }
     }
 }

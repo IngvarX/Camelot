@@ -1,5 +1,6 @@
 using Camelot.Services.Environment.Interfaces;
 using Moq;
+using Moq.AutoMock;
 using Xunit;
 
 namespace Camelot.Services.Windows.Tests
@@ -8,15 +9,21 @@ namespace Camelot.Services.Windows.Tests
     {
         private const string HomeDirPath = "C:/camelot";
 
+        private readonly AutoMocker _autoMocker;
+
+        public WindowsHomeDirectoryProviderTests()
+        {
+            _autoMocker = new AutoMocker();
+        }
+
         [Fact]
         public void TestHomeDirectory()
         {
-            var envServiceMock = new Mock<IEnvironmentService>();
-            envServiceMock
-                .Setup(m => m.GetEnvironmentVariable("USERPROFILE"))
+            _autoMocker
+                .Setup<IEnvironmentService, string>(m => m.GetEnvironmentVariable("USERPROFILE"))
                 .Returns(HomeDirPath);
 
-            var homeDirProvider = new WindowsHomeDirectoryProvider(envServiceMock.Object);
+            var homeDirProvider = _autoMocker.CreateInstance<WindowsHomeDirectoryProvider>();
             var homeDir = homeDirProvider.HomeDirectoryPath;
 
             Assert.Equal(HomeDirPath, homeDir);

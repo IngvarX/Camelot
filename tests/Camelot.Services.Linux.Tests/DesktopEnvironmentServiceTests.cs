@@ -2,6 +2,7 @@ using Camelot.Services.Environment.Interfaces;
 using Camelot.Services.Linux.Enums;
 using Camelot.Services.Linux.Implementations;
 using Moq;
+using Moq.AutoMock;
 using Xunit;
 
 namespace Camelot.Services.Linux.Tests
@@ -10,6 +11,13 @@ namespace Camelot.Services.Linux.Tests
     {
         private const string XdgCurrentDesktop = "XDG_CURRENT_DESKTOP";
         private const string DesktopSession = "DESKTOP_SESSION";
+
+        private readonly AutoMocker _autoMocker;
+
+        public DesktopEnvironmentServiceTests()
+        {
+            _autoMocker = new AutoMocker();
+        }
 
         [Theory]
         [InlineData("kde", DesktopEnvironment.Kde, XdgCurrentDesktop)]
@@ -24,12 +32,11 @@ namespace Camelot.Services.Linux.Tests
         public void TestDesktopEnvironment(string environmentName, DesktopEnvironment expectedEnvironment,
             string environmentVariable)
         {
-            var environmentServiceMock = new Mock<IEnvironmentService>();
-            environmentServiceMock
-                .Setup(m => m.GetEnvironmentVariable(environmentVariable))
+            _autoMocker
+                .Setup<IEnvironmentService, string>(m => m.GetEnvironmentVariable(environmentVariable))
                 .Returns(environmentName);
 
-            var desktopEnvironmentService = new DesktopEnvironmentService(environmentServiceMock.Object);
+            var desktopEnvironmentService = _autoMocker.CreateInstance<DesktopEnvironmentService>();
             var actualEnvironment = desktopEnvironmentService.GetDesktopEnvironment();
 
             Assert.Equal(expectedEnvironment, actualEnvironment);

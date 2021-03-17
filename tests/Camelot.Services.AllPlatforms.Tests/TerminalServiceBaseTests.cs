@@ -4,6 +4,7 @@ using Camelot.DataAccess.UnitOfWork;
 using Camelot.Services.Abstractions.Models.State;
 using Camelot.Services.Environment.Interfaces;
 using Moq;
+using Moq.AutoMock;
 using Xunit;
 
 namespace Camelot.Services.AllPlatforms.Tests
@@ -12,6 +13,13 @@ namespace Camelot.Services.AllPlatforms.Tests
     {
         private const string Command = "terminal";
         private const string Arguments = "arguments";
+
+        private readonly AutoMocker _autoMocker;
+
+        public TerminalServiceBaseTests()
+        {
+            _autoMocker = new AutoMocker();
+        }
 
         [Fact]
         public void TestSave()
@@ -30,13 +38,11 @@ namespace Camelot.Services.AllPlatforms.Tests
             uowMock
                 .Setup(m => m.GetRepository<TerminalSettings>())
                 .Returns(repositoryMock.Object);
-            var uowFactoryMock = new Mock<IUnitOfWorkFactory>();
-            uowFactoryMock
-                .Setup(m => m.Create())
+            _autoMocker
+                .Setup<IUnitOfWorkFactory, IUnitOfWork>(m => m.Create())
                 .Returns(uowMock.Object);
-            var processServiceMock = new Mock<IProcessService>();
 
-            var terminalService = new TerminalService(processServiceMock.Object, uowFactoryMock.Object);
+            var terminalService = _autoMocker.CreateInstance<TerminalService>();
 
             terminalService.SetTerminalSettings(terminalSettings);
 
@@ -61,13 +67,11 @@ namespace Camelot.Services.AllPlatforms.Tests
             uowMock
                 .Setup(m => m.GetRepository<TerminalSettings>())
                 .Returns(repositoryMock.Object);
-            var uowFactoryMock = new Mock<IUnitOfWorkFactory>();
-            uowFactoryMock
-                .Setup(m => m.Create())
+            _autoMocker
+                .Setup<IUnitOfWorkFactory, IUnitOfWork>(m => m.Create())
                 .Returns(uowMock.Object);
-            var processServiceMock = new Mock<IProcessService>();
 
-            var terminalService = new TerminalService(processServiceMock.Object, uowFactoryMock.Object);
+            var terminalService = _autoMocker.CreateInstance<TerminalService>();
 
             var (command, arguments) = terminalService.GetTerminalSettings();
             Assert.Equal(savedTerminalSettings.Arguments, arguments);
@@ -82,13 +86,11 @@ namespace Camelot.Services.AllPlatforms.Tests
             uowMock
                 .Setup(m => m.GetRepository<TerminalSettings>())
                 .Returns(repositoryMock.Object);
-            var uowFactoryMock = new Mock<IUnitOfWorkFactory>();
-            uowFactoryMock
-                .Setup(m => m.Create())
+            _autoMocker
+                .Setup<IUnitOfWorkFactory, IUnitOfWork>(m => m.Create())
                 .Returns(uowMock.Object);
-            var processServiceMock = new Mock<IProcessService>();
 
-            var terminalService = new TerminalService(processServiceMock.Object, uowFactoryMock.Object);
+            var terminalService = _autoMocker.CreateInstance<TerminalService>();
 
             var terminalSettings = terminalService.GetTerminalSettings();
 

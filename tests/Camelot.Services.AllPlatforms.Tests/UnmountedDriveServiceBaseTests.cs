@@ -61,7 +61,10 @@ namespace Camelot.Services.AllPlatforms.Tests
                 _drives = drives;
             }
 
-            public override void Mount(string drive) => throw new System.NotImplementedException();
+            public override void Mount(string drive)
+            {
+
+            }
 
             protected override Task<IReadOnlyList<UnmountedDriveModel>> GetUnmountedDrivesAsync() =>
                 Task.FromResult<IReadOnlyList<UnmountedDriveModel>>(_drives);
