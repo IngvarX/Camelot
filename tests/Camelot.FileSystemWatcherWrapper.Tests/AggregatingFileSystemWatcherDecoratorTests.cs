@@ -5,6 +5,7 @@ using Camelot.FileSystemWatcher.Implementations;
 using Camelot.FileSystemWatcher.Interfaces;
 using Camelot.Services.Abstractions;
 using Moq;
+using Moq.AutoMock;
 using Xunit;
 
 namespace Camelot.FileSystemWatcherWrapper.Tests
@@ -19,15 +20,18 @@ namespace Camelot.FileSystemWatcherWrapper.Tests
         private const string UpdatedIntermediateFileName = "UpdatedIntermediateFile";
         private const string DirectoryPath = "Directory";
 
+        private readonly AutoMocker _autoMocker;
+
+        public AggregatingFileSystemWatcherDecoratorTests()
+        {
+            _autoMocker = new AutoMocker();
+            _autoMocker.Use(GetConfiguration());
+        }
+
         [Fact]
         public async Task TestChangedEvents()
         {
-            var fileSystemWatcherWrapperMock = new Mock<IFileSystemWatcher>();
-            var pathServiceMock = new Mock<IPathService>();
-            var configuration = GetConfiguration();
-
-            var decorator = new AggregatingFileSystemWatcherDecorator(pathServiceMock.Object,
-                fileSystemWatcherWrapperMock.Object, configuration);
+            var decorator = _autoMocker.CreateInstance<AggregatingFileSystemWatcherDecorator>();
 
             var actualCallsCount = 0;
             decorator.Changed += (sender, args) =>
@@ -41,7 +45,7 @@ namespace Camelot.FileSystemWatcherWrapper.Tests
             for (var i = 0; i < 10; i++)
             {
                 var changedArgs = new FileSystemEventArgs(WatcherChangeTypes.Changed, DirectoryPath, FileName);
-                fileSystemWatcherWrapperMock.Raise(m => m.Changed += null, changedArgs);
+                _autoMocker.GetMock<IFileSystemWatcher>().Raise(m => m.Changed += null, changedArgs);
             }
 
             await Task.Delay(DelayIntervalMs);
@@ -52,12 +56,7 @@ namespace Camelot.FileSystemWatcherWrapper.Tests
         [Fact]
         public async Task TestChangedAndDeletedEvents()
         {
-            var fileSystemWatcherWrapperMock = new Mock<IFileSystemWatcher>();
-            var pathServiceMock = new Mock<IPathService>();
-            var configuration = GetConfiguration();
-
-            var decorator = new AggregatingFileSystemWatcherDecorator(pathServiceMock.Object,
-                fileSystemWatcherWrapperMock.Object, configuration);
+            var decorator = _autoMocker.CreateInstance<AggregatingFileSystemWatcherDecorator>();
 
             var changedCallsCount = 0;
             var actualCallsCount = 0;
@@ -76,6 +75,8 @@ namespace Camelot.FileSystemWatcherWrapper.Tests
 
                 actualCallsCount++;
             };
+
+            var fileSystemWatcherWrapperMock = _autoMocker.GetMock<IFileSystemWatcher>();
 
             var changedArgs = new FileSystemEventArgs(WatcherChangeTypes.Changed, DirectoryPath, FileName);
             fileSystemWatcherWrapperMock.Raise(m => m.Changed += null, changedArgs);
@@ -92,15 +93,11 @@ namespace Camelot.FileSystemWatcherWrapper.Tests
         [Fact]
         public async Task TestChangedAndRenamedEvents()
         {
-            var fileSystemWatcherWrapperMock = new Mock<IFileSystemWatcher>();
-            var pathServiceMock = new Mock<IPathService>();
-            pathServiceMock
-                .Setup(m => m.GetParentDirectory(It.IsAny<string>()))
+            _autoMocker
+                .Setup<IPathService, string>(m => m.GetParentDirectory(It.IsAny<string>()))
                 .Returns(DirectoryPath);
-            var configuration = GetConfiguration();
 
-            var decorator = new AggregatingFileSystemWatcherDecorator(pathServiceMock.Object,
-                fileSystemWatcherWrapperMock.Object, configuration);
+            var decorator = _autoMocker.CreateInstance<AggregatingFileSystemWatcherDecorator>();
 
             var changedCallsCount = 0;
             var actualCallsCount = 0;
@@ -121,6 +118,8 @@ namespace Camelot.FileSystemWatcherWrapper.Tests
                 actualCallsCount++;
             };
 
+            var fileSystemWatcherWrapperMock = _autoMocker.GetMock<IFileSystemWatcher>();
+
             var changedArgs = new FileSystemEventArgs(WatcherChangeTypes.Changed, DirectoryPath, FileName);
             fileSystemWatcherWrapperMock.Raise(m => m.Changed += null, changedArgs);
 
@@ -136,15 +135,11 @@ namespace Camelot.FileSystemWatcherWrapper.Tests
         [Fact]
         public async Task TestDeletedAndCreatedEvents()
         {
-            var fileSystemWatcherWrapperMock = new Mock<IFileSystemWatcher>();
-            var pathServiceMock = new Mock<IPathService>();
-            pathServiceMock
-                .Setup(m => m.GetParentDirectory(It.IsAny<string>()))
+            _autoMocker
+                .Setup<IPathService, string>(m => m.GetParentDirectory(It.IsAny<string>()))
                 .Returns(DirectoryPath);
-            var configuration = GetConfiguration();
 
-            var decorator = new AggregatingFileSystemWatcherDecorator(pathServiceMock.Object,
-                fileSystemWatcherWrapperMock.Object, configuration);
+            var decorator = _autoMocker.CreateInstance<AggregatingFileSystemWatcherDecorator>();
 
             var actualCallsCount = 0;
             decorator.Changed += (sender, args) =>
@@ -154,6 +149,8 @@ namespace Camelot.FileSystemWatcherWrapper.Tests
 
                 actualCallsCount++;
             };
+
+            var fileSystemWatcherWrapperMock = _autoMocker.GetMock<IFileSystemWatcher>();
 
             var deletedArgs = new FileSystemEventArgs(WatcherChangeTypes.Deleted, DirectoryPath, FileName);
             fileSystemWatcherWrapperMock.Raise(m => m.Deleted += null, deletedArgs);
@@ -169,15 +166,11 @@ namespace Camelot.FileSystemWatcherWrapper.Tests
         [Fact]
         public async Task TestRenamedAndDeletedEvents()
         {
-            var fileSystemWatcherWrapperMock = new Mock<IFileSystemWatcher>();
-            var pathServiceMock = new Mock<IPathService>();
-            pathServiceMock
-                .Setup(m => m.GetParentDirectory(It.IsAny<string>()))
+            _autoMocker
+                .Setup<IPathService, string>(m => m.GetParentDirectory(It.IsAny<string>()))
                 .Returns(DirectoryPath);
-            var configuration = GetConfiguration();
 
-            var decorator = new AggregatingFileSystemWatcherDecorator(pathServiceMock.Object,
-                fileSystemWatcherWrapperMock.Object, configuration);
+            var decorator = _autoMocker.CreateInstance<AggregatingFileSystemWatcherDecorator>();
 
             var actualCallsCount = 0;
             var isCallbackCalled = false;
@@ -189,6 +182,7 @@ namespace Camelot.FileSystemWatcherWrapper.Tests
                 actualCallsCount++;
             };
             decorator.Renamed += (sender, args) => isCallbackCalled = true;
+            var fileSystemWatcherWrapperMock = _autoMocker.GetMock<IFileSystemWatcher>();
 
             var renamedArgs = new RenamedEventArgs(WatcherChangeTypes.Renamed, DirectoryPath, NewFileName, FileName);
             fileSystemWatcherWrapperMock.Raise(m => m.Renamed += null, renamedArgs);
@@ -205,15 +199,11 @@ namespace Camelot.FileSystemWatcherWrapper.Tests
         [Fact]
         public async Task TestRenamedAndChangedEvents()
         {
-            var fileSystemWatcherWrapperMock = new Mock<IFileSystemWatcher>();
-            var pathServiceMock = new Mock<IPathService>();
-            pathServiceMock
-                .Setup(m => m.GetParentDirectory(It.IsAny<string>()))
+            _autoMocker
+                .Setup<IPathService, string>(m => m.GetParentDirectory(It.IsAny<string>()))
                 .Returns(DirectoryPath);
-            var configuration = GetConfiguration();
 
-            var decorator = new AggregatingFileSystemWatcherDecorator(pathServiceMock.Object,
-                fileSystemWatcherWrapperMock.Object, configuration);
+            var decorator = _autoMocker.CreateInstance<AggregatingFileSystemWatcherDecorator>();
 
             var actualCallsCount = 0;
             var isCallbackCalled = false;
@@ -226,6 +216,7 @@ namespace Camelot.FileSystemWatcherWrapper.Tests
                 actualCallsCount++;
             };
             decorator.Changed += (sender, args) => isCallbackCalled = true;
+            var fileSystemWatcherWrapperMock = _autoMocker.GetMock<IFileSystemWatcher>();
 
             var renamedArgs = new RenamedEventArgs(WatcherChangeTypes.Renamed, DirectoryPath, NewFileName, FileName);
             fileSystemWatcherWrapperMock.Raise(m => m.Renamed += null, renamedArgs);
@@ -242,15 +233,11 @@ namespace Camelot.FileSystemWatcherWrapper.Tests
         [Fact]
         public async Task TestRenamedEvents()
         {
-            var fileSystemWatcherWrapperMock = new Mock<IFileSystemWatcher>();
-            var pathServiceMock = new Mock<IPathService>();
-            pathServiceMock
-                .Setup(m => m.GetParentDirectory(It.IsAny<string>()))
+            _autoMocker
+                .Setup<IPathService, string>(m => m.GetParentDirectory(It.IsAny<string>()))
                 .Returns(DirectoryPath);
-            var configuration = GetConfiguration();
 
-            var decorator = new AggregatingFileSystemWatcherDecorator(pathServiceMock.Object,
-                fileSystemWatcherWrapperMock.Object, configuration);
+            var decorator = _autoMocker.CreateInstance<AggregatingFileSystemWatcherDecorator>();
 
             var actualCallsCount = 0;
             decorator.Renamed += (sender, args) =>
@@ -261,6 +248,8 @@ namespace Camelot.FileSystemWatcherWrapper.Tests
 
                 actualCallsCount++;
             };
+
+            var fileSystemWatcherWrapperMock = _autoMocker.GetMock<IFileSystemWatcher>();
 
             var renamedArgs = new RenamedEventArgs(WatcherChangeTypes.Renamed, DirectoryPath, IntermediateFileName, FileName);
             fileSystemWatcherWrapperMock.Raise(m => m.Renamed += null, renamedArgs);
@@ -279,12 +268,7 @@ namespace Camelot.FileSystemWatcherWrapper.Tests
         [Fact]
         public async Task TestCreatedAndChangedEvents()
         {
-            var fileSystemWatcherWrapperMock = new Mock<IFileSystemWatcher>();
-            var pathServiceMock = new Mock<IPathService>();
-            var configuration = GetConfiguration();
-
-            var decorator = new AggregatingFileSystemWatcherDecorator(pathServiceMock.Object,
-                fileSystemWatcherWrapperMock.Object, configuration);
+            var decorator = _autoMocker.CreateInstance<AggregatingFileSystemWatcherDecorator>();
 
             var actualCallsCount = 0;
             var isCallbackCalled = false;
@@ -296,6 +280,7 @@ namespace Camelot.FileSystemWatcherWrapper.Tests
                 actualCallsCount++;
             };
             decorator.Changed += (sender, args) => isCallbackCalled = true;
+            var fileSystemWatcherWrapperMock = _autoMocker.GetMock<IFileSystemWatcher>();
 
             var createdArgs = new FileSystemEventArgs(WatcherChangeTypes.Created, DirectoryPath, FileName);
             fileSystemWatcherWrapperMock.Raise(m => m.Created += null, createdArgs);
@@ -312,16 +297,12 @@ namespace Camelot.FileSystemWatcherWrapper.Tests
         [Fact]
         public async Task TestCreatedAndDeletedEvents()
         {
-            var fileSystemWatcherWrapperMock = new Mock<IFileSystemWatcher>();
-            var pathServiceMock = new Mock<IPathService>();
-            var configuration = GetConfiguration();
-
-            var decorator = new AggregatingFileSystemWatcherDecorator(pathServiceMock.Object,
-                fileSystemWatcherWrapperMock.Object, configuration);
+            var decorator = _autoMocker.CreateInstance<AggregatingFileSystemWatcherDecorator>();
 
             var isCallbackCalled = false;
             decorator.Created += (sender, args) => isCallbackCalled = true;
             decorator.Deleted += (sender, args) => isCallbackCalled = true;
+            var fileSystemWatcherWrapperMock = _autoMocker.GetMock<IFileSystemWatcher>();
 
             var createdArgs = new FileSystemEventArgs(WatcherChangeTypes.Created, DirectoryPath, FileName);
             fileSystemWatcherWrapperMock.Raise(m => m.Created += null, createdArgs);
@@ -337,15 +318,11 @@ namespace Camelot.FileSystemWatcherWrapper.Tests
         [Fact]
         public async Task TestCreatedAndRenamedEvents()
         {
-            var fileSystemWatcherWrapperMock = new Mock<IFileSystemWatcher>();
-            var pathServiceMock = new Mock<IPathService>();
-            pathServiceMock
-                .Setup(m => m.GetParentDirectory(It.IsAny<string>()))
+            _autoMocker
+                .Setup<IPathService, string>(m => m.GetParentDirectory(It.IsAny<string>()))
                 .Returns(DirectoryPath);
-            var configuration = GetConfiguration();
 
-            var decorator = new AggregatingFileSystemWatcherDecorator(pathServiceMock.Object,
-                fileSystemWatcherWrapperMock.Object, configuration);
+            var decorator = _autoMocker.CreateInstance<AggregatingFileSystemWatcherDecorator>();
 
             var actualCallsCount = 0;
             var isCallbackCalled = false;
@@ -357,6 +334,7 @@ namespace Camelot.FileSystemWatcherWrapper.Tests
                 actualCallsCount++;
             };
             decorator.Renamed += (sender, args) => isCallbackCalled = false;
+            var fileSystemWatcherWrapperMock = _autoMocker.GetMock<IFileSystemWatcher>();
 
             var createdArgs = new FileSystemEventArgs(WatcherChangeTypes.Created, DirectoryPath, FileName);
             fileSystemWatcherWrapperMock.Raise(m => m.Created += null, createdArgs);
@@ -373,24 +351,23 @@ namespace Camelot.FileSystemWatcherWrapper.Tests
         [Fact]
         public async Task TestCleanup()
         {
-            var fileSystemWatcherWrapperMock = new Mock<IFileSystemWatcher>();
-            fileSystemWatcherWrapperMock
-                .Setup(m => m.Dispose())
+            _autoMocker
+                .Setup<IFileSystemWatcher>(m => m.Dispose())
                 .Verifiable();
-            fileSystemWatcherWrapperMock
-                .Setup(m => m.StopRaisingEvents())
+            _autoMocker
+                .Setup<IFileSystemWatcher>(m => m.StopRaisingEvents())
                 .Verifiable();
-            var pathServiceMock = new Mock<IPathService>();
-            var configuration = GetConfiguration();
 
-            var decorator = new AggregatingFileSystemWatcherDecorator(pathServiceMock.Object,
-                fileSystemWatcherWrapperMock.Object, configuration);
+            var decorator = _autoMocker.CreateInstance<AggregatingFileSystemWatcherDecorator>();
 
             var isCallbackCalled = false;
             decorator.Changed += (sender, args) => isCallbackCalled = true;
 
             decorator.StopRaisingEvents();
             decorator.Dispose();
+
+            var fileSystemWatcherWrapperMock = _autoMocker.GetMock<IFileSystemWatcher>();
+
 
             for (var i = 0; i < 10; i++)
             {
