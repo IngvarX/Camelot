@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!--
     Microsoft ResX Schema
@@ -59,7 +59,7 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -238,10 +238,10 @@
     <value>_File</value>
   </data>
   <data name="FileInformationTitle" xml:space="preserve">
-    <value>File information</value>
+    <value>File-info</value>
   </data>
   <data name="FilesRemovingConfirmationTitle" xml:space="preserve">
-    <value>Files removing confirmation</value>
+    <value>Confirm removal of files</value>
   </data>
   <data name="General" xml:space="preserve">
     <value>General</value>
@@ -385,7 +385,7 @@
     <value>Create file</value>
   </data>
   <data name="EnterFileNameWithColon" xml:space="preserve">
-    <value>Enter file name:</value>
+    <value>Enter filename:</value>
   </data>
   <data name="ClickToMount" xml:space="preserve">
     <value>Click to mount</value>
