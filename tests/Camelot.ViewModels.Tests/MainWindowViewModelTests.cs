@@ -27,6 +27,10 @@ namespace Camelot.ViewModels.Tests
         public void TestFilePanelsRegistrations()
         {
             var leftFilePanelViewModelMock = new Mock<IFilesPanelViewModel>();
+            var tabsListViewModelMock = new Mock<ITabsListViewModel>();
+            leftFilePanelViewModelMock
+                .Setup(m => m.TabsListViewModel)
+                .Returns(tabsListViewModelMock.Object);
             var rightFilePanelViewModelMock = new Mock<IFilesPanelViewModel>();
             var operationsViewModelMock = new Mock<IOperationsViewModel>();
             var menuViewModelMock = new Mock<IMenuViewModel>();
@@ -37,6 +41,9 @@ namespace Camelot.ViewModels.Tests
             fileOperationsMediatorMock
                 .Setup(m => m.Register(It.IsAny<IFilesPanelViewModel>(), It.IsAny<IFilesPanelViewModel>()))
                 .Verifiable();
+            fileOperationsMediatorMock
+                .Setup(m => m.ActiveFilesPanelViewModel)
+                .Returns(leftFilePanelViewModelMock.Object);
             var favouriteDirectoriesListViewModelMock = new Mock<IFavouriteDirectoriesListViewModel>();
 
             var mainWindowViewModel = new MainWindowViewModel(
@@ -50,6 +57,7 @@ namespace Camelot.ViewModels.Tests
                 drivesListViewModelMock.Object,
                 favouriteDirectoriesListViewModelMock.Object);
 
+            Assert.Equal(tabsListViewModelMock.Object, mainWindowViewModel.ActiveTabsListViewModel);
             Assert.Equal(leftFilePanelViewModelMock.Object, mainWindowViewModel.LeftFilesPanelViewModel);
             Assert.Equal(rightFilePanelViewModelMock.Object, mainWindowViewModel.RightFilesPanelViewModel);
             Assert.Equal(menuViewModelMock.Object, mainWindowViewModel.MenuViewModel);

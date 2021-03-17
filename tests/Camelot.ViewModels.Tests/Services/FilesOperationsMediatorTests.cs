@@ -29,8 +29,11 @@ namespace Camelot.ViewModels.Tests.Services
                 .SetupSet(m => m.SelectedDirectory = Directory)
                 .Verifiable();
             var mediator = new FilesOperationsMediator(directoryServiceMock.Object);
+            var isCallbackCalled = false;
+            mediator.ActiveFilesPanelChanged += (sender, args) => isCallbackCalled = true;
             mediator.Register(activeFilesPanelViewModelMock.Object, inactiveFilesPanelViewModelMock.Object);
 
+            Assert.True(isCallbackCalled);
             Assert.Equal(activeFilesPanelViewModelMock.Object, mediator.ActiveFilesPanelViewModel);
             Assert.Equal(inactiveFilesPanelViewModelMock.Object, mediator.InactiveFilesPanelViewModel);
             Assert.Equal(NewDirectory, mediator.OutputDirectory);
@@ -113,8 +116,12 @@ namespace Camelot.ViewModels.Tests.Services
             var mediator = new FilesOperationsMediator(directoryServiceMock.Object);
             mediator.Register(activeFilesPanelViewModelMock.Object, inactiveFilesPanelViewModelMock.Object);
 
+            var isCallbackCalled = false;
+            mediator.ActiveFilesPanelChanged += (sender, args) => isCallbackCalled = true;
             inactiveFilesPanelViewModelMock
                 .Raise(m => m.Activated += null, EventArgs.Empty);
+
+            Assert.True(isCallbackCalled);
             Assert.Equal(inactiveFilesPanelViewModelMock.Object, mediator.ActiveFilesPanelViewModel);
             Assert.Equal(activeFilesPanelViewModelMock.Object, mediator.InactiveFilesPanelViewModel);
             directoryServiceMock

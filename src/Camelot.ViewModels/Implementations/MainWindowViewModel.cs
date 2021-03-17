@@ -77,7 +77,7 @@ namespace Camelot.ViewModels.Implementations
             GoToLastTabCommand = ReactiveCommand.Create(GoToLastTab);
 
             filesOperationsMediator.Register(leftFilesPanelViewModel, rightFilesPanelViewModel);
-            _filesOperationsMediator.ActiveFilesPanelChanged += FilesOperationsMediatorOnActiveFilesPanelChanged;
+            filesOperationsMediator.ActiveFilesPanelChanged += FilesOperationsMediatorOnActiveFilesPanelChanged;
         }
 
         private void CreateNewTab() => ActiveTabsListViewModel.CreateNewTab(switchTo: true);
