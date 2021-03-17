@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Windows.Input;
 using Camelot.ViewModels.Interfaces.MainWindow;
 using Camelot.ViewModels.Interfaces.MainWindow.Directories;
 using Camelot.ViewModels.Interfaces.MainWindow.Drives;
@@ -15,7 +16,7 @@ namespace Camelot.ViewModels.Implementations
     {
         private readonly IFilesOperationsMediator _filesOperationsMediator;
 
-        private ITabsListViewModel ActiveTabsListViewModel =>
+        public ITabsListViewModel ActiveTabsListViewModel =>
             _filesOperationsMediator.ActiveFilesPanelViewModel.TabsListViewModel;
 
         public IOperationsViewModel OperationsViewModel { get; }
@@ -76,6 +77,7 @@ namespace Camelot.ViewModels.Implementations
             GoToLastTabCommand = ReactiveCommand.Create(GoToLastTab);
 
             filesOperationsMediator.Register(leftFilesPanelViewModel, rightFilesPanelViewModel);
+            _filesOperationsMediator.ActiveFilesPanelChanged += FilesOperationsMediatorOnActiveFilesPanelChanged;
         }
 
         private void CreateNewTab() => ActiveTabsListViewModel.CreateNewTab(switchTo: true);
@@ -89,5 +91,8 @@ namespace Camelot.ViewModels.Implementations
         private void GoToTab(int tabIndex) => ActiveTabsListViewModel.SelectTab(tabIndex);
 
         private void GoToLastTab() => ActiveTabsListViewModel.SelectTab(ActiveTabsListViewModel.Tabs.Count - 1);
+
+        private void FilesOperationsMediatorOnActiveFilesPanelChanged(object sender, EventArgs e) =>
+            this.RaisePropertyChanged(nameof(ActiveTabsListViewModel));
     }
 }

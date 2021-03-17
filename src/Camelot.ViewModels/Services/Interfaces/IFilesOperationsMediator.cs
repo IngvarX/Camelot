@@ -1,3 +1,4 @@
+using System;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 
 namespace Camelot.ViewModels.Services.Interfaces
@@ -9,6 +10,8 @@ namespace Camelot.ViewModels.Services.Interfaces
         IFilesPanelViewModel InactiveFilesPanelViewModel { get; }
 
         string OutputDirectory { get; }
+
+        event EventHandler<EventArgs> ActiveFilesPanelChanged;
 
         void Register(IFilesPanelViewModel activeFilesPanelViewModel, IFilesPanelViewModel inactiveFilesPanelViewModel);
 

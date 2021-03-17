@@ -1,4 +1,5 @@
 using System;
+using Camelot.Extensions;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models.EventArgs;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
@@ -15,6 +16,8 @@ namespace Camelot.ViewModels.Services.Implementations
         public IFilesPanelViewModel ActiveFilesPanelViewModel { get; private set; }
 
         public IFilesPanelViewModel InactiveFilesPanelViewModel { get; private set; }
+
+        public event EventHandler<EventArgs> ActiveFilesPanelChanged;
 
         public FilesOperationsMediator(
             IDirectoryService directoryService)
@@ -35,6 +38,7 @@ namespace Camelot.ViewModels.Services.Implementations
 
             ActiveFilesPanelViewModel.Activate();
             InactiveFilesPanelViewModel.Deactivate();
+            RaiseActiveFilesPanelChangedEvent();
         }
 
         public void ToggleSearchPanelVisibility() => ActiveFilesPanelViewModel.SearchViewModel.ToggleSearch();
@@ -56,6 +60,7 @@ namespace Camelot.ViewModels.Services.Implementations
             SwapViewModels();
             UpdateCurrentDirectory();
             DeactivateInactiveViewModel();
+            RaiseActiveFilesPanelChangedEvent();
         }
 
         private void FilesPanelViewModelOnCurrentDirectoryChanged(object sender, EventArgs e)
@@ -94,5 +99,7 @@ namespace Camelot.ViewModels.Services.Implementations
         }
 
         private void DeactivateInactiveViewModel() => InactiveFilesPanelViewModel.Deactivate();
+
+        private void RaiseActiveFilesPanelChangedEvent() => ActiveFilesPanelChanged.Raise(this, EventArgs.Empty);
     }
 }
