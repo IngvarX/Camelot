@@ -90,7 +90,7 @@
                             <MenuItem Header="{x:Static p:Resources.Open}" Command="{Binding OpenCommand}" />
                             <MenuItem Header="{x:Static p:Resources.OpenWith}" Command="{Binding OpenWithCommand}" />
                             <MenuItem Header="{x:Static p:Resources.OpenInNewTab}" Command="{Binding OpenInNewTabCommand}" />
-                            <MenuItem Header="{x:Static p:Resources.OpenInNewTabOnOtherPanel}" Command="{Binding OpenInNewTabOnOtherPanelCommand}" />
+                            <MenuItem Header="{x:Static p:Resources.OpenInNewTabOnOppositePanel}" Command="{Binding OpenInNewTabOnOppositePanelCommand}" />
                         </MenuItem>
                         <MenuItem Header="{x:Static p:Resources.Pack}" Command="{Binding PackCommand}" />
                         <MenuItem Header="{x:Static p:Resources.Extract}" IsVisible="{Binding IsArchive}" >

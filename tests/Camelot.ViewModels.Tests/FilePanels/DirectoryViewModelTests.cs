@@ -46,7 +46,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
         }
 
         [Fact]
-        public void TestOpenInNewTabOnOtherPanelCommand()
+        public void TestOpenInNewTabOnOppositePanelCommand()
         {
             var tabListMock = new Mock<ITabsListViewModel>();
             tabListMock
@@ -63,8 +63,8 @@ namespace Camelot.ViewModels.Tests.FilePanels
             var viewModel = _autoMocker.CreateInstance<DirectoryViewModel>();
             viewModel.FullPath = FullPath;
 
-            Assert.True(viewModel.OpenInNewTabOnOtherPanelCommand.CanExecute(null));
-            viewModel.OpenInNewTabOnOtherPanelCommand.Execute(null);
+            Assert.True(viewModel.OpenInNewTabOnOppositePanelCommand.CanExecute(null));
+            viewModel.OpenInNewTabOnOppositePanelCommand.Execute(null);
 
             tabListMock
                 .Verify(m => m.CreateNewTab(FullPath, false), Times.Once);

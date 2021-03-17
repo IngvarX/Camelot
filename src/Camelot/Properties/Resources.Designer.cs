@@ -789,9 +789,9 @@ namespace Camelot.Properties {
             }
         }
         
-        public static string OpenInNewTabOnOtherPanel {
+        public static string OpenInNewTabOnOppositePanel {
             get {
-                return ResourceManager.GetString("OpenInNewTabOnOtherPanel", resourceCulture);
+                return ResourceManager.GetString("OpenInNewTabOnOppositePanel", resourceCulture);
             }
         }
     }

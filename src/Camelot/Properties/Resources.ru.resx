@@ -484,12 +484,12 @@
     <value>Извлечь</value>
   </data>
   <data name="DuplicateOnOppositePanel" xml:space="preserve">
-    <value>Дублировать на другой панели</value>
+    <value>Дублировать на противоположной панели</value>
   </data>
   <data name="OpenInNewTab" xml:space="preserve">
     <value>Открыть в новой вкладке</value>
   </data>
-  <data name="OpenInNewTabOnOtherPanel" xml:space="preserve">
-    <value>Открыть в новой вкладке на другой панели</value>
+  <data name="OpenInNewTabOnOppositePanel" xml:space="preserve">
+    <value>Открыть в новой вкладке на противоположной панели</value>
   </data>
 </root>

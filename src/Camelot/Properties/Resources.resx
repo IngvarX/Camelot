@@ -489,7 +489,7 @@
   <data name="OpenInNewTab" xml:space="preserve">
     <value>Open in new tab</value>
   </data>
-  <data name="OpenInNewTabOnOtherPanel" xml:space="preserve">
+  <data name="OpenInNewTabOnOppositePanel" xml:space="preserve">
     <value>Open in new tab on other panel</value>
   </data>
 </root>

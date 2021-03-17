@@ -18,7 +18,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         public ICommand OpenInNewTabCommand { get; }
 
-        public ICommand OpenInNewTabOnOtherPanelCommand { get; }
+        public ICommand OpenInNewTabOnOppositePanelCommand { get; }
 
         public DirectoryViewModel(
             IFileSystemNodeOpeningBehavior fileSystemNodeOpeningBehavior,
@@ -50,12 +50,12 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             _filesOperationsMediator = filesOperationsMediator;
 
             OpenInNewTabCommand = ReactiveCommand.Create(OpenInNewTab);
-            OpenInNewTabOnOtherPanelCommand = ReactiveCommand.Create(OpenInNewTabOnOtherPanel);
+            OpenInNewTabOnOppositePanelCommand = ReactiveCommand.Create(OpenInNewTabOnOppositePanel);
         }
 
         private void OpenInNewTab() => OpenTab(_filesOperationsMediator.ActiveFilesPanelViewModel);
 
-        private void OpenInNewTabOnOtherPanel() => OpenTab(_filesOperationsMediator.InactiveFilesPanelViewModel);
+        private void OpenInNewTabOnOppositePanel() => OpenTab(_filesOperationsMediator.InactiveFilesPanelViewModel);
 
         private void OpenTab(IFilesPanelViewModel panel) => panel.TabsListViewModel.CreateNewTab(FullPath);
     }
