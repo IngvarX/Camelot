@@ -40,7 +40,8 @@ namespace Camelot.Ui.Tests
             return AppBuilder
                 .Configure<App>()
                 .UsePlatformDetect()
-                .UseReactiveUI();
+                .UseReactiveUI()
+                .UseHeadless();
         }
     }
 }
