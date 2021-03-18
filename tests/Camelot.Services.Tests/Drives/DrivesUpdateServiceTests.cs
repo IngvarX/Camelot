@@ -1,8 +1,10 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions.Drives;
 using Camelot.Services.Configuration;
 using Camelot.Services.Drives;
+using Camelot.Tests.Common.Extensions;
 using Moq;
 using Moq.AutoMock;
 using Xunit;
@@ -16,15 +18,13 @@ namespace Camelot.Services.Tests.Drives
         public DrivesUpdateServiceTests()
         {
             _autoMocker = new AutoMocker();
+            _autoMocker.Use(GetConfig());
         }
 
         [Fact]
         public async Task TestReload()
         {
-            _autoMocker.Use(new DriveServiceConfiguration {DrivesListRefreshIntervalMs = 10});
-
             var taskCompletionSource = new TaskCompletionSource<bool>();
-
             var callsCount = 0;
 
             _autoMocker
@@ -62,5 +62,28 @@ namespace Camelot.Services.Tests.Drives
             _autoMocker
                 .Verify<IUnmountedDriveService>(m => m.ReloadUnmountedDrivesAsync(), Times.AtLeastOnce);
         }
+
+        [Fact]
+        public async Task TestReloadWithException()
+        {
+            _autoMocker.MockLogError();
+            _autoMocker
+                .Setup<IMountedDriveService>(m => m.ReloadMountedDrives())
+                .Throws(new InvalidOperationException());
+
+            var service = _autoMocker.CreateInstance<DrivesUpdateService>();
+            service.Start();
+
+            await Task.Delay(1500);
+
+            _autoMocker
+                .Verify<IMountedDriveService>(m => m.ReloadMountedDrives(), Times.AtLeastOnce);
+            _autoMocker
+                .Verify<IUnmountedDriveService>(m => m.ReloadUnmountedDrivesAsync(), Times.Never);
+            _autoMocker.VerifyLogError(Times.AtLeastOnce());
+        }
+
+        private DriveServiceConfiguration GetConfig() =>
+            new DriveServiceConfiguration {DrivesListRefreshIntervalMs = 10};
     }
 }

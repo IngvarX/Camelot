@@ -1,5 +1,4 @@
 using Camelot.Services.Environment.Interfaces;
-using Moq;
 using Moq.AutoMock;
 using Xunit;
 

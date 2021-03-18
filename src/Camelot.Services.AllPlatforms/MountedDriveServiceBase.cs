@@ -54,8 +54,9 @@ namespace Camelot.Services.AllPlatforms
             var removedDrives = MountedDrives
                 .Where(dm => !newRoots.Contains(dm.RootDirectory))
                 .ToArray();
+            var updatedDrives = _mountedDrives.Except(removedDrives).ToArray();
 
-            foreach (var driveModel in _mountedDrives.Except(removedDrives))
+            foreach (var driveModel in updatedDrives)
             {
                 var newDriveModel = drives.Single(d => d.RootDirectory == driveModel.RootDirectory);
                 if (!CheckIfDiffer(driveModel, newDriveModel))

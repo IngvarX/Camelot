@@ -1,7 +1,9 @@
+using System;
 using System.Threading.Tasks;
 using System.Timers;
 using Camelot.Services.Abstractions.Drives;
 using Camelot.Services.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace Camelot.Services.Drives
 {
@@ -9,16 +11,19 @@ namespace Camelot.Services.Drives
     {
         private readonly IMountedDriveService _mountedDriveService;
         private readonly IUnmountedDriveService _unmountedDriveService;
+        private readonly ILogger _logger;
 
         private readonly Timer _timer;
 
         public DrivesUpdateService(
             IMountedDriveService mountedDriveService,
             IUnmountedDriveService unmountedDriveService,
+            ILogger logger,
             DriveServiceConfiguration configuration)
         {
             _mountedDriveService = mountedDriveService;
             _unmountedDriveService = unmountedDriveService;
+            _logger = logger;
             _timer = CreateTimer(configuration);
         }
 
@@ -36,8 +41,15 @@ namespace Camelot.Services.Drives
 
         private async Task ReloadDrivesAsync()
         {
-            ReloadMountedDrives();
-            await ReloadUnmountedDrivesAsync();
+            try
+            {
+                ReloadMountedDrives();
+                await ReloadUnmountedDrivesAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed to update drives: {ex}");
+            }
         }
 
         private void ReloadMountedDrives() => _mountedDriveService.ReloadMountedDrives();

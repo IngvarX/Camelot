@@ -77,6 +77,7 @@ namespace Camelot.DependencyInjection
             services.RegisterLazySingleton<IDrivesUpdateService>(() => new DrivesUpdateService(
                 resolver.GetRequiredService<IMountedDriveService>(),
                 resolver.GetRequiredService<IUnmountedDriveService>(),
+                resolver.GetRequiredService<ILogger>(),
                 resolver.GetRequiredService<DriveServiceConfiguration>()
             ));
             services.RegisterLazySingleton<IOperationsFactory>(() => new OperationsFactory(

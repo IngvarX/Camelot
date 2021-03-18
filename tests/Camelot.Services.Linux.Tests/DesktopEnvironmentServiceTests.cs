@@ -1,7 +1,6 @@
 using Camelot.Services.Environment.Interfaces;
 using Camelot.Services.Linux.Enums;
 using Camelot.Services.Linux.Implementations;
-using Moq;
 using Moq.AutoMock;
 using Xunit;
 
