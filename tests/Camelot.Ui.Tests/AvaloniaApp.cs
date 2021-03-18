@@ -1,6 +1,5 @@
 using System;
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Headless;
 using Avalonia.ReactiveUI;
@@ -13,8 +12,6 @@ namespace Camelot.Ui.Tests
     {
         public static void RegisterDependencies() =>
             Bootstrapper.Register(Locator.CurrentMutable, Locator.Current);
-
-        public static Window GetMainWindow() => GetApp().MainWindow;
 
         public static void Stop()
         {
@@ -35,6 +32,6 @@ namespace Camelot.Ui.Tests
                 .Configure<App>()
                 .UsePlatformDetect()
                 .UseReactiveUI()
-                .UseHeadless();
+                .UseHeadless(false);
     }
 }

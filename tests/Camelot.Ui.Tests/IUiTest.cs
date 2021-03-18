@@ -1,9 +1,9 @@
-using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 
 namespace Camelot.Ui.Tests
 {
     public interface IUiTest
     {
-        void Execute(Window mainWindow);
+        void Execute(IClassicDesktopStyleApplicationLifetime app);
     }
 }
