@@ -28,11 +28,11 @@ namespace Camelot.Ui.Tests
                 {
                     DispatcherTimer.RunOnce(() =>
                     {
-                        var window = AvaloniaApp.GetMainWindow();
+                        var mainWindow = AvaloniaApp.GetMainWindow();
 
                         foreach (var test in _tests)
                         {
-                            test.Execute(window);
+                            test.Execute(mainWindow);
 
                             if (test is IDisposable disposable)
                             {
@@ -40,7 +40,7 @@ namespace Camelot.Ui.Tests
                             }
                         }
 
-                        window.Close();
+                        mainWindow.Close();
                     }, TimeSpan.FromMilliseconds(DelayMilliseconds));
                 })
                 .StartWithClassicDesktopLifetime(new string[0]);
