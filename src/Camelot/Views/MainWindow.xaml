@@ -120,6 +120,7 @@
         <KeyBinding Gesture="Ctrl+Tab" Command="{Binding ActiveTabsListViewModel.SelectTabToTheRightCommand}" />
         <KeyBinding Gesture="Ctrl+Shift+Tab" Command="{Binding ActiveTabsListViewModel.SelectTabToTheLeftCommand}" />
         <KeyBinding Gesture="Tab" Command="{Binding SwitchPanelCommand}" />
+        <KeyBinding Gesture="F9" Command="{Binding TopOperationsViewModel.OpenTerminalCommand}" />
     </Window.KeyBindings>
 
     <Grid RowDefinitions="Auto,Auto,*,Auto">
