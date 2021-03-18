@@ -78,6 +78,8 @@ Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Camelot.WindowsInstaller", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Installers", "Installers", "{AF27253D-17E1-40F0-A0C2-4BDD3089D71E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camelot.Ui.Tests", "tests\Camelot.Ui.Tests\Camelot.Ui.Tests.csproj", "{FEB5ABE3-EF9C-4BBC-A398-80058551E91A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -324,6 +326,14 @@ Global
 		{4AF845FA-DAEA-4B6C-A751-09E8DE6EEF0E}.Release|Any CPU.ActiveCfg = Release|x86
 		{4AF845FA-DAEA-4B6C-A751-09E8DE6EEF0E}.Release|x86.ActiveCfg = Release|x86
 		{4AF845FA-DAEA-4B6C-A751-09E8DE6EEF0E}.Release|x86.Build.0 = Release|x86
+		{FEB5ABE3-EF9C-4BBC-A398-80058551E91A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEB5ABE3-EF9C-4BBC-A398-80058551E91A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEB5ABE3-EF9C-4BBC-A398-80058551E91A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FEB5ABE3-EF9C-4BBC-A398-80058551E91A}.Debug|x86.Build.0 = Debug|Any CPU
+		{FEB5ABE3-EF9C-4BBC-A398-80058551E91A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEB5ABE3-EF9C-4BBC-A398-80058551E91A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FEB5ABE3-EF9C-4BBC-A398-80058551E91A}.Release|x86.ActiveCfg = Release|Any CPU
+		{FEB5ABE3-EF9C-4BBC-A398-80058551E91A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -365,6 +375,7 @@ Global
 		{59D6D13A-17F7-4CCB-AAD7-3748BD559F1F} = {6E54E223-60FD-418C-B6E0-0EB9095C34D0}
 		{AF27253D-17E1-40F0-A0C2-4BDD3089D71E} = {3E7B6E0B-F769-48DF-B269-43B747D4A964}
 		{4AF845FA-DAEA-4B6C-A751-09E8DE6EEF0E} = {AF27253D-17E1-40F0-A0C2-4BDD3089D71E}
+		{FEB5ABE3-EF9C-4BBC-A398-80058551E91A} = {6E54E223-60FD-418C-B6E0-0EB9095C34D0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5C51E5E2-AA78-45DF-89AC-640A29AFB2DF}
