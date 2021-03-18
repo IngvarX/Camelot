@@ -1,5 +1,4 @@
 using System;
-using System.Reflection;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -17,9 +16,6 @@ namespace Camelot.Ui.Tests
 
         public static Window GetMainWindow() => GetApp().MainWindow;
 
-        public static IClassicDesktopStyleApplicationLifetime GetApp() =>
-            (IClassicDesktopStyleApplicationLifetime) Application.Current.ApplicationLifetime;
-
         public static void Stop()
         {
             var app = GetApp();
@@ -31,17 +27,14 @@ namespace Camelot.Ui.Tests
             app.Shutdown();
         }
 
-        public static AppBuilder BuildAvaloniaApp()
-        {
-            var type = typeof(AppBuilderBase<AppBuilder>);
-            var field = type.GetField("s_setupWasAlreadyCalled", BindingFlags.NonPublic | BindingFlags.Static);
-            field.SetValue(null, false);
+        public static IClassicDesktopStyleApplicationLifetime GetApp() =>
+            (IClassicDesktopStyleApplicationLifetime) Application.Current.ApplicationLifetime;
 
-            return AppBuilder
+        public static AppBuilder BuildAvaloniaApp() =>
+            AppBuilder
                 .Configure<App>()
                 .UsePlatformDetect()
                 .UseReactiveUI()
                 .UseHeadless();
-        }
     }
 }
