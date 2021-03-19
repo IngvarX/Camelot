@@ -32,9 +32,23 @@ namespace Camelot.Ui.Tests.Tests.Dialogs
 
             Assert.NotNull(createButton);
             Assert.False(createButton.Command.CanExecute(null));
-            // Keyboard.PressKey(_dialog, Key.K);
-            // Assert.True(createButton.Command.CanExecute(null));
-            // Keyboard.PressKey(_dialog, Key.Enter);
+
+            var directoryNameTextBox = _dialog
+                .GetVisualDescendants()
+                .OfType<TextBox>()
+                .SingleOrDefault();
+            Assert.NotNull(directoryNameTextBox);
+            Assert.True(string.IsNullOrEmpty(directoryNameTextBox.Text));
+
+            directoryNameTextBox.RaiseEvent(new TextInputEventArgs
+            {
+                Device = KeyboardDevice.Instance,
+                Text = "DirectoryName",
+                RoutedEvent = InputElement.TextInputEvent
+            });
+
+            Assert.True(createButton.Command.CanExecute(null));
+            Keyboard.PressKey(_dialog, Key.Enter);
         }
 
         public void Dispose() => _dialog?.Close();
