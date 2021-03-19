@@ -9,7 +9,7 @@ namespace Camelot.Ui.Tests
 {
     public class UiTests : IDisposable
     {
-        private const int DelayMilliseconds = 5000;
+        private const int DelayMilliseconds = 3000;
 
         private readonly IReadOnlyList<IUiTest> _tests;
 

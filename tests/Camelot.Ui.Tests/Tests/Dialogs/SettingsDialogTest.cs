@@ -1,9 +1,7 @@
 using System;
 using System.Linq;
-using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.LogicalTree;
-using Avalonia.VisualTree;
+using Avalonia.Input;
 using Camelot.Views.Dialogs;
 using Xunit;
 
@@ -15,11 +13,11 @@ namespace Camelot.Ui.Tests.Tests.Dialogs
 
         public void Execute(IClassicDesktopStyleApplicationLifetime app)
         {
-            var menu = app.MainWindow.GetVisualDescendants().OfType<Menu>().First();
-            var menuItem = menu.GetVisualDescendants().OfType<MenuItem>().Skip(1).First();
-            menuItem.IsSubMenuOpen = true;
-            var settingsMenuItem = menuItem.GetLogicalDescendants().OfType<MenuItem>().First();
-            settingsMenuItem.Command?.Execute(null);
+            var window = app.MainWindow;
+
+            Keyboard.PressKey(window, Key.Tab);
+            Keyboard.PressKey(window, Key.Down);
+            Keyboard.PressKey(window, Key.F2);
 
             _dialog = app.Windows.OfType<SettingsDialog>().SingleOrDefault();
             Assert.NotNull(_dialog);
