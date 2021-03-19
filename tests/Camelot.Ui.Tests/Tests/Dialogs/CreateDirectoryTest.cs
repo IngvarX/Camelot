@@ -1,17 +1,9 @@
 using System;
 using System.Linq;
-using System.Threading;
-using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Input;
 using Avalonia.Input.Raw;
-using Avalonia.Interactivity;
-using Avalonia.LogicalTree;
-using Avalonia.Threading;
-using Avalonia.VisualTree;
-using Camelot.Avalonia.Implementations;
 using Camelot.Views.Dialogs;
-using Camelot.Views.Main;
 using Xunit;
 
 namespace Camelot.Ui.Tests.Tests.Dialogs
@@ -23,7 +15,22 @@ namespace Camelot.Ui.Tests.Tests.Dialogs
         public void Execute(IClassicDesktopStyleApplicationLifetime app)
         {
             var window = app.MainWindow;
-
+            KeyboardDevice.Instance.ProcessRawEvent(
+                new RawKeyEventArgs(
+                    KeyboardDevice.Instance, 0,  window,
+                    RawKeyEventType.KeyDown, Key.Tab, RawInputModifiers.None));
+            KeyboardDevice.Instance.ProcessRawEvent(
+                new RawKeyEventArgs(
+                    KeyboardDevice.Instance, 0,  window,
+                    RawKeyEventType.KeyUp, Key.Tab, RawInputModifiers.None));
+            KeyboardDevice.Instance.ProcessRawEvent(
+                new RawKeyEventArgs(
+                    KeyboardDevice.Instance, 0,  window,
+                    RawKeyEventType.KeyDown, Key.Down, RawInputModifiers.None));
+            KeyboardDevice.Instance.ProcessRawEvent(
+                new RawKeyEventArgs(
+                    KeyboardDevice.Instance, 0,  window,
+                    RawKeyEventType.KeyDown, Key.Up, RawInputModifiers.None));
             KeyboardDevice.Instance.ProcessRawEvent(
                 new RawKeyEventArgs(
                     KeyboardDevice.Instance, 0,  window,
