@@ -32,6 +32,6 @@ namespace Camelot.Ui.Tests
                 .Configure<App>()
                 .UsePlatformDetect()
                 .UseReactiveUI()
-                .UseHeadless(false);
+                .UseHeadless();
     }
 }
