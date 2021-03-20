@@ -1,7 +1,5 @@
 using Camelot.Services.Abstractions;
-using Camelot.Services.Abstractions.Archive;
 using Camelot.Services.Abstractions.Behaviors;
-using Camelot.Services.Abstractions.Operations;
 using Camelot.ViewModels.Interfaces.Behaviors;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Services.Interfaces;
@@ -30,31 +28,17 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         public FileViewModel(
             IFileSystemNodeOpeningBehavior fileSystemNodeOpeningBehavior,
-            IOperationsService operationsService,
-            IClipboardOperationsService clipboardOperationsService,
-            IFilesOperationsMediator filesOperationsMediator,
-            IFileSizeFormatter fileSizeFormatter,
             IFileSystemNodePropertiesBehavior fileSystemNodePropertiesBehavior,
-            IDialogService dialogService,
-            ITrashCanService trashCanService,
-            IArchiveService archiveService,
-            ISystemDialogService systemDialogService,
-            IOpenWithApplicationService openWithApplicationService,
-            IPathService pathService,
-            bool shouldShowOpenSubmenu)
+            IFileSystemNodeFacade fileSystemNodeFacade,
+            bool shouldShowOpenSubmenu,
+            bool isArchive,
+            IFileSizeFormatter fileSizeFormatter)
             : base(
                 fileSystemNodeOpeningBehavior,
-                operationsService,
-                clipboardOperationsService,
-                filesOperationsMediator,
                 fileSystemNodePropertiesBehavior,
-                dialogService,
-                trashCanService,
-                archiveService,
-                systemDialogService,
-                openWithApplicationService,
-                pathService,
-                shouldShowOpenSubmenu)
+                fileSystemNodeFacade,
+                shouldShowOpenSubmenu,
+                isArchive)
         {
             _fileSizeFormatter = fileSizeFormatter;
         }

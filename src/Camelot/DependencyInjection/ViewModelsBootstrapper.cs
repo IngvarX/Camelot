@@ -41,9 +41,28 @@ namespace Camelot.DependencyInjection
     {
         public static void RegisterViewModels(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
+            RegisterServices(services, resolver);
             RegisterFactories(services, resolver);
             RegisterCommonViewModels(services, resolver);
             RegisterPlatformSpecificViewModels(services, resolver);
+        }
+
+        private static void RegisterServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
+        {
+            services.RegisterLazySingleton<IFilesOperationsMediator>(() => new FilesOperationsMediator(
+                resolver.GetRequiredService<IDirectoryService>()
+            ));
+            services.RegisterLazySingleton<IFileSystemNodeFacade>(() => new FileSystemNodeFacade(
+                resolver.GetRequiredService<IOperationsService>(),
+                resolver.GetRequiredService<IClipboardOperationsService>(),
+                resolver.GetRequiredService<IFilesOperationsMediator>(),
+                resolver.GetRequiredService<IDialogService>(),
+                resolver.GetRequiredService<ITrashCanService>(),
+                resolver.GetRequiredService<IArchiveService>(),
+                resolver.GetRequiredService<ISystemDialogService>(),
+                resolver.GetRequiredService<IOpenWithApplicationService>(),
+                resolver.GetRequiredService<IPathService>()
+            ));
         }
 
         private static void RegisterFactories(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
@@ -64,18 +83,13 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<DirectoryOpeningBehavior>(),
                 resolver.GetRequiredService<IFileSizeFormatter>(),
                 resolver.GetRequiredService<IPathService>(),
-                resolver.GetRequiredService<IOperationsService>(),
-                resolver.GetRequiredService<IClipboardOperationsService>(),
                 resolver.GetRequiredService<IFilesOperationsMediator>(),
                 resolver.GetRequiredService<FilePropertiesBehavior>(),
                 resolver.GetRequiredService<DirectoryPropertiesBehavior>(),
-                resolver.GetRequiredService<IDialogService>(),
-                resolver.GetRequiredService<ITrashCanService>(),
                 resolver.GetRequiredService<IFileService>(),
                 resolver.GetRequiredService<IDirectoryService>(),
                 resolver.GetRequiredService<IArchiveService>(),
-                resolver.GetRequiredService<ISystemDialogService>(),
-                resolver.GetRequiredService<IOpenWithApplicationService>()
+                resolver.GetRequiredService<IFileSystemNodeFacade>()
             ));
             services.RegisterLazySingleton<IBitmapFactory>(() => new BitmapFactory());
             services.Register(() => new MainNodeInfoTabViewModel(
@@ -104,9 +118,6 @@ namespace Camelot.DependencyInjection
 
         private static void RegisterCommonViewModels(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
-            services.RegisterLazySingleton<IFilesOperationsMediator>(() => new FilesOperationsMediator(
-                resolver.GetRequiredService<IDirectoryService>()
-            ));
             services.Register(() => new TerminalSettingsViewModel(
                 resolver.GetRequiredService<ITerminalService>()
             ));
@@ -294,18 +305,13 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<MacDirectoryOpeningBehavior>(),
                 resolver.GetRequiredService<IFileSizeFormatter>(),
                 resolver.GetRequiredService<IPathService>(),
-                resolver.GetRequiredService<IOperationsService>(),
-                resolver.GetRequiredService<IClipboardOperationsService>(),
                 resolver.GetRequiredService<IFilesOperationsMediator>(),
                 resolver.GetRequiredService<FilePropertiesBehavior>(),
                 resolver.GetRequiredService<DirectoryPropertiesBehavior>(),
-                resolver.GetRequiredService<IDialogService>(),
-                resolver.GetRequiredService<ITrashCanService>(),
                 resolver.GetRequiredService<IFileService>(),
                 resolver.GetRequiredService<IDirectoryService>(),
                 resolver.GetRequiredService<IArchiveService>(),
-                resolver.GetRequiredService<ISystemDialogService>(),
-                resolver.GetRequiredService<IOpenWithApplicationService>()
+                resolver.GetRequiredService<IFileSystemNodeFacade>()
             ));
         }
     }
