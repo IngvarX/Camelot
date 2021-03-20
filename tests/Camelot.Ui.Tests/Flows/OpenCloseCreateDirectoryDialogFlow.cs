@@ -6,11 +6,13 @@ using Avalonia.VisualTree;
 using Camelot.Views.Dialogs;
 using Xunit;
 
-namespace Camelot.Ui.Tests.Views.Dialogs
+namespace Camelot.Ui.Tests.Flows
 {
-    public class CreateDirectoryDialogTest
+    public class OpenCloseCreateDirectoryDialogFlow : IDisposable
     {
-        [Fact(DisplayName = "Check if create directory dialog opens")]
+        private CreateDirectoryDialog _dialog;
+
+        [Fact(DisplayName = "Open and close create directory dialog")]
         public void TestCreateDirectoryDialog()
         {
             var app = AvaloniaApp.GetApp();
@@ -20,13 +22,13 @@ namespace Camelot.Ui.Tests.Views.Dialogs
             Keyboard.PressKey(window, Key.Down);
             Keyboard.PressKey(window, Key.F7);
 
-            var dialog = app
+            _dialog = app
                 .Windows
                 .OfType<CreateDirectoryDialog>()
                 .SingleOrDefault();
-            Assert.NotNull(dialog);
+            Assert.NotNull(_dialog);
 
-            var buttons = dialog
+            var buttons = _dialog
                 .GetVisualDescendants()
                 .OfType<Button>()
                 .ToArray();
@@ -37,7 +39,7 @@ namespace Camelot.Ui.Tests.Views.Dialogs
             Assert.False(createButton.Command.CanExecute(null));
             Assert.True(createButton.IsDefault);
 
-            var directoryNameTextBox = dialog
+            var directoryNameTextBox = _dialog
                 .GetVisualDescendants()
                 .OfType<TextBox>()
                 .SingleOrDefault();
@@ -61,11 +63,13 @@ namespace Camelot.Ui.Tests.Views.Dialogs
 
             closeButton.Command.Execute(null);
 
-            dialog = app
+            _dialog = app
                 .Windows
                 .OfType<CreateDirectoryDialog>()
                 .SingleOrDefault();
-            Assert.Null(dialog);
+            Assert.Null(_dialog);
         }
+
+        public void Dispose() => _dialog?.Close();
     }
 }

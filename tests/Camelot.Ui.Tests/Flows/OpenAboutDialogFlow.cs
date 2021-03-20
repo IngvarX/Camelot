@@ -6,13 +6,13 @@ using Avalonia.VisualTree;
 using Camelot.Views.Dialogs;
 using Xunit;
 
-namespace Camelot.Ui.Tests.Views.Dialogs
+namespace Camelot.Ui.Tests.Flows
 {
-    public class AboutDialogTest : IDisposable
+    public class OpenAboutDialogFlow : IDisposable
     {
         private AboutDialog _dialog;
 
-        [Fact(DisplayName = "Check if about dialog opens")]
+        [Fact(DisplayName = "Open about dialog")]
         public void TestAboutDialog()
         {
             var app = AvaloniaApp.GetApp();
