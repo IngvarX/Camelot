@@ -1,18 +1,19 @@
 using System;
 using System.Linq;
-using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Input;
 using Camelot.Views.Dialogs;
 using Xunit;
 
 namespace Camelot.Ui.Tests.Tests.Dialogs
 {
-    public class SettingsDialogTest : IUiTest, IDisposable
+    public class SettingsDialogTest : IDisposable
     {
         private SettingsDialog _dialog;
 
-        public void Execute(IClassicDesktopStyleApplicationLifetime app)
+        [Fact]
+        public void Execute()
         {
+            var app = AvaloniaApp.GetApp();
             var window = app.MainWindow;
 
             Keyboard.PressKey(window, Key.Tab);

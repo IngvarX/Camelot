@@ -1,8 +1,6 @@
 using System;
 using System.Linq;
-using System.Threading;
 using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Input;
 using Avalonia.VisualTree;
 using Camelot.Views.Dialogs;
@@ -10,12 +8,14 @@ using Xunit;
 
 namespace Camelot.Ui.Tests.Tests.Dialogs
 {
-    public class CreateDirectoryTest : IUiTest, IDisposable
+    public class CreateDirectoryTest : IDisposable
     {
         private CreateDirectoryDialog _dialog;
 
-        public void Execute(IClassicDesktopStyleApplicationLifetime app)
+        [Fact]
+        public void Execute()
         {
+            var app = AvaloniaApp.GetApp();
             var window = app.MainWindow;
 
             Keyboard.PressKey(window, Key.Tab);
