@@ -37,6 +37,7 @@ namespace Camelot.Ui.Tests.Flows
 
             var githubButton = _dialog.GetVisualDescendants().OfType<Button>().SingleOrDefault();
             Assert.NotNull(githubButton);
+            Assert.True(githubButton.IsDefault);
             Assert.True(githubButton.Command.CanExecute(null));
         }
 
