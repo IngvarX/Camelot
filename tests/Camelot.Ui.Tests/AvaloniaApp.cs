@@ -3,6 +3,7 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Headless;
 using Avalonia.ReactiveUI;
+using Avalonia.Threading;
 using Camelot.DependencyInjection;
 using Splat;
 
@@ -18,10 +19,10 @@ namespace Camelot.Ui.Tests
             var app = GetApp();
             if (app is IDisposable disposable)
             {
-                disposable.Dispose();
+                Dispatcher.UIThread.Post(disposable.Dispose);
             }
 
-            app.Shutdown();
+            Dispatcher.UIThread.Post(() => app.Shutdown());
         }
 
         public static IClassicDesktopStyleApplicationLifetime GetApp() =>
