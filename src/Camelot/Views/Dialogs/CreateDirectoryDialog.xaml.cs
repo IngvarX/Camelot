@@ -21,17 +21,6 @@ namespace Camelot.Views.Dialogs
             base.OnOpened();
         }
 
-        private void OnNodeNameTextBoxKeyUp(object sender, KeyEventArgs args)
-        {
-            if (args.Key is Key.Enter)
-            {
-                args.Handled = true;
-
-                var viewModel = (CreateDirectoryDialogViewModel) ViewModel;
-                viewModel.CreateCommand.Execute(null);
-            }
-        }
-
         private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
     }
 }

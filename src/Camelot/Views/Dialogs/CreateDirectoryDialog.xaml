@@ -16,12 +16,13 @@
     <Grid RowDefinitions="Auto,Auto,Auto" Margin="10" HorizontalAlignment="Center">
         <TextBlock Classes="dialogTextBlock" Text="{x:Static p:Resources.EnterDirectoryNameWithColon}" />
 
-        <TextBox Grid.Row="1" x:Name="NodeNameTextBox" Text="{Binding DirectoryName}"
-                 KeyUp="OnNodeNameTextBoxKeyUp" />
+        <TextBox Grid.Row="1" x:Name="NodeNameTextBox"
+                 Text="{Binding DirectoryName}" />
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Classes="dialogButton transparentDialogButton" Content="{x:Static p:Resources.Cancel}" Command="{Binding CancelCommand}" />
-            <Button Classes="dialogButton" Content="{x:Static p:Resources.Create}" Command="{Binding CreateCommand}" />
+            <Button Classes="dialogButton" Content="{x:Static p:Resources.Create}" IsDefault="True"
+                    Command="{Binding CreateCommand}" />
         </StackPanel>
     </Grid>
 </Window>
