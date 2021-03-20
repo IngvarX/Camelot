@@ -124,13 +124,13 @@
     <value>_Информация</value>
   </data>
   <data name="AboutPage" xml:space="preserve">
-    <value>Camelot - это легковесный файловый менеджер, написанный на языке C#</value>
+    <value>Camelot - это двухпанельный файловый менеджер, написанный на языке C#</value>
   </data>
   <data name="Apply" xml:space="preserve">
     <value>Применить</value>
   </data>
   <data name="ApplyActionToTheAllFilesAndFolders" xml:space="preserve">
-    <value>Применить это действие для всех файлов и каталогов</value>
+    <value>Применить для всех файлов и каталогов</value>
   </data>
   <data name="ArgumentsWithColon" xml:space="preserve">
     <value>Аргументы:</value>

@@ -238,7 +238,7 @@
     <value>_File</value>
   </data>
   <data name="FileInformationTitle" xml:space="preserve">
-    <value>File-info</value>
+    <value>File information</value>
   </data>
   <data name="FilesRemovingConfirmationTitle" xml:space="preserve">
     <value>Confirm removal of files</value>
