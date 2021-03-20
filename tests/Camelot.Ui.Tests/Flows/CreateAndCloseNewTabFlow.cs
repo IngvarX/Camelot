@@ -24,12 +24,12 @@ namespace Camelot.Ui.Tests.Flows
             for (var i = 0; i < 2; i++)
             {
                 Keyboard.PressKey(window, Key.T, RawInputModifiers.Control);
-                await Task.Delay(300);
+                await WaitService.WaitForConditionAsync(() => initialCount + 1 == GetTabsCount(window));
+
                 Assert.Equal(initialCount + 1,  GetTabsCount(window));
 
                 Keyboard.PressKey(window, Key.W, RawInputModifiers.Control);
-                await Task.Delay(300);
-                Assert.Equal(initialCount, GetTabsCount(window));
+                await WaitService.WaitForConditionAsync(() => initialCount == GetTabsCount(window));
 
                 Keyboard.PressKey(window, Key.Tab);
             }
