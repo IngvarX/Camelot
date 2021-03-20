@@ -76,6 +76,11 @@ namespace Camelot.ViewModels.Services.Implementations
 
         public async Task ExtractAsync(ExtractCommandType commandType, string fullPath)
         {
+            if (!CheckIfNodeIsArchive(fullPath))
+            {
+                return;
+            }
+
             switch (commandType)
             {
                 case ExtractCommandType.CurrentDirectory:
@@ -127,6 +132,8 @@ namespace Camelot.ViewModels.Services.Implementations
 
         public Task MoveAsync(string filePath) =>
             _operationsService.MoveAsync(CreateFilesList(filePath), _filesOperationsMediator.OutputDirectory);
+
+        public bool CheckIfNodeIsArchive(string filePath) => _archiveService.CheckIfNodeIsArchive(filePath);
 
         private async Task<CreateArchiveDialogResult> ShowPackDialogAsync(string fullPath)
         {

@@ -21,7 +21,6 @@ namespace Camelot.ViewModels.Factories.Implementations
         private readonly IFileSystemNodePropertiesBehavior _directoryPropertiesBehavior;
         private readonly IFileService _fileService;
         private readonly IDirectoryService _directoryService;
-        private readonly IArchiveService _archiveService;
         private readonly IFileSystemNodeFacade _fileSystemNodeFacade;
 
         public FileSystemNodeViewModelFactory(
@@ -34,7 +33,6 @@ namespace Camelot.ViewModels.Factories.Implementations
             IFileSystemNodePropertiesBehavior directoryPropertiesBehavior,
             IFileService fileService,
             IDirectoryService directoryService,
-            IArchiveService archiveService,
             IFileSystemNodeFacade fileSystemNodeFacade)
         {
             _fileOpeningBehavior = fileOpeningBehavior;
@@ -46,7 +44,6 @@ namespace Camelot.ViewModels.Factories.Implementations
             _directoryPropertiesBehavior = directoryPropertiesBehavior;
             _fileService = fileService;
             _directoryService = directoryService;
-            _archiveService = archiveService;
             _fileSystemNodeFacade = fileSystemNodeFacade;
         }
 
@@ -76,7 +73,6 @@ namespace Camelot.ViewModels.Factories.Implementations
                 _filePropertiesBehavior,
                 _fileSystemNodeFacade,
                 false,
-                _archiveService.CheckIfNodeIsArchive(fileModel.FullPath),
                 _fileSizeFormatter)
             {
                 FullPath = fileModel.FullPath,
@@ -97,7 +93,6 @@ namespace Camelot.ViewModels.Factories.Implementations
                 _directoryPropertiesBehavior,
                 _fileSystemNodeFacade,
                 true,
-                false,
                 _filesOperationsMediator)
             {
                 FullPath = directoryModel.FullPath,

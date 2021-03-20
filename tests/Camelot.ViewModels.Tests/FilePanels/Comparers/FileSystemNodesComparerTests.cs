@@ -1,9 +1,6 @@
 using System;
-using Camelot.Services.Abstractions;
-using Camelot.Services.Abstractions.Archive;
 using Camelot.Services.Abstractions.Behaviors;
 using Camelot.Services.Abstractions.Models.Enums;
-using Camelot.Services.Abstractions.Operations;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Comparers;
 using Camelot.ViewModels.Interfaces.Behaviors;
@@ -70,29 +67,13 @@ namespace Camelot.ViewModels.Tests.FilePanels.Comparers
         {
             public NodeViewModel(
                 IFileSystemNodeOpeningBehavior fileSystemNodeOpeningBehavior,
-                IOperationsService operationsService,
-                IClipboardOperationsService clipboardOperationsService,
-                IFilesOperationsMediator filesOperationsMediator,
                 IFileSystemNodePropertiesBehavior fileSystemNodePropertiesBehavior,
-                IDialogService dialogService,
-                ITrashCanService trashCanService,
-                IArchiveService archiveService,
-                ISystemDialogService systemDialogService,
-                IOpenWithApplicationService openWithApplicationService,
-                IPathService pathService,
+                IFileSystemNodeFacade fileSystemNodeFacade,
                 bool shouldShowOpenSubmenu)
                 : base(
                     fileSystemNodeOpeningBehavior,
-                    operationsService,
-                    clipboardOperationsService,
-                    filesOperationsMediator,
                     fileSystemNodePropertiesBehavior,
-                    dialogService,
-                    trashCanService,
-                    archiveService,
-                    systemDialogService,
-                    openWithApplicationService,
-                    pathService,
+                    fileSystemNodeFacade,
                     shouldShowOpenSubmenu)
             {
 

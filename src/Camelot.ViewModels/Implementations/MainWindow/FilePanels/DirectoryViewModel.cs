@@ -22,14 +22,12 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             IFileSystemNodePropertiesBehavior fileSystemNodePropertiesBehavior,
             IFileSystemNodeFacade fileSystemNodeFacade,
             bool shouldShowOpenSubmenu,
-            bool isArchive,
             IFilesOperationsMediator filesOperationsMediator)
             : base(
                 fileSystemNodeOpeningBehavior,
                 fileSystemNodePropertiesBehavior,
                 fileSystemNodeFacade,
-                shouldShowOpenSubmenu,
-                isArchive)
+                shouldShowOpenSubmenu)
         {
             _filesOperationsMediator = filesOperationsMediator;
 

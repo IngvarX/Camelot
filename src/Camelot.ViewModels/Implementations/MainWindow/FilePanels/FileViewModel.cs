@@ -31,14 +31,12 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             IFileSystemNodePropertiesBehavior fileSystemNodePropertiesBehavior,
             IFileSystemNodeFacade fileSystemNodeFacade,
             bool shouldShowOpenSubmenu,
-            bool isArchive,
             IFileSizeFormatter fileSizeFormatter)
             : base(
                 fileSystemNodeOpeningBehavior,
                 fileSystemNodePropertiesBehavior,
                 fileSystemNodeFacade,
-                shouldShowOpenSubmenu,
-                isArchive)
+                shouldShowOpenSubmenu)
         {
             _fileSizeFormatter = fileSizeFormatter;
         }

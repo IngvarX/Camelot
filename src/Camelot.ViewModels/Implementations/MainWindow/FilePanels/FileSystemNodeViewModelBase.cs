@@ -28,7 +28,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         [Reactive]
         public bool IsEditing { get; set; }
 
-        public bool IsArchive { get; }
+        public bool IsArchive => _fileSystemNodeFacade.CheckIfNodeIsArchive(FullPath);
 
         public bool IsWaitingForEdit { get; set; }
 
@@ -60,15 +60,13 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             IFileSystemNodeOpeningBehavior fileSystemNodeOpeningBehavior,
             IFileSystemNodePropertiesBehavior fileSystemNodePropertiesBehavior,
             IFileSystemNodeFacade fileSystemNodeFacade,
-            bool shouldShowOpenSubmenu,
-            bool isArchive)
+            bool shouldShowOpenSubmenu)
         {
             _fileSystemNodeOpeningBehavior = fileSystemNodeOpeningBehavior;
             _fileSystemNodePropertiesBehavior = fileSystemNodePropertiesBehavior;
             _fileSystemNodeFacade = fileSystemNodeFacade;
 
             ShouldShowOpenSubmenu = shouldShowOpenSubmenu;
-            IsArchive = isArchive;
 
             OpenCommand = ReactiveCommand.Create(Open);
             OpenWithCommand = ReactiveCommand.Create(OpenWithAsync);
@@ -89,8 +87,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         private Task OpenWithAsync() => _fileSystemNodeFacade.OpenWithAsync(_fileSystemNodeOpeningBehavior, FullPath);
 
-        private Task ExtractAsync(ExtractCommandType commandType) =>
-            _fileSystemNodeFacade.ExtractAsync(commandType, FullPath);
+        private Task ExtractAsync(ExtractCommandType commandType) => _fileSystemNodeFacade.ExtractAsync(commandType, FullPath);
 
         private void Rename() => IsEditing = !_fileSystemNodeFacade.Rename(FullName, FullPath);
 

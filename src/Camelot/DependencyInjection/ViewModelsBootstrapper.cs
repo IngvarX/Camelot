@@ -88,7 +88,6 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<DirectoryPropertiesBehavior>(),
                 resolver.GetRequiredService<IFileService>(),
                 resolver.GetRequiredService<IDirectoryService>(),
-                resolver.GetRequiredService<IArchiveService>(),
                 resolver.GetRequiredService<IFileSystemNodeFacade>()
             ));
             services.RegisterLazySingleton<IBitmapFactory>(() => new BitmapFactory());
@@ -310,7 +309,6 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<DirectoryPropertiesBehavior>(),
                 resolver.GetRequiredService<IFileService>(),
                 resolver.GetRequiredService<IDirectoryService>(),
-                resolver.GetRequiredService<IArchiveService>(),
                 resolver.GetRequiredService<IFileSystemNodeFacade>()
             ));
         }

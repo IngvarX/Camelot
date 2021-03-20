@@ -23,5 +23,7 @@ namespace Camelot.ViewModels.Services.Interfaces
         Task CopyAsync(string filePath);
 
         Task MoveAsync(string filePath);
+
+        bool CheckIfNodeIsArchive(string filePath);
     }
 }
