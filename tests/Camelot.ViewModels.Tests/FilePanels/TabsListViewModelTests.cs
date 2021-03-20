@@ -620,6 +620,43 @@ namespace Camelot.ViewModels.Tests.FilePanels
             Assert.Equal(thirdTab, tabsListViewModel.Tabs[1]);
         }
 
+        [Fact]
+        public void TestMoveRequestedSingleTab()
+        {
+            var tabs = new List<Mock<ITabViewModel>>();
+            _autoMocker
+                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.Is<TabStateModel>(tm => tm.Directory == AppRootDirectory)))
+                .Returns(() =>
+                {
+                    var mock = Create();
+                    tabs.Add(mock);
+
+                    return mock.Object;
+                });
+            _autoMocker
+                .Setup<IDirectoryService, bool>(m => m.CheckIfExists(AppRootDirectory))
+                .Returns(true);
+            _autoMocker
+                .Setup<IFilesPanelStateService, PanelStateModel>(m => m.GetPanelState())
+                .Returns(new PanelStateModel
+                {
+                    Tabs = new List<TabStateModel>
+                    {
+                        new TabStateModel {Directory = AppRootDirectory}
+                    }
+                });
+
+            var tabsListViewModel = _autoMocker.CreateInstance<TabsListViewModel>();
+
+            var firstTab = tabs[0].Object;
+            var secondTabMock = new Mock<ITabViewModel>();
+            var args = new MoveRequestedEventArgs(secondTabMock.Object);
+            tabs[0].Raise(m => m.MoveRequested += null, args);
+
+            Assert.Single(tabsListViewModel.Tabs);
+            Assert.Equal(firstTab, tabsListViewModel.Tabs.Single());
+        }
+
         [Theory]
         [InlineData(0)]
         [InlineData(1)]

@@ -277,6 +277,11 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
 
         private void TabViewModelOnMoveRequested(object sender, MoveRequestedEventArgs e)
         {
+            if (_tabs.Count == 1)
+            {
+                return;
+            }
+
             var (sourceTab, targetTab) = ((ITabViewModel) sender, e.Target);
             var (sourceTabIndex, targetTabIndex) = (GetTabIndex(sourceTab), GetTabIndex(targetTab));
 
