@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.VisualTree;
@@ -13,20 +14,26 @@ namespace Camelot.Ui.Tests.Flows
         private AboutDialog _dialog;
 
         [Fact(DisplayName = "Open about dialog")]
-        public void TestAboutDialog()
+        public async Task TestAboutDialog()
         {
             var app = AvaloniaApp.GetApp();
             var window = AvaloniaApp.GetMainWindow();
 
+            await Task.Delay(100);
+
             Keyboard.PressKey(window, Key.Tab);
             Keyboard.PressKey(window, Key.Down);
             Keyboard.PressKey(window, Key.F1);
+
+            await Task.Delay(100);
 
             _dialog = app
                 .Windows
                 .OfType<AboutDialog>()
                 .SingleOrDefault();
             Assert.NotNull(_dialog);
+
+            await Task.Delay(100);
 
             var githubButton = _dialog.GetVisualDescendants().OfType<Button>().SingleOrDefault();
             Assert.NotNull(githubButton);

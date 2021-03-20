@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.VisualTree;
@@ -13,14 +14,18 @@ namespace Camelot.Ui.Tests.Flows
         private CreateDirectoryDialog _dialog;
 
         [Fact(DisplayName = "Open and close create directory dialog")]
-        public void TestCreateDirectoryDialog()
+        public async Task TestCreateDirectoryDialog()
         {
             var app = AvaloniaApp.GetApp();
             var window = AvaloniaApp.GetMainWindow();
 
+            await Task.Delay(100);
+
             Keyboard.PressKey(window, Key.Tab);
             Keyboard.PressKey(window, Key.Down);
             Keyboard.PressKey(window, Key.F7);
+
+            await Task.Delay(100);
 
             _dialog = app
                 .Windows
@@ -54,6 +59,8 @@ namespace Camelot.Ui.Tests.Flows
                 RoutedEvent = InputElement.TextInputEvent
             });
 
+            await Task.Delay(100);
+
             Assert.True(createButton.Command.CanExecute(null));
 
             var closeButton = buttons.SingleOrDefault(b => b.Classes.Contains("transparentDialogButton"));
@@ -62,6 +69,8 @@ namespace Camelot.Ui.Tests.Flows
             Assert.False(closeButton.IsDefault);
 
             closeButton.Command.Execute(null);
+
+            await Task.Delay(100);
 
             _dialog = app
                 .Windows

@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.VisualTree;
@@ -13,10 +14,12 @@ namespace Camelot.Ui.Tests.Flows
         private SettingsDialog _dialog;
 
         [Fact(DisplayName = "Open and close settings dialog")]
-        public void TestSettingsDialog()
+        public async Task TestSettingsDialog()
         {
             var app = AvaloniaApp.GetApp();
             var window = AvaloniaApp.GetMainWindow();
+
+            await Task.Delay(100);
 
             Keyboard.PressKey(window, Key.Tab);
             Keyboard.PressKey(window, Key.Down);
@@ -28,6 +31,8 @@ namespace Camelot.Ui.Tests.Flows
                 .SingleOrDefault();
             Assert.NotNull(_dialog);
 
+            await Task.Delay(100);
+
             var closeButton = _dialog
                 .GetVisualDescendants()
                 .OfType<Button>()
@@ -36,6 +41,8 @@ namespace Camelot.Ui.Tests.Flows
 
             Assert.True(closeButton.Command.CanExecute(null));
             closeButton.Command.Execute(null);
+
+            await Task.Delay(100);
 
             _dialog = app
                 .Windows

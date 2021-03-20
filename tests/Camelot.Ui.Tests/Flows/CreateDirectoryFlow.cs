@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.VisualTree;
@@ -15,14 +16,18 @@ namespace Camelot.Ui.Tests.Flows
         private CreateDirectoryDialog _dialog;
 
         [Fact(DisplayName = "Create and remove directory")]
-        public void CreateAndRemoveDirectoryTest()
+        public async Task CreateAndRemoveDirectoryTest()
         {
             var app = AvaloniaApp.GetApp();
             var window = AvaloniaApp.GetMainWindow();
 
+            await Task.Delay(100);
+
             Keyboard.PressKey(window, Key.Tab);
             Keyboard.PressKey(window, Key.Down);
             Keyboard.PressKey(window, Key.F7);
+
+            await Task.Delay(100);
 
             _dialog = app
                 .Windows
@@ -40,6 +45,8 @@ namespace Camelot.Ui.Tests.Flows
                 RoutedEvent = InputElement.TextInputEvent
             });
             Keyboard.PressKey(window, Key.Enter);
+
+            await Task.Delay(100);
 
             _dialog = app
                 .Windows
