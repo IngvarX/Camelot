@@ -52,10 +52,18 @@ namespace Camelot.Ui.Tests
 
         private class Runner : XunitTestAssemblyRunner
         {
-            public Runner(ITestAssembly testAssembly, IEnumerable<IXunitTestCase> testCases,
-                IMessageSink diagnosticMessageSink, IMessageSink executionMessageSink,
-                ITestFrameworkExecutionOptions executionOptions) : base(testAssembly, testCases, diagnosticMessageSink,
-                executionMessageSink, executionOptions)
+            public Runner(
+                ITestAssembly testAssembly,
+                IEnumerable<IXunitTestCase> testCases,
+                IMessageSink diagnosticMessageSink,
+                IMessageSink executionMessageSink,
+                ITestFrameworkExecutionOptions executionOptions)
+                : base(
+                    testAssembly,
+                    testCases,
+                    diagnosticMessageSink,
+                    executionMessageSink,
+                    executionOptions)
             {
 
             }
