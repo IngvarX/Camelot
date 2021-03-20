@@ -13,11 +13,12 @@ using Xunit;
 
 namespace Camelot.Ui.Tests.Flows
 {
-    public class CreateDirectoryFlow : IDisposable
+    public class CreateAndRemoveDirectoryFlow : IDisposable
     {
         private const string DirectoryName = "CreateDirectoryTest__Directory";
 
-        private CreateDirectoryDialog _dialog;
+        private CreateDirectoryDialog _createDirectoryDialog;
+        private RemoveNodesConfirmationDialog _removeDialog;
         private string _directoryFullPath;
 
         [Fact(DisplayName = "Create and remove directory")]
@@ -34,11 +35,11 @@ namespace Camelot.Ui.Tests.Flows
 
             await Task.Delay(100);
 
-            _dialog = app
+            _createDirectoryDialog = app
                 .Windows
                 .OfType<CreateDirectoryDialog>()
                 .Single();
-            var directoryNameTextBox = _dialog
+            var directoryNameTextBox = _createDirectoryDialog
                 .GetVisualDescendants()
                 .OfType<TextBox>()
                 .Single();
@@ -53,11 +54,11 @@ namespace Camelot.Ui.Tests.Flows
 
             await Task.Delay(100);
 
-            _dialog = app
+            _createDirectoryDialog = app
                 .Windows
                 .OfType<CreateDirectoryDialog>()
                 .SingleOrDefault();
-            Assert.Null(_dialog);
+            Assert.Null(_createDirectoryDialog);
 
             var filesPanel = app
                 .MainWindow
@@ -100,11 +101,32 @@ namespace Camelot.Ui.Tests.Flows
 
             var selectedItemText = GetSelectedItemText(filesPanel);
             Assert.Equal(DirectoryName, selectedItemText);
+
+            Keyboard.PressKey(window, Key.F8);
+            await Task.Delay(100);
+
+            _removeDialog = app
+                .Windows
+                .OfType<RemoveNodesConfirmationDialog>()
+                .SingleOrDefault();
+            Assert.NotNull(_removeDialog);
+
+            Keyboard.PressKey(window, Key.Enter);
+            await Task.Delay(100);
+
+            _removeDialog = app
+                .Windows
+                .OfType<RemoveNodesConfirmationDialog>()
+                .SingleOrDefault();
+            Assert.Null(_removeDialog);
+
+            Assert.False(Directory.Exists(_directoryFullPath));
         }
 
         public void Dispose()
         {
-            _dialog?.Close();
+            _createDirectoryDialog?.Close();
+            _removeDialog?.Close();
 
             if (!string.IsNullOrEmpty(_directoryFullPath) && Directory.Exists(_directoryFullPath))
             {
@@ -120,7 +142,7 @@ namespace Camelot.Ui.Tests.Flows
             return viewModel?.IsActive ?? false;
         }
 
-        private string GetSelectedItemText(IInputElement filesPanel)
+        private string GetSelectedItemText(IVisual filesPanel)
         {
             var dataGrid = GetDataGrid(filesPanel);
             var directoryViewModel = (DirectoryViewModel) dataGrid.SelectedItem;
