@@ -9,6 +9,7 @@ using Xunit;
 
 namespace Camelot.Tests
 {
+    [Collection("DiTests")]
     public class DependencyInjectionTests
     {
         [Fact]

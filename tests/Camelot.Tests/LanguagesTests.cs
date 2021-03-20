@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Globalization;
+using System.Threading;
 using Camelot.Configuration;
 using Camelot.DependencyInjection;
 using Camelot.Properties;
@@ -8,6 +9,7 @@ using Xunit;
 
 namespace Camelot.Tests
 {
+    [Collection("DiTests")]
     public class LanguagesTests
     {
         [Fact]
@@ -38,6 +40,13 @@ namespace Camelot.Tests
 
             Assert.NotNull(config);
             Assert.NotNull(config.AvailableLocales);
+            Assert.NotEmpty(config.AvailableLocales);
+
+            var culture = Thread.CurrentThread.CurrentCulture;
+            if (!config.AvailableLocales.Contains(culture.IetfLanguageTag))
+            {
+                includedLanguages.Remove(culture.IetfLanguageTag);
+            }
 
             excludedLanguages.ExceptWith(includedLanguages);
             var allAvailable = includedLanguages.SetEquals(config.AvailableLocales);
