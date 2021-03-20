@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading;
 using Camelot.Configuration;
 using Camelot.DependencyInjection;
@@ -49,7 +50,8 @@ namespace Camelot.Tests
             }
 
             excludedLanguages.ExceptWith(includedLanguages);
-            var allAvailable = includedLanguages.SetEquals(config.AvailableLocales);
+            var availableLocales = config.AvailableLocales.ToHashSet();
+            var allAvailable = includedLanguages.IsSubsetOf(availableLocales);
 
             Assert.True(allAvailable);
         }

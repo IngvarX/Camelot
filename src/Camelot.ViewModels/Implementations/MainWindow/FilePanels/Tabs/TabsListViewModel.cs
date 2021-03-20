@@ -115,7 +115,9 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
             var tabs = GetInitialTabs(state.Tabs);
             tabs.CollectionChanged += TabsOnCollectionChanged;
 
-            var index = state.SelectedTabIndex >= tabs.Count ? ^1 : state.SelectedTabIndex;
+            var index = state.SelectedTabIndex >= tabs.Count || state.SelectedTabIndex < 0
+                ? ^1
+                : state.SelectedTabIndex;
             SelectTab(tabs[index]);
 
             return tabs;
