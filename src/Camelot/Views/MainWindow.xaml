@@ -118,9 +118,9 @@
         <KeyBinding Gesture="Ctrl+F" Command="{Binding SearchCommand}" />
         <KeyBinding Gesture="Meta+F" Command="{Binding SearchCommand}" />
         <KeyBinding Gesture="Ctrl+Tab" Command="{Binding ActiveTabsListViewModel.SelectTabToTheRightCommand}" />
-        <KeyBinding Gesture="Ctrl+PageUp" Command="{Binding ActiveTabsListViewModel.SelectTabToTheRightCommand}" />
+        <KeyBinding Gesture="Ctrl+PageDown" Command="{Binding ActiveTabsListViewModel.SelectTabToTheRightCommand}" />
         <KeyBinding Gesture="Ctrl+Shift+Tab" Command="{Binding ActiveTabsListViewModel.SelectTabToTheLeftCommand}" />
-        <KeyBinding Gesture="Ctrl+PageDown" Command="{Binding ActiveTabsListViewModel.SelectTabToTheLeftCommand}" />
+        <KeyBinding Gesture="Ctrl+PageUp" Command="{Binding ActiveTabsListViewModel.SelectTabToTheLeftCommand}" />
         <KeyBinding Gesture="Tab" Command="{Binding SwitchPanelCommand}" />
         <KeyBinding Gesture="F1" Command="{Binding MenuViewModel.AboutCommand}" />
         <KeyBinding Gesture="F2" Command="{Binding MenuViewModel.OpenSettingsCommand}" />
