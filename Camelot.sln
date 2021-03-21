@@ -80,6 +80,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Installers", "Installers", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camelot.Ui.Tests", "tests\Camelot.Ui.Tests\Camelot.Ui.Tests.csproj", "{FEB5ABE3-EF9C-4BBC-A398-80058551E91A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionFiles", "SolutionFiles", "{7A44F288-C9F3-4965-892B-CD08B0643C9C}"
+ProjectSection(SolutionItems) = preProject
+	nuget.config = nuget.config
+	camelot.desktop = camelot.desktop
+	.travis.yml = .travis.yml
+	codecov.yml = codecov.yml
+EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -376,6 +384,7 @@ Global
 		{AF27253D-17E1-40F0-A0C2-4BDD3089D71E} = {3E7B6E0B-F769-48DF-B269-43B747D4A964}
 		{4AF845FA-DAEA-4B6C-A751-09E8DE6EEF0E} = {AF27253D-17E1-40F0-A0C2-4BDD3089D71E}
 		{FEB5ABE3-EF9C-4BBC-A398-80058551E91A} = {6E54E223-60FD-418C-B6E0-0EB9095C34D0}
+		{7A44F288-C9F3-4965-892B-CD08B0643C9C} = {3E7B6E0B-F769-48DF-B269-43B747D4A964}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5C51E5E2-AA78-45DF-89AC-640A29AFB2DF}
