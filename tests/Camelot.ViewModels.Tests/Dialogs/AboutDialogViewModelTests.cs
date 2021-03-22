@@ -4,28 +4,35 @@ using Camelot.Services.Abstractions;
 using Camelot.ViewModels.Configuration;
 using Camelot.ViewModels.Implementations.Dialogs;
 using Moq;
+using Moq.AutoMock;
 using Xunit;
 
 namespace Camelot.ViewModels.Tests.Dialogs
 {
     public class AboutDialogViewModelTests
     {
+        private readonly AutoMocker _autoMocker;
+
+        public AboutDialogViewModelTests()
+        {
+            _autoMocker = new AutoMocker();
+        }
+
         [Fact]
         public void TestInformation()
         {
             const string version = "1.0.0";
 
-            var applicationVersionProviderMock = new Mock<IApplicationVersionProvider>();
-            applicationVersionProviderMock
-                .SetupGet(m => m.Version)
+            _autoMocker
+                .Setup<IApplicationVersionProvider, string>(m => m.Version)
                 .Returns(version);
-            var resourceOpeningServiceMock = new Mock<IResourceOpeningService>();
             var configuration = new AboutDialogConfiguration
             {
                 Maintainers = new[] {"Maintainer1", "Maintainer2"}
             };
-            var dialog = new AboutDialogViewModel(applicationVersionProviderMock.Object,
-                resourceOpeningServiceMock.Object, configuration);
+            _autoMocker.Use(configuration);
+
+            var dialog = _autoMocker.CreateInstance<AboutDialogViewModel>();
 
             Assert.Equal(version, dialog.ApplicationVersion);
             Assert.True(configuration.Maintainers.All(dialog.Maintainers.Contains));
@@ -36,20 +43,19 @@ namespace Camelot.ViewModels.Tests.Dialogs
         {
             const string url = "url";
 
-            var applicationVersionProviderMock = new Mock<IApplicationVersionProvider>();
-            var resourceOpeningServiceMock = new Mock<IResourceOpeningService>();
-            resourceOpeningServiceMock
-                .Setup(m => m.Open(url))
+            _autoMocker
+                .Setup<IResourceOpeningService>(m => m.Open(url))
                 .Verifiable();
             var configuration = new AboutDialogConfiguration {RepositoryUrl = url};
-            var dialog = new AboutDialogViewModel(applicationVersionProviderMock.Object,
-                resourceOpeningServiceMock.Object, configuration);
+            _autoMocker.Use(configuration);
+
+            var dialog = _autoMocker.CreateInstance<AboutDialogViewModel>();
 
             Assert.True(dialog.OpenRepositoryCommand.CanExecute(null));
 
             dialog.OpenRepositoryCommand.Execute(null);
 
-            resourceOpeningServiceMock.Verify(m => m.Open(url), Times.Once);
+            _autoMocker.Verify<IResourceOpeningService>(m => m.Open(url), Times.Once);
         }
     }
 }

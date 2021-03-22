@@ -84,8 +84,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionFiles", "SolutionFi
 ProjectSection(SolutionItems) = preProject
 	nuget.config = nuget.config
 	camelot.desktop = camelot.desktop
-	.travis.yml = .travis.yml
-	codecov.yml = codecov.yml
 EndProjectSection
 EndProject
 Global
