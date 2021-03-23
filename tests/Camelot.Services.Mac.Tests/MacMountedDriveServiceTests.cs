@@ -19,9 +19,9 @@ namespace Camelot.Services.Mac.Tests
         }
 
         [Theory]
-        [InlineData("/home/test", "diskutil", "unmount /home/test")]
-        [InlineData("/home/camelot", "diskutil", "unmount /home/camelot")]
-        [InlineData("/dev/disk1", "diskutil", "unmount /dev/disk1")]
+        [InlineData("/home/test", "diskutil", "unmount \"/home/test\"")]
+        [InlineData("/home/camelot", "diskutil", "unmount \"/home/camelot\"")]
+        [InlineData("/dev/disk1", "diskutil", "unmount \"/dev/disk1\"")]
         public void TestUnmount(string drive, string command, string arguments)
         {
             _autoMocker
@@ -39,9 +39,9 @@ namespace Camelot.Services.Mac.Tests
         }
 
         [Theory]
-        [InlineData("/home/test", "diskutil", "eject /home/test")]
-        [InlineData("/home/camelot", "diskutil", "eject /home/camelot")]
-        [InlineData("/dev/disk1", "diskutil", "eject /dev/disk1")]
+        [InlineData("/home/test", "diskutil", "eject \"/home/test\"")]
+        [InlineData("/home/camelot", "diskutil", "eject \"/home/camelot\"")]
+        [InlineData("/dev/disk1", "diskutil", "eject \"/dev/disk1\"")]
         public async Task TestEject(string drive, string command, string arguments)
         {
             _autoMocker

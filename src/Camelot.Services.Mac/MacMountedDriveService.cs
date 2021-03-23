@@ -7,9 +7,9 @@ namespace Camelot.Services.Mac
     public class MacMountedDriveService : MountedDriveServiceBase
     {
         private const string UnmountDriveCommand = "diskutil";
-        private const string UnmountDriveArguments = "unmount {0}";
+        private const string UnmountDriveArguments = "unmount \"{0}\"";
         private const string EjectDriveCommand = "diskutil";
-        private const string EjectDriveArguments = "eject {0}";
+        private const string EjectDriveArguments = "eject \"{0}\"";
 
         private readonly IProcessService _processService;
 
@@ -33,7 +33,7 @@ namespace Camelot.Services.Mac
             var arguments = string.Format(EjectDriveArguments, driveRootDirectory);
 
             _processService.Run(EjectDriveCommand, arguments);
-            
+
             return Task.CompletedTask;
         }
     }
