@@ -11,7 +11,8 @@
         <filePanels:SearchViewModel />
     </Design.DataContext>
 
-    <Grid ColumnDefinitions="Auto,*,Auto,Auto" IsVisible="{Binding IsSearchEnabled}">
+    <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto"
+          IsVisible="{Binding IsSearchEnabled}">
         <Image Classes="searchImage" Margin="35,10,10,0" ZIndex="1000">
             <Image.Source>
                 <DrawingImage>
@@ -23,7 +24,7 @@
             </Image.Source>
         </Image>
 
-        <TextBox Grid.Column="0" Grid.ColumnSpan="4" Name="SearchTextBox"
+        <TextBox Grid.Column="0" Grid.ColumnSpan="5" Name="SearchTextBox"
                  Classes="searchTextBox" Watermark="{x:Static p:Resources.SearchForFilesAndDirectories}"
                  Text="{Binding SearchText}" />
 
@@ -84,6 +85,21 @@
                 </Image>
             </Grid>
         </ToggleButton>
+
+        <Button Grid.Column="4" Name="CloseSearchButton"
+                Command="{Binding ToggleSearchCommand}">
+            <Image Classes="searchImage" Margin="0,11,10,0"
+                   IsVisible="{Binding $parent[ToggleButton].IsChecked}">
+                <Image.Source>
+                    <DrawingImage>
+                        <DrawingImage.Drawing>
+                            <GeometryDrawing Brush="{DynamicResource SearchIconForegroundBrush}"
+                                             Geometry="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"/>
+                        </DrawingImage.Drawing>
+                    </DrawingImage>
+                </Image.Source>
+            </Image>
+        </Button>
     </Grid>
 
 </UserControl>

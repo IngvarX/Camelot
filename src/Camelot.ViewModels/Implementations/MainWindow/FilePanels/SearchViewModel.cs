@@ -1,5 +1,6 @@
 using System;
 using System.Reactive.Linq;
+using System.Windows.Input;
 using Camelot.Avalonia.Interfaces;
 using Camelot.Extensions;
 using Camelot.Services.Abstractions.Models;
@@ -36,6 +37,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         public event EventHandler<EventArgs> SearchSettingsChanged;
 
+        public ICommand ToggleSearchCommand { get; }
+
         public SearchViewModel(
             IRegexService regexService,
             IResourceProvider resourceProvider,
@@ -44,6 +47,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         {
             _regexService = regexService;
             _applicationDispatcher = applicationDispatcher;
+
+            ToggleSearchCommand = ReactiveCommand.Create(ToggleSearch);
 
             Reset();
 

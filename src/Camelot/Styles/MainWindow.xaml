@@ -262,6 +262,15 @@
         <Setter Property="Background" Value="Transparent" />
     </Style>
 
+    <Style Selector="Button#CloseSearchButton">
+        <Setter Property="Width" Value="35" />
+        <Setter Property="Height" Value="35" />
+    </Style>
+
+    <Style Selector="Button#CloseSearchButton:pressed /template/ ContentPresenter">
+        <Setter Property="Background" Value="Transparent" />
+    </Style>
+
     <Style Selector="ToggleButton.searchOptionToggleButton:checked /template/ ContentControl">
         <Setter Property="Foreground" Value="{DynamicResource HighlightBrush}" />
     </Style>

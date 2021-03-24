@@ -31,14 +31,13 @@ namespace Camelot.ViewModels.Tests.FilePanels
             _autoMocker
                 .Setup<IApplicationDispatcher>(m => m.Dispatch(It.IsAny<Action>()))
                 .Callback<Action>(action => action());
+
+            _autoMocker.Use(GetConfiguration());
         }
 
         [Fact]
         public void TestDefaults()
         {
-            var configuration = GetConfiguration();
-            _autoMocker.Use(configuration);
-
             var viewModel = _autoMocker.CreateInstance<SearchViewModel>();
 
             Assert.False(viewModel.IsSearchEnabled);
@@ -48,11 +47,24 @@ namespace Camelot.ViewModels.Tests.FilePanels
         }
 
         [Fact]
+        public void TestToggleCommand()
+        {
+            var viewModel = _autoMocker.CreateInstance<SearchViewModel>();
+
+            viewModel.ToggleSearch();
+            viewModel.SearchText = SearchText;
+
+            Assert.True(viewModel.ToggleSearchCommand.CanExecute(null));
+
+            viewModel.ToggleSearchCommand.Execute(null);
+
+            Assert.False(viewModel.IsSearchEnabled);
+            Assert.Equal(string.Empty, viewModel.SearchText);
+        }
+
+        [Fact]
         public void TestToggle()
         {
-            var configuration = GetConfiguration();
-            _autoMocker.Use(configuration);
-
             var viewModel = _autoMocker.CreateInstance<SearchViewModel>();
             Assert.False(viewModel.IsSearchEnabled);
 
@@ -84,8 +96,6 @@ namespace Camelot.ViewModels.Tests.FilePanels
             _autoMocker
                 .Setup<IRegexService, bool>(m => m.ValidateRegex(It.IsAny<string>()))
                 .Returns(isRegexValid);
-            var configuration = GetConfiguration();
-            _autoMocker.Use(configuration);
 
             var viewModel = _autoMocker.CreateInstance<SearchViewModel>();
 
@@ -102,9 +112,6 @@ namespace Camelot.ViewModels.Tests.FilePanels
         {
             var taskCompletionSource = new TaskCompletionSource<bool>();
 
-            var configuration = GetConfiguration();
-            _autoMocker.Use(configuration);
-
             var viewModel = _autoMocker.CreateInstance<SearchViewModel>();
             viewModel.SearchSettingsChanged += (sender, args) => taskCompletionSource.SetResult(true);
 
@@ -118,9 +125,6 @@ namespace Camelot.ViewModels.Tests.FilePanels
         public async Task TestSearchCaseChanged()
         {
             var taskCompletionSource = new TaskCompletionSource<bool>();
-
-            var configuration = GetConfiguration();
-            _autoMocker.Use(configuration);
 
             var viewModel = _autoMocker.CreateInstance<SearchViewModel>();
             viewModel.SearchSettingsChanged += (sender, args) => taskCompletionSource.SetResult(true);
@@ -141,8 +145,6 @@ namespace Camelot.ViewModels.Tests.FilePanels
             _autoMocker
                 .Setup<IRegexService, bool>(m => m.ValidateRegex(SearchText))
                 .Returns(isRegexValid);
-            var configuration = GetConfiguration();
-            _autoMocker.Use(configuration);
 
             var viewModel = _autoMocker.CreateInstance<SearchViewModel>();
 
