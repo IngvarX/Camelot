@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -58,4 +58,55 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Delete" xml:space="preserve">
+    <value>Elimina</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Data</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Crea</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Copia</value>
+  </data>
+  <data name="ConfigurationHeader" xml:space="preserve">
+    <value>_Configurazione</value>
+  </data>
+  <data name="CommandWithColon" xml:space="preserve">
+    <value>Comando:</value>
+  </data>
+  <data name="CloseTabsToTheRight" xml:space="preserve">
+    <value>Chiudi le schede a destra</value>
+  </data>
+  <data name="CloseTabsToTheLeft" xml:space="preserve">
+    <value>Chiudi le schede a sinistra</value>
+  </data>
+  <data name="CloseTab" xml:space="preserve">
+    <value>Chiudi la scheda</value>
+  </data>
+  <data name="CloseAllButThis" xml:space="preserve">
+    <value>Chiudi tutto tranne questo</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Chiudi</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Annulla</value>
+  </data>
+  <data name="ApplyActionToTheAllFilesAndFolders" xml:space="preserve">
+    <value>Applica questa azione a tutti i file e cartelle</value>
+  </data>
+  <data name="Apply" xml:space="preserve">
+    <value>Applica</value>
+  </data>
+  <data name="AboutPage" xml:space="preserve">
+    <value>Camelot è un gestore di file a doppio pannello scritto in C#</value>
+  </data>
+  <data name="AboutHeader" xml:space="preserve">
+    <value>_Infomarzioni</value>
+  </data>
+  <data name="AboutCamelotTitle" xml:space="preserve">
+    <value>A proposito di Camelot</value>
+  </data>
 </root>

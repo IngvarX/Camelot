@@ -296,7 +296,7 @@
     <value>Général</value>
   </data>
   <data name="FilesRemovingConfirmationTitle" xml:space="preserve">
-    <value>Confirmation de la suppression des fichiers</value>
+    <value>Confirmer la suppression des fichiers</value>
   </data>
   <data name="FileInformationTitle" xml:space="preserve">
     <value>Informations sur le fichier</value>
@@ -405,5 +405,14 @@
   </data>
   <data name="AboutCamelotTitle" xml:space="preserve">
     <value>À propos de Camelot</value>
+  </data>
+  <data name="OpenInNewTabOnOppositePanel" xml:space="preserve">
+    <value>Ouvrir dans un nouvel onglet sur un autre panneau</value>
+  </data>
+  <data name="DuplicateOnOppositePanel" xml:space="preserve">
+    <value>Dupliquer sur le panneau opposé</value>
+  </data>
+  <data name="GitHub" xml:space="preserve">
+    <value>GitHub</value>
   </data>
 </root>
