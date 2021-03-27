@@ -68,12 +68,12 @@
                    PlacementTarget="DirectoryTextBox">
                 <Border BorderBrush="{DynamicResource ThemeBorderMidBrush}"
                         BorderThickness="1">
-                    <ListBox Items="{Binding DirectoryItems}"
+                    <ListBox Items="{Binding SuggestedPaths}"
                              ScrollViewer.HorizontalScrollBarVisibility="Auto"
                              ScrollViewer.VerticalScrollBarVisibility="Disabled">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding}" Tapped="InputElement_OnTapped" />
+                                <TextBlock Text="{Binding Text}" Tapped="InputElement_OnTapped" />
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>

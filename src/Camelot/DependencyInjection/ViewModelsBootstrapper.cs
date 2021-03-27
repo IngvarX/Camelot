@@ -71,6 +71,9 @@ namespace Camelot.DependencyInjection
             services.RegisterLazySingleton<ITabViewModelFactory>(() => new TabViewModelFactory(
                 resolver.GetRequiredService<IPathService>()
             ));
+            services.RegisterLazySingleton<ISuggestedPathViewModelFactory>(() => new SuggestedPathViewModelFactory(
+                resolver.GetRequiredService<IPathService>()
+            ));
             services.RegisterLazySingleton<IThemeViewModelFactory>(() => new ThemeViewModelFactory(
                 resolver.GetRequiredService<IResourceProvider>(),
                 resolver.GetRequiredService<ThemesNamesConfiguration>()
@@ -275,6 +278,8 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IFileSizeFormatter>(),
                 resolver.GetRequiredService<IClipboardOperationsService>(),
                 resolver.GetRequiredService<IFileSystemNodeViewModelComparerFactory>(),
+                resolver.GetRequiredService<ISuggestionsService>(),
+                resolver.GetRequiredService<ISuggestedPathViewModelFactory>(),
                 resolver.GetRequiredService<ISearchViewModel>(),
                 tabsListViewModel,
                 resolver.GetRequiredService<IOperationsViewModel>()

@@ -73,6 +73,11 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IEnvironmentFileService>(),
                 resolver.GetRequiredService<ILogger>()
             ));
+            services.RegisterLazySingleton<ISuggestionsService>(() => new SuggestionsService(
+                resolver.GetRequiredService<IDirectoryService>(),
+                resolver.GetRequiredService<IPathService>(),
+                resolver.GetRequiredService<SuggestionsConfiguration>()
+            ));
             services.RegisterLazySingleton<IDateTimeProvider>(() => new DateTimeProvider());
             services.RegisterLazySingleton<IDrivesUpdateService>(() => new DrivesUpdateService(
                 resolver.GetRequiredService<IMountedDriveService>(),

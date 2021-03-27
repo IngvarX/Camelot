@@ -31,13 +31,15 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private readonly IFileSizeFormatter _fileSizeFormatter;
         private readonly IClipboardOperationsService _clipboardOperationsService;
         private readonly IFileSystemNodeViewModelComparerFactory _comparerFactory;
+        private readonly ISuggestionsService _suggestionsService;
+        private readonly ISuggestedPathViewModelFactory _suggestedPathViewModelFactory;
 
         private readonly ObservableCollection<IFileSystemNodeViewModel> _fileSystemNodes;
         private readonly ObservableCollection<IFileSystemNodeViewModel> _selectedFileSystemNodes;
         private readonly object _locker;
 
         private string _currentDirectory;
-        private string _currentDirectoryText;
+        private string _currentDirectorySearchText;
 
         private IEnumerable<IFileViewModel> SelectedFiles => _selectedFileSystemNodes.OfType<IFileViewModel>();
 
@@ -61,13 +63,13 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             get => _currentDirectory;
             set
             {
-                _currentDirectoryText = value;
+                _currentDirectorySearchText = value;
                 Activate();
 
                 if (!_directoryService.CheckIfExists(value))
                 {
                     ShouldShowSuggestions = true;
-                    this.RaisePropertyChanged(nameof(DirectoryItems));
+                    this.RaisePropertyChanged(nameof(SuggestedPaths));
 
                     return;
                 }
@@ -92,11 +94,10 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         public IEnumerable<IFileSystemNodeViewModel> FileSystemNodes => _fileSystemNodes;
 
-        public IEnumerable<string> DirectoryItems => _directoryService
-            .GetChildDirectories(_currentDirectory)
-            .Select(d => d.FullPath)
-            .Where(n => n.StartsWith(_currentDirectoryText))
-            .Take(10);
+        public IEnumerable<ISuggestedPathViewModel> SuggestedPaths =>
+            _suggestionsService
+                .GetSuggestions(_currentDirectorySearchText)
+                .Select(p => _suggestedPathViewModelFactory.Create(_currentDirectorySearchText, p));
 
         public IList<IFileSystemNodeViewModel> SelectedFileSystemNodes => _selectedFileSystemNodes;
 
@@ -134,6 +135,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             IFileSizeFormatter fileSizeFormatter,
             IClipboardOperationsService clipboardOperationsService,
             IFileSystemNodeViewModelComparerFactory comparerFactory,
+            ISuggestionsService suggestionsService,
+            ISuggestedPathViewModelFactory suggestedPathViewModelFactory,
             ISearchViewModel searchViewModel,
             ITabsListViewModel tabsListViewModel,
             IOperationsViewModel operationsViewModel)
@@ -147,6 +150,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             _fileSizeFormatter = fileSizeFormatter;
             _clipboardOperationsService = clipboardOperationsService;
             _comparerFactory = comparerFactory;
+            _suggestionsService = suggestionsService;
+            _suggestedPathViewModelFactory = suggestedPathViewModelFactory;
 
             SearchViewModel = searchViewModel;
             TabsListViewModel = tabsListViewModel;

@@ -171,8 +171,9 @@ namespace Camelot.Views.Main
         private void InputElement_OnTapped(object sender, RoutedEventArgs e)
         {
             var dataContextProvider = (IDataContextProvider) sender;
+            var viewModel = (ISuggestedPathViewModel) dataContextProvider.DataContext;
 
-            DirectoryTextBox.Text = dataContextProvider.DataContext.ToString();
+            DirectoryTextBox.Text = viewModel.FullPath;
         }
     }
 }

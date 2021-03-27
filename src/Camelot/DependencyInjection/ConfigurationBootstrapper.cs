@@ -39,6 +39,7 @@ namespace Camelot.DependencyInjection
             RegisterDefaultThemeConfiguration(services, configuration);
             RegisterThemesNamesConfiguration(services, configuration);
             RegisterLanguagesConfiguration(services, configuration);
+            RegisterSuggestionsConfiguration(services, configuration);
         }
 
         private static IConfiguration BuildConfiguration() =>
@@ -225,6 +226,14 @@ namespace Camelot.DependencyInjection
         {
             var config = new LanguagesConfiguration();
             configuration.GetSection("Languages").Bind(config);
+            services.RegisterConstant(config);
+        }
+
+        private static void RegisterSuggestionsConfiguration(IMutableDependencyResolver services,
+            IConfiguration configuration)
+        {
+            var config = new SuggestionsConfiguration();
+            configuration.GetSection("Suggestions").Bind(config);
             services.RegisterConstant(config);
         }
     }
