@@ -73,7 +73,7 @@
                              ScrollViewer.VerticalScrollBarVisibility="Disabled">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Text}" Tapped="InputElement_OnTapped" />
+                                <controls:SuggestionView DataContext="{Binding}" Tapped="InputElement_OnTapped" />
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>

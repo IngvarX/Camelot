@@ -1,0 +1,31 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:filePanels="clr-namespace:Camelot.ViewModels.Implementations.MainWindow.FilePanels;assembly=Camelot.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Camelot.Views.Main.Controls.SuggestionView">
+
+    <Design.DataContext>
+        <filePanels:SuggestedPathViewModel />
+    </Design.DataContext>
+
+    <Grid ColumnDefinitions="Auto,*" Height="30">
+        <Image Classes="iconImage" Margin="10,0,3,1" VerticalAlignment="Center">
+            <Image.Source>
+                <DrawingImage>
+                    <DrawingImage.Drawing>
+                        <GeometryDrawing Brush="{DynamicResource MainWindowForegroundBrush}"
+                                         Geometry="M464 128H272l-64-64H48C21.49 64 0 85.49 0 112v288c0 26.51 21.49 48 48 48h416c26.51 0 48-21.49 48-48V176c0-26.51-21.49-48-48-48z"/>
+                    </DrawingImage.Drawing>
+                </DrawingImage>
+            </Image.Source>
+        </Image>
+
+        <TextBlock Grid.Column="1"
+                   Classes="filePanelTextBlock"
+                   VerticalAlignment="Center"
+                   Text="{Binding Text}" />
+    </Grid>
+
+</UserControl>
