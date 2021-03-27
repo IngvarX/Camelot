@@ -30,7 +30,7 @@ namespace Camelot.Services
             );
 
             return new[] {'/', '\\'}.Contains(commonPrefix[^1])
-                ? TrimPathSeparators(commonPrefix)
+                ? RightTrimPathSeparators(commonPrefix)
                 : GetParentDirectory(commonPrefix);
         }
 
@@ -40,8 +40,6 @@ namespace Camelot.Services
 
         public string GetRelativePath(string relativeTo, string path) =>
             _environmentPathService.GetRelativePath(relativeTo, path);
-
-        public string GetPathRoot(string path) => _environmentPathService.GetPathRoot(path);
 
         public string GetFileNameWithoutExtension(string path)
         {
@@ -85,7 +83,9 @@ namespace Camelot.Services
 
             return extension.StartsWith(".") ? extension.Substring(1) : extension;
         }
-        
-        public string TrimPathSeparators(string path) => path == "/" ? path : path.TrimEnd('/').TrimEnd('\\');
+
+        public string RightTrimPathSeparators(string path) => path == "/" ? path : path.TrimEnd('/').TrimEnd('\\');
+
+        public string LeftTrimPathSeparators(string relativePath) => relativePath.TrimStart('/').TrimStart('\\');
     }
 }

@@ -16,14 +16,11 @@ namespace Camelot.ViewModels.Factories.Implementations
             _pathService = pathService;
         }
 
-        public ISuggestedPathViewModel Create(string root, string fullPath)
+        public ISuggestedPathViewModel Create(string searchText, string fullPath)
         {
-            if (root.Length >= fullPath.Length)
-            {
-                root = _pathService.GetParentDirectory(root);
-            }
-
-            var text = fullPath.Substring(root.Length);
+            var root = _pathService.GetParentDirectory(searchText);
+            var relativePath = _pathService.GetRelativePath(root, fullPath);
+            var text = _pathService.LeftTrimPathSeparators(relativePath);
 
             return new SuggestedPathViewModel(fullPath, SuggestedPathType.Directory, text);
         }

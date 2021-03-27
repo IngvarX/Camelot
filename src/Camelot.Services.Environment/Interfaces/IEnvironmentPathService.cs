@@ -8,8 +8,6 @@ namespace Camelot.Services.Environment.Interfaces
 
         string GetRelativePath(string relativeTo, string path);
 
-        string GetPathRoot(string path);
-
         string GetFileNameWithoutExtension(string path);
 
         string GetFileName(string path);

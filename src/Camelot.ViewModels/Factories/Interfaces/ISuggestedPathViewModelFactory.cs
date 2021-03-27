@@ -4,6 +4,6 @@ namespace Camelot.ViewModels.Factories.Interfaces
 {
     public interface ISuggestedPathViewModelFactory
     {
-        ISuggestedPathViewModel Create(string root, string fullPath);
+        ISuggestedPathViewModel Create(string searchText, string fullPath);
     }
 }

@@ -174,6 +174,8 @@ namespace Camelot.Views.Main
             var viewModel = (ISuggestedPathViewModel) dataContextProvider.DataContext;
 
             DirectoryTextBox.Text = viewModel.FullPath;
+            DirectoryTextBox.CaretIndex = DirectoryTextBox.Text.Length;
+            DirectoryTextBox.Focus();
         }
     }
 }

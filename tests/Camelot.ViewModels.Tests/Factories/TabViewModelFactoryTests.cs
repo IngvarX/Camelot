@@ -16,7 +16,7 @@ namespace Camelot.ViewModels.Tests.Factories
             var tabModel = new TabStateModel {Directory = directoryName, SortingSettings = new SortingSettingsStateModel()};
             var pathServiceMock = new Mock<IPathService>();
             pathServiceMock
-                .Setup(m => m.TrimPathSeparators(directoryName))
+                .Setup(m => m.RightTrimPathSeparators(directoryName))
                 .Returns(directoryName);
 
             var tabViewModelFactory = new TabViewModelFactory(pathServiceMock.Object);

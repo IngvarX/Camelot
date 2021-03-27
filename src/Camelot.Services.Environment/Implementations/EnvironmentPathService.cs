@@ -11,8 +11,6 @@ namespace Camelot.Services.Environment.Implementations
 
         public string GetRelativePath(string relativeTo, string path) => Path.GetRelativePath(relativeTo, path);
 
-        public string GetPathRoot(string path) => Path.GetPathRoot(path);
-
         public string GetFileNameWithoutExtension(string path) => Path.GetFileNameWithoutExtension(path);
 
         public string GetFileName(string path) => Path.GetFileName(path);

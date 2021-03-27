@@ -19,7 +19,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
         {
             _autoMocker = new AutoMocker();
             _autoMocker
-                .Setup<IPathService, string>(m => m.TrimPathSeparators(CurrentDirectory))
+                .Setup<IPathService, string>(m => m.RightTrimPathSeparators(CurrentDirectory))
                 .Returns(CurrentDirectory);
             _autoMocker
                 .Setup<IPathService, string>(m => m.GetFileName(CurrentDirectory))
@@ -136,7 +136,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
         {
             const string directory = "dir";
             _autoMocker
-                .Setup<IPathService, string>(m => m.TrimPathSeparators(directory))
+                .Setup<IPathService, string>(m => m.RightTrimPathSeparators(directory))
                 .Returns(directory)
                 .Verifiable();
             _autoMocker
@@ -149,7 +149,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
 
             Assert.Equal(directory, tabViewModel.DirectoryName);
             _autoMocker
-                .Verify<IPathService>(m => m.TrimPathSeparators(directory), Times.Once);
+                .Verify<IPathService>(m => m.RightTrimPathSeparators(directory), Times.Once);
             _autoMocker
                 .Verify<IPathService>(m => m.GetFileName(directory), Times.Once);
         }

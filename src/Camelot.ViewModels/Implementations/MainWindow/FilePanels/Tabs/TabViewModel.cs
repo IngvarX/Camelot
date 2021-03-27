@@ -27,7 +27,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
             }
         }
 
-        public string DirectoryName => _pathService.GetFileName(_pathService.TrimPathSeparators(CurrentDirectory));
+        public string DirectoryName => _pathService.GetFileName(_pathService.RightTrimPathSeparators(CurrentDirectory));
 
         [Reactive]
         public bool IsActive { get; set; }
