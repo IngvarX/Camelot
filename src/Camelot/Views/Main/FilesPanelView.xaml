@@ -10,6 +10,7 @@
              xmlns:enums="clr-namespace:Camelot.Services.Abstractions.Models.Enums;assembly=Camelot.Services.Abstractions"
              xmlns:enumsViewModels="clr-namespace:Camelot.ViewModels.Implementations.MainWindow.FilePanels.Enums;assembly=Camelot.ViewModels"
              xmlns:tabs="clr-namespace:Camelot.Views.Main.Controls.Tabs"
+             xmlns:nodes="clr-namespace:Camelot.ViewModels.Implementations.MainWindow.FilePanels.Nodes;assembly=Camelot.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Camelot.Views.Main.FilesPanelView">
 
@@ -63,15 +64,11 @@
                 </Image>
             </Button>
 
-            <Popup
-                IsOpen="{Binding ShouldShowSuggestions}"
-                Name="PART_Popup"
-                PlacementTarget="DirectoryTextBox">
+            <Popup IsOpen="{Binding ShouldShowSuggestions}"
+                   PlacementTarget="DirectoryTextBox">
                 <Border BorderBrush="{DynamicResource ThemeBorderMidBrush}"
                         BorderThickness="1">
-                    <ListBox Name="PART_SelectingItemsControl"
-                             Items="{Binding DirectoryItems}"
-                             BorderThickness="0"
+                    <ListBox Items="{Binding DirectoryItems}"
                              ScrollViewer.HorizontalScrollBarVisibility="Auto"
                              ScrollViewer.VerticalScrollBarVisibility="Disabled">
                         <ListBox.ItemTemplate>
@@ -164,7 +161,7 @@
                         <DataTemplate>
                             <ContentControl Content="{Binding DataContext, RelativeSource={RelativeSource AncestorType=DataGridCell}}">
                                 <ContentControl.DataTemplates>
-                                    <DataTemplate DataType="{x:Type filePanels:DirectoryViewModel}">
+                                    <DataTemplate DataType="{x:Type nodes:DirectoryViewModel}">
                                         <Image Classes="iconImage" Margin="10,5,3,1" VerticalAlignment="Center">
                                             <Image.Source>
                                                 <DrawingImage>
@@ -177,7 +174,7 @@
                                         </Image>
                                     </DataTemplate>
 
-                                    <DataTemplate DataType="{x:Type filePanels:FileViewModel}">
+                                    <DataTemplate DataType="{x:Type nodes:FileViewModel}">
                                         <Image Classes="iconImage" Margin="10,3,3,3" VerticalAlignment="Center">
                                             <Image.Source>
                                                 <DrawingImage>
@@ -212,7 +209,7 @@
                         <DataTemplate>
                             <ContentControl Content="{Binding DataContext, RelativeSource={RelativeSource AncestorType=DataGridCell}}">
                                 <ContentControl.DataTemplates>
-                                    <DataTemplate DataType="{x:Type filePanels:DirectoryViewModel}">
+                                    <DataTemplate DataType="{x:Type nodes:DirectoryViewModel}">
                                         <Grid>
                                             <Grid IsVisible="{Binding !IsParentDirectory}">
                                                 <TextBlock Classes="filePanelTextBlock" Text="{Binding Name}" IsVisible="{Binding !IsEditing}"
@@ -230,7 +227,7 @@
                                         </Grid>
                                     </DataTemplate>
 
-                                    <DataTemplate DataType="{x:Type filePanels:FileViewModel}">
+                                    <DataTemplate DataType="{x:Type nodes:FileViewModel}">
                                         <Grid>
                                             <TextBlock Classes="filePanelTextBlock" Text="{Binding Name}" IsVisible="{Binding !IsEditing}"
                                                        Tapped="OnNameTextBlockTapped" />
@@ -265,11 +262,11 @@
                         <DataTemplate>
                             <ContentControl Content="{Binding DataContext, RelativeSource={RelativeSource AncestorType=DataGridCell}}">
                                 <ContentControl.DataTemplates>
-                                    <DataTemplate DataType="{x:Type filePanels:DirectoryViewModel}">
+                                    <DataTemplate DataType="{x:Type nodes:DirectoryViewModel}">
                                         <TextBlock Text="" />
                                     </DataTemplate>
 
-                                    <DataTemplate DataType="{x:Type filePanels:FileViewModel}">
+                                    <DataTemplate DataType="{x:Type nodes:FileViewModel}">
                                         <TextBlock Classes="filePanelTextBlock" Text="{Binding Extension}"
                                                    IsVisible="{Binding !IsEditing}" />
                                     </DataTemplate>
@@ -296,11 +293,11 @@
                         <DataTemplate>
                             <ContentControl Content="{Binding DataContext, RelativeSource={RelativeSource AncestorType=DataGridCell}}">
                                 <ContentControl.DataTemplates>
-                                    <DataTemplate DataType="{x:Type filePanels:DirectoryViewModel}">
+                                    <DataTemplate DataType="{x:Type nodes:DirectoryViewModel}">
                                         <TextBlock Classes="filePanelTextBlock" Text="{x:Static p:Resources.DirectoryTemplate}" />
                                     </DataTemplate>
 
-                                    <DataTemplate DataType="{x:Type filePanels:FileViewModel}">
+                                    <DataTemplate DataType="{x:Type nodes:FileViewModel}">
                                         <TextBlock Classes="filePanelTextBlock" Text="{Binding FormattedSize}" />
                                     </DataTemplate>
                                 </ContentControl.DataTemplates>

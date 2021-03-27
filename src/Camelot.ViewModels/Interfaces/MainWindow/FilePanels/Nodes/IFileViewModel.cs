@@ -1,4 +1,4 @@
-namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels
+namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Nodes
 {
     public interface IFileViewModel : IFileSystemNodeViewModel
     {

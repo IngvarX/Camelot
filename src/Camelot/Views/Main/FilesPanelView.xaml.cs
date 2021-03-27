@@ -8,6 +8,7 @@ using Avalonia.Markup.Xaml;
 using Camelot.Extensions;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
+using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Nodes;
 using DynamicData;
 
 namespace Camelot.Views.Main

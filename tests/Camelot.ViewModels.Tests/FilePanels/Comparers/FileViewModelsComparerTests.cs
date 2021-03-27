@@ -2,6 +2,7 @@ using System;
 using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Comparers;
+using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Nodes;
 using Moq.AutoMock;
 using Xunit;
 

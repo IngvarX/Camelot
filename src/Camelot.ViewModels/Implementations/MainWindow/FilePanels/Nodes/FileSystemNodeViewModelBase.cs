@@ -4,12 +4,12 @@ using System.Windows.Input;
 using Camelot.Services.Abstractions.Behaviors;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Enums;
 using Camelot.ViewModels.Interfaces.Behaviors;
-using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
+using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Nodes;
 using Camelot.ViewModels.Services.Interfaces;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
+namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Nodes
 {
     public abstract class FileSystemNodeViewModelBase : ViewModelBase, IFileSystemNodeViewModel
     {
