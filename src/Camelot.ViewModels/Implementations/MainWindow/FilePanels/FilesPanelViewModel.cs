@@ -97,7 +97,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         public IEnumerable<ISuggestedPathViewModel> SuggestedPaths =>
             _suggestionsService
                 .GetSuggestions(_currentDirectorySearchText)
-                .Select(p => _suggestedPathViewModelFactory.Create(_currentDirectorySearchText, p));
+                .Select(sm => _suggestedPathViewModelFactory.Create(_currentDirectorySearchText, sm));
 
         public IList<IFileSystemNodeViewModel> SelectedFileSystemNodes => _selectedFileSystemNodes;
 
