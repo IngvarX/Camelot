@@ -177,26 +177,27 @@ namespace Camelot.Views.Main
 
         private void DirectoryTextBoxOnKeyUp(object sender, KeyEventArgs e)
         {
-            if (e.Key != Key.Down && e.Key != Key.Enter)
+            if (e.Key != Key.Down)
             {
                 return;
             }
 
+            SuggestionsListBox.SelectedIndex = 0;
+            var topItem = SuggestionsListBox
+                .GetVisualDescendants()
+                .OfType<SuggestionView>()
+                .FirstOrDefault();
+            topItem?.Focus();
+
+            e.Handled = true;
+        }
+
+        private void SuggestionsListBoxOnKeyUp(object sender, KeyEventArgs e)
+        {
             if (e.Key == Key.Enter)
             {
                 SelectDirectory(SuggestionsListBox.SelectedItem);
             }
-            else
-            {
-                SuggestionsListBox.SelectedIndex = 0;
-                var topItem = SuggestionsListBox
-                    .GetVisualDescendants()
-                    .OfType<SuggestionView>()
-                    .FirstOrDefault();
-                topItem?.Focus();
-            }
-
-            e.Handled = true;
         }
 
         private void SelectDirectory(object sender)

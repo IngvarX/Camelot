@@ -71,7 +71,8 @@
                     <ListBox Name="SuggestionsListBox"
                              Items="{Binding SuggestedPaths}"
                              ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                             ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                             ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                             KeyUp="SuggestionsListBoxOnKeyUp">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <controls:SuggestionView DataContext="{Binding}"
