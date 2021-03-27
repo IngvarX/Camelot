@@ -1,5 +1,4 @@
 using Camelot.Services.Abstractions.Behaviors;
-using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Enums;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Nodes;
 using Camelot.ViewModels.Interfaces.Behaviors;

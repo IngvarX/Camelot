@@ -6,7 +6,6 @@ using Camelot.Services.Abstractions.Models.Operations;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
 using Camelot.ViewModels.Implementations.Dialogs.Results;
-using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Nodes;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;

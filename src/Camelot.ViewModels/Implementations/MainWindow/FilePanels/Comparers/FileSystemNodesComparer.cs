@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Nodes;
-using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Nodes;
 
 namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Comparers
