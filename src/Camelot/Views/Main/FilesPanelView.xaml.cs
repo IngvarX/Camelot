@@ -166,5 +166,12 @@ namespace Camelot.Views.Main
             viewModel.IsWaitingForEdit = viewModel.IsEditing = false;
 
         private void ClearSelection() => FilesDataGrid.SelectedItems.Clear();
+
+        private void InputElement_OnTapped(object sender, RoutedEventArgs e)
+        {
+            var dataContextProvider = (IDataContextProvider) sender;
+
+            DirectoryTextBox.Text = dataContextProvider.DataContext.ToString();
+        }
     }
 }

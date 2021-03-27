@@ -15,6 +15,7 @@ using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs;
 using DynamicData;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 {
@@ -35,6 +36,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private readonly object _locker;
 
         private string _currentDirectory;
+        private string _currentDirectoryText;
 
         private IEnumerable<IFileViewModel> SelectedFiles => _selectedFileSystemNodes.OfType<IFileViewModel>();
 
@@ -50,15 +52,22 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         public bool IsActive => SelectedTab.IsGloballyActive;
 
+        [Reactive]
+        public bool ShouldShowSuggestions { get; set; }
+
         public string CurrentDirectory
         {
             get => _currentDirectory;
             set
             {
+                _currentDirectoryText = value;
                 Activate();
 
                 if (!_directoryService.CheckIfExists(value))
                 {
+                    ShouldShowSuggestions = true;
+                    this.RaisePropertyChanged(nameof(DirectoryItems));
+
                     return;
                 }
 
@@ -75,10 +84,18 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
                 _fileSystemWatchingService.StartWatching(CurrentDirectory);
 
                 CurrentDirectoryChanged.Raise(this, EventArgs.Empty);
+
+                ShouldShowSuggestions = false;
             }
         }
 
         public IEnumerable<IFileSystemNodeViewModel> FileSystemNodes => _fileSystemNodes;
+
+        public IEnumerable<string> DirectoryItems => _directoryService
+            .GetChildDirectories(_currentDirectory)
+            .Select(d => d.FullPath)
+            .Where(n => n.StartsWith(_currentDirectoryText))
+            .Take(10);
 
         public IList<IFileSystemNodeViewModel> SelectedFileSystemNodes => _selectedFileSystemNodes;
 

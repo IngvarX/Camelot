@@ -63,6 +63,26 @@
                 </Image>
             </Button>
 
+            <Popup
+                IsOpen="{Binding ShouldShowSuggestions}"
+                Name="PART_Popup"
+                PlacementTarget="DirectoryTextBox">
+                <Border BorderBrush="{DynamicResource ThemeBorderMidBrush}"
+                        BorderThickness="1">
+                    <ListBox Name="PART_SelectingItemsControl"
+                             Items="{Binding DirectoryItems}"
+                             BorderThickness="0"
+                             ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                             ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}" Tapped="InputElement_OnTapped" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Border>
+            </Popup>
+
             <TextBox Name="DirectoryTextBox" Classes="directoryTextBox" GotFocus="OnDirectoryTextBoxGotFocus"
                      Text="{Binding CurrentDirectory, Mode=TwoWay}" />
         </DockPanel>
