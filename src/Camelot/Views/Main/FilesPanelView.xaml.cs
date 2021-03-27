@@ -198,6 +198,10 @@ namespace Camelot.Views.Main
             {
                 SelectDirectory(SuggestionsListBox.SelectedItem);
             }
+            else if (e.Key == Key.Up && SuggestionsListBox.SelectedIndex == 0)
+            {
+                DirectoryTextBox.Focus();
+            }
         }
 
         private void SelectDirectory(object sender)
