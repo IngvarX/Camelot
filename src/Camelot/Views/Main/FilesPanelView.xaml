@@ -68,19 +68,24 @@
                    PlacementTarget="DirectoryTextBox">
                 <Border BorderBrush="{DynamicResource ThemeBorderMidBrush}"
                         BorderThickness="1">
-                    <ListBox Items="{Binding SuggestedPaths}"
+                    <ListBox Name="SuggestionsListBox"
+                             Items="{Binding SuggestedPaths}"
                              ScrollViewer.HorizontalScrollBarVisibility="Auto"
                              ScrollViewer.VerticalScrollBarVisibility="Disabled">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <controls:SuggestionView DataContext="{Binding}" Tapped="InputElement_OnTapped" />
+                                <controls:SuggestionView DataContext="{Binding}"
+                                                         Tapped="SuggestionViewOnTapped" />
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
                 </Border>
             </Popup>
 
-            <TextBox Name="DirectoryTextBox" Classes="directoryTextBox" GotFocus="OnDirectoryTextBoxGotFocus"
+            <TextBox Name="DirectoryTextBox"
+                     Classes="directoryTextBox"
+                     GotFocus="OnDirectoryTextBoxGotFocus"
+                     KeyUp="DirectoryTextBoxOnKeyUp"
                      Text="{Binding CurrentDirectory, Mode=TwoWay}" />
         </DockPanel>
 

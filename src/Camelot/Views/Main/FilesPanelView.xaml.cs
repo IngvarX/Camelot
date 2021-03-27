@@ -5,10 +5,12 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using Avalonia.VisualTree;
 using Camelot.Extensions;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Nodes;
+using Camelot.Views.Main.Controls;
 using DynamicData;
 
 namespace Camelot.Views.Main
@@ -18,6 +20,8 @@ namespace Camelot.Views.Main
         private DataGrid FilesDataGrid => this.FindControl<DataGrid>("FilesDataGrid");
 
         private TextBox DirectoryTextBox => this.FindControl<TextBox>("DirectoryTextBox");
+
+        private ListBox SuggestionsListBox => this.FindControl<ListBox>("SuggestionsListBox");
 
         private FilesPanelViewModel ViewModel => (FilesPanelViewModel) DataContext;
 
@@ -168,10 +172,36 @@ namespace Camelot.Views.Main
 
         private void ClearSelection() => FilesDataGrid.SelectedItems.Clear();
 
-        private void InputElement_OnTapped(object sender, RoutedEventArgs e)
+        private void SuggestionViewOnTapped(object sender, RoutedEventArgs e) =>
+            SelectDirectory(((IDataContextProvider) sender).DataContext);
+
+        private void DirectoryTextBoxOnKeyUp(object sender, KeyEventArgs e)
         {
-            var dataContextProvider = (IDataContextProvider) sender;
-            var viewModel = (ISuggestedPathViewModel) dataContextProvider.DataContext;
+            if (e.Key != Key.Down && e.Key != Key.Enter)
+            {
+                return;
+            }
+
+            if (e.Key == Key.Enter)
+            {
+                SelectDirectory(SuggestionsListBox.SelectedItem);
+            }
+            else
+            {
+                SuggestionsListBox.SelectedIndex = 0;
+                var topItem = SuggestionsListBox
+                    .GetVisualDescendants()
+                    .OfType<SuggestionView>()
+                    .FirstOrDefault();
+                topItem?.Focus();
+            }
+
+            e.Handled = true;
+        }
+
+        private void SelectDirectory(object sender)
+        {
+            var viewModel = (ISuggestedPathViewModel) sender;
 
             DirectoryTextBox.Text = viewModel.FullPath;
             DirectoryTextBox.CaretIndex = DirectoryTextBox.Text.Length;
