@@ -72,11 +72,12 @@
                              Items="{Binding SuggestedPaths}"
                              ScrollViewer.HorizontalScrollBarVisibility="Auto"
                              ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                             KeyUp="SuggestionsListBoxOnKeyUp">
+                             KeyDown="SuggestionsListBoxOnKeyDown">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <controls:SuggestionView DataContext="{Binding}"
-                                                         Tapped="SuggestionViewOnTapped" />
+                                                         Tapped="SuggestionViewOnTapped"
+                                                         Width="{Binding #DirectoryTextBox.Bounds.Width}" />
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>

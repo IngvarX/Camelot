@@ -192,7 +192,7 @@ namespace Camelot.Views.Main
             e.Handled = true;
         }
 
-        private void SuggestionsListBoxOnKeyUp(object sender, KeyEventArgs e)
+        private void SuggestionsListBoxOnKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
@@ -200,6 +200,7 @@ namespace Camelot.Views.Main
             }
             else if (e.Key == Key.Up && SuggestionsListBox.SelectedIndex == 0)
             {
+                SuggestionsListBox.SelectedItem = null;
                 DirectoryTextBox.Focus();
             }
         }
