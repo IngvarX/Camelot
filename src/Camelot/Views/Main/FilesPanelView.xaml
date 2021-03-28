@@ -169,7 +169,7 @@
                             <ContentControl Content="{Binding DataContext, RelativeSource={RelativeSource AncestorType=DataGridCell}}">
                                 <ContentControl.DataTemplates>
                                     <DataTemplate DataType="{x:Type nodes:DirectoryViewModel}">
-                                        <Image Classes="iconImage" Margin="10,5,3,1" VerticalAlignment="Center">
+                                        <Image Classes="iconImage" Margin="10,4,3,3" VerticalAlignment="Center">
                                             <Image.Source>
                                                 <DrawingImage>
                                                     <DrawingImage.Drawing>

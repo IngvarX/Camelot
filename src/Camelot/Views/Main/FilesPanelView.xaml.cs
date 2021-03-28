@@ -177,31 +177,42 @@ namespace Camelot.Views.Main
 
         private void DirectoryTextBoxOnKeyUp(object sender, KeyEventArgs e)
         {
-            if (e.Key != Key.Down)
+            if (e.Key != Key.Down && e.Key != Key.Escape)
             {
                 return;
             }
 
-            SuggestionsListBox.SelectedIndex = 0;
-            var topItem = SuggestionsListBox
-                .GetVisualDescendants()
-                .OfType<SuggestionView>()
-                .FirstOrDefault();
-            topItem?.Focus();
+            if (e.Key == Key.Down)
+            {
+                SuggestionsListBox.SelectedIndex = 0;
+                var topItem = SuggestionsListBox
+                    .GetVisualDescendants()
+                    .OfType<SuggestionView>()
+                    .FirstOrDefault();
+                topItem?.Focus();
+            }
+            else
+            {
+                HideSuggestionsPopup();
+            }
 
             e.Handled = true;
         }
 
         private void SuggestionsListBoxOnKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
+            switch (e.Key)
             {
-                SelectDirectory(SuggestionsListBox.SelectedItem);
-            }
-            else if (e.Key == Key.Up && SuggestionsListBox.SelectedIndex == 0)
-            {
-                SuggestionsListBox.SelectedItem = null;
-                DirectoryTextBox.Focus();
+                case Key.Enter:
+                    SelectDirectory(SuggestionsListBox.SelectedItem);
+                    break;
+                case Key.Up when SuggestionsListBox.SelectedIndex == 0:
+                    SuggestionsListBox.SelectedItem = null;
+                    DirectoryTextBox.Focus();
+                    break;
+                case Key.Escape:
+                    HideSuggestionsPopup();
+                    break;
             }
         }
 
@@ -213,5 +224,7 @@ namespace Camelot.Views.Main
             DirectoryTextBox.CaretIndex = DirectoryTextBox.Text.Length;
             DirectoryTextBox.Focus();
         }
+
+        private void HideSuggestionsPopup() => ViewModel.ShouldShowSuggestions = false;
     }
 }
