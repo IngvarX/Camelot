@@ -61,6 +61,9 @@ namespace Camelot.ViewModels.Tests.FilePanels
             _autoMocker
                 .Setup<IFileService, IReadOnlyList<FileModel>>(m => m.GetFiles(NewDirectory, It.IsAny<ISpecification<NodeModelBase>>()))
                 .Returns(new FileModel[] {});
+            _autoMocker
+                .Setup<ISearchViewModel, INodeSpecification>(m => m.GetSpecification())
+                .Returns(new Mock<INodeSpecification>().Object);
 
             var filesPanelViewModel = _autoMocker.CreateInstance<FilesPanelViewModel>();
 
@@ -77,6 +80,9 @@ namespace Camelot.ViewModels.Tests.FilePanels
         public void TestSelection()
         {
             const long size = 42;
+            _autoMocker
+                .Setup<ISearchViewModel, INodeSpecification>(m => m.GetSpecification())
+                .Returns(new Mock<INodeSpecification>().Object);
             var fileViewModelMock = new Mock<IFileViewModel>();
             fileViewModelMock
                 .SetupGet(m => m.Size)
@@ -149,6 +155,9 @@ namespace Camelot.ViewModels.Tests.FilePanels
             _autoMocker
                 .Setup<IFileSystemNodeViewModelFactory, IFileSystemNodeViewModel>(m => m.Create(It.IsAny<DirectoryModel>(), It.IsAny<bool>()))
                 .Returns(new Mock<IDirectoryViewModel>().Object);
+            _autoMocker
+                .Setup<ISearchViewModel, INodeSpecification>(m => m.GetSpecification())
+                .Returns(new Mock<INodeSpecification>().Object);
             var tabViewModelMock = new Mock<ITabViewModel>();
             tabViewModelMock
                 .SetupGet(m => m.CurrentDirectory)
@@ -198,6 +207,9 @@ namespace Camelot.ViewModels.Tests.FilePanels
         [Fact]
         public void TestRefreshCommand()
         {
+            _autoMocker
+                .Setup<ISearchViewModel, INodeSpecification>(m => m.GetSpecification())
+                .Returns(new Mock<INodeSpecification>().Object);
             _autoMocker
                 .Setup<IDirectoryService, bool>(m => m.CheckIfExists(AppRootDirectory))
                 .Returns(true);
