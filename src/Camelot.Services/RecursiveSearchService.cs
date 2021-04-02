@@ -26,26 +26,37 @@ namespace Camelot.Services
             Task TaskFactory(RecursiveSearchResult r) =>
                 Task.Run(() =>
                 {
-                    foreach (var file in _directoryService.GetFilesRecursively(directory))
-                    {
-                        var model = _fileService.GetFile(file);
-                        if (specification.IsSatisfiedBy(model))
-                        {
-                            r.RaiseNodeFoundEvent(model);
-                        }
-                    }
-
-                    foreach (var dir in _directoryService.GetDirectoriesRecursively(directory))
-                    {
-                        var model = _directoryService.GetDirectory(dir);
-                        if (specification.IsSatisfiedBy(model))
-                        {
-                            r.RaiseNodeFoundEvent(model);
-                        }
-                    }
+                    ProcessFiles(directory, specification, r);
+                    ProcessDirectories(directory, specification, r);
                 }, cancellationToken);
 
             return new RecursiveSearchResult(TaskFactory);
+        }
+
+        private void ProcessFiles(string directory, ISpecification<NodeModelBase> specification,
+            RecursiveSearchResult recursiveSearchResult)
+        {
+            foreach (var file in _directoryService.GetFilesRecursively(directory))
+            {
+                var model = _fileService.GetFile(file);
+                if (specification.IsSatisfiedBy(model))
+                {
+                    recursiveSearchResult.RaiseNodeFoundEvent(model);
+                }
+            }
+        }
+
+        private void ProcessDirectories(string directory, ISpecification<NodeModelBase> specification,
+            RecursiveSearchResult recursiveSearchResult)
+        {
+            foreach (var dir in _directoryService.GetDirectoriesRecursively(directory))
+            {
+                var model = _directoryService.GetDirectory(dir);
+                if (specification.IsSatisfiedBy(model))
+                {
+                    recursiveSearchResult.RaiseNodeFoundEvent(model);
+                }
+            }
         }
     }
 }

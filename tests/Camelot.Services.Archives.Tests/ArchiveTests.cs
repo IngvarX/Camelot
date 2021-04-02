@@ -129,7 +129,7 @@ namespace Camelot.Services.Archives.Tests
                 .Setup<IPathService, string>(m => m.GetRelativePath(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns<string, string>(Path.GetRelativePath);
             _autoMocker
-                .Setup<IDirectoryService, IReadOnlyList<string>>(m => m.GetFilesRecursively(It.IsAny<string>()))
+                .Setup<IDirectoryService, IEnumerable<string>>(m => m.GetFilesRecursively(It.IsAny<string>()))
                 .Returns<string>(d => Directory
                     .EnumerateFiles(d, "*.*", SearchOption.AllDirectories)
                     .ToArray());

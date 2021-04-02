@@ -10,7 +10,7 @@ namespace Camelot.Services.Abstractions
     {
         IReadOnlyList<FileModel> GetFiles(string directory, ISpecification<FileModel> specification = null);
 
-        IReadOnlyList<FileModel> GetFiles(IReadOnlyList<string> files);
+        IReadOnlyList<FileModel> GetFiles(IEnumerable<string> files);
 
         FileModel GetFile(string file);
 

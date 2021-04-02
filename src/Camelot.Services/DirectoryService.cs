@@ -104,15 +104,13 @@ namespace Camelot.Services
         public bool CheckIfExists(string directory) =>
             _environmentDirectoryService.CheckIfExists(directory);
 
-        public IReadOnlyList<string> GetFilesRecursively(string directory) =>
+        public IEnumerable<string> GetFilesRecursively(string directory) =>
             _environmentDirectoryService
-                .EnumerateFilesRecursively(directory)
-                .ToArray();
+                .EnumerateFilesRecursively(directory);
 
-        public IReadOnlyList<string> GetDirectoriesRecursively(string directory) =>
+        public IEnumerable<string> GetDirectoriesRecursively(string directory) =>
             _environmentDirectoryService
-                .EnumerateDirectoriesRecursively(directory)
-                .ToArray();
+                .EnumerateDirectoriesRecursively(directory);
 
         public bool RemoveRecursively(string directory)
         {

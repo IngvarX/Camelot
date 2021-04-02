@@ -326,7 +326,7 @@ namespace Camelot.Operations.Tests
                 .Setup<IPathService, string>(m => m.Combine(NewDirectoryName, string.Empty))
                 .Returns(NewDirectoryName);
             _autoMocker
-                .Setup<IDirectoryService, IReadOnlyList<string>>(m => m.GetFilesRecursively(It.IsAny<string>()))
+                .Setup<IDirectoryService, IEnumerable<string>>(m => m.GetFilesRecursively(It.IsAny<string>()))
                 .Returns(new List<string>());
 
             var operationsService = _autoMocker.CreateInstance<OperationsService>();

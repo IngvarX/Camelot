@@ -37,7 +37,7 @@ namespace Camelot.Services
                 .Where(f => specification?.IsSatisfiedBy(f) ?? true)
                 .ToArray();
 
-        public IReadOnlyList<FileModel> GetFiles(IReadOnlyList<string> files) =>
+        public IReadOnlyList<FileModel> GetFiles(IEnumerable<string> files) =>
             files.Select(CreateFrom).WhereNotNull().ToArray();
 
         public FileModel GetFile(string file) => CreateFrom(file);
