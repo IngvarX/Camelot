@@ -284,6 +284,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             var specification = SearchViewModel.GetSpecification();
             if (specification.IsRecursive)
             {
+                _fileSystemNodes.Clear();
+
                 void RecursiveSearchResultOnNodeFoundEvent(object sender, NodeFoundEventArgs args) =>
                     ExecuteSynchronized(() => InsertNode(args.NodePath));
 

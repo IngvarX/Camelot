@@ -58,7 +58,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             this.ValidationRule(this.WhenAnyValue(x => x.IsRegexSearchEnabled, x => x.SearchText).Select(_ => IsValid),
                 resourceProvider.GetResourceByName(searchViewModelConfiguration.InvalidRegexResourceName));
             this.WhenAnyValue(x => x.SearchText, x => x.IsSearchEnabled,
-                    x => x.IsRegexSearchEnabled, x => x.IsSearchCaseSensitive)
+                    x => x.IsRegexSearchEnabled, x => x.IsSearchCaseSensitive,
+                    x => x.IsRecursiveSearchEnabled)
                 .Throttle(TimeSpan.FromMilliseconds(searchViewModelConfiguration.TimeoutMs))
                 .Subscribe(_ => FireSettingsChangedEvent());
         }
@@ -77,7 +78,11 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             IsSearchEnabled = !IsSearchEnabled;
         }
 
-        private void Reset() => SearchText = string.Empty;
+        private void Reset()
+        {
+            SearchText = string.Empty;
+            IsRecursiveSearchEnabled = false;
+        }
 
         private void FireSettingsChangedEvent()
         {
