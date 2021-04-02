@@ -4,7 +4,7 @@ using Camelot.Extensions;
 using Camelot.Services.Abstractions.Models.EventArgs;
 using Camelot.Services.Abstractions.RecursiveSearch;
 
-namespace Camelot.Services.Models
+namespace Camelot.Services.RecursiveSearch
 {
     public class RecursiveSearchResult : IRecursiveSearchResult, INodeFoundEventPublisher
     {

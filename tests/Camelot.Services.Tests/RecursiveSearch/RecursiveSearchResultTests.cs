@@ -1,10 +1,9 @@
 using System.Threading.Tasks;
-using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.RecursiveSearch;
-using Camelot.Services.Models;
+using Camelot.Services.RecursiveSearch;
 using Xunit;
 
-namespace Camelot.Services.Tests.Models
+namespace Camelot.Services.Tests.RecursiveSearch
 {
     public class RecursiveSearchResultTests
     {

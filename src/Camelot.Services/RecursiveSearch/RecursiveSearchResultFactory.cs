@@ -1,9 +1,8 @@
 using System;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions.RecursiveSearch;
-using Camelot.Services.Models;
 
-namespace Camelot.Services
+namespace Camelot.Services.RecursiveSearch
 {
     public class RecursiveSearchResultFactory : IRecursiveSearchResultFactory
     {

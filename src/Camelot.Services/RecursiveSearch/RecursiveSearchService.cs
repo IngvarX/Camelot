@@ -7,7 +7,7 @@ using Camelot.Services.Abstractions.RecursiveSearch;
 using Camelot.Services.Abstractions.Specifications;
 using Microsoft.Extensions.Logging;
 
-namespace Camelot.Services
+namespace Camelot.Services.RecursiveSearch
 {
     public class RecursiveSearchService : IRecursiveSearchService
     {

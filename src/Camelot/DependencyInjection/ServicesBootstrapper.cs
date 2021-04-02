@@ -28,6 +28,7 @@ using Camelot.Services.Linux.Interfaces.Builders;
 using Camelot.Services.Mac;
 using Camelot.Services.Mac.Configuration;
 using Camelot.Services.Mac.Interfaces;
+using Camelot.Services.RecursiveSearch;
 using Camelot.Services.Windows;
 using Camelot.Services.Windows.Builders;
 using Camelot.Services.Windows.Interfaces;
