@@ -43,6 +43,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
             Assert.False(viewModel.IsSearchEnabled);
             Assert.False(viewModel.IsRegexSearchEnabled);
             Assert.False(viewModel.IsSearchCaseSensitive);
+            Assert.False(viewModel.IsRecursiveSearchEnabled);
             Assert.Equal(string.Empty, viewModel.SearchText);
         }
 
@@ -53,6 +54,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
 
             viewModel.ToggleSearch();
             viewModel.SearchText = SearchText;
+            viewModel.IsRecursiveSearchEnabled = true;
 
             Assert.True(viewModel.ToggleSearchCommand.CanExecute(null));
 
@@ -60,6 +62,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
 
             Assert.False(viewModel.IsSearchEnabled);
             Assert.Equal(string.Empty, viewModel.SearchText);
+            Assert.False(viewModel.IsRecursiveSearchEnabled);
         }
 
         [Fact]
@@ -69,19 +72,25 @@ namespace Camelot.ViewModels.Tests.FilePanels
             Assert.False(viewModel.IsSearchEnabled);
 
             viewModel.SearchText = SearchText;
+            viewModel.IsRecursiveSearchEnabled = true;
             viewModel.ToggleSearch();
             Assert.True(viewModel.IsSearchEnabled);
             Assert.Equal(string.Empty, viewModel.SearchText);
+            Assert.False(viewModel.IsRecursiveSearchEnabled);
 
             viewModel.SearchText = SearchText;
+            viewModel.IsRecursiveSearchEnabled = true;
             viewModel.ToggleSearch();
             Assert.False(viewModel.IsSearchEnabled);
             Assert.Equal(string.Empty, viewModel.SearchText);
+            Assert.False(viewModel.IsRecursiveSearchEnabled);
 
             viewModel.SearchText = SearchText;
+            viewModel.IsRecursiveSearchEnabled = true;
             viewModel.ToggleSearch();
             Assert.True(viewModel.IsSearchEnabled);
             Assert.Equal(string.Empty, viewModel.SearchText);
+            Assert.False(viewModel.IsRecursiveSearchEnabled);
         }
 
         [Theory]
