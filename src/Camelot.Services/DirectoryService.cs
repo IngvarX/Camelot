@@ -112,6 +112,10 @@ namespace Camelot.Services
             _environmentDirectoryService
                 .EnumerateDirectoriesRecursively(directory);
 
+        public IEnumerable<string> GetNodesRecursively(string directory) =>
+            _environmentDirectoryService
+                .EnumerateFileSystemEntriesRecursively(directory);
+
         public bool RemoveRecursively(string directory)
         {
             try

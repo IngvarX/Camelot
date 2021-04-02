@@ -103,26 +103,11 @@ namespace Camelot.Services.Tests
                  .Returns(new[] {File})
                 .Verifiable();
             var directoryService = _autoMocker.CreateInstance<DirectoryService>();
-            var files = directoryService.GetFilesRecursively(DirectoryName);
+            var files = directoryService.GetFilesRecursively(DirectoryName).ToArray();
 
             Assert.NotNull(files);
             Assert.Single(files);
             Assert.Equal(File, files.Single());
-        }
-
-        [Fact]
-        public void TestGetDirectoriesRecursively()
-        {
-            _autoMocker
-                .Setup<IEnvironmentDirectoryService, IEnumerable<string>>(m => m.EnumerateDirectoriesRecursively(DirectoryName))
-                .Returns(new[] {NewDirectoryName})
-                .Verifiable();
-            var directoryService = _autoMocker.CreateInstance<DirectoryService>();
-            var directories = directoryService.GetDirectoriesRecursively(DirectoryName);
-
-            Assert.NotNull(directories);
-            Assert.Single(directories);
-            Assert.Equal(NewDirectoryName, directories.Single());
         }
 
         [Fact]

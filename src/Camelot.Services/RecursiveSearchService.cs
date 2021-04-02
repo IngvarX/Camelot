@@ -24,38 +24,44 @@ namespace Camelot.Services
             CancellationToken cancellationToken)
         {
             Task TaskFactory(RecursiveSearchResult r) =>
-                Task.Run(() =>
-                {
-                    ProcessFiles(directory, specification, r);
-                    ProcessDirectories(directory, specification, r);
-                }, cancellationToken);
+                Task.Run(() => ProcessNodes(directory, specification, r), cancellationToken);
 
             return new RecursiveSearchResult(TaskFactory);
         }
 
-        private void ProcessFiles(string directory, ISpecification<NodeModelBase> specification,
+        private void ProcessNodes(string directory, ISpecification<NodeModelBase> specification,
             RecursiveSearchResult recursiveSearchResult)
         {
-            foreach (var file in _directoryService.GetFilesRecursively(directory))
+            foreach (var node in _directoryService.GetNodesRecursively(directory))
             {
-                var model = _fileService.GetFile(file);
-                if (specification.IsSatisfiedBy(model))
+                if (_fileService.CheckIfExists(node))
                 {
-                    recursiveSearchResult.RaiseNodeFoundEvent(model);
+                    ProcessFile(node, specification, recursiveSearchResult);
+                }
+                else if (_directoryService.CheckIfExists(node))
+                {
+                    ProcessDirectory(node, specification, recursiveSearchResult);
                 }
             }
         }
 
-        private void ProcessDirectories(string directory, ISpecification<NodeModelBase> specification,
+        private void ProcessFile(string filePath, ISpecification<NodeModelBase> specification,
             RecursiveSearchResult recursiveSearchResult)
         {
-            foreach (var dir in _directoryService.GetDirectoriesRecursively(directory))
+            var model = _fileService.GetFile(filePath);
+            if (specification.IsSatisfiedBy(model))
             {
-                var model = _directoryService.GetDirectory(dir);
-                if (specification.IsSatisfiedBy(model))
-                {
-                    recursiveSearchResult.RaiseNodeFoundEvent(model);
-                }
+                recursiveSearchResult.RaiseNodeFoundEvent(model);
+            }
+        }
+
+        private void ProcessDirectory(string filePath, ISpecification<NodeModelBase> specification,
+            RecursiveSearchResult recursiveSearchResult)
+        {
+            var model = _directoryService.GetDirectory(filePath);
+            if (specification.IsSatisfiedBy(model))
+            {
+                recursiveSearchResult.RaiseNodeFoundEvent(model);
             }
         }
     }

@@ -30,6 +30,8 @@ namespace Camelot.Services.Abstractions
 
         IEnumerable<string> GetDirectoriesRecursively(string directory);
 
+        IEnumerable<string> GetNodesRecursively(string directory);
+
         bool RemoveRecursively(string directory);
 
         bool Rename(string directoryPath, string newName);
