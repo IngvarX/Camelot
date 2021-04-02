@@ -1,26 +1,25 @@
 using System;
 using System.Threading.Tasks;
 using Camelot.Extensions;
-using Camelot.Services.Abstractions;
-using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Models.EventArgs;
+using Camelot.Services.Abstractions.RecursiveSearch;
 
 namespace Camelot.Services.Models
 {
-    public class RecursiveSearchResult : IRecursiveSearchResult
+    public class RecursiveSearchResult : IRecursiveSearchResult, INodeFoundEventPublisher
     {
-        private readonly Func<RecursiveSearchResult, Task> _taskFactory;
+        private readonly Func<INodeFoundEventPublisher, Task> _taskFactory;
 
         public Lazy<Task> Task => new Lazy<Task>(() => _taskFactory(this));
 
         public event EventHandler<NodeFoundEventArgs> NodeFoundEvent;
 
-        public RecursiveSearchResult(Func<RecursiveSearchResult, Task> taskFactory)
+        public RecursiveSearchResult(Func<INodeFoundEventPublisher, Task> taskFactory)
         {
             _taskFactory = taskFactory;
         }
 
-        public void RaiseNodeFoundEvent(NodeModelBase nodeModel) =>
-            NodeFoundEvent.Raise(this, new NodeFoundEventArgs(nodeModel.FullPath));
+        public void RaiseNodeFoundEvent(string nodePath) =>
+            NodeFoundEvent.Raise(this, new NodeFoundEventArgs(nodePath));
     }
 }

@@ -1,9 +1,11 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
+using Camelot.Services.Abstractions.RecursiveSearch;
 using Camelot.Services.Abstractions.Specifications;
-using Camelot.Services.Models;
+using Microsoft.Extensions.Logging;
 
 namespace Camelot.Services
 {
@@ -11,57 +13,70 @@ namespace Camelot.Services
     {
         private readonly IDirectoryService _directoryService;
         private readonly IFileService _fileService;
+        private readonly IRecursiveSearchResultFactory _recursiveSearchResultFactory;
+        private readonly ILogger _logger;
 
         public RecursiveSearchService(
             IDirectoryService directoryService,
-            IFileService fileService)
+            IFileService fileService,
+            IRecursiveSearchResultFactory recursiveSearchResultFactory,
+            ILogger logger)
         {
             _directoryService = directoryService;
             _fileService = fileService;
+            _recursiveSearchResultFactory = recursiveSearchResultFactory;
+            _logger = logger;
         }
 
         public IRecursiveSearchResult Search(string directory, ISpecification<NodeModelBase> specification,
             CancellationToken cancellationToken)
         {
-            Task TaskFactory(RecursiveSearchResult r) =>
-                Task.Run(() => ProcessNodes(directory, specification, r), cancellationToken);
+            Task TaskFactory(INodeFoundEventPublisher publisher) =>
+                Task.Run(() => ProcessNodes(directory, specification, publisher), cancellationToken);
 
-            return new RecursiveSearchResult(TaskFactory);
+            return _recursiveSearchResultFactory.Create(TaskFactory);
         }
 
         private void ProcessNodes(string directory, ISpecification<NodeModelBase> specification,
-            RecursiveSearchResult recursiveSearchResult)
+            INodeFoundEventPublisher publisher)
         {
             foreach (var node in _directoryService.GetNodesRecursively(directory))
             {
-                if (_fileService.CheckIfExists(node))
+                try
                 {
-                    ProcessFile(node, specification, recursiveSearchResult);
+                    if (_fileService.CheckIfExists(node))
+                    {
+                        ProcessFile(node, specification, publisher);
+                    }
+                    else
+                    {
+                        ProcessDirectory(node, specification, publisher);
+                    }
                 }
-                else if (_directoryService.CheckIfExists(node))
+                catch (Exception ex)
                 {
-                    ProcessDirectory(node, specification, recursiveSearchResult);
+                    _logger.LogError(ex, "Exception occurred during recursive search");
                 }
             }
         }
 
         private void ProcessFile(string filePath, ISpecification<NodeModelBase> specification,
-            RecursiveSearchResult recursiveSearchResult)
+            INodeFoundEventPublisher publisher)
         {
             var model = _fileService.GetFile(filePath);
             if (specification.IsSatisfiedBy(model))
             {
-                recursiveSearchResult.RaiseNodeFoundEvent(model);
+                publisher.RaiseNodeFoundEvent(filePath);
             }
         }
 
-        private void ProcessDirectory(string filePath, ISpecification<NodeModelBase> specification,
-            RecursiveSearchResult recursiveSearchResult)
+        private void ProcessDirectory(string directoryPath, ISpecification<NodeModelBase> specification,
+            INodeFoundEventPublisher recursiveSearchResult)
         {
-            var model = _directoryService.GetDirectory(filePath);
+            var model = _directoryService.GetDirectory(directoryPath);
             if (specification.IsSatisfiedBy(model))
             {
-                recursiveSearchResult.RaiseNodeFoundEvent(model);
+                recursiveSearchResult.RaiseNodeFoundEvent(directoryPath);
             }
         }
     }

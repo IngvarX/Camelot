@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions.Models;
+using Camelot.Services.Abstractions.RecursiveSearch;
 using Camelot.Services.Models;
 using Xunit;
 
@@ -13,7 +14,7 @@ namespace Camelot.Services.Tests.Models
         public async Task TestTask()
         {
             var isTaskCalled = false;
-            Task TaskFactory(RecursiveSearchResult r)
+            Task TaskFactory(INodeFoundEventPublisher r)
             {
                 isTaskCalled = r != null;
 
@@ -30,17 +31,14 @@ namespace Camelot.Services.Tests.Models
         [Fact]
         public void TestEvent()
         {
-            static Task TaskFactory(RecursiveSearchResult r) => Task.CompletedTask;
+            static Task TaskFactory(INodeFoundEventPublisher r) => Task.CompletedTask;
 
             var isCallbackCalled = false;
 
             var result = new RecursiveSearchResult(TaskFactory);
             result.NodeFoundEvent += (sender, args) => isCallbackCalled = args.NodePath == NodePath;
 
-            result.RaiseNodeFoundEvent(new NodeModelBase
-            {
-                FullPath = NodePath
-            });
+            result.RaiseNodeFoundEvent(NodePath);
 
             Assert.True(isCallbackCalled);
         }

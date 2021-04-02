@@ -9,6 +9,7 @@ using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Archive;
 using Camelot.Services.Abstractions.Drives;
 using Camelot.Services.Abstractions.Operations;
+using Camelot.Services.Abstractions.RecursiveSearch;
 using Camelot.Services.AllPlatforms;
 using Camelot.Services.Archive;
 using Camelot.Services.Archives;
@@ -155,9 +156,12 @@ namespace Camelot.DependencyInjection
             services.RegisterLazySingleton<IOpenWithApplicationService>(() => new OpenWithApplicationService(
                 resolver.GetRequiredService<IUnitOfWorkFactory>()
             ));
+            services.RegisterLazySingleton<IRecursiveSearchResultFactory>(() => new RecursiveSearchResultFactory());
             services.RegisterLazySingleton<IRecursiveSearchService>(() => new RecursiveSearchService(
                 resolver.GetRequiredService<IDirectoryService>(),
-                resolver.GetRequiredService<IFileService>()
+                resolver.GetRequiredService<IFileService>(),
+                resolver.GetRequiredService<IRecursiveSearchResultFactory>(),
+                resolver.GetRequiredService<ILogger>()
             ));
         }
 

@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions.Models.EventArgs;
 
-namespace Camelot.Services.Abstractions
+namespace Camelot.Services.Abstractions.RecursiveSearch
 {
     public interface IRecursiveSearchResult
     {

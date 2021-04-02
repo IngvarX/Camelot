@@ -2,7 +2,7 @@ using System.Threading;
 using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Specifications;
 
-namespace Camelot.Services.Abstractions
+namespace Camelot.Services.Abstractions.RecursiveSearch
 {
     public interface IRecursiveSearchService
     {

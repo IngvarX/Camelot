@@ -5,6 +5,7 @@ using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Archive;
 using Camelot.Services.Abstractions.Drives;
 using Camelot.Services.Abstractions.Operations;
+using Camelot.Services.Abstractions.RecursiveSearch;
 using Camelot.Services.Behaviors;
 using Camelot.Services.Environment.Enums;
 using Camelot.Services.Environment.Interfaces;
