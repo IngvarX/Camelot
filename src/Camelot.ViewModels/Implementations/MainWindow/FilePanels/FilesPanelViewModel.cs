@@ -287,11 +287,11 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             var specification = SearchViewModel.GetSpecification();
             if (specification.IsRecursive)
             {
-                Search(specification);
+                RecursiveSearch(specification);
             }
             else
             {
-                RecursiveSearch(specification);
+                Search(specification);
             }
 
             InsertParentDirectory();
@@ -299,7 +299,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         private void CancelPreviousSearchIfNeeded() => _cancellationTokenSource?.Cancel();
 
-        private void Search(ISpecification<NodeModelBase> specification)
+        private void RecursiveSearch(ISpecification<NodeModelBase> specification)
         {
             _fileSystemNodes.Clear();
 
@@ -314,7 +314,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             recursiveSearchResult.Task.Value.ContinueWith(_ => recursiveSearchResult.NodeFoundEvent -= RecursiveSearchResultOnNodeFoundEvent);
         }
 
-        private void RecursiveSearch(ISpecification<NodeModelBase> specification)
+        private void Search(ISpecification<NodeModelBase> specification)
         {
             var directories = _directoryService.GetChildDirectories(CurrentDirectory, specification);
             var files = _fileService.GetFiles(CurrentDirectory, specification);
@@ -371,8 +371,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private Task CopyToClipboardAsync() =>
             _clipboardOperationsService.CopyFilesAsync(_nodesSelectionService.SelectedNodes);
 
-        private Task PasteFromClipboardAsync() =>
-            _clipboardOperationsService.PasteFilesAsync(CurrentDirectory);
+        private Task PasteFromClipboardAsync() => _clipboardOperationsService.PasteFilesAsync(CurrentDirectory);
 
         private int GetInsertIndex(IFileSystemNodeViewModel newNodeViewModel)
         {
