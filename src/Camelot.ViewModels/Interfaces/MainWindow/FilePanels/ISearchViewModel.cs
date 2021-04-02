@@ -1,6 +1,4 @@
 using System;
-using Camelot.Services.Abstractions.Models;
-using Camelot.Services.Abstractions.Specifications;
 
 namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels
 {
@@ -8,7 +6,7 @@ namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels
     {
         event EventHandler<EventArgs> SearchSettingsChanged;
 
-        ISpecification<NodeModelBase> GetSpecification();
+        INodeSpecification GetSpecification();
 
         void ToggleSearch();
     }

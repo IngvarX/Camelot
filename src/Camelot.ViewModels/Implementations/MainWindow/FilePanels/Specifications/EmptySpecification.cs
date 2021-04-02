@@ -1,10 +1,15 @@
 using Camelot.Services.Abstractions.Models;
-using Camelot.Services.Abstractions.Specifications;
 
 namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Specifications
 {
-    public class EmptySpecification : ISpecification<NodeModelBase>
+    public class EmptySpecification : SpecificationBase
     {
-        public bool IsSatisfiedBy(NodeModelBase nodeModel) => true;
+        public EmptySpecification(bool isRecursive)
+            : base(isRecursive)
+        {
+
+        }
+
+        public override bool IsSatisfiedBy(NodeModelBase nodeModel) => true;
     }
 }

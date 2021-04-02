@@ -155,6 +155,10 @@ namespace Camelot.DependencyInjection
             services.RegisterLazySingleton<IOpenWithApplicationService>(() => new OpenWithApplicationService(
                 resolver.GetRequiredService<IUnitOfWorkFactory>()
             ));
+            services.RegisterLazySingleton<IRecursiveSearchService>(() => new RecursiveSearchService(
+                resolver.GetRequiredService<IDirectoryService>(),
+                resolver.GetRequiredService<IFileService>()
+            ));
         }
 
         private static void RegisterPlatformSpecificServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)

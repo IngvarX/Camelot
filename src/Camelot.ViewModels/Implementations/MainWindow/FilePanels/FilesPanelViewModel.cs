@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Camelot.Avalonia.Interfaces;
 using Camelot.Extensions;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models.Enums;
+using Camelot.Services.Abstractions.Models.EventArgs;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Interfaces.MainWindow;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
@@ -32,6 +34,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private readonly IClipboardOperationsService _clipboardOperationsService;
         private readonly IFileSystemNodeViewModelComparerFactory _comparerFactory;
         private readonly ISuggestionsService _suggestionsService;
+        private readonly IRecursiveSearchService _recursiveSearchService;
         private readonly ISuggestedPathViewModelFactory _suggestedPathViewModelFactory;
 
         private readonly ObservableCollection<IFileSystemNodeViewModel> _fileSystemNodes;
@@ -136,6 +139,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             IClipboardOperationsService clipboardOperationsService,
             IFileSystemNodeViewModelComparerFactory comparerFactory,
             ISuggestionsService suggestionsService,
+            IRecursiveSearchService recursiveSearchService,
             ISuggestedPathViewModelFactory suggestedPathViewModelFactory,
             ISearchViewModel searchViewModel,
             ITabsListViewModel tabsListViewModel,
@@ -151,6 +155,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             _clipboardOperationsService = clipboardOperationsService;
             _comparerFactory = comparerFactory;
             _suggestionsService = suggestionsService;
+            _recursiveSearchService = recursiveSearchService;
             _suggestedPathViewModelFactory = suggestedPathViewModelFactory;
 
             SearchViewModel = searchViewModel;
@@ -217,18 +222,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             SearchViewModel.SearchSettingsChanged += SearchViewModelOnSearchSettingsChanged;
             _selectedFileSystemNodes.CollectionChanged += SelectedFileSystemNodesOnCollectionChanged;
 
-            void ExecuteInUiThread(Action action) => _applicationDispatcher.Dispatch(action);
-
-            void Synchronize(Action action)
-            {
-                lock (_locker)
-                {
-                    action();
-                }
-            }
-
-            void ExecuteSynchronized(Action action) => ExecuteInUiThread(() => Synchronize(action));
-
             _fileSystemWatchingService.NodeCreated += (sender, args) =>
                 ExecuteSynchronized(() => InsertNode(args.Node));
             _fileSystemWatchingService.NodeChanged += (sender, args) =>
@@ -289,21 +282,37 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             }
 
             var specification = SearchViewModel.GetSpecification();
-            var directories = _directoryService.GetChildDirectories(CurrentDirectory, specification);
-            var files = _fileService.GetFiles(CurrentDirectory, specification);
+            if (specification.IsRecursive)
+            {
+                void RecursiveSearchResultOnNodeFoundEvent(object sender, NodeFoundEventArgs args) =>
+                    ExecuteSynchronized(() => InsertNode(args.NodePath));
 
-            var directoriesViewModels = directories
-                .Select(d => _fileSystemNodeViewModelFactory.Create(d));
-            var filesViewModels = files
-                .Select(_fileSystemNodeViewModelFactory.Create);
+                var recursiveSearchResult = _recursiveSearchService.Search(CurrentDirectory, specification, CancellationToken.None);
+                recursiveSearchResult.NodeFoundEvent += RecursiveSearchResultOnNodeFoundEvent;
 
-            var comparer = GetComparer();
-            var models = directoriesViewModels
-                .Concat(filesViewModels)
-                .OrderBy(x => x, comparer);
+                recursiveSearchResult.Task.Value.ContinueWith(_ =>
+                {
+                    recursiveSearchResult.NodeFoundEvent -= RecursiveSearchResultOnNodeFoundEvent;
+                });
+            }
+            else
+            {
+                var directories = _directoryService.GetChildDirectories(CurrentDirectory, specification);
+                var files = _fileService.GetFiles(CurrentDirectory, specification);
 
-            _fileSystemNodes.Clear();
-            _fileSystemNodes.AddRange(models);
+                var directoriesViewModels = directories
+                    .Select(d => _fileSystemNodeViewModelFactory.Create(d));
+                var filesViewModels = files
+                    .Select(_fileSystemNodeViewModelFactory.Create);
+
+                var comparer = GetComparer();
+                var models = directoriesViewModels
+                    .Concat(filesViewModels)
+                    .OrderBy(x => x, comparer);
+
+                _fileSystemNodes.Clear();
+                _fileSystemNodes.AddRange(models);
+            }
 
             var parentDirectory = _directoryService.GetParentDirectory(CurrentDirectory);
             if (parentDirectory != null)
@@ -357,5 +366,17 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         private IFileSystemNodeViewModel GetViewModel(string nodePath) =>
             _fileSystemNodes.FirstOrDefault(n => n.FullPath == nodePath);
+
+        private void ExecuteInUiThread(Action action) => _applicationDispatcher.Dispatch(action);
+
+        private void Synchronize(Action action)
+        {
+            lock (_locker)
+            {
+                action();
+            }
+        }
+
+        private void ExecuteSynchronized(Action action) => ExecuteInUiThread(() => Synchronize(action));
     }
 }

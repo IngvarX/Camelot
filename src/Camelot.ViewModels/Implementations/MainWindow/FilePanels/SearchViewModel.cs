@@ -35,6 +35,9 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         [Reactive]
         public bool IsSearchEnabled { get; set; }
 
+        [Reactive]
+        public bool IsRecursiveSearchEnabled { get; set; }
+
         public event EventHandler<EventArgs> SearchSettingsChanged;
 
         public ICommand ToggleSearchCommand { get; }
@@ -60,12 +63,12 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
                 .Subscribe(_ => FireSettingsChangedEvent());
         }
 
-        public ISpecification<NodeModelBase> GetSpecification() =>
+        public INodeSpecification GetSpecification() =>
             (IsSearchEnabled, IsRegexSearchEnabled) switch
             {
-                (true, true) when IsValid => new NodeNameRegexSpecification(_regexService, SearchText, IsSearchCaseSensitive),
-                (true, false) => new NodeNameTextSpecification(SearchText, IsSearchCaseSensitive),
-                _ => new EmptySpecification()
+                (true, true) when IsValid => new NodeNameRegexSpecification(_regexService, SearchText, IsSearchCaseSensitive, IsRecursiveSearchEnabled),
+                (true, false) => new NodeNameTextSpecification(SearchText, IsSearchCaseSensitive, IsRecursiveSearchEnabled),
+                _ => new EmptySpecification(IsRecursiveSearchEnabled)
             };
 
         public void ToggleSearch()

@@ -279,6 +279,7 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IClipboardOperationsService>(),
                 resolver.GetRequiredService<IFileSystemNodeViewModelComparerFactory>(),
                 resolver.GetRequiredService<ISuggestionsService>(),
+                resolver.GetRequiredService<IRecursiveSearchService>(),
                 resolver.GetRequiredService<ISuggestedPathViewModelFactory>(),
                 resolver.GetRequiredService<ISearchViewModel>(),
                 tabsListViewModel,
