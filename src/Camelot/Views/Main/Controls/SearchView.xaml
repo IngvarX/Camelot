@@ -28,8 +28,10 @@
                  Classes="searchTextBox" Watermark="{x:Static p:Resources.SearchForFilesAndDirectories}"
                  Text="{Binding SearchText}" />
 
-        <ToggleButton Grid.Column="2" IsChecked="{Binding IsSearchCaseSensitive}"
-                      Classes="searchOptionToggleButton">
+        <ToggleButton Grid.Column="2"
+                      IsChecked="{Binding IsSearchCaseSensitive}"
+                      Classes="searchOptionToggleButton"
+                      ToolTip.Tip="{x:Static p:Resources.CaseSensitive}">
             <Grid>
                 <Image Classes="searchImage" Margin="0,10,10,0"
                        IsVisible="{Binding $parent[ToggleButton].IsChecked}">
@@ -57,8 +59,10 @@
             </Grid>
         </ToggleButton>
 
-        <ToggleButton Grid.Column="3" IsChecked="{Binding IsRegexSearchEnabled}"
-                      Classes="searchOptionToggleButton">
+        <ToggleButton Grid.Column="3"
+                      IsChecked="{Binding IsRegexSearchEnabled}"
+                      Classes="searchOptionToggleButton"
+                      ToolTip.Tip="{x:Static p:Resources.RegularExpression}">
             <Grid>
                 <Image Classes="largeSearchImage" Margin="0,15,10,0"
                        IsVisible="{Binding $parent[ToggleButton].IsChecked}">
@@ -86,8 +90,10 @@
             </Grid>
         </ToggleButton>
 
-        <ToggleButton Grid.Column="4" IsChecked="{Binding IsRecursiveSearchEnabled}"
-                      Classes="searchOptionToggleButton">
+        <ToggleButton Grid.Column="4"
+                      IsChecked="{Binding IsRecursiveSearchEnabled}"
+                      Classes="searchOptionToggleButton"
+                      ToolTip.Tip="{x:Static p:Resources.Recursive}">
             <Grid>
                 <Image Classes="largeSearchImage" Margin="0,15,10,0"
                        IsVisible="{Binding $parent[ToggleButton].IsChecked}">
@@ -95,7 +101,7 @@
                         <DrawingImage>
                             <DrawingImage.Drawing>
                                 <GeometryDrawing Brush="{DynamicResource ThemeAccentBrush4}"
-                                                 Geometry="M278.9 511.5l-61-17.7c-6.4-1.8-10-8.5-8.2-14.9L346.2 8.7c1.8-6.4 8.5-10 14.9-8.2l61 17.7c6.4 1.8 10 8.5 8.2 14.9L293.8 503.3c-1.9 6.4-8.5 10.1-14.9 8.2zm-114-112.2l43.5-46.4c4.6-4.9 4.3-12.7-.8-17.2L117 256l90.6-79.7c5.1-4.5 5.5-12.3.8-17.2l-43.5-46.4c-4.5-4.8-12.1-5.1-17-.5L3.8 247.2c-5.1 4.7-5.1 12.8 0 17.5l144.1 135.1c4.9 4.6 12.5 4.4 17-.5zm327.2.6l144.1-135.1c5.1-4.7 5.1-12.8 0-17.5L492.1 112.1c-4.8-4.5-12.4-4.3-17 .5L431.6 159c-4.6 4.9-4.3 12.7.8 17.2L523 256l-90.6 79.7c-5.1 4.5-5.5 12.3-.8 17.2l43.5 46.4c4.5 4.9 12.1 5.1 17 .6z"/>
+                                                 Geometry="M572.694 292.093L500.27 416.248A63.997 63.997 0 0 1 444.989 448H45.025c-18.523 0-30.064-20.093-20.731-36.093l72.424-124.155A64 64 0 0 1 152 256h399.964c18.523 0 30.064 20.093 20.73 36.093zM152 224h328v-48c0-26.51-21.49-48-48-48H272l-64-64H48C21.49 64 0 85.49 0 112v278.046l69.077-118.418C86.214 242.25 117.989 224 152 224z"/>
                             </DrawingImage.Drawing>
                         </DrawingImage>
                     </Image.Source>
@@ -107,7 +113,7 @@
                         <DrawingImage>
                             <DrawingImage.Drawing>
                                 <GeometryDrawing Brush="{DynamicResource SearchIconForegroundBrush}"
-                                                 Geometry="M278.9 511.5l-61-17.7c-6.4-1.8-10-8.5-8.2-14.9L346.2 8.7c1.8-6.4 8.5-10 14.9-8.2l61 17.7c6.4 1.8 10 8.5 8.2 14.9L293.8 503.3c-1.9 6.4-8.5 10.1-14.9 8.2zm-114-112.2l43.5-46.4c4.6-4.9 4.3-12.7-.8-17.2L117 256l90.6-79.7c5.1-4.5 5.5-12.3.8-17.2l-43.5-46.4c-4.5-4.8-12.1-5.1-17-.5L3.8 247.2c-5.1 4.7-5.1 12.8 0 17.5l144.1 135.1c4.9 4.6 12.5 4.4 17-.5zm327.2.6l144.1-135.1c5.1-4.7 5.1-12.8 0-17.5L492.1 112.1c-4.8-4.5-12.4-4.3-17 .5L431.6 159c-4.6 4.9-4.3 12.7.8 17.2L523 256l-90.6 79.7c-5.1 4.5-5.5 12.3-.8 17.2l43.5 46.4c4.5 4.9 12.1 5.1 17 .6z"/>
+                                                 Geometry="M572.694 292.093L500.27 416.248A63.997 63.997 0 0 1 444.989 448H45.025c-18.523 0-30.064-20.093-20.731-36.093l72.424-124.155A64 64 0 0 1 152 256h399.964c18.523 0 30.064 20.093 20.73 36.093zM152 224h328v-48c0-26.51-21.49-48-48-48H272l-64-64H48C21.49 64 0 85.49 0 112v278.046l69.077-118.418C86.214 242.25 117.989 224 152 224z"/>
                             </DrawingImage.Drawing>
                         </DrawingImage>
                     </Image.Source>
@@ -116,7 +122,8 @@
         </ToggleButton>
 
         <Button Grid.Column="5" Name="CloseSearchButton"
-                Command="{Binding ToggleSearchCommand}">
+                Command="{Binding ToggleSearchCommand}"
+                ToolTip.Tip="{x:Static p:Resources.CloseSearchPanel}">
             <Image Classes="searchImage" Margin="0,11,10,0"
                    IsVisible="{Binding $parent[ToggleButton].IsChecked}">
                 <Image.Source>

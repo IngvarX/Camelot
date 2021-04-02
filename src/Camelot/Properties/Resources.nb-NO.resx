@@ -202,9 +202,6 @@
   <data name="MovedFilesFromAndDirectoriesTo" xml:space="preserve">
     <value>Flyttet {0} filer og {1} mapper til {2}</value>
   </data>
-  <data name="OpenInNewTabOnOtherPanel" xml:space="preserve">
-    <value>Åpne i ny fane på motsatt panel</value>
-  </data>
   <data name="OpenInNewTab" xml:space="preserve">
     <value>Åpne i ny fane</value>
   </data>

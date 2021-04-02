@@ -492,4 +492,16 @@
   <data name="OpenInNewTabOnOppositePanel" xml:space="preserve">
     <value>Open in new tab on other panel</value>
   </data>
+  <data name="CaseSensitive" xml:space="preserve">
+    <value>Case sensitive</value>
+  </data>
+  <data name="CloseSearchPanel" xml:space="preserve">
+    <value>Close search panel</value>
+  </data>
+  <data name="Recursive" xml:space="preserve">
+    <value>Recursive</value>
+  </data>
+  <data name="RegularExpression" xml:space="preserve">
+    <value>Regular expression</value>
+  </data>
 </root>

@@ -492,4 +492,16 @@
   <data name="OpenInNewTabOnOppositePanel" xml:space="preserve">
     <value>Открыть в новой вкладке на противоположной панели</value>
   </data>
+  <data name="CaseSensitive" xml:space="preserve">
+    <value>Регистрозависимый</value>
+  </data>
+  <data name="CloseSearchPanel" xml:space="preserve">
+    <value>Закрыть панель поиска</value>
+  </data>
+  <data name="Recursive" xml:space="preserve">
+    <value>Рекурсивный</value>
+  </data>
+  <data name="RegularExpression" xml:space="preserve">
+    <value>Регулярное выражение</value>
+  </data>
 </root>

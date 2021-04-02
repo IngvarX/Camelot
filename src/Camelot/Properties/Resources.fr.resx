@@ -163,9 +163,6 @@
   <data name="CreateArchive" xml:space="preserve">
     <value>Créer une archive</value>
   </data>
-  <data name="OpenInNewTabOnOtherPanel" xml:space="preserve">
-    <value>Ouvrir dans un nouvel onglet sur l’autre volet</value>
-  </data>
   <data name="OpenInNewTab" xml:space="preserve">
     <value>Ouvert dans un nouvel onglet</value>
   </data>

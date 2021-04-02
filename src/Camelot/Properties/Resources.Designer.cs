@@ -794,5 +794,29 @@ namespace Camelot.Properties {
                 return ResourceManager.GetString("OpenInNewTabOnOppositePanel", resourceCulture);
             }
         }
+        
+        public static string CaseSensitive {
+            get {
+                return ResourceManager.GetString("CaseSensitive", resourceCulture);
+            }
+        }
+        
+        public static string CloseSearchPanel {
+            get {
+                return ResourceManager.GetString("CloseSearchPanel", resourceCulture);
+            }
+        }
+        
+        public static string Recursive {
+            get {
+                return ResourceManager.GetString("Recursive", resourceCulture);
+            }
+        }
+        
+        public static string RegularExpression {
+            get {
+                return ResourceManager.GetString("RegularExpression", resourceCulture);
+            }
+        }
     }
 }
