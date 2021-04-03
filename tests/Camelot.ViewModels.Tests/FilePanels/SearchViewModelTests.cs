@@ -94,12 +94,16 @@ namespace Camelot.ViewModels.Tests.FilePanels
         }
 
         [Theory]
-        [InlineData(false, false, typeof(EmptySpecification), false)]
-        [InlineData(false, true, typeof(EmptySpecification), false)]
-        [InlineData(true, true, typeof(EmptySpecification), false)]
-        [InlineData(true, true, typeof(NodeNameRegexSpecification), true)]
-        [InlineData(true, false, typeof(NodeNameTextSpecification), false)]
-        public void TestSpecification(bool isSearchEnabled, bool isRegexSearchEnabled,
+        [InlineData("Text", false, false, typeof(EmptySpecification), false)]
+        [InlineData("Text", false, true, typeof(EmptySpecification), false)]
+        [InlineData("Text", true, true, typeof(EmptySpecification), false)]
+        [InlineData("", true, true, typeof(EmptySpecification), false)]
+        [InlineData(null, true, true, typeof(EmptySpecification), false)]
+        [InlineData("", true, false, typeof(EmptySpecification), false)]
+        [InlineData(null, true, false, typeof(EmptySpecification), false)]
+        [InlineData("Text", true, true, typeof(NodeNameRegexSpecification), true)]
+        [InlineData("Text", true, false, typeof(NodeNameTextSpecification), false)]
+        public void TestSpecification(string searchText, bool isSearchEnabled, bool isRegexSearchEnabled,
             Type specificationType, bool isRegexValid)
         {
             _autoMocker
@@ -110,6 +114,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
 
             viewModel.IsSearchEnabled = isSearchEnabled;
             viewModel.IsRegexSearchEnabled = isRegexSearchEnabled;
+            viewModel.SearchText = searchText;
 
             var specification = viewModel.GetSpecification();
 
