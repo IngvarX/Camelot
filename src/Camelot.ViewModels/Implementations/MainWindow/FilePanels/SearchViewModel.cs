@@ -53,7 +53,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
             Reset();
 
-            this.ValidationRule(this.WhenAnyValue(x => x.IsRegexSearchEnabled, x => x.SearchText),
+            this.ValidationRule(vm => vm.SearchText,
+                this.WhenAnyValue(x => x.IsRegexSearchEnabled, x => x.SearchText),
                 v => IsValid,
                 _ => resourceProvider.GetResourceByName(searchViewModelConfiguration.InvalidRegexResourceName));
             this.WhenAnyValue(x => x.SearchText, x => x.IsSearchEnabled,
