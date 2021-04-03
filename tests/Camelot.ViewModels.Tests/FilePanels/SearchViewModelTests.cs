@@ -158,6 +158,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
             var viewModel = _autoMocker.CreateInstance<SearchViewModel>();
 
             viewModel.SearchText = SearchText;
+            viewModel.IsSearchEnabled = true;
 
             viewModel.SearchSettingsChanged += (sender, args) => taskCompletionSource.SetResult(true);
             viewModel.IsRegexSearchEnabled = true;

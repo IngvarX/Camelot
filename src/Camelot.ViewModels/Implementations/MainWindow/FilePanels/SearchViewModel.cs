@@ -53,12 +53,17 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
             Reset();
 
-            this.ValidationRule(vm => vm.SearchText,
+            this.ValidationRule(
+                vm => vm.SearchText,
                 this.WhenAnyValue(x => x.IsRegexSearchEnabled, x => x.SearchText),
                 v => IsValid,
-                _ => resourceProvider.GetResourceByName(searchViewModelConfiguration.InvalidRegexResourceName));
-            this.WhenAnyValue(x => x.SearchText, x => x.IsSearchEnabled,
-                    x => x.IsRegexSearchEnabled, x => x.IsSearchCaseSensitive,
+                _ => resourceProvider.GetResourceByName(searchViewModelConfiguration.InvalidRegexResourceName)
+            );
+            this.WhenAnyValue(
+                    x => x.SearchText,
+                    x => x.IsSearchEnabled,
+                    x => x.IsRegexSearchEnabled,
+                    x => x.IsSearchCaseSensitive,
                     x => x.IsRecursiveSearchEnabled)
                 .Throttle(TimeSpan.FromMilliseconds(searchViewModelConfiguration.TimeoutMs))
                 .Subscribe(_ => FireSettingsChangedEvent());
