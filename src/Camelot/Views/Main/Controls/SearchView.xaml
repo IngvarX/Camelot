@@ -17,7 +17,7 @@
             <Image.Source>
                 <DrawingImage>
                     <DrawingImage.Drawing>
-                        <GeometryDrawing Brush="{DynamicResource AlternativeThemeForegroundBrush}"
+                        <GeometryDrawing Brush="{DynamicResource ThemeAccentBrush}"
                                          Geometry="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z" />
                     </DrawingImage.Drawing>
                 </DrawingImage>
@@ -66,7 +66,7 @@
                       Classes="searchOptionToggleButton"
                       ToolTip.Tip="{x:Static p:Resources.RegularExpression}">
             <Grid>
-                <Image Classes="largeSearchImage" Margin="0,15,10,0"
+                <Image Classes="largeSearchImage" Margin="0,14,10,0"
                        IsVisible="{Binding $parent[ToggleButton].IsChecked}">
                     <Image.Source>
                         <DrawingImage>
@@ -78,7 +78,7 @@
                     </Image.Source>
                 </Image>
 
-                <Image Classes="largeSearchImage" Margin="0,15,10,0"
+                <Image Classes="largeSearchImage" Margin="0,14,10,0"
                        IsVisible="{Binding !$parent[ToggleButton].IsChecked}">
                     <Image.Source>
                         <DrawingImage>
@@ -97,25 +97,25 @@
                       Classes="searchOptionToggleButton"
                       ToolTip.Tip="{x:Static p:Resources.Recursive}">
             <Grid>
-                <Image Classes="largeSearchImage" Margin="0,15,10,0"
+                <Image Classes="searchImage" Margin="0,13,10,0"
                        IsVisible="{Binding $parent[ToggleButton].IsChecked}">
                     <Image.Source>
                         <DrawingImage>
                             <DrawingImage.Drawing>
                                 <GeometryDrawing Brush="{DynamicResource ThemeAccentBrush4}"
-                                                 Geometry="M572.694 292.093L500.27 416.248A63.997 63.997 0 0 1 444.989 448H45.025c-18.523 0-30.064-20.093-20.731-36.093l72.424-124.155A64 64 0 0 1 152 256h399.964c18.523 0 30.064 20.093 20.73 36.093zM152 224h328v-48c0-26.51-21.49-48-48-48H272l-64-64H48C21.49 64 0 85.49 0 112v278.046l69.077-118.418C86.214 242.25 117.989 224 152 224z"/>
+                                                 Geometry="M256 8C119.033 8 8 119.033 8 256s111.033 248 248 248 248-111.033 248-248S392.967 8 256 8zm0 448c-110.532 0-200-89.451-200-200 0-110.531 89.451-200 200-200 110.532 0 200 89.451 200 200 0 110.532-89.451 200-200 200zm110.442-81.791c-53.046-96.284-50.25-91.468-53.271-96.085 24.267-13.879 39.482-41.563 39.482-73.176 0-52.503-30.247-85.252-101.498-85.252h-78.667c-6.617 0-12 5.383-12 12V380c0 6.617 5.383 12 12 12h38.568c6.617 0 12-5.383 12-12v-83.663h31.958l47.515 89.303a11.98 11.98 0 0 0 10.593 6.36h42.81c9.14 0 14.914-9.799 10.51-17.791zM256.933 239.906h-33.875v-64.14h27.377c32.417 0 38.929 12.133 38.929 31.709-.001 20.913-11.518 32.431-32.431 32.431z"/>
                             </DrawingImage.Drawing>
                         </DrawingImage>
                     </Image.Source>
                 </Image>
 
-                <Image Classes="largeSearchImage" Margin="0,15,10,0"
+                <Image Classes="searchImage" Margin="0,13,10,0"
                        IsVisible="{Binding !$parent[ToggleButton].IsChecked}">
                     <Image.Source>
                         <DrawingImage>
                             <DrawingImage.Drawing>
                                 <GeometryDrawing Brush="{DynamicResource SearchIconForegroundBrush}"
-                                                 Geometry="M572.694 292.093L500.27 416.248A63.997 63.997 0 0 1 444.989 448H45.025c-18.523 0-30.064-20.093-20.731-36.093l72.424-124.155A64 64 0 0 1 152 256h399.964c18.523 0 30.064 20.093 20.73 36.093zM152 224h328v-48c0-26.51-21.49-48-48-48H272l-64-64H48C21.49 64 0 85.49 0 112v278.046l69.077-118.418C86.214 242.25 117.989 224 152 224z"/>
+                                                 Geometry="M256 8C119.033 8 8 119.033 8 256s111.033 248 248 248 248-111.033 248-248S392.967 8 256 8zm0 448c-110.532 0-200-89.451-200-200 0-110.531 89.451-200 200-200 110.532 0 200 89.451 200 200 0 110.532-89.451 200-200 200zm110.442-81.791c-53.046-96.284-50.25-91.468-53.271-96.085 24.267-13.879 39.482-41.563 39.482-73.176 0-52.503-30.247-85.252-101.498-85.252h-78.667c-6.617 0-12 5.383-12 12V380c0 6.617 5.383 12 12 12h38.568c6.617 0 12-5.383 12-12v-83.663h31.958l47.515 89.303a11.98 11.98 0 0 0 10.593 6.36h42.81c9.14 0 14.914-9.799 10.51-17.791zM256.933 239.906h-33.875v-64.14h27.377c32.417 0 38.929 12.133 38.929 31.709-.001 20.913-11.518 32.431-32.431 32.431z"/>
                             </DrawingImage.Drawing>
                         </DrawingImage>
                     </Image.Source>
