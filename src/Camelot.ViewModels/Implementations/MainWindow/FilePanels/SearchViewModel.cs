@@ -19,6 +19,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private readonly IRegexService _regexService;
         private readonly IApplicationDispatcher _applicationDispatcher;
 
+        private bool HasText => !string.IsNullOrEmpty(SearchText);
+
         private bool IsValid => !IsSearchEnabled || !IsRegexSearchEnabled || _regexService.ValidateRegex(SearchText);
 
         [Reactive]
@@ -56,7 +58,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             this.ValidationRule(
                 vm => vm.SearchText,
                 this.WhenAnyValue(x => x.IsRegexSearchEnabled, x => x.SearchText),
-                v => IsValid,
+                v => !HasText || IsValid,
                 _ => resourceProvider.GetResourceByName(searchViewModelConfiguration.InvalidRegexResourceName)
             );
             this.WhenAnyValue(
@@ -72,9 +74,9 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         public INodeSpecification GetSpecification() =>
             (IsSearchEnabled, IsRegexSearchEnabled) switch
             {
-                (true, true) when IsValid => new NodeNameRegexSpecification(_regexService, SearchText, IsSearchCaseSensitive, IsRecursiveSearchEnabled),
-                (true, false) => new NodeNameTextSpecification(SearchText, IsSearchCaseSensitive, IsRecursiveSearchEnabled),
-                _ => new EmptySpecification(IsRecursiveSearchEnabled)
+                (true, true) when HasText && IsValid => new NodeNameRegexSpecification(_regexService, SearchText, IsSearchCaseSensitive, IsRecursiveSearchEnabled),
+                (true, false) when HasText => new NodeNameTextSpecification(SearchText, IsSearchCaseSensitive, IsRecursiveSearchEnabled),
+                _ => new EmptySpecification(false)
             };
 
         public void ToggleSearch()
