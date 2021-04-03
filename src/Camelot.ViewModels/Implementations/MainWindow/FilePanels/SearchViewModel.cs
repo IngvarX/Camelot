@@ -3,8 +3,6 @@ using System.Reactive.Linq;
 using System.Windows.Input;
 using Camelot.Avalonia.Interfaces;
 using Camelot.Extensions;
-using Camelot.Services.Abstractions.Models;
-using Camelot.Services.Abstractions.Specifications;
 using Camelot.Services.Environment.Interfaces;
 using Camelot.ViewModels.Configuration;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Specifications;
@@ -21,7 +19,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private readonly IRegexService _regexService;
         private readonly IApplicationDispatcher _applicationDispatcher;
 
-        private bool IsValid => !IsRegexSearchEnabled || _regexService.ValidateRegex(SearchText);
+        private bool IsValid => !IsSearchEnabled || !IsRegexSearchEnabled || _regexService.ValidateRegex(SearchText);
 
         [Reactive]
         public string SearchText { get; set; }
@@ -55,8 +53,9 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
             Reset();
 
-            this.ValidationRule(this.WhenAnyValue(x => x.IsRegexSearchEnabled, x => x.SearchText).Select(_ => IsValid),
-                resourceProvider.GetResourceByName(searchViewModelConfiguration.InvalidRegexResourceName));
+            this.ValidationRule(this.WhenAnyValue(x => x.IsRegexSearchEnabled, x => x.SearchText),
+                v => IsValid,
+                _ => resourceProvider.GetResourceByName(searchViewModelConfiguration.InvalidRegexResourceName));
             this.WhenAnyValue(x => x.SearchText, x => x.IsSearchEnabled,
                     x => x.IsRegexSearchEnabled, x => x.IsSearchCaseSensitive,
                     x => x.IsRecursiveSearchEnabled)
