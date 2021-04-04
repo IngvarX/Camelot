@@ -42,6 +42,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         private readonly ObservableCollection<IFileSystemNodeViewModel> _fileSystemNodes;
         private readonly ObservableCollection<IFileSystemNodeViewModel> _selectedFileSystemNodes;
+        private readonly ObservableCollection<ISuggestedPathViewModel> _suggestedPaths;
 
         private string _currentDirectory;
         private string _currentDirectorySearchText;
@@ -71,11 +72,12 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             {
                 _currentDirectorySearchText = value;
                 Activate();
+                ClearSuggestions();
 
                 if (!_directoryService.CheckIfExists(value))
                 {
-                    ShouldShowSuggestions = true;
-                    this.RaisePropertyChanged(nameof(SuggestedPaths));
+                    ReloadSuggestions();
+                    ShouldShowSuggestions = SuggestedPaths.Any();
 
                     return;
                 }
@@ -100,10 +102,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         public IEnumerable<IFileSystemNodeViewModel> FileSystemNodes => _fileSystemNodes;
 
-        public IEnumerable<ISuggestedPathViewModel> SuggestedPaths =>
-            _suggestionsService
-                .GetSuggestions(_currentDirectorySearchText)
-                .Select(sm => _suggestedPathViewModelFactory.Create(_currentDirectorySearchText, sm));
+        public IEnumerable<ISuggestedPathViewModel> SuggestedPaths => _suggestedPaths;
 
         public IList<IFileSystemNodeViewModel> SelectedFileSystemNodes => _selectedFileSystemNodes;
 
@@ -167,6 +166,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
             _fileSystemNodes = new ObservableCollection<IFileSystemNodeViewModel>();
             _selectedFileSystemNodes = new ObservableCollection<IFileSystemNodeViewModel>();
+            _suggestedPaths = new ObservableCollection<ISuggestedPathViewModel>();
 
             ActivateCommand = ReactiveCommand.Create(Activate);
             RefreshCommand = ReactiveCommand.Create(ReloadFiles);
@@ -389,5 +389,16 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             _fileSystemNodes.FirstOrDefault(n => n.FullPath == nodePath);
 
         private void ExecuteInUiThread(Action action) => _applicationDispatcher.Dispatch(action);
+
+        private void ClearSuggestions() => _suggestedPaths.Clear();
+
+        private void ReloadSuggestions()
+        {
+            var suggestions = _suggestionsService
+                .GetSuggestions(_currentDirectorySearchText)
+                .Select(sm => _suggestedPathViewModelFactory.Create(_currentDirectorySearchText, sm));
+
+            _suggestedPaths.AddRange(suggestions);
+        }
     }
 }

@@ -27,9 +27,7 @@ namespace Camelot.Services
         }
 
         public IEnumerable<SuggestionModel> GetSuggestions(string substring) =>
-            _directoryService
-                .GetChildDirectories(_pathService.GetParentDirectory(substring))
-                .Select(d => d.FullPath)
+            GetChildDirectories(substring)
                 .Concat(_favouriteDirectoriesService.FavouriteDirectories)
                 .Where(n => n.StartsWith(substring))
                 .Distinct()
@@ -37,6 +35,17 @@ namespace Camelot.Services
                 .OrderByDescending(m => m.Type)
                 .ThenBy(m => m.FullPath.Length)
                 .Take(_configuration.SuggestionsCount);
+
+        private IEnumerable<string> GetChildDirectories(string substring)
+        {
+            var parentDirectory = _pathService.GetParentDirectory(substring);
+
+            return parentDirectory is null
+                ? Enumerable.Empty<string>()
+                : _directoryService
+                    .GetChildDirectories(parentDirectory)
+                    .Select(d => d.FullPath);
+        }
 
         private SuggestionModel CreateFrom(string fullPath)
         {
