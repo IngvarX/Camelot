@@ -14,7 +14,9 @@
     <StackPanel Orientation="Vertical">
         <Border Classes="tabBorder">
             <Grid>
-                <Button Classes="tabButton" PointerReleased="ButtonOnPointerReleased"
+                <Button Name="TabButton"
+                        Classes="tabButton"
+                        PointerReleased="ButtonOnPointerReleased"
                         Command="{Binding ActivateCommand}">
                     <Button.Content>
                         <Grid Name="TabGrid" DragDrop.AllowDrop="True">

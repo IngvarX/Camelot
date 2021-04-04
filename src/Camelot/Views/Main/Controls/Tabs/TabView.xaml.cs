@@ -49,7 +49,10 @@ namespace Camelot.Views.Main.Controls.Tabs
             var dragData = new DataObject();
             dragData.Set(DataFormat, ViewModel);
 
-            await DragDrop.DoDragDrop(e, dragData, DragDropEffects.Copy);
+            await DragDrop.DoDragDrop(e, dragData, DragDropEffects.Move);
+
+            var button = this.Find<Button>("TabButton");
+            button.Classes.Set(":pressed", false);
 
             ViewModel.ActivateCommand.Execute(null);
         }
