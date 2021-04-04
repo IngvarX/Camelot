@@ -85,11 +85,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             IsSearchEnabled = !IsSearchEnabled;
         }
 
-        private void Reset()
-        {
-            SearchText = string.Empty;
-            IsRecursiveSearchEnabled = false;
-        }
+        private void Reset() => SearchText = string.Empty;
 
         private void FireSettingsChangedEvent()
         {

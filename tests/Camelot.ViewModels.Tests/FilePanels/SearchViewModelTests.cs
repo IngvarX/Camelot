@@ -62,7 +62,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
 
             Assert.False(viewModel.IsSearchEnabled);
             Assert.Equal(string.Empty, viewModel.SearchText);
-            Assert.False(viewModel.IsRecursiveSearchEnabled);
+            Assert.True(viewModel.IsRecursiveSearchEnabled);
         }
 
         [Fact]
@@ -76,21 +76,21 @@ namespace Camelot.ViewModels.Tests.FilePanels
             viewModel.ToggleSearch();
             Assert.True(viewModel.IsSearchEnabled);
             Assert.Equal(string.Empty, viewModel.SearchText);
-            Assert.False(viewModel.IsRecursiveSearchEnabled);
+            Assert.True(viewModel.IsRecursiveSearchEnabled);
 
             viewModel.SearchText = SearchText;
             viewModel.IsRecursiveSearchEnabled = true;
             viewModel.ToggleSearch();
             Assert.False(viewModel.IsSearchEnabled);
             Assert.Equal(string.Empty, viewModel.SearchText);
-            Assert.False(viewModel.IsRecursiveSearchEnabled);
+            Assert.True(viewModel.IsRecursiveSearchEnabled);
 
             viewModel.SearchText = SearchText;
             viewModel.IsRecursiveSearchEnabled = true;
             viewModel.ToggleSearch();
             Assert.True(viewModel.IsSearchEnabled);
             Assert.Equal(string.Empty, viewModel.SearchText);
-            Assert.False(viewModel.IsRecursiveSearchEnabled);
+            Assert.True(viewModel.IsRecursiveSearchEnabled);
         }
 
         [Theory]
