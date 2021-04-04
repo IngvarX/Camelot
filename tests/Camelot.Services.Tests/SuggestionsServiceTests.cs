@@ -125,6 +125,21 @@ namespace Camelot.Services.Tests
             Assert.Equal(NotFavouriteDirectory, suggestions[2].FullPath);
         }
 
+        [Fact]
+        public void TestNoParent()
+        {
+            _autoMocker
+                .Setup<IFavouriteDirectoriesService, ISet<string>>(m => m.FavouriteDirectories)
+                .Returns(new HashSet<string> {FavouriteDirectory});
+
+            var service = _autoMocker.CreateInstance<SuggestionsService>();
+            var suggestions = service.GetSuggestions(Substring).ToArray();
+
+            Assert.NotEmpty(suggestions);
+            Assert.Single(suggestions);
+            Assert.Equal(FavouriteDirectory, suggestions.Single().FullPath);
+        }
+
         private static SuggestionsConfiguration GetConfiguration() =>
             new SuggestionsConfiguration
             {
