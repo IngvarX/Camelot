@@ -12,6 +12,7 @@ namespace Camelot.Services
 
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IPathService _pathService;
+        private readonly IHomeDirectoryProvider _homeDirectoryProvider;
 
         private readonly HashSet<string> _favouriteDirectories;
 
@@ -19,10 +20,12 @@ namespace Camelot.Services
 
         public FavouriteDirectoriesService(
             IUnitOfWorkFactory unitOfWorkFactory,
-            IPathService pathService)
+            IPathService pathService,
+            IHomeDirectoryProvider homeDirectoryProvider)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _pathService = pathService;
+            _homeDirectoryProvider = homeDirectoryProvider;
 
             _favouriteDirectories = GetFavouriteDirectories();
         }
@@ -49,10 +52,16 @@ namespace Camelot.Services
         {
             using var uow = _unitOfWorkFactory.Create();
             var repository = uow.GetRepository<FavouriteDirectories>();
-            var directories = repository.GetById(FavouriteDirectoriesKey).Directories;
+            var directories = repository
+                .GetById(FavouriteDirectoriesKey)
+                ?.Directories
+                ?.Select(d => d.FullPath) ?? GetDefaultDirectories();
 
-            return directories.Select(d => d.FullPath).ToHashSet();
+            return directories.ToHashSet();
         }
+
+        private IEnumerable<string> GetDefaultDirectories() =>
+            Enumerable.Repeat(_homeDirectoryProvider.HomeDirectoryPath, 1);
 
         private string PreprocessPath(string path) => _pathService.RightTrimPathSeparators(path);
 
