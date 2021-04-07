@@ -30,7 +30,7 @@ namespace Camelot.Services.Tests
         public void TestDistinct()
         {
             _autoMocker
-                .Setup<IFavouriteDirectoriesService, ISet<string>>(m => m.FavouriteDirectories)
+                .Setup<IFavouriteDirectoriesService, IReadOnlyCollection<string>>(m => m.FavouriteDirectories)
                 .Returns(new HashSet<string> {Directory});
             _autoMocker
                 .Setup<IPathService, string>(m => m.GetParentDirectory(Substring))
@@ -58,7 +58,7 @@ namespace Camelot.Services.Tests
         public void TestFiltering()
         {
             _autoMocker
-                .Setup<IFavouriteDirectoriesService, ISet<string>>(m => m.FavouriteDirectories)
+                .Setup<IFavouriteDirectoriesService, IReadOnlyCollection<string>>(m => m.FavouriteDirectories)
                 .Returns(new HashSet<string>());
             _autoMocker
                 .Setup<IPathService, string>(m => m.GetParentDirectory(Substring))
@@ -90,7 +90,7 @@ namespace Camelot.Services.Tests
         public void TestSorting()
         {
             _autoMocker
-                .Setup<IFavouriteDirectoriesService, ISet<string>>(m => m.FavouriteDirectories)
+                .Setup<IFavouriteDirectoriesService, IReadOnlyCollection<string>>(m => m.FavouriteDirectories)
                 .Returns(new HashSet<string> {FavouriteDirectory});
             _autoMocker
                 .Setup<IPathService, string>(m => m.GetParentDirectory(Substring))
@@ -129,7 +129,7 @@ namespace Camelot.Services.Tests
         public void TestNoParent()
         {
             _autoMocker
-                .Setup<IFavouriteDirectoriesService, ISet<string>>(m => m.FavouriteDirectories)
+                .Setup<IFavouriteDirectoriesService, IReadOnlyCollection<string>>(m => m.FavouriteDirectories)
                 .Returns(new HashSet<string> {FavouriteDirectory});
 
             var service = _autoMocker.CreateInstance<SuggestionsService>();

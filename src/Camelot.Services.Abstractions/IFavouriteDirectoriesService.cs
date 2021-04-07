@@ -4,6 +4,10 @@ namespace Camelot.Services.Abstractions
 {
     public interface IFavouriteDirectoriesService
     {
-        ISet<string> FavouriteDirectories { get; }
+        IReadOnlyCollection<string> FavouriteDirectories { get; }
+
+        void AddDirectory(string fullPath);
+
+        void RemoveDirectory(string fullPath);
     }
 }
