@@ -98,7 +98,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
                 CurrentDirectoryChanged.Raise(this, EventArgs.Empty);
 
                 ShouldShowSuggestions = false;
-                IsFavouriteDirectory = CheckIfDirectoryIsFavourite();
+                UpdateFavouriteDirectoryStatus();
             }
         }
 
@@ -226,6 +226,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             TabsListViewModel.SelectedTabChanged += TabsListViewModelOnSelectedTabChanged;
             SearchViewModel.SearchSettingsChanged += SearchViewModelOnSearchSettingsChanged;
             _selectedFileSystemNodes.CollectionChanged += SelectedFileSystemNodesOnCollectionChanged;
+            _favouriteDirectoriesService.DirectoryAdded += (sender, args) => UpdateFavouriteDirectoryStatus();
+            _favouriteDirectoriesService.DirectoryRemoved += (sender, args) => UpdateFavouriteDirectoryStatus();
 
             _fileSystemWatchingService.NodeCreated += (sender, args) =>
                 ExecuteInUiThread(() => InsertNode(args.Node));
@@ -416,7 +418,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             _suggestedPaths.AddRange(suggestions);
         }
 
-        private bool CheckIfDirectoryIsFavourite() =>
+        private void UpdateFavouriteDirectoryStatus() => IsFavouriteDirectory =
             _favouriteDirectoriesService.FavouriteDirectories.Contains(CurrentDirectory);
     }
 }
