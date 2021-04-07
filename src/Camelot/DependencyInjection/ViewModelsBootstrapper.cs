@@ -115,7 +115,7 @@ namespace Camelot.DependencyInjection
             ));
             services.RegisterLazySingleton<IFavouriteDirectoriesListViewModel>(() => new FavouriteDirectoriesListViewModel(
                 resolver.GetRequiredService<IFavouriteDirectoryViewModelFactory>(),
-                resolver.GetRequiredService<IHomeDirectoryProvider>()
+                resolver.GetRequiredService<IFavouriteDirectoriesService>()
             ));
         }
 
