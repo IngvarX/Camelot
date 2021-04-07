@@ -12,7 +12,7 @@
     </Design.DataContext>
 
     <Grid Classes="defaultBackgroundColorGrid" ColumnDefinitions="*,*,*,*,*">
-        <Button Classes="operationButton" Command="{Binding OpenCommand}">
+        <Button Classes="operationButton" Command="{Binding OpenInDefaultEditorCommand}">
             <StackPanel Orientation="Horizontal">
                 <Image Width="25" Height="20" Margin="0,5,0,0">
                     <Image.Source>
