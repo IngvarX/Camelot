@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.VisualTree;
+using Camelot.Ui.Tests.Extensions;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Nodes;
 using Camelot.Views.Dialogs;
@@ -45,12 +46,7 @@ namespace Camelot.Ui.Tests.Flows
                 .OfType<TextBox>()
                 .Single();
 
-            directoryNameTextBox.RaiseEvent(new TextInputEventArgs
-            {
-                Device = KeyboardDevice.Instance,
-                Text = DirectoryName,
-                RoutedEvent = InputElement.TextInputEvent
-            });
+            directoryNameTextBox.SendText(DirectoryName);
             Keyboard.PressKey(window, Key.Enter);
 
             await Task.Delay(100);
@@ -61,8 +57,7 @@ namespace Camelot.Ui.Tests.Flows
                 .SingleOrDefault();
             Assert.Null(_createDirectoryDialog);
 
-            var filesPanel = app
-                .MainWindow
+            var filesPanel = window
                 .GetVisualDescendants()
                 .OfType<FilesPanelView>()
                 .SingleOrDefault(CheckIfActive);
@@ -84,12 +79,7 @@ namespace Camelot.Ui.Tests.Flows
                 .SingleOrDefault();
             Assert.NotNull(searchTextBox);
 
-            searchTextBox.RaiseEvent(new TextInputEventArgs
-            {
-                Device = KeyboardDevice.Instance,
-                Text = DirectoryName,
-                RoutedEvent = InputElement.TextInputEvent
-            });
+            searchTextBox.SendText(DirectoryName);
 
             await Task.Delay(1000);
 

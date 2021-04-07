@@ -5,7 +5,7 @@ namespace Camelot.Ui.Tests
 {
     public static class WaitService
     {
-        public static async Task WaitForConditionAsync(Func<bool> condition, int delayMs = 50, int maxAttempts = 20)
+        public static async Task<bool> WaitForConditionAsync(Func<bool> condition, int delayMs = 50, int maxAttempts = 20)
         {
             for (var i = 0; i < maxAttempts; i++)
             {
@@ -13,9 +13,11 @@ namespace Camelot.Ui.Tests
 
                 if (condition())
                 {
-                    break;
+                    return true;
                 }
             }
+
+            return false;
         }
     }
 }
