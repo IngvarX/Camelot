@@ -30,26 +30,6 @@ namespace Camelot.ViewModels.Tests
         }
 
         [Fact]
-        public void TestOpen()
-        {
-            var filesPanelViewModelMock = new Mock<IFilesPanelViewModel>();
-            filesPanelViewModelMock
-                .Setup(m => m.OpenLastSelectedFile())
-                .Verifiable();
-            _autoMocker
-                .Setup<IFilesOperationsMediator, IFilesPanelViewModel>(m => m.ActiveFilesPanelViewModel)
-                .Returns(filesPanelViewModelMock.Object);
-
-            var viewModel = _autoMocker.CreateInstance<OperationsViewModel>();
-
-            Assert.True(viewModel.OpenCommand.CanExecute(null));
-            viewModel.OpenCommand.Execute(null);
-
-            filesPanelViewModelMock
-                .Verify(m => m.OpenLastSelectedFile(), Times.Once);
-        }
-
-        [Fact]
         public void TestOpenInDefaultEditor()
         {
             _autoMocker

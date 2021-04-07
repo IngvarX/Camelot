@@ -196,13 +196,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             SelectedTab.IsGloballyActive = false;
         }
 
-        public void OpenLastSelectedFile()
-        {
-            var lastSelected = _selectedFileSystemNodes.LastOrDefault();
-
-            lastSelected?.OpenCommand.Execute(null);
-        }
-
         private void SortFiles(SortingMode sortingMode)
         {
             if (SelectedTab.SortingViewModel.SortingColumn == sortingMode)

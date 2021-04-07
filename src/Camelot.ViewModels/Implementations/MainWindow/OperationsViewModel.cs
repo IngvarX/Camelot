@@ -23,8 +23,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow
         private readonly IDirectoryService _directoryService;
         private readonly ITrashCanService _trashCanService;
 
-        public ICommand OpenCommand { get; }
-
         public ICommand OpenInDefaultEditorCommand { get; }
 
         public ICommand CopyCommand { get; }
@@ -54,7 +52,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             _directoryService = directoryService;
             _trashCanService = trashCanService;
 
-            OpenCommand = ReactiveCommand.Create(Open);
             OpenInDefaultEditorCommand = ReactiveCommand.Create(OpenInDefaultEditor);
             CopyCommand = ReactiveCommand.Create(Copy);
             MoveCommand = ReactiveCommand.Create(Move);
@@ -63,8 +60,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             RemoveCommand = ReactiveCommand.CreateFromTask(RemoveAsync);
             MoveToTrashCommand = ReactiveCommand.CreateFromTask(MoveToTrashAsync);
         }
-
-        private void Open() => _filesOperationsMediator.ActiveFilesPanelViewModel.OpenLastSelectedFile();
 
         private void OpenInDefaultEditor() => _operationsService.OpenFiles(GetSelectedNodes());
 

@@ -18,7 +18,5 @@ namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels
         void Activate();
 
         void Deactivate();
-
-        void OpenLastSelectedFile();
     }
 }
