@@ -38,6 +38,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private readonly IFileSystemNodeViewModelComparerFactory _comparerFactory;
         private readonly ISuggestionsService _suggestionsService;
         private readonly IRecursiveSearchService _recursiveSearchService;
+        private readonly IFavouriteDirectoriesService _favouriteDirectoriesService;
         private readonly ISuggestedPathViewModelFactory _suggestedPathViewModelFactory;
 
         private readonly ObservableCollection<IFileSystemNodeViewModel> _fileSystemNodes;
@@ -97,8 +98,12 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
                 CurrentDirectoryChanged.Raise(this, EventArgs.Empty);
 
                 ShouldShowSuggestions = false;
+                IsFavouriteDirectory = CheckIfDirectoryIsFavourite();
             }
         }
+
+        [Reactive]
+        public bool IsFavouriteDirectory { get; set; }
 
         public IEnumerable<IFileSystemNodeViewModel> FileSystemNodes => _fileSystemNodes;
 
@@ -130,6 +135,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         public ICommand PasteFromClipboardCommand { get; }
 
+        public ICommand ToggleFavouriteStatusCommand { get; }
+
         public FilesPanelViewModel(
             IFileService fileService,
             IDirectoryService directoryService,
@@ -142,6 +149,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             IFileSystemNodeViewModelComparerFactory comparerFactory,
             ISuggestionsService suggestionsService,
             IRecursiveSearchService recursiveSearchService,
+            IFavouriteDirectoriesService favouriteDirectoriesService,
             ISuggestedPathViewModelFactory suggestedPathViewModelFactory,
             ISearchViewModel searchViewModel,
             ITabsListViewModel tabsListViewModel,
@@ -158,6 +166,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             _comparerFactory = comparerFactory;
             _suggestionsService = suggestionsService;
             _recursiveSearchService = recursiveSearchService;
+            _favouriteDirectoriesService = favouriteDirectoriesService;
             _suggestedPathViewModelFactory = suggestedPathViewModelFactory;
 
             SearchViewModel = searchViewModel;
@@ -173,6 +182,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             SortFilesCommand = ReactiveCommand.Create<SortingMode>(SortFiles);
             CopyToClipboardCommand = ReactiveCommand.CreateFromTask(CopyToClipboardAsync);
             PasteFromClipboardCommand = ReactiveCommand.CreateFromTask(PasteFromClipboardAsync);
+            ToggleFavouriteStatusCommand = ReactiveCommand.Create(ToggleFavouriteStatus);
 
             SubscribeToEvents();
             CurrentDirectory = SelectedTab.CurrentDirectory;
@@ -367,6 +377,18 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         private Task PasteFromClipboardAsync() => _clipboardOperationsService.PasteFilesAsync(CurrentDirectory);
 
+        private void ToggleFavouriteStatus()
+        {
+            if (IsFavouriteDirectory)
+            {
+                _favouriteDirectoriesService.AddDirectory(CurrentDirectory);
+            }
+            else
+            {
+                _favouriteDirectoriesService.RemoveDirectory(CurrentDirectory);
+            }
+        }
+
         private int GetInsertIndex(IFileSystemNodeViewModel newNodeViewModel)
         {
             var comparer = GetComparer();
@@ -393,5 +415,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
             _suggestedPaths.AddRange(suggestions);
         }
+
+        private bool CheckIfDirectoryIsFavourite() =>
+            _favouriteDirectoriesService.FavouriteDirectories.Contains(CurrentDirectory);
     }
 }
