@@ -1,8 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Camelot.DataAccess.Models;
 using Camelot.DataAccess.UnitOfWork;
+using Camelot.Extensions;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Models.EventArgs;
 
 namespace Camelot.Services
 {
@@ -17,6 +20,10 @@ namespace Camelot.Services
         private readonly HashSet<string> _favouriteDirectories;
 
         public IReadOnlyCollection<string> FavouriteDirectories => _favouriteDirectories;
+
+        public event EventHandler<FavouriteDirectoriesListChangedEventArgs> DirectoryAdded;
+
+        public event EventHandler<FavouriteDirectoriesListChangedEventArgs> DirectoryRemoved;
 
         public FavouriteDirectoriesService(
             IUnitOfWorkFactory unitOfWorkFactory,
@@ -36,6 +43,7 @@ namespace Camelot.Services
             if (_favouriteDirectories.Add(preprocessedPath))
             {
                 SaveFavouriteDirectories();
+                DirectoryAdded.Raise(this, CreateArgs(fullPath));
             }
         }
 
@@ -45,6 +53,7 @@ namespace Camelot.Services
             if (_favouriteDirectories.Remove(preprocessedPath))
             {
                 SaveFavouriteDirectories();
+                DirectoryRemoved.Raise(this, CreateArgs(fullPath));
             }
         }
 
@@ -84,5 +93,8 @@ namespace Camelot.Services
         {
             Directories = directories
         };
+
+        private static FavouriteDirectoriesListChangedEventArgs CreateArgs(string path) =>
+            new FavouriteDirectoriesListChangedEventArgs(path);
     }
 }

@@ -1,38 +1,44 @@
+using System.Collections.Generic;
 using System.Linq;
 using Camelot.Services.Abstractions;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Implementations.MainWindow.FavouriteDirectories;
 using Camelot.ViewModels.Interfaces.MainWindow.Directories;
 using Moq;
+using Moq.AutoMock;
 using Xunit;
 
 namespace Camelot.ViewModels.Tests.FavouriteDirectories
 {
     public class FavouriteDirectoriesListViewModelTests
     {
-        private const string HomeDir = "HomeDir";
+        private const string Dir = "Dir";
+
+        private readonly AutoMocker _autoMocker;
+
+        public FavouriteDirectoriesListViewModelTests()
+        {
+            _autoMocker = new AutoMocker();
+        }
 
         [Fact]
-        public void TestHomeDir()
+        public void TestLoad()
         {
             var favDirMock = new Mock<IFavouriteDirectoryViewModel>();
-            var factoryMock = new Mock<IFavouriteDirectoryViewModelFactory>();
-            factoryMock
-                .Setup(m => m.Create(HomeDir))
-                .Returns(favDirMock.Object)
-                .Verifiable();
-            var homeDirProviderMock = new Mock<IHomeDirectoryProvider>();
-            homeDirProviderMock
-                .SetupGet(m => m.HomeDirectoryPath)
-                .Returns(HomeDir);
+            _autoMocker
+                .Setup<IFavouriteDirectoryViewModelFactory, IFavouriteDirectoryViewModel>(m => m.Create(Dir))
+                .Returns(favDirMock.Object);
+            _autoMocker
+                .Setup<IFavouriteDirectoriesService, IReadOnlyCollection<string>>(m => m.FavouriteDirectories)
+                .Returns(new[] {Dir});
 
-            var viewModel = new FavouriteDirectoriesListViewModel(factoryMock.Object, homeDirProviderMock.Object);
+            var viewModel = _autoMocker.CreateInstance<FavouriteDirectoriesListViewModel>();
 
             Assert.NotNull(viewModel.Directories);
             Assert.Single(viewModel.Directories);
 
-            var homeDir = viewModel.Directories.Single();
-            Assert.Equal(favDirMock.Object, homeDir);
+            var dir = viewModel.Directories.Single();
+            Assert.Equal(favDirMock.Object, dir);
         }
     }
 }
