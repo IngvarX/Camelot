@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:favouriteDirectories="clr-namespace:Camelot.ViewModels.Implementations.MainWindow.FavouriteDirectories;assembly=Camelot.ViewModels"
+             xmlns:p="clr-namespace:Camelot.Properties"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Camelot.Views.Main.FavouriteDirectories.FavouriteDirectoryView">
 
@@ -26,5 +27,12 @@
             <TextBlock Grid.Column="1" Classes="driveNameTextBlock"
                        Text="{Binding DirectoryName}" />
         </Grid>
+
+        <Button.ContextMenu>
+            <ContextMenu>
+                <MenuItem Header="{x:Static p:Resources.Remove}"
+                          Command="{Binding RemoveCommand}" />
+            </ContextMenu>
+        </Button.ContextMenu>
     </Button>
 </UserControl>
