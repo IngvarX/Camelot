@@ -1,8 +1,10 @@
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Models;
 using Camelot.ViewModels.Factories.Implementations;
 using Camelot.ViewModels.Implementations.MainWindow.FavouriteDirectories;
 using Camelot.ViewModels.Services.Interfaces;
 using Moq;
+using Moq.AutoMock;
 using Xunit;
 
 namespace Camelot.ViewModels.Tests.Factories
@@ -10,23 +12,33 @@ namespace Camelot.ViewModels.Tests.Factories
     public class FavouriteDirectoryViewModelFactoryTests
     {
         private const string DirPath = "Dir";
+        private const string DirName = "Name";
+
+        private readonly AutoMocker _autoMocker;
+
+        public FavouriteDirectoryViewModelFactoryTests()
+        {
+            _autoMocker = new AutoMocker();
+        }
 
         [Fact]
         public void TestCreate()
         {
-            var mediatorMock = new Mock<IFilesOperationsMediator>();
-            var directoryServiceMock = new Mock<IDirectoryService>();
-            directoryServiceMock
-                .Setup(m => m.GetDirectory(DirPath))
-                .Verifiable();
+            _autoMocker
+                .Setup<IDirectoryService, DirectoryModel>(m => m.GetDirectory(DirPath))
+                .Returns(new DirectoryModel
+                {
+                    Name = DirName
+                });
 
-            var factory = new FavouriteDirectoryViewModelFactory(mediatorMock.Object, directoryServiceMock.Object);
+            var factory = _autoMocker.CreateInstance<FavouriteDirectoryViewModelFactory>();
 
             var viewModel = factory.Create(DirPath);
             Assert.IsType<FavouriteDirectoryViewModel>(viewModel);
 
-            directoryServiceMock
-                .Verify(m => m.GetDirectory(DirPath), Times.Once);
+            var favDirViewModel = (FavouriteDirectoryViewModel) viewModel;
+
+            Assert.Equal(DirName, favDirViewModel.DirectoryName);
         }
     }
 }
