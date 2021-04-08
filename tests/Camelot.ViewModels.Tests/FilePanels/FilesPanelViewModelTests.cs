@@ -31,6 +31,9 @@ namespace Camelot.ViewModels.Tests.FilePanels
         [Fact]
         public void TestSetDirectory()
         {
+            _autoMocker
+                .Setup<IFavouriteDirectoriesService, IReadOnlyCollection<string>>(m => m.FavouriteDirectories)
+                .Returns(new string[0]);
             var currentDirectory = AppRootDirectory;
             var tabViewModelMock = new Mock<ITabViewModel>();
             tabViewModelMock
@@ -79,6 +82,9 @@ namespace Camelot.ViewModels.Tests.FilePanels
         [Fact]
         public void TestSelection()
         {
+            _autoMocker
+                .Setup<IFavouriteDirectoriesService, IReadOnlyCollection<string>>(m => m.FavouriteDirectories)
+                .Returns(new string[0]);
             const long size = 42;
             _autoMocker
                 .Setup<ISearchViewModel, INodeSpecification>(m => m.GetSpecification())
@@ -153,6 +159,9 @@ namespace Camelot.ViewModels.Tests.FilePanels
         public void TestActivationAndDeactivation()
         {
             _autoMocker
+                .Setup<IFavouriteDirectoriesService, IReadOnlyCollection<string>>(m => m.FavouriteDirectories)
+                .Returns(new string[0]);
+            _autoMocker
                 .Setup<IFileSystemNodeViewModelFactory, IFileSystemNodeViewModel>(m => m.Create(It.IsAny<DirectoryModel>(), It.IsAny<bool>()))
                 .Returns(new Mock<IDirectoryViewModel>().Object);
             _autoMocker
@@ -207,6 +216,9 @@ namespace Camelot.ViewModels.Tests.FilePanels
         [Fact]
         public void TestRefreshCommand()
         {
+            _autoMocker
+                .Setup<IFavouriteDirectoriesService, IReadOnlyCollection<string>>(m => m.FavouriteDirectories)
+                .Returns(new string[0]);
             _autoMocker
                 .Setup<ISearchViewModel, INodeSpecification>(m => m.GetSpecification())
                 .Returns(new Mock<INodeSpecification>().Object);
