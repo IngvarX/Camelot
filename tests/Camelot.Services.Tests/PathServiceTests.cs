@@ -76,7 +76,20 @@ namespace Camelot.Services.Tests
             var pathService = _autoMocker.CreateInstance<PathService>();
             var path = pathService.RightTrimPathSeparators(directory);
 
-            Assert.Equal(path, expectedResult);
+            Assert.Equal(expectedResult, path);
+        }
+
+        [Theory]
+        [InlineData("Directory", "Directory")]
+        [InlineData("/Directory", "Directory")]
+        [InlineData("\\Directory", "Directory")]
+        [InlineData("/", "")]
+        public void TestLeftTrimPathSeparators(string directory, string expectedResult)
+        {
+            var pathService = _autoMocker.CreateInstance<PathService>();
+            var path = pathService.LeftTrimPathSeparators(directory);
+
+            Assert.Equal(expectedResult, path);
         }
 
         [Theory]
