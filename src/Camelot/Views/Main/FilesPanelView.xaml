@@ -129,6 +129,7 @@
                   Items="{Binding FileSystemNodes}"
                   CanUserSortColumns="False" IsReadOnly="True" CanUserResizeColumns="True"
                   DragDrop.AllowDrop="True"
+                  Cursor="Arrow"
                   HorizontalScrollBarVisibility="Disabled"
                   AlternatingRowBackground="{DynamicResource AlternativeThemeBackgroundBrush}"
                   VerticalScrollBarVisibility="Visible"
@@ -252,7 +253,7 @@
                                         <Grid>
                                             <Grid IsVisible="{Binding !IsParentDirectory}">
                                                 <TextBlock Classes="filePanelTextBlock" Text="{Binding Name}" IsVisible="{Binding !IsEditing}"
-                                                           Tapped="OnNameTextBlockTapped" />
+                                                           Name="NameTextBlock" />
                                                 <TextBox Classes="fileNameTextBox" Text="{Binding FullName}" IsVisible="{Binding IsEditing}"
                                                          LostFocus="OnFullNameTextBoxLostFocus">
                                                     <TextBox.KeyBindings>
@@ -269,7 +270,7 @@
                                     <DataTemplate DataType="{x:Type nodes:FileViewModel}">
                                         <Grid>
                                             <TextBlock Classes="filePanelTextBlock" Text="{Binding Name}" IsVisible="{Binding !IsEditing}"
-                                                       Tapped="OnNameTextBlockTapped" />
+                                                       Name="NameTextBlock" />
                                             <TextBox Classes="fileNameTextBox" Text="{Binding FullName}" IsVisible="{Binding IsEditing}"
                                                      LostFocus="OnFullNameTextBoxLostFocus">
                                                 <TextBox.KeyBindings>

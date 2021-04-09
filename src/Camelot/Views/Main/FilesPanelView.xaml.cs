@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Xml;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -19,8 +17,6 @@ namespace Camelot.Views.Main
 {
     public class FilesPanelView : UserControl
     {
-        private const string DataFormat = "Node";
-
         private DataGrid FilesDataGrid => this.FindControl<DataGrid>("FilesDataGrid");
 
         private TextBox DirectoryTextBox => this.FindControl<TextBox>("DirectoryTextBox");
@@ -141,27 +137,27 @@ namespace Camelot.Views.Main
 
                 directoryViewModel.OpenInNewTabCommand.Execute(null);
             }
-        }
-
-        private void OnNameTextBlockTapped(object sender, RoutedEventArgs args)
-        {
-            var textBlock = (TextBlock) sender;
-            if (!(textBlock.DataContext is IFileSystemNodeViewModel viewModel))
+            else if (point.Properties.IsLeftButtonPressed && args.Source is TextBlock {Name: "NameTextBlock"} textBlock)
             {
-                return;
-            }
+                if (!(textBlock.DataContext is IFileSystemNodeViewModel viewModel))
+                {
+                    return;
+                }
 
-            if (viewModel.IsWaitingForEdit)
-            {
-                viewModel.IsEditing = true;
+                args.Handled = true;
 
-                // focus text box with file/dir name
-                var textBox = textBlock.Parent.VisualChildren.OfType<TextBox>().Single();
-                textBox.Focus();
-            }
-            else
-            {
-                viewModel.IsWaitingForEdit = true;
+                if (viewModel.IsWaitingForEdit)
+                {
+                    viewModel.IsEditing = true;
+
+                    // focus text box with file/dir name
+                    var textBox = textBlock.Parent.VisualChildren.OfType<TextBox>().Single();
+                    textBox.Focus();
+                }
+                else
+                {
+                    viewModel.IsWaitingForEdit = true;
+                }
             }
         }
 
@@ -241,7 +237,7 @@ namespace Camelot.Views.Main
                 return;
             }
 
-            if (!(e.Cell.DataContext is IFileSystemNodeViewModel viewModel))
+            if (!(e.Cell.DataContext is IFileSystemNodeViewModel {IsEditing: false} viewModel))
             {
                 return;
             }
@@ -255,6 +251,7 @@ namespace Camelot.Views.Main
             dragData.Set(DataFormats.FileNames, fileNames);
 
             await DragDrop.DoDragDrop(e.PointerPressedEventArgs, dragData, DragDropEffects.Copy);
+            viewModel.IsWaitingForEdit = true;
         }
 
         private async void OnDrop(object sender, DragEventArgs e)
@@ -295,6 +292,8 @@ namespace Camelot.Views.Main
                     await ViewModel.DragAndDropOperationsViewModel.MoveFilesAsync(fileNames, fullPath);
                     break;
             }
+
+            e.Handled = true;
         }
     }
 }
