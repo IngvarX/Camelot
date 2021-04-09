@@ -22,6 +22,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow
         private readonly IDialogService _dialogService;
         private readonly IDirectoryService _directoryService;
         private readonly ITrashCanService _trashCanService;
+        private readonly IPathService _pathService;
 
         public ICommand OpenInDefaultEditorCommand { get; }
 
@@ -43,7 +44,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             INodesSelectionService nodesSelectionService,
             IDialogService dialogService,
             IDirectoryService directoryService,
-            ITrashCanService trashCanService)
+            ITrashCanService trashCanService,
+            IPathService pathService)
         {
             _filesOperationsMediator = filesOperationsMediator;
             _operationsService = operationsService;
@@ -51,6 +53,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             _dialogService = dialogService;
             _directoryService = directoryService;
             _trashCanService = trashCanService;
+            _pathService = pathService;
 
             OpenInDefaultEditorCommand = ReactiveCommand.Create(OpenInDefaultEditor);
             CopyCommand = ReactiveCommand.Create(Copy);
@@ -60,6 +63,9 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             RemoveCommand = ReactiveCommand.CreateFromTask(RemoveAsync);
             MoveToTrashCommand = ReactiveCommand.CreateFromTask(MoveToTrashAsync);
         }
+
+        public Task PasteFilesAsync(IReadOnlyList<string> files, string fullPath) =>
+            _operationsService.CopyAsync(files, ExtractDirectory(fullPath));
 
         private void OpenInDefaultEditor() => _operationsService.OpenFiles(GetSelectedNodes());
 
@@ -139,5 +145,9 @@ namespace Camelot.ViewModels.Implementations.MainWindow
                 .ToArray();
 
         private static void Execute(Action action) => Task.Factory.StartNew(action);
+
+        private string ExtractDirectory(string fullPath) => _directoryService.CheckIfExists(fullPath)
+            ? fullPath
+            : _pathService.GetParentDirectory(fullPath);
     }
 }

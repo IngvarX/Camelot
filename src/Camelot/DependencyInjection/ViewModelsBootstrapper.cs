@@ -205,7 +205,8 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<INodesSelectionService>(),
                 resolver.GetRequiredService<IDialogService>(),
                 resolver.GetRequiredService<IDirectoryService>(),
-                resolver.GetRequiredService<ITrashCanService>()
+                resolver.GetRequiredService<ITrashCanService>(),
+                resolver.GetRequiredService<IPathService>()
             ));
             services.RegisterLazySingleton<IMenuViewModel>(() => new MenuViewModel(
                 resolver.GetRequiredService<IApplicationCloser>(),

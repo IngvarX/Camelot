@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Xml;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -17,6 +19,8 @@ namespace Camelot.Views.Main
 {
     public class FilesPanelView : UserControl
     {
+        private const string DataFormat = "Node";
+
         private DataGrid FilesDataGrid => this.FindControl<DataGrid>("FilesDataGrid");
 
         private TextBox DirectoryTextBox => this.FindControl<TextBox>("DirectoryTextBox");
@@ -39,6 +43,8 @@ namespace Camelot.Views.Main
         {
             ViewModel.Deactivated += ViewModelOnDeactivated;
             ViewModel.Activated += ViewModelOnActivated;
+
+            FilesDataGrid.AddHandler(DragDrop.DropEvent, OnDrop);
         }
 
         private void ViewModelOnDeactivated(object sender, EventArgs e) => ClearSelection();
@@ -118,6 +124,7 @@ namespace Camelot.Views.Main
         {
             ActivateViewModel();
             ProcessPointerClickInCell(args.PointerPressedEventArgs, args.Cell);
+            DoDrag(args);
         }
 
         private void OnDirectoryTextBoxGotFocus(object sender, GotFocusEventArgs args) => ActivateViewModel();
@@ -226,5 +233,69 @@ namespace Camelot.Views.Main
         }
 
         private void HideSuggestionsPopup() => ViewModel.ShouldShowSuggestions = false;
+
+        private async void DoDrag(DataGridCellPointerPressedEventArgs e)
+        {
+            if (!e.PointerPressedEventArgs.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
+            {
+                return;
+            }
+
+            if (!(e.Cell.DataContext is IFileSystemNodeViewModel viewModel))
+            {
+                return;
+            }
+
+            var dragData = new DataObject();
+            var fileNames = ViewModel
+                .SelectedFileSystemNodes
+                .Select(f => f.FullPath)
+                .Concat(new[] {viewModel.FullPath})
+                .ToHashSet();
+            dragData.Set(DataFormats.FileNames, fileNames);
+
+            await DragDrop.DoDragDrop(e.PointerPressedEventArgs, dragData, DragDropEffects.Copy);
+        }
+
+        private async void OnDrop(object sender, DragEventArgs e)
+        {
+            if (!e.Data.Contains(DataFormats.FileNames))
+            {
+                return;
+            }
+
+            var fileNames = e.Data.GetFileNames()?.ToArray();
+            if (fileNames is null || !fileNames.Any())
+            {
+                return;
+            }
+
+            if (!(e.Source is IDataContextProvider dataContextProvider))
+            {
+                return;
+            }
+
+            var fullPath = ViewModel.CurrentDirectory;
+            if (dataContextProvider.DataContext is IFileSystemNodeViewModel viewModel)
+            {
+                if (ViewModel.SelectedFileSystemNodes.Contains(viewModel))
+                {
+                    return;
+                }
+
+                fullPath = viewModel.FullPath;
+            }
+
+            switch (e.DragEffects)
+            {
+                case DragDropEffects.Copy:
+                    await ViewModel.OperationsViewModel.PasteFilesAsync(fileNames, fullPath);
+                    break;
+                case DragDropEffects.Move:
+                    break;
+                case DragDropEffects.Link:
+                    break;
+            }
+        }
     }
 }

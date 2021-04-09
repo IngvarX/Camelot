@@ -46,7 +46,7 @@ namespace Camelot.Services
             var files = selectedFilesString
                 .Split()
                 .Where(t => t.StartsWith(UrlPrefix))
-                .Select(f => f.Substring(startIndex))
+                .Select(f => f[startIndex..])
                 .ToArray();
             if (files.Any())
             {
