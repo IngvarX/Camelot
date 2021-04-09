@@ -250,10 +250,16 @@ namespace Camelot.Views.Main
                 .Concat(new[] {viewModel.FullPath})
                 .ToHashSet();
             dragData.Set(DataFormats.FileNames, fileNames);
+            var effects = GetEffects(e.PointerPressedEventArgs);
 
-            await DragDrop.DoDragDrop(e.PointerPressedEventArgs, dragData, DragDropEffects.Copy);
+            await DragDrop.DoDragDrop(e.PointerPressedEventArgs, dragData, effects);
             viewModel.IsWaitingForEdit = true;
         }
+
+        private static DragDropEffects GetEffects(PointerEventArgs e) =>
+            (e.KeyModifiers | KeyModifiers.Shift) > 0
+                ? DragDropEffects.Move
+                : DragDropEffects.Copy;
 
         private async void OnDrop(object sender, DragEventArgs e)
         {
