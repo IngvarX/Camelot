@@ -127,12 +127,7 @@
 
         <DataGrid x:Name="FilesDataGrid" Grid.Row="2"
                   Items="{Binding FileSystemNodes}"
-                  CanUserSortColumns="False" IsReadOnly="True" CanUserResizeColumns="True"
                   DragDrop.AllowDrop="True"
-                  Cursor="Arrow"
-                  HorizontalScrollBarVisibility="Disabled"
-                  AlternatingRowBackground="{DynamicResource AlternativeThemeBackgroundBrush}"
-                  VerticalScrollBarVisibility="Visible"
                   KeyDown="OnDataGridKeyDown"
                   DoubleTapped="OnDataGridDoubleTapped"
                   CellPointerPressed="OnDataGridCellPointerPressed"

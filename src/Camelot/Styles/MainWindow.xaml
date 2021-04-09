@@ -226,6 +226,15 @@
         <Setter Property="Foreground" Value="{DynamicResource InactiveTabForegroundBrush}" />
     </Style>
 
+    <Style Selector="DataGrid#FilesDataGrid">
+        <Setter Property="CanUserSortColumns" Value="False" />
+        <Setter Property="IsReadOnly" Value="True" />
+        <Setter Property="CanUserResizeColumns" Value="True" />
+        <Setter Property="Cursor" Value="Arrow" />
+        <Setter Property="HorizontalScrollBarVisibility" Value="Disabled" />
+        <Setter Property="AlternatingRowBackground" Value="{DynamicResource AlternativeThemeBackgroundBrush}" />
+    </Style>
+
     <Style Selector="Button.iconButton:pressed /template/ ContentPresenter">
         <Setter Property="Background" Value="Transparent" />
     </Style>

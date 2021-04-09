@@ -137,7 +137,8 @@ namespace Camelot.Views.Main
 
                 directoryViewModel.OpenInNewTabCommand.Execute(null);
             }
-            else if (point.Properties.IsLeftButtonPressed && args.Source is TextBlock {Name: "NameTextBlock"} textBlock)
+            else if (point.Properties.IsLeftButtonPressed
+                     && args.Source is TextBlock {Name: "NameTextBlock"} textBlock)
             {
                 if (!(textBlock.DataContext is IFileSystemNodeViewModel viewModel))
                 {
