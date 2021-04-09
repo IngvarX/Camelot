@@ -173,7 +173,7 @@ namespace Camelot.Operations
                 UnsubscribeFromEvents(operation);
 
                 var finishedOperationsCount = Interlocked.Increment(ref _finishedOperationsCount);
-                if (finishedOperationsCount == _currentOperationsGroup.Count)
+                if (finishedOperationsCount == _currentOperationsGroup?.Count)
                 {
                     var isSuccessful = !state.IsFailedOrCancelled();
 

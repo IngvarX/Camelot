@@ -22,7 +22,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.Operations
         private readonly IDialogService _dialogService;
         private readonly IDirectoryService _directoryService;
         private readonly ITrashCanService _trashCanService;
-        private readonly IPathService _pathService;
 
         public ICommand OpenInDefaultEditorCommand { get; }
 
@@ -44,8 +43,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.Operations
             INodesSelectionService nodesSelectionService,
             IDialogService dialogService,
             IDirectoryService directoryService,
-            ITrashCanService trashCanService,
-            IPathService pathService)
+            ITrashCanService trashCanService)
         {
             _filesOperationsMediator = filesOperationsMediator;
             _operationsService = operationsService;
@@ -53,7 +51,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.Operations
             _dialogService = dialogService;
             _directoryService = directoryService;
             _trashCanService = trashCanService;
-            _pathService = pathService;
 
             OpenInDefaultEditorCommand = ReactiveCommand.Create(OpenInDefaultEditor);
             CopyCommand = ReactiveCommand.Create(Copy);
