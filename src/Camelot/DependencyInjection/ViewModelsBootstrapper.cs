@@ -22,6 +22,7 @@ using Camelot.ViewModels.Implementations.MainWindow.Drives;
 using Camelot.ViewModels.Implementations.MainWindow.FavouriteDirectories;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs;
+using Camelot.ViewModels.Implementations.MainWindow.Operations;
 using Camelot.ViewModels.Implementations.MainWindow.OperationsStates;
 using Camelot.ViewModels.Implementations.Menu;
 using Camelot.ViewModels.Implementations.Settings;
@@ -30,6 +31,7 @@ using Camelot.ViewModels.Interfaces.MainWindow;
 using Camelot.ViewModels.Interfaces.MainWindow.Directories;
 using Camelot.ViewModels.Interfaces.MainWindow.Drives;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
+using Camelot.ViewModels.Interfaces.MainWindow.Operations;
 using Camelot.ViewModels.Interfaces.MainWindow.OperationsStates;
 using Camelot.ViewModels.Interfaces.Menu;
 using Camelot.ViewModels.Services.Implementations;
@@ -222,6 +224,11 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IApplicationDispatcher>(),
                 resolver.GetRequiredService<SearchViewModelConfiguration>()
             ));
+            services.RegisterLazySingleton<IDragAndDropOperationsViewModel>(() => new DragAndDropOperationsViewModel(
+                resolver.GetRequiredService<IOperationsService>(),
+                resolver.GetRequiredService<IDirectoryService>(),
+                resolver.GetRequiredService<IPathService>()
+            ));
             services.RegisterLazySingleton<IDrivesListViewModel>(() => new DrivesListViewModel(
                 resolver.GetRequiredService<IMountedDriveService>(),
                 resolver.GetRequiredService<IUnmountedDriveService>(),
@@ -287,7 +294,8 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<ISuggestedPathViewModelFactory>(),
                 resolver.GetRequiredService<ISearchViewModel>(),
                 tabsListViewModel,
-                resolver.GetRequiredService<IOperationsViewModel>()
+                resolver.GetRequiredService<IOperationsViewModel>(),
+                resolver.GetRequiredService<IDragAndDropOperationsViewModel>()
             );
 
             return filesPanelViewModel;

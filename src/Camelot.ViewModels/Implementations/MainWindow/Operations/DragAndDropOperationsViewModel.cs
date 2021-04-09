@@ -1,0 +1,35 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Operations;
+using Camelot.ViewModels.Interfaces.MainWindow.Operations;
+
+namespace Camelot.ViewModels.Implementations.MainWindow.Operations
+{
+    public class DragAndDropOperationsViewModel : IDragAndDropOperationsViewModel
+    {
+        private readonly IOperationsService _operationsService;
+        private readonly IDirectoryService _directoryService;
+        private readonly IPathService _pathService;
+
+        public DragAndDropOperationsViewModel(
+            IOperationsService operationsService,
+            IDirectoryService directoryService,
+            IPathService pathService)
+        {
+            _operationsService = operationsService;
+            _directoryService = directoryService;
+            _pathService = pathService;
+        }
+
+        public Task CopyFilesAsync(IReadOnlyList<string> files, string fullPath) =>
+            _operationsService.CopyAsync(files, ExtractDirectory(fullPath));
+
+        public Task MoveFilesAsync(IReadOnlyList<string> files, string fullPath) =>
+            _operationsService.MoveAsync(files, ExtractDirectory(fullPath));
+
+        private string ExtractDirectory(string fullPath) => _directoryService.CheckIfExists(fullPath)
+            ? fullPath
+            : _pathService.GetParentDirectory(fullPath);
+    }
+}

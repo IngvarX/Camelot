@@ -7,6 +7,7 @@ using Camelot.ViewModels.Implementations.Dialogs;
 using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
 using Camelot.ViewModels.Implementations.Dialogs.Results;
 using Camelot.ViewModels.Implementations.MainWindow;
+using Camelot.ViewModels.Implementations.MainWindow.Operations;
 using Camelot.ViewModels.Services.Interfaces;
 using Moq;
 using Moq.AutoMock;

@@ -20,6 +20,7 @@ using Camelot.ViewModels.Interfaces.MainWindow;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Nodes;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs;
+using Camelot.ViewModels.Interfaces.MainWindow.Operations;
 using DynamicData;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -61,6 +62,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         public ITabsListViewModel TabsListViewModel { get; }
 
         public IOperationsViewModel OperationsViewModel { get; }
+
+        public IDragAndDropOperationsViewModel DragAndDropOperationsViewModel { get; }
 
         public bool IsActive => SelectedTab.IsGloballyActive;
 
@@ -154,7 +157,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             ISuggestedPathViewModelFactory suggestedPathViewModelFactory,
             ISearchViewModel searchViewModel,
             ITabsListViewModel tabsListViewModel,
-            IOperationsViewModel operationsViewModel)
+            IOperationsViewModel operationsViewModel,
+            IDragAndDropOperationsViewModel dragAndDropOperationsViewModel)
         {
             _fileService = fileService;
             _directoryService = directoryService;
@@ -173,6 +177,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             SearchViewModel = searchViewModel;
             TabsListViewModel = tabsListViewModel;
             OperationsViewModel = operationsViewModel;
+            DragAndDropOperationsViewModel = dragAndDropOperationsViewModel;
 
             _fileSystemNodes = new ObservableCollection<IFileSystemNodeViewModel>();
             _selectedFileSystemNodes = new ObservableCollection<IFileSystemNodeViewModel>();

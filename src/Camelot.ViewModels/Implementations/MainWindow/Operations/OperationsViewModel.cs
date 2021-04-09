@@ -8,11 +8,11 @@ using Camelot.Services.Abstractions.Operations;
 using Camelot.ViewModels.Implementations.Dialogs;
 using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
 using Camelot.ViewModels.Implementations.Dialogs.Results;
-using Camelot.ViewModels.Interfaces.MainWindow;
+using Camelot.ViewModels.Interfaces.MainWindow.Operations;
 using Camelot.ViewModels.Services.Interfaces;
 using ReactiveUI;
 
-namespace Camelot.ViewModels.Implementations.MainWindow
+namespace Camelot.ViewModels.Implementations.MainWindow.Operations
 {
     public class OperationsViewModel : ViewModelBase, IOperationsViewModel
     {
@@ -63,9 +63,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow
             RemoveCommand = ReactiveCommand.CreateFromTask(RemoveAsync);
             MoveToTrashCommand = ReactiveCommand.CreateFromTask(MoveToTrashAsync);
         }
-
-        public Task PasteFilesAsync(IReadOnlyList<string> files, string fullPath) =>
-            _operationsService.CopyAsync(files, ExtractDirectory(fullPath));
 
         private void OpenInDefaultEditor() => _operationsService.OpenFiles(GetSelectedNodes());
 
@@ -145,9 +142,5 @@ namespace Camelot.ViewModels.Implementations.MainWindow
                 .ToArray();
 
         private static void Execute(Action action) => Task.Factory.StartNew(action);
-
-        private string ExtractDirectory(string fullPath) => _directoryService.CheckIfExists(fullPath)
-            ? fullPath
-            : _pathService.GetParentDirectory(fullPath);
     }
 }

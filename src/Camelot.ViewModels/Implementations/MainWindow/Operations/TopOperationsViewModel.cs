@@ -6,11 +6,11 @@ using Camelot.Services.Abstractions.Archive;
 using Camelot.ViewModels.Implementations.Dialogs;
 using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
 using Camelot.ViewModels.Implementations.Dialogs.Results;
-using Camelot.ViewModels.Interfaces.MainWindow;
+using Camelot.ViewModels.Interfaces.MainWindow.Operations;
 using Camelot.ViewModels.Services.Interfaces;
 using ReactiveUI;
 
-namespace Camelot.ViewModels.Implementations.MainWindow
+namespace Camelot.ViewModels.Implementations.MainWindow.Operations
 {
     public class TopOperationsViewModel : ViewModelBase, ITopOperationsViewModel
     {

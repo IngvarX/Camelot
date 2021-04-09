@@ -4,11 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:p="clr-namespace:Camelot.Properties"
              xmlns:mainWindow="clr-namespace:Camelot.ViewModels.Implementations.MainWindow;assembly=Camelot.ViewModels"
+             xmlns:operations="clr-namespace:Camelot.ViewModels.Implementations.MainWindow.Operations;assembly=Camelot.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Camelot.Views.Main.TopOperationsView">
 
     <Design.DataContext>
-        <mainWindow:TopOperationsViewModel />
+        <operations:TopOperationsViewModel />
     </Design.DataContext>
 
     <StackPanel Orientation="Horizontal" Margin="0,0,5,0">

@@ -289,11 +289,10 @@ namespace Camelot.Views.Main
             switch (e.DragEffects)
             {
                 case DragDropEffects.Copy:
-                    await ViewModel.OperationsViewModel.PasteFilesAsync(fileNames, fullPath);
+                    await ViewModel.DragAndDropOperationsViewModel.CopyFilesAsync(fileNames, fullPath);
                     break;
                 case DragDropEffects.Move:
-                    break;
-                case DragDropEffects.Link:
+                    await ViewModel.DragAndDropOperationsViewModel.MoveFilesAsync(fileNames, fullPath);
                     break;
             }
         }
