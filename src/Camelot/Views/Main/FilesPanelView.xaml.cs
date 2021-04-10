@@ -1,21 +1,27 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.VisualTree;
+using Camelot.Avalonia.Interfaces;
+using Camelot.DependencyInjection;
 using Camelot.Extensions;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Nodes;
 using Camelot.Views.Main.Controls;
 using DynamicData;
+using Splat;
 
 namespace Camelot.Views.Main
 {
     public class FilesPanelView : UserControl
     {
+        private bool _isCellPressed;
+
         private DataGrid FilesDataGrid => this.FindControl<DataGrid>("FilesDataGrid");
 
         private TextBox DirectoryTextBox => this.FindControl<TextBox>("DirectoryTextBox");
@@ -119,7 +125,7 @@ namespace Camelot.Views.Main
         {
             ActivateViewModel();
             ProcessPointerClickInCell(args.PointerPressedEventArgs, args.Cell);
-            DoDrag(args);
+            PrepareDrag(args);
         }
 
         private void OnDirectoryTextBoxGotFocus(object sender, GotFocusEventArgs args) => ActivateViewModel();
@@ -230,19 +236,43 @@ namespace Camelot.Views.Main
 
         private void HideSuggestionsPopup() => ViewModel.ShouldShowSuggestions = false;
 
-        private async void DoDrag(DataGridCellPointerPressedEventArgs e)
+        private void PrepareDrag(DataGridCellPointerPressedEventArgs e)
         {
             if (!e.PointerPressedEventArgs.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
             {
                 return;
             }
 
-            if ((e.PointerPressedEventArgs.KeyModifiers & KeyModifiers.Control) == 0)
+            if (!(e.Cell.DataContext is IFileSystemNodeViewModel {IsEditing: false}))
             {
                 return;
             }
 
-            if (!(e.Cell.DataContext is IFileSystemNodeViewModel {IsEditing: false} viewModel))
+            _isCellPressed = true;
+            e.Cell.PointerReleased += CellOnPointerReleased;
+
+            Task.Delay(200).ContinueWith(_ =>
+            {
+                var dispatcher = Locator.Current.GetRequiredService<IApplicationDispatcher>();
+                dispatcher.DispatchAsync(() => DoDragAsync(e.Cell, e.PointerPressedEventArgs));
+            });
+        }
+
+        private void CellOnPointerReleased(object sender, PointerReleasedEventArgs e)
+        {
+            var cell = (DataGridCell) sender;
+            cell.PointerReleased -= CellOnPointerReleased;
+            _isCellPressed = false;
+        }
+
+        private async Task DoDragAsync(IDataContextProvider sender, PointerEventArgs e)
+        {
+            if (!_isCellPressed)
+            {
+                return;
+            }
+
+            if (!(sender.DataContext is IFileSystemNodeViewModel viewModel))
             {
                 return;
             }
@@ -255,7 +285,8 @@ namespace Camelot.Views.Main
                 .ToHashSet();
             dragData.Set(DataFormats.FileNames, fileNames);
 
-            await DragDrop.DoDragDrop(e.PointerPressedEventArgs, dragData, DragDropEffects.Copy);
+            await DragDrop.DoDragDrop(e, dragData,
+                DragDropEffects.Copy | DragDropEffects.Move | DragDropEffects.Link);
             viewModel.IsWaitingForEdit = true;
         }
 
