@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -58,4 +58,391 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="RegularExpression" xml:space="preserve">
+    <value>Regularni izraz</value>
+  </data>
+  <data name="Recursive" xml:space="preserve">
+    <value>Rekurzivno</value>
+  </data>
+  <data name="CloseSearchPanel" xml:space="preserve">
+    <value>Zatvori ploču pretrage</value>
+  </data>
+  <data name="CaseSensitive" xml:space="preserve">
+    <value>Razlikovanje veličine slova</value>
+  </data>
+  <data name="OpenInNewTabOnOppositePanel" xml:space="preserve">
+    <value>Otvori u novoj kartici na drugoj ploči</value>
+  </data>
+  <data name="OpenInNewTab" xml:space="preserve">
+    <value>Otvori u novoj kartici</value>
+  </data>
+  <data name="DuplicateOnOppositePanel" xml:space="preserve">
+    <value>Duplikat na suprotnoj ploči</value>
+  </data>
+  <data name="Eject" xml:space="preserve">
+    <value>Izbaci</value>
+  </data>
+  <data name="Unmount" xml:space="preserve">
+    <value>Odspoji</value>
+  </data>
+  <data name="LightThemeName" xml:space="preserve">
+    <value>Svjetla</value>
+  </data>
+  <data name="DarkThemeName" xml:space="preserve">
+    <value>Tamna</value>
+  </data>
+  <data name="ThemeWithColon" xml:space="preserve">
+    <value>Tema:</value>
+  </data>
+  <data name="EnterNewNameWithColon" xml:space="preserve">
+    <value>Upiši novo ime:</value>
+  </data>
+  <data name="SearchForApplications" xml:space="preserve">
+    <value>Traži programe</value>
+  </data>
+  <data name="SetAsDefaultApplication" xml:space="preserve">
+    <value>Postavi kao standardno</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>Odaberi</value>
+  </data>
+  <data name="SelectOtherApplications" xml:space="preserve">
+    <value>Ostali programi</value>
+  </data>
+  <data name="RecommendedApplications" xml:space="preserve">
+    <value>Preporučeni programi</value>
+  </data>
+  <data name="OpeningFiles" xml:space="preserve">
+    <value>Otvaranje „{0}” datoteka</value>
+  </data>
+  <data name="OpenWithTitle" xml:space="preserve">
+    <value>Otvori pomoću</value>
+  </data>
+  <data name="OpenWith" xml:space="preserve">
+    <value>Otvori pomoću</value>
+  </data>
+  <data name="FailedToPackFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Neuspjelo pakiranje {0} datoteka i {1} mapa u {2}</value>
+  </data>
+  <data name="FailedToPackTo" xml:space="preserve">
+    <value>Neuspjelo pakiranje {0} u {1}</value>
+  </data>
+  <data name="FailedToExtractArchiveTo" xml:space="preserve">
+    <value>Neuspjelo raspakiravanje arhiva {0} u {1}</value>
+  </data>
+  <data name="CreateArchive" xml:space="preserve">
+    <value>Stvori arhiv</value>
+  </data>
+  <data name="PackToTheFileWithColon" xml:space="preserve">
+    <value>Pakiraj u datoteku:</value>
+  </data>
+  <data name="PackFilesTitle" xml:space="preserve">
+    <value>Pakiraj datoteke</value>
+  </data>
+  <data name="SelectDirectoryForExtraction" xml:space="preserve">
+    <value>Odaberi mapu za raspakiravanje</value>
+  </data>
+  <data name="ExtractArchiveToNewDirectory" xml:space="preserve">
+    <value>Raspakiraj arhiv u novu mapu</value>
+  </data>
+  <data name="ExtractArchiveHere" xml:space="preserve">
+    <value>Raspakiraj arhiv ovdje</value>
+  </data>
+  <data name="PackedFilesAndDirectoriesTo" xml:space="preserve">
+    <value>{0} datoteke i {1} mape su pakirane u {2}</value>
+  </data>
+  <data name="PackedFileTo" xml:space="preserve">
+    <value>Datoteka {0} je pakirana u {1}</value>
+  </data>
+  <data name="ExtractedArchiveTo" xml:space="preserve">
+    <value>Arhiv {0} je raspakiran u {1}</value>
+  </data>
+  <data name="PackingFileTo" xml:space="preserve">
+    <value>Datoteka {0} se pakira u {1}</value>
+  </data>
+  <data name="PackingFilesAndDirectoriesTo" xml:space="preserve">
+    <value>{0} datoteke i {1} mape se pakiraju u {2}</value>
+  </data>
+  <data name="ExtractingArchiveTo" xml:space="preserve">
+    <value>Arhiv {0} se raspakirava u {1}</value>
+  </data>
+  <data name="Extract" xml:space="preserve">
+    <value>Raspakiraj</value>
+  </data>
+  <data name="Pack" xml:space="preserve">
+    <value>Pakiraj</value>
+  </data>
+  <data name="ClickToMount" xml:space="preserve">
+    <value>Klikni za pokretanje</value>
+  </data>
+  <data name="EnterFileNameWithColon" xml:space="preserve">
+    <value>Upiši ime datoteke:</value>
+  </data>
+  <data name="CreateFileTitle" xml:space="preserve">
+    <value>Stvori datoteku</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>Datoteka</value>
+  </data>
+  <data name="AvailableSpaceWithColon" xml:space="preserve">
+    <value>Dostupna memorija:</value>
+  </data>
+  <data name="TotalSpaceWithColon" xml:space="preserve">
+    <value>Ukupna memorija:</value>
+  </data>
+  <data name="InvalidRegex" xml:space="preserve">
+    <value>Nevaljan regularni izraz</value>
+  </data>
+  <data name="SearchForFilesAndDirectories" xml:space="preserve">
+    <value>Traži datoteke i mape</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Traži</value>
+  </data>
+  <data name="Terminal" xml:space="preserve">
+    <value>Terminal</value>
+  </data>
+  <data name="Skip" xml:space="preserve">
+    <value>Preskoči</value>
+  </data>
+  <data name="SizeWithColon" xml:space="preserve">
+    <value>Veličina:</value>
+  </data>
+  <data name="Size" xml:space="preserve">
+    <value>Veličina</value>
+  </data>
+  <data name="ShowProperties" xml:space="preserve">
+    <value>Prikaži svojstva</value>
+  </data>
+  <data name="SettingsTitle" xml:space="preserve">
+    <value>Postavke</value>
+  </data>
+  <data name="SettingsHeader" xml:space="preserve">
+    <value>Po_stavke</value>
+  </data>
+  <data name="SelectNewNameForDestination" xml:space="preserve">
+    <value>Odaberi novo ime za odredište</value>
+  </data>
+  <data name="SelectFromFilesAndDirectories" xml:space="preserve">
+    <value>{0} datoteke ({1}) i {2} mape</value>
+  </data>
+  <data name="ReplaceWith" xml:space="preserve">
+    <value>Zamijeni s</value>
+  </data>
+  <data name="ReplaceIfOlder" xml:space="preserve">
+    <value>Zamijeni ako je starija od</value>
+  </data>
+  <data name="ReplaceFileDestinationDirectory" xml:space="preserve">
+    <value>Jedna druga datoteka s istim imenom već postoji u „{0}”. Želiš li je zamijeniti?</value>
+  </data>
+  <data name="ReplaceFile" xml:space="preserve">
+    <value>Zamijeni datoteku</value>
+  </data>
+  <data name="Replace" xml:space="preserve">
+    <value>Zamijeni</value>
+  </data>
+  <data name="Rename" xml:space="preserve">
+    <value>Preimenuj</value>
+  </data>
+  <data name="RemovingFilesToTrash" xml:space="preserve">
+    <value>Želiš li premjestiti ove {0} datoteke u smeće?</value>
+  </data>
+  <data name="RemovingFilesAndDirectoriesFrom" xml:space="preserve">
+    <value>{0} datoteke i {1} mape se uklanjaju iz {2}</value>
+  </data>
+  <data name="RemovingFileFromTo" xml:space="preserve">
+    <value>Datoteka {0} se uklanja iz {1}</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Ukloni</value>
+  </data>
+  <data name="PermanentlyRemoveFiles" xml:space="preserve">
+    <value>Želiš li nepovratno ukloniti ove {0} datoteke?</value>
+  </data>
+  <data name="PathWithColon" xml:space="preserve">
+    <value>Staza:</value>
+  </data>
+  <data name="OverwriteOptionsTitle" xml:space="preserve">
+    <value>Opcije prepisivanja</value>
+  </data>
+  <data name="OriginalFile" xml:space="preserve">
+    <value>Izvorna datoteka</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Otvori</value>
+  </data>
+  <data name="NewTab" xml:space="preserve">
+    <value>Nova kartica</value>
+  </data>
+  <data name="NewDirectory" xml:space="preserve">
+    <value>Nova mapa</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Ime</value>
+  </data>
+  <data name="MovingFromFilesAndDirectoriesTo" xml:space="preserve">
+    <value>{0} datoteke i {1} mape se premještaju u {2}</value>
+  </data>
+  <data name="MovingFileFromTo" xml:space="preserve">
+    <value>Datoteka {0} se premješta u {1}</value>
+  </data>
+  <data name="MovedFilesFromAndDirectoriesTo" xml:space="preserve">
+    <value>{0} datoteke i {1} mape su premještene u {2}</value>
+  </data>
+  <data name="MovedFileFromTo" xml:space="preserve">
+    <value>Datoteka {0} je premještena u {1}</value>
+  </data>
+  <data name="Move" xml:space="preserve">
+    <value>Premjesti</value>
+  </data>
+  <data name="Maintainers" xml:space="preserve">
+    <value>Održavatelji</value>
+  </data>
+  <data name="LastModified" xml:space="preserve">
+    <value>Zadnja promjena</value>
+  </data>
+  <data name="LastModificationWithColon" xml:space="preserve">
+    <value>Zadnja promjena:</value>
+  </data>
+  <data name="LastAccessWithColon" xml:space="preserve">
+    <value>Zadnji pristup:</value>
+  </data>
+  <data name="LanguageWithColon" xml:space="preserve">
+    <value>Jezik:</value>
+  </data>
+  <data name="HelpHeader" xml:space="preserve">
+    <value>_Pomoć</value>
+  </data>
+  <data name="GitHub" xml:space="preserve">
+    <value>GitHub</value>
+  </data>
+  <data name="General" xml:space="preserve">
+    <value>Opće</value>
+  </data>
+  <data name="FilesRemovingConfirmationTitle" xml:space="preserve">
+    <value>Potvrdi uklanjanje datoteka</value>
+  </data>
+  <data name="FileInformationTitle" xml:space="preserve">
+    <value>Podaci datoteke</value>
+  </data>
+  <data name="FileHeader" xml:space="preserve">
+    <value>_Datoteka</value>
+  </data>
+  <data name="FailedToMoveFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Neuspjelo premještanje {0} datoteka i {1} mapa u {2}</value>
+  </data>
+  <data name="FailedToMoveFileFromTo" xml:space="preserve">
+    <value>Neuspjelo premještanje datoteke {0} u {1}</value>
+  </data>
+  <data name="FailedToDeleteFilesAndDirectoriesFrom" xml:space="preserve">
+    <value>Neuspjelo brisanje {0} datoteka i {1} mapa u {2}</value>
+  </data>
+  <data name="FailedToDeleteFileFromTo" xml:space="preserve">
+    <value>Neuspjelo brisanje datoteke {0} u {1}</value>
+  </data>
+  <data name="FailedCopyFromFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Neuspjelo kopiranje {0} datoteka i {1} mapa u {2}</value>
+  </data>
+  <data name="FailedCopyFileFromTo" xml:space="preserve">
+    <value>Neuspjelo kopiranje datoteke {0} u {1}</value>
+  </data>
+  <data name="Extension" xml:space="preserve">
+    <value>Vrsta</value>
+  </data>
+  <data name="ExitHeader" xml:space="preserve">
+    <value>_Zatvori</value>
+  </data>
+  <data name="EnterDirectoryNameWithColon" xml:space="preserve">
+    <value>Upiši ime mape:</value>
+  </data>
+  <data name="DirectoryTemplate" xml:space="preserve">
+    <value>&lt;MAPA&gt;</value>
+  </data>
+  <data name="DirectoryInformationTitle" xml:space="preserve">
+    <value>Podaci mape</value>
+  </data>
+  <data name="Directory" xml:space="preserve">
+    <value>Mapa</value>
+  </data>
+  <data name="DeletedFilesAndDirectories" xml:space="preserve">
+    <value>{0} datoteke i {1} mape su izbrisane iz {2}</value>
+  </data>
+  <data name="DeletedFileFromTo" xml:space="preserve">
+    <value>Datoteka {0} je izbrisana iz {1}</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Izbriži</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Datum</value>
+  </data>
+  <data name="CreationDateWithColon" xml:space="preserve">
+    <value>Datum izrade:</value>
+  </data>
+  <data name="CreateDirectoryTitle" xml:space="preserve">
+    <value>Stvori mapu</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Stvori</value>
+  </data>
+  <data name="CopyToClipboard" xml:space="preserve">
+    <value>Kopiraj u međuspremnik</value>
+  </data>
+  <data name="CopyingFilesFromAndDirectoriesTo" xml:space="preserve">
+    <value>{0} datoteke i {1} mape se kopiraju u {2}</value>
+  </data>
+  <data name="CopyingFileFromTo" xml:space="preserve">
+    <value>Datoteka {0} se kopira u {1}</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Kopiraj</value>
+  </data>
+  <data name="CopiedFilesFromAndDirectoriesTo" xml:space="preserve">
+    <value>{0} datoteke i {1} mape su kopirane u {2}</value>
+  </data>
+  <data name="CopiedFileFromTo" xml:space="preserve">
+    <value>Datoteka {0} je kopirana u {1}</value>
+  </data>
+  <data name="ConfigurationHeader" xml:space="preserve">
+    <value>_Konfiguracija</value>
+  </data>
+  <data name="CommandWithColon" xml:space="preserve">
+    <value>Naredba:</value>
+  </data>
+  <data name="CloseTabsToTheRight" xml:space="preserve">
+    <value>Zatvori kartice prema desno</value>
+  </data>
+  <data name="CloseTabsToTheLeft" xml:space="preserve">
+    <value>Zatvori kartice prema lijevo</value>
+  </data>
+  <data name="CloseTab" xml:space="preserve">
+    <value>Zatvori karticu</value>
+  </data>
+  <data name="CloseAllButThis" xml:space="preserve">
+    <value>Zatvori sve osim ove</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Zatvori</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Odustani</value>
+  </data>
+  <data name="ArgumentsWithColon" xml:space="preserve">
+    <value>Argumenti:</value>
+  </data>
+  <data name="ApplyActionToTheAllFilesAndFolders" xml:space="preserve">
+    <value>Primijeni ovu radnju na sve datoteke i mape</value>
+  </data>
+  <data name="Apply" xml:space="preserve">
+    <value>Primijeni</value>
+  </data>
+  <data name="AboutPage" xml:space="preserve">
+    <value>Camelot je dvopločni upravljač datoteka napisan u C#</value>
+  </data>
+  <data name="AboutHeader" xml:space="preserve">
+    <value>_Informacije</value>
+  </data>
+  <data name="AboutCamelotTitle" xml:space="preserve">
+    <value>Camelot podaci</value>
+  </data>
 </root>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -58,4 +58,79 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CopyToClipboard" xml:space="preserve">
+    <value>Skopiuj do schowka</value>
+  </data>
+  <data name="CopyingFilesFromAndDirectoriesTo" xml:space="preserve">
+    <value>Kopiowanie {0} plików i {1} katalogów do {2}</value>
+  </data>
+  <data name="CopyingFileFromTo" xml:space="preserve">
+    <value>Kopiowanie {0} do {1}</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Kopiować</value>
+  </data>
+  <data name="CopiedFilesFromAndDirectoriesTo" xml:space="preserve">
+    <value>Skopiowano {0} plików i {1} katalogów do {2}</value>
+  </data>
+  <data name="CopiedFileFromTo" xml:space="preserve">
+    <value>Skopiowano {0} do {1}</value>
+  </data>
+  <data name="ConfigurationHeader" xml:space="preserve">
+    <value>_Konfiguracja</value>
+  </data>
+  <data name="AboutHeader" xml:space="preserve">
+    <value>_O</value>
+  </data>
+  <data name="CommandWithColon" xml:space="preserve">
+    <value>Komenda:</value>
+  </data>
+  <data name="CloseTab" xml:space="preserve">
+    <value>Zamknij kartę</value>
+  </data>
+  <data name="CloseTabsToTheLeft" xml:space="preserve">
+    <value>Zamknij karty po lewej stronie</value>
+  </data>
+  <data name="CloseTabsToTheRight" xml:space="preserve">
+    <value>Zamknij karty po prawej stronie</value>
+  </data>
+  <data name="CloseAllButThis" xml:space="preserve">
+    <value>Zamknij wszystko oprócz tego</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Zamknij</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Anuluj</value>
+  </data>
+  <data name="ArgumentsWithColon" xml:space="preserve">
+    <value>Argumenty:</value>
+  </data>
+  <data name="ApplyActionToTheAllFilesAndFolders" xml:space="preserve">
+    <value>Zastosuj tę czynność do wszystkich plików i folderów</value>
+  </data>
+  <data name="Apply" xml:space="preserve">
+    <value>Zastosuj</value>
+  </data>
+  <data name="AboutPage" xml:space="preserve">
+    <value>Camelot jest dwupanelowym menedżerem plików napisanym w C#</value>
+  </data>
+  <data name="AboutCamelotTitle" xml:space="preserve">
+    <value>Informacje o Camelot</value>
+  </data>
+  <data name="ClickToMount" xml:space="preserve">
+    <value>Kliknij tutaj, aby zainstalować</value>
+  </data>
+  <data name="EnterFileNameWithColon" xml:space="preserve">
+    <value>Wprowadź nazwę pliku:</value>
+  </data>
+  <data name="CreateFileTitle" xml:space="preserve">
+    <value>Utwórz plik</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>Plik</value>
+  </data>
+  <data name="AvailableSpaceWithColon" xml:space="preserve">
+    <value>Dostępne miejsce:</value>
+  </data>
 </root>

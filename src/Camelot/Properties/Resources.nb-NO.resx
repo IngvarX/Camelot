@@ -430,4 +430,25 @@
   <data name="AboutCamelotTitle" xml:space="preserve">
     <value>Om Camelot</value>
   </data>
+  <data name="DuplicateOnOppositePanel" xml:space="preserve">
+    <value>Dupliser på motsatt panel</value>
+  </data>
+  <data name="OpenInNewTabOnOppositePanel" xml:space="preserve">
+    <value>Åpne i nytt fane på det andre panelet</value>
+  </data>
+  <data name="CaseSensitive" xml:space="preserve">
+    <value>Forskjell på små og store bokstaver</value>
+  </data>
+  <data name="RegularExpression" xml:space="preserve">
+    <value>Regulært uttrykk</value>
+  </data>
+  <data name="Recursive" xml:space="preserve">
+    <value>Rekursivt</value>
+  </data>
+  <data name="CloseSearchPanel" xml:space="preserve">
+    <value>Lukk søkepanel</value>
+  </data>
+  <data name="GitHub" xml:space="preserve">
+    <value>GitHub</value>
+  </data>
 </root>

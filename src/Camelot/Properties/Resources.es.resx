@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -58,4 +58,55 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Extension" xml:space="preserve">
+    <value>Extensión</value>
+  </data>
+  <data name="EnterDirectoryNameWithColon" xml:space="preserve">
+    <value>Insertar nombre de directorio:</value>
+  </data>
+  <data name="DirectoryTemplate" xml:space="preserve">
+    <value>&lt;CARPETA&gt;</value>
+  </data>
+  <data name="ConfigurationHeader" xml:space="preserve">
+    <value>_Configuración</value>
+  </data>
+  <data name="CommandWithColon" xml:space="preserve">
+    <value>Comando:</value>
+  </data>
+  <data name="CloseTabsToTheRight" xml:space="preserve">
+    <value>Cerrar pestañas a la derecha</value>
+  </data>
+  <data name="CloseTabsToTheLeft" xml:space="preserve">
+    <value>Cerrar pestañas a la izquierda</value>
+  </data>
+  <data name="CloseTab" xml:space="preserve">
+    <value>Cerrar pestaña</value>
+  </data>
+  <data name="CloseAllButThis" xml:space="preserve">
+    <value>Cerrar todo excepto esto</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Cerrar</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="ArgumentsWithColon" xml:space="preserve">
+    <value>Argumentos:</value>
+  </data>
+  <data name="ApplyActionToTheAllFilesAndFolders" xml:space="preserve">
+    <value>Aplicar esta acción hacia todas las carpetas y archivos</value>
+  </data>
+  <data name="Apply" xml:space="preserve">
+    <value>Aplicar</value>
+  </data>
+  <data name="AboutPage" xml:space="preserve">
+    <value>Camelot en un administrador de archivos de doble vista escrito en C#</value>
+  </data>
+  <data name="AboutHeader" xml:space="preserve">
+    <value>_Acerca de</value>
+  </data>
+  <data name="AboutCamelotTitle" xml:space="preserve">
+    <value>Acerca de Camelot</value>
+  </data>
 </root>

@@ -164,7 +164,7 @@
     <value>Créer une archive</value>
   </data>
   <data name="OpenInNewTab" xml:space="preserve">
-    <value>Ouvert dans un nouvel onglet</value>
+    <value>Ouvrir dans un nouvel onglet</value>
   </data>
   <data name="DuplicateOnOtherPanel" xml:space="preserve">
     <value>Dupliquer sur l’autre volet</value>
@@ -408,5 +408,44 @@
   </data>
   <data name="GitHub" xml:space="preserve">
     <value>GitHub</value>
+  </data>
+  <data name="RegularExpression" xml:space="preserve">
+    <value>Expression régulière</value>
+  </data>
+  <data name="Recursive" xml:space="preserve">
+    <value>Récursif</value>
+  </data>
+  <data name="CloseSearchPanel" xml:space="preserve">
+    <value>Fermer le panneau de recherche</value>
+  </data>
+  <data name="CaseSensitive" xml:space="preserve">
+    <value>Sensible à la casse</value>
+  </data>
+  <data name="FailedToPackFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Echec du chargement de {0} fichiers et {1} dossiers vers {2}</value>
+  </data>
+  <data name="FailedToPackTo" xml:space="preserve">
+    <value>Echec du chargement de {0} vers {1}</value>
+  </data>
+  <data name="PackToTheFileWithColon" xml:space="preserve">
+    <value>Compacter vers :</value>
+  </data>
+  <data name="PackFilesTitle" xml:space="preserve">
+    <value>Compacter fichiers</value>
+  </data>
+  <data name="PackedFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Chargement de {0} fichiers et {1} dossiers vers {2}</value>
+  </data>
+  <data name="PackedFileTo" xml:space="preserve">
+    <value>Fichiers {0} à {1} compactés</value>
+  </data>
+  <data name="PackingFileTo" xml:space="preserve">
+    <value>Chargement des fichiers {0} à {1}</value>
+  </data>
+  <data name="PackingFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Chargement de {0} fichiers et {1} dossiers vers {2}</value>
+  </data>
+  <data name="Pack" xml:space="preserve">
+    <value>Compacter</value>
   </data>
 </root>
