@@ -237,6 +237,11 @@ namespace Camelot.Views.Main
                 return;
             }
 
+            if ((e.PointerPressedEventArgs.KeyModifiers & KeyModifiers.Control) == 0)
+            {
+                return;
+            }
+
             if (!(e.Cell.DataContext is IFileSystemNodeViewModel {IsEditing: false} viewModel))
             {
                 return;
@@ -249,16 +254,10 @@ namespace Camelot.Views.Main
                 .Concat(new[] {viewModel.FullPath})
                 .ToHashSet();
             dragData.Set(DataFormats.FileNames, fileNames);
-            var effects = GetEffects(e.PointerPressedEventArgs);
 
-            await DragDrop.DoDragDrop(e.PointerPressedEventArgs, dragData, effects);
+            await DragDrop.DoDragDrop(e.PointerPressedEventArgs, dragData, DragDropEffects.Copy);
             viewModel.IsWaitingForEdit = true;
         }
-
-        private static DragDropEffects GetEffects(PointerEventArgs e) =>
-            (e.KeyModifiers | KeyModifiers.Shift) > 0
-                ? DragDropEffects.Move
-                : DragDropEffects.Copy;
 
         private async void OnDrop(object sender, DragEventArgs e)
         {
@@ -290,14 +289,13 @@ namespace Camelot.Views.Main
             }
 
             var mediator = ViewModel.DragAndDropOperationsMediator;
-            switch (e.DragEffects)
+            if ((e.KeyModifiers & KeyModifiers.Shift) > 0)
             {
-                case DragDropEffects.Copy:
-                    await mediator.CopyFilesAsync(fileNames, fullPath);
-                    break;
-                case DragDropEffects.Move:
-                    await mediator.MoveFilesAsync(fileNames, fullPath);
-                    break;
+                await mediator.MoveFilesAsync(fileNames, fullPath);
+            }
+            else
+            {
+                await mediator.CopyFilesAsync(fileNames, fullPath);
             }
 
             e.Handled = true;
