@@ -98,6 +98,7 @@
                          Opacity="0.6" />
         <SolidColorBrush x:Key="TabArrowButtonBackgroundBrush" Color="{DynamicResource BlackColor}"
                          Opacity="0.4" />
+        <SolidColorBrush x:Key="FavouriteDirectoryIconBrush" Color="{DynamicResource OrangeColor}" />
 
         <!-- Theme resources -->
         <system:Double x:Key="ThemeDisabledOpacity">0.5</system:Double>
