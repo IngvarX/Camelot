@@ -52,7 +52,9 @@
                 </Image>
             </Button>
 
-            <Button Grid.Column="2" Classes="iconButton" Command="{Binding RefreshCommand}">
+            <Button Grid.Column="2"
+                    Classes="iconButton"
+                    Command="{Binding RefreshCommand}">
                 <Image Classes="iconImage">
                     <Image.Source>
                         <DrawingImage>
@@ -92,10 +94,11 @@
                      Text="{Binding CurrentDirectory, Mode=TwoWay}" />
 
             <ToggleButton Grid.Column="4"
+                          Margin="5,0,0,0"
                           Command="{Binding ToggleFavouriteStatusCommand}"
                           IsChecked="{Binding IsFavouriteDirectory}">
                 <Grid>
-                    <Image Classes="largeSearchImage"
+                    <Image Classes="favouriteDirectoryImage"
                            IsVisible="{Binding $parent[ToggleButton].IsChecked}">
                         <Image.Source>
                             <DrawingImage>
@@ -107,7 +110,7 @@
                         </Image.Source>
                     </Image>
 
-                    <Image Classes="largeSearchImage"
+                    <Image Classes="favouriteDirectoryImage"
                            IsVisible="{Binding !$parent[ToggleButton].IsChecked}">
                         <Image.Source>
                             <DrawingImage>

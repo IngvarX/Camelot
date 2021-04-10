@@ -11,7 +11,7 @@
         <favouriteDirectories:FavouriteDirectoriesListViewModel />
     </Design.DataContext>
 
-    <Grid ColumnDefinitions="Auto,*,Auto,10">
+    <Grid ColumnDefinitions="Auto,*,Auto,10" Classes="defaultBackgroundColorGrid">
         <Button Name="LeftArrowButton"
             Classes="iconButton tabScrollButton" Click="LeftButtonOnClick">
             <Image Width="20" Height="20">

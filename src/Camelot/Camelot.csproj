@@ -67,9 +67,6 @@
     <AvaloniaResource Update="Views\Main\OperationsStates\OperationsStateView.xaml">
       <SubType>Designer</SubType>
     </AvaloniaResource>
-    <Compile Update="Views\Main\OperationsStates\OperationsStatesListsListView.xaml.cs">
-      <DependentUpon>OperationsStatesListView.xaml</DependentUpon>
-    </Compile>
     <AvaloniaResource Update="Views\Main\Controls\DataGridHeaderArrowView.xaml">
       <SubType>Designer</SubType>
     </AvaloniaResource>
@@ -144,6 +141,9 @@
     </Compile>
     <Compile Update="Views\Dialogs\Settings\General\ThemeSettingsView.xaml.cs">
       <DependentUpon>ThemeSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Main\OperationsStates\OperationsStatesListsView.xaml.cs">
+      <DependentUpon>OperationsStatesListView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
