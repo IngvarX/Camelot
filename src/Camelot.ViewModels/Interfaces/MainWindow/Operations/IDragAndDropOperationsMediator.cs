@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Camelot.ViewModels.Interfaces.MainWindow.Operations
 {
-    public interface IDragAndDropOperationsViewModel
+    public interface IDragAndDropOperationsMediator
     {
         Task CopyFilesAsync(IReadOnlyList<string> files, string fullPath);
 

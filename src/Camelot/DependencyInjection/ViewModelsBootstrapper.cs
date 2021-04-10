@@ -223,7 +223,7 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IApplicationDispatcher>(),
                 resolver.GetRequiredService<SearchViewModelConfiguration>()
             ));
-            services.RegisterLazySingleton<IDragAndDropOperationsViewModel>(() => new DragAndDropOperationsViewModel(
+            services.RegisterLazySingleton<IDragAndDropOperationsMediator>(() => new DragAndDropOperationsMediator(
                 resolver.GetRequiredService<IOperationsService>(),
                 resolver.GetRequiredService<IDirectoryService>(),
                 resolver.GetRequiredService<IPathService>()
@@ -294,7 +294,7 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<ISearchViewModel>(),
                 tabsListViewModel,
                 resolver.GetRequiredService<IOperationsViewModel>(),
-                resolver.GetRequiredService<IDragAndDropOperationsViewModel>()
+                resolver.GetRequiredService<IDragAndDropOperationsMediator>()
             );
 
             return filesPanelViewModel;

@@ -290,13 +290,14 @@ namespace Camelot.Views.Main
                 fullPath = viewModel.FullPath;
             }
 
+            var mediator = ViewModel.DragAndDropOperationsMediator;
             switch (e.DragEffects)
             {
                 case DragDropEffects.Copy:
-                    await ViewModel.DragAndDropOperationsViewModel.CopyFilesAsync(fileNames, fullPath);
+                    await mediator.CopyFilesAsync(fileNames, fullPath);
                     break;
                 case DragDropEffects.Move:
-                    await ViewModel.DragAndDropOperationsViewModel.MoveFilesAsync(fileNames, fullPath);
+                    await mediator.MoveFilesAsync(fileNames, fullPath);
                     break;
             }
 

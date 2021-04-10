@@ -61,7 +61,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         public IOperationsViewModel OperationsViewModel { get; }
 
-        public IDragAndDropOperationsViewModel DragAndDropOperationsViewModel { get; }
+        public IDragAndDropOperationsMediator DragAndDropOperationsMediator { get; }
 
         public bool IsActive => SelectedTab.IsGloballyActive;
 
@@ -156,7 +156,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             ISearchViewModel searchViewModel,
             ITabsListViewModel tabsListViewModel,
             IOperationsViewModel operationsViewModel,
-            IDragAndDropOperationsViewModel dragAndDropOperationsViewModel)
+            IDragAndDropOperationsMediator dragAndDropOperationsMediator)
         {
             _fileService = fileService;
             _directoryService = directoryService;
@@ -175,7 +175,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             SearchViewModel = searchViewModel;
             TabsListViewModel = tabsListViewModel;
             OperationsViewModel = operationsViewModel;
-            DragAndDropOperationsViewModel = dragAndDropOperationsViewModel;
+            DragAndDropOperationsMediator = dragAndDropOperationsMediator;
 
             _fileSystemNodes = new ObservableCollection<IFileSystemNodeViewModel>();
             _selectedFileSystemNodes = new ObservableCollection<IFileSystemNodeViewModel>();

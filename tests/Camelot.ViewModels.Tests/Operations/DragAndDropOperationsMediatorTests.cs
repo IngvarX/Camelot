@@ -10,7 +10,7 @@ using Xunit;
 
 namespace Camelot.ViewModels.Tests.Operations
 {
-    public class DragAndDropOperationsViewModelTests
+    public class DragAndDropOperationsMediatorTests
     {
         private const string Directory = "Dir";
         private const string File = "File";
@@ -19,7 +19,7 @@ namespace Camelot.ViewModels.Tests.Operations
 
         private readonly AutoMocker _autoMocker;
 
-        public DragAndDropOperationsViewModelTests()
+        public DragAndDropOperationsMediatorTests()
         {
             _autoMocker = new AutoMocker();
         }
@@ -40,7 +40,7 @@ namespace Camelot.ViewModels.Tests.Operations
                     It.Is<IReadOnlyList<string>>(m => m.Single() == FileToProcess), destinationDirectory))
                 .Verifiable();
 
-            var viewModel = _autoMocker.CreateInstance<DragAndDropOperationsViewModel>();
+            var viewModel = _autoMocker.CreateInstance<DragAndDropOperationsMediator>();
             var files = new[] {FileToProcess};
 
             await viewModel.CopyFilesAsync(files, destination);
@@ -67,7 +67,7 @@ namespace Camelot.ViewModels.Tests.Operations
                     It.Is<IReadOnlyList<string>>(l => l.Single() == FileToProcess), destinationDirectory))
                 .Verifiable();
 
-            var viewModel = _autoMocker.CreateInstance<DragAndDropOperationsViewModel>();
+            var viewModel = _autoMocker.CreateInstance<DragAndDropOperationsMediator>();
             var files = new[] {FileToProcess};
 
             await viewModel.MoveFilesAsync(files, destination);

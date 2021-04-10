@@ -6,13 +6,13 @@ using Camelot.ViewModels.Interfaces.MainWindow.Operations;
 
 namespace Camelot.ViewModels.Implementations.MainWindow.Operations
 {
-    public class DragAndDropOperationsViewModel : IDragAndDropOperationsViewModel
+    public class DragAndDropOperationsMediator : IDragAndDropOperationsMediator
     {
         private readonly IOperationsService _operationsService;
         private readonly IDirectoryService _directoryService;
         private readonly IPathService _pathService;
 
-        public DragAndDropOperationsViewModel(
+        public DragAndDropOperationsMediator(
             IOperationsService operationsService,
             IDirectoryService directoryService,
             IPathService pathService)
