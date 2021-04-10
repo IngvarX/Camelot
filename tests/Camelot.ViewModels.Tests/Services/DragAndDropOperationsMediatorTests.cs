@@ -3,12 +3,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Operations;
-using Camelot.ViewModels.Implementations.MainWindow.Operations;
+using Camelot.ViewModels.Services.Implementations;
 using Moq;
 using Moq.AutoMock;
 using Xunit;
 
-namespace Camelot.ViewModels.Tests.Operations
+namespace Camelot.ViewModels.Tests.Services
 {
     public class DragAndDropOperationsMediatorTests
     {

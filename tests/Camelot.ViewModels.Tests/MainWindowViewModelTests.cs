@@ -1,6 +1,5 @@
 using System.Linq;
 using Camelot.ViewModels.Implementations;
-using Camelot.ViewModels.Interfaces.MainWindow;
 using Camelot.ViewModels.Interfaces.MainWindow.Directories;
 using Camelot.ViewModels.Interfaces.MainWindow.Drives;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;

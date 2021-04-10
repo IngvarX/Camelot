@@ -40,7 +40,7 @@ namespace Camelot.Services
         {
             var parentDirectory = _pathService.GetParentDirectory(substring);
 
-            return parentDirectory is null
+            return parentDirectory is null || !_directoryService.CheckIfExists(parentDirectory)
                 ? Enumerable.Empty<string>()
                 : _directoryService
                     .GetChildDirectories(parentDirectory)

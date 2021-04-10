@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Camelot.ViewModels.Interfaces.MainWindow.Operations
+namespace Camelot.ViewModels.Services.Interfaces
 {
     public interface IDragAndDropOperationsMediator
     {

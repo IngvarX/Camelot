@@ -36,6 +36,9 @@ namespace Camelot.Services.Tests
                 .Setup<IPathService, string>(m => m.GetParentDirectory(Substring))
                 .Returns(ParentDirectory);
             _autoMocker
+                .Setup<IDirectoryService, bool>(m => m.CheckIfExists(ParentDirectory))
+                .Returns(true);
+            _autoMocker
                 .Setup<IDirectoryService, IReadOnlyList<DirectoryModel>>(m =>
                     m.GetChildDirectories(ParentDirectory, null))
                 .Returns(new[]
@@ -63,6 +66,9 @@ namespace Camelot.Services.Tests
             _autoMocker
                 .Setup<IPathService, string>(m => m.GetParentDirectory(Substring))
                 .Returns(ParentDirectory);
+            _autoMocker
+                .Setup<IDirectoryService, bool>(m => m.CheckIfExists(ParentDirectory))
+                .Returns(true);
             _autoMocker
                 .Setup<IDirectoryService, IReadOnlyList<DirectoryModel>>(m =>
                     m.GetChildDirectories(ParentDirectory, null))
@@ -98,6 +104,9 @@ namespace Camelot.Services.Tests
             _autoMocker
                 .Setup<IPathService, string>(m => m.GetParentDirectory(Substring))
                 .Returns(ParentDirectory);
+            _autoMocker
+                .Setup<IDirectoryService, bool>(m => m.CheckIfExists(ParentDirectory))
+                .Returns(true);
             _autoMocker
                 .Setup<IDirectoryService, IReadOnlyList<DirectoryModel>>(m =>
                     m.GetChildDirectories(ParentDirectory, null))

@@ -4,6 +4,7 @@ using System.Windows.Input;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Nodes;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs;
 using Camelot.ViewModels.Interfaces.MainWindow.Operations;
+using Camelot.ViewModels.Services.Interfaces;
 
 namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels
 {

@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Operations;
-using Camelot.ViewModels.Interfaces.MainWindow.Operations;
+using Camelot.ViewModels.Services.Interfaces;
 
-namespace Camelot.ViewModels.Implementations.MainWindow.Operations
+namespace Camelot.ViewModels.Services.Implementations
 {
     public class DragAndDropOperationsMediator : IDragAndDropOperationsMediator
     {
