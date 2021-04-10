@@ -43,7 +43,7 @@ namespace Camelot.Services
             if (_favouriteDirectories.Add(preprocessedPath))
             {
                 SaveFavouriteDirectories();
-                DirectoryAdded.Raise(this, CreateArgs(fullPath));
+                DirectoryAdded.Raise(this, CreateArgs(preprocessedPath));
             }
         }
 
@@ -53,7 +53,7 @@ namespace Camelot.Services
             if (_favouriteDirectories.Remove(preprocessedPath))
             {
                 SaveFavouriteDirectories();
-                DirectoryRemoved.Raise(this, CreateArgs(fullPath));
+                DirectoryRemoved.Raise(this, CreateArgs(preprocessedPath));
             }
         }
 

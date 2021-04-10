@@ -93,6 +93,9 @@ namespace Camelot.Services.Tests
                 .Setup<IFavouriteDirectoriesService, IReadOnlyCollection<string>>(m => m.FavouriteDirectories)
                 .Returns(new HashSet<string> {FavouriteDirectory});
             _autoMocker
+                .Setup<IFavouriteDirectoriesService, bool>(m => m.ContainsDirectory(FavouriteDirectory))
+                .Returns(true);
+            _autoMocker
                 .Setup<IPathService, string>(m => m.GetParentDirectory(Substring))
                 .Returns(ParentDirectory);
             _autoMocker
