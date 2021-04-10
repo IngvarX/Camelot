@@ -57,6 +57,13 @@ namespace Camelot.Services
             }
         }
 
+        public bool ContainsDirectory(string fullPath)
+        {
+            var preprocessedPath = PreprocessPath(fullPath);
+
+            return _favouriteDirectories.Contains(preprocessedPath);
+        }
+
         private HashSet<string> GetFavouriteDirectories()
         {
             using var uow = _unitOfWorkFactory.Create();

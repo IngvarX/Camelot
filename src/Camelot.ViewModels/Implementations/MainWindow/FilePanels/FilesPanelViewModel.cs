@@ -423,6 +423,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         }
 
         private void UpdateFavouriteDirectoryStatus() => IsFavouriteDirectory =
-            _favouriteDirectoriesService.FavouriteDirectories.Contains(CurrentDirectory);
+            _favouriteDirectoriesService.ContainsDirectory(CurrentDirectory);
     }
 }

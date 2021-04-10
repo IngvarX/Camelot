@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Camelot.DataAccess.Models;
 using Camelot.DataAccess.Repositories;
 using Camelot.DataAccess.UnitOfWork;
@@ -13,6 +14,8 @@ namespace Camelot.Services.Tests
     public class FavouriteDirectoriesServiceTests
     {
         private const string DirectoryPath = "Dir";
+        private const string DirectoryWithSlashPath = "Dir/";
+        private const string SecondDirectory = "SecondDir";
         private const string FavouriteDirectoriesKey = "FavouriteDirectories";
 
         private readonly AutoMocker _autoMocker;
@@ -98,7 +101,7 @@ namespace Camelot.Services.Tests
                 .Setup<IUnitOfWorkFactory, IUnitOfWork>(m => m.Create())
                 .Returns(uow.Object);
             _autoMocker
-                .Setup<IPathService, string>(m => m.RightTrimPathSeparators(DirectoryPath))
+                .Setup<IPathService, string>(m => m.RightTrimPathSeparators(DirectoryWithSlashPath))
                 .Returns(DirectoryPath);
 
             var service = _autoMocker.CreateInstance<FavouriteDirectoriesService>();
@@ -109,7 +112,7 @@ namespace Camelot.Services.Tests
             var isCallbackCalled = false;
             service.DirectoryAdded += (sender, args) => isCallbackCalled = args.FullPath == DirectoryPath;
 
-            service.AddDirectory(DirectoryPath);
+            service.AddDirectory(DirectoryWithSlashPath);
 
             Assert.NotNull(service.FavouriteDirectories);
             Assert.Single(service.FavouriteDirectories);
@@ -145,7 +148,7 @@ namespace Camelot.Services.Tests
                 .Setup<IUnitOfWorkFactory, IUnitOfWork>(m => m.Create())
                 .Returns(uow.Object);
             _autoMocker
-                .Setup<IPathService, string>(m => m.RightTrimPathSeparators(DirectoryPath))
+                .Setup<IPathService, string>(m => m.RightTrimPathSeparators(DirectoryWithSlashPath))
                 .Returns(DirectoryPath);
 
             var service = _autoMocker.CreateInstance<FavouriteDirectoriesService>();
@@ -158,7 +161,7 @@ namespace Camelot.Services.Tests
 
             for (var i = 0; i < 10; i++)
             {
-                service.AddDirectory(DirectoryPath);
+                service.AddDirectory(DirectoryWithSlashPath);
             }
 
             Assert.NotNull(service.FavouriteDirectories);
@@ -198,7 +201,7 @@ namespace Camelot.Services.Tests
                 .Setup<IUnitOfWorkFactory, IUnitOfWork>(m => m.Create())
                 .Returns(uow.Object);
             _autoMocker
-                .Setup<IPathService, string>(m => m.RightTrimPathSeparators(DirectoryPath))
+                .Setup<IPathService, string>(m => m.RightTrimPathSeparators(DirectoryWithSlashPath))
                 .Returns(DirectoryPath);
 
             var service = _autoMocker.CreateInstance<FavouriteDirectoriesService>();
@@ -209,7 +212,7 @@ namespace Camelot.Services.Tests
             var isCallbackCalled = false;
             service.DirectoryRemoved += (sender, args) => isCallbackCalled = args.FullPath == DirectoryPath;
 
-            service.RemoveDirectory(DirectoryPath);
+            service.RemoveDirectory(DirectoryWithSlashPath);
 
             Assert.NotNull(service.FavouriteDirectories);
             Assert.Empty(service.FavouriteDirectories);
@@ -247,7 +250,7 @@ namespace Camelot.Services.Tests
                 .Setup<IUnitOfWorkFactory, IUnitOfWork>(m => m.Create())
                 .Returns(uow.Object);
             _autoMocker
-                .Setup<IPathService, string>(m => m.RightTrimPathSeparators(DirectoryPath))
+                .Setup<IPathService, string>(m => m.RightTrimPathSeparators(DirectoryWithSlashPath))
                 .Returns(DirectoryPath);
 
             var service = _autoMocker.CreateInstance<FavouriteDirectoriesService>();
@@ -260,7 +263,7 @@ namespace Camelot.Services.Tests
 
             for (var i = 0; i < 10; i++)
             {
-                service.RemoveDirectory(DirectoryPath);
+                service.RemoveDirectory(DirectoryWithSlashPath);
             }
 
             Assert.NotNull(service.FavouriteDirectories);
@@ -272,6 +275,42 @@ namespace Camelot.Services.Tests
                 .Verify(m => m.Upsert(FavouriteDirectoriesKey,
                         It.Is<FavouriteDirectories>(fd => !fd.Directories.Any())),
                     Times.Once);
+        }
+
+        [Theory]
+        [InlineData(DirectoryPath, DirectoryPath, true)]
+        [InlineData(DirectoryWithSlashPath, DirectoryPath, true)]
+        [InlineData(SecondDirectory, SecondDirectory, false)]
+        public void TestContains(string directory, string directoryWithoutSlash, bool expectedResult)
+        {
+            var repository = new Mock<IRepository<FavouriteDirectories>>();
+            repository
+                .Setup(m => m.GetById(FavouriteDirectoriesKey))
+                .Returns(new FavouriteDirectories
+                {
+                    Directories = new List<FavouriteDirectory>
+                    {
+                        new FavouriteDirectory
+                        {
+                            FullPath = DirectoryPath
+                        }
+                    }
+                });
+            var uow = new Mock<IUnitOfWork>();
+            uow
+                .Setup(m => m.GetRepository<FavouriteDirectories>())
+                .Returns(repository.Object);
+            _autoMocker
+                .Setup<IUnitOfWorkFactory, IUnitOfWork>(m => m.Create())
+                .Returns(uow.Object);
+            _autoMocker
+                .Setup<IPathService, string>(m => m.RightTrimPathSeparators(directory))
+                .Returns(directoryWithoutSlash);
+
+            var service = _autoMocker.CreateInstance<FavouriteDirectoriesService>();
+
+            var actualResult = service.ContainsDirectory(directory);
+            Assert.Equal(expectedResult, actualResult);
         }
     }
 }

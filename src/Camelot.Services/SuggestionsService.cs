@@ -55,7 +55,7 @@ namespace Camelot.Services
         }
 
         private SuggestionType GetSuggestionType(string fullPath) =>
-            _favouriteDirectoriesService.FavouriteDirectories.Contains(fullPath)
+            _favouriteDirectoriesService.ContainsDirectory(fullPath)
                 ? SuggestionType.FavouriteDirectory
                 : SuggestionType.Directory;
     }

@@ -15,5 +15,7 @@ namespace Camelot.Services.Abstractions
         void AddDirectory(string fullPath);
 
         void RemoveDirectory(string fullPath);
+
+        bool ContainsDirectory(string fullPath);
     }
 }
