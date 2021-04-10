@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Input;
+using Camelot.ViewModels.Interfaces;
 using Camelot.ViewModels.Interfaces.MainWindow.Directories;
 using Camelot.ViewModels.Interfaces.MainWindow.Drives;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
@@ -12,7 +13,7 @@ using ReactiveUI;
 
 namespace Camelot.ViewModels.Implementations
 {
-    public class MainWindowViewModel : ViewModelBase
+    public class MainWindowViewModel : ViewModelBase, IMainWindowViewModel
     {
         private readonly IFilesOperationsMediator _filesOperationsMediator;
 

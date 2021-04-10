@@ -12,7 +12,7 @@ namespace Camelot.Views
             var fullName = data.GetType().FullName;
             if (fullName is null)
             {
-                throw new InvalidOperationException($"Full name for type was not found");
+                throw new InvalidOperationException("Full name for type was not found");
             }
 
             var name = fullName

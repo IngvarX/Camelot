@@ -26,6 +26,7 @@ using Camelot.ViewModels.Implementations.MainWindow.OperationsStates;
 using Camelot.ViewModels.Implementations.Menu;
 using Camelot.ViewModels.Implementations.Settings;
 using Camelot.ViewModels.Implementations.Settings.General;
+using Camelot.ViewModels.Interfaces;
 using Camelot.ViewModels.Interfaces.MainWindow.Directories;
 using Camelot.ViewModels.Interfaces.MainWindow.Drives;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
@@ -246,7 +247,7 @@ namespace Camelot.DependencyInjection
             services.RegisterLazySingleton<IOperationStateViewModelFactory>(() => new OperationStateViewModelFactory(
                 resolver.GetRequiredService<IPathService>()
             ));
-            services.RegisterLazySingleton(() => new MainWindowViewModel(
+            services.RegisterLazySingleton<IMainWindowViewModel>(() => new MainWindowViewModel(
                 resolver.GetRequiredService<IFilesOperationsMediator>(),
                 resolver.GetRequiredService<IOperationsViewModel>(),
                 CreateFilesPanelViewModel(resolver, "Left"),

@@ -5,7 +5,7 @@ using Camelot.DependencyInjection;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Styles.Themes;
-using Camelot.ViewModels.Implementations;
+using Camelot.ViewModels.Interfaces;
 using Camelot.Views;
 using Splat;
 using Application = Avalonia.Application;
@@ -25,7 +25,7 @@ namespace Camelot
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                DataContext = GetRequiredService<MainWindowViewModel>();
+                DataContext = GetRequiredService<IMainWindowViewModel>();
                 desktop.MainWindow = new MainWindow
                 {
                     DataContext = DataContext

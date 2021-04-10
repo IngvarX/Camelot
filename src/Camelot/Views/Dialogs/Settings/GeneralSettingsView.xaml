@@ -11,8 +11,9 @@
         <settings:GeneralSettingsViewModel />
     </Design.DataContext>
 
-    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*">
+    <Grid RowDefinitions="Auto,Auto">
         <general:LanguageSettingsView DataContext="{Binding LanguageSettingsViewModel}" />
         <general:ThemeSettingsView Grid.Row="1" DataContext="{Binding ThemeViewModel}" />
     </Grid>
+
 </UserControl>
