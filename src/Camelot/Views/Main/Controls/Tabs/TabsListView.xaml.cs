@@ -22,13 +22,6 @@ namespace Camelot.Views.Main.Controls.Tabs
             InitializeComponent();
         }
 
-        protected override void OnInitialized()
-        {
-            base.OnInitialized();
-
-            ScrollViewer.ScrollChanged += ScrollViewerOnScrollChanged;
-        }
-
         private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
 
         private void TabsListOnPointerWheelChanged(object sender, PointerWheelEventArgs e)

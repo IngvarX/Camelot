@@ -98,9 +98,13 @@
         <Setter Property="Background" Value="{DynamicResource TabArrowButtonBackgroundBrush}" />
     </Style>
 
-    <Style Selector="ScrollViewer#TabsScrollViewer">
+    <Style Selector="ScrollViewer.arrowScrollViewer">
         <Setter Property="VerticalScrollBarVisibility" Value="Disabled" />
         <Setter Property="HorizontalScrollBarVisibility" Value="Hidden" />
+    </Style>
+
+    <Style Selector="ScrollViewer#FavDirsScrollViewer">
+        <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
     </Style>
 
     <Style Selector="Border#OperationsBorder">

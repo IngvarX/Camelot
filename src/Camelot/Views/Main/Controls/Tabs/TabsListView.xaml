@@ -27,7 +27,9 @@
         </Button>
 
         <ScrollViewer Name="TabsScrollViewer"
-                      Grid.Column="0" Grid.ColumnSpan="3">
+                      Grid.Column="0" Grid.ColumnSpan="3"
+                      Classes="arrowScrollViewer"
+                      ScrollChanged="ScrollViewerOnScrollChanged">
             <ItemsControl Items="{Binding Tabs}"
                           PointerWheelChanged="TabsListOnPointerWheelChanged">
 
