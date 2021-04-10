@@ -181,9 +181,6 @@
   <data name="LastAccessWithColon" xml:space="preserve">
     <value>Siste tilgang:</value>
   </data>
-  <data name="Github" xml:space="preserve">
-    <value>GitHub</value>
-  </data>
   <data name="DeletedFilesAndDirectories" xml:space="preserve">
     <value>Slettet {0} filer og {1} mapper fra {2}</value>
   </data>

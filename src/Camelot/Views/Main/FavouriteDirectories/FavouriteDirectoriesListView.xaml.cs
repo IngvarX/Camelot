@@ -9,7 +9,7 @@ namespace Camelot.Views.Main.FavouriteDirectories
 {
     public class FavouriteDirectoriesListView : UserControl
     {
-        private const int ScrollsCount = 5;
+        private const int ScrollsCount = 6;
 
         private ScrollViewer ScrollViewer => this.FindControl<ScrollViewer>("FavDirsScrollViewer");
 
