@@ -20,6 +20,8 @@ namespace Camelot.Views.Main
 {
     public class FilesPanelView : UserControl
     {
+        private const int DragAndDropDelay = 200;
+
         private bool _isCellPressed;
 
         private DataGrid FilesDataGrid => this.FindControl<DataGrid>("FilesDataGrid");
@@ -152,17 +154,13 @@ namespace Camelot.Views.Main
 
                 args.Handled = true;
 
-                if (viewModel.IsWaitingForEdit)
+                if (ViewModel.SelectedFileSystemNodes.Contains(viewModel))
                 {
                     viewModel.IsEditing = true;
 
                     // focus text box with file/dir name
                     var textBox = textBlock.Parent.VisualChildren.OfType<TextBox>().Single();
                     textBox.Focus();
-                }
-                else
-                {
-                    viewModel.IsWaitingForEdit = true;
                 }
             }
         }
@@ -176,8 +174,7 @@ namespace Camelot.Views.Main
             }
         }
 
-        private static void StopEditing(IFileSystemNodeViewModel viewModel) =>
-            viewModel.IsWaitingForEdit = viewModel.IsEditing = false;
+        private static void StopEditing(IFileSystemNodeViewModel viewModel) => viewModel.IsEditing = false;
 
         private void ClearSelection() => FilesDataGrid.SelectedItems.Clear();
 
@@ -251,7 +248,7 @@ namespace Camelot.Views.Main
             _isCellPressed = true;
             e.Cell.PointerReleased += CellOnPointerReleased;
 
-            Task.Delay(200).ContinueWith(_ =>
+            Task.Delay(DragAndDropDelay).ContinueWith(_ =>
             {
                 var dispatcher = Locator.Current.GetRequiredService<IApplicationDispatcher>();
                 dispatcher.DispatchAsync(() => DoDragAsync(e.Cell, e.PointerPressedEventArgs));
@@ -287,7 +284,6 @@ namespace Camelot.Views.Main
 
             await DragDrop.DoDragDrop(e, dragData,
                 DragDropEffects.Copy | DragDropEffects.Move | DragDropEffects.Link);
-            viewModel.IsWaitingForEdit = true;
         }
 
         private async void OnDrop(object sender, DragEventArgs e)

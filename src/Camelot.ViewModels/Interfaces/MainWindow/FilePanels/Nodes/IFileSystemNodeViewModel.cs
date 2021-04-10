@@ -10,8 +10,6 @@ namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Nodes
 
         bool IsEditing { get; set; }
 
-        bool IsWaitingForEdit { get; set; }
-
         ICommand OpenCommand { get; }
     }
 }

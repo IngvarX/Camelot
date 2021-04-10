@@ -46,7 +46,6 @@ namespace Camelot.ViewModels.Tests.Factories
             Assert.Equal(node.Name, Name);
             Assert.Equal(node.FullPath, FullPath);
             Assert.False(node.IsEditing);
-            Assert.False(node.IsWaitingForEdit);
         }
 
         [Theory]
@@ -91,7 +90,6 @@ namespace Camelot.ViewModels.Tests.Factories
             Assert.Equal(node.Name, Name);
             Assert.Equal(node.FullPath, FullPath);
             Assert.False(node.IsEditing);
-            Assert.False(node.IsWaitingForEdit);
         }
 
         [Theory]
@@ -113,7 +111,6 @@ namespace Camelot.ViewModels.Tests.Factories
             Assert.Equal(node.Name, Name);
             Assert.Equal(node.FullPath, FullPath);
             Assert.False(node.IsEditing);
-            Assert.False(node.IsWaitingForEdit);
         }
 
         [Theory]
@@ -149,7 +146,6 @@ namespace Camelot.ViewModels.Tests.Factories
             Assert.Equal(node.Name, Name);
             Assert.Equal(node.FullPath, FullPath);
             Assert.False(node.IsEditing);
-            Assert.False(node.IsWaitingForEdit);
         }
 
         [Fact]

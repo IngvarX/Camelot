@@ -30,8 +30,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Nodes
 
         public bool IsArchive => _fileSystemNodeFacade.CheckIfNodeIsArchive(FullPath);
 
-        public bool IsWaitingForEdit { get; set; }
-
         public bool ShouldShowOpenSubmenu { get; }
 
         public ICommand OpenCommand { get; }
