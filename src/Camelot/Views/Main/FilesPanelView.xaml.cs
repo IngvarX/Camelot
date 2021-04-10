@@ -7,7 +7,6 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.VisualTree;
 using Camelot.Extensions;
-using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Nodes;
 using Camelot.Views.Main.Controls;
@@ -23,7 +22,7 @@ namespace Camelot.Views.Main
 
         private ListBox SuggestionsListBox => this.FindControl<ListBox>("SuggestionsListBox");
 
-        private FilesPanelViewModel ViewModel => (FilesPanelViewModel) DataContext;
+        private IFilesPanelViewModel ViewModel => (IFilesPanelViewModel) DataContext;
 
         public FilesPanelView()
         {

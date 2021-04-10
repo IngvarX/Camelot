@@ -1,13 +1,13 @@
 using System;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
+using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 
 namespace Camelot.Views.Main.Controls
 {
     public class SearchView : UserControl
     {
-        private SearchViewModel ViewModel => (SearchViewModel) DataContext;
+        private ISearchViewModel ViewModel => (ISearchViewModel) DataContext;
 
         public SearchView()
         {

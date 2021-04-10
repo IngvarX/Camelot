@@ -1,5 +1,9 @@
 using System;
+using System.Collections.Generic;
+using System.Windows.Input;
+using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Nodes;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs;
+using Camelot.ViewModels.Interfaces.MainWindow.Operations;
 
 namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels
 {
@@ -9,11 +13,25 @@ namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels
 
         ISearchViewModel SearchViewModel { get; }
 
+        IOperationsViewModel OperationsViewModel { get; }
+
+        IDragAndDropOperationsMediator DragAndDropOperationsMediator { get; }
+
+        IList<IFileSystemNodeViewModel> SelectedFileSystemNodes { get; }
+
+        bool IsActive { get; }
+
         string CurrentDirectory { get; set; }
+
+        bool ShouldShowSuggestions { get; set; }
 
         event EventHandler<EventArgs> Activated;
 
+        event EventHandler<EventArgs> Deactivated;
+
         event EventHandler<EventArgs> CurrentDirectoryChanged;
+
+        ICommand ActivateCommand { get; }
 
         void Activate();
 

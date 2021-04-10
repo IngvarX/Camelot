@@ -16,12 +16,17 @@
     <Grid RowDefinitions="Auto,Auto,Auto" Margin="10" HorizontalAlignment="Center">
         <TextBlock Classes="dialogTextBlock" Text="{x:Static p:Resources.EnterNewNameWithColon}" />
 
-        <TextBox Grid.Row="1" x:Name="NodeNameTextBox" Text="{Binding NodeName}"
-                 KeyUp="OnNodeNameTextBoxKeyUp" />
+        <TextBox Grid.Row="1" x:Name="NodeNameTextBox"
+                 Text="{Binding NodeName}" />
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Classes="dialogButton transparentDialogButton" Content="{x:Static p:Resources.Cancel}" Command="{Binding CancelCommand}" />
-            <Button Classes="dialogButton" Content="{x:Static p:Resources.Rename}" Command="{Binding RenameCommand}" />
+            <Button Classes="dialogButton transparentDialogButton"
+                    Content="{x:Static p:Resources.Cancel}"
+                    Command="{Binding CancelCommand}" />
+            <Button Classes="dialogButton"
+                    IsDefault="True"
+                    Content="{x:Static p:Resources.Rename}"
+                    Command="{Binding RenameCommand}" />
         </StackPanel>
     </Grid>
 </Window>
