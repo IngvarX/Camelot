@@ -28,6 +28,92 @@ namespace Camelot.ViewModels.Tests.FilePanels
             _autoMocker = new AutoMocker();
         }
 
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void TestIsActive(bool isTabActive)
+        {
+            var tabViewModelMock = new Mock<ITabViewModel>();
+            tabViewModelMock
+                .SetupGet(m => m.IsGloballyActive)
+                .Returns(isTabActive);
+            _autoMocker
+                .Setup<ITabsListViewModel, ITabViewModel>(m => m.SelectedTab)
+                .Returns(tabViewModelMock.Object);
+
+            var filesPanelViewModel = _autoMocker.CreateInstance<FilesPanelViewModel>();
+
+            Assert.Equal(isTabActive, filesPanelViewModel.IsActive);
+        }
+
+        [Fact]
+        public void TestSetDirectory()
+        {
+            var tabViewModelMock = new Mock<ITabViewModel>();
+            tabViewModelMock
+                .SetupGet(m => m.CurrentDirectory)
+                .Returns(AppRootDirectory);
+            _autoMocker
+                .Setup<ITabsListViewModel, ITabViewModel>(m => m.SelectedTab)
+                .Returns(tabViewModelMock.Object);
+            _autoMocker
+                .GetMock<IDirectorySelectorViewModel>()
+                .SetupSet<string>(m => m.CurrentDirectory = AppRootDirectory)
+                .Verifiable();
+            _autoMocker
+                .GetMock<IDirectorySelectorViewModel>()
+                .SetupSet<string>(m => m.CurrentDirectory = NewDirectory)
+                .Verifiable();
+
+            var filesPanelViewModel = _autoMocker.CreateInstance<FilesPanelViewModel>();
+
+            _autoMocker
+                .GetMock<IDirectorySelectorViewModel>()
+                .VerifySet(m => m.CurrentDirectory = AppRootDirectory,
+                    Times.Once);
+
+            filesPanelViewModel.CurrentDirectory = NewDirectory;
+
+            _autoMocker
+                .GetMock<IDirectorySelectorViewModel>()
+                .VerifySet(m => m.CurrentDirectory = NewDirectory,
+                    Times.Once);
+        }
+
+        [Fact]
+        public void TestSelectedTabChanged()
+        {
+            var tabViewModelMock = new Mock<ITabViewModel>();
+            tabViewModelMock
+                .SetupGet(m => m.CurrentDirectory)
+                .Returns(AppRootDirectory);
+            _autoMocker
+                .Setup<ITabsListViewModel, ITabViewModel>(m => m.SelectedTab)
+                .Returns(tabViewModelMock.Object);
+            _autoMocker
+                .GetMock<IDirectorySelectorViewModel>()
+                .SetupSet<string>(m => m.CurrentDirectory = AppRootDirectory)
+                .Verifiable();
+
+            var filesPanelViewModel = _autoMocker.CreateInstance<FilesPanelViewModel>();
+
+            _autoMocker
+                .GetMock<IDirectorySelectorViewModel>()
+                .VerifySet(m => m.CurrentDirectory = AppRootDirectory,
+                    Times.Once);
+
+            _autoMocker
+                .GetMock<ITabsListViewModel>()
+                .Raise(m => m.SelectedTabChanged += null, EventArgs.Empty);
+
+            Assert.Equal(tabViewModelMock.Object, filesPanelViewModel.SelectedTab);
+
+            _autoMocker
+                .GetMock<IDirectorySelectorViewModel>()
+                .VerifySet(m => m.CurrentDirectory = AppRootDirectory,
+                    Times.Exactly(2));
+        }
+
         [Fact]
         public void TestDirectoryUpdated()
         {
