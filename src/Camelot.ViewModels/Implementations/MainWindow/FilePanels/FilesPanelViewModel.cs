@@ -77,24 +77,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         public string CurrentDirectory
         {
             get => _currentDirectory;
-            set
-            {
-                Activate();
-
-                var previousCurrentDirectory = _currentDirectory;
-                this.RaiseAndSetIfChanged(ref _currentDirectory, value);
-
-                if (previousCurrentDirectory != null)
-                {
-                    _fileSystemWatchingService.StopWatching(previousCurrentDirectory);
-                }
-
-                ReloadFiles();
-                SelectedTab.CurrentDirectory = _currentDirectory;
-                _fileSystemWatchingService.StartWatching(CurrentDirectory);
-
-                CurrentDirectoryChanged.Raise(this, EventArgs.Empty);
-            }
+            set => DirectorySelectorViewModel.CurrentDirectory = value;
         }
 
         public event EventHandler<EventArgs> Activated;
@@ -197,6 +180,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         {
             TabsListViewModel.SelectedTabChanged += TabsListViewModelOnSelectedTabChanged;
             SearchViewModel.SearchSettingsChanged += SearchViewModelOnSearchSettingsChanged;
+            DirectorySelectorViewModel.CurrentDirectoryChanged += DirectorySelectorViewModelOnCurrentDirectoryChanged;
             _selectedFileSystemNodes.CollectionChanged += SelectedFileSystemNodesOnCollectionChanged;
 
             _fileSystemWatchingService.NodeCreated += (sender, args) =>
@@ -217,6 +201,25 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         private void SearchViewModelOnSearchSettingsChanged(object sender, EventArgs e) =>
             _applicationDispatcher.Dispatch(ReloadFiles);
+
+        private void DirectorySelectorViewModelOnCurrentDirectoryChanged(object sender, EventArgs e)
+        {
+            Activate();
+
+            var previousCurrentDirectory = _currentDirectory;
+            this.RaiseAndSetIfChanged(ref _currentDirectory, DirectorySelectorViewModel.CurrentDirectory);
+
+            if (previousCurrentDirectory != null)
+            {
+                _fileSystemWatchingService.StopWatching(previousCurrentDirectory);
+            }
+
+            ReloadFiles();
+            SelectedTab.CurrentDirectory = _currentDirectory;
+            _fileSystemWatchingService.StartWatching(CurrentDirectory);
+
+            CurrentDirectoryChanged.Raise(this, EventArgs.Empty);
+        }
 
         private void RenameNode(string oldName, string newName)
         {
