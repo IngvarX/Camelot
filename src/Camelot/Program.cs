@@ -14,6 +14,7 @@ namespace Camelot
     {
         private const int TimeoutSeconds = 3;
 
+        [STAThread]
         public static void Main(string[] args)
         {
             var mutex = new Mutex(false, typeof(Program).FullName);
