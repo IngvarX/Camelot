@@ -145,6 +145,9 @@
     <Compile Update="Views\Main\OperationsStates\OperationsStatesListsView.xaml.cs">
       <DependentUpon>OperationsStatesListView.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\Main\Controls\DirectorySelectorView.xaml.cs">
+      <DependentUpon>DirectorySelectorView.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.10.0" />
