@@ -88,6 +88,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         private void ToggleFavouriteStatus()
         {
+            // IsFavouriteDirectory property changes before executing this command
             if (IsFavouriteDirectory)
             {
                 _favouriteDirectoriesService.AddDirectory(CurrentDirectory);
