@@ -3,7 +3,7 @@ using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
+namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
 {
     public class FileSystemNodesSortingViewModel : ViewModelBase, IFileSystemNodesSortingViewModel
     {

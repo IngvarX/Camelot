@@ -1,5 +1,5 @@
 using Camelot.Services.Abstractions.Models.Enums;
-using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
+using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs;
 using Xunit;
 
 namespace Camelot.ViewModels.Tests.FilePanels
