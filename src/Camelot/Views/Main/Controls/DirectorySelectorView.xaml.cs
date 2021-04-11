@@ -15,7 +15,7 @@ namespace Camelot.Views.Main.Controls
 
         public TextBox DirectoryTextBox => this.FindControl<TextBox>("DirectoryTextBox");
 
-        private IFilesPanelViewModel ViewModel => (IFilesPanelViewModel) DataContext;
+        private IDirectorySelectorViewModel ViewModel => (IDirectorySelectorViewModel) DataContext;
 
         public DirectorySelectorView()
         {

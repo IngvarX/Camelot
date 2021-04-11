@@ -8,7 +8,7 @@
              x:Class="Camelot.Views.Main.Controls.DirectorySelectorView">
 
     <Design.DataContext>
-        <filePanels:FilesPanelViewModel />
+        <filePanels:DirectorySelectorViewModel />
     </Design.DataContext>
 
     <Grid Margin="7,0,0,0" ColumnDefinitions="*,Auto">

@@ -222,6 +222,12 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IApplicationDispatcher>(),
                 resolver.GetRequiredService<SearchViewModelConfiguration>()
             ));
+            services.Register<IDirectorySelectorViewModel>(() => new DirectorySelectorViewModel(
+                resolver.GetRequiredService<IFavouriteDirectoriesService>(),
+                resolver.GetRequiredService<IDirectoryService>(),
+                resolver.GetRequiredService<ISuggestionsService>(),
+                resolver.GetRequiredService<ISuggestedPathViewModelFactory>()
+            ));
             services.RegisterLazySingleton<IDragAndDropOperationsMediator>(() => new DragAndDropOperationsMediator(
                 resolver.GetRequiredService<IOperationsService>(),
                 resolver.GetRequiredService<IDirectoryService>(),
@@ -286,13 +292,11 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IFileSizeFormatter>(),
                 resolver.GetRequiredService<IClipboardOperationsService>(),
                 resolver.GetRequiredService<IFileSystemNodeViewModelComparerFactory>(),
-                resolver.GetRequiredService<ISuggestionsService>(),
                 resolver.GetRequiredService<IRecursiveSearchService>(),
-                resolver.GetRequiredService<IFavouriteDirectoriesService>(),
-                resolver.GetRequiredService<ISuggestedPathViewModelFactory>(),
                 resolver.GetRequiredService<ISearchViewModel>(),
                 tabsListViewModel,
                 resolver.GetRequiredService<IOperationsViewModel>(),
+                resolver.GetRequiredService<IDirectorySelectorViewModel>(),
                 resolver.GetRequiredService<IDragAndDropOperationsMediator>()
             );
 

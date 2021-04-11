@@ -1,6 +1,6 @@
 using Camelot.Services.Abstractions.Models.Enums;
 
-namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels
+namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs
 {
     public interface IFileSystemNodesSortingViewModel
     {

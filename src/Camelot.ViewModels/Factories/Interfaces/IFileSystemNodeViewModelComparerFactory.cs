@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Nodes;
+using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs;
 
 namespace Camelot.ViewModels.Factories.Interfaces
 {

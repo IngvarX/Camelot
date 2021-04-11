@@ -22,7 +22,6 @@ using Camelot.ViewModels.Interfaces.MainWindow.Operations;
 using Camelot.ViewModels.Services.Interfaces;
 using DynamicData;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 
 namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 {
@@ -37,18 +36,13 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private readonly IFileSizeFormatter _fileSizeFormatter;
         private readonly IClipboardOperationsService _clipboardOperationsService;
         private readonly IFileSystemNodeViewModelComparerFactory _comparerFactory;
-        private readonly ISuggestionsService _suggestionsService;
         private readonly IRecursiveSearchService _recursiveSearchService;
-        private readonly IFavouriteDirectoriesService _favouriteDirectoriesService;
-        private readonly ISuggestedPathViewModelFactory _suggestedPathViewModelFactory;
 
         private readonly ObservableCollection<IFileSystemNodeViewModel> _fileSystemNodes;
         private readonly ObservableCollection<IFileSystemNodeViewModel> _selectedFileSystemNodes;
-        private readonly ObservableCollection<ISuggestedPathViewModel> _suggestedPaths;
 
-        private string _currentDirectory;
-        private string _currentDirectorySearchText;
         private CancellationTokenSource _cancellationTokenSource;
+        private string _currentDirectory;
 
         private IEnumerable<IFileViewModel> SelectedFiles => _selectedFileSystemNodes.OfType<IFileViewModel>();
 
@@ -62,29 +56,30 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         public IOperationsViewModel OperationsViewModel { get; }
 
+        public IDirectorySelectorViewModel DirectorySelectorViewModel { get; }
+
         public IDragAndDropOperationsMediator DragAndDropOperationsMediator { get; }
 
         public bool IsActive => SelectedTab.IsGloballyActive;
 
-        [Reactive]
-        public bool ShouldShowSuggestions { get; set; }
+        public IEnumerable<IFileSystemNodeViewModel> FileSystemNodes => _fileSystemNodes;
+
+        public IList<IFileSystemNodeViewModel> SelectedFileSystemNodes => _selectedFileSystemNodes;
+
+        public bool AreAnyFileSystemNodesSelected => _selectedFileSystemNodes.Any();
+
+        public int SelectedFilesCount => SelectedFiles.Count();
+
+        public int SelectedDirectoriesCount => SelectedDirectories.Count();
+
+        public string SelectedFilesSize => _fileSizeFormatter.GetFormattedSize(SelectedFiles.Sum(f => f.Size));
 
         public string CurrentDirectory
         {
             get => _currentDirectory;
             set
             {
-                _currentDirectorySearchText = value;
                 Activate();
-                ClearSuggestions();
-
-                if (!_directoryService.CheckIfExists(value))
-                {
-                    ReloadSuggestions();
-                    ShouldShowSuggestions = SuggestedPaths.Any();
-
-                    return;
-                }
 
                 var previousCurrentDirectory = _currentDirectory;
                 this.RaiseAndSetIfChanged(ref _currentDirectory, value);
@@ -99,28 +94,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
                 _fileSystemWatchingService.StartWatching(CurrentDirectory);
 
                 CurrentDirectoryChanged.Raise(this, EventArgs.Empty);
-
-                ShouldShowSuggestions = false;
-                UpdateFavouriteDirectoryStatus();
             }
         }
-
-        [Reactive]
-        public bool IsFavouriteDirectory { get; set; }
-
-        public IEnumerable<IFileSystemNodeViewModel> FileSystemNodes => _fileSystemNodes;
-
-        public IEnumerable<ISuggestedPathViewModel> SuggestedPaths => _suggestedPaths;
-
-        public IList<IFileSystemNodeViewModel> SelectedFileSystemNodes => _selectedFileSystemNodes;
-
-        public bool AreAnyFileSystemNodesSelected => _selectedFileSystemNodes.Any();
-
-        public int SelectedFilesCount => SelectedFiles.Count();
-
-        public int SelectedDirectoriesCount => SelectedDirectories.Count();
-
-        public string SelectedFilesSize => _fileSizeFormatter.GetFormattedSize(SelectedFiles.Sum(f => f.Size));
 
         public event EventHandler<EventArgs> Activated;
 
@@ -138,8 +113,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         public ICommand PasteFromClipboardCommand { get; }
 
-        public ICommand ToggleFavouriteStatusCommand { get; }
-
         public FilesPanelViewModel(
             IFileService fileService,
             IDirectoryService directoryService,
@@ -150,13 +123,11 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             IFileSizeFormatter fileSizeFormatter,
             IClipboardOperationsService clipboardOperationsService,
             IFileSystemNodeViewModelComparerFactory comparerFactory,
-            ISuggestionsService suggestionsService,
             IRecursiveSearchService recursiveSearchService,
-            IFavouriteDirectoriesService favouriteDirectoriesService,
-            ISuggestedPathViewModelFactory suggestedPathViewModelFactory,
             ISearchViewModel searchViewModel,
             ITabsListViewModel tabsListViewModel,
             IOperationsViewModel operationsViewModel,
+            IDirectorySelectorViewModel directorySelectorViewModel,
             IDragAndDropOperationsMediator dragAndDropOperationsMediator)
         {
             _fileService = fileService;
@@ -168,26 +139,22 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             _fileSizeFormatter = fileSizeFormatter;
             _clipboardOperationsService = clipboardOperationsService;
             _comparerFactory = comparerFactory;
-            _suggestionsService = suggestionsService;
             _recursiveSearchService = recursiveSearchService;
-            _favouriteDirectoriesService = favouriteDirectoriesService;
-            _suggestedPathViewModelFactory = suggestedPathViewModelFactory;
 
             SearchViewModel = searchViewModel;
             TabsListViewModel = tabsListViewModel;
             OperationsViewModel = operationsViewModel;
+            DirectorySelectorViewModel = directorySelectorViewModel;
             DragAndDropOperationsMediator = dragAndDropOperationsMediator;
 
             _fileSystemNodes = new ObservableCollection<IFileSystemNodeViewModel>();
             _selectedFileSystemNodes = new ObservableCollection<IFileSystemNodeViewModel>();
-            _suggestedPaths = new ObservableCollection<ISuggestedPathViewModel>();
 
             ActivateCommand = ReactiveCommand.Create(Activate);
             RefreshCommand = ReactiveCommand.Create(ReloadFiles);
             SortFilesCommand = ReactiveCommand.Create<SortingMode>(SortFiles);
             CopyToClipboardCommand = ReactiveCommand.CreateFromTask(CopyToClipboardAsync);
             PasteFromClipboardCommand = ReactiveCommand.CreateFromTask(PasteFromClipboardAsync);
-            ToggleFavouriteStatusCommand = ReactiveCommand.Create(ToggleFavouriteStatus);
 
             SubscribeToEvents();
             CurrentDirectory = SelectedTab.CurrentDirectory;
@@ -231,8 +198,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             TabsListViewModel.SelectedTabChanged += TabsListViewModelOnSelectedTabChanged;
             SearchViewModel.SearchSettingsChanged += SearchViewModelOnSearchSettingsChanged;
             _selectedFileSystemNodes.CollectionChanged += SelectedFileSystemNodesOnCollectionChanged;
-            _favouriteDirectoriesService.DirectoryAdded += (sender, args) => UpdateFavouriteDirectoryStatus();
-            _favouriteDirectoriesService.DirectoryRemoved += (sender, args) => UpdateFavouriteDirectoryStatus();
 
             _fileSystemWatchingService.NodeCreated += (sender, args) =>
                 ExecuteInUiThread(() => InsertNode(args.Node));
@@ -384,18 +349,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         private Task PasteFromClipboardAsync() => _clipboardOperationsService.PasteFilesAsync(CurrentDirectory);
 
-        private void ToggleFavouriteStatus()
-        {
-            if (IsFavouriteDirectory)
-            {
-                _favouriteDirectoriesService.AddDirectory(CurrentDirectory);
-            }
-            else
-            {
-                _favouriteDirectoriesService.RemoveDirectory(CurrentDirectory);
-            }
-        }
-
         private int GetInsertIndex(IFileSystemNodeViewModel newNodeViewModel)
         {
             var comparer = GetComparer();
@@ -411,19 +364,5 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             _fileSystemNodes.FirstOrDefault(n => n.FullPath == nodePath);
 
         private void ExecuteInUiThread(Action action) => _applicationDispatcher.Dispatch(action);
-
-        private void ClearSuggestions() => _suggestedPaths.Clear();
-
-        private void ReloadSuggestions()
-        {
-            var suggestions = _suggestionsService
-                .GetSuggestions(_currentDirectorySearchText)
-                .Select(sm => _suggestedPathViewModelFactory.Create(_currentDirectorySearchText, sm));
-
-            _suggestedPaths.AddRange(suggestions);
-        }
-
-        private void UpdateFavouriteDirectoryStatus() => IsFavouriteDirectory =
-            _favouriteDirectoriesService.ContainsDirectory(CurrentDirectory);
     }
 }

@@ -1,5 +1,6 @@
 using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
+using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 

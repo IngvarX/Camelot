@@ -2,6 +2,7 @@ using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.ViewModels.Factories.Implementations;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Comparers;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
+using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs;
 using Moq;
 using Xunit;
 

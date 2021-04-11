@@ -67,7 +67,8 @@
                 </Image>
             </Button>
 
-            <controls:DirectorySelectorView Name="DirectorySelectorView" Grid.Column="3" />
+            <controls:DirectorySelectorView Name="DirectorySelectorView" Grid.Column="3"
+                                            DataContext="{Binding DirectorySelectorViewModel}" />
         </Grid>
 
         <tabs:TabsListView Grid.Row="1"
