@@ -29,11 +29,8 @@ namespace Camelot.ViewModels.Tests.FilePanels
         }
 
         [Fact]
-        public void TestSetDirectory()
+        public void TestDirectoryUpdated()
         {
-            _autoMocker
-                .Setup<IFavouriteDirectoriesService, IReadOnlyCollection<string>>(m => m.FavouriteDirectories)
-                .Returns(new string[0]);
             var currentDirectory = AppRootDirectory;
             var tabViewModelMock = new Mock<ITabViewModel>();
             tabViewModelMock
@@ -43,15 +40,9 @@ namespace Camelot.ViewModels.Tests.FilePanels
                 .SetupSet(m => m.CurrentDirectory = NewDirectory)
                 .Callback<string>(s => currentDirectory = s)
                 .Verifiable();
-            var tabsListViewModelMock = new Mock<ITabsListViewModel>();
-            tabsListViewModelMock
-                .SetupGet(m => m.SelectedTab)
-                .Returns(tabViewModelMock.Object);
-            _autoMocker.Use(tabsListViewModelMock.Object);
-
             _autoMocker
-                .Setup<IDirectoryService, bool>(m => m.CheckIfExists(AppRootDirectory))
-                .Returns(true);
+                .Setup<ITabsListViewModel, ITabViewModel>(m => m.SelectedTab)
+                .Returns(tabViewModelMock.Object);
             _autoMocker
                 .Setup<IDirectoryService, bool>(m => m.CheckIfExists(NewDirectory))
                 .Returns(true);
@@ -59,32 +50,33 @@ namespace Camelot.ViewModels.Tests.FilePanels
                 .Setup<IDirectoryService, IReadOnlyList<DirectoryModel>>(m => m.GetChildDirectories(It.IsAny<string>(), It.IsAny<ISpecification<DirectoryModel>>()))
                 .Returns(new DirectoryModel[] {});
             _autoMocker
-                .Setup<IFileService, IReadOnlyList<FileModel>>(m => m.GetFiles(AppRootDirectory, It.IsAny<ISpecification<NodeModelBase>>()))
-                .Returns(new[] {new FileModel {Name = File}});
-            _autoMocker
                 .Setup<IFileService, IReadOnlyList<FileModel>>(m => m.GetFiles(NewDirectory, It.IsAny<ISpecification<NodeModelBase>>()))
-                .Returns(new FileModel[] {});
+                .Returns(new[] {new FileModel {Name = File}});
             _autoMocker
                 .Setup<ISearchViewModel, INodeSpecification>(m => m.GetSpecification())
                 .Returns(new Mock<INodeSpecification>().Object);
+            _autoMocker
+                .Setup<IDirectorySelectorViewModel, string>(m => m.CurrentDirectory)
+                .Returns(NewDirectory);
 
             var filesPanelViewModel = _autoMocker.CreateInstance<FilesPanelViewModel>();
 
-            Assert.Equal(AppRootDirectory, filesPanelViewModel.CurrentDirectory);
+            _autoMocker
+                .GetMock<IDirectorySelectorViewModel>()
+                .Raise(m => m.CurrentDirectoryChanged += null, EventArgs.Empty);
+
             Assert.Single(filesPanelViewModel.FileSystemNodes);
-
-            filesPanelViewModel.CurrentDirectory = NewDirectory;
-
             Assert.Equal(NewDirectory, filesPanelViewModel.CurrentDirectory);
             tabViewModelMock.VerifySet(m => m.CurrentDirectory = NewDirectory);
+
+            _autoMocker
+                .Verify<IDirectoryService, DirectoryModel>(m => m.GetParentDirectory(NewDirectory),
+                    Times.Once);
         }
 
         [Fact]
         public void TestSelection()
         {
-            _autoMocker
-                .Setup<IFavouriteDirectoriesService, IReadOnlyCollection<string>>(m => m.FavouriteDirectories)
-                .Returns(new string[0]);
             const long size = 42;
             _autoMocker
                 .Setup<ISearchViewModel, INodeSpecification>(m => m.GetSpecification())
@@ -103,11 +95,9 @@ namespace Camelot.ViewModels.Tests.FilePanels
             tabViewModelMock
                 .SetupGet(m => m.CurrentDirectory)
                 .Returns(AppRootDirectory);
-            var tabsListViewModelMock = new Mock<ITabsListViewModel>();
-            tabsListViewModelMock
-                .SetupGet(m => m.SelectedTab)
+            _autoMocker
+                .Setup<ITabsListViewModel, ITabViewModel>(m => m.SelectedTab)
                 .Returns(tabViewModelMock.Object);
-            _autoMocker.Use(tabsListViewModelMock.Object);
             _autoMocker
                 .Setup<IFileSystemNodeViewModelComparerFactory, IComparer<IFileSystemNodeViewModel>>(m => m.Create(It.IsAny<IFileSystemNodesSortingViewModel>()))
                 .Returns(new Mock<IComparer<IFileSystemNodeViewModel>>().Object);
@@ -126,7 +116,15 @@ namespace Camelot.ViewModels.Tests.FilePanels
                 .Setup<IFileSizeFormatter, string>(m => m.GetFormattedSize(size))
                 .Returns(formattedSize);
 
+            _autoMocker
+                .Setup<IDirectorySelectorViewModel, string>(m => m.CurrentDirectory)
+                .Returns(AppRootDirectory);
+
             var filesPanelViewModel = _autoMocker.CreateInstance<FilesPanelViewModel>();
+
+            _autoMocker
+                .GetMock<IDirectorySelectorViewModel>()
+                .Raise(m => m.CurrentDirectoryChanged += null, EventArgs.Empty);
             Assert.Equal(2, filesPanelViewModel.FileSystemNodes.Count());
 
             void CheckSelection(int selectedFilesCount, int selectedDirsCount)
@@ -159,9 +157,6 @@ namespace Camelot.ViewModels.Tests.FilePanels
         public void TestActivationAndDeactivation()
         {
             _autoMocker
-                .Setup<IFavouriteDirectoriesService, IReadOnlyCollection<string>>(m => m.FavouriteDirectories)
-                .Returns(new string[0]);
-            _autoMocker
                 .Setup<IFileSystemNodeViewModelFactory, IFileSystemNodeViewModel>(m => m.Create(It.IsAny<DirectoryModel>(), It.IsAny<bool>()))
                 .Returns(new Mock<IDirectoryViewModel>().Object);
             _autoMocker
@@ -177,11 +172,9 @@ namespace Camelot.ViewModels.Tests.FilePanels
             tabViewModelMock
                 .SetupSet(m => m.IsGloballyActive = false)
                 .Verifiable();
-            var tabsListViewModelMock = new Mock<ITabsListViewModel>();
-            tabsListViewModelMock
-                .SetupGet(m => m.SelectedTab)
+            _autoMocker
+                .Setup<ITabsListViewModel, ITabViewModel>(m => m.SelectedTab)
                 .Returns(tabViewModelMock.Object);
-            _autoMocker.Use(tabsListViewModelMock.Object);
             _autoMocker
                 .Setup<IFileSystemNodeViewModelComparerFactory, IComparer<IFileSystemNodeViewModel>>(m => m.Create(It.IsAny<IFileSystemNodesSortingViewModel>()))
                 .Returns(new Mock<IComparer<IFileSystemNodeViewModel>>().Object);
@@ -217,9 +210,6 @@ namespace Camelot.ViewModels.Tests.FilePanels
         public void TestRefreshCommand()
         {
             _autoMocker
-                .Setup<IFavouriteDirectoriesService, IReadOnlyCollection<string>>(m => m.FavouriteDirectories)
-                .Returns(new string[0]);
-            _autoMocker
                 .Setup<ISearchViewModel, INodeSpecification>(m => m.GetSpecification())
                 .Returns(new Mock<INodeSpecification>().Object);
             _autoMocker
@@ -237,14 +227,18 @@ namespace Camelot.ViewModels.Tests.FilePanels
             tabViewModelMock
                 .SetupGet(m => m.CurrentDirectory)
                 .Returns(AppRootDirectory);
-            var tabsListViewModelMock = new Mock<ITabsListViewModel>();
-            tabsListViewModelMock
-                .SetupGet(m => m.SelectedTab)
+            _autoMocker
+                .Setup<ITabsListViewModel, ITabViewModel>(m => m.SelectedTab)
                 .Returns(tabViewModelMock.Object);
-            _autoMocker.Use(tabsListViewModelMock.Object);
+            _autoMocker
+                .Setup<IDirectorySelectorViewModel, string>(m => m.CurrentDirectory)
+                .Returns(AppRootDirectory);
 
             var filesPanelViewModel = _autoMocker.CreateInstance<FilesPanelViewModel>();
 
+            _autoMocker
+                .GetMock<IDirectorySelectorViewModel>()
+                .Raise(m => m.CurrentDirectoryChanged += null, EventArgs.Empty);
             _autoMocker
                 .Verify<IDirectoryService, IReadOnlyList<DirectoryModel>>(
                     m => m.GetChildDirectories(AppRootDirectory, It.IsAny<ISpecification<DirectoryModel>>()),
