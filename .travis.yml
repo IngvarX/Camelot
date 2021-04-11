@@ -6,7 +6,7 @@ before_script:
   - dotnet restore
   - dotnet build --configuration Release --no-restore
 script:
-  - dotnet test --configuration Release --no-build --collect:"XPlat Code Coverage" /p:CoverletOutputFormat=opencover
+  - dotnet test --configuration Release --no-build --collect:"XPlat Code Coverage" /p:CoverletOutputFormat=opencover --filter FullyQualifiedName!~Ui.Tests
 after_script:
   - bash <(curl -s https://codecov.io/bash)
 notifications:
