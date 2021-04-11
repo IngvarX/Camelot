@@ -256,11 +256,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         private void ReloadFiles()
         {
-            if (!_directoryService.CheckIfExists(CurrentDirectory))
-            {
-                return;
-            }
-
             CancelPreviousSearchIfNeeded();
 
             var specification = SearchViewModel.GetSpecification();

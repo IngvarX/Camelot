@@ -115,6 +115,71 @@ namespace Camelot.ViewModels.Tests.FilePanels
         }
 
         [Fact]
+        public void TestCopyToClipboardCommand()
+        {
+            _autoMocker
+                .Setup<INodesSelectionService, IReadOnlyList<string>>(m => m.SelectedNodes)
+                .Returns(new[] {File});
+            _autoMocker
+                .Setup<IClipboardOperationsService>(m => m.CopyFilesAsync(
+                    It.Is<IReadOnlyList<string>>(l => l.Single() == File)))
+                .Verifiable();
+            _autoMocker
+                .Setup<ITabsListViewModel, ITabViewModel>(m => m.SelectedTab)
+                .Returns(Mock.Of<ITabViewModel>());
+
+           var filesPanelViewModel = _autoMocker.CreateInstance<FilesPanelViewModel>();
+
+           Assert.True(filesPanelViewModel.CopyToClipboardCommand.CanExecute(null));
+
+            filesPanelViewModel.CopyToClipboardCommand.Execute(null);
+
+            _autoMocker
+                .Verify<IClipboardOperationsService>(m => m.CopyFilesAsync(
+                    It.Is<IReadOnlyList<string>>(l => l.Single() == File)),
+                    Times.Once);
+        }
+
+        [Fact]
+        public void TestPasteFromClipboardCommand()
+        {
+            var tabViewModelMock = new Mock<ITabViewModel>();
+            tabViewModelMock
+                .SetupGet(m => m.CurrentDirectory)
+                .Returns(AppRootDirectory);
+            _autoMocker
+                .Setup<ITabsListViewModel, ITabViewModel>(m => m.SelectedTab)
+                .Returns(tabViewModelMock.Object);
+            _autoMocker
+                .Setup<IDirectorySelectorViewModel, string>(m => m.CurrentDirectory)
+                .Returns(AppRootDirectory);
+            _autoMocker
+                .Setup<ISearchViewModel, INodeSpecification>(m => m.GetSpecification())
+                .Returns(new Mock<INodeSpecification>().Object);
+            _autoMocker
+                .Setup<IDirectoryService, IReadOnlyList<DirectoryModel>>(m => m.GetChildDirectories(It.IsAny<string>(), It.IsAny<ISpecification<DirectoryModel>>()))
+                .Returns(new DirectoryModel[] {});
+            _autoMocker
+                .Setup<IFileService, IReadOnlyList<FileModel>>(m =>
+                    m.GetFiles(It.IsAny<string>(), It.IsAny<ISpecification<NodeModelBase>>()))
+                .Returns(new FileModel[] { });
+
+            var filesPanelViewModel = _autoMocker.CreateInstance<FilesPanelViewModel>();
+
+            _autoMocker
+                .GetMock<IDirectorySelectorViewModel>()
+                .Raise(m => m.CurrentDirectoryChanged += null, EventArgs.Empty);
+
+            Assert.True(filesPanelViewModel.PasteFromClipboardCommand.CanExecute(null));
+
+            filesPanelViewModel.PasteFromClipboardCommand.Execute(null);
+
+            _autoMocker
+                .Verify<IClipboardOperationsService>(m => m.PasteFilesAsync(AppRootDirectory),
+                    Times.Once);
+        }
+
+        [Fact]
         public void TestDirectoryUpdated()
         {
             var currentDirectory = AppRootDirectory;
