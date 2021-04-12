@@ -21,6 +21,8 @@ namespace Camelot.Ui.Tests.Flows
 
             var initialCount = GetTabsCount(window);
 
+            Keyboard.PressKey(window, Key.T, RawInputModifiers.Control | RawInputModifiers.Shift);
+
             for (var i = 0; i < 2; i++)
             {
                 Keyboard.PressKey(window, Key.T, RawInputModifiers.Control);
@@ -33,6 +35,12 @@ namespace Camelot.Ui.Tests.Flows
 
                 Keyboard.PressKey(window, Key.Tab);
             }
+
+            Keyboard.PressKey(window, Key.T, RawInputModifiers.Control | RawInputModifiers.Shift);
+            var isTabReopened = await WaitService.WaitForConditionAsync(() => initialCount + 1 == GetTabsCount(window));
+            Assert.True(isTabReopened);
+
+            Keyboard.PressKey(window, Key.W, RawInputModifiers.Control);
         }
 
         private static int GetTabsCount(IVisual window) =>
