@@ -83,7 +83,7 @@ namespace Camelot.Services.Tests.Drives
             _autoMocker.VerifyLogError(Times.AtLeastOnce());
         }
 
-        private DriveServiceConfiguration GetConfig() =>
+        private static DriveServiceConfiguration GetConfig() =>
             new DriveServiceConfiguration {DrivesListRefreshIntervalMs = 10};
     }
 }

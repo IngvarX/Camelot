@@ -1,7 +1,9 @@
 namespace Camelot.ViewModels.Configuration
 {
-    public class FilePanelConfiguration
+    public class TabsListConfiguration
     {
         public int SaveTimeoutMs { get; set; }
+
+        public int SavedClosedTabsLimit { get; set; }
     }
 }

@@ -26,7 +26,7 @@ namespace Camelot.DependencyInjection
             RegisterDatabaseConfiguration(services, resolver, configuration);
             RegisterFileSystemWatcherConfiguration(services, configuration);
             RegisterImagePreviewConfiguration(services, configuration);
-            RegisterFilePanelConfiguration(services, configuration);
+            RegisterTabsListConfiguration(services, configuration);
             RegisterSearchViewModelConfiguration(services, configuration);
             RegisterDriveServiceConfiguration(services, configuration);
             RegisterUnmountedDrivesConfiguration(services, configuration);
@@ -109,11 +109,11 @@ namespace Camelot.DependencyInjection
             services.RegisterConstant(config);
         }
 
-        private static void RegisterFilePanelConfiguration(IMutableDependencyResolver services,
+        private static void RegisterTabsListConfiguration(IMutableDependencyResolver services,
             IConfiguration configuration)
         {
-            var config = new FilePanelConfiguration();
-            configuration.GetSection("FilePanel").Bind(config);
+            var config = new TabsListConfiguration();
+            configuration.GetSection("TabsList").Bind(config);
             services.RegisterConstant(config);
         }
 
