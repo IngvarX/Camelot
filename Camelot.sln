@@ -86,6 +86,8 @@ ProjectSection(SolutionItems) = preProject
 	camelot.desktop = camelot.desktop
 EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camelot.Collections", "src\Camelot.Collections\Camelot.Collections.csproj", "{8745C732-67D4-4BCC-9593-71318000EA9F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -340,6 +342,14 @@ Global
 		{FEB5ABE3-EF9C-4BBC-A398-80058551E91A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FEB5ABE3-EF9C-4BBC-A398-80058551E91A}.Release|x86.ActiveCfg = Release|Any CPU
 		{FEB5ABE3-EF9C-4BBC-A398-80058551E91A}.Release|x86.Build.0 = Release|Any CPU
+		{8745C732-67D4-4BCC-9593-71318000EA9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8745C732-67D4-4BCC-9593-71318000EA9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8745C732-67D4-4BCC-9593-71318000EA9F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8745C732-67D4-4BCC-9593-71318000EA9F}.Debug|x86.Build.0 = Debug|Any CPU
+		{8745C732-67D4-4BCC-9593-71318000EA9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8745C732-67D4-4BCC-9593-71318000EA9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8745C732-67D4-4BCC-9593-71318000EA9F}.Release|x86.ActiveCfg = Release|Any CPU
+		{8745C732-67D4-4BCC-9593-71318000EA9F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -383,6 +393,7 @@ Global
 		{4AF845FA-DAEA-4B6C-A751-09E8DE6EEF0E} = {AF27253D-17E1-40F0-A0C2-4BDD3089D71E}
 		{FEB5ABE3-EF9C-4BBC-A398-80058551E91A} = {6E54E223-60FD-418C-B6E0-0EB9095C34D0}
 		{7A44F288-C9F3-4965-892B-CD08B0643C9C} = {3E7B6E0B-F769-48DF-B269-43B747D4A964}
+		{8745C732-67D4-4BCC-9593-71318000EA9F} = {152EE21C-6799-4717-B96C-0DFB5AFA0FF0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5C51E5E2-AA78-45DF-89AC-640A29AFB2DF}

@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Camelot.Avalonia.Interfaces;
+using Camelot.Collections;
 using Camelot.Extensions;
 using Camelot.Services.Abstractions.Extensions;
 using Camelot.Services.Abstractions.Models.Enums;
@@ -27,10 +28,9 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
         private readonly IOperationStateViewModelFactory _operationStateViewModelFactory;
         private readonly IApplicationDispatcher _applicationDispatcher;
         private readonly IDialogService _dialogService;
-        private readonly OperationsStatesConfiguration _configuration;
 
         private readonly ObservableCollection<IOperationStateViewModel> _activeOperations;
-        private readonly Queue<IOperationStateViewModel> _finishedOperationsQueue;
+        private readonly LimitedSizeStack<IOperationStateViewModel> _finishedOperationsQueue;
         private readonly IDictionary<IOperation, IOperationStateViewModel> _operationsViewModelsDictionary;
 
         private int _totalProgress;
@@ -52,7 +52,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
 
         public IEnumerable<IOperationStateViewModel> ActiveOperations => _activeOperations;
 
-        public IEnumerable<IOperationStateViewModel> InactiveOperations => _finishedOperationsQueue.Reverse();
+        public IEnumerable<IOperationStateViewModel> InactiveOperations => _finishedOperationsQueue.Items.Reverse();
 
         public OperationsStatesListViewModel(
             IOperationsStateService operationsStateService,
@@ -65,10 +65,9 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
             _operationStateViewModelFactory = operationStateViewModelFactory;
             _applicationDispatcher = applicationDispatcher;
             _dialogService = dialogService;
-            _configuration = configuration;
 
             _activeOperations = new ObservableCollection<IOperationStateViewModel>();
-            _finishedOperationsQueue = new Queue<IOperationStateViewModel>(_configuration.MaximumFinishedOperationsCount);
+            _finishedOperationsQueue = new LimitedSizeStack<IOperationStateViewModel>(configuration.MaximumFinishedOperationsCount);
             _operationsViewModelsDictionary = new ConcurrentDictionary<IOperation, IOperationStateViewModel>();
 
             SubscribeToEvents();
@@ -111,12 +110,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
 
         private void AddFinishedOperationViewModel(IOperationStateViewModel stateViewModel)
         {
-            if (_finishedOperationsQueue.Count == _configuration.MaximumFinishedOperationsCount)
-            {
-                _finishedOperationsQueue.Dequeue();
-            }
-
-            _finishedOperationsQueue.Enqueue(stateViewModel);
+            _finishedOperationsQueue.Push(stateViewModel);
             this.RaisePropertyChanged(nameof(InactiveOperations));
         }
 

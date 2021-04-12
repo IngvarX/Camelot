@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Camelot.Collections;
 using Camelot.Extensions;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models.Enums;
@@ -27,10 +28,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
         private readonly IHomeDirectoryProvider _homeDirectoryProvider;
 
         private readonly ObservableCollection<ITabViewModel> _tabs;
-        private readonly LinkedList<(ITabViewModel ViewModel, int Index)> _closedTabs;
-        private readonly int _maxClosedTabQueueLength;
+        private readonly LimitedSizeStack<(ITabViewModel ViewModel, int Index)> _closedTabs;
 
-        private int _closedTabQueueLength;
         private ITabViewModel _selectedTab;
 
         public IReadOnlyList<ITabViewModel> Tabs => _tabs;
@@ -64,9 +63,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
             _homeDirectoryProvider = homeDirectoryProvider;
 
             _tabs = SetupTabs();
-            _closedTabs = new LinkedList<(ITabViewModel ViewModel, int Index)>();
-            _maxClosedTabQueueLength = tabsListConfiguration.SavedClosedTabsLimit;
-            _closedTabQueueLength = 0;
+            _closedTabs = new LimitedSizeStack<(ITabViewModel ViewModel, int Index)>(tabsListConfiguration.SavedClosedTabsLimit);
 
             SelectTabToTheLeftCommand = ReactiveCommand.Create(SelectTabToTheLeft);
             SelectTabToTheRightCommand = ReactiveCommand.Create(SelectTabToTheRight);
@@ -152,14 +149,12 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
 
         private void ReopenClosedTab()
         {
-            if (_closedTabs.Last is null)
+            if (_closedTabs.IsEmpty)
             {
                 return;
             }
 
-            var (viewModel, index) = _closedTabs.Last.Value;
-            _closedTabs.RemoveLast();
-            _closedTabQueueLength--;
+            var (viewModel, index) = _closedTabs.Pop();
 
             SubscribeToEvents(viewModel);
             _tabs.Insert(index, viewModel);
@@ -232,27 +227,13 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
             var index = _tabs.IndexOf(tabViewModel);
             _tabs.RemoveAt(index);
 
-            SaveClosedTab(tabViewModel, index);
+            _closedTabs.Push((tabViewModel, index));
 
             if (SelectedTab == tabViewModel)
             {
                 var newActiveTabIndex = index > 0 ? index - 1 : 0;
                 SelectTab(_tabs[newActiveTabIndex]);
             }
-        }
-
-        private void SaveClosedTab(ITabViewModel tabViewModel, int index)
-        {
-            if (_closedTabQueueLength == _maxClosedTabQueueLength)
-            {
-                _closedTabs.RemoveFirst();
-            }
-            else
-            {
-                _closedTabQueueLength++;
-            }
-
-            _closedTabs.AddLast((tabViewModel, index));
         }
 
         private void SubscribeToEvents(ITabViewModel tabViewModel)
