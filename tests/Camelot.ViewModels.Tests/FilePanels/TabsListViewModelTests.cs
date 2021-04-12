@@ -25,6 +25,10 @@ namespace Camelot.ViewModels.Tests.FilePanels
         public TabsListViewModelTests()
         {
             _autoMocker = new AutoMocker();
+            _autoMocker.Use(new TabsListConfiguration
+            {
+                SavedClosedTabsLimit = 5
+            });
         }
 
         [Fact]
@@ -146,10 +150,6 @@ namespace Camelot.ViewModels.Tests.FilePanels
             _autoMocker
                 .Setup<IDirectoryService, bool>(m => m.CheckIfExists(AppRootDirectory))
                 .Returns(true);
-            _autoMocker.Use(new TabsListConfiguration
-            {
-                SavedClosedTabsLimit = 5
-            });
 
             var tabsListViewModel = _autoMocker.CreateInstance<TabsListViewModel>();
 
