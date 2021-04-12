@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models.State;
+using Camelot.ViewModels.Configuration;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
@@ -40,7 +41,6 @@ namespace Camelot.ViewModels.Tests.FilePanels
                     Tabs = new List<TabStateModel>()
                 })
                 .Verifiable();
-
             _autoMocker
                 .Setup<IHomeDirectoryProvider, string>(m => m.HomeDirectoryPath)
                 .Returns(AppRootDirectory)
@@ -86,6 +86,79 @@ namespace Camelot.ViewModels.Tests.FilePanels
             _autoMocker.Verify<IFilesPanelStateService, PanelStateModel>(m => m.GetPanelState(), Times.Once);
 
             Assert.Equal(tabsCount, tabsListViewModel.Tabs.Count);
+        }
+
+        [Fact]
+        public void TestReopenClosedTabNotExists()
+        {
+            var sortingViewModelMock = new Mock<IFileSystemNodesSortingViewModel>();
+            var tabViewModelMock = new Mock<ITabViewModel>();
+            tabViewModelMock
+                .SetupGet(m => m.SortingViewModel)
+                .Returns(sortingViewModelMock.Object);
+            _autoMocker
+                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<TabStateModel>()))
+                .Returns(tabViewModelMock.Object);
+            _autoMocker
+                .Setup<IFilesPanelStateService, PanelStateModel>(m => m.GetPanelState())
+                .Returns(new PanelStateModel
+                {
+                    Tabs = new List<TabStateModel>
+                    {
+                        new TabStateModel {Directory = AppRootDirectory}
+                    }
+                });
+
+            _autoMocker
+                .Setup<IDirectoryService, bool>(m => m.CheckIfExists(AppRootDirectory))
+                .Returns(true);
+
+            var tabsListViewModel = _autoMocker.CreateInstance<TabsListViewModel>();
+
+            Assert.True(tabsListViewModel.ReopenClosedTabCommand.CanExecute(null));
+
+            tabsListViewModel.ReopenClosedTabCommand.Execute(null);
+
+            Assert.Single(tabsListViewModel.Tabs);
+        }
+
+        [Fact]
+        public void TestReopenClosedTabExists()
+        {
+            var sortingViewModelMock = new Mock<IFileSystemNodesSortingViewModel>();
+            var tabViewModelMock = new Mock<ITabViewModel>();
+            tabViewModelMock
+                .SetupGet(m => m.SortingViewModel)
+                .Returns(sortingViewModelMock.Object);
+            _autoMocker
+                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<TabStateModel>()))
+                .Returns(tabViewModelMock.Object);
+            _autoMocker
+                .Setup<IFilesPanelStateService, PanelStateModel>(m => m.GetPanelState())
+                .Returns(new PanelStateModel
+                {
+                    Tabs = new List<TabStateModel>
+                    {
+                        new TabStateModel {Directory = AppRootDirectory},
+                        new TabStateModel {Directory = AppRootDirectory}
+                    }
+                });
+            _autoMocker
+                .Setup<IDirectoryService, bool>(m => m.CheckIfExists(AppRootDirectory))
+                .Returns(true);
+            _autoMocker.Use(new TabsListConfiguration
+            {
+                SavedClosedTabsLimit = 5
+            });
+
+            var tabsListViewModel = _autoMocker.CreateInstance<TabsListViewModel>();
+
+            tabsListViewModel.CloseActiveTab();
+
+            Assert.True(tabsListViewModel.ReopenClosedTabCommand.CanExecute(null));
+            tabsListViewModel.ReopenClosedTabCommand.Execute(null);
+
+            Assert.Equal(2, tabsListViewModel.Tabs.Count);
         }
 
         [Fact]
@@ -663,13 +736,11 @@ namespace Camelot.ViewModels.Tests.FilePanels
         [InlineData(2)]
         public void TestInsertBeforeTab(int insertIndex)
         {
-            var tabs = new List<Mock<ITabViewModel>>();
             _autoMocker
                 .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.Is<TabStateModel>(tm => tm.Directory == AppRootDirectory)))
                 .Returns(() =>
                 {
                     var mock = Create();
-                    tabs.Add(mock);
 
                     return mock.Object;
                 });
