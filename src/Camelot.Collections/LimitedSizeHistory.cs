@@ -23,33 +23,36 @@ namespace Camelot.Collections
             FillStacks(collection, splitIndex);
         }
 
-        public void GoToPrevious()
+        public T GoToPrevious()
         {
-            if (_left.IsEmpty)
+            if (!_left.IsEmpty)
             {
-                return;
+                _right.Push(Current);
+                Current = _left.Pop();
             }
 
-            _right.Push(Current);
-            Current = _left.Pop();
+            return Current;
         }
 
-        public void GoToNext()
+        public T GoToNext()
         {
-            if (_right.IsEmpty)
+            if (!_right.IsEmpty)
             {
-                return;
+
+                _left.Push(Current);
+                Current = _right.Pop();
             }
 
-            _left.Push(Current);
-            Current = _right.Pop();
+            return Current;
         }
 
-        public void AddItem(T item)
+        public T AddItem(T item)
         {
             _left.Push(Current);
             _right.Clear();
             Current = item;
+
+            return Current;
         }
 
         private void FillStacks(IReadOnlyList<T> collection, int splitIndex)

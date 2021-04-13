@@ -1,5 +1,6 @@
 using System;
 using System.Windows.Input;
+using Camelot.Collections;
 using Camelot.Extensions;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models.State;
@@ -12,6 +13,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
     public class TabViewModel : ViewModelBase, ITabViewModel
     {
         private readonly IPathService _pathService;
+
+        private readonly LimitedSizeHistory<string> _history;
 
         private string _currentDirectory;
 
@@ -67,12 +70,19 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
 
         public ICommand RequestMoveCommand { get; }
 
+        public ICommand GoToPreviousDirectoryCommand { get; }
+
+        public ICommand GoToNextDirectoryCommand { get; }
+
         public TabViewModel(
             IPathService pathService,
             IFileSystemNodesSortingViewModel fileSystemNodesSortingViewModel,
             TabStateModel tabStateModel)
         {
             _pathService = pathService;
+
+            _history = new LimitedSizeHistory<string>(50, tabStateModel.History,
+                tabStateModel.CurrentPositionInHistory);
 
             SortingViewModel = fileSystemNodesSortingViewModel;
             CurrentDirectory = tabStateModel.Directory;
@@ -85,6 +95,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
             CloseTabsToTheRightCommand = ReactiveCommand.Create(RequestClosingTabsToTheRight);
             CloseAllTabsButThisCommand = ReactiveCommand.Create(RequestClosingAllTabsButThis);
             RequestMoveCommand = ReactiveCommand.Create<ITabViewModel>(RequestMoveTo);
+            GoToPreviousDirectoryCommand = ReactiveCommand.Create(GoToPreviousDirectory);
+            GoToNextDirectoryCommand = ReactiveCommand.Create(GoToNextDirectory);
         }
 
         public TabStateModel GetState() => new TabStateModel
@@ -115,5 +127,9 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
         private void RequestClosingAllTabsButThis() => ClosingAllTabsButThisRequested.Raise(this, EventArgs.Empty);
 
         private void RequestMoveTo(ITabViewModel target) => MoveRequested.Raise(this, new MoveRequestedEventArgs(target));
+
+        private void GoToPreviousDirectory() => CurrentDirectory = _history.GoToPrevious();
+
+        private void GoToNextDirectory() => CurrentDirectory = _history.GoToNext();
     }
 }

@@ -26,7 +26,8 @@
 
         <Grid Margin="7,0,0,0"
               ColumnDefinitions="Auto,Auto,Auto,*">
-            <Button Classes="iconButton">
+            <Button Classes="iconButton"
+                    Command="{Binding SelectedTab.GoToPreviousDirectoryCommand}">
                 <Image Classes="iconImage">
                     <Image.Source>
                         <DrawingImage>
@@ -39,7 +40,8 @@
                 </Image>
             </Button>
 
-            <Button Grid.Column="1" Classes="iconButton">
+            <Button Grid.Column="1" Classes="iconButton"
+                    Command="{Binding SelectedTab.GoToNextDirectoryCommand}">
                 <Image Classes="iconImage">
                     <Image.Source>
                         <DrawingImage>

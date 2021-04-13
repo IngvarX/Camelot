@@ -36,6 +36,10 @@ namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs
 
         ICommand RequestMoveCommand { get; }
 
+        ICommand GoToPreviousDirectoryCommand { get; }
+
+        ICommand GoToNextDirectoryCommand { get; }
+
         TabStateModel GetState();
     }
 }

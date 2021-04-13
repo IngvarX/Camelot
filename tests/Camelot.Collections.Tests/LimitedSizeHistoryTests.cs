@@ -35,7 +35,8 @@ namespace Camelot.Collections.Tests
 
             for (var i = 0; i < ElementsSize; i++)
             {
-                history.GoToPrevious();
+                var c = history.GoToPrevious();
+                Assert.Equal(history.Current, c);
                 Assert.Equal(history.Current, Math.Max(0, SplitIndex - i - 1));
             }
         }
@@ -47,7 +48,8 @@ namespace Camelot.Collections.Tests
 
             for (var i = 0; i < ElementsSize; i++)
             {
-                history.GoToNext();
+                var c = history.GoToNext();
+                Assert.Equal(history.Current, c);
                 Assert.Equal(history.Current, Math.Min(ElementsSize - 1, SplitIndex + i + 1));
             }
         }
@@ -57,8 +59,9 @@ namespace Camelot.Collections.Tests
         {
             var history = CreateHistory();
 
-            history.AddItem(Item);
+            var added = history.AddItem(Item);
             Assert.Equal(Item, history.Current);
+            Assert.Equal(Item, added);
 
             var items = history.Items.ToArray();
             Assert.Equal(SplitIndex + 2, items.Length);
