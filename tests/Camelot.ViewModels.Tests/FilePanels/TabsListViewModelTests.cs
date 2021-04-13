@@ -169,6 +169,9 @@ namespace Camelot.ViewModels.Tests.FilePanels
             tabViewModelMock
                 .SetupGet(m => m.SortingViewModel)
                 .Returns(sortingViewModelMock.Object);
+            tabViewModelMock
+                .Setup(m => m.GetState())
+                .Returns(new TabStateModel());
             _autoMocker
                 .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<TabStateModel>()))
                 .Returns(tabViewModelMock.Object);
@@ -345,6 +348,12 @@ namespace Camelot.ViewModels.Tests.FilePanels
         public void TestNewTabAndCloseRequested()
         {
             var firstTabMock = Create();
+            firstTabMock
+                .Setup(m => m.GetState())
+                .Returns(new TabStateModel()
+                {
+                    SortingSettings = new SortingSettingsStateModel()
+                });
             var currentTabMock = firstTabMock;
             _autoMocker
                 .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.Is<TabStateModel>(tm => tm.Directory == AppRootDirectory)))

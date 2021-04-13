@@ -2,6 +2,7 @@ using System;
 using System.Windows.Input;
 using Camelot.Extensions;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Models.State;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs;
 using ReactiveUI;
@@ -86,6 +87,19 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
             CloseAllTabsButThisCommand = ReactiveCommand.Create(RequestClosingAllTabsButThis);
             RequestMoveCommand = ReactiveCommand.Create<ITabViewModel>(RequestMoveTo);
         }
+
+        public TabStateModel GetState() => new TabStateModel
+        {
+            Directory = CurrentDirectory,
+            SortingSettings = GetSortingSettings()
+        };
+
+        private SortingSettingsStateModel GetSortingSettings() =>
+            new SortingSettingsStateModel
+            {
+                IsAscending = SortingViewModel.IsSortingByAscendingEnabled,
+                SortingMode = SortingViewModel.SortingColumn
+            };
 
         private void RequestActivation() => ActivationRequested.Raise(this, EventArgs.Empty);
 

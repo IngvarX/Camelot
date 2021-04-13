@@ -98,7 +98,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
         public void SaveState() =>
             Task.Factory.StartNew(() =>
             {
-                var tabs = _tabs.Select(CreateFrom).ToList();
+                var tabs = _tabs.Select(t => t.GetState()).ToList();
                 var selectedTabIndex = GetSelectedTabIndex();
                 var state = new PanelStateModel
                 {
@@ -206,7 +206,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
             var tabModel = new TabStateModel
             {
                 Directory = directory,
-                SortingSettings = GetSortingSettings(SelectedTab)
+                SortingSettings = SelectedTab.GetState().SortingSettings
             };
 
             return CreateViewModelFrom(tabModel);
@@ -352,20 +352,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
                 Remove(tabViewModel);
             }
         }
-
-        private static TabStateModel CreateFrom(ITabViewModel tabViewModel) =>
-            new TabStateModel
-            {
-                Directory = tabViewModel.CurrentDirectory,
-                SortingSettings = GetSortingSettings(tabViewModel)
-            };
-
-        private static SortingSettingsStateModel GetSortingSettings(ITabViewModel tabViewModel) =>
-            new SortingSettingsStateModel
-            {
-                IsAscending = tabViewModel.SortingViewModel.IsSortingByAscendingEnabled,
-                SortingMode = tabViewModel.SortingViewModel.SortingColumn
-            };
 
         private int GetSelectedTabIndex() => GetTabIndex(SelectedTab);
 

@@ -1,5 +1,6 @@
 using System;
 using System.Windows.Input;
+using Camelot.Services.Abstractions.Models.State;
 
 namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs
 {
@@ -34,5 +35,7 @@ namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs
         ICommand CloseTabCommand { get; }
 
         ICommand RequestMoveCommand { get; }
+
+        TabStateModel GetState();
     }
 }
