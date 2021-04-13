@@ -31,7 +31,13 @@ namespace Camelot.Collections
             Add(item);
         }
 
-        public T Pop() => IsEmpty ? throw new InvalidOperationException("Queue is empty!") : Remove();
+        public T Pop() => IsEmpty ? throw new InvalidOperationException("Stack is empty!") : Remove();
+
+        public void Clear()
+        {
+            _linkedList.Clear();
+            _currentLength = 0;
+        }
 
         private void CleanupLinkedList()
         {

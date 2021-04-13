@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Camelot.DataAccess.Models;
 using Camelot.DataAccess.UnitOfWork;
@@ -57,7 +58,7 @@ namespace Camelot.Services
             {
                 Directory = model.Directory,
                 SortingSettings = CreateFrom(model.SortingSettings),
-                History = model.History,
+                History = GetHistory(model),
                 CurrentPositionInHistory = model.CurrentPositionInHistory
             };
 
@@ -90,5 +91,8 @@ namespace Camelot.Services
                 IsAscending = model.IsAscending,
                 SortingMode = (int) model.SortingMode
             };
+
+        private static List<string> GetHistory(TabModel model) =>
+            model.History.Any() ? model.History : new List<string> {model.Directory};
     }
 }

@@ -51,5 +51,23 @@ namespace Camelot.Collections.Tests
             Assert.Equal(3, items[1]);
             Assert.Equal(4, items[2]);
         }
+
+        [Fact]
+        public void TestClear()
+        {
+            var stack = new LimitedSizeStack<int>(Size);
+
+            for (var i = 0; i < 5; i++)
+            {
+                stack.Push(i);
+            }
+
+            Assert.False(stack.IsEmpty);
+
+            stack.Clear();
+
+            Assert.True(stack.IsEmpty);
+            Assert.Empty(stack.Items);
+        }
     }
 }
