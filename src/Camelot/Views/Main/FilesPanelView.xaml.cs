@@ -6,7 +6,6 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
-using Avalonia.VisualTree;
 using Camelot.Avalonia.Interfaces;
 using Camelot.DependencyInjection;
 using Camelot.Extensions;
@@ -185,6 +184,11 @@ namespace Camelot.Views.Main
             }
 
             if (!(e.Cell.DataContext is IFileSystemNodeViewModel {IsEditing: false}))
+            {
+                return;
+            }
+
+            if (e.Cell.DataContext is IDirectoryViewModel {IsParentDirectory: true})
             {
                 return;
             }
