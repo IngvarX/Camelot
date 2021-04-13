@@ -70,12 +70,12 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
         public TabViewModel(
             IPathService pathService,
             IFileSystemNodesSortingViewModel fileSystemNodesSortingViewModel,
-            string directory)
+            TabStateModel tabStateModel)
         {
             _pathService = pathService;
 
             SortingViewModel = fileSystemNodesSortingViewModel;
-            CurrentDirectory = directory;
+            CurrentDirectory = tabStateModel.Directory;
 
             ActivateCommand = ReactiveCommand.Create(RequestActivation);
             NewTabCommand = ReactiveCommand.Create(RequestNewTab);

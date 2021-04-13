@@ -56,7 +56,9 @@ namespace Camelot.Services
             new TabStateModel
             {
                 Directory = model.Directory,
-                SortingSettings = CreateFrom(model.SortingSettings)
+                SortingSettings = CreateFrom(model.SortingSettings),
+                History = model.History,
+                CurrentPositionInHistory = model.CurrentPositionInHistory
             };
 
         private static SortingSettingsStateModel CreateFrom(SortingSettings model) =>
@@ -77,7 +79,9 @@ namespace Camelot.Services
             new TabModel
             {
                 Directory = model.Directory,
-                SortingSettings = CreateFrom(model.SortingSettings)
+                SortingSettings = CreateFrom(model.SortingSettings),
+                History = model.History,
+                CurrentPositionInHistory = model.CurrentPositionInHistory
             };
 
         private static SortingSettings CreateFrom(SortingSettingsStateModel model) =>

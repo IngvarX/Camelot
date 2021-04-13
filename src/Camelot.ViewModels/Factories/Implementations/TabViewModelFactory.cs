@@ -19,7 +19,7 @@ namespace Camelot.ViewModels.Factories.Implementations
         {
             var fileSystemNodeViewModel = Create(tabModel.SortingSettings);
 
-            return new TabViewModel(_pathService, fileSystemNodeViewModel, tabModel.Directory);
+            return new TabViewModel(_pathService, fileSystemNodeViewModel, tabModel);
         }
 
         private static IFileSystemNodesSortingViewModel Create(SortingSettingsStateModel sortingSettings) =>
