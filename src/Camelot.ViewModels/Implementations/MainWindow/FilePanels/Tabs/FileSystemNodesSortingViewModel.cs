@@ -1,30 +1,23 @@
 using Camelot.Services.Abstractions.Models.Enums;
-using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs;
-using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
 namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
 {
     public class FileSystemNodesSortingViewModel : ViewModelBase, IFileSystemNodesSortingViewModel
     {
-        private bool _isSortingByAscendingEnabled;
-
         [Reactive]
         public SortingMode SortingColumn { get; set; }
 
-        public bool IsSortingByAscendingEnabled
-        {
-            get => _isSortingByAscendingEnabled;
-            private set => this.RaiseAndSetIfChanged(ref _isSortingByAscendingEnabled, value);
-        }
+        [Reactive]
+        public bool IsSortingByAscendingEnabled { get; private set; }
 
         public FileSystemNodesSortingViewModel(
             SortingMode sortingColumn,
             bool isSortingByAscendingEnabled)
         {
             SortingColumn = sortingColumn;
-            _isSortingByAscendingEnabled = isSortingByAscendingEnabled;
+            IsSortingByAscendingEnabled = isSortingByAscendingEnabled;
         }
 
         public void ToggleSortingDirection() => IsSortingByAscendingEnabled = !IsSortingByAscendingEnabled;

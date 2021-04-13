@@ -3,7 +3,6 @@ using System.Windows.Input;
 using Camelot.Extensions;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models.State;
-using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
