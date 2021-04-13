@@ -25,6 +25,8 @@ namespace Camelot.Collections.Tests
         public void TestPopThrows()
         {
             var stack = new LimitedSizeStack<int>(Size);
+            stack.Push(1);
+            stack.Pop();
             Assert.True(stack.IsEmpty);
 
             Assert.Throws<InvalidOperationException>(() => stack.Pop());

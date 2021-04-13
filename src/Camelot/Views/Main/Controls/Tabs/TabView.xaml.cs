@@ -66,9 +66,6 @@ namespace Camelot.Views.Main.Controls.Tabs
 
         private async Task DoDragAsync(PointerEventArgs e)
         {
-            var button = this.Find<Button>("TabButton");
-            button.Classes.Set(":pressed", false);
-
             if (!_isGridPressed)
             {
                 return;

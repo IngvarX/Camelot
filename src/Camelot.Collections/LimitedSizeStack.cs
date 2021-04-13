@@ -50,6 +50,7 @@ namespace Camelot.Collections
             // ReSharper disable once PossibleNullReferenceException
             var last = _linkedList.Last.Value;
             _linkedList.RemoveLast();
+            _currentLength--;
 
             return last;
         }
