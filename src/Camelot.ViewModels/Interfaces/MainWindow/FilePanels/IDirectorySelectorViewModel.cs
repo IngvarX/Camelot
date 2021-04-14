@@ -7,7 +7,5 @@ namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels
         string CurrentDirectory { get; set; }
 
         bool ShouldShowSuggestions { get; set; }
-
-        event EventHandler<EventArgs> CurrentDirectoryChanged;
     }
 }

@@ -16,6 +16,7 @@ using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs;
 using Camelot.ViewModels.Services.Interfaces;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
 {
@@ -26,19 +27,15 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
         private readonly ITabViewModelFactory _tabViewModelFactory;
         private readonly IFilesOperationsMediator _filesOperationsMediator;
         private readonly IHomeDirectoryProvider _homeDirectoryProvider;
+        private readonly IFilePanelDirectoryObserver _filePanelDirectoryObserver;
 
         private readonly ObservableCollection<ITabViewModel> _tabs;
         private readonly LimitedSizeStack<(ITabViewModel ViewModel, int Index)> _closedTabs;
 
-        private ITabViewModel _selectedTab;
-
         public IReadOnlyList<ITabViewModel> Tabs => _tabs;
 
-        public ITabViewModel SelectedTab
-        {
-            get => _selectedTab;
-            private set => this.RaiseAndSetIfChanged(ref _selectedTab, value);
-        }
+        [Reactive]
+        public ITabViewModel SelectedTab { get; private set; }
 
         public event EventHandler<EventArgs> SelectedTabChanged;
 
@@ -54,6 +51,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
             ITabViewModelFactory tabViewModelFactory,
             IFilesOperationsMediator filesOperationsMediator,
             IHomeDirectoryProvider homeDirectoryProvider,
+            IFilePanelDirectoryObserver filePanelDirectoryObserver,
             TabsListConfiguration tabsListConfiguration)
         {
             _filesPanelStateService = filesPanelStateService;
@@ -61,6 +59,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
             _tabViewModelFactory = tabViewModelFactory;
             _filesOperationsMediator = filesOperationsMediator;
             _homeDirectoryProvider = homeDirectoryProvider;
+            _filePanelDirectoryObserver = filePanelDirectoryObserver;
 
             _tabs = SetupTabs();
             _closedTabs = new LimitedSizeStack<(ITabViewModel ViewModel, int Index)>(tabsListConfiguration.SavedClosedTabsLimit);
@@ -72,6 +71,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
             this.WhenAnyValue(x => x.SelectedTab.CurrentDirectory, x => x.SelectedTab)
                 .Throttle(TimeSpan.FromMilliseconds(tabsListConfiguration.SaveTimeoutMs))
                 .Subscribe(_ => SaveState());
+
+            SubscribeToEvents();
         }
 
         public void CreateNewTab(string directory = null, bool switchTo = false) =>
@@ -171,6 +172,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
             tabViewModel.IsActive = tabViewModel.IsGloballyActive = true;
             SelectedTab = tabViewModel;
 
+            _filePanelDirectoryObserver.CurrentDirectory = SelectedTab.CurrentDirectory;
             SelectedTabChanged.Raise(this, EventArgs.Empty);
         }
 
@@ -203,10 +205,12 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
 
         private ITabViewModel CreateViewModelFrom(string directory)
         {
+            // TODO: just get state?
             var tabModel = new TabStateModel
             {
                 Directory = directory,
-                SortingSettings = SelectedTab.GetState().SortingSettings
+                SortingSettings = SelectedTab.GetState().SortingSettings,
+                History = new List<string>{directory}
             };
 
             return CreateViewModelFrom(tabModel);
@@ -235,6 +239,10 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
                 SelectTab(_tabs[newActiveTabIndex]);
             }
         }
+
+        private void SubscribeToEvents() =>
+            _filePanelDirectoryObserver.CurrentDirectoryChanged += (sender, args) =>
+                SelectedTab.CurrentDirectory = _filePanelDirectoryObserver.CurrentDirectory;
 
         private void SubscribeToEvents(ITabViewModel tabViewModel)
         {

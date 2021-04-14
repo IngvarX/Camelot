@@ -37,6 +37,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private readonly IClipboardOperationsService _clipboardOperationsService;
         private readonly IFileSystemNodeViewModelComparerFactory _comparerFactory;
         private readonly IRecursiveSearchService _recursiveSearchService;
+        private readonly IFilePanelDirectoryObserver _filePanelDirectoryObserver;
 
         private readonly ObservableCollection<IFileSystemNodeViewModel> _fileSystemNodes;
         private readonly ObservableCollection<IFileSystemNodeViewModel> _selectedFileSystemNodes;
@@ -77,7 +78,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         public string CurrentDirectory
         {
             get => _currentDirectory;
-            set => DirectorySelectorViewModel.CurrentDirectory = value;
+            set => _filePanelDirectoryObserver.CurrentDirectory = value;
         }
 
         public event EventHandler<EventArgs> Activated;
@@ -107,6 +108,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             IClipboardOperationsService clipboardOperationsService,
             IFileSystemNodeViewModelComparerFactory comparerFactory,
             IRecursiveSearchService recursiveSearchService,
+            IFilePanelDirectoryObserver filePanelDirectoryObserver,
             ISearchViewModel searchViewModel,
             ITabsListViewModel tabsListViewModel,
             IOperationsViewModel operationsViewModel,
@@ -123,6 +125,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             _clipboardOperationsService = clipboardOperationsService;
             _comparerFactory = comparerFactory;
             _recursiveSearchService = recursiveSearchService;
+            _filePanelDirectoryObserver = filePanelDirectoryObserver;
 
             SearchViewModel = searchViewModel;
             TabsListViewModel = tabsListViewModel;
@@ -140,7 +143,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             PasteFromClipboardCommand = ReactiveCommand.CreateFromTask(PasteFromClipboardAsync);
 
             SubscribeToEvents();
-            CurrentDirectory = SelectedTab.CurrentDirectory;
+            UpdateState();
         }
 
         public void Activate()
@@ -180,7 +183,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         {
             TabsListViewModel.SelectedTabChanged += TabsListViewModelOnSelectedTabChanged;
             SearchViewModel.SearchSettingsChanged += SearchViewModelOnSearchSettingsChanged;
-            DirectorySelectorViewModel.CurrentDirectoryChanged += DirectorySelectorViewModelOnCurrentDirectoryChanged;
+            _filePanelDirectoryObserver.CurrentDirectoryChanged += FilePanelDirectoryObserverOnCurrentDirectoryChanged;
             _selectedFileSystemNodes.CollectionChanged += SelectedFileSystemNodesOnCollectionChanged;
 
             _fileSystemWatchingService.NodeCreated += (sender, args) =>
@@ -193,21 +196,20 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
                 ExecuteInUiThread(() => RemoveNode(args.Node));
         }
 
-        private void TabsListViewModelOnSelectedTabChanged(object sender, EventArgs e)
-        {
-            CurrentDirectory = SelectedTab.CurrentDirectory;
+        private void TabsListViewModelOnSelectedTabChanged(object sender, EventArgs e) =>
             this.RaisePropertyChanged(nameof(SelectedTab));
-        }
 
         private void SearchViewModelOnSearchSettingsChanged(object sender, EventArgs e) =>
             _applicationDispatcher.Dispatch(ReloadFiles);
 
-        private void DirectorySelectorViewModelOnCurrentDirectoryChanged(object sender, EventArgs e)
+        private void FilePanelDirectoryObserverOnCurrentDirectoryChanged(object sender, EventArgs e) => UpdateState();
+
+        private void UpdateState()
         {
             Activate();
 
             var previousCurrentDirectory = _currentDirectory;
-            this.RaiseAndSetIfChanged(ref _currentDirectory, DirectorySelectorViewModel.CurrentDirectory);
+            this.RaiseAndSetIfChanged(ref _currentDirectory, _filePanelDirectoryObserver.CurrentDirectory);
 
             if (previousCurrentDirectory != null)
             {
@@ -215,7 +217,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             }
 
             ReloadFiles();
-            SelectedTab.CurrentDirectory = _currentDirectory;
             _fileSystemWatchingService.StartWatching(CurrentDirectory);
 
             CurrentDirectoryChanged.Raise(this, EventArgs.Empty);

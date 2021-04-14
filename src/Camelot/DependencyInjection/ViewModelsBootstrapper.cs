@@ -54,6 +54,7 @@ namespace Camelot.DependencyInjection
             services.RegisterLazySingleton<IFilesOperationsMediator>(() => new FilesOperationsMediator(
                 resolver.GetRequiredService<IDirectoryService>()
             ));
+            services.Register<IFilePanelDirectoryObserver>(() => new FilePanelDirectoryObserver());
             services.RegisterLazySingleton<IFileSystemNodeFacade>(() => new FileSystemNodeFacade(
                 resolver.GetRequiredService<IOperationsService>(),
                 resolver.GetRequiredService<IClipboardOperationsService>(),
@@ -71,7 +72,8 @@ namespace Camelot.DependencyInjection
         {
             services.RegisterLazySingleton<IFileSystemNodeViewModelComparerFactory>(() => new FileSystemNodeViewModelComparerFactory());
             services.RegisterLazySingleton<ITabViewModelFactory>(() => new TabViewModelFactory(
-                resolver.GetRequiredService<IPathService>()
+                resolver.GetRequiredService<IPathService>(),
+                resolver.GetRequiredService<IFilePanelDirectoryObserver>()
             ));
             services.RegisterLazySingleton<ISuggestedPathViewModelFactory>(() => new SuggestedPathViewModelFactory(
                 resolver.GetRequiredService<IPathService>()
@@ -222,12 +224,6 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IApplicationDispatcher>(),
                 resolver.GetRequiredService<SearchViewModelConfiguration>()
             ));
-            services.Register<IDirectorySelectorViewModel>(() => new DirectorySelectorViewModel(
-                resolver.GetRequiredService<IFavouriteDirectoriesService>(),
-                resolver.GetRequiredService<IDirectoryService>(),
-                resolver.GetRequiredService<ISuggestionsService>(),
-                resolver.GetRequiredService<ISuggestedPathViewModelFactory>()
-            ));
             services.RegisterLazySingleton<IDragAndDropOperationsMediator>(() => new DragAndDropOperationsMediator(
                 resolver.GetRequiredService<IOperationsService>(),
                 resolver.GetRequiredService<IDirectoryService>(),
@@ -270,6 +266,14 @@ namespace Camelot.DependencyInjection
             IReadonlyDependencyResolver resolver,
             string panelKey)
         {
+            var observer = resolver.GetRequiredService<IFilePanelDirectoryObserver>();
+            var directorySelectorViewModel = new DirectorySelectorViewModel(
+                resolver.GetRequiredService<IFavouriteDirectoriesService>(),
+                resolver.GetRequiredService<IDirectoryService>(),
+                resolver.GetRequiredService<ISuggestionsService>(),
+                observer,
+                resolver.GetRequiredService<ISuggestedPathViewModelFactory>()
+            );
             var filesPanelStateService = new FilesPanelStateService(
                 resolver.GetRequiredService<IUnitOfWorkFactory>(),
                 panelKey
@@ -280,6 +284,7 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<ITabViewModelFactory>(),
                 resolver.GetRequiredService<IFilesOperationsMediator>(),
                 resolver.GetRequiredService<IHomeDirectoryProvider>(),
+                observer,
                 resolver.GetRequiredService<TabsListConfiguration>()
             );
             var filesPanelViewModel = new FilesPanelViewModel(
@@ -293,10 +298,11 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IClipboardOperationsService>(),
                 resolver.GetRequiredService<IFileSystemNodeViewModelComparerFactory>(),
                 resolver.GetRequiredService<IRecursiveSearchService>(),
+                observer,
                 resolver.GetRequiredService<ISearchViewModel>(),
                 tabsListViewModel,
                 resolver.GetRequiredService<IOperationsViewModel>(),
-                resolver.GetRequiredService<IDirectorySelectorViewModel>(),
+                directorySelectorViewModel,
                 resolver.GetRequiredService<IDragAndDropOperationsMediator>()
             );
 

@@ -7,6 +7,7 @@ using Camelot.Extensions;
 using Camelot.Services.Abstractions;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
+using Camelot.ViewModels.Services.Interfaces;
 using DynamicData;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -18,6 +19,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private readonly IFavouriteDirectoriesService _favouriteDirectoriesService;
         private readonly IDirectoryService _directoryService;
         private readonly ISuggestionsService _suggestionsService;
+        private readonly IFilePanelDirectoryObserver _filePanelDirectoryObserver;
         private readonly ISuggestedPathViewModelFactory _suggestedPathViewModelFactory;
 
         private string _currentDirectory;
@@ -30,6 +32,11 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             get => _currentDirectory;
             set
             {
+                if (_currentDirectorySearchText == value)
+                {
+                    return;
+                }
+
                 _currentDirectorySearchText = value;
                 ClearSuggestions();
 
@@ -46,7 +53,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
                 ShouldShowSuggestions = false;
                 UpdateFavouriteDirectoryStatus();
 
-                CurrentDirectoryChanged.Raise(this, EventArgs.Empty);
+                _filePanelDirectoryObserver.CurrentDirectory = _currentDirectory;
             }
         }
 
@@ -58,19 +65,19 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         public IEnumerable<ISuggestedPathViewModel> SuggestedPaths => _suggestedPaths;
 
-        public event EventHandler<EventArgs> CurrentDirectoryChanged;
-
         public ICommand ToggleFavouriteStatusCommand { get; }
 
         public DirectorySelectorViewModel(
             IFavouriteDirectoriesService favouriteDirectoriesService,
             IDirectoryService directoryService,
             ISuggestionsService suggestionsService,
+            IFilePanelDirectoryObserver filePanelDirectoryObserver,
             ISuggestedPathViewModelFactory suggestedPathViewModelFactory)
         {
             _favouriteDirectoriesService = favouriteDirectoriesService;
             _directoryService = directoryService;
             _suggestionsService = suggestionsService;
+            _filePanelDirectoryObserver = filePanelDirectoryObserver;
             _suggestedPathViewModelFactory = suggestedPathViewModelFactory;
 
             _suggestedPaths = new ObservableCollection<ISuggestedPathViewModel>();
@@ -84,6 +91,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         {
             _favouriteDirectoriesService.DirectoryAdded += (sender, args) => UpdateFavouriteDirectoryStatus();
             _favouriteDirectoriesService.DirectoryRemoved += (sender, args) => UpdateFavouriteDirectoryStatus();
+            _filePanelDirectoryObserver.CurrentDirectoryChanged += (sender, args) =>
+                CurrentDirectory = _filePanelDirectoryObserver.CurrentDirectory;
         }
 
         private void ToggleFavouriteStatus()

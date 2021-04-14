@@ -91,7 +91,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         {
             if (IsValid)
             {
-                _applicationDispatcher.Dispatch(() => SearchSettingsChanged.Raise(this, EventArgs.Empty));
+                SearchSettingsChanged.Raise(this, EventArgs.Empty);
             }
         }
     }

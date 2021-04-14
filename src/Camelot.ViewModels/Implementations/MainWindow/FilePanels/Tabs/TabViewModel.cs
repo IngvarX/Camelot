@@ -5,6 +5,7 @@ using Camelot.Extensions;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models.State;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs;
+using Camelot.ViewModels.Services.Interfaces;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
@@ -13,6 +14,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
     public class TabViewModel : ViewModelBase, ITabViewModel
     {
         private readonly IPathService _pathService;
+        private readonly IFilePanelDirectoryObserver _filePanelDirectoryObserver;
 
         private readonly LimitedSizeHistory<string> _history;
 
@@ -76,10 +78,12 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
 
         public TabViewModel(
             IPathService pathService,
+            IFilePanelDirectoryObserver filePanelDirectoryObserver,
             IFileSystemNodesSortingViewModel fileSystemNodesSortingViewModel,
             TabStateModel tabStateModel)
         {
             _pathService = pathService;
+            _filePanelDirectoryObserver = filePanelDirectoryObserver;
 
             _history = new LimitedSizeHistory<string>(50, tabStateModel.History,
                 tabStateModel.CurrentPositionInHistory);
@@ -128,8 +132,11 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
 
         private void RequestMoveTo(ITabViewModel target) => MoveRequested.Raise(this, new MoveRequestedEventArgs(target));
 
-        private void GoToPreviousDirectory() => CurrentDirectory = _history.GoToPrevious();
+        private void GoToPreviousDirectory() => SetDirectory(_history.GoToPrevious());
 
-        private void GoToNextDirectory() => CurrentDirectory = _history.GoToNext();
+        private void GoToNextDirectory() => SetDirectory(_history.GoToNext());
+
+        private void SetDirectory(string directory) =>
+            _filePanelDirectoryObserver.CurrentDirectory = directory;
     }
 }

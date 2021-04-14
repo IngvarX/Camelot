@@ -115,24 +115,6 @@ namespace Camelot.ViewModels.Tests.FilePanels
         }
 
         [Theory]
-        [InlineData(true, 1)]
-        [InlineData(false, 0)]
-        public void TestCurrentDirectoryEvent(bool dirExists, int callsCount)
-        {
-            _autoMocker
-                .Setup<IDirectoryService, bool>(m => m.CheckIfExists(Dir))
-                .Returns(dirExists);
-
-            var viewModel = _autoMocker.CreateInstance<DirectorySelectorViewModel>();
-
-            var callbackCalledTimes = 0;
-            viewModel.CurrentDirectoryChanged += (sender, args) => callbackCalledTimes++;
-            viewModel.CurrentDirectory = Dir;
-
-            Assert.Equal(callsCount, callbackCalledTimes);
-        }
-
-        [Theory]
         [InlineData(true, 0, false, 0)]
         [InlineData(true, 1, false, 0)]
         [InlineData(false, 0, false, 0)]

@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Models.State;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs;
 using Moq;
@@ -24,7 +26,12 @@ namespace Camelot.ViewModels.Tests.FilePanels
             _autoMocker
                 .Setup<IPathService, string>(m => m.GetFileName(CurrentDirectory))
                 .Returns(CurrentDirectoryName);
-            _autoMocker.Use(CurrentDirectory);
+            _autoMocker.Use(new TabStateModel
+            {
+                Directory = CurrentDirectory,
+                History = new List<string> {CurrentDirectory},
+                SortingSettings = new SortingSettingsStateModel()
+            });
 
             _tabViewModel = _autoMocker.CreateInstance<TabViewModel>();
         }
@@ -134,24 +141,23 @@ namespace Camelot.ViewModels.Tests.FilePanels
         [Fact]
         public void TestSortingViewModelAndDirectory()
         {
-            const string directory = "dir";
             _autoMocker
-                .Setup<IPathService, string>(m => m.RightTrimPathSeparators(directory))
-                .Returns(directory)
+                .Setup<IPathService, string>(m => m.RightTrimPathSeparators(CurrentDirectory))
+                .Returns(CurrentDirectory)
                 .Verifiable();
             _autoMocker
-                .Setup<IPathService, string>(m => m.GetFileName(directory))
-                .Returns(directory)
+                .Setup<IPathService, string>(m => m.GetFileName(CurrentDirectory))
+                .Returns(CurrentDirectory)
                 .Verifiable();
-            _autoMocker.Use(directory);
+            _autoMocker.Use(CurrentDirectory);
 
             var tabViewModel = _autoMocker.CreateInstance<TabViewModel>();
 
-            Assert.Equal(directory, tabViewModel.DirectoryName);
+            Assert.Equal(CurrentDirectory, tabViewModel.DirectoryName);
             _autoMocker
-                .Verify<IPathService>(m => m.RightTrimPathSeparators(directory), Times.Once);
+                .Verify<IPathService>(m => m.RightTrimPathSeparators(CurrentDirectory), Times.Once);
             _autoMocker
-                .Verify<IPathService>(m => m.GetFileName(directory), Times.Once);
+                .Verify<IPathService>(m => m.GetFileName(CurrentDirectory), Times.Once);
         }
     }
 }

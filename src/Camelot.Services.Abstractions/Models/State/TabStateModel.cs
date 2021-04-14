@@ -11,5 +11,10 @@ namespace Camelot.Services.Abstractions.Models.State
         public List<string> History { get; set; }
 
         public int CurrentPositionInHistory { get; set; }
+
+        public TabStateModel()
+        {
+            History = new List<string>();
+        }
     }
 }
