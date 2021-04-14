@@ -1,34 +1,31 @@
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Camelot.Collections
 {
     public class LimitedSizeHistory<T>
     {
-        private readonly LimitedSizeStack<T> _left;
-        private readonly LimitedSizeStack<T> _right;
+        private readonly int _capacity;
+        private readonly LinkedList<T> _linkedList;
 
-        public T Current { get; private set; }
+        private LinkedListNode<T> _current;
 
-        public IEnumerable<T> Items => _left
-            .Items
-            .Concat(Enumerable.Repeat(Current, 1))
-            .Concat(_right.Items.Reverse());
+        public T Current => _current.Value;
+
+        public IEnumerable<T> Items => _linkedList;
 
         public LimitedSizeHistory(int capacity, IReadOnlyList<T> collection, int splitIndex)
         {
-            _left = new LimitedSizeStack<T>(capacity);
-            _right = new LimitedSizeStack<T>(capacity);
+            _capacity = capacity;
+            _linkedList = new LinkedList<T>();
 
-            FillStacks(collection, splitIndex);
+            FillLinkedList(collection, splitIndex);
         }
 
         public T GoToPrevious()
         {
-            if (!_left.IsEmpty)
+            if (_current.Previous != null)
             {
-                _right.Push(Current);
-                Current = _left.Pop();
+                _current = _current.Previous;
             }
 
             return Current;
@@ -36,11 +33,9 @@ namespace Camelot.Collections
 
         public T GoToNext()
         {
-            if (!_right.IsEmpty)
+            if (_current.Next != null)
             {
-
-                _left.Push(Current);
-                Current = _right.Pop();
+                _current = _current.Next;
             }
 
             return Current;
@@ -48,25 +43,44 @@ namespace Camelot.Collections
 
         public T AddItem(T item)
         {
-            _left.Push(Current);
-            _right.Clear();
-            Current = item;
+            RemoveAllItemsAfterCurrent();
+            AppendItem(item);
+            RemoveOldestItemIfNeeded();
 
             return Current;
         }
 
-        private void FillStacks(IReadOnlyList<T> collection, int splitIndex)
+        private void FillLinkedList(IReadOnlyList<T> collection, int splitIndex)
         {
-            for (var i = 0; i < splitIndex; i++)
+            for (var i = 0; i < collection.Count; i++)
             {
-                _left.Push(collection[i]);
+                _linkedList.AddLast(collection[i]);
+                if (i == splitIndex)
+                {
+                    _current = _linkedList.Last;
+                }
             }
+        }
 
-            Current = collection[splitIndex];
-
-            for (var i = collection.Count - 1; i > splitIndex; i--)
+        private void RemoveAllItemsAfterCurrent()
+        {
+            while (_current != _linkedList.Last)
             {
-                _right.Push(collection[i]);
+                _linkedList.RemoveLast();
+            }
+        }
+
+        private void AppendItem(T item)
+        {
+            _linkedList.AddLast(item);
+            _current = _linkedList.Last;
+        }
+
+        private void RemoveOldestItemIfNeeded()
+        {
+            while (_linkedList.Count > _capacity)
+            {
+                _linkedList.RemoveFirst();
             }
         }
     }
