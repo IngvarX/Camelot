@@ -70,11 +70,7 @@ namespace Camelot.Collections
             }
         }
 
-        private void AppendItem(T item)
-        {
-            _linkedList.AddLast(item);
-            _current = _linkedList.Last;
-        }
+        private void AppendItem(T item) => _current = _linkedList.AddLast(item);
 
         private void RemoveOldestItemIfNeeded()
         {

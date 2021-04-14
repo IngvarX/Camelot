@@ -183,7 +183,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         {
             TabsListViewModel.SelectedTabChanged += TabsListViewModelOnSelectedTabChanged;
             SearchViewModel.SearchSettingsChanged += SearchViewModelOnSearchSettingsChanged;
-            _filePanelDirectoryObserver.CurrentDirectoryChanged += FilePanelDirectoryObserverOnCurrentDirectoryChanged;
+            _filePanelDirectoryObserver.CurrentDirectoryChanged += (sender, args) => UpdateState();
             _selectedFileSystemNodes.CollectionChanged += SelectedFileSystemNodesOnCollectionChanged;
 
             _fileSystemWatchingService.NodeCreated += (sender, args) =>
@@ -199,10 +199,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private void TabsListViewModelOnSelectedTabChanged(object sender, EventArgs e) =>
             this.RaisePropertyChanged(nameof(SelectedTab));
 
-        private void SearchViewModelOnSearchSettingsChanged(object sender, EventArgs e) =>
-            _applicationDispatcher.Dispatch(ReloadFiles);
-
-        private void FilePanelDirectoryObserverOnCurrentDirectoryChanged(object sender, EventArgs e) => UpdateState();
+        private void SearchViewModelOnSearchSettingsChanged(object sender, EventArgs e) => ReloadFiles();
 
         private void UpdateState()
         {
