@@ -218,7 +218,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
 
         private ITabViewModel CreateViewModelFrom(TabStateModel tabModel)
         {
-            var tabViewModel = _tabViewModelFactory.Create(tabModel);
+            var tabViewModel = _tabViewModelFactory.Create(_filePanelDirectoryObserver, tabModel);
             SubscribeToEvents(tabViewModel);
 
             return tabViewModel;

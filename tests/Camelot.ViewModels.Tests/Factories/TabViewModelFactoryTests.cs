@@ -3,6 +3,7 @@ using System.IO;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models.State;
 using Camelot.ViewModels.Factories.Implementations;
+using Camelot.ViewModels.Services.Interfaces;
 using Moq;
 using Moq.AutoMock;
 using Xunit;
@@ -33,7 +34,8 @@ namespace Camelot.ViewModels.Tests.Factories
                 .Returns(directoryName);
 
             var tabViewModelFactory = _autoMocker.CreateInstance<TabViewModelFactory>();
-            var tabViewModel = tabViewModelFactory.Create(tabModel);
+            var observer = Mock.Of<IFilePanelDirectoryObserver>();
+            var tabViewModel = tabViewModelFactory.Create(observer, tabModel);
 
             Assert.Equal(directoryName, tabViewModel.CurrentDirectory);
         }

@@ -27,8 +27,15 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
             get => _currentDirectory;
             set
             {
+                if (_currentDirectory == value)
+                {
+                    return;
+                }
+
                 this.RaiseAndSetIfChanged(ref _currentDirectory, value);
                 this.RaisePropertyChanged(nameof(DirectoryName));
+
+                AppendDirectoryToHistory(value);
             }
         }
 
@@ -136,7 +143,12 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
 
         private void GoToNextDirectory() => SetDirectory(_history.GoToNext());
 
-        private void SetDirectory(string directory) =>
-            _filePanelDirectoryObserver.CurrentDirectory = directory;
+        private void SetDirectory(string directory)
+        {
+            _filePanelDirectoryObserver.CurrentDirectory = _currentDirectory = directory;
+            this.RaisePropertyChanged(nameof(DirectoryName));
+        }
+
+        private void AppendDirectoryToHistory(string directory) => _history.AddItem(directory);
     }
 }
