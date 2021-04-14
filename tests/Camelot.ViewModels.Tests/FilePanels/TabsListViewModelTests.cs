@@ -36,7 +36,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
         {
             var tabViewModel = new Mock<ITabViewModel>().Object;
             _autoMocker
-                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<TabStateModel>()))
+                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<IFilePanelDirectoryObserver>(), It.IsAny<TabStateModel>()))
                 .Returns(tabViewModel);
             _autoMocker
                 .Setup<IFilesPanelStateService, PanelStateModel>(m => m.GetPanelState())
@@ -69,7 +69,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
 
             var tabViewModel = new Mock<ITabViewModel>().Object;
             _autoMocker
-                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<TabStateModel>()))
+                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<IFilePanelDirectoryObserver>(), It.IsAny<TabStateModel>()))
                 .Returns(tabViewModel);
             _autoMocker
                 .Setup<IFilesPanelStateService, PanelStateModel>(m => m.GetPanelState())
@@ -101,7 +101,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
                 .SetupGet(m => m.SortingViewModel)
                 .Returns(sortingViewModelMock.Object);
             _autoMocker
-                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<TabStateModel>()))
+                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<IFilePanelDirectoryObserver>(), It.IsAny<TabStateModel>()))
                 .Returns(tabViewModelMock.Object);
             _autoMocker
                 .Setup<IFilesPanelStateService, PanelStateModel>(m => m.GetPanelState())
@@ -135,7 +135,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
                 .SetupGet(m => m.SortingViewModel)
                 .Returns(sortingViewModelMock.Object);
             _autoMocker
-                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<TabStateModel>()))
+                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<IFilePanelDirectoryObserver>(), It.IsAny<TabStateModel>()))
                 .Returns(tabViewModelMock.Object);
             _autoMocker
                 .Setup<IFilesPanelStateService, PanelStateModel>(m => m.GetPanelState())
@@ -173,7 +173,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
                 .Setup(m => m.GetState())
                 .Returns(new TabStateModel());
             _autoMocker
-                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<TabStateModel>()))
+                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<IFilePanelDirectoryObserver>(), It.IsAny<TabStateModel>()))
                 .Returns(tabViewModelMock.Object);
             _autoMocker
                 .Setup<IFilesPanelStateService>(m => m.SavePanelState(It.IsAny<PanelStateModel>()))
@@ -239,7 +239,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
                 .Verifiable();
 
             _autoMocker
-                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<TabStateModel>()))
+                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<IFilePanelDirectoryObserver>(), It.IsAny<TabStateModel>()))
                 .Returns(tabViewModelMock.Object);
             _autoMocker
                 .Setup<IFilesOperationsMediator, IFilesPanelViewModel>(m => m.InactiveFilesPanelViewModel)
@@ -281,7 +281,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
                 .SetupGet(m => m.SortingViewModel)
                 .Returns(sortingViewModelMock.Object);
             _autoMocker
-                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.Is<TabStateModel>(tm => tm.Directory == AppRootDirectory)))
+                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<IFilePanelDirectoryObserver>(), It.Is<TabStateModel>(tm => tm.Directory == AppRootDirectory)))
                 .Returns(tabViewModelMock.Object);
             _autoMocker
                 .Setup<IDirectoryService, bool>(m => m.CheckIfExists(AppRootDirectory))
@@ -314,14 +314,14 @@ namespace Camelot.ViewModels.Tests.FilePanels
                 .SetupGet(m => m.SortingViewModel)
                 .Returns(sortingViewModelMock.Object);
             _autoMocker
-                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.Is<TabStateModel>(tm => tm.Directory == AppRootDirectory)))
+                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<IFilePanelDirectoryObserver>(), It.Is<TabStateModel>(tm => tm.Directory == AppRootDirectory)))
                 .Returns(tabViewModelMock.Object);
             var secondTabViewModelMock = new Mock<ITabViewModel>();
             secondTabViewModelMock
                 .SetupGet(m => m.SortingViewModel)
                 .Returns(sortingViewModelMock.Object);
             _autoMocker
-                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.Is<TabStateModel>(tm => tm.Directory == Directory)))
+                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<IFilePanelDirectoryObserver>(), It.Is<TabStateModel>(tm => tm.Directory == Directory)))
                 .Returns(secondTabViewModelMock.Object);
             _autoMocker
                 .Setup<IDirectoryService, bool>(m => m.CheckIfExists(It.Is<string>(d => d == AppRootDirectory || d == Directory)))
@@ -356,7 +356,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
                 });
             var currentTabMock = firstTabMock;
             _autoMocker
-                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.Is<TabStateModel>(tm => tm.Directory == AppRootDirectory)))
+                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<IFilePanelDirectoryObserver>(), It.Is<TabStateModel>(tm => tm.Directory == AppRootDirectory)))
                 .Returns(() => currentTabMock.Object);
             _autoMocker
                 .Setup<IDirectoryService, bool>(m => m.CheckIfExists(AppRootDirectory))
@@ -390,7 +390,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
         {
             var tabs = new List<Mock<ITabViewModel>>();
             _autoMocker
-                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.Is<TabStateModel>(tm => tm.Directory == AppRootDirectory)))
+                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<IFilePanelDirectoryObserver>(), It.Is<TabStateModel>(tm => tm.Directory == AppRootDirectory)))
                 .Returns(() =>
                 {
                     var mock = Create();
@@ -427,7 +427,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
         {
             var tabs = new List<Mock<ITabViewModel>>();
             _autoMocker
-                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.Is<TabStateModel>(tm => tm.Directory == AppRootDirectory)))
+                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<IFilePanelDirectoryObserver>(), It.Is<TabStateModel>(tm => tm.Directory == AppRootDirectory)))
                 .Returns(() =>
                 {
                     var mock = Create();
@@ -465,7 +465,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
         {
             var tabs = new List<Mock<ITabViewModel>>();
             _autoMocker
-                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.Is<TabStateModel>(tm => tm.Directory == AppRootDirectory)))
+                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<IFilePanelDirectoryObserver>(), It.Is<TabStateModel>(tm => tm.Directory == AppRootDirectory)))
                 .Returns(() =>
                 {
                     var mock = Create();
@@ -503,7 +503,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
         {
             var tabs = new List<Mock<ITabViewModel>>();
             _autoMocker
-                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.Is<TabStateModel>(tm => tm.Directory == AppRootDirectory)))
+                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<IFilePanelDirectoryObserver>(), It.Is<TabStateModel>(tm => tm.Directory == AppRootDirectory)))
                 .Returns(() =>
                 {
                     var mock = Create();
@@ -556,7 +556,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
 
             var tabViewModel = new Mock<ITabViewModel>().Object;
             _autoMocker
-                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<TabStateModel>()))
+                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<IFilePanelDirectoryObserver>(), It.IsAny<TabStateModel>()))
                 .Returns(tabViewModel);
             _autoMocker
                 .Setup<IFilesPanelStateService, PanelStateModel>(m => m.GetPanelState())
@@ -590,7 +590,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
 
             var tabViewModel = new Mock<ITabViewModel>().Object;
             _autoMocker
-                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<TabStateModel>()))
+                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<IFilePanelDirectoryObserver>(), It.IsAny<TabStateModel>()))
                 .Returns(tabViewModel);
             _autoMocker
                 .Setup<IFilesPanelStateService, PanelStateModel>(m => m.GetPanelState())
@@ -623,7 +623,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
         {
             var tabs = new List<Mock<ITabViewModel>>();
             _autoMocker
-                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.Is<TabStateModel>(tm => tm.Directory == AppRootDirectory)))
+                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<IFilePanelDirectoryObserver>(), It.Is<TabStateModel>(tm => tm.Directory == AppRootDirectory)))
                 .Returns(() =>
                 {
                     var mock = Create();
@@ -665,7 +665,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
         {
             var tabs = new List<Mock<ITabViewModel>>();
             _autoMocker
-                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.Is<TabStateModel>(tm => tm.Directory == AppRootDirectory)))
+                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<IFilePanelDirectoryObserver>(), It.Is<TabStateModel>(tm => tm.Directory == AppRootDirectory)))
                 .Returns(() =>
                 {
                     var mock = Create();
@@ -707,7 +707,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
         {
             var tabs = new List<Mock<ITabViewModel>>();
             _autoMocker
-                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.Is<TabStateModel>(tm => tm.Directory == AppRootDirectory)))
+                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<IFilePanelDirectoryObserver>(), It.Is<TabStateModel>(tm => tm.Directory == AppRootDirectory)))
                 .Returns(() =>
                 {
                     var mock = Create();
@@ -746,7 +746,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
         public void TestInsertBeforeTab(int insertIndex)
         {
             _autoMocker
-                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.Is<TabStateModel>(tm => tm.Directory == AppRootDirectory)))
+                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<IFilePanelDirectoryObserver>(), It.Is<TabStateModel>(tm => tm.Directory == AppRootDirectory)))
                 .Returns(() =>
                 {
                     var mock = Create();

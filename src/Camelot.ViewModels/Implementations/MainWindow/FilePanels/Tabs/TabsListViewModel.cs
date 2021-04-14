@@ -205,15 +205,14 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
 
         private ITabViewModel CreateViewModelFrom(string directory)
         {
-            // TODO: just get state?
-            var tabModel = new TabStateModel
+            var tabStateModel = new TabStateModel
             {
                 Directory = directory,
                 SortingSettings = SelectedTab.GetState().SortingSettings,
                 History = new List<string>{directory}
             };
 
-            return CreateViewModelFrom(tabModel);
+            return CreateViewModelFrom(tabStateModel);
         }
 
         private ITabViewModel CreateViewModelFrom(TabStateModel tabModel)

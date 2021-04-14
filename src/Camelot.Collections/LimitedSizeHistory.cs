@@ -11,6 +11,8 @@ namespace Camelot.Collections
 
         public T Current => _current.Value;
 
+        public int CurrentIndex { get; private set; }
+
         public IEnumerable<T> Items => _linkedList;
 
         public LimitedSizeHistory(int capacity, IReadOnlyList<T> collection, int splitIndex)
@@ -18,6 +20,7 @@ namespace Camelot.Collections
             _capacity = capacity;
             _linkedList = new LinkedList<T>();
 
+            CurrentIndex = splitIndex;
             FillLinkedList(collection, splitIndex);
         }
 
@@ -26,6 +29,7 @@ namespace Camelot.Collections
             if (_current.Previous != null)
             {
                 _current = _current.Previous;
+                CurrentIndex--;
             }
 
             return Current;
@@ -36,6 +40,7 @@ namespace Camelot.Collections
             if (_current.Next != null)
             {
                 _current = _current.Next;
+                CurrentIndex++;
             }
 
             return Current;
@@ -70,13 +75,18 @@ namespace Camelot.Collections
             }
         }
 
-        private void AppendItem(T item) => _current = _linkedList.AddLast(item);
+        private void AppendItem(T item)
+        {
+            _current = _linkedList.AddLast(item);
+            CurrentIndex++;
+        }
 
         private void RemoveOldestItemIfNeeded()
         {
             while (_linkedList.Count > _capacity)
             {
                 _linkedList.RemoveFirst();
+                CurrentIndex--;
             }
         }
     }

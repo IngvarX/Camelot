@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Windows.Input;
 using Camelot.Collections;
 using Camelot.Extensions;
@@ -113,15 +114,16 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
         public TabStateModel GetState() => new TabStateModel
         {
             Directory = CurrentDirectory,
-            SortingSettings = GetSortingSettings()
+            SortingSettings = GetSortingSettings(),
+            History = _history.Items.ToList(),
+            CurrentPositionInHistory = _history.CurrentIndex
         };
 
-        private SortingSettingsStateModel GetSortingSettings() =>
-            new SortingSettingsStateModel
-            {
-                IsAscending = SortingViewModel.IsSortingByAscendingEnabled,
-                SortingMode = SortingViewModel.SortingColumn
-            };
+        private SortingSettingsStateModel GetSortingSettings() => new SortingSettingsStateModel
+        {
+            IsAscending = SortingViewModel.IsSortingByAscendingEnabled,
+            SortingMode = SortingViewModel.SortingColumn
+        };
 
         private void RequestActivation() => ActivationRequested.Raise(this, EventArgs.Empty);
 
