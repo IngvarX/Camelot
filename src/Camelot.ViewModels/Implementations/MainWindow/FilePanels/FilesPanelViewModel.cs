@@ -196,8 +196,11 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
                 ExecuteInUiThread(() => RemoveNode(args.Node));
         }
 
-        private void TabsListViewModelOnSelectedTabChanged(object sender, EventArgs e) =>
+        private void TabsListViewModelOnSelectedTabChanged(object sender, EventArgs e)
+        {
             this.RaisePropertyChanged(nameof(SelectedTab));
+            Activate();
+        }
 
         private void SearchViewModelOnSearchSettingsChanged(object sender, EventArgs e) => ReloadFiles();
 
@@ -206,13 +209,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             Activate();
 
             var previousCurrentDirectory = _currentDirectory;
-            var newCurrentDirectory = _filePanelDirectoryObserver.CurrentDirectory;
-            if (previousCurrentDirectory == newCurrentDirectory)
-            {
-                return;
-            }
-
-            this.RaiseAndSetIfChanged(ref _currentDirectory, newCurrentDirectory);
+            this.RaiseAndSetIfChanged(ref _currentDirectory, _filePanelDirectoryObserver.CurrentDirectory);
 
             if (previousCurrentDirectory != null)
             {

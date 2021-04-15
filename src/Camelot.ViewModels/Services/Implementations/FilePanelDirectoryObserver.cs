@@ -13,9 +13,12 @@ namespace Camelot.ViewModels.Services.Implementations
             get => _directory;
             set
             {
-                _directory = value;
+                if (_directory != value)
+                {
+                    _directory = value;
 
-                CurrentDirectoryChanged.Raise(this, EventArgs.Empty);
+                    CurrentDirectoryChanged.Raise(this, EventArgs.Empty);
+                }
             }
         }
 

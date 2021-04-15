@@ -27,7 +27,7 @@ namespace Camelot.ViewModels.Tests.Services
         }
 
         [Fact]
-        public void TestEventNotFiredSameDir()
+        public void TestEventNotFired()
         {
             var observer = _autoMocker.CreateInstance<FilePanelDirectoryObserver>();
 
@@ -36,11 +36,11 @@ namespace Camelot.ViewModels.Tests.Services
             observer.CurrentDirectoryChanged += (sender, args) => isCallbackCalled = true;
 
             observer.CurrentDirectory = Directory;
-            Assert.True(isCallbackCalled);
+            Assert.False(isCallbackCalled);
         }
 
         [Fact]
-        public void TestEventFiredDifferentDirs()
+        public void TestEventFired()
         {
             var observer = _autoMocker.CreateInstance<FilePanelDirectoryObserver>();
 
