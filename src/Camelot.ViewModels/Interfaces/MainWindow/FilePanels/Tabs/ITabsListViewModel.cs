@@ -21,7 +21,5 @@ namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs
         void CreateNewTab(string directory);
 
         void InsertBeforeTab(ITabViewModel tabViewModel, ITabViewModel tabViewModelToInsert);
-
-        void SaveState();
     }
 }

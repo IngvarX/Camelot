@@ -176,7 +176,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             }
 
             ReloadFiles();
-            TabsListViewModel.SaveState();
         }
 
         private void SubscribeToEvents()

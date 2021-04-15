@@ -97,20 +97,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
             SubscribeToEvents(tabViewModelToInsert);
         }
 
-        public void SaveState() =>
-            Task.Factory.StartNew(() =>
-            {
-                var tabs = _tabs.Select(t => t.GetState()).ToList();
-                var selectedTabIndex = GetSelectedTabIndex();
-                var state = new PanelStateModel
-                {
-                    Tabs = tabs,
-                    SelectedTabIndex = selectedTabIndex
-                };
-
-                _filesPanelStateService.SavePanelState(state);
-            }, TaskCreationOptions.LongRunning);
-
         private void SelectTab(int index)
         {
             if (index >= 0 && index < _tabs.Count)
@@ -266,6 +252,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
             tabViewModel.ClosingTabsToTheRightRequested += TabViewModelOnClosingTabsToTheRightRequested;
             tabViewModel.ClosingAllTabsButThisRequested += TabViewModelOnClosingAllTabsButThisRequested;
             tabViewModel.MoveRequested += TabViewModelOnMoveRequested;
+            tabViewModel.SortingViewModel.SortingSettingsChanged += SortingViewModelOnSortingSettingsChanged;
         }
 
         private void UnsubscribeFromEvents(ITabViewModel tabViewModel)
@@ -278,6 +265,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
             tabViewModel.ClosingTabsToTheRightRequested -= TabViewModelOnClosingTabsToTheRightRequested;
             tabViewModel.ClosingAllTabsButThisRequested -= TabViewModelOnClosingAllTabsButThisRequested;
             tabViewModel.MoveRequested -= TabViewModelOnMoveRequested;
+            tabViewModel.SortingViewModel.SortingSettingsChanged -= SortingViewModelOnSortingSettingsChanged;
         }
 
         private void TabViewModelOnActivationRequested(object sender, EventArgs e) => SelectTab((ITabViewModel) sender);
@@ -344,6 +332,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
             }
         }
 
+        private void SortingViewModelOnSortingSettingsChanged(object sender, EventArgs e) => SaveState();
+
         private void CreateNewBackgroundTab(string directory)
         {
             var insertIndex = GetSelectedTabIndex() + 1;
@@ -381,5 +371,19 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
         private int GetSelectedTabIndex() => GetTabIndex(SelectedTab);
 
         private int GetTabIndex(ITabViewModel tabViewModel) => _tabs.IndexOf(tabViewModel);
+
+        private void SaveState() =>
+            Task.Run(() =>
+            {
+                var tabs = _tabs.Select(t => t.GetState()).ToList();
+                var selectedTabIndex = GetSelectedTabIndex();
+                var state = new PanelStateModel
+                {
+                    Tabs = tabs,
+                    SelectedTabIndex = selectedTabIndex
+                };
+
+                _filesPanelStateService.SavePanelState(state);
+            });
     }
 }

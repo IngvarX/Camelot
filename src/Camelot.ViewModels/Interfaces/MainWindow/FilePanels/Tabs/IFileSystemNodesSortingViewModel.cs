@@ -1,3 +1,4 @@
+using System;
 using Camelot.Services.Abstractions.Models.Enums;
 
 namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs
@@ -9,5 +10,7 @@ namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs
         bool IsSortingByAscendingEnabled { get; }
 
         void ToggleSortingDirection();
+
+        event EventHandler<EventArgs> SortingSettingsChanged;
     }
 }
