@@ -36,17 +36,9 @@ namespace Camelot.ViewModels.Implementations
 
         public IFavouriteDirectoriesListViewModel FavouriteDirectoriesListViewModel { get; }
 
-        public ICommand CreateNewTabCommand { get; }
-
-        public ICommand CloseCurrentTabCommand { get; }
-
         public ICommand SearchCommand { get; }
 
         public ICommand SwitchPanelCommand { get; }
-
-        public ICommand GoToTabCommand { get; }
-
-        public ICommand GoToLastTabCommand { get; }
 
         public MainWindowViewModel(
             IFilesOperationsMediator filesOperationsMediator,
@@ -70,28 +62,16 @@ namespace Camelot.ViewModels.Implementations
             DrivesListViewModel = drivesListViewModel;
             FavouriteDirectoriesListViewModel = favouriteDirectoriesListViewModel;
 
-            CreateNewTabCommand = ReactiveCommand.Create(CreateNewTab);
-            CloseCurrentTabCommand = ReactiveCommand.Create(CloseActiveTab);
             SearchCommand = ReactiveCommand.Create(Search);
             SwitchPanelCommand = ReactiveCommand.Create(SwitchPanel);
-            GoToTabCommand = ReactiveCommand.Create<int>(GoToTab);
-            GoToLastTabCommand = ReactiveCommand.Create(GoToLastTab);
 
             filesOperationsMediator.Register(leftFilesPanelViewModel, rightFilesPanelViewModel);
             filesOperationsMediator.ActiveFilesPanelChanged += FilesOperationsMediatorOnActiveFilesPanelChanged;
         }
 
-        private void CreateNewTab() => ActiveTabsListViewModel.CreateNewTab(switchTo: true);
-
-        private void CloseActiveTab() => ActiveTabsListViewModel.CloseActiveTab();
-
         private void Search() => _filesOperationsMediator.ToggleSearchPanelVisibility();
 
         private void SwitchPanel() => _filesOperationsMediator.InactiveFilesPanelViewModel.Activate();
-
-        private void GoToTab(int tabIndex) => ActiveTabsListViewModel.SelectTab(tabIndex);
-
-        private void GoToLastTab() => ActiveTabsListViewModel.SelectTab(ActiveTabsListViewModel.Tabs.Count - 1);
 
         private void FilesOperationsMediatorOnActiveFilesPanelChanged(object sender, EventArgs e) =>
             this.RaisePropertyChanged(nameof(ActiveTabsListViewModel));

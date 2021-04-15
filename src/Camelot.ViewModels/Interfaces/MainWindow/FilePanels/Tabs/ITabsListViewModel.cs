@@ -20,10 +20,6 @@ namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs
 
         void CreateNewTab(string directory = null, bool switchTo = false);
 
-        void CloseActiveTab();
-
-        void SelectTab(int index);
-
         void InsertBeforeTab(ITabViewModel tabViewModel, ITabViewModel tabViewModelToInsert);
 
         void SaveState();

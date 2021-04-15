@@ -45,6 +45,14 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
 
         public ICommand ReopenClosedTabCommand { get; }
 
+        public ICommand CreateNewTabCommand { get; }
+
+        public ICommand CloseCurrentTabCommand { get; }
+
+        public ICommand GoToTabCommand { get; }
+
+        public ICommand GoToLastTabCommand { get; }
+
         public TabsListViewModel(
             IFilesPanelStateService filesPanelStateService,
             IDirectoryService directoryService,
@@ -67,6 +75,10 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
             SelectTabToTheLeftCommand = ReactiveCommand.Create(SelectTabToTheLeft);
             SelectTabToTheRightCommand = ReactiveCommand.Create(SelectTabToTheRight);
             ReopenClosedTabCommand = ReactiveCommand.Create(ReopenClosedTab);
+            CreateNewTabCommand = ReactiveCommand.Create(() => CreateNewTab(switchTo: true));
+            CloseCurrentTabCommand = ReactiveCommand.Create(CloseActiveTab);
+            GoToTabCommand = ReactiveCommand.Create<int>(SelectTab);
+            GoToLastTabCommand = ReactiveCommand.Create(GoToLastTab);
 
             this.WhenAnyValue(x => x.SelectedTab.CurrentDirectory, x => x.SelectedTab)
                 .Throttle(TimeSpan.FromMilliseconds(tabsListConfiguration.SaveTimeoutMs))
@@ -110,6 +122,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
                 _filesPanelStateService.SavePanelState(state);
             }, TaskCreationOptions.LongRunning);
 
+        private void GoToLastTab() => SelectTab(Tabs.Last());
 
         private ObservableCollection<ITabViewModel> SetupTabs()
         {
