@@ -18,7 +18,7 @@ namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs
 
         public ICommand ReopenClosedTabCommand { get; }
 
-        void CreateNewTab(string directory = null, bool switchTo = false);
+        void CreateNewTab(string directory = null);
 
         void InsertBeforeTab(ITabViewModel tabViewModel, ITabViewModel tabViewModelToInsert);
 

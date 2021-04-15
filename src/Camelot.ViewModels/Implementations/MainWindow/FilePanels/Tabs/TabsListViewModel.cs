@@ -75,7 +75,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
             SelectTabToTheLeftCommand = ReactiveCommand.Create(SelectTabToTheLeft);
             SelectTabToTheRightCommand = ReactiveCommand.Create(SelectTabToTheRight);
             ReopenClosedTabCommand = ReactiveCommand.Create(ReopenClosedTab);
-            CreateNewTabCommand = ReactiveCommand.Create(() => CreateNewTab(switchTo: true));
+            CreateNewTabCommand = ReactiveCommand.Create(CreateCopyOfSelectedTab);
             CloseCurrentTabCommand = ReactiveCommand.Create(CloseActiveTab);
             GoToTabCommand = ReactiveCommand.Create<int>(SelectTab);
             GoToLastTabCommand = ReactiveCommand.Create(GoToLastTab);
@@ -87,10 +87,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
             SubscribeToEvents();
         }
 
-        public void CreateNewTab(string directory = null, bool switchTo = false) =>
-            CreateNewTab(SelectedTab, directory, switchTo);
-
-        public void CloseActiveTab() => CloseTab(SelectedTab);
+        public void CreateNewTab(string directory = null) => CreateNewTab(SelectedTab, directory, false);
 
         public void SelectTab(int index)
         {
@@ -122,7 +119,11 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
                 _filesPanelStateService.SavePanelState(state);
             }, TaskCreationOptions.LongRunning);
 
-        private void GoToLastTab() => SelectTab(Tabs.Last());
+        private void CreateCopyOfSelectedTab() => CreateNewTab(SelectedTab, null, false);
+
+        private void CloseActiveTab() => CloseTab(SelectedTab);
+
+        private void GoToLastTab() => SelectTab(Tabs[^1]);
 
         private ObservableCollection<ITabViewModel> SetupTabs()
         {
@@ -222,7 +223,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
             {
                 Directory = directory,
                 SortingSettings = SelectedTab.GetState().SortingSettings,
-                History = new List<string>{directory}
+                History = new List<string> {directory}
             };
 
             return CreateViewModelFrom(tabStateModel);
@@ -240,9 +241,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
         {
             UnsubscribeFromEvents(tabViewModel);
 
-            var index = _tabs.IndexOf(tabViewModel);
+            var index = GetTabIndex(tabViewModel);
             _tabs.RemoveAt(index);
-
             _closedTabs.Push((tabViewModel, index));
 
             if (SelectedTab == tabViewModel)
@@ -292,7 +292,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
         private void TabViewModelOnClosingTabsToTheLeftRequested(object sender, EventArgs e)
         {
             var tabViewModel = (ITabViewModel) sender;
-            var tabPosition = _tabs.IndexOf(tabViewModel);
+            var tabPosition = GetTabIndex(tabViewModel);
             var tabsToClose = _tabs.Take(tabPosition).ToArray();
 
             tabsToClose.ForEach(Remove);
@@ -301,7 +301,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
         private void TabViewModelOnClosingTabsToTheRightRequested(object sender, EventArgs e)
         {
             var tabViewModel = (ITabViewModel) sender;
-            var tabPosition = _tabs.IndexOf(tabViewModel);
+            var tabPosition = GetTabIndex(tabViewModel);
             var tabsToClose = _tabs.Skip(tabPosition + 1).ToArray();
 
             tabsToClose.ForEach(Remove);
@@ -346,7 +346,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
 
         private void CreateNewTab(ITabViewModel tabViewModel, string directory = null, bool switchToTab = true)
         {
-            var insertIndex = _tabs.IndexOf(tabViewModel) + 1;
+            var insertIndex = GetTabIndex(tabViewModel) + 1;
             var newTabViewModel = CreateViewModelFrom(directory ?? tabViewModel.CurrentDirectory);
 
             _tabs.Insert(insertIndex, newTabViewModel);
