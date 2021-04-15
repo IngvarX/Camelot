@@ -87,15 +87,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
             SubscribeToEvents();
         }
 
-        public void CreateNewTab(string directory = null) => CreateNewTab(SelectedTab, directory, false);
-
-        public void SelectTab(int index)
-        {
-            if (index >= 0 && index < _tabs.Count)
-            {
-                SelectTab(_tabs[index]);
-            }
-        }
+        public void CreateNewTab(string directory) => CreateNewBackgroundTab(directory);
 
         public void InsertBeforeTab(ITabViewModel tabViewModel, ITabViewModel tabViewModelToInsert)
         {
@@ -119,7 +111,15 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
                 _filesPanelStateService.SavePanelState(state);
             }, TaskCreationOptions.LongRunning);
 
-        private void CreateCopyOfSelectedTab() => CreateNewTab(SelectedTab, null, false);
+        private void SelectTab(int index)
+        {
+            if (index >= 0 && index < _tabs.Count)
+            {
+                SelectTab(_tabs[index]);
+            }
+        }
+
+        private void CreateCopyOfSelectedTab() => CreateNewForegroundTab(SelectedTab);
 
         private void CloseActiveTab() => CloseTab(SelectedTab);
 
@@ -282,7 +282,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
 
         private void TabViewModelOnActivationRequested(object sender, EventArgs e) => SelectTab((ITabViewModel) sender);
 
-        private void TabViewModelOnNewTabRequested(object sender, EventArgs e) => CreateNewTab((ITabViewModel) sender);
+        private void TabViewModelOnNewTabRequested(object sender, EventArgs e) => CreateNewForegroundTab((ITabViewModel) sender);
 
         private void TabViewModelOnNewTabOnOppositePanelRequested(object sender, EventArgs e) =>
             CreateNewTabOnOppositePanel((ITabViewModel) sender);
@@ -344,16 +344,21 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
             }
         }
 
-        private void CreateNewTab(ITabViewModel tabViewModel, string directory = null, bool switchToTab = true)
+        private void CreateNewBackgroundTab(string directory)
         {
-            var insertIndex = GetTabIndex(tabViewModel) + 1;
-            var newTabViewModel = CreateViewModelFrom(directory ?? tabViewModel.CurrentDirectory);
+            var insertIndex = GetSelectedTabIndex() + 1;
+            var newTabViewModel = CreateViewModelFrom(directory);
 
             _tabs.Insert(insertIndex, newTabViewModel);
-            if (switchToTab)
-            {
-                SelectTab(newTabViewModel);
-            }
+        }
+
+        private void CreateNewForegroundTab(ITabViewModel tabViewModel)
+        {
+            var insertIndex = GetTabIndex(tabViewModel) + 1;
+            var newTabViewModel = CreateViewModelFrom(tabViewModel.CurrentDirectory);
+
+            _tabs.Insert(insertIndex, newTabViewModel);
+            SelectTab(newTabViewModel);
         }
 
         private void CreateNewTabOnOppositePanel(ITabViewModel tabViewModel)
