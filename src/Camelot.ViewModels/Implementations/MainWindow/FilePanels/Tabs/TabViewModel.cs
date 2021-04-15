@@ -5,6 +5,7 @@ using Camelot.Collections;
 using Camelot.Extensions;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models.State;
+using Camelot.ViewModels.Configuration;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs;
 using Camelot.ViewModels.Services.Interfaces;
 using ReactiveUI;
@@ -88,16 +89,17 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
             IPathService pathService,
             IFilePanelDirectoryObserver filePanelDirectoryObserver,
             IFileSystemNodesSortingViewModel fileSystemNodesSortingViewModel,
+            TabConfiguration tabConfiguration,
             TabStateModel tabStateModel)
         {
             _pathService = pathService;
             _filePanelDirectoryObserver = filePanelDirectoryObserver;
 
-            _history = new LimitedSizeHistory<string>(50, tabStateModel.History,
+            _history = new LimitedSizeHistory<string>(tabConfiguration.MaxHistorySize, tabStateModel.History,
                 tabStateModel.CurrentPositionInHistory);
+            _currentDirectory = tabStateModel.Directory;
 
             SortingViewModel = fileSystemNodesSortingViewModel;
-            CurrentDirectory = tabStateModel.Directory;
 
             ActivateCommand = ReactiveCommand.Create(RequestActivation);
             NewTabCommand = ReactiveCommand.Create(RequestNewTab);

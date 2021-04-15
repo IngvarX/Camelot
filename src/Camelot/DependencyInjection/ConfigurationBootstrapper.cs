@@ -26,6 +26,7 @@ namespace Camelot.DependencyInjection
             RegisterDatabaseConfiguration(services, resolver, configuration);
             RegisterFileSystemWatcherConfiguration(services, configuration);
             RegisterImagePreviewConfiguration(services, configuration);
+            RegisterTabConfiguration(services, configuration);
             RegisterTabsListConfiguration(services, configuration);
             RegisterSearchViewModelConfiguration(services, configuration);
             RegisterDriveServiceConfiguration(services, configuration);
@@ -106,6 +107,14 @@ namespace Camelot.DependencyInjection
         {
             var config = new ImagePreviewConfiguration();
             configuration.GetSection("ImagePreview").Bind(config);
+            services.RegisterConstant(config);
+        }
+
+        private static void RegisterTabConfiguration(IMutableDependencyResolver services,
+            IConfiguration configuration)
+        {
+            var config = new TabConfiguration();
+            configuration.GetSection("Tab").Bind(config);
             services.RegisterConstant(config);
         }
 
