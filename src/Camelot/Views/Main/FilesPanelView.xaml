@@ -139,6 +139,8 @@
                 <KeyBinding Gesture="F8" Command="{Binding OperationsViewModel.MoveToTrashCommand}" />
                 <KeyBinding Gesture="Shift+Delete" Command="{Binding OperationsViewModel.RemoveCommand}" />
                 <KeyBinding Gesture="Shift+Back" Command="{Binding OperationsViewModel.RemoveCommand}" />
+                <KeyBinding Gesture="Left" Command="{Binding SelectedTab.GoToPreviousDirectoryCommand}" />
+                <KeyBinding Gesture="Right" Command="{Binding SelectedTab.GoToNextDirectoryCommand}" />
             </DataGrid.KeyBindings>
 
             <DataGrid.Columns>
