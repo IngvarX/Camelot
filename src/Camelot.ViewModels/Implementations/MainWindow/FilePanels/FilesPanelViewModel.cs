@@ -206,7 +206,13 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             Activate();
 
             var previousCurrentDirectory = _currentDirectory;
-            this.RaiseAndSetIfChanged(ref _currentDirectory, _filePanelDirectoryObserver.CurrentDirectory);
+            var newCurrentDirectory = _filePanelDirectoryObserver.CurrentDirectory;
+            if (previousCurrentDirectory == newCurrentDirectory)
+            {
+                return;
+            }
+
+            this.RaiseAndSetIfChanged(ref _currentDirectory, newCurrentDirectory);
 
             if (previousCurrentDirectory != null)
             {

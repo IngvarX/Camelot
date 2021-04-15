@@ -151,6 +151,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
         {
             _filePanelDirectoryObserver.CurrentDirectory = _currentDirectory = directory;
             this.RaisePropertyChanged(nameof(DirectoryName));
+            this.RaisePropertyChanged(nameof(CurrentDirectory));
         }
 
         private void AppendDirectoryToHistory(string directory) => _history.AddItem(directory);
