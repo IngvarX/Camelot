@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models.State;
+using Camelot.ViewModels.Configuration;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs;
+using Camelot.ViewModels.Services.Interfaces;
 using Moq;
 using Moq.AutoMock;
 using Xunit;
@@ -11,7 +13,9 @@ namespace Camelot.ViewModels.Tests.FilePanels
 {
     public class TabViewModelTests
     {
+        private const string PrevDirectory = "PrevDir";
         private const string CurrentDirectory = "CurrDir";
+        private const string NextDirectory = "NextDir";
         private const string CurrentDirectoryName = "CurrDirName";
 
         private readonly AutoMocker _autoMocker;
@@ -26,11 +30,17 @@ namespace Camelot.ViewModels.Tests.FilePanels
             _autoMocker
                 .Setup<IPathService, string>(m => m.GetFileName(CurrentDirectory))
                 .Returns(CurrentDirectoryName);
+            _autoMocker
+                .Use(new TabConfiguration
+                {
+                    MaxHistorySize = 100
+                });
             _autoMocker.Use(new TabStateModel
             {
                 Directory = CurrentDirectory,
-                History = new List<string> {CurrentDirectory},
-                SortingSettings = new SortingSettingsStateModel()
+                History = new List<string> {PrevDirectory, CurrentDirectory, NextDirectory},
+                SortingSettings = new SortingSettingsStateModel(),
+                CurrentPositionInHistory = 1
             });
 
             _tabViewModel = _autoMocker.CreateInstance<TabViewModel>();
@@ -136,6 +146,64 @@ namespace Camelot.ViewModels.Tests.FilePanels
             _tabViewModel.RequestMoveCommand.Execute(tab);
 
             Assert.True(callbackCalled);
+        }
+
+        [Fact]
+        public void TestGoToPreviousDirectoryCommand()
+        {
+            Assert.True(_tabViewModel.GoToPreviousDirectoryCommand.CanExecute(null));
+            _tabViewModel.GoToPreviousDirectoryCommand.Execute(null);
+
+            Assert.Equal(PrevDirectory, _tabViewModel.CurrentDirectory);
+            Assert.Equal(0, _tabViewModel.GetState().CurrentPositionInHistory);
+
+            _autoMocker
+                .GetMock<IFilePanelDirectoryObserver>()
+                .VerifySet(m => m.CurrentDirectory = PrevDirectory);
+        }
+
+        [Fact]
+        public void TestGoToNextDirectoryCommand()
+        {
+            Assert.True(_tabViewModel.GoToNextDirectoryCommand.CanExecute(null));
+            _tabViewModel.GoToNextDirectoryCommand.Execute(null);
+
+            Assert.Equal(NextDirectory, _tabViewModel.CurrentDirectory);
+            Assert.Equal(2, _tabViewModel.GetState().CurrentPositionInHistory);
+
+            _autoMocker
+                .GetMock<IFilePanelDirectoryObserver>()
+                .VerifySet(m => m.CurrentDirectory = NextDirectory);
+        }
+
+        [Fact]
+        public void TestSetDirectoryFails()
+        {
+            Assert.Equal(CurrentDirectory, _tabViewModel.CurrentDirectory);
+
+            _tabViewModel.CurrentDirectory = CurrentDirectory;
+
+            var state = _tabViewModel.GetState();
+            Assert.Equal(3, state.History.Count);
+            Assert.Equal(1, state.CurrentPositionInHistory);
+        }
+
+        [Fact]
+        public void TestSetDirectorySuccess()
+        {
+            Assert.Equal(CurrentDirectory, _tabViewModel.CurrentDirectory);
+
+            _tabViewModel.CurrentDirectory = PrevDirectory;
+
+            Assert.Equal(PrevDirectory, _tabViewModel.CurrentDirectory);
+
+            var state = _tabViewModel.GetState();
+            Assert.Equal(3, state.History.Count);
+            Assert.Equal(2, state.CurrentPositionInHistory);
+            Assert.Equal(2, state.CurrentPositionInHistory);
+            Assert.Equal(PrevDirectory, state.History[0]);
+            Assert.Equal(CurrentDirectory, state.History[1]);
+            Assert.Equal(PrevDirectory, state.History[2]);
         }
 
         [Fact]
