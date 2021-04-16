@@ -34,7 +34,11 @@ namespace Camelot.ViewModels.Tests.FilePanels
         [Fact]
         public void TestEmptyFilesPanelState()
         {
-            var tabViewModel = new Mock<ITabViewModel>().Object;
+            var tabViewModelMock = new Mock<ITabViewModel>();
+            tabViewModelMock
+                .SetupGet(m => m.SortingViewModel)
+                .Returns(Mock.Of<IFileSystemNodesSortingViewModel>());
+            var tabViewModel = tabViewModelMock.Object;
             _autoMocker
                 .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<IFilePanelDirectoryObserver>(), It.IsAny<TabStateModel>()))
                 .Returns(tabViewModel);
@@ -67,7 +71,11 @@ namespace Camelot.ViewModels.Tests.FilePanels
         {
             var tabsCount = new Random().Next(2, 10);
 
-            var tabViewModel = new Mock<ITabViewModel>().Object;
+            var tabViewModelMock = new Mock<ITabViewModel>();
+            tabViewModelMock
+                .SetupGet(m => m.SortingViewModel)
+                .Returns(Mock.Of<IFileSystemNodesSortingViewModel>());
+            var tabViewModel = tabViewModelMock.Object;
             _autoMocker
                 .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<IFilePanelDirectoryObserver>(), It.IsAny<TabStateModel>()))
                 .Returns(tabViewModel);
@@ -153,7 +161,10 @@ namespace Camelot.ViewModels.Tests.FilePanels
 
             var tabsListViewModel = _autoMocker.CreateInstance<TabsListViewModel>();
 
-            tabsListViewModel.CloseActiveTab();
+            Assert.True(tabsListViewModel.CloseCurrentTabCommand.CanExecute(null));
+            tabsListViewModel.CloseCurrentTabCommand.Execute(null);
+
+            Assert.Equal(1, tabsListViewModel.Tabs.Count);
 
             Assert.True(tabsListViewModel.ReopenClosedTabCommand.CanExecute(null));
             tabsListViewModel.ReopenClosedTabCommand.Execute(null);
@@ -195,12 +206,12 @@ namespace Camelot.ViewModels.Tests.FilePanels
             var tabsListViewModel = _autoMocker.CreateInstance<TabsListViewModel>();
             Assert.Single(tabsListViewModel.Tabs);
 
-            tabsListViewModel.CreateNewTab();
+            tabsListViewModel.CreateNewTabCommand.Execute(null);
             Assert.Equal(2, tabsListViewModel.Tabs.Count);
 
-            tabsListViewModel.CloseActiveTab();
+            tabsListViewModel.CloseCurrentTabCommand.Execute(null);
             Assert.Single(tabsListViewModel.Tabs);
-            tabsListViewModel.CloseActiveTab();
+            tabsListViewModel.CloseCurrentTabCommand.Execute(null);
             Assert.Single(tabsListViewModel.Tabs);
 
             _autoMocker
@@ -225,17 +236,20 @@ namespace Camelot.ViewModels.Tests.FilePanels
             tabViewModelMock
                 .SetupGet(m => m.IsGloballyActive)
                 .Returns(isActive);
+            tabViewModelMock
+                .SetupGet(m => m.SortingViewModel)
+                .Returns(Mock.Of<IFileSystemNodesSortingViewModel>());
             inactiveFilePanelMock
                 .SetupGet(m => m.TabsListViewModel)
                 .Returns(inactiveTabsListMock.Object);
             inactiveTabsListMock
-                .Setup(m => m.CreateNewTab(AppRootDirectory, false))
+                .Setup(m => m.CreateNewTab(AppRootDirectory))
                 .Verifiable();
             activeFilePanelMock
                 .SetupGet(m => m.TabsListViewModel)
                 .Returns(activeTabsListMock.Object);
             activeTabsListMock
-                .Setup(m => m.CreateNewTab(AppRootDirectory, false))
+                .Setup(m => m.CreateNewTab(AppRootDirectory))
                 .Verifiable();
 
             _autoMocker
@@ -267,9 +281,9 @@ namespace Camelot.ViewModels.Tests.FilePanels
             Assert.Single(tabsListViewModel.Tabs);
 
             inactiveTabsListMock
-                .Verify(m => m.CreateNewTab(AppRootDirectory, false), Times.Exactly(inactiveCallsCount));
+                .Verify(m => m.CreateNewTab(AppRootDirectory), Times.Exactly(inactiveCallsCount));
             activeTabsListMock
-                .Verify(m => m.CreateNewTab(AppRootDirectory, false), Times.Exactly(activeCallsCount));
+                .Verify(m => m.CreateNewTab(AppRootDirectory), Times.Exactly(activeCallsCount));
         }
 
         [Fact]
@@ -554,7 +568,11 @@ namespace Camelot.ViewModels.Tests.FilePanels
         {
             var tabsCount = new Random().Next(2, 10);
 
-            var tabViewModel = new Mock<ITabViewModel>().Object;
+            var tabViewModelMock = new Mock<ITabViewModel>();
+            tabViewModelMock
+                .SetupGet(m => m.SortingViewModel)
+                .Returns(Mock.Of<IFileSystemNodesSortingViewModel>());
+            var tabViewModel = tabViewModelMock.Object;
             _autoMocker
                 .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<IFilePanelDirectoryObserver>(), It.IsAny<TabStateModel>()))
                 .Returns(tabViewModel);
@@ -578,7 +596,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
 
             for (var i = 0; i < tabsCount; i++)
             {
-                tabsListViewModel.SelectTab(i);
+                tabsListViewModel.GoToTabCommand.Execute(i);
                 Assert.Equal(tabsListViewModel.Tabs[i], tabsListViewModel.SelectedTab);
             }
         }
@@ -588,7 +606,11 @@ namespace Camelot.ViewModels.Tests.FilePanels
         {
             var tabsCount = new Random().Next(2, 10);
 
-            var tabViewModel = new Mock<ITabViewModel>().Object;
+            var tabViewModelMock = new Mock<ITabViewModel>();
+            tabViewModelMock
+                .SetupGet(m => m.SortingViewModel)
+                .Returns(Mock.Of<IFileSystemNodesSortingViewModel>());
+            var tabViewModel = tabViewModelMock.Object;
             _autoMocker
                 .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<IFilePanelDirectoryObserver>(), It.IsAny<TabStateModel>()))
                 .Returns(tabViewModel);
@@ -611,10 +633,10 @@ namespace Camelot.ViewModels.Tests.FilePanels
             var tab = tabsListViewModel.Tabs[0];
             Assert.Equal(tab, tabsListViewModel.SelectedTab);
 
-            tabsListViewModel.SelectTab(-1);
+            tabsListViewModel.GoToTabCommand.Execute(-1);
             Assert.Equal(tab, tabsListViewModel.SelectedTab);
 
-            tabsListViewModel.SelectTab(tabsCount + 13);
+            tabsListViewModel.GoToTabCommand.Execute(tabsCount + 13);
             Assert.Equal(tab, tabsListViewModel.SelectedTab);
         }
 
@@ -770,7 +792,11 @@ namespace Camelot.ViewModels.Tests.FilePanels
 
             var tabsListViewModel = _autoMocker.CreateInstance<TabsListViewModel>();
 
-            var insertViewModel = new Mock<ITabViewModel>().Object;
+            var insertViewModelMock = new Mock<ITabViewModel>();
+            insertViewModelMock
+                .SetupGet(m => m.SortingViewModel)
+                .Returns(Mock.Of<IFileSystemNodesSortingViewModel>());
+            var insertViewModel = insertViewModelMock.Object;
             var currentTabViewModel = tabsListViewModel.Tabs[insertIndex];
             tabsListViewModel.InsertBeforeTab(currentTabViewModel, insertViewModel);
 
