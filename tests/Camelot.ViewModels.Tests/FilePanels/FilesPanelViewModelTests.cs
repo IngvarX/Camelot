@@ -91,6 +91,34 @@ namespace Camelot.ViewModels.Tests.FilePanels
         }
 
         [Fact]
+        public void TestSelectedTabChanged()
+        {
+            var tabViewModelMock = new Mock<ITabViewModel>();
+            _autoMocker
+                .Setup<ITabsListViewModel, ITabViewModel>(m => m.SelectedTab)
+                .Returns(tabViewModelMock.Object);
+
+            var filesPanelViewModel = _autoMocker.CreateInstance<FilesPanelViewModel>();
+
+            var isCallbackCalled = false;
+            filesPanelViewModel.Activated += (sender, args) => isCallbackCalled = true;
+
+            tabViewModelMock
+                .VerifySet(m => m.IsGloballyActive = true,
+                    Times.Once);
+
+            _autoMocker
+                .GetMock<ITabsListViewModel>()
+                .Raise(m => m.SelectedTabChanged += null, EventArgs.Empty);
+
+            Assert.True(isCallbackCalled);
+
+            tabViewModelMock
+                .VerifySet(m => m.IsGloballyActive = true,
+                    Times.Exactly(2));
+        }
+
+        [Fact]
         public void TestCopyToClipboardCommand()
         {
             _autoMocker

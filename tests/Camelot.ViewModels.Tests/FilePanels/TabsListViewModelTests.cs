@@ -721,11 +721,10 @@ namespace Camelot.ViewModels.Tests.FilePanels
 
             Assert.Equal(tabsListViewModel.Tabs[^1], tabsListViewModel.SelectedTab);
 
-            for (var i = 0; i < tabsCount; i++)
-            {
-                tabsListViewModel.GoToTabCommand.Execute(i);
-                Assert.Equal(tabsListViewModel.Tabs[i], tabsListViewModel.SelectedTab);
-            }
+            tabsListViewModel.GoToTabCommand.Execute(0);
+
+            tabsListViewModel.GoToLastTabCommand.Execute(null);
+            Assert.Equal(tabsListViewModel.Tabs[^1], tabsListViewModel.SelectedTab);
         }
 
         [Fact]
@@ -847,6 +846,82 @@ namespace Camelot.ViewModels.Tests.FilePanels
 
             Assert.Single(tabsListViewModel.Tabs);
             Assert.Equal(firstTab, tabsListViewModel.Tabs.Single());
+        }
+
+        [Theory]
+        [InlineData(false, 1, 0)]
+        [InlineData(true, 0, 1)]
+        public void TestMoveRequestedOppositePanel(bool isGloballyActive, int activePanelCallsCount,
+            int inactivePanelCallsCount)
+        {
+            var tabs = new List<Mock<ITabViewModel>>();
+            _autoMocker
+                .Setup<ITabViewModelFactory, ITabViewModel>(m => m.Create(It.IsAny<IFilePanelDirectoryObserver>(), It.Is<TabStateModel>(tm => tm.Directory == AppRootDirectory)))
+                .Returns(() =>
+                {
+                    var mock = Create();
+                    tabs.Add(mock);
+
+                    return mock.Object;
+                });
+            _autoMocker
+                .Setup<IDirectoryService, bool>(m => m.CheckIfExists(AppRootDirectory))
+                .Returns(true);
+            _autoMocker
+                .Setup<IFilesPanelStateService, PanelStateModel>(m => m.GetPanelState())
+                .Returns(new PanelStateModel
+                {
+                    Tabs = new List<TabStateModel>
+                    {
+                        new TabStateModel {Directory = AppRootDirectory},
+                        new TabStateModel {Directory = AppRootDirectory},
+                        new TabStateModel {Directory = AppRootDirectory}
+                    }
+                });
+
+            var tabsListViewModel = _autoMocker.CreateInstance<TabsListViewModel>();
+
+            var secondTabMock = tabs[1];
+            tabs[0]
+                .SetupGet(m => m.IsGloballyActive)
+                .Returns(isGloballyActive);
+            var tabFromOppositePanel = Mock.Of<ITabViewModel>();
+            var args = new MoveRequestedEventArgs(tabFromOppositePanel);
+
+            var inactiveTabsListMock = new Mock<ITabsListViewModel>();
+            inactiveTabsListMock
+                .Setup(m => m.InsertBeforeTab(tabFromOppositePanel, secondTabMock.Object))
+                .Verifiable();
+            var inactivePanelMock = new Mock<IFilesPanelViewModel>();
+            inactivePanelMock
+                .Setup(m => m.TabsListViewModel)
+                .Returns(inactiveTabsListMock.Object);
+            _autoMocker
+                .Setup<IFilesOperationsMediator, IFilesPanelViewModel>(m => m.InactiveFilesPanelViewModel)
+                .Returns(inactivePanelMock.Object);
+
+            var activeTabsListMock = new Mock<ITabsListViewModel>();
+            activeTabsListMock
+                .Setup(m => m.InsertBeforeTab(tabFromOppositePanel, secondTabMock.Object))
+                .Verifiable();
+            var activePanelMock = new Mock<IFilesPanelViewModel>();
+            activePanelMock
+                .Setup(m => m.TabsListViewModel)
+                .Returns(activeTabsListMock.Object);
+            _autoMocker
+                .Setup<IFilesOperationsMediator, IFilesPanelViewModel>(m => m.ActiveFilesPanelViewModel)
+                .Returns(activePanelMock.Object);
+
+            secondTabMock.Raise(m => m.MoveRequested += null, args);
+
+            Assert.Equal(2, tabsListViewModel.Tabs.Count);
+
+            inactiveTabsListMock
+                .Verify(m => m.InsertBeforeTab(tabFromOppositePanel, secondTabMock.Object),
+                    Times.Exactly(inactivePanelCallsCount));
+            activeTabsListMock
+                .Verify(m => m.InsertBeforeTab(tabFromOppositePanel, secondTabMock.Object),
+                    Times.Exactly(activePanelCallsCount));
         }
 
         [Theory]

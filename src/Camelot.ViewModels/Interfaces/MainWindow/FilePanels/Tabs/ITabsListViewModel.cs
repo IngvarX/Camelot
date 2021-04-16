@@ -16,7 +16,7 @@ namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs
 
         ICommand SelectTabToTheRightCommand { get; }
 
-        public ICommand ReopenClosedTabCommand { get; }
+        ICommand ReopenClosedTabCommand { get; }
 
         void CreateNewTab(string directory);
 
