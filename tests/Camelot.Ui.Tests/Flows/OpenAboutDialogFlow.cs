@@ -2,9 +2,10 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.VisualTree;
 using Camelot.Ui.Tests.Common;
+using Camelot.Ui.Tests.Conditions;
+using Camelot.Ui.Tests.Steps;
 using Camelot.Views.Dialogs;
 using Xunit;
 
@@ -20,26 +21,20 @@ namespace Camelot.Ui.Tests.Flows
             var app = AvaloniaApp.GetApp();
             var window = AvaloniaApp.GetMainWindow();
 
-            await Task.Delay(100);
+            await FocusFilePanelStep.FocusFilePanelAsync(window);
 
-            Keyboard.PressKey(window, Key.Tab);
-            Keyboard.PressKey(window, Key.Down);
-            Keyboard.PressKey(window, Key.F1);
-
-            await Task.Delay(100);
+            OpenAboutDialogStep.OpenAboutDialog(window);
+            await DialogOpenedCondition.CheckIfDialogIsOpenedAsync<AboutDialog>(app);
 
             _dialog = app
                 .Windows
                 .OfType<AboutDialog>()
-                .SingleOrDefault();
-            Assert.NotNull(_dialog);
-
-            await Task.Delay(100);
+                .Single();
 
             var githubButton = _dialog.GetVisualDescendants().OfType<Button>().SingleOrDefault();
             Assert.NotNull(githubButton);
             Assert.True(githubButton.IsDefault);
-            Assert.True(githubButton.Command.CanExecute(null));
+            Assert.True(githubButton.IsEnabled);
         }
 
         public void Dispose() => _dialog?.Close();

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Avalonia.Input;
 using Avalonia.VisualTree;
 using Camelot.Ui.Tests.Common;
+using Camelot.Ui.Tests.Steps;
 using Camelot.Views.Main.Controls.Tabs;
 using Xunit;
 
@@ -15,33 +16,28 @@ namespace Camelot.Ui.Tests.Flows
         {
             var window = AvaloniaApp.GetMainWindow();
 
-            await Task.Delay(100);
-
-            Keyboard.PressKey(window, Key.Tab);
-            Keyboard.PressKey(window, Key.Down);
+            await FocusFilePanelStep.FocusFilePanelAsync(window);
 
             var initialCount = GetTabsCount(window);
 
-            Keyboard.PressKey(window, Key.T, RawInputModifiers.Control | RawInputModifiers.Shift);
-
             for (var i = 0; i < 2; i++)
             {
-                Keyboard.PressKey(window, Key.T, RawInputModifiers.Control);
+                CreateNewTabStep.CreateNewTab(window);
                 var isNewTabOpened = await WaitService.WaitForConditionAsync(() => initialCount + 1 == GetTabsCount(window));
                 Assert.True(isNewTabOpened);
 
-                Keyboard.PressKey(window, Key.W, RawInputModifiers.Control);
+                CloseCurrentTabStep.CloseCurrentTab(window);
                 var isTabClosed = await WaitService.WaitForConditionAsync(() => initialCount == GetTabsCount(window));
                 Assert.True(isTabClosed);
 
                 Keyboard.PressKey(window, Key.Tab);
             }
 
-            Keyboard.PressKey(window, Key.T, RawInputModifiers.Control | RawInputModifiers.Shift);
+            ReopenClosedTabStep.ReopenClosedTab(window);
             var isTabReopened = await WaitService.WaitForConditionAsync(() => initialCount + 1 == GetTabsCount(window));
             Assert.True(isTabReopened);
 
-            Keyboard.PressKey(window, Key.W, RawInputModifiers.Control);
+            CloseCurrentTabStep.CloseCurrentTab(window);
         }
 
         private static int GetTabsCount(IVisual window) =>

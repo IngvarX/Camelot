@@ -2,10 +2,11 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.VisualTree;
 using Camelot.Ui.Tests.Common;
+using Camelot.Ui.Tests.Conditions;
 using Camelot.Ui.Tests.Extensions;
+using Camelot.Ui.Tests.Steps;
 using Camelot.Views.Dialogs;
 using Xunit;
 
@@ -21,19 +22,16 @@ namespace Camelot.Ui.Tests.Flows
             var app = AvaloniaApp.GetApp();
             var window = AvaloniaApp.GetMainWindow();
 
-            await Task.Delay(100);
+            await FocusFilePanelStep.FocusFilePanelAsync(window);
 
-            Keyboard.PressKey(window, Key.Tab);
-            Keyboard.PressKey(window, Key.Down);
-            Keyboard.PressKey(window, Key.F7);
-
-            await Task.Delay(100);
+            OpenCreateDirectoryDialogStep.OpenCreateDirectoryDialog(window);
+            var isDialogOpened = await DialogOpenedCondition.CheckIfDialogIsOpenedAsync<CreateDirectoryDialog>(app);
+            Assert.True(isDialogOpened);
 
             _dialog = app
                 .Windows
                 .OfType<CreateDirectoryDialog>()
-                .SingleOrDefault();
-            Assert.NotNull(_dialog);
+                .Single();
 
             var buttons = _dialog
                 .GetVisualDescendants()
@@ -56,9 +54,7 @@ namespace Camelot.Ui.Tests.Flows
 
             directoryNameTextBox.SendText("DirectoryName");
 
-            await Task.Delay(100);
-
-            Assert.True(createButton.Command.CanExecute(null));
+            await WaitService.WaitForConditionAsync(() => createButton.Command.CanExecute(null));
 
             var closeButton = buttons.SingleOrDefault(b => b.Classes.Contains("transparentDialogButton"));
             Assert.NotNull(closeButton);
@@ -67,13 +63,8 @@ namespace Camelot.Ui.Tests.Flows
 
             closeButton.Command.Execute(null);
 
-            await Task.Delay(100);
-
-            _dialog = app
-                .Windows
-                .OfType<CreateDirectoryDialog>()
-                .SingleOrDefault();
-            Assert.Null(_dialog);
+            var isDialogClosed = await DialogClosedCondition.CheckIfDialogIsClosedAsync<CreateDirectoryDialog>(app);
+            Assert.True(isDialogClosed);
         }
 
         public void Dispose() => _dialog?.Close();

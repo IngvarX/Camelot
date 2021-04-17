@@ -6,7 +6,9 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.VisualTree;
 using Camelot.Ui.Tests.Common;
+using Camelot.Ui.Tests.Conditions;
 using Camelot.Ui.Tests.Extensions;
+using Camelot.Ui.Tests.Steps;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Nodes;
 using Camelot.Views.Dialogs;
@@ -30,13 +32,11 @@ namespace Camelot.Ui.Tests.Flows
             var app = AvaloniaApp.GetApp();
             var window = AvaloniaApp.GetMainWindow();
 
-            await Task.Delay(100);
+            await FocusFilePanelStep.FocusFilePanelAsync(window);
 
-            Keyboard.PressKey(window, Key.Tab);
-            Keyboard.PressKey(window, Key.Down);
-            Keyboard.PressKey(window, Key.F7);
-
-            await Task.Delay(100);
+            OpenCreateDirectoryDialogStep.OpenCreateDirectoryDialog(window);
+            var isDialogOpened = await DialogOpenedCondition.CheckIfDialogIsOpenedAsync<CreateDirectoryDialog>(app);
+            Assert.True(isDialogOpened);
 
             _createDirectoryDialog = app
                 .Windows
@@ -50,13 +50,8 @@ namespace Camelot.Ui.Tests.Flows
             directoryNameTextBox.SendText(DirectoryName);
             Keyboard.PressKey(window, Key.Enter);
 
-            await Task.Delay(100);
-
-            _createDirectoryDialog = app
-                .Windows
-                .OfType<CreateDirectoryDialog>()
-                .SingleOrDefault();
-            Assert.Null(_createDirectoryDialog);
+            var isDialogClosed = await DialogClosedCondition.CheckIfDialogIsClosedAsync<CreateDirectoryDialog>(app);
+            Assert.True(isDialogClosed);
 
             var filesPanel = window
                 .GetVisualDescendants()
@@ -64,7 +59,7 @@ namespace Camelot.Ui.Tests.Flows
                 .SingleOrDefault(CheckIfActive);
             Assert.NotNull(filesPanel);
 
-            Keyboard.PressKey(window, Key.F, RawInputModifiers.Control);
+            ToggleSearchPanelStep.ToggleSearchPanelVisibility(window);
 
             await Task.Delay(100);
 

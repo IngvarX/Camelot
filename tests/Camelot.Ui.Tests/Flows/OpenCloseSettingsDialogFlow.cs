@@ -2,9 +2,10 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.VisualTree;
 using Camelot.Ui.Tests.Common;
+using Camelot.Ui.Tests.Conditions;
+using Camelot.Ui.Tests.Steps;
 using Camelot.Views.Dialogs;
 using Xunit;
 
@@ -20,20 +21,14 @@ namespace Camelot.Ui.Tests.Flows
             var app = AvaloniaApp.GetApp();
             var window = AvaloniaApp.GetMainWindow();
 
-            await Task.Delay(100);
-
-            Keyboard.PressKey(window, Key.Tab);
-            Keyboard.PressKey(window, Key.Down);
-            Keyboard.PressKey(window, Key.F2);
+            await FocusFilePanelStep.FocusFilePanelAsync(window);
+            OpenSettingsDialogStep.OpenSettingsDialog(window);
+            await DialogOpenedCondition.CheckIfDialogIsOpenedAsync<SettingsDialog>(app);
 
             _dialog = app
                 .Windows
                 .OfType<SettingsDialog>()
-                .SingleOrDefault();
-            Assert.NotNull(_dialog);
-
-            await Task.Delay(100);
-
+                .Single();
             var closeButton = _dialog
                 .GetVisualDescendants()
                 .OfType<Button>()
@@ -43,13 +38,8 @@ namespace Camelot.Ui.Tests.Flows
             Assert.True(closeButton.Command.CanExecute(null));
             closeButton.Command.Execute(null);
 
-            await Task.Delay(100);
-
-            _dialog = app
-                .Windows
-                .OfType<SettingsDialog>()
-                .SingleOrDefault();
-            Assert.Null(_dialog);
+            var isClosed = await DialogClosedCondition.CheckIfDialogIsClosedAsync<SettingsDialog>(app);
+            Assert.True(isClosed);
         }
 
         public void Dispose() => _dialog?.Close();
