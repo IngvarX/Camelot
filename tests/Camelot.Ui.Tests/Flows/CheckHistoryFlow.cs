@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.VisualTree;
-using Camelot.Ui.Tests.Extensions;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.Views.Main;
@@ -13,11 +12,11 @@ using Xunit;
 
 namespace Camelot.Ui.Tests.Flows
 {
-    public class GoToParentDirectoryFlow : IDisposable
+    public class CheckHistoryFlow : IDisposable
     {
         private string _directoryFullPath;
 
-        [Fact(DisplayName = "Go to parent directory and back using directory selector")]
+        [Fact(DisplayName = "Go to parent directory and back using history")]
         public async Task GoToParentDirectoryAndBackTest()
         {
             var window = AvaloniaApp.GetMainWindow();
@@ -46,19 +45,18 @@ namespace Camelot.Ui.Tests.Flows
                 CheckIfParentDirectoryWasOpened(viewModel, _directoryFullPath));
             Assert.True(parentDirectoryWasOpened);
 
-            var directoryName = Path.GetFileNameWithoutExtension(_directoryFullPath);
-            var directoryTextBox = filesPanel
-                .GetVisualDescendants()
-                .OfType<TextBox>()
-                .SingleOrDefault(t => t.Name == "DirectoryTextBox");
-            Assert.NotNull(directoryTextBox);
-
-            directoryTextBox.CaretIndex = directoryTextBox.Text.Length;
-            directoryTextBox.SendText(Path.DirectorySeparatorChar + directoryName);
-
+            Keyboard.PressKey(window, Key.Left);
             var childDirectoryWasOpened = await WaitService.WaitForConditionAsync(() =>
-                viewModel.CurrentDirectory == _directoryFullPath);
+                CheckIfDirectoryWasOpened(viewModel, _directoryFullPath));
             Assert.True(childDirectoryWasOpened);
+
+            for (var i = 0; i < 10; i++)
+            {
+                Keyboard.PressKey(window, Key.Right);
+                var parentDirectoryWasReopened = await WaitService.WaitForConditionAsync(() =>
+                    CheckIfParentDirectoryWasOpened(viewModel, _directoryFullPath));
+                Assert.True(parentDirectoryWasReopened);
+            }
         }
 
         public void Dispose()
@@ -92,6 +90,9 @@ namespace Camelot.Ui.Tests.Flows
                 .Single();
 
         private static bool CheckIfParentDirectoryWasOpened(IFilesPanelViewModel viewModel, string directoryPath) =>
-            Directory.GetParent(directoryPath).FullName == viewModel.CurrentDirectory;
+            CheckIfDirectoryWasOpened(viewModel, Directory.GetParent(directoryPath).FullName);
+
+        private static bool CheckIfDirectoryWasOpened(IFilesPanelViewModel viewModel, string directoryPath) =>
+            viewModel.CurrentDirectory == directoryPath;
     }
 }

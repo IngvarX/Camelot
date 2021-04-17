@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.VisualTree;
+using Camelot.Ui.Tests.Extensions;
 using Camelot.Views.Dialogs;
 using Xunit;
 
@@ -52,12 +53,7 @@ namespace Camelot.Ui.Tests.Flows
             Assert.True(string.IsNullOrEmpty(directoryNameTextBox.Text));
             Assert.True(directoryNameTextBox.IsFocused);
 
-            directoryNameTextBox.RaiseEvent(new TextInputEventArgs
-            {
-                Device = KeyboardDevice.Instance,
-                Text = "DirectoryName",
-                RoutedEvent = InputElement.TextInputEvent
-            });
+            directoryNameTextBox.SendText("DirectoryName");
 
             await Task.Delay(100);
 
