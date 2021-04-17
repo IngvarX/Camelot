@@ -4,12 +4,13 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
+using Camelot.Ui.Tests.Common;
 using Xunit;
 using Xunit.Abstractions;
 using Xunit.Sdk;
 
 [assembly: TestFramework("Camelot.Ui.Tests.AvaloniaUiTestFramework", "Camelot.Ui.Tests")]
-[assembly:CollectionBehavior(CollectionBehavior.CollectionPerAssembly, DisableTestParallelization = false, MaxParallelThreads = 1)]
+[assembly: CollectionBehavior(CollectionBehavior.CollectionPerAssembly, DisableTestParallelization = false, MaxParallelThreads = 1)]
 namespace Camelot.Ui.Tests
 {
     public class AvaloniaUiTestFramework : XunitTestFramework

@@ -1,7 +1,7 @@
 using Avalonia.Input;
 using Avalonia.Input.Raw;
 
-namespace Camelot.Ui.Tests
+namespace Camelot.Ui.Tests.Common
 {
     public static class Keyboard
     {

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.VisualTree;
+using Camelot.Ui.Tests.Common;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.Views.Main;

@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace Camelot.Ui.Tests
+namespace Camelot.Ui.Tests.Common
 {
     public static class WaitService
     {

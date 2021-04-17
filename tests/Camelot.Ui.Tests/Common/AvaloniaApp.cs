@@ -8,7 +8,7 @@ using Camelot.DependencyInjection;
 using Camelot.Views;
 using Splat;
 
-namespace Camelot.Ui.Tests
+namespace Camelot.Ui.Tests.Common
 {
     public static class AvaloniaApp
     {

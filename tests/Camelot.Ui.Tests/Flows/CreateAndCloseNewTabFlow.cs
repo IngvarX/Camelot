@@ -2,6 +2,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Input;
 using Avalonia.VisualTree;
+using Camelot.Ui.Tests.Common;
 using Camelot.Views.Main.Controls.Tabs;
 using Xunit;
 

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.VisualTree;
+using Camelot.Ui.Tests.Common;
 using Camelot.Ui.Tests.Extensions;
 using Camelot.Views.Dialogs;
 using Xunit;
