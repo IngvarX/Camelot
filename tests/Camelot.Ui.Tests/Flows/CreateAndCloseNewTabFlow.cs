@@ -12,7 +12,7 @@ namespace Camelot.Ui.Tests.Flows
     public class CreateAndCloseNewTabFlow
     {
         [Fact(DisplayName = "Create and close tab")]
-        public async Task TestAboutDialog()
+        public async Task CreateAndCloseTabTest()
         {
             var window = AvaloniaApp.GetMainWindow();
 

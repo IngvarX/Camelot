@@ -103,5 +103,25 @@ namespace Camelot.ViewModels.Tests
 
             filePanelViewModelMock.Verify(m => m.Activate(), Times.Once);
         }
+
+        [Fact]
+        public void TestFocusDirectorySelectorCommand()
+        {
+            var directorySelectorMock = new Mock<IDirectorySelectorViewModel>();
+            var filePanelViewModelMock = new Mock<IFilesPanelViewModel>();
+            filePanelViewModelMock
+                .Setup(m => m.DirectorySelectorViewModel)
+                .Returns(directorySelectorMock.Object);
+            _autoMocker
+                .Setup<IFilesOperationsMediator, IFilesPanelViewModel>(m => m.ActiveFilesPanelViewModel)
+                .Returns(filePanelViewModelMock.Object);
+
+            var mainWindowViewModel = _autoMocker.CreateInstance<MainWindowViewModel>();
+
+            Assert.True(mainWindowViewModel.FocusDirectorySelectorCommand.CanExecute(null));
+            mainWindowViewModel.FocusDirectorySelectorCommand.Execute(null);
+
+            directorySelectorMock.Verify(m => m.Activate(), Times.Once);
+        }
     }
 }

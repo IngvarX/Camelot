@@ -139,5 +139,18 @@ namespace Camelot.ViewModels.Tests.FilePanels
             Assert.Equal(shouldShowSuggestions, viewModel.ShouldShowSuggestions);
             Assert.Equal(expectedSuggestionsCount, viewModel.SuggestedPaths.Count());
         }
+
+        [Fact]
+        public void TestActivation()
+        {
+            var viewModel = _autoMocker.CreateInstance<DirectorySelectorViewModel>();
+
+            var isCallbackCalled = false;
+            viewModel.ActivationRequested += (sender, args) => isCallbackCalled = true;
+
+            viewModel.Activate();
+
+            Assert.True(isCallbackCalled);
+        }
     }
 }
