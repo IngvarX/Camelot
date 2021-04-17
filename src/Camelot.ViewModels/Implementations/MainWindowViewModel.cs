@@ -40,6 +40,8 @@ namespace Camelot.ViewModels.Implementations
 
         public ICommand SwitchPanelCommand { get; }
 
+        public ICommand FocusDirectorySelectorCommand { get; }
+
         public MainWindowViewModel(
             IFilesOperationsMediator filesOperationsMediator,
             IOperationsViewModel operationsViewModel,
@@ -64,6 +66,7 @@ namespace Camelot.ViewModels.Implementations
 
             SearchCommand = ReactiveCommand.Create(Search);
             SwitchPanelCommand = ReactiveCommand.Create(SwitchPanel);
+            FocusDirectorySelectorCommand = ReactiveCommand.Create(FocusDirectorySelector);
 
             filesOperationsMediator.Register(leftFilesPanelViewModel, rightFilesPanelViewModel);
             filesOperationsMediator.ActiveFilesPanelChanged += FilesOperationsMediatorOnActiveFilesPanelChanged;
@@ -72,6 +75,13 @@ namespace Camelot.ViewModels.Implementations
         private void Search() => _filesOperationsMediator.ToggleSearchPanelVisibility();
 
         private void SwitchPanel() => _filesOperationsMediator.InactiveFilesPanelViewModel.Activate();
+
+        private void FocusDirectorySelector()
+        {
+            var directorySelector = _filesOperationsMediator.ActiveFilesPanelViewModel.DirectorySelectorViewModel;
+
+            directorySelector.Activate();
+        }
 
         private void FilesOperationsMediatorOnActiveFilesPanelChanged(object sender, EventArgs e) =>
             this.RaisePropertyChanged(nameof(ActiveTabsListViewModel));

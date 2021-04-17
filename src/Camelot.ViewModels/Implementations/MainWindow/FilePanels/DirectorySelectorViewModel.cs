@@ -63,6 +63,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         [Reactive]
         public bool IsFavouriteDirectory { get; set; }
 
+        public event EventHandler<EventArgs> ActivationRequested;
+
         public IEnumerable<ISuggestedPathViewModel> SuggestedPaths => _suggestedPaths;
 
         public ICommand ToggleFavouriteStatusCommand { get; }
@@ -86,6 +88,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
             SubscribeToEvents();
         }
+
+        public void Activate() => ActivationRequested.Raise(this, EventArgs.Empty);
 
         private void SubscribeToEvents()
         {

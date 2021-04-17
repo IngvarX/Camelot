@@ -117,6 +117,8 @@
         <KeyBinding Gesture="Meta+W" Command="{Binding ActiveTabsListViewModel.CloseCurrentTabCommand}" />
         <KeyBinding Gesture="Ctrl+F" Command="{Binding SearchCommand}" />
         <KeyBinding Gesture="Meta+F" Command="{Binding SearchCommand}" />
+        <KeyBinding Gesture="Ctrl+L" Command="{Binding FocusDirectorySelectorCommand}" />
+        <KeyBinding Gesture="Meta+L" Command="{Binding FocusDirectorySelectorCommand}" />
         <KeyBinding Gesture="Ctrl+Tab" Command="{Binding ActiveTabsListViewModel.SelectTabToTheRightCommand}" />
         <KeyBinding Gesture="Ctrl+PageDown" Command="{Binding ActiveTabsListViewModel.SelectTabToTheRightCommand}" />
         <KeyBinding Gesture="Ctrl+Shift+Tab" Command="{Binding ActiveTabsListViewModel.SelectTabToTheLeftCommand}" />

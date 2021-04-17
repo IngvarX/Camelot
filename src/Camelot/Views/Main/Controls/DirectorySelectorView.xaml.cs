@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
@@ -20,9 +21,22 @@ namespace Camelot.Views.Main.Controls
         public DirectorySelectorView()
         {
             InitializeComponent();
+            DataContextChanged += OnDataContextChanged;
         }
 
         private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
+
+        private void OnDataContextChanged(object sender, EventArgs e)
+        {
+            DataContextChanged -= OnDataContextChanged;
+            ViewModel.ActivationRequested += ViewModelOnActivationRequested;
+        }
+
+        private void ViewModelOnActivationRequested(object sender, EventArgs e)
+        {
+            DirectoryTextBox.CaretIndex = DirectoryTextBox.Text.Length;
+            DirectoryTextBox.Focus();
+        }
 
         private void SuggestionViewOnTapped(object sender, RoutedEventArgs e) =>
             SelectDirectory(((IDataContextProvider) sender).DataContext);

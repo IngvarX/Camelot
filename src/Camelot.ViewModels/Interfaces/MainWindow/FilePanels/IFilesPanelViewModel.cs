@@ -16,6 +16,8 @@ namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels
 
         IOperationsViewModel OperationsViewModel { get; }
 
+        IDirectorySelectorViewModel DirectorySelectorViewModel { get; }
+
         IDragAndDropOperationsMediator DragAndDropOperationsMediator { get; }
 
         IList<IFileSystemNodeViewModel> SelectedFileSystemNodes { get; }
