@@ -54,7 +54,9 @@ namespace Camelot.DependencyInjection
             services.RegisterLazySingleton<IFilesOperationsMediator>(() => new FilesOperationsMediator(
                 resolver.GetRequiredService<IDirectoryService>()
             ));
-            services.Register<IFilePanelDirectoryObserver>(() => new FilePanelDirectoryObserver());
+            services.Register<IFilePanelDirectoryObserver>(() => new FilePanelDirectoryObserver(
+                resolver.GetRequiredService<IPathService>()
+            ));
             services.RegisterLazySingleton<IFileSystemNodeFacade>(() => new FileSystemNodeFacade(
                 resolver.GetRequiredService<IOperationsService>(),
                 resolver.GetRequiredService<IClipboardOperationsService>(),
