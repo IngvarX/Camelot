@@ -22,6 +22,10 @@ namespace Camelot.ViewModels.Tests.Services
         [Fact]
         public void TestProperty()
         {
+            _autoMocker
+                .Setup<IPathService, string>(m => m.RightTrimPathSeparators(It.IsAny<string>()))
+                .Returns<string>(s => s);
+
             var observer = _autoMocker.CreateInstance<FilePanelDirectoryObserver>();
 
             observer.CurrentDirectory = Directory;
