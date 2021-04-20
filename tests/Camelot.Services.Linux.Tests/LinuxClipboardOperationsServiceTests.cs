@@ -3,20 +3,19 @@ using System.Threading.Tasks;
 using Camelot.Avalonia.Interfaces;
 using Camelot.Services.Abstractions.Operations;
 using Camelot.Services.Environment.Interfaces;
-using Camelot.Services.Linux;
 using Moq;
 using Moq.AutoMock;
 using Xunit;
 
-namespace Camelot.Services.Tests
+namespace Camelot.Services.Linux.Tests
 {
-    public class ClipboardOperationsServiceTests
+    public class LinuxClipboardOperationsServiceTests
     {
         private const string Directory = "Dir";
 
         private readonly AutoMocker _autoMocker;
 
-        public ClipboardOperationsServiceTests()
+        public LinuxClipboardOperationsServiceTests()
         {
             _autoMocker = new AutoMocker();
         }

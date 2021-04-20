@@ -13,7 +13,7 @@ namespace Camelot.Avalonia.Implementations
 
         public Task<string> GetTextAsync() => AvaloniaClipboard.GetTextAsync();
 
-        public async Task<List<string>> GetFilesAsync()
+        public async Task<IReadOnlyList<string>> GetFilesAsync()
         {
             var data = await AvaloniaClipboard.GetDataAsync(DataFormats.FileNames);
 

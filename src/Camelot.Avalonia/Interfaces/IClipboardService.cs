@@ -7,7 +7,7 @@ namespace Camelot.Avalonia.Interfaces
     {
         Task<string> GetTextAsync();
 
-        Task<List<string>> GetFilesAsync();
+        Task<IReadOnlyList<string>> GetFilesAsync();
 
         Task SetTextAsync(string text);
 
