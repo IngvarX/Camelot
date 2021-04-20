@@ -142,9 +142,11 @@
             <favouriteDirectories:FavouriteDirectoriesListView Grid.Column="1" DataContext="{Binding FavouriteDirectoriesListViewModel}" />
         </Grid>
 
-        <Grid Grid.Row="2" ColumnDefinitions="*,*">
+        <Grid Grid.Row="2" ColumnDefinitions="*,Auto,*">
             <main:FilesPanelView DataContext="{Binding LeftFilesPanelViewModel}" />
-            <main:FilesPanelView Grid.Column="1" DataContext="{Binding RightFilesPanelViewModel}" />
+            <GridSplitter Grid.Column="1" ShowsPreview="False" Width="2"
+                          HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+            <main:FilesPanelView Grid.Column="2" DataContext="{Binding RightFilesPanelViewModel}" />
         </Grid>
 
         <main:OperationsView Grid.Row="3" DataContext="{Binding OperationsViewModel}" />

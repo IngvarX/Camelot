@@ -116,6 +116,10 @@
         <Setter Property="Background" Value="Transparent" />
     </Style>
 
+    <Style Selector="GridSplitter">
+        <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
+    </Style>
+    
     <Style Selector="MenuItem">
         <Setter Property="FontSize" Value="16" />
         <Setter Property="BorderThickness" Value="0" />
@@ -192,5 +196,4 @@
     <Style Selector="Grid.defaultBackgroundColorGrid">
         <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
     </Style>
-
 </Styles>
