@@ -6,7 +6,7 @@ namespace Camelot.DependencyInjection
     {
         public static void Register(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
-            EnvironmentServicesBootstrapper.RegisterEnvironmentServices(services);
+            EnvironmentServicesBootstrapper.RegisterEnvironmentServices(services, resolver);
             ConfigurationBootstrapper.RegisterConfiguration(services, resolver);
             LoggingBootstrapper.RegisterLogging(services, resolver);
             AvaloniaServicesBootstrapper.RegisterAvaloniaServices(services);

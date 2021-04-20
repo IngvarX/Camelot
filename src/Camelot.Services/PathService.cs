@@ -24,8 +24,7 @@ namespace Camelot.Services
 
             var commonPrefix = new string(
                 paths
-                    .First()
-                    .Substring(0, paths.Min(s => s.Length))
+                    .First()[..paths.Min(s => s.Length)]
                     .TakeWhile((c, i) => paths.All(s => s[i] == c)).ToArray()
             );
 
@@ -55,7 +54,7 @@ namespace Camelot.Services
 
             var lastDot = path.LastIndexOf(".", StringComparison.InvariantCulture);
 
-            return path.Substring(0, lastDot);
+            return path[..lastDot];
         }
 
         public string GetFileName(string path)
@@ -76,12 +75,12 @@ namespace Camelot.Services
 
                 var lastDot = path.LastIndexOf(".", StringComparison.InvariantCulture);
 
-                return path.Substring(lastDot + 1);
+                return path[(lastDot + 1)..];
             }
 
             var extension = _environmentPathService.GetExtension(path);
 
-            return extension.StartsWith(".") ? extension.Substring(1) : extension;
+            return extension.StartsWith(".") ? extension[1..] : extension;
         }
 
         public string RightTrimPathSeparators(string path) => path == "/" ? path : path.TrimEnd('/').TrimEnd('\\');
