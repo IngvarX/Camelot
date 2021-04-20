@@ -22,7 +22,7 @@ namespace Camelot.ViewModels.Factories.Implementations
         public ISuggestedPathViewModel Create(string searchText, SuggestionModel model)
         {
             var root = _pathService.GetParentDirectory(searchText);
-            var relativePath = _pathService.GetRelativePath(root, model.FullPath);
+            var relativePath = GetRelativePath(root, model.FullPath);
             var text = _pathService.LeftTrimPathSeparators(relativePath);
             var type = CreateFrom(model.Type);
 
@@ -36,5 +36,8 @@ namespace Camelot.ViewModels.Factories.Implementations
                 SuggestionType.FavouriteDirectory => SuggestedPathType.FavouriteDirectory,
                 _ => throw new ArgumentOutOfRangeException(nameof(modelType), modelType, null)
             };
+
+        private string GetRelativePath(string relativeTo, string fullPath) =>
+            string.IsNullOrEmpty(relativeTo) ? fullPath : _pathService.GetRelativePath(relativeTo, fullPath);
     }
 }

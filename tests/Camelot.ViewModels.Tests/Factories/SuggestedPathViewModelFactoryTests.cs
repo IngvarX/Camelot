@@ -22,6 +22,7 @@ namespace Camelot.ViewModels.Tests.Factories
         [Theory]
         [InlineData("/home/camel", "/home/camelot", SuggestedPathType.Directory, "camelot", "/home", SuggestionType.Directory)]
         [InlineData("/home/camel", "/home/camelot", SuggestedPathType.FavouriteDirectory, "camelot", "/home", SuggestionType.FavouriteDirectory)]
+        [InlineData("/home/camel", "/home/camelot", SuggestedPathType.FavouriteDirectory, null, "/home", SuggestionType.FavouriteDirectory)]
         public void TestCreate(string searchText, string fullPath, SuggestedPathType suggestedPathType,
             string relativePath, string parentDir, SuggestionType suggestionType)
         {
