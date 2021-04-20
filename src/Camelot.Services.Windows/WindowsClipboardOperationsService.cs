@@ -5,14 +5,14 @@ using Camelot.Avalonia.Interfaces;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Operations;
 
-namespace Camelot.Services.AllPlatforms
+namespace Camelot.Services.Windows
 {
-    public class FilesClipboardOperationsService : IClipboardOperationsService
+    public class WindowsClipboardOperationsService : IClipboardOperationsService
     {
         private readonly IClipboardService _clipboardService;
         private readonly IOperationsService _operationsService;
 
-        public FilesClipboardOperationsService(
+        public WindowsClipboardOperationsService(
             IClipboardService clipboardService,
             IOperationsService operationsService)
         {

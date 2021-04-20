@@ -7,7 +7,7 @@ using Moq;
 using Moq.AutoMock;
 using Xunit;
 
-namespace Camelot.Services.AllPlatforms.Tests
+namespace Camelot.Services.Windows.Tests
 {
     public class FilesClipboardOperationsServiceTests
     {
@@ -29,7 +29,7 @@ namespace Camelot.Services.AllPlatforms.Tests
                     l => l.Count == 2 && l.Contains(Directory) && l.Contains(File))))
                 .Verifiable();
 
-            var clipboardOperationsService = _autoMocker.CreateInstance<FilesClipboardOperationsService>();
+            var clipboardOperationsService = _autoMocker.CreateInstance<WindowsClipboardOperationsService>();
 
             await clipboardOperationsService.CopyFilesAsync(new[] {Directory, File});
 
@@ -49,7 +49,7 @@ namespace Camelot.Services.AllPlatforms.Tests
                 .Setup<IOperationsService>(m => m.CopyAsync(new[] {File}, Directory))
                 .Verifiable();
 
-            var clipboardOperationsService = _autoMocker.CreateInstance<FilesClipboardOperationsService>();
+            var clipboardOperationsService = _autoMocker.CreateInstance<WindowsClipboardOperationsService>();
 
             await clipboardOperationsService.PasteFilesAsync(Directory);
 
@@ -67,7 +67,7 @@ namespace Camelot.Services.AllPlatforms.Tests
                 .Setup<IClipboardService, Task<IReadOnlyList<string>>>(m => m.GetFilesAsync())
                 .ReturnsAsync(files);
 
-            var clipboardOperationsService = _autoMocker.CreateInstance<FilesClipboardOperationsService>();
+            var clipboardOperationsService = _autoMocker.CreateInstance<WindowsClipboardOperationsService>();
 
             await clipboardOperationsService.PasteFilesAsync(Directory);
 

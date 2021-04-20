@@ -196,7 +196,7 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IEnvironmentService>(),
                 resolver.GetRequiredService<LinuxUnmountedDrivesConfiguration>()
             ));
-            services.RegisterLazySingleton<IClipboardOperationsService>(() => new LinuxClipboardOperationsService(
+            services.RegisterLazySingleton<IClipboardOperationsService>(() => new UnixClipboardOperationsService(
                 resolver.GetRequiredService<IClipboardService>(),
                 resolver.GetRequiredService<IOperationsService>(),
                 resolver.GetRequiredService<IEnvironmentService>()
@@ -263,9 +263,10 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IEnvironmentService>(),
                 resolver.GetRequiredService<MacUnmountedDrivesConfiguration>()
             ));
-            services.RegisterLazySingleton<IClipboardOperationsService>(() => new FilesClipboardOperationsService(
+            services.RegisterLazySingleton<IClipboardOperationsService>(() => new UnixClipboardOperationsService(
                 resolver.GetRequiredService<IClipboardService>(),
-                resolver.GetRequiredService<IOperationsService>()
+                resolver.GetRequiredService<IOperationsService>(),
+                resolver.GetRequiredService<IEnvironmentService>()
             ));
             services.RegisterLazySingleton<ITrashCanService>(() => new MacTrashCanService(
                 resolver.GetRequiredService<IMountedDriveService>(),
@@ -312,7 +313,7 @@ namespace Camelot.DependencyInjection
             services.RegisterLazySingleton<IHomeDirectoryProvider>(() => new WindowsHomeDirectoryProvider(
                 resolver.GetRequiredService<IEnvironmentService>()
             ));
-            services.RegisterLazySingleton<IClipboardOperationsService>(() => new FilesClipboardOperationsService(
+            services.RegisterLazySingleton<IClipboardOperationsService>(() => new WindowsClipboardOperationsService(
                 resolver.GetRequiredService<IClipboardService>(),
                 resolver.GetRequiredService<IOperationsService>()
             ));
