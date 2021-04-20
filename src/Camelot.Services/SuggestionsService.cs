@@ -30,6 +30,7 @@ namespace Camelot.Services
             GetChildDirectories(substring)
                 .Concat(_favouriteDirectoriesService.FavouriteDirectories)
                 .Where(n => n.StartsWith(substring))
+                .Select(Preprocess)
                 .Distinct()
                 .Select(CreateFrom)
                 .OrderByDescending(m => m.Type)
@@ -46,6 +47,8 @@ namespace Camelot.Services
                     .GetChildDirectories(parentDirectory)
                     .Select(d => d.FullPath);
         }
+
+        private string Preprocess(string path) => _pathService.RightTrimPathSeparators(path);
 
         private SuggestionModel CreateFrom(string fullPath)
         {

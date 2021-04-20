@@ -4,6 +4,7 @@ using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Configuration;
+using Moq;
 using Moq.AutoMock;
 using Xunit;
 
@@ -13,6 +14,7 @@ namespace Camelot.Services.Tests
     {
         private const string Substring = "Dir";
         private const string Directory = "Directory";
+        private const string DirectoryWithSlash = "Directory/";
         private const string ChildDirectory = "ChildDirectory";
         private const string ParentDirectory = "ParentDirectory";
         private const string FavouriteDirectory = "DirectoryFavourite";
@@ -24,6 +26,9 @@ namespace Camelot.Services.Tests
         {
             _autoMocker = new AutoMocker();
             _autoMocker.Use(GetConfiguration());
+            _autoMocker
+                .Setup<IPathService, string>(m => m.RightTrimPathSeparators(It.IsAny<string>()))
+                .Returns<string>(s => s);
         }
 
         [Fact]
@@ -38,6 +43,40 @@ namespace Camelot.Services.Tests
             _autoMocker
                 .Setup<IDirectoryService, bool>(m => m.CheckIfExists(ParentDirectory))
                 .Returns(true);
+            _autoMocker
+                .Setup<IDirectoryService, IReadOnlyList<DirectoryModel>>(m =>
+                    m.GetChildDirectories(ParentDirectory, null))
+                .Returns(new[]
+                {
+                    new DirectoryModel
+                    {
+                        FullPath = Directory
+                    }
+                });
+
+            var service = _autoMocker.CreateInstance<SuggestionsService>();
+            var suggestions = service.GetSuggestions(Substring).ToArray();
+
+            Assert.NotEmpty(suggestions);
+            Assert.Single(suggestions);
+            Assert.Equal(Directory, suggestions.Single().FullPath);
+        }
+
+        [Fact]
+        public void TestDistinctAndTrimming()
+        {
+            _autoMocker
+                .Setup<IFavouriteDirectoriesService, IReadOnlyCollection<string>>(m => m.FavouriteDirectories)
+                .Returns(new HashSet<string> {DirectoryWithSlash});
+            _autoMocker
+                .Setup<IPathService, string>(m => m.GetParentDirectory(Substring))
+                .Returns(ParentDirectory);
+            _autoMocker
+                .Setup<IDirectoryService, bool>(m => m.CheckIfExists(ParentDirectory))
+                .Returns(true);
+            _autoMocker
+                .Setup<IPathService, string>(m => m.RightTrimPathSeparators(It.IsAny<string>()))
+                .Returns(Directory);
             _autoMocker
                 .Setup<IDirectoryService, IReadOnlyList<DirectoryModel>>(m =>
                     m.GetChildDirectories(ParentDirectory, null))
