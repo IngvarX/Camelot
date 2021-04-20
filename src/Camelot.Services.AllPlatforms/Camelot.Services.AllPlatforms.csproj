@@ -5,6 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Camelot.Avalonia\Camelot.Avalonia.csproj" />
       <ProjectReference Include="..\Camelot.DataAccess.Models\Camelot.DataAccess.Models.csproj" />
       <ProjectReference Include="..\Camelot.DataAccess\Camelot.DataAccess.csproj" />
       <ProjectReference Include="..\Camelot.Extensions\Camelot.Extensions.csproj" />

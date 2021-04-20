@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Camelot.Avalonia.Interfaces;
 using Camelot.Services.Abstractions.Operations;
 using Camelot.Services.Environment.Interfaces;
+using Camelot.Services.Linux;
 using Moq;
 using Moq.AutoMock;
 using Xunit;
@@ -32,7 +33,7 @@ namespace Camelot.Services.Tests
                 .Setup<IEnvironmentService, string>(m => m.NewLine)
                 .Returns(System.Environment.NewLine);
 
-            var clipboardOperationsService = _autoMocker.CreateInstance<ClipboardOperationsService>();
+            var clipboardOperationsService = _autoMocker.CreateInstance<LinuxClipboardOperationsService>();
 
             await clipboardOperationsService.CopyFilesAsync(new[] {sourceFilePath});
 
@@ -53,7 +54,7 @@ namespace Camelot.Services.Tests
                 .Setup<IOperationsService>(m => m.CopyAsync(new[] {sourceFilePath}, Directory))
                 .Verifiable();
 
-            var clipboardOperationsService = _autoMocker.CreateInstance<ClipboardOperationsService>();
+            var clipboardOperationsService = _autoMocker.CreateInstance<LinuxClipboardOperationsService>();
 
             await clipboardOperationsService.PasteFilesAsync(Directory);
 
@@ -73,7 +74,7 @@ namespace Camelot.Services.Tests
                 .Setup<IClipboardService, Task<string>>(m => m.GetTextAsync())
                 .ReturnsAsync(text);
 
-            var clipboardOperationsService = _autoMocker.CreateInstance<ClipboardOperationsService>();
+            var clipboardOperationsService = _autoMocker.CreateInstance<LinuxClipboardOperationsService>();
 
             await clipboardOperationsService.PasteFilesAsync(Directory);
 

@@ -6,9 +6,9 @@ using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Operations;
 using Camelot.Services.Environment.Interfaces;
 
-namespace Camelot.Services
+namespace Camelot.Services.Linux
 {
-    public class ClipboardOperationsService : IClipboardOperationsService
+    public class LinuxClipboardOperationsService : IClipboardOperationsService
     {
         private const string UrlPrefix = "file://";
 
@@ -16,7 +16,7 @@ namespace Camelot.Services
         private readonly IOperationsService _operationsService;
         private readonly IEnvironmentService _environmentService;
 
-        public ClipboardOperationsService(
+        public LinuxClipboardOperationsService(
             IClipboardService clipboardService,
             IOperationsService operationsService,
             IEnvironmentService environmentService)

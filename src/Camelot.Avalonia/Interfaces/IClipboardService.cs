@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Camelot.Avalonia.Interfaces
@@ -6,6 +7,10 @@ namespace Camelot.Avalonia.Interfaces
     {
         Task<string> GetTextAsync();
 
+        Task<List<string>> GetFilesAsync();
+
         Task SetTextAsync(string text);
+
+        Task SetFilesAsync(IReadOnlyList<string> files);
     }
 }

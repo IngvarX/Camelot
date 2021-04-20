@@ -147,11 +147,6 @@ namespace Camelot.DependencyInjection
             services.RegisterLazySingleton<ILanguageManager>(() => new LanguageManager(
                 resolver.GetRequiredService<LanguagesConfiguration>()
             ));
-            services.RegisterLazySingleton<IClipboardOperationsService>(() => new ClipboardOperationsService(
-                resolver.GetRequiredService<IClipboardService>(),
-                resolver.GetRequiredService<IOperationsService>(),
-                resolver.GetRequiredService<IEnvironmentService>()
-            ));
             services.RegisterLazySingleton<IOperationsStateService>(() => new OperationsStateService());
             services.RegisterLazySingleton<IFileNameGenerationService>(() => new FileNameGenerationService(
                 resolver.GetRequiredService<IFileService>(),
@@ -200,6 +195,11 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IProcessService>(),
                 resolver.GetRequiredService<IEnvironmentService>(),
                 resolver.GetRequiredService<LinuxUnmountedDrivesConfiguration>()
+            ));
+            services.RegisterLazySingleton<IClipboardOperationsService>(() => new LinuxClipboardOperationsService(
+                resolver.GetRequiredService<IClipboardService>(),
+                resolver.GetRequiredService<IOperationsService>(),
+                resolver.GetRequiredService<IEnvironmentService>()
             ));
             services.RegisterLazySingleton<ITrashCanService>(() => new LinuxTrashCanService(
                 resolver.GetRequiredService<IMountedDriveService>(),
@@ -263,6 +263,10 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IEnvironmentService>(),
                 resolver.GetRequiredService<MacUnmountedDrivesConfiguration>()
             ));
+            services.RegisterLazySingleton<IClipboardOperationsService>(() => new FilesClipboardOperationsService(
+                resolver.GetRequiredService<IClipboardService>(),
+                resolver.GetRequiredService<IOperationsService>()
+            ));
             services.RegisterLazySingleton<ITrashCanService>(() => new MacTrashCanService(
                 resolver.GetRequiredService<IMountedDriveService>(),
                 resolver.GetRequiredService<IOperationsService>(),
@@ -307,6 +311,10 @@ namespace Camelot.DependencyInjection
             services.RegisterLazySingleton<IWindowsTrashCanNodeNameGenerator>(() => new WindowsTrashCanNodeNameGenerator());
             services.RegisterLazySingleton<IHomeDirectoryProvider>(() => new WindowsHomeDirectoryProvider(
                 resolver.GetRequiredService<IEnvironmentService>()
+            ));
+            services.RegisterLazySingleton<IClipboardOperationsService>(() => new FilesClipboardOperationsService(
+                resolver.GetRequiredService<IClipboardService>(),
+                resolver.GetRequiredService<IOperationsService>()
             ));
             services.RegisterLazySingleton<IUnmountedDriveService>(() => new WindowsUnmountedDriveService());
             services.RegisterLazySingleton<ITrashCanService>(() => new WindowsTrashCanService(
