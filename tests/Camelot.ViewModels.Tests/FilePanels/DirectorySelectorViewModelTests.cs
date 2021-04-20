@@ -115,26 +115,28 @@ namespace Camelot.ViewModels.Tests.FilePanels
         }
 
         [Theory]
-        [InlineData(true, 0, false, 0)]
-        [InlineData(true, 1, false, 0)]
-        [InlineData(false, 0, false, 0)]
-        [InlineData(false, 1, true, 1)]
-        public void TestSuggestions(bool dirExists, int suggestionsCount, bool shouldShowSuggestions,
+        [InlineData(Dir, true, 0, false, 0)]
+        [InlineData(Dir, true, 1, false, 0)]
+        [InlineData("", true, 1, true, 1)]
+        [InlineData("", true, 0, false, 0)]
+        [InlineData(Dir, false, 0, false, 0)]
+        [InlineData(Dir, false, 1, true, 1)]
+        public void TestSuggestions(string directory, bool dirExists, int suggestionsCount, bool shouldShowSuggestions,
             int expectedSuggestionsCount)
         {
             _autoMocker
-                .Setup<IDirectoryService, bool>(m => m.CheckIfExists(Dir))
+                .Setup<IDirectoryService, bool>(m => m.CheckIfExists(directory))
                 .Returns(dirExists);
             _autoMocker
-                .Setup<ISuggestionsService, IEnumerable<SuggestionModel>>(m => m.GetSuggestions(Dir))
-                .Returns(Enumerable.Repeat(new SuggestionModel(Dir, SuggestionType.Directory), suggestionsCount));
+                .Setup<ISuggestionsService, IEnumerable<SuggestionModel>>(m => m.GetSuggestions(directory))
+                .Returns(Enumerable.Repeat(new SuggestionModel(directory, SuggestionType.Directory), suggestionsCount));
             _autoMocker
-                .Setup<ISuggestedPathViewModelFactory, ISuggestedPathViewModel>(m => m.Create(Dir,
-                    It.Is<SuggestionModel>(m => m.Type == SuggestionType.Directory && m.FullPath == Dir)))
+                .Setup<ISuggestedPathViewModelFactory, ISuggestedPathViewModel>(m => m.Create(directory,
+                    It.Is<SuggestionModel>(m => m.Type == SuggestionType.Directory && m.FullPath == directory)))
                 .Returns(Mock.Of<ISuggestedPathViewModel>());
 
             var viewModel = _autoMocker.CreateInstance<DirectorySelectorViewModel>();
-            viewModel.CurrentDirectory = Dir;
+            viewModel.CurrentDirectory = directory;
 
             Assert.Equal(shouldShowSuggestions, viewModel.ShouldShowSuggestions);
             Assert.Equal(expectedSuggestionsCount, viewModel.SuggestedPaths.Count());

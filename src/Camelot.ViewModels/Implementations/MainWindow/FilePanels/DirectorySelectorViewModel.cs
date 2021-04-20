@@ -40,7 +40,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
                 _currentDirectorySearchText = value;
                 ClearSuggestions();
 
-                if (!_directoryService.CheckIfExists(value))
+                if (string.IsNullOrEmpty(value) || !_directoryService.CheckIfExists(value))
                 {
                     ReloadSuggestions();
                     ShouldShowSuggestions = SuggestedPaths.Any();
