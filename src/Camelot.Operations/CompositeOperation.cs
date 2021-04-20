@@ -47,6 +47,7 @@ namespace Camelot.Operations
         {
             _fileNameGenerationService = fileNameGenerationService;
             _groupedOperationsToExecute = groupedOperationsToExecute;
+
             Info = operationInfo;
 
             _blockedOperationsDictionary = new ConcurrentDictionary<string, ISelfBlockingOperation>();
@@ -132,6 +133,12 @@ namespace Camelot.Operations
                 for (var i = 0; i < _currentOperationsGroup.Count; i++)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
+
+                    if (_currentOperationsGroupIndex > 0
+                        && groupedOperationsToExecute[_currentOperationsGroupIndex - 1][i].State != OperationState.Finished)
+                    {
+                        continue;
+                    }
 
                     var currentOperation = operationsGroup[i];
                     SubscribeToEvents(currentOperation);

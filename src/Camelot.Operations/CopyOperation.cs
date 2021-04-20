@@ -40,8 +40,15 @@ namespace Camelot.Operations
 
             if (_fileService.CheckIfExists(_destinationFile))
             {
-                CurrentBlockedFile = (_sourceFile, _destinationFile);
-                State = OperationState.Blocked;
+                if (_sourceFile == _destinationFile)
+                {
+                    State = OperationState.Skipped;
+                }
+                else
+                {
+                    CurrentBlockedFile = (_sourceFile, _destinationFile);
+                    State = OperationState.Blocked;
+                }
             }
             else
             {
