@@ -144,7 +144,7 @@
 
         <Grid Grid.Row="2" ColumnDefinitions="*,Auto,*">
             <main:FilesPanelView DataContext="{Binding LeftFilesPanelViewModel}" />
-            <GridSplitter Grid.Column="1" ShowsPreview="False" Width="3"
+            <GridSplitter Grid.Column="1" ShowsPreview="False" Width="2"
                           HorizontalAlignment="Center" VerticalAlignment="Stretch" />
             <main:FilesPanelView Grid.Column="2" DataContext="{Binding RightFilesPanelViewModel}" />
         </Grid>
