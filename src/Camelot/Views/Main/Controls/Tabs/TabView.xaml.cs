@@ -11,7 +11,7 @@ namespace Camelot.Views.Main.Controls.Tabs
 {
     public class TabView : UserControl
     {
-        private const int DragAndDropDelay = 200;
+        private const int DragAndDropDelay = 300;
         private const string DataFormat = "Tab";
 
         private Grid Grid => this.Find<Grid>("TabGrid");

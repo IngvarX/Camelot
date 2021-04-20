@@ -14,10 +14,15 @@
         <Setter Property="Cursor" Value="Hand" />
     </Style>
 
+    <Style Selector="TextBlock">
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
     <Style Selector="TextBox">
         <Setter Property="FontSize" Value="20" />
         <Setter Property="Background" Value="{DynamicResource ThemeControlLowBrush}" />
         <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
 
     <Style Selector="TextBox:error">

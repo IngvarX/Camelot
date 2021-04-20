@@ -19,7 +19,7 @@ namespace Camelot.Views.Main
 {
     public class FilesPanelView : UserControl
     {
-        private const int DragAndDropDelay = 200;
+        private const int DragAndDropDelay = 300;
 
         private bool _isCellPressed;
 
