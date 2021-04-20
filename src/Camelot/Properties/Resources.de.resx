@@ -322,4 +322,28 @@
   <data name="AboutCamelotTitle" xml:space="preserve">
     <value>Über Camelot</value>
   </data>
+  <data name="CaseSensitive" xml:space="preserve">
+    <value>Groß-/Kleinschreibung beachten</value>
+  </data>
+  <data name="Recursive" xml:space="preserve">
+    <value>Rekursiv</value>
+  </data>
+  <data name="CloseSearchPanel" xml:space="preserve">
+    <value>Suchfeld schließen</value>
+  </data>
+  <data name="CopiedFilesFromAndDirectoriesTo" xml:space="preserve">
+    <value>{0} Dateien und {1} Verzeichnisse nach {2} kopiert</value>
+  </data>
+  <data name="ArgumentsWithColon" xml:space="preserve">
+    <value>Argumente:</value>
+  </data>
+  <data name="AboutPage" xml:space="preserve">
+    <value>Camelot ist ein in C# geschriebenes Dateiverwaltungsprogramm mit zwei Bedienfeldern</value>
+  </data>
+  <data name="FailedToDeleteFileFromTo" xml:space="preserve">
+    <value>Löschen von {0} aus {1} fehlgeschlagen</value>
+  </data>
+  <data name="CopyingFilesFromAndDirectoriesTo" xml:space="preserve">
+    <value>Kopieren von {0} Dateien und {1} Verzeichnissen nach {2}</value>
+  </data>
 </root>

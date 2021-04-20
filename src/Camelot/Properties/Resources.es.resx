@@ -109,4 +109,13 @@
   <data name="AboutCamelotTitle" xml:space="preserve">
     <value>Acerca de Camelot</value>
   </data>
+  <data name="LastModificationWithColon" xml:space="preserve">
+    <value>Última modificación:</value>
+  </data>
+  <data name="ExitHeader" xml:space="preserve">
+    <value>_Salir</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Copiar</value>
+  </data>
 </root>

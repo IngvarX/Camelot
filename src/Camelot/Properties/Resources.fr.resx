@@ -422,10 +422,10 @@
     <value>Sensible à la casse</value>
   </data>
   <data name="FailedToPackFilesAndDirectoriesTo" xml:space="preserve">
-    <value>Echec du chargement de {0} fichiers et {1} dossiers vers {2}</value>
+    <value>Échec du chargement de {0} fichiers et {1} dossiers vers {2}</value>
   </data>
   <data name="FailedToPackTo" xml:space="preserve">
-    <value>Echec du chargement de {0} vers {1}</value>
+    <value>Échec du chargement de {0} vers {1}</value>
   </data>
   <data name="PackToTheFileWithColon" xml:space="preserve">
     <value>Compacter vers :</value>
