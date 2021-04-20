@@ -134,13 +134,18 @@ namespace Camelot.Operations
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
-                    if (_currentOperationsGroupIndex > 0
-                        && groupedOperationsToExecute[_currentOperationsGroupIndex - 1][i].State != OperationState.Finished)
+                    var currentOperation = operationsGroup[i];
+
+                    var previousOperationDidNotSucceeded =
+                        _currentOperationsGroupIndex > 0
+                        && groupedOperationsToExecute[_currentOperationsGroupIndex - 1][i].State != OperationState.Finished;
+                    if (previousOperationDidNotSucceeded)
                     {
+                        FinishOperation(currentOperation);
+
                         continue;
                     }
 
-                    var currentOperation = operationsGroup[i];
                     SubscribeToEvents(currentOperation);
 
                     RunOperation(currentOperation, cancellationToken);
@@ -177,18 +182,25 @@ namespace Camelot.Operations
             if (state.IsCompleted())
             {
                 var operation = (IInternalOperation) sender;
-                UnsubscribeFromEvents(operation);
 
-                var finishedOperationsCount = Interlocked.Increment(ref _finishedOperationsCount);
-                if (finishedOperationsCount == _currentOperationsGroup?.Count)
-                {
-                    var isSuccessful = !state.IsFailedOrCancelled();
-
-                    _taskCompletionSource.SetResult(isSuccessful);
-                }
+                FinishOperation(operation);
             }
 
             UpdateProgress();
+        }
+
+        private void FinishOperation(IInternalOperation operation)
+        {
+            UnsubscribeFromEvents(operation);
+
+            var finishedOperationsCount = Interlocked.Increment(ref _finishedOperationsCount);
+            if (finishedOperationsCount == _currentOperationsGroup?.Count)
+            {
+                // TODO: use different check
+                var isSuccessful = !operation.State.IsFailedOrCancelled();
+
+                _taskCompletionSource.SetResult(isSuccessful);
+            }
         }
 
         private async Task ProcessNextBlockedTaskAsync()
