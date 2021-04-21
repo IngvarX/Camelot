@@ -3,7 +3,7 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <IsPackable>false</IsPackable>
-    <Version>0.2.4</Version>
+    <Version>0.2.5</Version>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyName>camelot</AssemblyName>
@@ -14,8 +14,8 @@
     <CFBundleName>Camelot</CFBundleName>
     <CFBundleDisplayName>Camelot</CFBundleDisplayName>
     <CFBundleIdentifier>com.camelot</CFBundleIdentifier>
-    <CFBundleVersion>0.2.4</CFBundleVersion>
-    <CFBundleShortVersionString>0.2.4</CFBundleShortVersionString>
+    <CFBundleVersion>0.2.5</CFBundleVersion>
+    <CFBundleShortVersionString>0.2.5</CFBundleShortVersionString>
     <CFBundlePackageType>AAPL</CFBundlePackageType>
     <CFBundleSignature>????</CFBundleSignature>
     <CFBundleExecutable>Camelot</CFBundleExecutable>
