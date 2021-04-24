@@ -6,6 +6,7 @@ using Camelot.ViewModels.Implementations.Dialogs;
 using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Nodes;
 using Moq;
+using Moq.AutoMock;
 using Xunit;
 
 namespace Camelot.ViewModels.Tests.Dialogs
@@ -18,6 +19,13 @@ namespace Camelot.ViewModels.Tests.Dialogs
         private const string ParentDirectory = "Parent";
         private const string ParentDirectoryName = "ParentName";
         private const string NewFilePath = ParentDirectory + NewFileName;
+
+        private readonly AutoMocker _autoMocker;
+
+        public OverwriteOptionsDialogViewModelTests()
+        {
+            _autoMocker = new AutoMocker();
+        }
 
         [Theory]
         [InlineData(true, true)]
@@ -50,6 +58,8 @@ namespace Camelot.ViewModels.Tests.Dialogs
                 }
             };
 
+            Assert.True(dialog.CancelCommand.CanExecute(null));
+
             dialog.CancelCommand.Execute(null);
 
             Assert.True(isCallbackCalled);
@@ -75,6 +85,8 @@ namespace Camelot.ViewModels.Tests.Dialogs
                 Assert.Equal(shouldApplyToAll, result.Options.ApplyToAll);
                 Assert.Equal(SourceFilePath, result.Options.FilePath);
             };
+
+            Assert.True(dialog.SkipCommand.CanExecute(null));
 
             dialog.SkipCommand.Execute(null);
 
@@ -102,6 +114,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
                 Assert.Equal(SourceFilePath, result.Options.FilePath);
             };
 
+            Assert.True(dialog.ReplaceCommand.CanExecute(null));
             dialog.ReplaceCommand.Execute(null);
 
             Assert.True(isCallbackCalled);
@@ -128,6 +141,8 @@ namespace Camelot.ViewModels.Tests.Dialogs
                 Assert.Equal(SourceFilePath, result.Options.FilePath);
             };
 
+            Assert.True(dialog.ReplaceIfOlderCommand.CanExecute(null));
+
             dialog.ReplaceIfOlderCommand.Execute(null);
 
             Assert.True(isCallbackCalled);
@@ -138,6 +153,10 @@ namespace Camelot.ViewModels.Tests.Dialogs
         [InlineData(false)]
         public void TestRename(bool shouldApplyToAll)
         {
+            _autoMocker
+                .Setup<IFileService, bool>(m => m.CheckIfExists(NewFilePath))
+                .Returns(false);
+
             var isCallbackCalled = false;
             var dialog = Create();
             dialog.ShouldApplyToAll = shouldApplyToAll;
@@ -156,20 +175,36 @@ namespace Camelot.ViewModels.Tests.Dialogs
                 Assert.Equal(NewFilePath, result.Options.NewFilePath);
             };
 
+            Assert.True(dialog.RenameCommand.CanExecute(null));
+
             dialog.RenameCommand.Execute(null);
 
             Assert.True(isCallbackCalled);
         }
 
-        private static OverwriteOptionsDialogViewModel Create(bool areMultipleFilesAvailable = true)
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void TestRenameNotPossible(bool shouldApplyToAll)
         {
-            var fileServiceMock = new Mock<IFileService>();
-            fileServiceMock
-                .Setup(m => m.GetFile(It.IsAny<string>()))
+            _autoMocker
+                .Setup<IFileService, bool>(m => m.CheckIfExists(NewFilePath))
+                .Returns(true);
+
+            var dialog = Create();
+            dialog.ShouldApplyToAll = shouldApplyToAll;
+            dialog.NewFileName = NewFileName;
+
+            Assert.False(dialog.RenameCommand.CanExecute(null));
+        }
+
+        private OverwriteOptionsDialogViewModel Create(bool areMultipleFilesAvailable = true)
+        {
+            _autoMocker
+                .Setup<IFileService, FileModel>(m => m.GetFile(It.IsAny<string>()))
                 .Returns<string>(s => new FileModel {FullPath = s, Name = s});
-            var fileSystemNodeViewModelFactory = new Mock<IFileSystemNodeViewModelFactory>();
-            fileSystemNodeViewModelFactory
-                .Setup(m => m.Create(It.IsAny<FileModel>()))
+            _autoMocker
+                .Setup<IFileSystemNodeViewModelFactory, IFileSystemNodeViewModel>(m => m.Create(It.IsAny<FileModel>()))
                 .Returns<FileModel>(fm =>
                 {
                     var mock = new Mock<IFileSystemNodeViewModel>();
@@ -179,21 +214,17 @@ namespace Camelot.ViewModels.Tests.Dialogs
 
                     return mock.Object;
                 });
-            var fileNameGenerationService = new Mock<IFileNameGenerationService>();
-            var pathService = new Mock<IPathService>();
-            pathService
-                .Setup(m => m.GetParentDirectory(DestinationFilePath))
+            _autoMocker
+                .Setup<IPathService, string>(m => m.GetParentDirectory(DestinationFilePath))
                 .Returns(ParentDirectory);
-            pathService
-                .Setup(m => m.Combine(ParentDirectory, NewFileName))
+            _autoMocker
+                .Setup<IPathService, string>(m => m.Combine(ParentDirectory, NewFileName))
                 .Returns(NewFilePath);
-            pathService
-                .Setup(m => m.GetFileName(ParentDirectory))
+            _autoMocker
+                .Setup<IPathService, string>(m => m.GetFileName(ParentDirectory))
                 .Returns(ParentDirectoryName);
 
-            var dialog = new OverwriteOptionsDialogViewModel(
-                fileServiceMock.Object, fileSystemNodeViewModelFactory.Object,
-                fileNameGenerationService.Object, pathService.Object);
+            var dialog = _autoMocker.CreateInstance<OverwriteOptionsDialogViewModel>();
 
             var parameter = new OverwriteOptionsNavigationParameter(SourceFilePath, DestinationFilePath, areMultipleFilesAvailable);
             dialog.Activate(parameter);

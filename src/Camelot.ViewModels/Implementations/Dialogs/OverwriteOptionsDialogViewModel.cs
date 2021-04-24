@@ -1,3 +1,4 @@
+using System;
 using System.Windows.Input;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
@@ -62,7 +63,10 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             SkipCommand = ReactiveCommand.Create(Skip);
             ReplaceCommand = ReactiveCommand.Create(Replace);
             ReplaceIfOlderCommand = ReactiveCommand.Create(ReplaceIfOlder);
-            RenameCommand = ReactiveCommand.Create(Rename);
+
+            var canRename = this.WhenAnyValue(x => x.NewFileName,
+                (Func<string, bool>) (_ => CheckIfDestinationNotExists()));
+            RenameCommand = ReactiveCommand.Create(Rename, canRename);
         }
 
         public override void Activate(OverwriteOptionsNavigationParameter parameter)
@@ -88,12 +92,10 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 
         private void Rename()
         {
-            var destinationDirectory = _pathService.GetParentDirectory(OriginalFileViewModel.FullPath);
-            var destinationFilePath = _pathService.Combine(destinationDirectory, NewFileName);
             var options = OperationContinuationOptions.CreateRenamingContinuationOptions(
                 ReplaceWithFileViewModel.FullPath,
                 ShouldApplyToAll,
-                destinationFilePath
+                GetDestinationFilePath()
             );
 
             Close(options);
@@ -111,5 +113,15 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 
         private IFileSystemNodeViewModel CreateFrom(FileModel fileModel) =>
             _fileSystemNodeViewModelFactory.Create(fileModel);
+
+        private bool CheckIfDestinationNotExists() =>
+            OriginalFileViewModel is null || !_fileService.CheckIfExists(GetDestinationFilePath());
+
+        private string GetDestinationFilePath()
+        {
+            var destinationDirectory = _pathService.GetParentDirectory(OriginalFileViewModel.FullPath);
+
+            return _pathService.Combine(destinationDirectory, NewFileName);
+        }
     }
 }

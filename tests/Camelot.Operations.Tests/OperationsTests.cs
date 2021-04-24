@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,6 +24,7 @@ namespace Camelot.Operations.Tests
         private const string SourceDirName = "SourceDir";
         private const string DestinationDirName = "DestinationDir";
         private const string SecondDestinationName = "SecondDestination";
+        private const string ThirdDestinationName = "ThirdDestination";
 
         private readonly AutoMocker _autoMocker;
 
@@ -32,14 +34,19 @@ namespace Camelot.Operations.Tests
         }
 
         [Theory]
-        [InlineData(true, OperationState.Failed)]
-        [InlineData(false, OperationState.Finished)]
-        public async Task TestCopyOperation(bool throws, OperationState state)
+        [InlineData(true, OperationState.Failed, SourceName, DestinationName, 1, false)]
+        [InlineData(false, OperationState.Finished, SourceName, DestinationName, 1, false)]
+        [InlineData(false, OperationState.Finished, SourceName, SourceName, 0, true)]
+        public async Task TestCopyOperation(bool throws, OperationState state, string sourceName,
+            string destinationName, int copyCallsCount, bool destinationExists)
         {
             var copySetup = _autoMocker
-                .Setup<IFileService, Task<bool>>(m => m.CopyAsync(SourceName, DestinationName, false))
+                .Setup<IFileService, Task<bool>>(m => m.CopyAsync(sourceName, destinationName, false))
                 .ReturnsAsync(!throws);
             copySetup.Verifiable();
+            _autoMocker
+                .Setup<IFileService, bool>(m => m.CheckIfExists(destinationName))
+                .Returns(destinationExists);
 
             var operationsFactory = _autoMocker.CreateInstance<OperationsFactory>();
             var settings = new BinaryFileSystemOperationSettings(
@@ -47,7 +54,7 @@ namespace Camelot.Operations.Tests
                 new[] {SourceName},
                 new string[] { },
                 new[] {SourceName},
-                new Dictionary<string, string> {[SourceName] = DestinationName},
+                new Dictionary<string, string> {[sourceName] = destinationName},
                 new string[] { }
             );
             var copyOperation = operationsFactory.CreateCopyOperation(settings);
@@ -62,18 +69,23 @@ namespace Camelot.Operations.Tests
             Assert.Equal(state, copyOperation.State);
 
             Assert.True(isCallbackCalled);
-            _autoMocker.Verify<IFileService>(m => m.CopyAsync(SourceName, DestinationName, false), Times.Once);
+            _autoMocker
+                .Verify<IFileService>(m => m.CopyAsync(sourceName, destinationName, false),
+                    Times.Exactly(copyCallsCount));
         }
 
         [Theory]
-        [InlineData(true, 1, OperationContinuationMode.Overwrite, 1, 1)]
-        [InlineData(false, 2, OperationContinuationMode.Overwrite, 1, 1)]
-        [InlineData(true, 1, OperationContinuationMode.Skip, 0, 0)]
-        [InlineData(false, 2, OperationContinuationMode.Skip, 0, 0)]
-        [InlineData(true, 1, OperationContinuationMode.OverwriteIfOlder, 1, 0)]
-        [InlineData(false, 2, OperationContinuationMode.OverwriteIfOlder, 1, 0)]
+        [InlineData(true, 1, OperationContinuationMode.Overwrite, 1, 1, 0)]
+        [InlineData(false, 2, OperationContinuationMode.Overwrite, 1, 1, 0)]
+        [InlineData(true, 1, OperationContinuationMode.Skip, 0, 0, 0)]
+        [InlineData(false, 2, OperationContinuationMode.Skip, 0, 0, 0)]
+        [InlineData(true, 1, OperationContinuationMode.OverwriteIfOlder, 1, 0, 0)]
+        [InlineData(false, 2, OperationContinuationMode.OverwriteIfOlder, 1, 0, 0)]
+        [InlineData(true, 1, OperationContinuationMode.Rename, 0, 0, 1)]
+        [InlineData(false, 2, OperationContinuationMode.Rename, 0, 0, 1)]
         public async Task TestBlockedCopyOperation(bool applyToAll, int expectedCallbackCallsCount,
-            OperationContinuationMode mode, int expectedWriteCallsCountFirstFile, int expectedWriteCallsCountSecondFile)
+            OperationContinuationMode mode, int expectedWriteCallsCountFirstFile, int expectedWriteCallsCountSecondFile,
+            int expectedWriteCallsCountThirdFile)
         {
             var now = DateTime.UtcNow;
             var hourBeforeNow = now.AddHours(-1);
@@ -105,8 +117,19 @@ namespace Camelot.Operations.Tests
                 .ReturnsAsync(true)
                 .Verifiable();
             _autoMocker
+                .Setup<IFileService, Task<bool>>(m => m.CopyAsync(SourceName, ThirdDestinationName, false))
+                .ReturnsAsync(true)
+                .Verifiable();
+            _autoMocker
+                .Setup<IFileService, Task<bool>>(m => m.CopyAsync(SecondSourceName, ThirdDestinationName, false))
+                .ReturnsAsync(true)
+                .Verifiable();
+            _autoMocker
                 .Setup<IFileService, bool>(m => m.CheckIfExists(It.IsAny<string>()))
                 .Returns(true);
+            _autoMocker
+                .Setup<IFileNameGenerationService, string>(m => m.GenerateFullName(It.IsAny<string>()))
+                .Returns(ThirdDestinationName);
             var operationsFactory = _autoMocker.CreateInstance<OperationsFactory>();
             var settings = new BinaryFileSystemOperationSettings(
                 new string[] { },
@@ -139,7 +162,9 @@ namespace Camelot.Operations.Tests
                 Interlocked.Increment(ref callbackCallsCount);
 
                 var (sourceFilePath, _) = operation.CurrentBlockedFile;
-                var options = OperationContinuationOptions.CreateContinuationOptions(sourceFilePath, applyToAll, mode);
+                var options = mode is OperationContinuationMode.Rename
+                    ? OperationContinuationOptions.CreateRenamingContinuationOptions(sourceFilePath, applyToAll, ThirdDestinationName)
+                    : OperationContinuationOptions.CreateContinuationOptions(sourceFilePath, applyToAll, mode);
 
                 await copyOperation.ContinueAsync(options);
             };
@@ -157,6 +182,10 @@ namespace Camelot.Operations.Tests
                 .Verify<IFileService>(m => m.CopyAsync(SourceName, DestinationName, false), Times.Never);
             _autoMocker
                 .Verify<IFileService>(m => m.CopyAsync(SecondSourceName, SecondDestinationName, false), Times.Never);
+            _autoMocker
+                .Verify<IFileService>(m => m.CopyAsync(SourceName, ThirdDestinationName, false), Times.Exactly(expectedWriteCallsCountThirdFile));
+            _autoMocker
+                .Verify<IFileService>(m => m.CopyAsync(SecondSourceName, ThirdDestinationName, false), Times.Exactly(expectedWriteCallsCountThirdFile));
         }
 
         [Theory]
