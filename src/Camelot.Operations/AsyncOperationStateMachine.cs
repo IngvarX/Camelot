@@ -17,15 +17,30 @@ namespace Camelot.Operations
         private readonly ILogger _logger;
 
         private OperationState _operationState;
+        private readonly object _locker;
 
         public OperationState State
         {
-            get => _operationState;
+            get
+            {
+                lock (_locker)
+                {
+                    return _operationState;
+                }
+            }
             private set
             {
-                _operationState = value;
+                lock (_locker)
+                {
+                    if (_operationState == value)
+                    {
+                        return;
+                    }
 
-                var args = new OperationStateChangedEventArgs(State);
+                    _operationState = value;
+                }
+
+                var args = new OperationStateChangedEventArgs(value);
                 StateChanged.Raise(this, args);
             }
         }
@@ -51,6 +66,8 @@ namespace Camelot.Operations
         {
             _compositeOperation = compositeOperation;
             _logger = logger;
+
+            _locker = new object();
 
             SubscribeToEvents();
         }

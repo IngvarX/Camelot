@@ -175,17 +175,23 @@ namespace Camelot.Operations.Tests
 
             Assert.Equal(OperationState.Finished, copyOperation.State);
             _autoMocker
-                .Verify<IFileService>(m => m.CopyAsync(SourceName, DestinationName, true), Times.Exactly(expectedWriteCallsCountFirstFile));
+                .Verify<IFileService>(m => m.CopyAsync(SourceName, DestinationName, true),
+                    Times.Exactly(expectedWriteCallsCountFirstFile));
             _autoMocker
-                .Verify<IFileService>(m => m.CopyAsync(SecondSourceName, SecondDestinationName, true), Times.Exactly(expectedWriteCallsCountSecondFile));
+                .Verify<IFileService>(m => m.CopyAsync(SecondSourceName, SecondDestinationName, true),
+                    Times.Exactly(expectedWriteCallsCountSecondFile));
             _autoMocker
-                .Verify<IFileService>(m => m.CopyAsync(SourceName, DestinationName, false), Times.Never);
+                .Verify<IFileService>(m => m.CopyAsync(SourceName, DestinationName, false),
+                    Times.Never);
             _autoMocker
-                .Verify<IFileService>(m => m.CopyAsync(SecondSourceName, SecondDestinationName, false), Times.Never);
+                .Verify<IFileService>(m => m.CopyAsync(SecondSourceName, SecondDestinationName, false),
+                    Times.Never);
             _autoMocker
-                .Verify<IFileService>(m => m.CopyAsync(SourceName, ThirdDestinationName, false), Times.Exactly(expectedWriteCallsCountThirdFile));
+                .Verify<IFileService>(m => m.CopyAsync(SourceName, ThirdDestinationName, false),
+                    Times.Exactly(expectedWriteCallsCountThirdFile));
             _autoMocker
-                .Verify<IFileService>(m => m.CopyAsync(SecondSourceName, ThirdDestinationName, false), Times.Exactly(expectedWriteCallsCountThirdFile));
+                .Verify<IFileService>(m => m.CopyAsync(SecondSourceName, ThirdDestinationName, false),
+                    Times.Exactly(expectedWriteCallsCountThirdFile));
         }
 
         [Theory]

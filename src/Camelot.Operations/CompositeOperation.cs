@@ -23,7 +23,6 @@ namespace Camelot.Operations
 
         private readonly IDictionary<string, ISelfBlockingOperation> _blockedOperationsDictionary;
         private readonly ConcurrentQueue<(string SourceFilePath, string DestinationFilePath)> _blockedFilesQueue;
-        private readonly object _blockedFileLocker;
 
         private int _finishedOperationsCount;
         private int _currentOperationsGroupIndex;
@@ -36,7 +35,8 @@ namespace Camelot.Operations
 
         public OperationInfo Info { get; }
 
-        public (string SourceFilePath, string DestinationFilePath) CurrentBlockedFile { get; private set; }
+        public (string SourceFilePath, string DestinationFilePath) CurrentBlockedFile =>
+            _blockedFilesQueue.TryPeek(out var blockedFile) ? blockedFile : default;
 
         public event EventHandler<EventArgs> Blocked;
 
@@ -52,7 +52,6 @@ namespace Camelot.Operations
 
             _blockedOperationsDictionary = new ConcurrentDictionary<string, ISelfBlockingOperation>();
             _blockedFilesQueue = new ConcurrentQueue<(string SourceFilePath, string DestinationFilePath)>();
-            _blockedFileLocker = new object();
         }
 
         public async Task RunAsync()
@@ -69,10 +68,7 @@ namespace Camelot.Operations
                 _continuationMode = options.Mode;
             }
 
-            lock (_blockedFileLocker)
-            {
-                CurrentBlockedFile = default;
-            }
+            _blockedFilesQueue.TryDequeue(out _);
 
             var operation = _blockedOperationsDictionary[options.FilePath];
             _blockedOperationsDictionary.Remove(options.FilePath);
@@ -221,45 +217,43 @@ namespace Camelot.Operations
             if (_continuationMode is null)
             {
                 _blockedOperationsDictionary[operation.CurrentBlockedFile.SourceFilePath] = operation;
+                _blockedFilesQueue.Enqueue(operation.CurrentBlockedFile);
 
-                lock (_blockedFileLocker)
+                if (CurrentBlockedFile == operation.CurrentBlockedFile && _continuationMode is null)
                 {
-                    if (CurrentBlockedFile != default)
-                    {
-                        _blockedFilesQueue.Enqueue(operation.CurrentBlockedFile);
-
-                        return;
-                    }
-
-                    CurrentBlockedFile = operation.CurrentBlockedFile;
+                    Blocked.Raise(this, EventArgs.Empty);
                 }
-
-                Blocked.Raise(this, EventArgs.Empty);
             }
             else
             {
-                var (sourceFilePath, destinationFilePath) = operation.CurrentBlockedFile;
-                OperationContinuationOptions options;
-                if (_continuationMode is OperationContinuationMode.Rename)
-                {
-                    var newFilePath = _fileNameGenerationService.GenerateFullName(destinationFilePath);
-                    options = OperationContinuationOptions.CreateRenamingContinuationOptions(
-                        sourceFilePath,
-                        true,
-                        newFilePath
-                    );
-                }
-                else
-                {
-                    options = OperationContinuationOptions.CreateContinuationOptions(
-                        sourceFilePath,
-                        true,
-                        _continuationMode.Value
-                    );
-                }
-
-                await operation.ContinueAsync(options);
+                await ContinueWithDefaultOptionsAsync(operation, _continuationMode.Value);
             }
+        }
+
+        private async Task ContinueWithDefaultOptionsAsync(ISelfBlockingOperation operation,
+            OperationContinuationMode continuationMode)
+        {
+            var (sourceFilePath, destinationFilePath) = operation.CurrentBlockedFile;
+            OperationContinuationOptions options;
+            if (continuationMode is OperationContinuationMode.Rename)
+            {
+                var newFilePath = _fileNameGenerationService.GenerateFullName(destinationFilePath);
+                options = OperationContinuationOptions.CreateRenamingContinuationOptions(
+                    sourceFilePath,
+                    true,
+                    newFilePath
+                );
+            }
+            else
+            {
+                options = OperationContinuationOptions.CreateContinuationOptions(
+                    sourceFilePath,
+                    true,
+                    continuationMode
+                );
+            }
+
+            await operation.ContinueAsync(options);
         }
 
         private void SubscribeToEvents(IInternalOperation currentOperation)
