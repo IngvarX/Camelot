@@ -12,7 +12,7 @@
     </Design.DataContext>
 
     <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,15,*">
-        <Image  Width="48" Height="48" Margin="3,7,3,3" VerticalAlignment="Center"
+        <Image Width="48" Height="48" Margin="3,7,3,3" VerticalAlignment="Center"
                 IsVisible="{Binding IsDirectory}">
             <Image.Source>
                 <DrawingImage>
@@ -36,7 +36,10 @@
                     </DrawingImage>
                 </Image.Source>
             </Image>
+            <Image Source="{Binding ImageBitmap}" MaxWidth="100" MaxHeight="100"
+                   IsVisible="{Binding ImageBitmap, Converter={x:Static ObjectConverters.IsNotNull}}" />
         </Grid>
+
         <TextBlock Grid.Column="2" Classes="dialogTextBlock" Text="{Binding Name}"
                    VerticalAlignment="Center" TextWrapping="Wrap" />
 
