@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -58,4 +58,391 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="FailedToPackFilesAndDirectoriesTo" xml:space="preserve">
+    <value>未能打包 {0} 个文件 {1} 个文件夹到 {2}</value>
+  </data>
+  <data name="SelectDirectoryForExtraction" xml:space="preserve">
+    <value>选择解压文件夹</value>
+  </data>
+  <data name="ExtractArchiveToNewDirectory" xml:space="preserve">
+    <value>解压到新文件夹</value>
+  </data>
+  <data name="ExtractArchiveHere" xml:space="preserve">
+    <value>解压到当前文件夹</value>
+  </data>
+  <data name="PackedFilesAndDirectoriesTo" xml:space="preserve">
+    <value>已打包 {0} 个文件 {1} 个文件夹到 {2}</value>
+  </data>
+  <data name="PackingFilesAndDirectoriesTo" xml:space="preserve">
+    <value>正在打包 {0} 个文件 {1} 个文件夹到 {2}</value>
+  </data>
+  <data name="SearchForFilesAndDirectories" xml:space="preserve">
+    <value>搜索文件和文件夹</value>
+  </data>
+  <data name="SelectFromFilesAndDirectories" xml:space="preserve">
+    <value>{0} 个文件 ({1}) {2} 个文件夹</value>
+  </data>
+  <data name="ReplaceFileDestinationDirectory" xml:space="preserve">
+    <value>文件夹 "{0}" 中已包含一个同名文件，要替换吗？</value>
+  </data>
+  <data name="RemovingFilesAndDirectoriesFrom" xml:space="preserve">
+    <value>正在从 {2} 移除 {0} 个文件 {1} 个文件夹</value>
+  </data>
+  <data name="NewDirectory" xml:space="preserve">
+    <value>新建文件夹</value>
+  </data>
+  <data name="MovingFromFilesAndDirectoriesTo" xml:space="preserve">
+    <value>正在移动 {0} 个文件 {1} 个文件夹到 {2}</value>
+  </data>
+  <data name="MovedFilesFromAndDirectoriesTo" xml:space="preserve">
+    <value>已移动 {0} 个文件 {1} 个文件夹到 {2}</value>
+  </data>
+  <data name="FailedToMoveFilesAndDirectoriesTo" xml:space="preserve">
+    <value>未能移动 {0} 个文件 {1} 个文件夹到 {2}</value>
+  </data>
+  <data name="FailedToDeleteFilesAndDirectoriesFrom" xml:space="preserve">
+    <value>未能删除 {2} 中的 {0} 个文件 {1} 个文件夹</value>
+  </data>
+  <data name="FailedCopyFromFilesAndDirectoriesTo" xml:space="preserve">
+    <value>未能复制 {0} 个文件 {1} 个文件夹到 {2}</value>
+  </data>
+  <data name="EnterDirectoryNameWithColon" xml:space="preserve">
+    <value>文件夹名称:</value>
+  </data>
+  <data name="DirectoryTemplate" xml:space="preserve">
+    <value>&lt;文件夹&gt;</value>
+  </data>
+  <data name="DirectoryInformationTitle" xml:space="preserve">
+    <value>文件夹信息</value>
+  </data>
+  <data name="Directory" xml:space="preserve">
+    <value>文件夹</value>
+  </data>
+  <data name="DeletedFilesAndDirectories" xml:space="preserve">
+    <value>已从 {2} 删除 {0} 个文件 {1} 个文件夹</value>
+  </data>
+  <data name="CreateDirectoryTitle" xml:space="preserve">
+    <value>新建文件夹</value>
+  </data>
+  <data name="CopyingFilesFromAndDirectoriesTo" xml:space="preserve">
+    <value>正在复制 {0} 个文件 {1} 个文件夹到 {2}</value>
+  </data>
+  <data name="CopiedFilesFromAndDirectoriesTo" xml:space="preserve">
+    <value>已复制 {0} 个文件 {1} 个文件夹到 {2}</value>
+  </data>
+  <data name="CloseSearchPanel" xml:space="preserve">
+    <value>关闭搜索面板</value>
+  </data>
+  <data name="CaseSensitive" xml:space="preserve">
+    <value>大小写敏感</value>
+  </data>
+  <data name="OpenInNewTabOnOppositePanel" xml:space="preserve">
+    <value>在另一侧的新标签页中打开</value>
+  </data>
+  <data name="OpenInNewTab" xml:space="preserve">
+    <value>在新标签页中打开</value>
+  </data>
+  <data name="DuplicateOnOppositePanel" xml:space="preserve">
+    <value>复制到另一侧</value>
+  </data>
+  <data name="RemovingFilesToTrash" xml:space="preserve">
+    <value>确认将 {0} 个文件放入回收站？</value>
+  </data>
+  <data name="RemovingFileFromTo" xml:space="preserve">
+    <value>正在从 {1} 移除 {0}</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>移除</value>
+  </data>
+  <data name="ShowProperties" xml:space="preserve">
+    <value>属性</value>
+  </data>
+  <data name="SettingsTitle" xml:space="preserve">
+    <value>设置</value>
+  </data>
+  <data name="SettingsHeader" xml:space="preserve">
+    <value>_设置</value>
+  </data>
+  <data name="SelectNewNameForDestination" xml:space="preserve">
+    <value>新文件名</value>
+  </data>
+  <data name="ReplaceWith" xml:space="preserve">
+    <value>用...替换</value>
+  </data>
+  <data name="ReplaceIfOlder" xml:space="preserve">
+    <value>如果源文件较旧则替换</value>
+  </data>
+  <data name="ReplaceFile" xml:space="preserve">
+    <value>替换文件</value>
+  </data>
+  <data name="Replace" xml:space="preserve">
+    <value>替换</value>
+  </data>
+  <data name="Rename" xml:space="preserve">
+    <value>重命名</value>
+  </data>
+  <data name="Eject" xml:space="preserve">
+    <value>弹出</value>
+  </data>
+  <data name="Unmount" xml:space="preserve">
+    <value>弹出</value>
+  </data>
+  <data name="LightThemeName" xml:space="preserve">
+    <value>浅色</value>
+  </data>
+  <data name="DarkThemeName" xml:space="preserve">
+    <value>暗色</value>
+  </data>
+  <data name="ThemeWithColon" xml:space="preserve">
+    <value>主题:</value>
+  </data>
+  <data name="EnterNewNameWithColon" xml:space="preserve">
+    <value>新名称:</value>
+  </data>
+  <data name="SearchForApplications" xml:space="preserve">
+    <value>搜索应用</value>
+  </data>
+  <data name="SetAsDefaultApplication" xml:space="preserve">
+    <value>设为默认</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>选择</value>
+  </data>
+  <data name="SelectOtherApplications" xml:space="preserve">
+    <value>其他应用</value>
+  </data>
+  <data name="RecommendedApplications" xml:space="preserve">
+    <value>推荐应用</value>
+  </data>
+  <data name="OpeningFiles" xml:space="preserve">
+    <value>正在打开 "{0}" 文件</value>
+  </data>
+  <data name="OpenWithTitle" xml:space="preserve">
+    <value>打开方式</value>
+  </data>
+  <data name="OpenWith" xml:space="preserve">
+    <value>打开方式</value>
+  </data>
+  <data name="FailedToPackTo" xml:space="preserve">
+    <value>未能打包 {0} 到 {1}</value>
+  </data>
+  <data name="FailedToExtractArchiveTo" xml:space="preserve">
+    <value>未能解压 {0} 到 {1}</value>
+  </data>
+  <data name="CreateArchive" xml:space="preserve">
+    <value>新建压缩包</value>
+  </data>
+  <data name="PackToTheFileWithColon" xml:space="preserve">
+    <value>压缩包:</value>
+  </data>
+  <data name="PackFilesTitle" xml:space="preserve">
+    <value>打包文件</value>
+  </data>
+  <data name="PackedFileTo" xml:space="preserve">
+    <value>已打包 {0} 到 {1}</value>
+  </data>
+  <data name="ExtractedArchiveTo" xml:space="preserve">
+    <value>已解压 {0} 到 {1}</value>
+  </data>
+  <data name="PackingFileTo" xml:space="preserve">
+    <value>正在打包 {0} 到 {1}</value>
+  </data>
+  <data name="ExtractingArchiveTo" xml:space="preserve">
+    <value>正在解压 {0} 到 {1}</value>
+  </data>
+  <data name="Extract" xml:space="preserve">
+    <value>解压</value>
+  </data>
+  <data name="Pack" xml:space="preserve">
+    <value>打包</value>
+  </data>
+  <data name="ClickToMount" xml:space="preserve">
+    <value>装载</value>
+  </data>
+  <data name="EnterFileNameWithColon" xml:space="preserve">
+    <value>文件名:</value>
+  </data>
+  <data name="CreateFileTitle" xml:space="preserve">
+    <value>新建文件</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>文件</value>
+  </data>
+  <data name="AvailableSpaceWithColon" xml:space="preserve">
+    <value>可用空间:</value>
+  </data>
+  <data name="TotalSpaceWithColon" xml:space="preserve">
+    <value>容量:</value>
+  </data>
+  <data name="InvalidRegex" xml:space="preserve">
+    <value>正则表达式无效</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>搜索</value>
+  </data>
+  <data name="Terminal" xml:space="preserve">
+    <value>终端</value>
+  </data>
+  <data name="Skip" xml:space="preserve">
+    <value>跳过</value>
+  </data>
+  <data name="SizeWithColon" xml:space="preserve">
+    <value>大小:</value>
+  </data>
+  <data name="Size" xml:space="preserve">
+    <value>大小</value>
+  </data>
+  <data name="RegularExpression" xml:space="preserve">
+    <value>正则表达式</value>
+  </data>
+  <data name="Recursive" xml:space="preserve">
+    <value>递归</value>
+  </data>
+  <data name="PermanentlyRemoveFiles" xml:space="preserve">
+    <value>确认要永久删除 {0} 个文件?</value>
+  </data>
+  <data name="PathWithColon" xml:space="preserve">
+    <value>路径:</value>
+  </data>
+  <data name="OverwriteOptionsTitle" xml:space="preserve">
+    <value>覆盖选项</value>
+  </data>
+  <data name="OriginalFile" xml:space="preserve">
+    <value>源文件</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>打开</value>
+  </data>
+  <data name="NewTab" xml:space="preserve">
+    <value>新建标签页</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>名称</value>
+  </data>
+  <data name="MovingFileFromTo" xml:space="preserve">
+    <value>正在移动 {0} 到 {1}</value>
+  </data>
+  <data name="MovedFileFromTo" xml:space="preserve">
+    <value>已移动 {0} 到 {1}</value>
+  </data>
+  <data name="CopyingFileFromTo" xml:space="preserve">
+    <value>正在复制 {0} 到 {1}</value>
+  </data>
+  <data name="CopiedFileFromTo" xml:space="preserve">
+    <value>已复制 {0} 到 {1}</value>
+  </data>
+  <data name="Move" xml:space="preserve">
+    <value>移动</value>
+  </data>
+  <data name="Maintainers" xml:space="preserve">
+    <value>维护人员</value>
+  </data>
+  <data name="LastModified" xml:space="preserve">
+    <value>最后修改</value>
+  </data>
+  <data name="LastModificationWithColon" xml:space="preserve">
+    <value>最后修改:</value>
+  </data>
+  <data name="LastAccessWithColon" xml:space="preserve">
+    <value>最后访问:</value>
+  </data>
+  <data name="LanguageWithColon" xml:space="preserve">
+    <value>语言:</value>
+  </data>
+  <data name="HelpHeader" xml:space="preserve">
+    <value>_帮助</value>
+  </data>
+  <data name="GitHub" xml:space="preserve">
+    <value>GitHub</value>
+  </data>
+  <data name="General" xml:space="preserve">
+    <value>通用</value>
+  </data>
+  <data name="FailedToDeleteFileFromTo" xml:space="preserve">
+    <value>未能删除 {1} 中的 {0}</value>
+  </data>
+  <data name="FailedToMoveFileFromTo" xml:space="preserve">
+    <value>未能移动 {0} 到 {1}</value>
+  </data>
+  <data name="FailedCopyFileFromTo" xml:space="preserve">
+    <value>未能复制 {0} 到 {1}</value>
+  </data>
+  <data name="FilesRemovingConfirmationTitle" xml:space="preserve">
+    <value>确认文件删除</value>
+  </data>
+  <data name="FileInformationTitle" xml:space="preserve">
+    <value>文件信息</value>
+  </data>
+  <data name="FileHeader" xml:space="preserve">
+    <value>_文件</value>
+  </data>
+  <data name="DeletedFileFromTo" xml:space="preserve">
+    <value>已从 {1} 删除 {0}</value>
+  </data>
+  <data name="Extension" xml:space="preserve">
+    <value>扩展名</value>
+  </data>
+  <data name="ExitHeader" xml:space="preserve">
+    <value>_退出</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>新建</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>日期</value>
+  </data>
+  <data name="CreationDateWithColon" xml:space="preserve">
+    <value>创建日期:</value>
+  </data>
+  <data name="CopyToClipboard" xml:space="preserve">
+    <value>复制到剪贴板</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>复制</value>
+  </data>
+  <data name="ConfigurationHeader" xml:space="preserve">
+    <value>_配置</value>
+  </data>
+  <data name="CommandWithColon" xml:space="preserve">
+    <value>命令:</value>
+  </data>
+  <data name="CloseTabsToTheRight" xml:space="preserve">
+    <value>关闭右侧的标签页</value>
+  </data>
+  <data name="CloseTabsToTheLeft" xml:space="preserve">
+    <value>关闭左侧的标签页</value>
+  </data>
+  <data name="CloseTab" xml:space="preserve">
+    <value>关闭标签页</value>
+  </data>
+  <data name="CloseAllButThis" xml:space="preserve">
+    <value>除此之外全部关闭</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="ArgumentsWithColon" xml:space="preserve">
+    <value>参数:</value>
+  </data>
+  <data name="ApplyActionToTheAllFilesAndFolders" xml:space="preserve">
+    <value>应用到所有文件和文件夹</value>
+  </data>
+  <data name="Apply" xml:space="preserve">
+    <value>应用</value>
+  </data>
+  <data name="AboutPage" xml:space="preserve">
+    <value>Camelot是由C#编写的双面板文件管理器</value>
+  </data>
+  <data name="AboutHeader" xml:space="preserve">
+    <value>_关于</value>
+  </data>
+  <data name="AboutCamelotTitle" xml:space="preserve">
+    <value>关于 Camelot</value>
+  </data>
 </root>
