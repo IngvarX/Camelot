@@ -75,7 +75,7 @@ namespace Camelot.Services.Tests
                 .Returns(true);
 
             var fileService = _autoMocker.CreateInstance<FileService>();
-            var result = await fileService.CopyAsync(FileName, NewFileName, false);
+            var result = await fileService.CopyAsync(FileName, NewFileName, default, false);
 
             Assert.False(result);
 
@@ -108,7 +108,7 @@ namespace Camelot.Services.Tests
             }
 
             var fileService = _autoMocker.CreateInstance<FileService>();
-            var result = await fileService.CopyAsync(FileName, NewFileName, false);
+            var result = await fileService.CopyAsync(FileName, NewFileName, default, false);
 
             Assert.Equal(expected, result);
 

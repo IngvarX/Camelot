@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Camelot.Extensions;
 using Camelot.Services.Abstractions;
@@ -44,18 +45,23 @@ namespace Camelot.Services
 
         public bool CheckIfExists(string file) => _environmentFileService.CheckIfExists(file);
 
-        public async Task<bool> CopyAsync(string source, string destination, bool overwrite)
+        public async Task<bool> CopyAsync(string source, string destination, CancellationToken cancellationToken,
+            bool overwrite)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             if (CheckIfExists(destination) && !overwrite)
             {
                 return false;
             }
 
+            cancellationToken.ThrowIfCancellationRequested();
+
             try
             {
                 await using var readStream = _environmentFileService.OpenRead(source);
                 await using var writeStream = _environmentFileService.OpenWrite(destination);
-                await readStream.CopyToAsync(writeStream);
+                await readStream.CopyToAsync(writeStream, cancellationToken);
             }
             catch (Exception ex)
             {

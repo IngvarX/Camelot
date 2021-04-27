@@ -105,7 +105,7 @@ namespace Camelot.Operations
                 _ when (State.IsCancellationAvailable() || State is OperationState.Blocked) && requestedState is OperationState.Cancelling =>
                     WrapAsync(_compositeOperation.CancelAsync, OperationState.Cancelling, OperationState.Cancelled),
 
-                (OperationState.InProgress, OperationState.Failed) => GetCompletedTask, // TODO: cleanup?
+                (_, OperationState.Failed) => GetCompletedTask, // TODO: cleanup?
 
                 (OperationState.InProgress, OperationState.Pausing) =>
                     WrapAsync(_compositeOperation.PauseAsync, OperationState.Pausing, OperationState.Paused),

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Specifications;
@@ -16,7 +17,7 @@ namespace Camelot.Services.Abstractions
 
         bool CheckIfExists(string file);
 
-        Task<bool> CopyAsync(string source, string destination, bool overwrite = false);
+        Task<bool> CopyAsync(string source, string destination, CancellationToken cancellationToken, bool overwrite = false);
 
         bool Remove(string file);
 

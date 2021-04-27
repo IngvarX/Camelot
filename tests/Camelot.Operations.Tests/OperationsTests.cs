@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Camelot.Extensions;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Archive;
 using Camelot.Services.Abstractions.Models;
@@ -41,7 +41,7 @@ namespace Camelot.Operations.Tests
             string destinationName, int copyCallsCount, bool destinationExists)
         {
             var copySetup = _autoMocker
-                .Setup<IFileService, Task<bool>>(m => m.CopyAsync(sourceName, destinationName, false))
+                .Setup<IFileService, Task<bool>>(m => m.CopyAsync(sourceName, destinationName, It.IsAny<CancellationToken>(), false))
                 .ReturnsAsync(!throws);
             copySetup.Verifiable();
             _autoMocker
@@ -70,7 +70,7 @@ namespace Camelot.Operations.Tests
 
             Assert.True(isCallbackCalled);
             _autoMocker
-                .Verify<IFileService>(m => m.CopyAsync(sourceName, destinationName, false),
+                .Verify<IFileService>(m => m.CopyAsync(sourceName, destinationName, It.IsAny<CancellationToken>(), false),
                     Times.Exactly(copyCallsCount));
         }
 
@@ -103,25 +103,25 @@ namespace Camelot.Operations.Tests
                 .Setup<IFileService, FileModel>(m => m.GetFile(SecondDestinationName))
                 .Returns(new FileModel {LastModifiedDateTime = now});
             _autoMocker
-                .Setup<IFileService>(m => m.CopyAsync(SourceName, DestinationName, false))
+                .Setup<IFileService>(m => m.CopyAsync(SourceName, DestinationName, It.IsAny<CancellationToken>(), false))
                 .Verifiable();
             _autoMocker
-                .Setup<IFileService, Task<bool>>(m => m.CopyAsync(SourceName, DestinationName, true))
+                .Setup<IFileService, Task<bool>>(m => m.CopyAsync(SourceName, DestinationName, It.IsAny<CancellationToken>(), true))
                 .ReturnsAsync(true)
                 .Verifiable();
             _autoMocker
-                .Setup<IFileService>(m => m.CopyAsync(SecondSourceName, SecondDestinationName, false))
+                .Setup<IFileService>(m => m.CopyAsync(SecondSourceName, SecondDestinationName, It.IsAny<CancellationToken>(), false))
                 .Verifiable();
             _autoMocker
-                .Setup<IFileService, Task<bool>>(m => m.CopyAsync(SecondSourceName, SecondDestinationName, true))
+                .Setup<IFileService, Task<bool>>(m => m.CopyAsync(SecondSourceName, SecondDestinationName, It.IsAny<CancellationToken>(), true))
                 .ReturnsAsync(true)
                 .Verifiable();
             _autoMocker
-                .Setup<IFileService, Task<bool>>(m => m.CopyAsync(SourceName, ThirdDestinationName, false))
+                .Setup<IFileService, Task<bool>>(m => m.CopyAsync(SourceName, ThirdDestinationName, It.IsAny<CancellationToken>(), false))
                 .ReturnsAsync(true)
                 .Verifiable();
             _autoMocker
-                .Setup<IFileService, Task<bool>>(m => m.CopyAsync(SecondSourceName, ThirdDestinationName, false))
+                .Setup<IFileService, Task<bool>>(m => m.CopyAsync(SecondSourceName, ThirdDestinationName, It.IsAny<CancellationToken>(), false))
                 .ReturnsAsync(true)
                 .Verifiable();
             _autoMocker
@@ -175,22 +175,22 @@ namespace Camelot.Operations.Tests
 
             Assert.Equal(OperationState.Finished, copyOperation.State);
             _autoMocker
-                .Verify<IFileService>(m => m.CopyAsync(SourceName, DestinationName, true),
+                .Verify<IFileService>(m => m.CopyAsync(SourceName, DestinationName, It.IsAny<CancellationToken>(), true),
                     Times.Exactly(expectedWriteCallsCountFirstFile));
             _autoMocker
-                .Verify<IFileService>(m => m.CopyAsync(SecondSourceName, SecondDestinationName, true),
+                .Verify<IFileService>(m => m.CopyAsync(SecondSourceName, SecondDestinationName, It.IsAny<CancellationToken>(), true),
                     Times.Exactly(expectedWriteCallsCountSecondFile));
             _autoMocker
-                .Verify<IFileService>(m => m.CopyAsync(SourceName, DestinationName, false),
+                .Verify<IFileService>(m => m.CopyAsync(SourceName, DestinationName, It.IsAny<CancellationToken>(), false),
                     Times.Never);
             _autoMocker
-                .Verify<IFileService>(m => m.CopyAsync(SecondSourceName, SecondDestinationName, false),
+                .Verify<IFileService>(m => m.CopyAsync(SecondSourceName, SecondDestinationName, It.IsAny<CancellationToken>(), false),
                     Times.Never);
             _autoMocker
-                .Verify<IFileService>(m => m.CopyAsync(SourceName, ThirdDestinationName, false),
+                .Verify<IFileService>(m => m.CopyAsync(SourceName, ThirdDestinationName, It.IsAny<CancellationToken>(), false),
                     Times.Exactly(expectedWriteCallsCountThirdFile));
             _autoMocker
-                .Verify<IFileService>(m => m.CopyAsync(SecondSourceName, ThirdDestinationName, false),
+                .Verify<IFileService>(m => m.CopyAsync(SecondSourceName, ThirdDestinationName, It.IsAny<CancellationToken>(), false),
                     Times.Exactly(expectedWriteCallsCountThirdFile));
         }
 
@@ -202,7 +202,7 @@ namespace Camelot.Operations.Tests
         public async Task TestMoveOperation(bool copyThrows, bool deleteThrows, OperationState state)
         {
             var copySetup = _autoMocker
-                .Setup<IFileService, Task<bool>>(m => m.CopyAsync(SourceName, DestinationName, false))
+                .Setup<IFileService, Task<bool>>(m => m.CopyAsync(SourceName, DestinationName, It.IsAny<CancellationToken>(), false))
                 .ReturnsAsync(!copyThrows);
             copySetup.Verifiable();
 
@@ -233,7 +233,7 @@ namespace Camelot.Operations.Tests
 
             Assert.True(callbackCalled);
             _autoMocker
-                .Verify<IFileService>(m => m.CopyAsync(SourceName, DestinationName, false), Times.Once());
+                .Verify<IFileService>(m => m.CopyAsync(SourceName, DestinationName, It.IsAny<CancellationToken>(), false), Times.Once());
             _autoMocker
                 .Verify<IFileService, bool>(m => m.Remove(SourceName), copyThrows ? Times.Never() : Times.Once());
         }
@@ -412,6 +412,70 @@ namespace Camelot.Operations.Tests
             processorMock
                 .Verify(m => m.ExtractAsync(
                     SourceName, DestinationDirName), Times.Once);
+        }
+
+        [Theory]
+        [InlineData(true, 1, 1)]
+        [InlineData(false, 0, 1)]
+        public async Task TestCopyOperationCancel(bool isSuccessFirst, int removeFirstCalled,
+            int removeSecondCalled)
+        {
+            var taskCompletionSource = new TaskCompletionSource<bool>();
+
+            _autoMocker
+                .Setup<IFileService, Task<bool>>(m =>
+                    m.CopyAsync(SourceName, DestinationName, It.IsAny<CancellationToken>(), false))
+                .Returns(async () =>
+                {
+                    await taskCompletionSource.Task;
+                    await Task.Delay(100);
+
+                    return isSuccessFirst;
+                });
+            _autoMocker
+                .Setup<IFileService, Task<bool>>(m =>
+                    m.CopyAsync(SecondSourceName, SecondDestinationName, It.IsAny<CancellationToken>(), false))
+                .ReturnsAsync(true)
+                .Callback(() => taskCompletionSource.SetResult(true));
+            _autoMocker
+                .Setup<IFileService, bool>(m => m.Remove(DestinationName))
+                .Returns(true)
+                .Verifiable();
+            _autoMocker
+                .Setup<IFileService, bool>(m => m.Remove(SecondDestinationName))
+                .Returns(true)
+                .Verifiable();
+
+            var operationsFactory = _autoMocker.CreateInstance<OperationsFactory>();
+            var settings = new BinaryFileSystemOperationSettings(
+                new string[] { },
+                new[] {SourceName, SecondSourceName},
+                new string[] { },
+                new[] {DestinationName, SecondDestinationName},
+                new Dictionary<string, string>
+                {
+                    [SourceName] = DestinationName,
+                    [SecondSourceName] = SecondDestinationName
+                },
+                new string[] { }
+            );
+            var copyOperation = operationsFactory.CreateCopyOperation(settings);
+
+            Assert.Equal(OperationState.NotStarted, copyOperation.State);
+
+            Task.Run(copyOperation.RunAsync).Forget();
+
+            await taskCompletionSource.Task;
+            await copyOperation.CancelAsync();
+
+            Assert.Equal(OperationState.Cancelled, copyOperation.State);
+
+            _autoMocker
+                .Verify<IFileService, bool>(m => m.Remove(DestinationName),
+                    Times.Exactly(removeFirstCalled));
+            _autoMocker
+                .Verify<IFileService, bool>(m => m.Remove(SecondDestinationName),
+                    Times.Exactly(removeSecondCalled));
         }
     }
 }

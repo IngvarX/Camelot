@@ -16,6 +16,8 @@ namespace Camelot.Operations
         private readonly string _sourceFile;
         private readonly string _destinationFile;
 
+        private CancellationToken _cancellationToken;
+
         public (string SourceFilePath, string DestinationFilePath) CurrentBlockedFile { get; private set; }
 
         public CopyOperation(
@@ -34,7 +36,8 @@ namespace Camelot.Operations
 
         public async Task RunAsync(CancellationToken cancellationToken)
         {
-            cancellationToken.ThrowIfCancellationRequested();
+            _cancellationToken = cancellationToken;
+            _cancellationToken.ThrowIfCancellationRequested();
 
             CreateOutputDirectoryIfNeeded(_destinationFile);
 
@@ -102,8 +105,10 @@ namespace Camelot.Operations
 
         private async Task CopyFileAsync(string destinationFile, bool force = false)
         {
+            _cancellationToken.ThrowIfCancellationRequested();
+
             State = OperationState.InProgress;
-            var isCopied = await _fileService.CopyAsync(_sourceFile, destinationFile, force);
+            var isCopied = await _fileService.CopyAsync(_sourceFile, destinationFile, _cancellationToken, force);
             State = isCopied ? OperationState.Finished : OperationState.Failed;
             SetFinalProgress();
         }

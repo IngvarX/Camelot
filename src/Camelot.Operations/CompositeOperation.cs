@@ -90,7 +90,7 @@ namespace Camelot.Operations
         public async Task CancelAsync()
         {
             _cancellationTokenSource.Cancel();
-            // TODO: wait?
+            await _taskCompletionSource.Task;
 
             var cancelOperations = _groupedOperationsToExecute
                 .Reverse()
@@ -111,6 +111,7 @@ namespace Camelot.Operations
 
             _totalOperationsCount = groupedOperationsToExecute.Sum(g => g.Count);
             _operationsGroupsCount = groupedOperationsToExecute.Count;
+            _currentOperationsGroupIndex = 0;
 
             foreach (var operationsGroup in groupedOperationsToExecute)
             {
@@ -190,13 +191,14 @@ namespace Camelot.Operations
             UnsubscribeFromEvents(operation);
 
             var finishedOperationsCount = Interlocked.Increment(ref _finishedOperationsCount);
-            if (finishedOperationsCount == _currentOperationsGroup?.Count)
+            if (finishedOperationsCount != _currentOperationsGroup?.Count)
             {
-                // TODO: use different check
-                var isSuccessful = !operation.State.IsFailedOrCancelled();
-
-                _taskCompletionSource.SetResult(isSuccessful);
+                return;
             }
+
+            var isSuccessful = _currentOperationsGroup.All(o => !operation.State.IsFailedOrCancelled());
+
+            _taskCompletionSource.SetResult(isSuccessful);
         }
 
         private async Task ProcessNextBlockedTaskAsync()
