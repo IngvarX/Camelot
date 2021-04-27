@@ -27,6 +27,7 @@ namespace Camelot.Operations
         private int _finishedOperationsCount;
         private int _currentOperationsGroupIndex;
         private int _operationsGroupsCount;
+        private int _startedOperationsInGroup;
         private IReadOnlyList<IInternalOperation> _currentOperationsGroup;
         private int _totalOperationsCount;
         private CancellationTokenSource _cancellationTokenSource;
@@ -90,7 +91,15 @@ namespace Camelot.Operations
         public async Task CancelAsync()
         {
             _cancellationTokenSource.Cancel();
-            await _taskCompletionSource.Task;
+
+            if (_startedOperationsInGroup < _finishedOperationsCount)
+            {
+                await _taskCompletionSource.Task;
+            }
+            else
+            {
+                _taskCompletionSource.SetResult(false);
+            }
 
             var cancelOperations = _groupedOperationsToExecute
                 .Reverse()
@@ -131,6 +140,7 @@ namespace Camelot.Operations
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
+                    _startedOperationsInGroup = i;
                     var currentOperation = operationsGroup[i];
 
                     var previousOperationDidNotSucceeded =
@@ -191,7 +201,8 @@ namespace Camelot.Operations
             UnsubscribeFromEvents(operation);
 
             var finishedOperationsCount = Interlocked.Increment(ref _finishedOperationsCount);
-            if (finishedOperationsCount != _currentOperationsGroup?.Count)
+            if (finishedOperationsCount != _currentOperationsGroup?.Count
+                || _cancellationTokenSource.IsCancellationRequested && _finishedOperationsCount != _currentOperationsGroupIndex)
             {
                 return;
             }
