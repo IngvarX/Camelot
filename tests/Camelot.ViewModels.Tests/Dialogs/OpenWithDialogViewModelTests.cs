@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
@@ -23,7 +24,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
             _autoMocker = new AutoMocker();
             _autoMocker.Use(new OpenWithDialogConfiguration
             {
-                SearchTimeoutMs = 1
+                SearchTimeoutMs = 10
             });
         }
 
@@ -222,7 +223,6 @@ namespace Camelot.ViewModels.Tests.Dialogs
             dialog.ApplicationName = searchString;
             Assert.Equal(searchString, dialog.ApplicationName);
 
-            await Task.Delay(100);
             Assert.Equal(count, dialog.OtherApplications.Count());
         }
 
