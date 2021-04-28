@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
+using Camelot.ViewModels.Configuration;
 using Camelot.ViewModels.Implementations.Dialogs;
 using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
 using Moq;
@@ -20,6 +21,10 @@ namespace Camelot.ViewModels.Tests.Dialogs
         public OpenWithDialogViewModelTests()
         {
             _autoMocker = new AutoMocker();
+            _autoMocker.Use(new OpenWithDialogConfiguration
+            {
+                SearchTimeoutMs = 1
+            });
         }
 
         [Fact]
@@ -204,7 +209,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
             var apps = appsNames.Select(n => new ApplicationModel
             {
                 DisplayName = n
-            });
+            }).ToArray();
             _autoMocker
                 .Setup<IApplicationService, Task<IEnumerable<ApplicationModel>>>(m => m.GetInstalledApplicationsAsync())
                 .ReturnsAsync(apps);

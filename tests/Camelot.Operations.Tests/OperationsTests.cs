@@ -415,10 +415,11 @@ namespace Camelot.Operations.Tests
         }
 
         [Theory]
-        [InlineData(true, 1, 1)]
-        [InlineData(false, 0, 1)]
+        [InlineData(true, 1, 1, false)]
+        [InlineData(false, 0, 1, false)]
+        [InlineData(false, 1, 1, true)]
         public async Task TestCopyOperationCancel(bool isSuccessFirst, int removeFirstCalled,
-            int removeSecondCalled)
+            int removeSecondCalled, bool shouldThrow)
         {
             var taskCompletionSource = new TaskCompletionSource<bool>();
 
@@ -428,7 +429,11 @@ namespace Camelot.Operations.Tests
                 .Returns(async () =>
                 {
                     await taskCompletionSource.Task;
-                    await Task.Delay(100);
+                    await Task.Delay(200);
+                    if (shouldThrow)
+                    {
+                        throw new OperationCanceledException();
+                    }
 
                     return isSuccessFirst;
                 });
