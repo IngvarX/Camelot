@@ -63,6 +63,13 @@ namespace Camelot.Services
                 await using var writeStream = _environmentFileService.OpenWrite(destination);
                 await readStream.CopyToAsync(writeStream, cancellationToken);
             }
+            catch (TaskCanceledException)
+            {
+                _logger.LogInformation(
+                    $"Cancelled file copy {source} to {destination} (overwrite: {overwrite})");
+
+                throw;
+            }
             catch (Exception ex)
             {
                 _logger.LogError(

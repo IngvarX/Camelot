@@ -29,6 +29,7 @@ namespace Camelot.Services.Abstractions.Extensions
                 OperationState.Paused,
                 OperationState.Pausing,
                 OperationState.Unpausing,
+                OperationState.Cancelled,
                 OperationState.Finished
             };
 

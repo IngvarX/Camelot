@@ -105,12 +105,21 @@ namespace Camelot.Operations
 
         private async Task CopyFileAsync(string destinationFile, bool force = false)
         {
-            _cancellationToken.ThrowIfCancellationRequested();
+            try
+            {
+                _cancellationToken.ThrowIfCancellationRequested();
 
-            State = OperationState.InProgress;
-            var isCopied = await _fileService.CopyAsync(_sourceFile, destinationFile, _cancellationToken, force);
-            State = isCopied ? OperationState.Finished : OperationState.Failed;
-            SetFinalProgress();
+                State = OperationState.InProgress;
+                var isCopied = await _fileService.CopyAsync(_sourceFile, destinationFile, _cancellationToken, force);
+                State = isCopied ? OperationState.Finished : OperationState.Failed;
+                SetFinalProgress();
+            }
+            catch (TaskCanceledException)
+            {
+                State = OperationState.Cancelled;
+
+                throw;
+            }
         }
     }
 }

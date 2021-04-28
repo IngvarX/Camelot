@@ -27,7 +27,6 @@ namespace Camelot.Operations
         private int _finishedOperationsCount;
         private int _currentOperationsGroupIndex;
         private int _operationsGroupsCount;
-        private int _startedOperationsInGroup;
         private IReadOnlyList<IInternalOperation> _currentOperationsGroup;
         private int _totalOperationsCount;
         private CancellationTokenSource _cancellationTokenSource;
@@ -92,14 +91,7 @@ namespace Camelot.Operations
         {
             _cancellationTokenSource.Cancel();
 
-            if (_startedOperationsInGroup < _finishedOperationsCount)
-            {
-                await _taskCompletionSource.Task;
-            }
-            else
-            {
-                _taskCompletionSource.SetResult(false);
-            }
+            await _taskCompletionSource.Task;
 
             var cancelOperations = _groupedOperationsToExecute
                 .Reverse()
@@ -140,7 +132,6 @@ namespace Camelot.Operations
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
-                    _startedOperationsInGroup = i;
                     var currentOperation = operationsGroup[i];
 
                     var previousOperationDidNotSucceeded =
@@ -171,8 +162,16 @@ namespace Camelot.Operations
             SetFinalProgress();
         }
 
-        private static void RunOperation(IInternalOperation operation, CancellationToken cancellationToken) =>
-            Task.Run(() => operation.RunAsync(cancellationToken), cancellationToken).Forget();
+        private void RunOperation(IInternalOperation operation, CancellationToken cancellationToken) =>
+            Task
+                .Run(() => operation.RunAsync(cancellationToken), cancellationToken)
+                .ContinueWith(t =>
+                {
+                    if (t.IsCanceled)
+                    {
+                        FinishOperation(operation);
+                    }
+                });
 
         private async void OperationOnStateChanged(object sender, OperationStateChangedEventArgs e)
         {
@@ -201,8 +200,7 @@ namespace Camelot.Operations
             UnsubscribeFromEvents(operation);
 
             var finishedOperationsCount = Interlocked.Increment(ref _finishedOperationsCount);
-            if (finishedOperationsCount != _currentOperationsGroup?.Count
-                || _cancellationTokenSource.IsCancellationRequested && _finishedOperationsCount != _currentOperationsGroupIndex)
+            if (finishedOperationsCount != _currentOperationsGroup?.Count)
             {
                 return;
             }
