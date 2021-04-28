@@ -421,18 +421,22 @@ namespace Camelot.Operations.Tests
         public async Task TestCopyOperationCancel(bool isSuccessFirst, int removeFirstCalled,
             int removeSecondCalled, bool shouldThrow)
         {
-            var taskCompletionSource = new TaskCompletionSource<bool>();
+            var firstTaskCompletionSource = new TaskCompletionSource<bool>();
+            var secondTaskCompletionSource = new TaskCompletionSource<bool>();
+            var cancelTaskCompletionSource = new TaskCompletionSource<bool>();
 
             _autoMocker
                 .Setup<IFileService, Task<bool>>(m =>
                     m.CopyAsync(SourceName, DestinationName, It.IsAny<CancellationToken>(), false))
                 .Returns(async () =>
                 {
-                    await taskCompletionSource.Task;
-                    await Task.Delay(200);
+                    await firstTaskCompletionSource.Task;
+                    secondTaskCompletionSource.SetResult(true);
+                    await cancelTaskCompletionSource.Task;
+                    await Task.Delay(100);
                     if (shouldThrow)
                     {
-                        throw new OperationCanceledException();
+                        throw new TaskCanceledException();
                     }
 
                     return isSuccessFirst;
@@ -441,7 +445,7 @@ namespace Camelot.Operations.Tests
                 .Setup<IFileService, Task<bool>>(m =>
                     m.CopyAsync(SecondSourceName, SecondDestinationName, It.IsAny<CancellationToken>(), false))
                 .ReturnsAsync(true)
-                .Callback(() => taskCompletionSource.SetResult(true));
+                .Callback(() => firstTaskCompletionSource.SetResult(true));
             _autoMocker
                 .Setup<IFileService, bool>(m => m.Remove(DestinationName))
                 .Returns(true)
@@ -470,8 +474,11 @@ namespace Camelot.Operations.Tests
 
             Task.Run(copyOperation.RunAsync).Forget();
 
-            await taskCompletionSource.Task;
-            await copyOperation.CancelAsync();
+            await firstTaskCompletionSource.Task;
+            await secondTaskCompletionSource.Task;
+            var task = copyOperation.CancelAsync();
+            cancelTaskCompletionSource.SetResult(true);
+            await task;
 
             Assert.Equal(OperationState.Cancelled, copyOperation.State);
 

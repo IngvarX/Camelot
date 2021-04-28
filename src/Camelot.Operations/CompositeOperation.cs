@@ -167,7 +167,7 @@ namespace Camelot.Operations
                 .Run(() => operation.RunAsync(cancellationToken), cancellationToken)
                 .ContinueWith(t =>
                 {
-                    if (t.IsCanceled)
+                    if (t.IsCanceled && operation.State == OperationState.NotStarted)
                     {
                         FinishOperation(operation);
                     }
