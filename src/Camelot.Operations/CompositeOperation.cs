@@ -23,6 +23,7 @@ namespace Camelot.Operations
 
         private readonly IDictionary<string, ISelfBlockingOperation> _blockedOperationsDictionary;
         private readonly ConcurrentQueue<(string SourceFilePath, string DestinationFilePath)> _blockedFilesQueue;
+        private readonly object _locker;
 
         private int _finishedOperationsCount;
         private int _currentOperationsGroupIndex;
@@ -52,6 +53,7 @@ namespace Camelot.Operations
 
             _blockedOperationsDictionary = new ConcurrentDictionary<string, ISelfBlockingOperation>();
             _blockedFilesQueue = new ConcurrentQueue<(string SourceFilePath, string DestinationFilePath)>();
+            _locker = new object();
         }
 
         public async Task RunAsync()
@@ -212,13 +214,19 @@ namespace Camelot.Operations
 
         private async Task ProcessNextBlockedTaskAsync()
         {
-            var isBlockedFileAvailable = _blockedFilesQueue.TryDequeue(out var currentBlockedFile);
-            if (!isBlockedFileAvailable)
+            string sourceFilePath;
+            lock (_locker)
             {
-                return;
+                var isBlockedFileAvailable = _blockedFilesQueue.TryDequeue(out var currentBlockedFile);
+                if (!isBlockedFileAvailable)
+                {
+                    return;
+                }
+
+                sourceFilePath = currentBlockedFile.SourceFilePath;
             }
 
-            var operation = _blockedOperationsDictionary[currentBlockedFile.SourceFilePath];
+            var operation = _blockedOperationsDictionary[sourceFilePath];
 
             await ProcessBlockedTaskAsync(operation);
         }
@@ -230,9 +238,12 @@ namespace Camelot.Operations
                 _blockedOperationsDictionary[operation.CurrentBlockedFile.SourceFilePath] = operation;
                 _blockedFilesQueue.Enqueue(operation.CurrentBlockedFile);
 
-                if (CurrentBlockedFile == operation.CurrentBlockedFile && _continuationMode is null)
+                lock (_locker)
                 {
-                    Blocked.Raise(this, EventArgs.Empty);
+                    if (CurrentBlockedFile == operation.CurrentBlockedFile && _continuationMode is null)
+                    {
+                        Blocked.Raise(this, EventArgs.Empty);
+                    }
                 }
             }
             else
