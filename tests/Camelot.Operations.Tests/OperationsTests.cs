@@ -489,5 +489,47 @@ namespace Camelot.Operations.Tests
                 .Verify<IFileService, bool>(m => m.Remove(SecondDestinationName),
                     Times.Exactly(removeSecondCalled));
         }
+
+        [Fact]
+        public async Task TestMoveOperationFailed()
+        {
+            _autoMocker
+                .Setup<IFileService, Task<bool>>(m =>
+                    m.CopyAsync(SourceName, DestinationName, It.IsAny<CancellationToken>(), false))
+                .ReturnsAsync(false)
+                .Verifiable();
+            _autoMocker
+                .Setup<IFileService, bool>(m => m.Remove(DestinationName))
+                .Returns(true)
+                .Verifiable();
+
+            var operationsFactory = _autoMocker.CreateInstance<OperationsFactory>();
+            var settings = new BinaryFileSystemOperationSettings(
+                new string[] { },
+                new[] {SourceName},
+                new string[] { },
+                new[] {DestinationName},
+                new Dictionary<string, string>
+                {
+                    [SourceName] = DestinationName
+                },
+                new string[] { }
+            );
+            var moveOperation = operationsFactory.CreateMoveOperation(settings);
+
+            Assert.Equal(OperationState.NotStarted, moveOperation.State);
+
+            await moveOperation.RunAsync();
+
+            Assert.Equal(OperationState.Failed, moveOperation.State);
+
+            _autoMocker
+                .Verify<IFileService, bool>(m => m.Remove(DestinationName),
+                    Times.Never);
+            _autoMocker
+                .Verify<IFileService, Task<bool>>(m =>
+                        m.CopyAsync(SourceName, DestinationName, It.IsAny<CancellationToken>(), false),
+                    Times.Once);
+        }
     }
 }
