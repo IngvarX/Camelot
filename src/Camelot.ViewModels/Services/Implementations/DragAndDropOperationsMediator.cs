@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Operations;
@@ -22,14 +23,31 @@ namespace Camelot.ViewModels.Services.Implementations
             _pathService = pathService;
         }
 
-        public Task CopyFilesAsync(IReadOnlyList<string> files, string fullPath) =>
-            _operationsService.CopyAsync(files, ExtractDirectory(fullPath));
+        public async Task CopyFilesAsync(IReadOnlyList<string> files, string fullPath)
+        {
+            var targetDirectory = ExtractDirectory(fullPath);
+            var filteredFiles = Filter(files, targetDirectory);
+            if (filteredFiles.Any())
+            {
+                await _operationsService.CopyAsync(filteredFiles, targetDirectory);
+            }
+        }
 
-        public Task MoveFilesAsync(IReadOnlyList<string> files, string fullPath) =>
-            _operationsService.MoveAsync(files, ExtractDirectory(fullPath));
+        public async Task MoveFilesAsync(IReadOnlyList<string> files, string fullPath)
+        {
+            var targetDirectory = ExtractDirectory(fullPath);
+            var filteredFiles = Filter(files, targetDirectory);
+            if (filteredFiles.Any())
+            {
+                await _operationsService.MoveAsync(filteredFiles, targetDirectory);
+            }
+        }
 
         private string ExtractDirectory(string fullPath) => _directoryService.CheckIfExists(fullPath)
             ? fullPath
             : _pathService.GetParentDirectory(fullPath);
+
+        private IReadOnlyList<string> Filter(IReadOnlyList<string> files, string targetDirectory) =>
+            files.Where(f => _pathService.GetParentDirectory(f) != targetDirectory).ToArray();
     }
 }

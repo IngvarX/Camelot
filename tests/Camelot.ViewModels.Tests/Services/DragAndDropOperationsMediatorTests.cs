@@ -51,6 +51,31 @@ namespace Camelot.ViewModels.Tests.Services
                     Times.Once);
         }
 
+        [Fact]
+        public async Task TestCopyNotCalled()
+        {
+            _autoMocker
+                .Setup<IDirectoryService, bool>(m => m.CheckIfExists(Directory))
+                .Returns(true);
+            _autoMocker
+                .Setup<IPathService, string>(m => m.GetParentDirectory(File))
+                .Returns(ParentDirectory);
+            _autoMocker
+                .Setup<IOperationsService>(m => m.CopyAsync(
+                    It.IsAny<IReadOnlyList<string>>(), It.IsAny<string>()))
+                .Verifiable();
+
+            var viewModel = _autoMocker.CreateInstance<DragAndDropOperationsMediator>();
+            var files = new[] {FileToProcess};
+
+            await viewModel.CopyFilesAsync(files, ParentDirectory);
+
+            _autoMocker
+                .Verify<IOperationsService>(m => m.CopyAsync(
+                    It.IsAny<IReadOnlyList<string>>(), It.IsAny<string>()),
+                    Times.Once);
+        }
+
         [Theory]
         [InlineData(Directory, true, Directory)]
         [InlineData(File, false, ParentDirectory)]
@@ -75,6 +100,31 @@ namespace Camelot.ViewModels.Tests.Services
             _autoMocker
                 .Verify<IOperationsService>(m => m.MoveAsync(
                         It.Is<IReadOnlyList<string>>(m => m.Single() == FileToProcess), destinationDirectory),
+                    Times.Once);
+        }
+
+        [Fact]
+        public async Task TestMoveNotCalled()
+        {
+            _autoMocker
+                .Setup<IDirectoryService, bool>(m => m.CheckIfExists(Directory))
+                .Returns(true);
+            _autoMocker
+                .Setup<IPathService, string>(m => m.GetParentDirectory(File))
+                .Returns(ParentDirectory);
+            _autoMocker
+                .Setup<IOperationsService>(m => m.CopyAsync(
+                    It.IsAny<IReadOnlyList<string>>(), It.IsAny<string>()))
+                .Verifiable();
+
+            var viewModel = _autoMocker.CreateInstance<DragAndDropOperationsMediator>();
+            var files = new[] {FileToProcess};
+
+            await viewModel.MoveFilesAsync(files, ParentDirectory);
+
+            _autoMocker
+                .Verify<IOperationsService>(m => m.MoveAsync(
+                        It.IsAny<IReadOnlyList<string>>(), It.IsAny<string>()),
                     Times.Once);
         }
     }

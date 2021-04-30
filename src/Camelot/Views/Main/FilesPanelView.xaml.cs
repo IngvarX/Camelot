@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Timers;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -21,7 +22,11 @@ namespace Camelot.Views.Main
     {
         private const int DragAndDropDelay = 300;
 
+        private readonly Timer _timer;
+
         private bool _isCellPressed;
+        private PointerEventArgs _pointerEventArgs;
+        private IDataContextProvider _dataContextProvider;
 
         private DataGrid FilesDataGrid => this.FindControl<DataGrid>("FilesDataGrid");
 
@@ -33,6 +38,9 @@ namespace Camelot.Views.Main
         {
             InitializeComponent();
             SubscribeToEvents();
+
+            _timer = new Timer {Interval = DragAndDropDelay};
+            _timer.Elapsed += TimerOnElapsed;
         }
 
         private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
@@ -178,6 +186,8 @@ namespace Camelot.Views.Main
 
         private void PrepareDrag(DataGridCellPointerPressedEventArgs e)
         {
+            _timer.Stop();
+
             if (!e.PointerPressedEventArgs.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
             {
                 return;
@@ -196,11 +206,9 @@ namespace Camelot.Views.Main
             _isCellPressed = true;
             e.Cell.PointerReleased += CellOnPointerReleased;
 
-            Task.Delay(DragAndDropDelay).ContinueWith(_ =>
-            {
-                var dispatcher = Locator.Current.GetRequiredService<IApplicationDispatcher>();
-                dispatcher.DispatchAsync(() => DoDragAsync(e.Cell, e.PointerPressedEventArgs));
-            });
+            _pointerEventArgs = e.PointerPressedEventArgs;
+            _dataContextProvider = e.Cell;
+            _timer.Start();
         }
 
         private void CellOnPointerReleased(object sender, PointerReleasedEventArgs e)
@@ -274,6 +282,20 @@ namespace Camelot.Views.Main
             }
 
             e.Handled = true;
+        }
+
+        private async void TimerOnElapsed(object sender, ElapsedEventArgs e)
+        {
+            _timer.Stop();
+
+            await DoDragInUiThreadAsync();
+        }
+
+        private async Task DoDragInUiThreadAsync()
+        {
+            var dispatcher = Locator.Current.GetRequiredService<IApplicationDispatcher>();
+
+            await dispatcher.DispatchAsync(() => DoDragAsync(_dataContextProvider, _pointerEventArgs));
         }
     }
 }

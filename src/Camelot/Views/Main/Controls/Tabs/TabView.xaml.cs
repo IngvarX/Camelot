@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using System.Timers;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Markup.Xaml;
@@ -11,8 +12,12 @@ namespace Camelot.Views.Main.Controls.Tabs
 {
     public class TabView : UserControl
     {
-        private const int DragAndDropDelay = 300;
+        private const int DragAndDropDelay = 200;
         private const string DataFormat = "Tab";
+
+        private readonly Timer _timer;
+
+        private PointerEventArgs _pointerEventArgs;
 
         private Grid Grid => this.Find<Grid>("TabGrid");
 
@@ -25,6 +30,9 @@ namespace Camelot.Views.Main.Controls.Tabs
             InitializeComponent();
 
             SetupDragAndDrop();
+
+            _timer = new Timer {Interval = DragAndDropDelay};
+            _timer.Elapsed += TimerOnElapsed;
         }
 
         private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
@@ -49,6 +57,8 @@ namespace Camelot.Views.Main.Controls.Tabs
 
         private void PrepareDrag(object sender, PointerPressedEventArgs e)
         {
+            _timer.Stop();
+
             if (!e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
             {
                 return;
@@ -57,11 +67,8 @@ namespace Camelot.Views.Main.Controls.Tabs
             _isGridPressed = true;
             Grid.PointerReleased += GridOnPointerReleased;
 
-            Task.Delay(DragAndDropDelay).ContinueWith(_ =>
-            {
-                var dispatcher = Locator.Current.GetRequiredService<IApplicationDispatcher>();
-                dispatcher.DispatchAsync(() => DoDragAsync(e));
-            });
+            _pointerEventArgs = e;
+            _timer.Start();
         }
 
         private async Task DoDragAsync(PointerEventArgs e)
@@ -93,6 +100,20 @@ namespace Camelot.Views.Main.Controls.Tabs
             {
                 tabViewModel.RequestMoveCommand.Execute(ViewModel);
             }
+        }
+
+        private async void TimerOnElapsed(object sender, ElapsedEventArgs e)
+        {
+            _timer.Stop();
+
+            await DoDragInUiThreadAsync();
+        }
+
+        private async Task DoDragInUiThreadAsync()
+        {
+            var dispatcher = Locator.Current.GetRequiredService<IApplicationDispatcher>();
+
+            await dispatcher.DispatchAsync(() => DoDragAsync(_pointerEventArgs));
         }
     }
 }
