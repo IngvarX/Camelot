@@ -166,6 +166,7 @@ namespace Camelot.DependencyInjection
             ));
             services.Register(() => new DirectoryInformationDialogViewModel(
                 resolver.GetRequiredService<IDirectoryService>(),
+                resolver.GetRequiredService<IFileService>(),
                 resolver.GetRequiredService<IApplicationDispatcher>(),
                 resolver.GetRequiredService<MainNodeInfoTabViewModel>()
             ));

@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Camelot.Avalonia.Interfaces;
 using Camelot.Services.Abstractions;
@@ -16,6 +18,8 @@ namespace Camelot.ViewModels.Tests.Dialogs
     {
         private const string Directory = "Dir";
         private const long Size = 42;
+        private const int FilesCount = 13;
+        private const int DirsCount = 31;
 
         private readonly AutoMocker _autoMocker;
 
@@ -40,38 +44,44 @@ namespace Camelot.ViewModels.Tests.Dialogs
             var taskCompletionSource = new TaskCompletionSource<bool>();
 
             var directoryModel = new DirectoryModel {FullPath = Directory};
-            var directoryServiceMock = new Mock<IDirectoryService>();
-            directoryServiceMock
-                .Setup(m => m.GetDirectory(Directory))
+            _autoMocker
+                .Setup<IDirectoryService, DirectoryModel>(m => m.GetDirectory(Directory))
                 .Returns(directoryModel);
-            directoryServiceMock
-                .Setup(m => m.CalculateSize(Directory))
+            _autoMocker
+                .Setup<IDirectoryService, long>(m => m.CalculateSize(Directory))
                 .Returns(Size);
-            var applicationDispatcherMock = new Mock<IApplicationDispatcher>();
-            applicationDispatcherMock
-                .Setup(m => m.Dispatch(It.IsAny<Action>()))
+            _autoMocker
+                .Setup<IApplicationDispatcher>(m => m.Dispatch(It.IsAny<Action>()))
                 .Callback<Action>(action =>
                 {
                     action();
                     taskCompletionSource.SetResult(true);
                 });
-            var mainNodeInfoTabViewModelMock = new Mock<IMainNodeInfoTabViewModel>();
-            mainNodeInfoTabViewModelMock
-                .Setup(m => m.SetSize(Size))
+            _autoMocker
+                .Setup<IDirectoryService, IReadOnlyList<DirectoryModel>>(m => m.GetChildDirectories(Directory, null))
+                .Returns(Enumerable.Repeat(new DirectoryModel(), DirsCount).ToArray());
+            _autoMocker
+                .Setup<IFileService, IReadOnlyList<FileModel>>(m => m.GetFiles(Directory, null))
+                .Returns(Enumerable.Repeat(new FileModel(), FilesCount).ToArray());
+            _autoMocker
+                .Setup<IMainNodeInfoTabViewModel>(m => m.SetSize(Size))
                 .Verifiable();
-            mainNodeInfoTabViewModelMock
-                .Setup(m => m.Activate(directoryModel, true))
+            _autoMocker
+                .Setup<IMainNodeInfoTabViewModel>(m => m.Activate(directoryModel, true, FilesCount, DirsCount))
                 .Verifiable();
 
-            var viewModel = new DirectoryInformationDialogViewModel(directoryServiceMock.Object,
-                applicationDispatcherMock.Object, mainNodeInfoTabViewModelMock.Object);
+            var viewModel = _autoMocker.CreateInstance<DirectoryInformationDialogViewModel>();
             var parameter = new FileSystemNodeNavigationParameter(Directory);
             viewModel.Activate(parameter);
 
             await Task.WhenAny(taskCompletionSource.Task, Task.Delay(1000));
 
-            mainNodeInfoTabViewModelMock.Verify(m => m.SetSize(Size), Times.Once);
-            mainNodeInfoTabViewModelMock.Verify(m => m.Activate(directoryModel, true), Times.Once);
+            _autoMocker
+                .Verify<IMainNodeInfoTabViewModel>(m => m.SetSize(Size),
+                    Times.Once);
+            _autoMocker
+                .Verify<IMainNodeInfoTabViewModel>(m => m.Activate(directoryModel, true, FilesCount, DirsCount),
+                    Times.Once);
         }
     }
 }

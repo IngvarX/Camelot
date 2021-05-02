@@ -35,25 +35,26 @@ namespace Camelot.ViewModels.Tests.Dialogs
         public void TestActivation()
         {
             var fileModel = new FileModel {FullPath = File, SizeBytes = Size};
-            var fileServiceMock = new Mock<IFileService>();
-            fileServiceMock
-                .Setup(m => m.GetFile(File))
+            _autoMocker
+                .Setup<IFileService, FileModel>(m => m.GetFile(File))
                 .Returns(fileModel);
-            var mainNodeInfoTabViewModelMock = new Mock<IMainNodeInfoTabViewModel>();
-            mainNodeInfoTabViewModelMock
-                .Setup(m => m.SetSize(Size))
+            _autoMocker
+                .Setup<IMainNodeInfoTabViewModel>(m => m.SetSize(Size))
                 .Verifiable();
-            mainNodeInfoTabViewModelMock
-                .Setup(m => m.Activate(fileModel, false))
+            _autoMocker
+                .Setup<IMainNodeInfoTabViewModel>(m => m.Activate(fileModel, false, 0, 0))
                 .Verifiable();
 
-            var viewModel = new FileInformationDialogViewModel(fileServiceMock.Object,
-                mainNodeInfoTabViewModelMock.Object);
+            var viewModel = _autoMocker.CreateInstance<FileInformationDialogViewModel>();
             var parameter = new FileSystemNodeNavigationParameter(File);
             viewModel.Activate(parameter);
 
-            mainNodeInfoTabViewModelMock.Verify(m => m.SetSize(Size), Times.Once);
-            mainNodeInfoTabViewModelMock.Verify(m => m.Activate(fileModel, false), Times.Once);
+            _autoMocker
+                .Verify<IMainNodeInfoTabViewModel>(m => m.SetSize(Size),
+                    Times.Once);
+            _autoMocker
+                .Verify<IMainNodeInfoTabViewModel>(m => m.Activate(fileModel, false, 0, 0),
+                    Times.Once);
         }
     }
 }

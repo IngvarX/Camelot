@@ -11,7 +11,7 @@
         <properties:MainNodeInfoTabViewModel />
     </Design.DataContext>
 
-    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,15,*">
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,15,*">
         <Image Width="48" Height="48" Margin="3,7,3,3" VerticalAlignment="Center"
                 IsVisible="{Binding IsDirectory}">
             <Image.Source>
@@ -64,5 +64,15 @@
 
         <TextBlock Grid.Row="5" Grid.Column="0" Classes="dialogTextBlock" Text="{x:Static p:Resources.CreationDateWithColon}" />
         <TextBlock Grid.Row="5" Grid.Column="2" Classes="dialogTextBlock" Text="{Binding CreatedDateTime}" />
+
+        <TextBlock Grid.Row="6" Grid.Column="0" IsVisible="{Binding IsDirectory}"
+                   Classes="dialogTextBlock" Text="{x:Static p:Resources.InnerDirectoriesWithColon}" />
+        <TextBlock Grid.Row="6" Grid.Column="2" IsVisible="{Binding IsDirectory}"
+                   Classes="dialogTextBlock" Text="{Binding InnerDirectoriesCount}" />
+
+        <TextBlock Grid.Row="7" Grid.Column="0" IsVisible="{Binding IsDirectory}"
+                   Classes="dialogTextBlock" Text="{x:Static p:Resources.InnerFilesWithColon}" />
+        <TextBlock Grid.Row="7" Grid.Column="2" IsVisible="{Binding IsDirectory}"
+                   Classes="dialogTextBlock" Text="{Binding InnerFilesCount}" />
     </Grid>
 </UserControl>

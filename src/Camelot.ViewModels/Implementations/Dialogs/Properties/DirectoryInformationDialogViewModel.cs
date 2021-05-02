@@ -10,16 +10,19 @@ namespace Camelot.ViewModels.Implementations.Dialogs.Properties
     public class DirectoryInformationDialogViewModel : ParameterizedDialogViewModelBase<FileSystemNodeNavigationParameter>
     {
         private readonly IDirectoryService _directoryService;
+        private readonly IFileService _fileService;
         private readonly IApplicationDispatcher _applicationDispatcher;
 
         public IMainNodeInfoTabViewModel MainNodeInfoTabViewModel { get; }
 
         public DirectoryInformationDialogViewModel(
             IDirectoryService directoryService,
+            IFileService fileService,
             IApplicationDispatcher applicationDispatcher,
             IMainNodeInfoTabViewModel mainNodeInfoTabViewModel)
         {
             _directoryService = directoryService;
+            _fileService = fileService;
             _applicationDispatcher = applicationDispatcher;
 
             MainNodeInfoTabViewModel = mainNodeInfoTabViewModel;
@@ -36,13 +39,15 @@ namespace Camelot.ViewModels.Implementations.Dialogs.Properties
         {
             LoadDirectorySize(directoryModel.FullPath);
 
-            MainNodeInfoTabViewModel.Activate(directoryModel, true);
+            var filesCount = _fileService.GetFiles(directoryModel.FullPath).Count;
+            var directoriesCount = _directoryService.GetChildDirectories(directoryModel.FullPath).Count;
+
+            MainNodeInfoTabViewModel.Activate(directoryModel, true, filesCount, directoriesCount);
         }
 
         private void LoadDirectorySize(string directory) =>
             Task
-                .Factory
-                .StartNew(() => _directoryService.CalculateSize(directory))
+                .Run(() => _directoryService.CalculateSize(directory))
                 .ContinueWith(t => SetSize(t.Result));
 
         private void SetSize(long size) =>

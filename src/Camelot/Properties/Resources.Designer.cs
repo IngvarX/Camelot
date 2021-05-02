@@ -818,5 +818,17 @@ namespace Camelot.Properties {
                 return ResourceManager.GetString("RegularExpression", resourceCulture);
             }
         }
+        
+        public static string InnerFilesWithColon {
+            get {
+                return ResourceManager.GetString("InnerFilesWithColon", resourceCulture);
+            }
+        }
+        
+        public static string InnerDirectoriesWithColon {
+            get {
+                return ResourceManager.GetString("InnerDirectoriesWithColon", resourceCulture);
+            }
+        }
     }
 }

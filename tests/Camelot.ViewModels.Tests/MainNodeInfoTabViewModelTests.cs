@@ -7,6 +7,7 @@ using Camelot.ViewModels.Configuration;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Implementations.Dialogs.Properties;
 using Moq;
+using Moq.AutoMock;
 using Xunit;
 
 namespace Camelot.ViewModels.Tests
@@ -18,6 +19,23 @@ namespace Camelot.ViewModels.Tests
         private const string SizeAsNumber = "42 000";
         private const string ParentDirectory = "Dir";
         private const string FileName = "Name";
+        private const int InnerFilesCount = 5;
+        private const int InnerDirectoriesCount = 13;
+
+        private readonly AutoMocker _autoMocker;
+
+        public MainNodeInfoTabViewModelTests()
+        {
+            _autoMocker = new AutoMocker();
+            var configuration = new ImagePreviewConfiguration
+            {
+                SupportedFormats = new List<string>
+                {
+                    "png", "jpg"
+                }
+            };
+            _autoMocker.Use(configuration);
+        }
 
         [Theory]
         [InlineData("File", "", false, false)]
@@ -27,37 +45,26 @@ namespace Camelot.ViewModels.Tests
         [InlineData("Dir", null, true, false)]
         public void TestProperties(string filePath, string extension, bool isDirectory, bool isImage)
         {
-            var configuration = new ImagePreviewConfiguration
-            {
-                SupportedFormats = new List<string>
-                {
-                    "png", "jpg"
-                }
-            };
-            var fileSizeFormatterMock = new Mock<IFileSizeFormatter>();
-            fileSizeFormatterMock
-                .Setup(m => m.GetFormattedSize(Size))
+            _autoMocker
+                .Setup<IFileSizeFormatter, string>(m => m.GetFormattedSize(Size))
                 .Returns(FormattedSize);
-            fileSizeFormatterMock
-                .Setup(m => m.GetSizeAsNumber(Size))
+            _autoMocker
+                .Setup<IFileSizeFormatter, string>(m => m.GetSizeAsNumber(Size))
                 .Returns(SizeAsNumber);
-            var pathServiceMock = new Mock<IPathService>();
-            pathServiceMock
-                .Setup(m => m.GetParentDirectory(filePath))
+            _autoMocker
+                .Setup<IPathService, string>(m => m.GetParentDirectory(filePath))
                 .Returns(ParentDirectory);
-            pathServiceMock
-                .Setup(m => m.GetFileName(filePath))
+            _autoMocker
+                .Setup<IPathService, string>(m => m.GetFileName(filePath))
                 .Returns(FileName);
-            pathServiceMock
-                .Setup(m => m.GetExtension(filePath))
+            _autoMocker
+                .Setup<IPathService, string>(m => m.GetExtension(filePath))
                 .Returns(extension);
-            var bitmapFactoryMock = new Mock<IBitmapFactory>();
-            bitmapFactoryMock
-                .Setup(m => m.Create(filePath))
+            _autoMocker
+                .Setup<IBitmapFactory, IBitmap>(m => m.Create(filePath))
                 .Returns(new Mock<IBitmap>().Object);
 
-            var viewModel = new MainNodeInfoTabViewModel(fileSizeFormatterMock.Object,
-                pathServiceMock.Object, bitmapFactoryMock.Object, configuration);
+            var viewModel = _autoMocker.CreateInstance<MainNodeInfoTabViewModel>();
             var nodeModel = new NodeModelBase
             {
                 FullPath = filePath,
@@ -65,7 +72,7 @@ namespace Camelot.ViewModels.Tests
                 LastAccessDateTime = DateTime.Now.AddHours(1),
                 LastModifiedDateTime = DateTime.Now.AddHours(2),
             };
-            viewModel.Activate(nodeModel, isDirectory);
+            viewModel.Activate(nodeModel, isDirectory, InnerFilesCount, InnerDirectoriesCount);
             viewModel.SetSize(Size);
 
             Assert.Equal(nodeModel.CreatedDateTime, viewModel.CreatedDateTime);
@@ -76,6 +83,8 @@ namespace Camelot.ViewModels.Tests
             Assert.Equal(FileName, viewModel.Name);
             Assert.Equal(ParentDirectory, viewModel.Path);
             Assert.Equal(isDirectory, viewModel.IsDirectory);
+            Assert.Equal(InnerFilesCount, viewModel.InnerFilesCount);
+            Assert.Equal(InnerDirectoriesCount, viewModel.InnerDirectoriesCount);
 
             if (isImage)
             {

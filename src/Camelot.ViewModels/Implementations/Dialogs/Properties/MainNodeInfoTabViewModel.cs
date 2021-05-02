@@ -47,6 +47,10 @@ namespace Camelot.ViewModels.Implementations.Dialogs.Properties
 
         public DateTime LastAccessDateTime { get; set; }
 
+        public int InnerFilesCount { get; set; }
+
+        public int InnerDirectoriesCount { get; set; }
+
         public MainNodeInfoTabViewModel(
             IFileSizeFormatter fileSizeFormatter,
             IPathService pathService,
@@ -59,13 +63,16 @@ namespace Camelot.ViewModels.Implementations.Dialogs.Properties
             _configuration = configuration;
         }
 
-        public void Activate(NodeModelBase nodeModel, bool isDirectory)
+        public void Activate(NodeModelBase nodeModel, bool isDirectory, int innerFilesCount,
+            int innerDirectoriesCount)
         {
             _fullPath = nodeModel.FullPath;
             CreatedDateTime = nodeModel.CreatedDateTime;
             LastWriteDateTime = nodeModel.LastModifiedDateTime;
             LastAccessDateTime = nodeModel.LastAccessDateTime;
             IsDirectory = isDirectory;
+            InnerFilesCount = innerFilesCount;
+            InnerDirectoriesCount = innerDirectoriesCount;
         }
 
         public void SetSize(long sizeBytes) => Size = sizeBytes;

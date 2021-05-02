@@ -504,4 +504,10 @@
   <data name="RegularExpression" xml:space="preserve">
     <value>Regular expression</value>
   </data>
+  <data name="InnerFilesWithColon" xml:space="preserve">
+    <value>Inner files:</value>
+  </data>
+  <data name="InnerDirectoriesWithColon" xml:space="preserve">
+    <value>Inner directories:</value>
+  </data>
 </root>
