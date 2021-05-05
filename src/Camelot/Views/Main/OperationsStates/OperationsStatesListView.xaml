@@ -14,8 +14,7 @@
 
     <Grid>
         <ToggleButton x:Name="OperationsToggleButton" IsVisible="{Binding AreAnyOperationsAvailable}">
-           <controls:CircularProgressBar MinValue="0" MaxValue="100" Radius="12" StrokeThickness="5"
-                                         Background="Red"
+           <controls:CircularProgressBar MinValue="0" MaxValue="100" Radius="10" StrokeThickness="2"
                                          IsVisible="{Binding IsInProgress}"
                                          Value="{Binding TotalProgress}" />
         </ToggleButton>
