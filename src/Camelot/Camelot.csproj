@@ -51,7 +51,6 @@
     <AvaloniaResource Update="Controls\MenuView.xaml">
       <SubType>Designer</SubType>
     </AvaloniaResource>
-    <Compile Remove="Controls\CircularProgressBar.cs" />
     <AvaloniaResource Update="Views\Main\OperationsStates\DataGridHeaderArrowView.xaml">
       <SubType>Designer</SubType>
     </AvaloniaResource>

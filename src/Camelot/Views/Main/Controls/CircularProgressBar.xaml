@@ -1,0 +1,45 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Camelot.Views.Main.Controls.CircularProgressBar">
+
+    <Grid>
+        <Path Name="ProgressPath" Stroke="{DynamicResource ProgressBarForegroundBrush}">
+            <Path.Data>
+                <PathGeometry>
+                    <PathGeometry.Figures>
+                        <PathFigures>
+                            <PathFigure IsClosed="False">
+                                <PathFigure.Segments>
+                                    <PathSegments>
+                                        <ArcSegment SweepDirection="Clockwise" />
+                                    </PathSegments>
+                                </PathFigure.Segments>
+                            </PathFigure>
+                        </PathFigures>
+                    </PathGeometry.Figures>
+                </PathGeometry>
+            </Path.Data>
+        </Path>
+
+        <Path Name="RemainingPath" Stroke="{DynamicResource ProgressBarBackgroundBrush}">
+            <Path.Data>
+                <PathGeometry>
+                    <PathGeometry.Figures>
+                        <PathFigures>
+                            <PathFigure IsClosed="False">
+                                <PathFigure.Segments>
+                                    <PathSegments>
+                                        <ArcSegment SweepDirection="CounterClockwise" />
+                                    </PathSegments>
+                                </PathFigure.Segments>
+                            </PathFigure>
+                        </PathFigures>
+                    </PathGeometry.Figures>
+                </PathGeometry>
+            </Path.Data>
+        </Path>
+
+        <TextBlock Name="ProgressTextBlock"
+                   VerticalAlignment="Center" HorizontalAlignment="Center" />
+    </Grid>
+</UserControl>
