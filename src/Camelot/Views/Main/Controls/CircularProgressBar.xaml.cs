@@ -11,7 +11,7 @@ namespace Camelot.Views.Main.Controls
 {
     public class CircularProgressBar : UserControl
     {
-        private const int Margin = 2;
+        private const int Offset = 2;
 
         private bool _isInitialized;
         private double _value;
@@ -89,12 +89,12 @@ namespace Camelot.Views.Main.Controls
             var remainingPath = this.FindControl<Path>("RemainingPath");
 
             Width = Height = remainingPath.Width =
-                remainingPath.Height = progressPath.Width = progressPath.Height = 2 * (FullRadius + Margin);
+                remainingPath.Height = progressPath.Width = progressPath.Height = 2 * (FullRadius + Offset);
             remainingPath.StrokeThickness = progressPath.StrokeThickness = StrokeThickness;
 
             var progressPathFigure = ((PathGeometry) progressPath.Data).Figures.Single();
             var remainingPathFigure = ((PathGeometry) remainingPath.Data).Figures.Single();
-            progressPathFigure.StartPoint = remainingPathFigure.StartPoint = new Point(Margin + FullRadius, Margin);
+            progressPathFigure.StartPoint = remainingPathFigure.StartPoint = new Point(Offset + FullRadius, Offset);
             if (progressPathFigure.Segments is null || remainingPathFigure.Segments is null)
             {
                 return;
@@ -119,8 +119,8 @@ namespace Camelot.Views.Main.Controls
             }
 
             var angleInRadians = 2 * Math.PI * (Value - MinValue) / (MaxValue - MinValue);
-            var x = Margin + FullRadius * (1 + Math.Sin(angleInRadians));
-            var y = Margin + FullRadius * (1 - Math.Cos(angleInRadians));
+            var x = Offset + FullRadius * (1 + Math.Sin(angleInRadians));
+            var y = Offset + FullRadius * (1 - Math.Cos(angleInRadians));
             var point = new Point(x, y);
 
             _remainingArcSegment.Point = _progressArcSegment.Point = point;

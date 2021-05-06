@@ -33,22 +33,16 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
         private readonly LimitedSizeStack<IOperationStateViewModel> _finishedOperationsQueue;
         private readonly IDictionary<IOperation, IOperationStateViewModel> _operationsViewModelsDictionary;
 
-        private int _totalProgress;
-
-        public int TotalProgress
-        {
-            get => _totalProgress;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _totalProgress, value);
-                this.RaisePropertyChanged(nameof(IsInProgress));
-            }
-        }
+        [Reactive]
+        public int TotalProgress  { get; set; }
 
         [Reactive]
         public bool AreAnyOperationsAvailable { get; set; }
 
-        public bool IsInProgress => TotalProgress > 0 && TotalProgress < 100;
+        [Reactive]
+        public bool IsLastOperationSuccessful { get; set; }
+
+        public bool IsInProgress => ActiveOperations.Any();
 
         public IEnumerable<IOperationStateViewModel> ActiveOperations => _activeOperations;
 
@@ -75,6 +69,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
 
         private void SubscribeToEvents()
         {
+            _activeOperations.CollectionChanged += (sender, args) => this.RaisePropertyChanged(nameof(IsInProgress));
             _operationsStateService.OperationStarted += OperationsStateServiceOnOperationStarted;
         }
 
@@ -111,6 +106,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
         private void AddFinishedOperationViewModel(IOperationStateViewModel stateViewModel)
         {
             _finishedOperationsQueue.Push(stateViewModel);
+            IsLastOperationSuccessful = !stateViewModel.State.IsFailedOrCancelled();
             this.RaisePropertyChanged(nameof(InactiveOperations));
         }
 
