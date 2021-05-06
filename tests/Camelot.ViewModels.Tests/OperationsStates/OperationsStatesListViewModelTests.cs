@@ -7,10 +7,12 @@ using Camelot.Services.Abstractions.Models.EventArgs;
 using Camelot.Services.Abstractions.Models.Operations;
 using Camelot.Services.Abstractions.Operations;
 using Camelot.ViewModels.Configuration;
+using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Implementations.Dialogs;
 using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
 using Camelot.ViewModels.Implementations.Dialogs.Results;
 using Camelot.ViewModels.Implementations.MainWindow.OperationsStates;
+using Camelot.ViewModels.Interfaces.MainWindow.OperationsStates;
 using Camelot.ViewModels.Services.Interfaces;
 using Moq;
 using Moq.AutoMock;
@@ -183,12 +185,22 @@ namespace Camelot.ViewModels.Tests.OperationsStates
             operationMock.Verify(m => m.CancelAsync(), Times.Once);
         }
 
-        [Fact]
-        public async Task TestInProgressOperation()
+        [Theory]
+        [InlineData(OperationState.Finished, true)]
+        [InlineData(OperationState.Failed, false)]
+        [InlineData(OperationState.Cancelled, false)]
+        public async Task TestInProgressOperation(OperationState operationState, bool isLastSuccessful)
         {
+            var stateViewModelMock = new Mock<IOperationStateViewModel>();
+            stateViewModelMock
+                .Setup(m => m.State)
+                .Returns(operationState);
             _autoMocker
                 .Setup<IApplicationDispatcher>(m => m.Dispatch(It.IsAny<Action>()))
                 .Callback<Action>(action => action());
+            _autoMocker
+                .Setup<IOperationStateViewModelFactory, IOperationStateViewModel>(m => m.Create(It.IsAny<IOperation>()))
+                .Returns(stateViewModelMock.Object);
 
             var configuration = new OperationsStatesConfiguration
             {
@@ -258,8 +270,8 @@ namespace Camelot.ViewModels.Tests.OperationsStates
                    taskCompletionSource.SetResult(true);
                });
 
-           state = OperationState.Finished;
-           var finishedArgs = new OperationStateChangedEventArgs(OperationState.Finished);
+           state = operationState;
+           var finishedArgs = new OperationStateChangedEventArgs(state);
            operationMock
                .Raise(m => m.StateChanged += null, finishedArgs);
 
@@ -275,6 +287,7 @@ namespace Camelot.ViewModels.Tests.OperationsStates
            Assert.NotEmpty(viewModel.InactiveOperations);
            Assert.Single(viewModel.InactiveOperations);
            Assert.Empty(viewModel.ActiveOperations);
+           Assert.Equal(viewModel.IsLastOperationSuccessful, isLastSuccessful);
         }
     }
 }
