@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Camelot.Services.Environment.Interfaces;
 using Camelot.Services.Environment.Models;
 using Camelot.Services.Linux.Interfaces;
-using Camelot.Tests.Common.Extensions;
+using Camelot.Tests.Shared.Extensions;
 using Moq;
 using Moq.AutoMock;
 using Xunit;

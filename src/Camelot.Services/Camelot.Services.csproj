@@ -9,7 +9,7 @@
       <ProjectReference Include="..\Camelot.DataAccess.Models\Camelot.DataAccess.Models.csproj" />
       <ProjectReference Include="..\Camelot.DataAccess\Camelot.DataAccess.csproj" />
       <ProjectReference Include="..\Camelot.Extensions\Camelot.Extensions.csproj" />
-      <ProjectReference Include="..\Camelot.FileSystemWatcher\Camelot.FileSystemWatcher.csproj" />
+      <ProjectReference Include="..\Camelot.Services.FileSystemWatcher\Camelot.Services.FileSystemWatcher.csproj" />
       <ProjectReference Include="..\Camelot.Services.Abstractions\Camelot.Services.Abstractions.csproj" />
       <ProjectReference Include="..\Camelot.Services.Linux\Camelot.Services.Linux.csproj" />
       <ProjectReference Include="..\Camelot.Services.Mac\Camelot.Services.Mac.csproj" />

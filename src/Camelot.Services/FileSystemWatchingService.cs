@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Camelot.Extensions;
-using Camelot.FileSystemWatcher.Interfaces;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models.EventArgs;
+using Camelot.Services.FileSystemWatcher.Interfaces;
 
 namespace Camelot.Services
 {

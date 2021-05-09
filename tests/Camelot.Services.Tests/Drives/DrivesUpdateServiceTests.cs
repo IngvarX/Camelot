@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Camelot.Services.Abstractions.Drives;
 using Camelot.Services.Configuration;
 using Camelot.Services.Drives;
-using Camelot.Tests.Common.Extensions;
+using Camelot.Tests.Shared.Extensions;
 using Moq;
 using Moq.AutoMock;
 using Xunit;

@@ -6,7 +6,7 @@ using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.RecursiveSearch;
 using Camelot.Services.Abstractions.Specifications;
 using Camelot.Services.RecursiveSearch;
-using Camelot.Tests.Common.Extensions;
+using Camelot.Tests.Shared.Extensions;
 using Moq;
 using Moq.AutoMock;
 using Xunit;
