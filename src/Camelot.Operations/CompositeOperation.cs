@@ -16,7 +16,7 @@ using Camelot.Services.Abstractions.Operations;
 
 namespace Camelot.Operations
 {
-    public class CompositeOperation : OperationBase, ICompositeOperation
+    public class CompositeOperation : OperationWithProgressBase, ICompositeOperation
     {
         private readonly IFileNameGenerationService _fileNameGenerationService;
         private readonly IReadOnlyList<OperationGroup> _groupedOperationsToExecute;
@@ -92,6 +92,11 @@ namespace Camelot.Operations
         public async Task CancelAsync()
         {
             _cancellationTokenSource.Cancel();
+
+            while (_blockedFilesQueue.Any())
+            {
+                await ProcessNextBlockedTaskAsync();
+            }
 
             await _taskCompletionSource.Task;
 
@@ -227,12 +232,20 @@ namespace Camelot.Operations
             }
 
             var operation = _blockedOperationsDictionary[sourceFilePath];
+            _blockedOperationsDictionary.Remove(sourceFilePath);
 
             await ProcessBlockedTaskAsync(operation);
         }
 
         private async Task ProcessBlockedTaskAsync(ISelfBlockingOperation operation)
         {
+            if (_cancellationTokenSource.IsCancellationRequested)
+            {
+                FinishOperation((IInternalOperation) operation);
+
+                return;
+            }
+
             if (_continuationMode is null)
             {
                 _blockedOperationsDictionary[operation.CurrentBlockedFile.SourceFilePath] = operation;
@@ -250,6 +263,11 @@ namespace Camelot.Operations
             {
                 await ContinueWithDefaultOptionsAsync(operation, _continuationMode.Value);
             }
+        }
+
+        private void RemoveCurrentBlockedFile()
+        {
+
         }
 
         private async Task ContinueWithDefaultOptionsAsync(ISelfBlockingOperation operation,

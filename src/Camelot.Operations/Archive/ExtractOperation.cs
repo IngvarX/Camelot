@@ -7,7 +7,7 @@ using Camelot.Services.Abstractions.Operations;
 
 namespace Camelot.Operations.Archive
 {
-    public class ExtractOperation : OperationBase, IInternalOperation
+    public class ExtractOperation : StatefulOperationWithProgressBase, IInternalOperation
     {
         private readonly IArchiveReader _archiveReader;
         private readonly IDirectoryService _directoryService;

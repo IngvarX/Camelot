@@ -6,7 +6,7 @@ using Camelot.Services.Abstractions.Operations;
 
 namespace Camelot.Operations
 {
-    public class CreateDirectoryOperation : OperationBase, IInternalOperation
+    public class CreateDirectoryOperation : StatefulOperationWithProgressBase, IInternalOperation
     {
         private readonly IDirectoryService _directoryService;
         private readonly string _directoryToCreate;

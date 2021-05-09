@@ -6,12 +6,11 @@ using Camelot.Services.Abstractions.Operations;
 
 namespace Camelot.Operations
 {
-    public abstract class OperationBase : IOperationWithProgress, IStatefulOperation
+    public abstract class StatefulOperationWithProgressBase : OperationWithProgressBase, IStatefulOperation
     {
         private readonly object _stateLocker;
 
         private OperationState _state;
-        private double _progress;
 
         public OperationState State
         {
@@ -40,26 +39,11 @@ namespace Camelot.Operations
             }
         }
 
-        public double CurrentProgress
-        {
-            get => _progress;
-            protected set
-            {
-                _progress = value;
-                var args = new OperationProgressChangedEventArgs(_progress);
-                ProgressChanged.Raise(this, args);
-            }
-        }
-
-        public event EventHandler<OperationProgressChangedEventArgs> ProgressChanged;
-
         public event EventHandler<OperationStateChangedEventArgs> StateChanged;
 
-        protected OperationBase()
+        protected StatefulOperationWithProgressBase()
         {
             _stateLocker = new object();
         }
-
-        protected void SetFinalProgress() => CurrentProgress = 1;
     }
 }

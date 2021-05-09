@@ -1,15 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Camelot.Extensions;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Archive;
-using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Models.Operations;
-using Camelot.Services.Abstractions.Operations;
 using Moq;
 using Moq.AutoMock;
 using Xunit;
@@ -19,12 +15,9 @@ namespace Camelot.Operations.Tests
     public class OperationsTests
     {
         private const string SourceName = "Source";
-        private const string SecondSourceName = "SecondSource";
         private const string DestinationName = "Destination";
         private const string SourceDirName = "SourceDir";
         private const string DestinationDirName = "DestinationDir";
-        private const string SecondDestinationName = "SecondDestination";
-        private const string ThirdDestinationName = "ThirdDestination";
 
         private readonly AutoMocker _autoMocker;
 
@@ -75,131 +68,12 @@ namespace Camelot.Operations.Tests
         }
 
         [Theory]
-        [InlineData(true, 1, OperationContinuationMode.Overwrite, 1, 1, 0)]
-        [InlineData(false, 2, OperationContinuationMode.Overwrite, 1, 1, 0)]
-        [InlineData(true, 1, OperationContinuationMode.Skip, 0, 0, 0)]
-        [InlineData(false, 2, OperationContinuationMode.Skip, 0, 0, 0)]
-        [InlineData(true, 1, OperationContinuationMode.OverwriteIfOlder, 1, 0, 0)]
-        [InlineData(false, 2, OperationContinuationMode.OverwriteIfOlder, 1, 0, 0)]
-        [InlineData(true, 1, OperationContinuationMode.Rename, 0, 0, 1)]
-        [InlineData(false, 2, OperationContinuationMode.Rename, 0, 0, 1)]
-        public async Task TestBlockedCopyOperation(bool applyToAll, int expectedCallbackCallsCount,
-            OperationContinuationMode mode, int expectedWriteCallsCountFirstFile, int expectedWriteCallsCountSecondFile,
-            int expectedWriteCallsCountThirdFile)
-        {
-            var now = DateTime.UtcNow;
-            var hourBeforeNow = now.AddHours(-1);
-
-            _autoMocker
-                .Setup<IFileService, FileModel>(m => m.GetFile(SourceName))
-                .Returns(new FileModel {LastModifiedDateTime = now});
-            _autoMocker
-                .Setup<IFileService, FileModel>(m => m.GetFile(DestinationName))
-                .Returns(new FileModel {LastModifiedDateTime = hourBeforeNow});
-            _autoMocker
-                .Setup<IFileService, FileModel>(m => m.GetFile(SecondSourceName))
-                .Returns(new FileModel {LastModifiedDateTime = hourBeforeNow});
-            _autoMocker
-                .Setup<IFileService, FileModel>(m => m.GetFile(SecondDestinationName))
-                .Returns(new FileModel {LastModifiedDateTime = now});
-            _autoMocker
-                .Setup<IFileService>(m => m.CopyAsync(SourceName, DestinationName, It.IsAny<CancellationToken>(), false))
-                .Verifiable();
-            _autoMocker
-                .Setup<IFileService, Task<bool>>(m => m.CopyAsync(SourceName, DestinationName, It.IsAny<CancellationToken>(), true))
-                .ReturnsAsync(true)
-                .Verifiable();
-            _autoMocker
-                .Setup<IFileService>(m => m.CopyAsync(SecondSourceName, SecondDestinationName, It.IsAny<CancellationToken>(), false))
-                .Verifiable();
-            _autoMocker
-                .Setup<IFileService, Task<bool>>(m => m.CopyAsync(SecondSourceName, SecondDestinationName, It.IsAny<CancellationToken>(), true))
-                .ReturnsAsync(true)
-                .Verifiable();
-            _autoMocker
-                .Setup<IFileService, Task<bool>>(m => m.CopyAsync(SourceName, ThirdDestinationName, It.IsAny<CancellationToken>(), false))
-                .ReturnsAsync(true)
-                .Verifiable();
-            _autoMocker
-                .Setup<IFileService, Task<bool>>(m => m.CopyAsync(SecondSourceName, ThirdDestinationName, It.IsAny<CancellationToken>(), false))
-                .ReturnsAsync(true)
-                .Verifiable();
-            _autoMocker
-                .Setup<IFileService, bool>(m => m.CheckIfExists(It.IsAny<string>()))
-                .Returns(true);
-            _autoMocker
-                .Setup<IFileNameGenerationService, string>(m => m.GenerateFullName(It.IsAny<string>()))
-                .Returns(ThirdDestinationName);
-            var operationsFactory = _autoMocker.CreateInstance<OperationsFactory>();
-            var settings = new BinaryFileSystemOperationSettings(
-                new string[] { },
-                new[] {SourceName, SecondSourceName},
-                new string[] { },
-                new[] {DestinationName, SecondDestinationName},
-                new Dictionary<string, string>
-                {
-                    [SourceName] = DestinationName,
-                    [SecondSourceName] = SecondDestinationName
-                },
-                new string[] { }
-            );
-            var copyOperation = operationsFactory.CreateCopyOperation(settings);
-
-            var callbackCallsCount = 0;
-            copyOperation.StateChanged += async (sender, args) =>
-            {
-                if (args.OperationState != OperationState.Blocked)
-                {
-                    return;
-                }
-
-                var operation = (IOperation) sender;
-                if (operation is null)
-                {
-                    return;
-                }
-
-                Interlocked.Increment(ref callbackCallsCount);
-
-                var (sourceFilePath, _) = operation.CurrentBlockedFile;
-                var options = mode is OperationContinuationMode.Rename
-                    ? OperationContinuationOptions.CreateRenamingContinuationOptions(sourceFilePath, applyToAll, ThirdDestinationName)
-                    : OperationContinuationOptions.CreateContinuationOptions(sourceFilePath, applyToAll, mode);
-
-                await copyOperation.ContinueAsync(options);
-            };
-
-            await copyOperation.RunAsync();
-
-            Assert.Equal(expectedCallbackCallsCount, callbackCallsCount);
-
-            Assert.Equal(OperationState.Finished, copyOperation.State);
-            _autoMocker
-                .Verify<IFileService>(m => m.CopyAsync(SourceName, DestinationName, It.IsAny<CancellationToken>(), true),
-                    Times.Exactly(expectedWriteCallsCountFirstFile));
-            _autoMocker
-                .Verify<IFileService>(m => m.CopyAsync(SecondSourceName, SecondDestinationName, It.IsAny<CancellationToken>(), true),
-                    Times.Exactly(expectedWriteCallsCountSecondFile));
-            _autoMocker
-                .Verify<IFileService>(m => m.CopyAsync(SourceName, DestinationName, It.IsAny<CancellationToken>(), false),
-                    Times.Never);
-            _autoMocker
-                .Verify<IFileService>(m => m.CopyAsync(SecondSourceName, SecondDestinationName, It.IsAny<CancellationToken>(), false),
-                    Times.Never);
-            _autoMocker
-                .Verify<IFileService>(m => m.CopyAsync(SourceName, ThirdDestinationName, It.IsAny<CancellationToken>(), false),
-                    Times.Exactly(expectedWriteCallsCountThirdFile));
-            _autoMocker
-                .Verify<IFileService>(m => m.CopyAsync(SecondSourceName, ThirdDestinationName, It.IsAny<CancellationToken>(), false),
-                    Times.Exactly(expectedWriteCallsCountThirdFile));
-        }
-
-        [Theory]
-        [InlineData(true, true, OperationState.Failed)]
-        [InlineData(true, false, OperationState.Failed)]
-        [InlineData(false, true, OperationState.Failed)]
-        [InlineData(false, false, OperationState.Finished)]
-        public async Task TestMoveOperation(bool copyThrows, bool deleteThrows, OperationState state)
+        [InlineData(true, true, OperationState.Failed, 0)]
+        [InlineData(true, false, OperationState.Failed, 0)]
+        [InlineData(false, true, OperationState.Failed, 1)]
+        [InlineData(false, false, OperationState.Finished, 1)]
+        public async Task TestMoveOperation(bool copyThrows, bool deleteThrows, OperationState state,
+            int removeCallsCount)
         {
             var copySetup = _autoMocker
                 .Setup<IFileService, Task<bool>>(m => m.CopyAsync(SourceName, DestinationName, It.IsAny<CancellationToken>(), false))
@@ -233,9 +107,11 @@ namespace Camelot.Operations.Tests
 
             Assert.True(callbackCalled);
             _autoMocker
-                .Verify<IFileService>(m => m.CopyAsync(SourceName, DestinationName, It.IsAny<CancellationToken>(), false), Times.Once());
+                .Verify<IFileService>(m => m.CopyAsync(SourceName, DestinationName, It.IsAny<CancellationToken>(), false),
+                    Times.Once);
             _autoMocker
-                .Verify<IFileService, bool>(m => m.Remove(SourceName), copyThrows ? Times.Never() : Times.Once());
+                .Verify<IFileService, bool>(m => m.Remove(SourceName),
+                    Times.Exactly(removeCallsCount));
         }
 
         [Theory]
@@ -293,7 +169,7 @@ namespace Camelot.Operations.Tests
         [Theory]
         [InlineData(false, OperationState.Failed)]
         [InlineData(true, OperationState.Finished)]
-        public async Task TestCopeEmptyDirectoryOperation(bool success, OperationState state)
+        public async Task TestCopyEmptyDirectoryOperation(bool success, OperationState state)
         {
             _autoMocker
                 .Setup<IDirectoryService, IReadOnlyList<string>>(m => m.GetEmptyDirectoriesRecursively(SourceName))
@@ -412,124 +288,6 @@ namespace Camelot.Operations.Tests
             processorMock
                 .Verify(m => m.ExtractAsync(
                     SourceName, DestinationDirName), Times.Once);
-        }
-
-        [Theory]
-        [InlineData(true, 1, 1, false)]
-        [InlineData(false, 0, 1, false)]
-        [InlineData(false, 1, 1, true)]
-        public async Task TestCopyOperationCancel(bool isSuccessFirst, int removeFirstCalled,
-            int removeSecondCalled, bool shouldThrow)
-        {
-            var firstTaskCompletionSource = new TaskCompletionSource<bool>();
-            var secondTaskCompletionSource = new TaskCompletionSource<bool>();
-            var cancelTaskCompletionSource = new TaskCompletionSource<bool>();
-
-            _autoMocker
-                .Setup<IFileService, Task<bool>>(m =>
-                    m.CopyAsync(SourceName, DestinationName, It.IsAny<CancellationToken>(), false))
-                .Returns(async () =>
-                {
-                    await firstTaskCompletionSource.Task;
-                    secondTaskCompletionSource.SetResult(true);
-                    await cancelTaskCompletionSource.Task;
-                    await Task.Delay(100);
-                    if (shouldThrow)
-                    {
-                        throw new TaskCanceledException();
-                    }
-
-                    return isSuccessFirst;
-                });
-            _autoMocker
-                .Setup<IFileService, Task<bool>>(m =>
-                    m.CopyAsync(SecondSourceName, SecondDestinationName, It.IsAny<CancellationToken>(), false))
-                .ReturnsAsync(true)
-                .Callback(() => firstTaskCompletionSource.SetResult(true));
-            _autoMocker
-                .Setup<IFileService, bool>(m => m.Remove(DestinationName))
-                .Returns(true)
-                .Verifiable();
-            _autoMocker
-                .Setup<IFileService, bool>(m => m.Remove(SecondDestinationName))
-                .Returns(true)
-                .Verifiable();
-
-            var operationsFactory = _autoMocker.CreateInstance<OperationsFactory>();
-            var settings = new BinaryFileSystemOperationSettings(
-                new string[] { },
-                new[] {SourceName, SecondSourceName},
-                new string[] { },
-                new[] {DestinationName, SecondDestinationName},
-                new Dictionary<string, string>
-                {
-                    [SourceName] = DestinationName,
-                    [SecondSourceName] = SecondDestinationName
-                },
-                new string[] { }
-            );
-            var copyOperation = operationsFactory.CreateCopyOperation(settings);
-
-            Assert.Equal(OperationState.NotStarted, copyOperation.State);
-
-            Task.Run(copyOperation.RunAsync).Forget();
-
-            await firstTaskCompletionSource.Task;
-            await secondTaskCompletionSource.Task;
-            var task = copyOperation.CancelAsync();
-            cancelTaskCompletionSource.SetResult(true);
-            await task;
-
-            Assert.Equal(OperationState.Cancelled, copyOperation.State);
-
-            _autoMocker
-                .Verify<IFileService, bool>(m => m.Remove(DestinationName),
-                    Times.Exactly(removeFirstCalled));
-            _autoMocker
-                .Verify<IFileService, bool>(m => m.Remove(SecondDestinationName),
-                    Times.Exactly(removeSecondCalled));
-        }
-
-        [Fact]
-        public async Task TestMoveOperationFailed()
-        {
-            _autoMocker
-                .Setup<IFileService, Task<bool>>(m =>
-                    m.CopyAsync(SourceName, DestinationName, It.IsAny<CancellationToken>(), false))
-                .ReturnsAsync(false)
-                .Verifiable();
-            _autoMocker
-                .Setup<IFileService, bool>(m => m.Remove(DestinationName))
-                .Returns(true)
-                .Verifiable();
-
-            var operationsFactory = _autoMocker.CreateInstance<OperationsFactory>();
-            var settings = new BinaryFileSystemOperationSettings(
-                new string[] { },
-                new[] {SourceName},
-                new string[] { },
-                new[] {DestinationName},
-                new Dictionary<string, string>
-                {
-                    [SourceName] = DestinationName
-                },
-                new string[] { }
-            );
-            var moveOperation = operationsFactory.CreateMoveOperation(settings);
-
-            Assert.Equal(OperationState.NotStarted, moveOperation.State);
-
-            await moveOperation.RunAsync();
-
-            Assert.Equal(OperationState.Failed, moveOperation.State);
-
-            _autoMocker
-                .Verify<IFileService, bool>(m => m.Remove(DestinationName),
-                    Times.Never);
-            _autoMocker
-                .Verify<IFileService, Task<bool>>(m =>
-                        m.CopyAsync(SourceName, DestinationName, It.IsAny<CancellationToken>(), false),
-                    Times.Once);
         }
     }
 }

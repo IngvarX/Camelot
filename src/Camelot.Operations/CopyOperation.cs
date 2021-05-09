@@ -8,7 +8,7 @@ using Camelot.Services.Abstractions.Operations;
 
 namespace Camelot.Operations
 {
-    public class CopyOperation : OperationBase, IInternalOperation, ISelfBlockingOperation
+    public class CopyOperation : StatefulOperationWithProgressBase, IInternalOperation, ISelfBlockingOperation
     {
         private readonly IDirectoryService _directoryService;
         private readonly IFileService _fileService;

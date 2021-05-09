@@ -8,7 +8,7 @@ using Camelot.Services.Abstractions.Operations;
 
 namespace Camelot.Operations.Archive
 {
-    public class PackOperation : OperationBase, IInternalOperation
+    public class PackOperation : StatefulOperationWithProgressBase, IInternalOperation
     {
         private readonly IArchiveWriter _archiveWriter;
         private readonly IDirectoryService _directoryService;
