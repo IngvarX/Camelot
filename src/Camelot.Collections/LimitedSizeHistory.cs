@@ -50,7 +50,7 @@ namespace Camelot.Collections
         {
             RemoveAllItemsAfterCurrent();
             AppendItem(item);
-            RemoveOldestItemIfNeeded();
+            RemoveOldItems();
 
             return Current;
         }
@@ -81,7 +81,7 @@ namespace Camelot.Collections
             CurrentIndex++;
         }
 
-        private void RemoveOldestItemIfNeeded()
+        private void RemoveOldItems()
         {
             while (_linkedList.Count > _capacity)
             {

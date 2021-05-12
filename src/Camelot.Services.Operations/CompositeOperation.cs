@@ -141,10 +141,10 @@ namespace Camelot.Services.Operations
 
                     var currentOperation = operationsGroup[i];
 
-                    var previousOperationDidNotSucceeded =
+                    var previousOperationFailed =
                         _currentOperationsGroupIndex > 0
                         && groupedOperationsToExecute[_currentOperationsGroupIndex - 1][i].State != OperationState.Finished;
-                    if (previousOperationDidNotSucceeded)
+                    if (previousOperationFailed)
                     {
                         FinishOperation(currentOperation);
 
@@ -263,11 +263,6 @@ namespace Camelot.Services.Operations
             {
                 await ContinueWithDefaultOptionsAsync(operation, _continuationMode.Value);
             }
-        }
-
-        private void RemoveCurrentBlockedFile()
-        {
-
         }
 
         private async Task ContinueWithDefaultOptionsAsync(ISelfBlockingOperation operation,
