@@ -135,7 +135,7 @@ namespace Camelot.Services.Operations
                 _finishedOperationsCount = 0;
                 _currentOperationsGroup = operationsGroup;
 
-                for (var i = 0; i < _currentOperationsGroup.Count; i++)
+                for (var i = 0; i < operationsGroup.Count; i++)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
