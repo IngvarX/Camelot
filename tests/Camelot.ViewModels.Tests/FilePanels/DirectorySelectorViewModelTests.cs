@@ -7,6 +7,7 @@ using Camelot.Services.Abstractions.Models.EventArgs;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
+using Camelot.ViewModels.Services.Interfaces;
 using Moq;
 using Moq.AutoMock;
 using Xunit;
@@ -16,6 +17,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
     public class DirectorySelectorViewModelTests
     {
         private const string Dir = "Dir";
+        private const string AnotherDir = "AnotherDir";
 
         private readonly AutoMocker _autoMocker;
 
@@ -153,6 +155,42 @@ namespace Camelot.ViewModels.Tests.FilePanels
             viewModel.Activate();
 
             Assert.True(isCallbackCalled);
+        }
+
+        [Theory]
+        [InlineData(Dir, Dir, true, 1, 0)]
+        [InlineData(Dir, "", true, 0, 2)]
+        [InlineData(Dir, Dir, false, 0, 1)]
+        [InlineData(Dir, AnotherDir, true, 1, 1)]
+        [InlineData(Dir, AnotherDir, false, 0, 2)]
+        public void TestSetCurrentDirectory(string initialDir, string finalDir,
+            bool dirExists, int setDirectoryCallsCount, int getSuggestionsCount)
+        {
+            _autoMocker
+                .Setup<IDirectoryService, bool>(m => m.CheckIfExists(finalDir))
+                .Returns(dirExists);
+            _autoMocker
+                .GetMock<IFilePanelDirectoryObserver>()
+                .SetupSet(m => m.CurrentDirectory = finalDir)
+                .Verifiable();
+            _autoMocker
+                .Setup<ISuggestionsService, IEnumerable<SuggestionModel>>(m => m.GetSuggestions(It.IsAny<string>()))
+                .Returns(Enumerable.Empty<SuggestionModel>())
+                .Verifiable();
+
+            var viewModel = _autoMocker.CreateInstance<DirectorySelectorViewModel>();
+
+            viewModel.CurrentDirectory = initialDir;
+            viewModel.CurrentDirectory = finalDir;
+
+            _autoMocker
+                .GetMock<IFilePanelDirectoryObserver>()
+                .VerifySet(m => m.CurrentDirectory = finalDir,
+                    Times.Exactly(setDirectoryCallsCount));
+            _autoMocker
+                .Verify<ISuggestionsService, IEnumerable<SuggestionModel>>(
+                    m => m.GetSuggestions(It.IsAny<string>()),
+                    Times.Exactly(getSuggestionsCount));
         }
     }
 }
