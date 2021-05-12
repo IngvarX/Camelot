@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Camelot.Extensions;
-using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Models.EventArgs;
 using Camelot.Services.Abstractions.Models.Operations;
@@ -91,47 +89,76 @@ namespace Camelot.Services.Operations.Tests
         }
 
         [Theory]
-        [InlineData(true, 1, 1, false)]
-        [InlineData(false, 0, 1, false)]
-        [InlineData(false, 1, 1, true)]
-        public async Task TestCopyOperationCancel(bool isSuccessFirst, int removeFirstCalled,
-            int removeSecondCalled, bool shouldThrow)
+        [InlineData(OperationState.Finished, OperationState.Finished, 1, 1)]
+        [InlineData(OperationState.Finished, OperationState.Failed, 1, 0)]
+        [InlineData(OperationState.Failed, OperationState.NotStarted, 0, 0)]
+        public async Task TestCopyOperationCancel(OperationState firstState, OperationState secondState,
+            int cancelFirstCount, int cancelSecondCount)
         {
-            var firstTaskCompletionSource = new TaskCompletionSource<bool>();
-            var secondTaskCompletionSource = new TaskCompletionSource<bool>();
-            var cancelTaskCompletionSource = new TaskCompletionSource<bool>();
-
-            _autoMocker
-                .Setup<IFileService, Task<bool>>(m =>
-                    m.CopyAsync(SourceName, DestinationName, It.IsAny<CancellationToken>(), false))
-                .Returns(async () =>
+            var copyOperation = new Mock<IInternalOperation>();
+            copyOperation
+                .SetupGet(m => m.State)
+                .Returns(firstState);
+            copyOperation
+                .Setup(m => m.RunAsync(It.IsAny<CancellationToken>()))
+                .Returns(() =>
                 {
-                    await firstTaskCompletionSource.Task;
-                    secondTaskCompletionSource.SetResult(true);
-                    await cancelTaskCompletionSource.Task;
-                    await Task.Delay(100);
-                    if (shouldThrow)
-                    {
-                        throw new TaskCanceledException();
-                    }
+                    copyOperation.Raise(m => m.StateChanged += null,
+                        new OperationStateChangedEventArgs(firstState));
 
-                    return isSuccessFirst;
-                });
-            _autoMocker
-                .Setup<IFileService, Task<bool>>(m =>
-                    m.CopyAsync(SecondSourceName, SecondDestinationName, It.IsAny<CancellationToken>(), false))
-                .ReturnsAsync(true)
-                .Callback(() => firstTaskCompletionSource.SetResult(true));
-            _autoMocker
-                .Setup<IFileService, bool>(m => m.Remove(DestinationName))
-                .Returns(true)
+                    return Task.CompletedTask;
+                })
                 .Verifiable();
-            _autoMocker
-                .Setup<IFileService, bool>(m => m.Remove(SecondDestinationName))
-                .Returns(true)
-                .Verifiable();
+            var secondCopyOperation = new Mock<IInternalOperation>();
+            secondCopyOperation
+                .SetupGet(m => m.State)
+                .Returns(secondState);
+            secondCopyOperation
+                .Setup(m => m.RunAsync(It.IsAny<CancellationToken>()))
+                .Returns(() =>
+                {
+                    secondCopyOperation.Raise(m => m.StateChanged += null,
+                        new OperationStateChangedEventArgs(secondState));
 
-            var operationsFactory = _autoMocker.CreateInstance<OperationsFactory>();
+                    return Task.CompletedTask;
+                })
+                .Verifiable();
+            var cancelOperation = new Mock<IInternalOperation>();
+            cancelOperation
+                .SetupGet(m => m.State)
+                .Returns(OperationState.Finished);
+            cancelOperation
+                .Setup(m => m.RunAsync(It.IsAny<CancellationToken>()))
+                .Returns(() =>
+                {
+                    cancelOperation.Raise(m => m.StateChanged += null,
+                        new OperationStateChangedEventArgs(OperationState.Finished));
+
+                    return Task.CompletedTask;
+                })
+                .Verifiable();
+            var secondCancelOperation = new Mock<IInternalOperation>();
+            secondCancelOperation
+                .Setup(m => m.RunAsync(It.IsAny<CancellationToken>()))
+                .Returns(() =>
+                {
+                    secondCancelOperation.Raise(m => m.StateChanged += null,
+                        new OperationStateChangedEventArgs(OperationState.Finished));
+
+                    return Task.CompletedTask;
+                })
+                .Verifiable();
+            secondCancelOperation
+                .SetupGet(m => m.State)
+                .Returns(OperationState.Finished);
+            IReadOnlyList<OperationGroup> operationGroups = new List<OperationGroup>
+            {
+                new OperationGroup(
+                    new[] {copyOperation.Object}, new[] {cancelOperation.Object}),
+                new OperationGroup(
+                    new[] {secondCopyOperation.Object}, new[] {secondCancelOperation.Object})
+            };
+            _autoMocker.Use(operationGroups);
             var settings = new BinaryFileSystemOperationSettings(
                 new string[] { },
                 new[] {SourceName, SecondSourceName},
@@ -144,26 +171,27 @@ namespace Camelot.Services.Operations.Tests
                 },
                 new string[] { }
             );
-            var copyOperation = operationsFactory.CreateCopyOperation(settings);
+            _autoMocker.Use(new OperationInfo(OperationType.Copy, settings));
 
-            Assert.Equal(OperationState.NotStarted, copyOperation.State);
+            var operation = _autoMocker.CreateInstance<CompositeOperation>();
 
-            Task.Run(copyOperation.RunAsync).Forget();
+            try
+            {
+                await operation.RunAsync();
+            }
+            catch
+            {
+                // ignore
+            }
 
-            await firstTaskCompletionSource.Task;
-            await secondTaskCompletionSource.Task;
-            var task = copyOperation.CancelAsync();
-            cancelTaskCompletionSource.SetResult(true);
-            await task;
+            await operation.CancelAsync();
 
-            Assert.Equal(OperationState.Cancelled, copyOperation.State);
-
-            _autoMocker
-                .Verify<IFileService, bool>(m => m.Remove(DestinationName),
-                    Times.Exactly(removeFirstCalled));
-            _autoMocker
-                .Verify<IFileService, bool>(m => m.Remove(SecondDestinationName),
-                    Times.Exactly(removeSecondCalled));
+            cancelOperation
+                .Verify(m => m.RunAsync(It.IsAny<CancellationToken>()),
+                    Times.Exactly(cancelFirstCount));
+            secondCancelOperation
+                .Verify(m => m.RunAsync(It.IsAny<CancellationToken>()),
+                    Times.Exactly(cancelSecondCount));
         }
     }
 }
