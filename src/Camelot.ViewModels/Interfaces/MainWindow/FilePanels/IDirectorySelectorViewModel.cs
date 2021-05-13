@@ -1,4 +1,5 @@
 using System;
+using System.Windows.Input;
 
 namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels
 {
@@ -9,6 +10,8 @@ namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels
         bool ShouldShowSuggestions { get; set; }
 
         event EventHandler<EventArgs> ActivationRequested;
+
+        ICommand ToggleFavouriteStatusCommand { get; }
 
         void Activate();
     }

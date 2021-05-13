@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using Camelot.ViewModels.Implementations;
 using Camelot.ViewModels.Interfaces.MainWindow.Directories;
 using Camelot.ViewModels.Interfaces.MainWindow.Drives;
@@ -122,6 +126,64 @@ namespace Camelot.ViewModels.Tests
             mainWindowViewModel.FocusDirectorySelectorCommand.Execute(null);
 
             directorySelectorMock.Verify(m => m.Activate(), Times.Once);
+        }
+
+        [Fact]
+        public void TestActivePanelChanged()
+        {
+            var activeDirectorySelectorMock = new Mock<IDirectorySelectorViewModel>();
+            var activeTabListViewModelMock = new Mock<ITabsListViewModel>();
+            var activeFilePanelViewModelMock = new Mock<IFilesPanelViewModel>();
+            activeFilePanelViewModelMock
+                .Setup(m => m.DirectorySelectorViewModel)
+                .Returns(activeDirectorySelectorMock.Object);
+            activeFilePanelViewModelMock
+                .Setup(m => m.TabsListViewModel)
+                .Returns(activeTabListViewModelMock.Object);
+            _autoMocker
+                .Setup<IFilesOperationsMediator, IFilesPanelViewModel>(m => m.ActiveFilesPanelViewModel)
+                .Returns(activeFilePanelViewModelMock.Object);
+            var inactiveDirectorySelectorMock = new Mock<IDirectorySelectorViewModel>();
+            var inactiveTabListViewModelMock = new Mock<ITabsListViewModel>();
+            var inactiveFilePanelViewModelMock = new Mock<IFilesPanelViewModel>();
+            inactiveFilePanelViewModelMock
+                .Setup(m => m.DirectorySelectorViewModel)
+                .Returns(inactiveDirectorySelectorMock.Object);
+            inactiveFilePanelViewModelMock
+                .Setup(m => m.TabsListViewModel)
+                .Returns(inactiveTabListViewModelMock.Object);
+            _autoMocker
+                .Setup<IFilesOperationsMediator, IFilesPanelViewModel>(m => m.InactiveFilesPanelViewModel)
+                .Returns(activeFilePanelViewModelMock.Object);
+
+            var mainWindowViewModel = _autoMocker.CreateInstance<MainWindowViewModel>();
+
+            Assert.Equal(activeDirectorySelectorMock.Object, mainWindowViewModel.ActiveDirectorySelectorViewModel);
+            Assert.Equal(activeTabListViewModelMock.Object, mainWindowViewModel.ActiveTabsListViewModel);
+
+            _autoMocker
+                .Setup<IFilesOperationsMediator, IFilesPanelViewModel>(m => m.ActiveFilesPanelViewModel)
+                .Returns(inactiveFilePanelViewModelMock.Object);
+            _autoMocker
+                .Setup<IFilesOperationsMediator, IFilesPanelViewModel>(m => m.InactiveFilesPanelViewModel)
+                .Returns(activeFilePanelViewModelMock.Object);
+            var notifyPropertyChanged = (INotifyPropertyChanged) mainWindowViewModel;
+            var properties = new List<string>();
+            notifyPropertyChanged.PropertyChanged += (sender, args) => properties.Add(args.PropertyName);
+
+            _autoMocker
+                .GetMock<IFilesOperationsMediator>()
+                .Raise(m => m.ActiveFilesPanelChanged += null, EventArgs.Empty);
+
+            Assert.Equal(inactiveDirectorySelectorMock.Object, mainWindowViewModel.ActiveDirectorySelectorViewModel);
+            Assert.Equal(inactiveTabListViewModelMock.Object, mainWindowViewModel.ActiveTabsListViewModel);
+
+            var expectedProperties = new[]
+            {
+                nameof(mainWindowViewModel.ActiveDirectorySelectorViewModel),
+                nameof(mainWindowViewModel.ActiveTabsListViewModel)
+            };
+            Assert.True(expectedProperties.All(p => properties.Contains(p)));
         }
     }
 }

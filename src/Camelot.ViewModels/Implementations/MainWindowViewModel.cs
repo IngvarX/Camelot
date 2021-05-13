@@ -20,6 +20,9 @@ namespace Camelot.ViewModels.Implementations
         public ITabsListViewModel ActiveTabsListViewModel =>
             _filesOperationsMediator.ActiveFilesPanelViewModel.TabsListViewModel;
 
+        public IDirectorySelectorViewModel ActiveDirectorySelectorViewModel =>
+            _filesOperationsMediator.ActiveFilesPanelViewModel.DirectorySelectorViewModel;
+
         public IOperationsViewModel OperationsViewModel { get; }
 
         public IFilesPanelViewModel LeftFilesPanelViewModel { get; }
@@ -76,14 +79,12 @@ namespace Camelot.ViewModels.Implementations
 
         private void SwitchPanel() => _filesOperationsMediator.InactiveFilesPanelViewModel.Activate();
 
-        private void FocusDirectorySelector()
+        private void FocusDirectorySelector() => ActiveDirectorySelectorViewModel.Activate();
+
+        private void FilesOperationsMediatorOnActiveFilesPanelChanged(object sender, EventArgs e)
         {
-            var directorySelector = _filesOperationsMediator.ActiveFilesPanelViewModel.DirectorySelectorViewModel;
-
-            directorySelector.Activate();
-        }
-
-        private void FilesOperationsMediatorOnActiveFilesPanelChanged(object sender, EventArgs e) =>
             this.RaisePropertyChanged(nameof(ActiveTabsListViewModel));
+            this.RaisePropertyChanged(nameof(ActiveDirectorySelectorViewModel));
+        }
     }
 }

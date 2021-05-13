@@ -29,7 +29,35 @@ namespace Camelot.ViewModels.Tests.FilePanels
         [Theory]
         [InlineData(true, 1, 0)]
         [InlineData(false, 0, 1)]
-        public void ToggleFavouriteStatusCommand(bool isFavourite, int addCallsCount, int removeCallsCount)
+        public void TestSaveFavouriteStatusCommand(bool isFavourite, int addCallsCount, int removeCallsCount)
+        {
+            _autoMocker
+                .Setup<IDirectoryService, bool>(m => m.CheckIfExists(Dir))
+                .Returns(true);
+            _autoMocker
+                .Setup<IFavouriteDirectoriesService, bool>(m => m.ContainsDirectory(Dir))
+                .Returns(isFavourite);
+
+            var viewModel = _autoMocker.CreateInstance<DirectorySelectorViewModel>();
+
+            viewModel.CurrentDirectory = Dir;
+
+            Assert.Equal(isFavourite, viewModel.IsFavouriteDirectory);
+            Assert.True(viewModel.SaveFavouriteStatusCommand.CanExecute(null));
+            viewModel.SaveFavouriteStatusCommand.Execute(null);
+
+            _autoMocker
+                .Verify<IFavouriteDirectoriesService>(m => m.AddDirectory(Dir),
+                    Times.Exactly(addCallsCount));
+            _autoMocker
+                .Verify<IFavouriteDirectoriesService>(m => m.RemoveDirectory(Dir),
+                    Times.Exactly(removeCallsCount));
+        }
+
+        [Theory]
+        [InlineData(true, 0, 1)]
+        [InlineData(false, 1, 0)]
+        public void TestToggleFavouriteStatusCommand(bool isFavourite, int addCallsCount, int removeCallsCount)
         {
             _autoMocker
                 .Setup<IDirectoryService, bool>(m => m.CheckIfExists(Dir))
@@ -46,6 +74,8 @@ namespace Camelot.ViewModels.Tests.FilePanels
             Assert.True(viewModel.ToggleFavouriteStatusCommand.CanExecute(null));
             viewModel.ToggleFavouriteStatusCommand.Execute(null);
 
+            Assert.Equal(!isFavourite, viewModel.IsFavouriteDirectory);
+
             _autoMocker
                 .Verify<IFavouriteDirectoriesService>(m => m.AddDirectory(Dir),
                     Times.Exactly(addCallsCount));
@@ -59,7 +89,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
         [InlineData(true, false)]
         [InlineData(false, true)]
         [InlineData(false, false)]
-        public void ToggleFavouriteDirectoryAdd(bool stateBefore, bool stateAfter)
+        public void TestToggleFavouriteDirectoryAdd(bool stateBefore, bool stateAfter)
         {
             _autoMocker
                 .Setup<IDirectoryService, bool>(m => m.CheckIfExists(Dir))
@@ -90,7 +120,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
         [InlineData(true, false)]
         [InlineData(false, true)]
         [InlineData(false, false)]
-        public void ToggleFavouriteDirectoryRemove(bool stateBefore, bool stateAfter)
+        public void TestToggleFavouriteDirectoryRemove(bool stateBefore, bool stateAfter)
         {
             _autoMocker
                 .Setup<IDirectoryService, bool>(m => m.CheckIfExists(Dir))

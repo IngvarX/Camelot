@@ -67,6 +67,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         public IEnumerable<ISuggestedPathViewModel> SuggestedPaths => _suggestedPaths;
 
+        public ICommand SaveFavouriteStatusCommand { get; }
+
         public ICommand ToggleFavouriteStatusCommand { get; }
 
         public DirectorySelectorViewModel(
@@ -84,6 +86,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
             _suggestedPaths = new ObservableCollection<ISuggestedPathViewModel>();
 
+            SaveFavouriteStatusCommand = ReactiveCommand.Create(SaveFavouriteStatus);
             ToggleFavouriteStatusCommand = ReactiveCommand.Create(ToggleFavouriteStatus);
 
             SubscribeToEvents();
@@ -100,6 +103,13 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         }
 
         private void ToggleFavouriteStatus()
+        {
+            IsFavouriteDirectory = !IsFavouriteDirectory;
+
+            SaveFavouriteStatus();
+        }
+
+        private void SaveFavouriteStatus()
         {
             // IsFavouriteDirectory property changes before executing this command
             if (IsFavouriteDirectory)

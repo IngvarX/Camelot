@@ -39,7 +39,7 @@
 
         <ToggleButton Grid.Column="1"
                       Margin="5,0"
-                      Command="{Binding ToggleFavouriteStatusCommand}"
+                      Command="{Binding SaveFavouriteStatusCommand}"
                       IsChecked="{Binding IsFavouriteDirectory}">
             <Grid>
                 <Image Classes="favouriteDirectoryImage"
