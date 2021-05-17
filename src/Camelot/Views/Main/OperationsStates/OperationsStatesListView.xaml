@@ -31,7 +31,7 @@
                        </Image.Source>
                    </Image>
 
-                   <Image Width="11" Height="11" Margin="0,2,4,0"
+                   <Image Width="11" Height="11" Margin="0,2,5,0"
                           IsVisible="{Binding !IsLastOperationSuccessful}">
                        <Image.Source>
                            <DrawingImage>
@@ -63,13 +63,21 @@
                PlacementMode="Bottom">
             <Border x:Name="OuterOperationsBorder">
                 <Grid>
-                    <Canvas>
-                        <Path Canvas.Left="30" Canvas.Top="5" Margin="5"
-                              Data="M0,0 L-15,-15 L-30,0 z"
+                    <Canvas ZIndex="50">
+                        <Path Data="M30,15 L17,0 L4,15 z"
                               Fill="{DynamicResource PopupBackgroundBrush}" />
+                        <Line StartPoint="30,14"
+                              EndPoint="17,0"
+                              Stroke="Black"
+                              StrokeThickness="1" />
+                        <Line StartPoint="17,0"
+                              EndPoint="4,14"
+                              Stroke="Black"
+                              StrokeThickness="1" />
                     </Canvas>
 
-                    <Border x:Name="InnerOperationsBorder" BoxShadow="3 3 3 Black">
+                    <Border x:Name="InnerOperationsBorder"
+                            BoxShadow="0 0 5 2 Black">
                         <StackPanel Orientation="Vertical">
                             <operationsStatesViews:ActiveOperationsView />
                             <operationsStatesViews:InactiveOperationsView />

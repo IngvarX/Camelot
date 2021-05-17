@@ -110,8 +110,8 @@
 
     <Style Selector="Border#InnerOperationsBorder">
         <Setter Property="Padding" Value="20" />
-        <Setter Property="Margin" Value="5,10,5,5" />
-        <Setter Property="CornerRadius" Value="5" />
+        <Setter Property="Margin" Value="5,15,5,5" />
+        <Setter Property="CornerRadius" Value="0,5,5,5" />
         <Setter Property="Background" Value="{DynamicResource PopupBackgroundBrush}" />
     </Style>
 
