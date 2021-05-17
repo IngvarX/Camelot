@@ -5,8 +5,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.3" />
-      <PackageReference Include="ReactiveUI.Fody" Version="13.2.18" />
+      <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.4" />
+      <PackageReference Include="ReactiveUI.Fody" Version="13.3.2" />
       <PackageReference Include="ReactiveUI.Validation" Version="2.1.1" />
     </ItemGroup>
 
