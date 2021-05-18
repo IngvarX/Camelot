@@ -29,7 +29,7 @@ namespace Camelot.Services.AllPlatforms.Tests
             var driveService = _autoMocker.CreateInstance<MountedDriveService>();
 
             Assert.NotNull(driveService.MountedDrives);
-            Assert.NotEmpty(driveService.MountedDrives);
+            Assert.Equal(3, driveService.MountedDrives.Count);
         }
 
         [Fact]
@@ -154,7 +154,7 @@ namespace Camelot.Services.AllPlatforms.Tests
                 new DriveInfo
                 {
                     RootDirectory = "/home/a/b",
-                    Name = "A name",
+                    Name = "B name",
                     TotalSpaceBytes = 42,
                     FreeSpaceBytes = 21,
                     DriveType = DriveType.Fixed
@@ -162,10 +162,34 @@ namespace Camelot.Services.AllPlatforms.Tests
                 new DriveInfo
                 {
                     RootDirectory = "/home/a/b/c",
-                    Name = "A name",
+                    Name = "C name",
                     TotalSpaceBytes = 42,
                     FreeSpaceBytes = 21,
                     DriveType = DriveType.Fixed
+                },
+                new DriveInfo
+                {
+                    RootDirectory = "/home/a/b/c/d",
+                    Name = "D name",
+                    TotalSpaceBytes = 0,
+                    FreeSpaceBytes = 0,
+                    DriveType = DriveType.Fixed
+                },
+                new DriveInfo
+                {
+                    RootDirectory = "/home/a/b/c/d",
+                    Name = "D name",
+                    TotalSpaceBytes = 42,
+                    FreeSpaceBytes = 21,
+                    DriveType = DriveType.Unknown
+                },
+                new DriveInfo
+                {
+                    RootDirectory = "/home/a/b/c/d/e",
+                    Name = "E name",
+                    TotalSpaceBytes = 42,
+                    FreeSpaceBytes = 21,
+                    DriveType = DriveType.Ram
                 }
             };
 

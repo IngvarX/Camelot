@@ -109,9 +109,8 @@ namespace Camelot.Services.AllPlatforms
             {
                 return driveInfo.DriveType != DriveType.Ram
                        && driveInfo.DriveType != DriveType.Unknown
-                       && driveInfo.DriveFormat != "fuse"
-                       && !driveInfo.RootDirectory.StartsWith("/snap/")
-                       && !driveInfo.RootDirectory.StartsWith("/sys/");
+                       && driveInfo.TotalSpaceBytes > 0
+                       && !driveInfo.RootDirectory.StartsWith("/snap/");
             }
             catch
             {
