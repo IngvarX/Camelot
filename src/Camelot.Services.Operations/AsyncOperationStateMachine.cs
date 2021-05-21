@@ -115,8 +115,8 @@ namespace Camelot.Services.Operations
 
                 (OperationState.Blocked, OperationState.InProgress) => () => _compositeOperation.ContinueAsync(options),
 
-                (OperationState.Paused, OperationState.InProgress) =>
-                    WrapAsync(_compositeOperation.UnpauseAsync, OperationState.InProgress, OperationState.Finished),
+                (OperationState.Paused, OperationState.Unpausing) =>
+                    WrapAsync(_compositeOperation.UnpauseAsync, OperationState.Unpausing, OperationState.InProgress),
 
                 (OperationState.Cancelling, OperationState.Cancelled) => GetCompletedTask,
                 (OperationState.InProgress, OperationState.Finished) => GetCompletedTask,
