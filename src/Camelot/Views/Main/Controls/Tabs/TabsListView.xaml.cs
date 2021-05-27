@@ -3,6 +3,7 @@ using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
 using Camelot.Extensions;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs;
@@ -17,12 +18,31 @@ namespace Camelot.Views.Main.Controls.Tabs
 
         private ScrollViewer ScrollViewer => this.FindControl<ScrollViewer>("TabsScrollViewer");
 
+        private ItemsControl ItemsControl => this.FindControl<ItemsControl>("TabsItemsControl");
+
         public TabsListView()
         {
             InitializeComponent();
         }
 
+        protected override void OnDataContextChanged(EventArgs e)
+        {
+            ViewModel.SelectedTabChanged += (sender, args) => ScrollToSelectedTab();
+
+            base.OnDataContextChanged(e);
+        }
+
         private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
+
+        private void ScrollToSelectedTab()
+        {
+            var selectedTab = ItemsControl
+                .GetLogicalDescendants()
+                .OfType<TabView>()
+                .SingleOrDefault(t => t.DataContext is ITabViewModel {IsActive: true});
+
+            selectedTab?.BringIntoView();
+        }
 
         private void TabsListOnPointerWheelChanged(object sender, PointerWheelEventArgs e)
         {
