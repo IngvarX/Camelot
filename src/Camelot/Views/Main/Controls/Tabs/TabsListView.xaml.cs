@@ -5,8 +5,11 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
+using Camelot.Avalonia.Interfaces;
+using Camelot.DependencyInjection;
 using Camelot.Extensions;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs;
+using Splat;
 
 namespace Camelot.Views.Main.Controls.Tabs
 {
@@ -28,6 +31,8 @@ namespace Camelot.Views.Main.Controls.Tabs
         protected override void OnDataContextChanged(EventArgs e)
         {
             ViewModel.SelectedTabChanged += (sender, args) => ScrollToSelectedTab();
+            var dispatcher = Locator.Current.GetRequiredService<IApplicationDispatcher>();
+            dispatcher.Dispatch(ScrollToSelectedTab);
 
             base.OnDataContextChanged(e);
         }
