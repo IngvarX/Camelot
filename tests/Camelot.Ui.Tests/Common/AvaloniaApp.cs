@@ -4,6 +4,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Headless;
 using Avalonia.ReactiveUI;
 using Avalonia.Threading;
+using Camelot.Configuration;
 using Camelot.DependencyInjection;
 using Camelot.Views;
 using Splat;
@@ -12,8 +13,15 @@ namespace Camelot.Ui.Tests.Common
 {
     public static class AvaloniaApp
     {
-        public static void RegisterDependencies() =>
-            Bootstrapper.Register(Locator.CurrentMutable, Locator.Current);
+        public static void RegisterDependencies()
+        {
+            var config = new DataAccessConfiguration
+            {
+                UseInMemoryDatabase = true
+            };
+
+            Bootstrapper.Register(Locator.CurrentMutable, Locator.Current, config);
+        }
 
         public static void Stop()
         {

@@ -35,7 +35,7 @@ namespace Camelot.Tests
                 includedLanguages.Add(cultureInfo.IetfLanguageTag);
             }
 
-            Bootstrapper.Register(Locator.CurrentMutable, Locator.Current);
+            Bootstrapper.Register(Locator.CurrentMutable, Locator.Current, new DataAccessConfiguration());
 
             var config = Locator.Current.GetRequiredService<LanguagesConfiguration>();
 

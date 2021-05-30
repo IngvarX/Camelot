@@ -3,7 +3,9 @@ using System.Threading;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.ReactiveUI;
+using Camelot.Configuration;
 using Camelot.DependencyInjection;
+using CommandLine;
 using Microsoft.Extensions.Logging;
 using Splat;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
@@ -17,6 +19,22 @@ namespace Camelot
         [STAThread]
         public static void Main(string[] args)
         {
+            var parserResult = Parser
+                .Default
+                .ParseArguments<CommandLineOptions>(args);
+
+            var shouldExit = parserResult.Tag == ParserResultType.NotParsed;
+            if (shouldExit)
+            {
+                return;
+            }
+
+            var parsed = (Parsed<CommandLineOptions>) parserResult;
+            var dataAccessConfig = new DataAccessConfiguration
+            {
+                UseInMemoryDatabase = parsed.Value.IsIncognitoModeEnabled
+            };
+
             var mutex = new Mutex(false, typeof(Program).FullName);
 
             try
@@ -27,7 +45,7 @@ namespace Camelot
                 }
 
                 SubscribeToDomainUnhandledEvents();
-                RegisterDependencies();
+                RegisterDependencies(dataAccessConfig);
                 RunBackgroundTasks();
 
                 BuildAvaloniaApp()
@@ -48,8 +66,8 @@ namespace Camelot
                 logger.LogCritical($"Unhandled application error: {ex}");
             };
 
-        private static void RegisterDependencies() =>
-            Bootstrapper.Register(Locator.CurrentMutable, Locator.Current);
+        private static void RegisterDependencies(DataAccessConfiguration dataAccessConfig) =>
+            Bootstrapper.Register(Locator.CurrentMutable, Locator.Current, dataAccessConfig);
 
         private static void RunBackgroundTasks() =>
             BackgroundTasksRunner.Start(Locator.Current);

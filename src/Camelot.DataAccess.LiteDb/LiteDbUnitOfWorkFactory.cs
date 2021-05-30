@@ -1,3 +1,4 @@
+using System.IO;
 using Camelot.DataAccess.Configuration;
 using Camelot.DataAccess.UnitOfWork;
 using LiteDB;
@@ -12,12 +13,19 @@ namespace Camelot.DataAccess.LiteDb
         {
             _databaseConfiguration = databaseConfiguration;
         }
-        
+
         public IUnitOfWork Create()
         {
-            var database = new LiteDatabase(_databaseConfiguration.ConnectionString);
-            
+            var database = _databaseConfiguration.UseInMemoryDatabase
+                ? CreateInMemoryDatabase()
+                : CreateDatabaseFromConnectionString();
+
             return new LiteDbUnitOfWork(database);
         }
+
+        private static LiteDatabase CreateInMemoryDatabase() => new LiteDatabase(new MemoryStream());
+
+        private LiteDatabase CreateDatabaseFromConnectionString() =>
+            new LiteDatabase(_databaseConfiguration.ConnectionString);
     }
 }

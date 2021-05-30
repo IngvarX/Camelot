@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Camelot.Configuration;
 using Camelot.DependencyInjection;
 using Camelot.ViewModels.Implementations;
 using Splat;
@@ -16,7 +17,7 @@ namespace Camelot.Tests
         public void TestRegistrations()
         {
             var resolver = new MutableDependencyResolver(Locator.CurrentMutable);
-            Bootstrapper.Register(resolver, Locator.Current);
+            Bootstrapper.Register(resolver, Locator.Current, new DataAccessConfiguration());
 
             resolver
                 .RegisteredTypes
@@ -27,7 +28,7 @@ namespace Camelot.Tests
         public void TestDialogRegistrations()
         {
             var resolver = new MutableDependencyResolver(Locator.CurrentMutable);
-            Bootstrapper.Register(resolver, Locator.Current);
+            Bootstrapper.Register(resolver, Locator.Current, new DataAccessConfiguration());
 
             var viewModelsAssembly = Assembly.GetAssembly(typeof(ViewModelBase));
             var dialogTypes = viewModelsAssembly

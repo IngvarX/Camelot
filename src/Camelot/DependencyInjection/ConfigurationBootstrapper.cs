@@ -18,12 +18,13 @@ namespace Camelot.DependencyInjection
 {
     public static class ConfigurationBootstrapper
     {
-        public static void RegisterConfiguration(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
+        public static void RegisterConfiguration(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver,
+            DataAccessConfiguration dataAccessConfig)
         {
             var configuration = BuildConfiguration();
 
             RegisterAboutDialogConfiguration(services, configuration);
-            RegisterDatabaseConfiguration(services, resolver, configuration);
+            RegisterDatabaseConfiguration(services, resolver, configuration, dataAccessConfig);
             RegisterFileSystemWatcherConfiguration(services, configuration);
             RegisterImagePreviewConfiguration(services, configuration);
             RegisterTabConfiguration(services, configuration);
@@ -57,13 +58,14 @@ namespace Camelot.DependencyInjection
         }
 
         private static void RegisterDatabaseConfiguration(IMutableDependencyResolver services,
-            IReadonlyDependencyResolver resolver, IConfiguration configuration)
+            IReadonlyDependencyResolver resolver, IConfiguration configuration, DataAccessConfiguration dataAccessConfig)
         {
-            var databaseConfiguration = new DatabaseConfiguration
+            var config = new DatabaseConfiguration
             {
-                ConnectionString = GetDatabaseConnectionString(configuration, resolver)
+                ConnectionString = GetDatabaseConnectionString(configuration, resolver),
+                UseInMemoryDatabase = dataAccessConfig.UseInMemoryDatabase
             };
-            services.RegisterConstant(databaseConfiguration);
+            services.RegisterConstant(config);
         }
 
         private static string GetDatabaseConnectionString(IConfiguration configuration,
