@@ -120,7 +120,7 @@
                             <MenuItem Header="{x:Static p:Resources.File}"
                                       Command="{Binding $parent[views:MainWindow].DataContext.OperationsViewModel.CreateNewFileCommand}" />
                         </MenuItem>
-                        <MenuItem Header="{x:Static p:Resources.ShowProperties}" Command="{Binding ShowPropertiesCommand}"/>
+                        <MenuItem Header="{x:Static p:Resources.ShowProperties}" Command="{Binding ShowPropertiesCommand}" />
                     </ContextMenu>
                 </Template>
             </DataGrid.Resources>
@@ -160,6 +160,7 @@
                         <MenuItem Header="{x:Static p:Resources.File}"
                                   Command="{Binding OperationsViewModel.CreateNewFileCommand}" />
                     </MenuItem>
+                    <MenuItem Header="{x:Static p:Resources.ShowProperties}" Command="{Binding CurrentNode.ShowPropertiesCommand}" />
                 </ContextMenu>
             </DataGrid.ContextMenu>
 

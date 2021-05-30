@@ -22,6 +22,7 @@ using Camelot.ViewModels.Interfaces.MainWindow.Operations;
 using Camelot.ViewModels.Services.Interfaces;
 using DynamicData;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 {
@@ -66,6 +67,9 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         public IEnumerable<IFileSystemNodeViewModel> FileSystemNodes => _fileSystemNodes;
 
         public IList<IFileSystemNodeViewModel> SelectedFileSystemNodes => _selectedFileSystemNodes;
+
+        [Reactive]
+        public IFileSystemNodeViewModel CurrentNode { get; private set; }
 
         public bool AreAnyFileSystemNodesSelected => _selectedFileSystemNodes.Any();
 
@@ -219,6 +223,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
             ReloadFiles();
             _fileSystemWatchingService.StartWatching(CurrentDirectory);
+            LoadDirectoryViewModel();
 
             CurrentDirectoryChanged.Raise(this, EventArgs.Empty);
         }
@@ -271,6 +276,13 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             }
 
             InsertParentDirectory();
+        }
+
+        private void LoadDirectoryViewModel()
+        {
+            var directory = _directoryService.GetDirectory(CurrentDirectory);
+
+            CurrentNode = _fileSystemNodeViewModelFactory.Create(directory);
         }
 
         private void CancelPreviousSearchIfNeeded() => _cancellationTokenSource?.Cancel();
