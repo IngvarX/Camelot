@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Specifications;
@@ -418,6 +419,28 @@ namespace Camelot.ViewModels.Tests.FilePanels
                 .Verify<IFileService, IReadOnlyList<FileModel>>(
                     m => m.GetFiles(AppRootDirectory, It.IsAny<ISpecification<NodeModelBase>>()),
                     Times.Exactly(refreshCount + 2));
+        }
+
+        [Theory]
+        [InlineData(false, false)]
+        [InlineData(true, true)]
+        public async Task TestCanPaste(bool canPaste, bool expected)
+        {
+            _autoMocker
+                .Setup<ITabsListViewModel, ITabViewModel>(m => m.SelectedTab)
+                .Returns(Mock.Of<ITabViewModel>());
+            _autoMocker
+                .Setup<IClipboardOperationsService, Task<bool>>(m => m.CanPasteAsync())
+                .ReturnsAsync(canPaste);
+
+            var filesPanelViewModel = _autoMocker.CreateInstance<FilesPanelViewModel>();
+
+            var actual = await filesPanelViewModel.CanPasteAsync();
+            Assert.Equal(expected, actual);
+
+            _autoMocker
+                .Verify<IClipboardOperationsService, Task<bool>>(m => m.CanPasteAsync(),
+                    Times.Once);
         }
     }
 }

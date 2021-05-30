@@ -9,14 +9,14 @@ using Xunit;
 
 namespace Camelot.Services.Windows.Tests
 {
-    public class FilesClipboardOperationsServiceTests
+    public class WindowsClipboardOperationsServiceTests
     {
         private const string Directory = "Dir";
         private const string File = "File";
 
         private readonly AutoMocker _autoMocker;
 
-        public FilesClipboardOperationsServiceTests()
+        public WindowsClipboardOperationsServiceTests()
         {
             _autoMocker = new AutoMocker();
         }
@@ -74,6 +74,23 @@ namespace Camelot.Services.Windows.Tests
             _autoMocker
                 .Verify<IOperationsService>(m => m.CopyAsync(It.IsAny<IReadOnlyList<string>>(), Directory),
                     Times.Exactly(expectedCallsCount));
+        }
+
+        [Theory]
+        [InlineData(null, false)]
+        [InlineData(new string[0], false)]
+        [InlineData(new[] {File}, true)]
+        public async Task TestCanPaste(string[] files, bool expected)
+        {
+            _autoMocker
+                .Setup<IClipboardService, Task<IReadOnlyList<string>>>(m => m.GetFilesAsync())
+                .ReturnsAsync(files);
+
+            var clipboardOperationsService = _autoMocker.CreateInstance<WindowsClipboardOperationsService>();
+
+            var actual = await clipboardOperationsService.CanPasteAsync();
+
+            Assert.Equal(expected, actual);
         }
     }
 }

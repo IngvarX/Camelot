@@ -111,6 +111,7 @@
                         <MenuItem Header="{x:Static p:Resources.Delete}" Command="{Binding DeleteCommand}"/>
                         <MenuItem Header="{x:Static p:Resources.CopyToClipboard}" Command="{Binding CopyToClipboardCommand}"/>
                         <MenuItem Name="PasteFromClipboard"
+                                  IsVisible="False"
                                   Header="{x:Static p:Resources.PasteFromClipboard}"
                                   Command="{Binding $parent[DataGrid].DataContext.PasteFromClipboardCommand}" />
                         <MenuItem Header="{x:Static p:Resources.Create}">
@@ -150,6 +151,7 @@
             <DataGrid.ContextMenu>
                 <ContextMenu Classes="smallContextMenu" ContextMenuOpening="DataGridOnContextMenuOpening">
                     <MenuItem Name="PasteFromClipboard"
+                              IsVisible="False"
                               Header="{x:Static p:Resources.PasteFromClipboard}"
                               Command="{Binding PasteFromClipboardCommand}" />
                     <MenuItem Header="{x:Static p:Resources.Create}">

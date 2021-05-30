@@ -2,21 +2,20 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Camelot.Avalonia.Interfaces;
 using Camelot.Services.Abstractions.Operations;
-using Camelot.Services.AllPlatforms;
 using Camelot.Services.Environment.Interfaces;
 using Moq;
 using Moq.AutoMock;
 using Xunit;
 
-namespace Camelot.Services.Linux.Tests
+namespace Camelot.Services.AllPlatforms.Tests
 {
-    public class LinuxClipboardOperationsServiceTests
+    public class UnixClipboardOperationsServiceTests
     {
         private const string Directory = "Dir";
 
         private readonly AutoMocker _autoMocker;
 
-        public LinuxClipboardOperationsServiceTests()
+        public UnixClipboardOperationsServiceTests()
         {
             _autoMocker = new AutoMocker();
         }
@@ -81,6 +80,28 @@ namespace Camelot.Services.Linux.Tests
             _autoMocker
                 .Verify<IOperationsService>(m => m.CopyAsync(It.IsAny<IReadOnlyList<string>>(), Directory),
                     Times.Never);
+        }
+
+        [Theory]
+        [InlineData("file://file.txt", true)]
+        [InlineData("file://file42.txt", true)]
+        [InlineData(null, false)]
+        [InlineData("", false)]
+        [InlineData(" ", false)]
+        [InlineData(" \t   \t\n", false)]
+        [InlineData("test", false)]
+        public async Task TestCanPaste(string clipboardString, bool expected)
+        {
+
+            _autoMocker
+                .Setup<IClipboardService, Task<string>>(m => m.GetTextAsync())
+                .ReturnsAsync(clipboardString);
+
+            var clipboardOperationsService = _autoMocker.CreateInstance<UnixClipboardOperationsService>();
+
+            var canPaste = await clipboardOperationsService.CanPasteAsync();
+
+            Assert.Equal(expected, canPaste);
         }
     }
 }
