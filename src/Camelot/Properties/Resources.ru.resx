@@ -510,4 +510,7 @@
   <data name="InnerDirectoriesWithColon" xml:space="preserve">
     <value>Вложенные каталоги:</value>
   </data>
+  <data name="PasteFromClipboard" xml:space="preserve">
+    <value>Вставить из буфера обмена</value>
+  </data>
 </root>

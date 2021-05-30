@@ -86,7 +86,8 @@
 
             <DataGrid.Resources>
                 <Template x:Key="RowContextMenu">
-                    <ContextMenu Classes="smallContextMenu">
+                    <ContextMenu Classes="smallContextMenu"
+                                 ContextMenuOpening="DataGridOnContextMenuOpening">
                         <MenuItem Header="{x:Static p:Resources.Open}" Command="{Binding OpenCommand}" IsVisible="{Binding !ShouldShowOpenSubmenu}" />
                         <MenuItem Header="{x:Static p:Resources.OpenWith}" Command="{Binding OpenWithCommand}" IsVisible="{Binding !ShouldShowOpenSubmenu}" />
                         <MenuItem Header="{x:Static p:Resources.Open}" IsVisible="{Binding ShouldShowOpenSubmenu}">
@@ -109,6 +110,9 @@
                         <MenuItem Header="{x:Static p:Resources.Move}" Command="{Binding MoveCommand}" />
                         <MenuItem Header="{x:Static p:Resources.Delete}" Command="{Binding DeleteCommand}"/>
                         <MenuItem Header="{x:Static p:Resources.CopyToClipboard}" Command="{Binding CopyToClipboardCommand}"/>
+                        <MenuItem Name="PasteFromClipboard"
+                                  Header="{x:Static p:Resources.PasteFromClipboard}"
+                                  Command="{Binding $parent[DataGrid].DataContext.PasteFromClipboardCommand}" />
                         <MenuItem Header="{x:Static p:Resources.Create}">
                             <MenuItem Header="{x:Static p:Resources.Directory}"
                                       Command="{Binding $parent[views:MainWindow].DataContext.OperationsViewModel.CreateNewDirectoryCommand}" />
@@ -142,6 +146,20 @@
                 <KeyBinding Gesture="Left" Command="{Binding SelectedTab.GoToPreviousDirectoryCommand}" />
                 <KeyBinding Gesture="Right" Command="{Binding SelectedTab.GoToNextDirectoryCommand}" />
             </DataGrid.KeyBindings>
+
+            <DataGrid.ContextMenu>
+                <ContextMenu Classes="smallContextMenu" ContextMenuOpening="DataGridOnContextMenuOpening">
+                    <MenuItem Name="PasteFromClipboard"
+                              Header="{x:Static p:Resources.PasteFromClipboard}"
+                              Command="{Binding PasteFromClipboardCommand}" />
+                    <MenuItem Header="{x:Static p:Resources.Create}">
+                        <MenuItem Header="{x:Static p:Resources.Directory}"
+                                  Command="{Binding OperationsViewModel.CreateNewDirectoryCommand}" />
+                        <MenuItem Header="{x:Static p:Resources.File}"
+                                  Command="{Binding OperationsViewModel.CreateNewFileCommand}" />
+                    </MenuItem>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
 
             <DataGrid.Columns>
                 <DataGridTemplateColumn Width="Auto">

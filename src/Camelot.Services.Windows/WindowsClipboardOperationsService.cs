@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,11 +25,25 @@ namespace Camelot.Services.Windows
 
         public async Task PasteFilesAsync(string destinationDirectory)
         {
-            var files = await _clipboardService.GetFilesAsync();
-            if (files?.Any() == true)
+            var files = await GetFilesAsync();
+            if (files.Any())
             {
                 await _operationsService.CopyAsync(files, destinationDirectory);
             }
+        }
+
+        public async Task<bool> CanPasteAsync()
+        {
+            var files = await GetFilesAsync();
+
+            return files.Any();
+        }
+
+        private async Task<IReadOnlyList<string>> GetFilesAsync()
+        {
+            var files = await _clipboardService.GetFilesAsync();
+
+            return files ?? Array.Empty<string>();
         }
     }
 }

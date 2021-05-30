@@ -164,6 +164,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             SelectedTab.IsGloballyActive = false;
         }
 
+        public Task<bool> CanPasteAsync() => _clipboardOperationsService.CanPasteAsync();
+
         private void SortFiles(SortingMode sortingMode)
         {
             if (SelectedTab.SortingViewModel.SortingColumn == sortingMode)

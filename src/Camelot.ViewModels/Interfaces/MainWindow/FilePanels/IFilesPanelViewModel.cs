@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Nodes;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs;
@@ -37,5 +38,7 @@ namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels
         void Activate();
 
         void Deactivate();
+
+        Task<bool> CanPasteAsync();
     }
 }

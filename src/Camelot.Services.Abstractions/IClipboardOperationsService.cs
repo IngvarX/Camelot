@@ -8,5 +8,7 @@ namespace Camelot.Services.Abstractions
         Task CopyFilesAsync(IReadOnlyList<string> files);
 
         Task PasteFilesAsync(string destinationDirectory);
+
+        Task<bool> CanPasteAsync();
     }
 }

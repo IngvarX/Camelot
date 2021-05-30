@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -36,22 +37,35 @@ namespace Camelot.Services.AllPlatforms
 
         public async Task PasteFilesAsync(string destinationDirectory)
         {
-            var selectedFilesString = await _clipboardService.GetTextAsync();
-            if (string.IsNullOrWhiteSpace(selectedFilesString))
-            {
-                return;
-            }
-
-            var startIndex = UrlPrefix.Length;
-            var files = selectedFilesString
-                .Split()
-                .Where(t => t.StartsWith(UrlPrefix))
-                .Select(f => f[startIndex..])
-                .ToArray();
+            var files = await GetFilesAsync();
             if (files.Any())
             {
                 await _operationsService.CopyAsync(files, destinationDirectory);
             }
+        }
+
+        public async Task<bool> CanPasteAsync()
+        {
+            var files = await GetFilesAsync();
+
+            return files.Any();
+        }
+
+        private async Task<IReadOnlyList<string>> GetFilesAsync()
+        {
+            var selectedFilesString = await _clipboardService.GetTextAsync();
+            if (string.IsNullOrWhiteSpace(selectedFilesString))
+            {
+                return Array.Empty<string>();
+            }
+
+            var startIndex = UrlPrefix.Length;
+
+            return selectedFilesString
+                .Split(_environmentService.NewLine)
+                .Where(t => t.StartsWith(UrlPrefix))
+                .Select(f => f[startIndex..])
+                .ToArray();
         }
     }
 }

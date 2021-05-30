@@ -510,4 +510,7 @@
   <data name="InnerDirectoriesWithColon" xml:space="preserve">
     <value>Inner directories:</value>
   </data>
+  <data name="PasteFromClipboard" xml:space="preserve">
+    <value>Paste from clipboard</value>
+  </data>
 </root>

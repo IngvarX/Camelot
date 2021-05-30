@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
@@ -20,6 +21,7 @@ namespace Camelot.Views.Main
 {
     public class FilesPanelView : UserControl
     {
+        private const string PasteFromClipboardMenuItemName = "PasteFromClipboard";
         private const int DragAndDropDelay = 300;
 
         private readonly Timer _timer;
@@ -296,6 +298,20 @@ namespace Camelot.Views.Main
             var dispatcher = Locator.Current.GetRequiredService<IApplicationDispatcher>();
 
             await dispatcher.DispatchAsync(() => DoDragAsync(_dataContextProvider, _pointerEventArgs));
+        }
+
+        private async void DataGridOnContextMenuOpening(object sender, CancelEventArgs e)
+        {
+            var menu = (ContextMenu) sender;
+            var canPaste = await ViewModel.CanPasteAsync();
+            var item = menu
+                .Items
+                .Cast<MenuItem>()
+                .SingleOrDefault(i => i.Name == PasteFromClipboardMenuItemName);
+            if (item != null)
+            {
+                item.IsVisible = canPaste;
+            }
         }
     }
 }

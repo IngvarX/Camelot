@@ -830,5 +830,11 @@ namespace Camelot.Properties {
                 return ResourceManager.GetString("InnerDirectoriesWithColon", resourceCulture);
             }
         }
+        
+        public static string PasteFromClipboard {
+            get {
+                return ResourceManager.GetString("PasteFromClipboard", resourceCulture);
+            }
+        }
     }
 }
