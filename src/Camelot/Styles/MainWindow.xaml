@@ -92,12 +92,6 @@
         <Setter Property="TextTrimming" Value="CharacterEllipsis" />
     </Style>
 
-    <Style Selector="Button.tabScrollButton">
-        <Setter Property="ZIndex" Value="10" />
-        <Setter Property="Padding" Value="5,3,5,0" />
-        <Setter Property="Background" Value="{DynamicResource TabArrowButtonBackgroundBrush}" />
-    </Style>
-
     <Style Selector="ScrollViewer.arrowScrollViewer">
         <Setter Property="VerticalScrollBarVisibility" Value="Disabled" />
         <Setter Property="HorizontalScrollBarVisibility" Value="Hidden" />
@@ -201,6 +195,13 @@
 
     <Style Selector="Button.iconButton:pointerover">
         <Setter Property="Opacity" Value="0.9" />
+    </Style>
+
+    <Style Selector="Button.tabScrollButton">
+        <Setter Property="ZIndex" Value="10" />
+        <Setter Property="Padding" Value="5,3,5,0" />
+        <Setter Property="Background" Value="{DynamicResource TabArrowButtonBackgroundBrush}" />
+        <Setter Property="Margin" Value="0,0,0,2" />
     </Style>
 
     <Style Selector="Rectangle.tabRectangleGloballyActive">
