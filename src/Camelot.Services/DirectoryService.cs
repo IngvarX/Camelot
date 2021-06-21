@@ -86,6 +86,7 @@ namespace Camelot.Services
             _environmentDirectoryService
                 .GetDirectories(directory)
                 .Select(CreateFrom)
+                .WhereNotNull()
                 .Where(d => specification?.IsSatisfiedBy(d) ?? true)
                 .ToArray();
 
@@ -157,9 +158,16 @@ namespace Camelot.Services
 
         private DirectoryModel CreateFrom(string directory)
         {
-            var directoryInfo = _environmentDirectoryService.GetDirectory(directory);
+            try
+            {
+                var directoryInfo = _environmentDirectoryService.GetDirectory(directory);
 
-            return CreateFrom(directoryInfo);
+                return CreateFrom(directoryInfo);
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         private long GetFileSize(string file) =>
