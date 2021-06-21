@@ -9,8 +9,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 {
     public class RenameNodeDialogViewModel : ParameterizedDialogViewModelBase<RenameNodeDialogResult, RenameNodeNavigationParameter>
     {
-        private readonly IDirectoryService _directoryService;
-        private readonly IFileService _fileService;
+        private readonly INodeService _nodeService;
         private readonly IPathService _pathService;
 
         private string _directory;
@@ -23,12 +22,10 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         public ICommand CancelCommand { get; }
 
         public RenameNodeDialogViewModel(
-            IDirectoryService directoryService,
-            IFileService fileService,
+            INodeService nodeService,
             IPathService pathService)
         {
-            _directoryService = directoryService;
-            _fileService = fileService;
+            _nodeService = nodeService;
             _pathService = pathService;
 
             var canRename = this.WhenAnyValue(x => x.NodeName,
@@ -53,7 +50,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 
             var fullPath = GetFullPath();
 
-            return !_fileService.CheckIfExists(fullPath) && !_directoryService.CheckIfExists(fullPath);
+            return !_nodeService.CheckIfExists(fullPath);
         }
 
         private void Rename() => Close(new RenameNodeDialogResult(GetFullPath()));

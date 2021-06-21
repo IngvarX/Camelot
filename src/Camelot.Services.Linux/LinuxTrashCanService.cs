@@ -16,6 +16,7 @@ namespace Camelot.Services.Linux
         private readonly IPathService _pathService;
         private readonly IFileService _fileService;
         private readonly IDirectoryService _directoryService;
+        private readonly INodeService _nodeService;
         private readonly IDateTimeProvider _dateTimeProvider;
         private readonly ILinuxRemovedFileMetadataBuilderFactory _removedFileMetadataBuilderFactory;
         private readonly IHomeDirectoryProvider _homeDirectoryProvider;
@@ -28,6 +29,7 @@ namespace Camelot.Services.Linux
             IFileService fileService,
             IEnvironmentService environmentService,
             IDirectoryService directoryService,
+            INodeService nodeService,
             IDateTimeProvider dateTimeProvider,
             ILinuxRemovedFileMetadataBuilderFactory removedFileMetadataBuilderFactory,
             IHomeDirectoryProvider homeDirectoryProvider)
@@ -37,6 +39,7 @@ namespace Camelot.Services.Linux
             _fileService = fileService;
             _environmentService = environmentService;
             _directoryService = directoryService;
+            _nodeService = nodeService;
             _dateTimeProvider = dateTimeProvider;
             _removedFileMetadataBuilderFactory = removedFileMetadataBuilderFactory;
             _homeDirectoryProvider = homeDirectoryProvider;
@@ -93,8 +96,7 @@ namespace Camelot.Services.Linux
             return result;
         }
 
-        private bool CheckIfExists(string nodePath) =>
-            _fileService.CheckIfExists(nodePath) || _directoryService.CheckIfExists(nodePath);
+        private bool CheckIfExists(string nodePath) => _nodeService.CheckIfExists(nodePath);
 
         private async Task WriteMetaDataAsync(string oldFilePath, string newFilePath,
             string trashCanMetadataLocation, DateTime dateTime)

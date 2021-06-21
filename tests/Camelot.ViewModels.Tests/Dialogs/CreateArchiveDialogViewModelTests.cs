@@ -93,20 +93,14 @@ namespace Camelot.ViewModels.Tests.Dialogs
             Assert.Equal(ArchiveFullPath, dialog.ArchivePath);
         }
 
-        [Theory]
-        [InlineData(false, true)]
-        [InlineData(true, false)]
-        [InlineData(true, true)]
-        public void TestArchiveWithExistingNodeNameCreation(bool fileExists, bool dirExists)
+        [Fact]
+        public void TestArchiveWithExistingNodeNameCreation()
         {
             SetupForType();
 
             _autoMocker
-                .Setup<IDirectoryService, bool>(m => m.CheckIfExists(NewArchivePath))
-                .Returns(dirExists);
-            _autoMocker
-                .Setup<IFileService, bool>(m => m.CheckIfExists(NewArchivePath))
-                .Returns(fileExists);
+                .Setup<INodeService, bool>(m => m.CheckIfExists(NewArchivePath))
+                .Returns(true);
 
             var dialog = _autoMocker.CreateInstance<CreateArchiveDialogViewModel>();
             dialog.Activate(new CreateArchiveNavigationParameter(ArchivePath, true));

@@ -50,7 +50,7 @@ namespace Camelot.Services.Linux.Tests
                 .Setup<IPathService, string>(m => m.Combine(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns<string, string>((a, b) => $"{a}/{b}");
             _autoMocker
-                .Setup<IFileService, bool>(m => m.CheckIfExists(It.IsAny<string>()))
+                .Setup<INodeService, bool>(m => m.CheckIfExists(It.IsAny<string>()))
                 .Returns<string>(existingFiles.Contains);
             _autoMocker
                 .Setup<IFileService>(m => m.WriteTextAsync(metadataPath, MetaData))

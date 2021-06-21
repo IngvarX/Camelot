@@ -35,18 +35,12 @@ namespace Camelot.ViewModels.Tests.Dialogs
             Assert.False(dialog.CreateCommand.CanExecute(null));
         }
 
-        [Theory]
-        [InlineData(false, true)]
-        [InlineData(true, false)]
-        [InlineData(true, true)]
-        public void TestDirectoryWithExistingNodeNameCreation(bool fileExists, bool dirExists)
+        [Fact]
+        public void TestDirectoryWithExistingNodeNameCreation()
         {
             _autoMocker
-                .Setup<IDirectoryService, bool>(m => m.CheckIfExists(NewDirectoryPath))
-                .Returns(dirExists);
-            _autoMocker
-                .Setup<IFileService, bool>(m => m.CheckIfExists(NewDirectoryPath))
-                .Returns(fileExists);
+                .Setup<INodeService, bool>(m => m.CheckIfExists(NewDirectoryPath))
+                .Returns(true);
             _autoMocker
                 .Setup<IPathService, string>(m => m.Combine(DirectoryPath, DirectoryName))
                 .Returns(NewDirectoryPath);

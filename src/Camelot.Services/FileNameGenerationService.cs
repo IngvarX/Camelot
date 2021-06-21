@@ -4,17 +4,14 @@ namespace Camelot.Services
 {
     public class FileNameGenerationService : IFileNameGenerationService
     {
-        private readonly IFileService _fileService;
-        private readonly IDirectoryService _directoryService;
+        private readonly INodeService _nodeService;
         private readonly IPathService _pathService;
 
         public FileNameGenerationService(
-            IFileService fileService,
-            IDirectoryService directoryService,
+            INodeService nodeService,
             IPathService pathService)
         {
-            _fileService = fileService;
-            _directoryService = directoryService;
+            _nodeService = nodeService;
             _pathService = pathService;
         }
 
@@ -55,7 +52,7 @@ namespace Camelot.Services
         {
             var fullPath = _pathService.Combine(directory, name);
 
-            return _fileService.CheckIfExists(fullPath) || _directoryService.CheckIfExists(fullPath);
+            return _nodeService.CheckIfExists(fullPath);
         }
 
         private string GenerateNewName(string currentName, int i)

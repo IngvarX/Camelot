@@ -64,6 +64,10 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IPathService>(),
                 resolver.GetRequiredService<ArchiveTypeMapperConfiguration>()
             ));
+            services.RegisterLazySingleton<INodeService>(() => new NodeService(
+                resolver.GetRequiredService<IFileService>(),
+                resolver.GetRequiredService<IDirectoryService>()
+            ));
             services.RegisterLazySingleton<IArchiveService>(() => new ArchiveService(
                 resolver.GetRequiredService<IArchiveTypeMapper>(),
                 resolver.GetRequiredService<IPathService>(),
@@ -149,8 +153,7 @@ namespace Camelot.DependencyInjection
             ));
             services.RegisterLazySingleton<IOperationsStateService>(() => new OperationsStateService());
             services.RegisterLazySingleton<IFileNameGenerationService>(() => new FileNameGenerationService(
-                resolver.GetRequiredService<IFileService>(),
-                resolver.GetRequiredService<IDirectoryService>(),
+                resolver.GetRequiredService<INodeService>(),
                 resolver.GetRequiredService<IPathService>()
             ));
             services.RegisterLazySingleton<IOpenWithApplicationService>(() => new OpenWithApplicationService(
@@ -208,6 +211,7 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IFileService>(),
                 resolver.GetRequiredService<IEnvironmentService>(),
                 resolver.GetRequiredService<IDirectoryService>(),
+                resolver.GetRequiredService<INodeService>(),
                 resolver.GetRequiredService<IDateTimeProvider>(),
                 resolver.GetRequiredService<ILinuxRemovedFileMetadataBuilderFactory>(),
                 resolver.GetRequiredService<IHomeDirectoryProvider>()
@@ -275,6 +279,7 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IFileService>(),
                 resolver.GetRequiredService<IEnvironmentService>(),
                 resolver.GetRequiredService<IDirectoryService>(),
+                resolver.GetRequiredService<INodeService>(),
                 resolver.GetRequiredService<IHomeDirectoryProvider>()
             ));
             services.RegisterLazySingleton<IResourceOpeningService>(() => new ResourceOpeningServiceOpenWith(

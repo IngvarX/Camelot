@@ -14,6 +14,7 @@ namespace Camelot.Services.Mac
         private readonly IFileService _fileService;
         private readonly IEnvironmentService _environmentService;
         private readonly IDirectoryService _directoryService;
+        private readonly INodeService _nodeService;
         private readonly IHomeDirectoryProvider _homeDirectoryProvider;
 
         public MacTrashCanService(
@@ -23,6 +24,7 @@ namespace Camelot.Services.Mac
             IFileService fileService,
             IEnvironmentService environmentService,
             IDirectoryService directoryService,
+            INodeService nodeService,
             IHomeDirectoryProvider homeDirectoryProvider)
             : base(mountedDriveService, operationsService, pathService)
         {
@@ -30,6 +32,7 @@ namespace Camelot.Services.Mac
             _fileService = fileService;
             _environmentService = environmentService;
             _directoryService = directoryService;
+            _nodeService = nodeService;
             _homeDirectoryProvider = homeDirectoryProvider;
         }
 
@@ -71,8 +74,7 @@ namespace Camelot.Services.Mac
             return result;
         }
 
-        private bool CheckIfExists(string nodePath) =>
-            _fileService.CheckIfExists(nodePath) || _directoryService.CheckIfExists(nodePath);
+        private bool CheckIfExists(string nodePath) => _nodeService.CheckIfExists(nodePath);
 
         private string GetHomeTrashCanPath()
         {

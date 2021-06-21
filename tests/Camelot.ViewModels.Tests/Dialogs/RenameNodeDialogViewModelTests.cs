@@ -51,18 +51,12 @@ namespace Camelot.ViewModels.Tests.Dialogs
             Assert.False(dialog.RenameCommand.CanExecute(null));
         }
 
-        [Theory]
-        [InlineData(false, true)]
-        [InlineData(true, false)]
-        [InlineData(true, true)]
-        public void TestNodeWithExistingNodeName(bool fileExists, bool dirExists)
+        [Fact]
+        public void TestNodeWithExistingNodeName()
         {
             _autoMocker
-                .Setup<IDirectoryService, bool>(m => m.CheckIfExists(NewNodePath))
-                .Returns(dirExists);
-            _autoMocker
-                .Setup<IFileService, bool>(m => m.CheckIfExists(NewNodePath))
-                .Returns(fileExists);
+                .Setup<INodeService, bool>(m => m.CheckIfExists(NewNodePath))
+                .Returns(true);
             _autoMocker
                 .Setup<IPathService, string>(m => m.GetParentDirectory(NodePath))
                 .Returns(NodeDirectory);

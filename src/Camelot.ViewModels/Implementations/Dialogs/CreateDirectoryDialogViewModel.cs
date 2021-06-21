@@ -9,8 +9,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 {
     public class CreateDirectoryDialogViewModel : ParameterizedDialogViewModelBase<CreateDirectoryDialogResult, CreateNodeNavigationParameter>
     {
-        private readonly IDirectoryService _directoryService;
-        private readonly IFileService _fileService;
+        private readonly INodeService _nodeService;
         private readonly IPathService _pathService;
 
         private string _directoryPath;
@@ -23,12 +22,10 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         public ICommand CancelCommand { get; }
 
         public CreateDirectoryDialogViewModel(
-            IDirectoryService directoryService,
-            IFileService fileService,
+            INodeService nodeService,
             IPathService pathService)
         {
-            _directoryService = directoryService;
-            _fileService = fileService;
+            _nodeService = nodeService;
             _pathService = pathService;
 
             var canCreate = this.WhenAnyValue(x => x.DirectoryName,
@@ -38,7 +35,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             CancelCommand = ReactiveCommand.Create(Close);
         }
 
-        public override void Activate(CreateNodeNavigationParameter navigationParameter) => 
+        public override void Activate(CreateNodeNavigationParameter navigationParameter) =>
             _directoryPath = navigationParameter.DirectoryPath;
 
         private void CreateDirectory() => Close(new CreateDirectoryDialogResult(DirectoryName));
@@ -52,7 +49,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 
             var newFullPath = _pathService.Combine(_directoryPath, name);
 
-            return !_fileService.CheckIfExists(newFullPath) && !_directoryService.CheckIfExists(newFullPath);
+            return !_nodeService.CheckIfExists(newFullPath);
         }
     }
 }

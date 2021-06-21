@@ -39,7 +39,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
         public void TestDirectoryWithExistingDirectoryNameCreation()
         {
             _autoMocker
-                .Setup<IDirectoryService, bool>(m => m.CheckIfExists(NewFilePath))
+                .Setup<INodeService, bool>(m => m.CheckIfExists(NewFilePath))
                 .Returns(true);
             _autoMocker
                 .Setup<IPathService, string>(m => m.Combine(DirectoryPath, FileName))
@@ -53,18 +53,12 @@ namespace Camelot.ViewModels.Tests.Dialogs
             Assert.False(dialog.CreateCommand.CanExecute(null));
         }
 
-        [Theory]
-        [InlineData(false, true)]
-        [InlineData(true, false)]
-        [InlineData(true, true)]
-        public void TestFileWithExistingFileNameCreation(bool fileExists, bool dirExists)
+        [Fact]
+        public void TestFileWithExistingFileNameCreation()
         {
             _autoMocker
-                .Setup<IDirectoryService, bool>(m => m.CheckIfExists(NewFilePath))
-                .Returns(dirExists);
-            _autoMocker
-                .Setup<IFileService, bool>(m => m.CheckIfExists(NewFilePath))
-                .Returns(fileExists);
+                .Setup<INodeService, bool>(m => m.CheckIfExists(NewFilePath))
+                .Returns(true);
             _autoMocker
                 .Setup<IPathService, string>(m => m.Combine(DirectoryPath, FileName))
                 .Returns(NewFilePath);

@@ -22,8 +22,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 {
     public class CreateArchiveDialogViewModel : ParameterizedDialogViewModelBase<CreateArchiveDialogResult, CreateArchiveNavigationParameter>
     {
-        private readonly IDirectoryService _directoryService;
-        private readonly IFileService _fileService;
+        private readonly INodeService _nodeService;
         private readonly IArchiveTypeViewModelFactory _archiveTypeViewModelFactory;
         private readonly ISystemDialogService _systemDialogService;
         private readonly ICreateArchiveStateService _createArchiveStateService;
@@ -44,14 +43,12 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         public ICommand CancelCommand { get; }
 
         public CreateArchiveDialogViewModel(
-            IDirectoryService directoryService,
-            IFileService fileService,
+            INodeService nodeService,
             IArchiveTypeViewModelFactory archiveTypeViewModelFactory,
             ISystemDialogService systemDialogService,
             ICreateArchiveStateService createArchiveStateService)
         {
-            _directoryService = directoryService;
-            _fileService = fileService;
+            _nodeService = nodeService;
             _archiveTypeViewModelFactory = archiveTypeViewModelFactory;
             _systemDialogService = systemDialogService;
             _createArchiveStateService = createArchiveStateService;
@@ -110,8 +107,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 
         private bool CheckIfPathIsValid(string path) =>
             !string.IsNullOrWhiteSpace(path) &&
-            !_fileService.CheckIfExists(path) &&
-            !_directoryService.CheckIfExists(path);
+            !_nodeService.CheckIfExists(path);
 
         private string GetUpdatedArchivePath(ArchiveTypeViewModel previous, ArchiveTypeViewModel current)
         {
@@ -124,7 +120,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         private ArchiveTypeViewModel GetSelectedArchiveType()
         {
             var stateModel = _createArchiveStateService.GetState();
-            var archiveType = (ArchiveType) stateModel.ArchiveType;
+            var archiveType = stateModel.ArchiveType;
 
             return _availableArchiveTypes.SingleOrDefault(vm => vm.ArchiveType == archiveType) ??
                    _availableArchiveTypes.First();

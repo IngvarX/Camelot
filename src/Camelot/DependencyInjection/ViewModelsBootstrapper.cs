@@ -158,8 +158,7 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<AboutDialogConfiguration>()
             ));
             services.Register(() => new CreateArchiveDialogViewModel(
-                resolver.GetRequiredService<IDirectoryService>(),
-                resolver.GetRequiredService<IFileService>(),
+                resolver.GetRequiredService<INodeService>(),
                 resolver.GetRequiredService<IArchiveTypeViewModelFactory>(),
                 resolver.GetRequiredService<ISystemDialogService>(),
                 resolver.GetRequiredService<ICreateArchiveStateService>()
@@ -181,18 +180,15 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IPathService>()
             ));
             services.Register(() => new CreateDirectoryDialogViewModel(
-                resolver.GetRequiredService<IDirectoryService>(),
-                resolver.GetRequiredService<IFileService>(),
+                resolver.GetRequiredService<INodeService>(),
                 resolver.GetRequiredService<IPathService>()
             ));
             services.Register(() => new CreateFileDialogViewModel(
-                resolver.GetRequiredService<IDirectoryService>(),
-                resolver.GetRequiredService<IFileService>(),
+                resolver.GetRequiredService<INodeService>(),
                 resolver.GetRequiredService<IPathService>()
             ));
             services.Register(() => new RenameNodeDialogViewModel(
-                resolver.GetRequiredService<IDirectoryService>(),
-                resolver.GetRequiredService<IFileService>(),
+                resolver.GetRequiredService<INodeService>(),
                 resolver.GetRequiredService<IPathService>()
             ));
             services.RegisterLazySingleton<IOperationsStateViewModel>(() => new OperationsStatesListViewModel(
