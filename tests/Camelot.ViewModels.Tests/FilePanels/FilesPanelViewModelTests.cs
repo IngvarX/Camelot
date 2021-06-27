@@ -42,6 +42,9 @@ namespace Camelot.ViewModels.Tests.FilePanels
                 .Setup<IFileService, IReadOnlyList<FileModel>>(m =>
                     m.GetFiles(It.IsAny<string>(), It.IsAny<ISpecification<NodeModelBase>>()))
                 .Returns(new FileModel[] { });
+            _autoMocker
+                .Setup<IPermissionsService, bool>(m => m.CheckIfHasAccess(It.IsAny<string>()))
+                .Returns(true);
         }
 
         [Theory]
