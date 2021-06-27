@@ -298,6 +298,7 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IFileSystemNodeViewModelComparerFactory>(),
                 resolver.GetRequiredService<IRecursiveSearchService>(),
                 observer,
+                resolver.GetRequiredService<IPermissionsService>(),
                 resolver.GetRequiredService<ISearchViewModel>(),
                 tabsListViewModel,
                 resolver.GetRequiredService<IOperationsViewModel>(),

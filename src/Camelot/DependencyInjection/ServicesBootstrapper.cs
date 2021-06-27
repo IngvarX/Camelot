@@ -68,6 +68,9 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IFileService>(),
                 resolver.GetRequiredService<IDirectoryService>()
             ));
+            services.RegisterLazySingleton<IPermissionsService>(() => new PermissionsService(
+                resolver.GetRequiredService<IEnvironmentDirectoryService>()
+            ));
             services.RegisterLazySingleton<IArchiveService>(() => new ArchiveService(
                 resolver.GetRequiredService<IArchiveTypeMapper>(),
                 resolver.GetRequiredService<IPathService>(),

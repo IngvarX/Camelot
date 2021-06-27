@@ -11,6 +11,7 @@ namespace Camelot.Services.Tests
     public class OpenWithApplicationServiceTests
     {
         private const string Extension = "txt";
+        private const string UppercaseExtension = "TXT";
         private const string AnotherExtension = "pdf";
         private const string DisplayName = "App";
         private const string Arguments = "Args";
@@ -40,8 +41,10 @@ namespace Camelot.Services.Tests
             Assert.Null(application);
         }
 
-        [Fact]
-        public void TestNonEmptyStateAppFound()
+        [Theory]
+        [InlineData(Extension)]
+        [InlineData(UppercaseExtension)]
+        public void TestNonEmptyStateAppFound(string extension)
         {
             var dbApplication = new Application
             {
@@ -62,7 +65,7 @@ namespace Camelot.Services.Tests
             _autoMocker.Use(unitOfWorkFactory);
             var service = _autoMocker.CreateInstance<OpenWithApplicationService>();
 
-            var application = service.GetSelectedApplication(Extension);
+            var application = service.GetSelectedApplication(extension);
 
             Assert.NotNull(application);
             Assert.Equal(DisplayName, application.DisplayName);

@@ -39,6 +39,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private readonly IFileSystemNodeViewModelComparerFactory _comparerFactory;
         private readonly IRecursiveSearchService _recursiveSearchService;
         private readonly IFilePanelDirectoryObserver _filePanelDirectoryObserver;
+        private readonly IPermissionsService _permissionsService;
 
         private readonly ObservableCollection<IFileSystemNodeViewModel> _fileSystemNodes;
         private readonly ObservableCollection<IFileSystemNodeViewModel> _selectedFileSystemNodes;
@@ -113,6 +114,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             IFileSystemNodeViewModelComparerFactory comparerFactory,
             IRecursiveSearchService recursiveSearchService,
             IFilePanelDirectoryObserver filePanelDirectoryObserver,
+            IPermissionsService permissionsService,
             ISearchViewModel searchViewModel,
             ITabsListViewModel tabsListViewModel,
             IOperationsViewModel operationsViewModel,
@@ -130,6 +132,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             _comparerFactory = comparerFactory;
             _recursiveSearchService = recursiveSearchService;
             _filePanelDirectoryObserver = filePanelDirectoryObserver;
+            _permissionsService = permissionsService;
 
             SearchViewModel = searchViewModel;
             TabsListViewModel = tabsListViewModel;
@@ -214,7 +217,17 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             Activate();
 
             var previousCurrentDirectory = _currentDirectory;
-            this.RaiseAndSetIfChanged(ref _currentDirectory, _filePanelDirectoryObserver.CurrentDirectory);
+            var newCurrentDirectory = _filePanelDirectoryObserver.CurrentDirectory;
+            
+            if (!_permissionsService.CheckIfHasAccess(newCurrentDirectory))
+            {
+                // TODO: show dialog
+                _filePanelDirectoryObserver.CurrentDirectory = previousCurrentDirectory;
+                
+                return;
+            }
+
+            this.RaiseAndSetIfChanged(ref _currentDirectory, newCurrentDirectory);
 
             if (previousCurrentDirectory != null)
             {
