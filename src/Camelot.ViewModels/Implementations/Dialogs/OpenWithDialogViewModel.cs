@@ -46,8 +46,6 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         [Reactive]
         public bool IsDefaultApplication { get; set; }
 
-        public ICommand CancelCommand { get; }
-
         public ICommand SelectCommand { get; }
 
         public OpenWithDialogViewModel(
@@ -63,7 +61,6 @@ namespace Camelot.ViewModels.Implementations.Dialogs
                 x => x.SelectedOtherApplication,
                 CheckIfSelectedApplicationIsValid);
 
-            CancelCommand = ReactiveCommand.Create(Close);
             SelectCommand = ReactiveCommand.Create(SelectApplication, canSelect);
 
             this

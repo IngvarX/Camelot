@@ -40,8 +40,6 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 
         public ICommand CreateCommand { get; }
 
-        public ICommand CancelCommand { get; }
-
         public CreateArchiveDialogViewModel(
             INodeService nodeService,
             IArchiveTypeViewModelFactory archiveTypeViewModelFactory,
@@ -63,7 +61,6 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 
             SelectPathCommand = ReactiveCommand.CreateFromTask(SelectPathAsync);
             CreateCommand = ReactiveCommand.Create(CreateArchive, canCreate);
-            CancelCommand = ReactiveCommand.Create(Close);
 
             ArchivePath = string.Empty;
         }

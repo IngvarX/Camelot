@@ -80,21 +80,6 @@ namespace Camelot.ViewModels.Tests.Dialogs
         }
 
         [Fact]
-        public void TestCloseCommand()
-        {
-            var generalSettingsViewModel = new Mock<ISettingsViewModel>();
-            var terminalSettingsViewModel = new Mock<ISettingsViewModel>();
-
-            var dialogViewModel = new SettingsDialogViewModel(generalSettingsViewModel.Object, terminalSettingsViewModel.Object);
-            var isCallbackCalled = false;
-
-            dialogViewModel.CloseRequested += (sender, args) => isCallbackCalled = args.Result == default;
-            Assert.True(dialogViewModel.CloseCommand.CanExecute(null));
-            dialogViewModel.CloseCommand.Execute(null);
-            Assert.True(isCallbackCalled);
-        }
-
-        [Fact]
         public void TestSettingsViewModelActivation()
         {
             var generalSettingsViewModel = new Mock<ISettingsViewModel>();
@@ -107,7 +92,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
                 .Setup(m => m.Activate())
                 .Verifiable();
 
-            var dialogViewModel = new SettingsDialogViewModel(generalSettingsViewModel.Object, terminalSettingsViewModel.Object) 
+            var dialogViewModel = new SettingsDialogViewModel(generalSettingsViewModel.Object, terminalSettingsViewModel.Object)
             {
                 SelectedIndex = 0
             };

@@ -44,27 +44,6 @@ namespace Camelot.ViewModels.Tests.Dialogs
             Assert.Equal(NewFileName, dialog.NewFileName);
         }
 
-        [Fact]
-        public void TestCanceled()
-        {
-            var isCallbackCalled = false;
-            var dialog = Create();
-            dialog.CloseRequested += (sender, args) =>
-            {
-                var result = args.Result;
-                if (result is null)
-                {
-                    isCallbackCalled = true;
-                }
-            };
-
-            Assert.True(dialog.CancelCommand.CanExecute(null));
-
-            dialog.CancelCommand.Execute(null);
-
-            Assert.True(isCallbackCalled);
-        }
-
         [Theory]
         [InlineData(true)]
         [InlineData(false)]

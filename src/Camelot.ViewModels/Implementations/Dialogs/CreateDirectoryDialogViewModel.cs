@@ -19,8 +19,6 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 
         public ICommand CreateCommand { get; }
 
-        public ICommand CancelCommand { get; }
-
         public CreateDirectoryDialogViewModel(
             INodeService nodeService,
             IPathService pathService)
@@ -32,7 +30,6 @@ namespace Camelot.ViewModels.Implementations.Dialogs
                 CheckIfNameIsValid);
 
             CreateCommand = ReactiveCommand.Create(CreateDirectory, canCreate);
-            CancelCommand = ReactiveCommand.Create(Close);
         }
 
         public override void Activate(CreateNodeNavigationParameter navigationParameter) =>

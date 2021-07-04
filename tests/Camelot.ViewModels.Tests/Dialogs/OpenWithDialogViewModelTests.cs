@@ -137,28 +137,6 @@ namespace Camelot.ViewModels.Tests.Dialogs
             Assert.Equal(otherApplication, dialog.OtherApplications.Single());
         }
 
-        [Fact]
-        public async Task TestCancelCommand()
-        {
-            var isCallbackCalled = false;
-            var dialog = _autoMocker.CreateInstance<OpenWithDialogViewModel>();
-            var parameter = new OpenWithNavigationParameter(FileExtension, null);
-            await dialog.ActivateAsync(parameter);
-
-            dialog.CloseRequested += (sender, args) =>
-            {
-                var result = args.Result;
-                if (result is null)
-                {
-                    isCallbackCalled = true;
-                }
-            };
-
-            dialog.CancelCommand.Execute(null);
-
-            Assert.True(isCallbackCalled);
-        }
-
         [Theory]
         [InlineData(true)]
         [InlineData(false)]

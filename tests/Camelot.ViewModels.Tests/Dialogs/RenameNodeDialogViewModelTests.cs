@@ -31,7 +31,6 @@ namespace Camelot.ViewModels.Tests.Dialogs
             var dialog = _autoMocker.CreateInstance<RenameNodeDialogViewModel>();
             dialog.Activate(new RenameNodeNavigationParameter(NodePath));
 
-            Assert.True(dialog.CancelCommand.CanExecute(null));
             Assert.Equal(NodeName, dialog.NodeName);
         }
 
@@ -100,28 +99,6 @@ namespace Camelot.ViewModels.Tests.Dialogs
             Assert.True(dialog.RenameCommand.CanExecute(null));
 
             dialog.RenameCommand.Execute(null);
-
-            Assert.True(isCallbackCalled);
-        }
-
-        [Fact]
-        public void TestCancel()
-        {
-            var dialog = _autoMocker.CreateInstance<RenameNodeDialogViewModel>();
-            dialog.Activate(new RenameNodeNavigationParameter(NodePath));
-
-            var isCallbackCalled = false;
-            dialog.CloseRequested += (sender, args) =>
-            {
-                if (args.Result is null)
-                {
-                    isCallbackCalled = true;
-                }
-            };
-
-            Assert.True(dialog.CancelCommand.CanExecute(null));
-
-            dialog.CancelCommand.Execute(null);
 
             Assert.True(isCallbackCalled);
         }

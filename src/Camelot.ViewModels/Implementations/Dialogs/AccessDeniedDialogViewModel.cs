@@ -10,13 +10,6 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         [Reactive]
         public string Directory { get; set; }
 
-        public ICommand CloseCommand { get; }
-
-        public AccessDeniedDialogViewModel()
-        {
-            CloseCommand = ReactiveCommand.Create(Close);
-        }
-
         public override void Activate(AccessDeniedNavigationParameter parameter)
         {
             Directory = parameter.Directory;

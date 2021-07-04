@@ -38,8 +38,6 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         [Reactive]
         public bool AreMultipleFilesAvailable { get; set; }
 
-        public ICommand CancelCommand { get; }
-
         public ICommand SkipCommand { get; }
 
         public ICommand ReplaceCommand { get; }
@@ -59,7 +57,6 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             _fileNameGenerationService = fileNameGenerationService;
             _pathService = pathService;
 
-            CancelCommand = ReactiveCommand.Create(Close);
             SkipCommand = ReactiveCommand.Create(Skip);
             ReplaceCommand = ReactiveCommand.Create(Replace);
             ReplaceIfOlderCommand = ReactiveCommand.Create(ReplaceIfOlder);

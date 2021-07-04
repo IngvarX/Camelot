@@ -28,8 +28,6 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 
         public ICommand SaveCommand { get; }
 
-        public ICommand CloseCommand { get; }
-
         public SettingsDialogViewModel(
             ISettingsViewModel generalSettingsViewModel,
             ISettingsViewModel terminalSettingsViewModel)
@@ -46,7 +44,6 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             Activate(_settingsViewModels.First());
 
             SaveCommand = ReactiveCommand.Create(Save);
-            CloseCommand = ReactiveCommand.Create(Close);
         }
 
         private void Save() =>

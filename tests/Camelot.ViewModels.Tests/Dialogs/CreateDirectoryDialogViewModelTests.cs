@@ -77,27 +77,5 @@ namespace Camelot.ViewModels.Tests.Dialogs
 
             Assert.True(isCallbackCalled);
         }
-
-        [Fact]
-        public void TestCancel()
-        {
-            var dialog = _autoMocker.CreateInstance<CreateDirectoryDialogViewModel>();
-            dialog.Activate(new CreateNodeNavigationParameter(DirectoryPath));
-
-            var isCallbackCalled = false;
-            dialog.CloseRequested += (sender, args) =>
-            {
-                if (args.Result is null)
-                {
-                    isCallbackCalled = true;
-                }
-            };
-
-            Assert.True(dialog.CancelCommand.CanExecute(null));
-
-            dialog.CancelCommand.Execute(null);
-
-            Assert.True(isCallbackCalled);
-        }
     }
 }

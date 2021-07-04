@@ -19,8 +19,6 @@ namespace Camelot.ViewModels.Implementations.Dialogs
 
         public ICommand RenameCommand { get; }
 
-        public ICommand CancelCommand { get; }
-
         public RenameNodeDialogViewModel(
             INodeService nodeService,
             IPathService pathService)
@@ -32,7 +30,6 @@ namespace Camelot.ViewModels.Implementations.Dialogs
                 CheckIfNameIsValid);
 
             RenameCommand = ReactiveCommand.Create(Rename, canRename);
-            CancelCommand = ReactiveCommand.Create(Close);
         }
 
         public override void Activate(RenameNodeNavigationParameter parameter)

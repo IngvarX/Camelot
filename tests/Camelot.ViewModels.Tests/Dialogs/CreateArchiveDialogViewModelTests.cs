@@ -217,30 +217,6 @@ namespace Camelot.ViewModels.Tests.Dialogs
             Assert.EndsWith(ArchiveZip, dialog.ArchivePath);
         }
 
-        [Fact]
-        public void TestCancel()
-        {
-            SetupForType();
-
-            var dialog = _autoMocker.CreateInstance<CreateArchiveDialogViewModel>();
-            dialog.Activate(new CreateArchiveNavigationParameter(ArchivePath, true));
-
-            var isCallbackCalled = false;
-            dialog.CloseRequested += (sender, args) =>
-            {
-                if (args.Result is null)
-                {
-                    isCallbackCalled = true;
-                }
-            };
-
-            Assert.True(dialog.CancelCommand.CanExecute(null));
-
-            dialog.CancelCommand.Execute(null);
-
-            Assert.True(isCallbackCalled);
-        }
-
         private void SetupForType(ArchiveType archiveType = ArchiveType.Zip)
         {
             var viewModels = new[]
