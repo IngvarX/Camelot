@@ -513,4 +513,10 @@
   <data name="PasteFromClipboard" xml:space="preserve">
     <value>Вставить из буфера обмена</value>
   </data>
+  <data name="AccessDeniedTitle" xml:space="preserve">
+    <value>Доступ запрещён</value>
+  </data>
+  <data name="AccessToDirectoryIsDenied" xml:space="preserve">
+    <value>Доступ к каталогу {0} запрещён</value>
+  </data>
 </root>

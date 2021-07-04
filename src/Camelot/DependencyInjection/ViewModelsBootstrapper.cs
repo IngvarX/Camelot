@@ -173,6 +173,7 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IFileService>(),
                 resolver.GetRequiredService<MainNodeInfoTabViewModel>()
             ));
+            services.Register(() => new AccessDeniedDialogViewModel());
             services.Register(() => new OverwriteOptionsDialogViewModel(
                 resolver.GetRequiredService<IFileService>(),
                 resolver.GetRequiredService<IFileSystemNodeViewModelFactory>(),
@@ -299,6 +300,7 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IRecursiveSearchService>(),
                 observer,
                 resolver.GetRequiredService<IPermissionsService>(),
+                resolver.GetRequiredService<IDialogService>(),
                 resolver.GetRequiredService<ISearchViewModel>(),
                 tabsListViewModel,
                 resolver.GetRequiredService<IOperationsViewModel>(),

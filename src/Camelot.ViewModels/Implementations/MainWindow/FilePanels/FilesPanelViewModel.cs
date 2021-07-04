@@ -15,6 +15,8 @@ using Camelot.Services.Abstractions.Models.EventArgs;
 using Camelot.Services.Abstractions.RecursiveSearch;
 using Camelot.Services.Abstractions.Specifications;
 using Camelot.ViewModels.Factories.Interfaces;
+using Camelot.ViewModels.Implementations.Dialogs;
+using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Nodes;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs;
@@ -40,6 +42,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private readonly IRecursiveSearchService _recursiveSearchService;
         private readonly IFilePanelDirectoryObserver _filePanelDirectoryObserver;
         private readonly IPermissionsService _permissionsService;
+        private readonly IDialogService _dialogService;
 
         private readonly ObservableCollection<IFileSystemNodeViewModel> _fileSystemNodes;
         private readonly ObservableCollection<IFileSystemNodeViewModel> _selectedFileSystemNodes;
@@ -115,6 +118,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             IRecursiveSearchService recursiveSearchService,
             IFilePanelDirectoryObserver filePanelDirectoryObserver,
             IPermissionsService permissionsService,
+            IDialogService dialogService,
             ISearchViewModel searchViewModel,
             ITabsListViewModel tabsListViewModel,
             IOperationsViewModel operationsViewModel,
@@ -133,6 +137,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             _recursiveSearchService = recursiveSearchService;
             _filePanelDirectoryObserver = filePanelDirectoryObserver;
             _permissionsService = permissionsService;
+            _dialogService = dialogService;
 
             SearchViewModel = searchViewModel;
             TabsListViewModel = tabsListViewModel;
@@ -150,7 +155,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             PasteFromClipboardCommand = ReactiveCommand.CreateFromTask(PasteFromClipboardAsync);
 
             SubscribeToEvents();
-            UpdateState();
+            UpdateStateAsync().Forget();
         }
 
         public void Activate()
@@ -191,7 +196,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         {
             TabsListViewModel.SelectedTabChanged += TabsListViewModelOnSelectedTabChanged;
             SearchViewModel.SearchSettingsChanged += SearchViewModelOnSearchSettingsChanged;
-            _filePanelDirectoryObserver.CurrentDirectoryChanged += (sender, args) => UpdateState();
+            _filePanelDirectoryObserver.CurrentDirectoryChanged += async (sender, args) => await UpdateStateAsync();
             _selectedFileSystemNodes.CollectionChanged += SelectedFileSystemNodesOnCollectionChanged;
 
             _fileSystemWatchingService.NodeCreated += (sender, args) =>
@@ -212,18 +217,19 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         private void SearchViewModelOnSearchSettingsChanged(object sender, EventArgs e) => ReloadFiles();
 
-        private void UpdateState()
+        private async Task UpdateStateAsync()
         {
             Activate();
 
             var previousCurrentDirectory = _currentDirectory;
             var newCurrentDirectory = _filePanelDirectoryObserver.CurrentDirectory;
-            
+
             if (!_permissionsService.CheckIfHasAccess(newCurrentDirectory))
             {
-                // TODO: show dialog
+                var parameter = new AccessDeniedNavigationParameter(newCurrentDirectory);
+                await _dialogService.ShowDialogAsync(nameof(AccessDeniedDialogViewModel), parameter);
                 _filePanelDirectoryObserver.CurrentDirectory = previousCurrentDirectory;
-                
+
                 return;
             }
 

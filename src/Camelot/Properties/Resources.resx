@@ -513,4 +513,10 @@
   <data name="PasteFromClipboard" xml:space="preserve">
     <value>Paste from clipboard</value>
   </data>
+  <data name="AccessDeniedTitle" xml:space="preserve">
+    <value>Access denied</value>
+  </data>
+  <data name="AccessToDirectoryIsDenied" xml:space="preserve">
+    <value>Access to directory {0} is denied</value>
+  </data>
 </root>

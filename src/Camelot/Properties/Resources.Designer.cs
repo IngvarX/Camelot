@@ -836,5 +836,17 @@ namespace Camelot.Properties {
                 return ResourceManager.GetString("PasteFromClipboard", resourceCulture);
             }
         }
+        
+        public static string AccessDeniedTitle {
+            get {
+                return ResourceManager.GetString("AccessDeniedTitle", resourceCulture);
+            }
+        }
+        
+        public static string AccessToDirectoryIsDenied {
+            get {
+                return ResourceManager.GetString("AccessToDirectoryIsDenied", resourceCulture);
+            }
+        }
     }
 }
