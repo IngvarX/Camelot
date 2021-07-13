@@ -346,4 +346,76 @@
   <data name="CopyingFilesFromAndDirectoriesTo" xml:space="preserve">
     <value>Kopieren von {0} Dateien und {1} Verzeichnissen nach {2}</value>
   </data>
+  <data name="AvailableSpaceWithColon" xml:space="preserve">
+    <value>Verfügbarer Speicher:</value>
+  </data>
+  <data name="TotalSpaceWithColon" xml:space="preserve">
+    <value>Gesamtspeicher:</value>
+  </data>
+  <data name="InvalidRegex" xml:space="preserve">
+    <value>Ungültiger regulärer Ausdruck</value>
+  </data>
+  <data name="SelectFromFilesAndDirectories" xml:space="preserve">
+    <value>{0} Dateien ({1}) und {2} Verzeichnisse</value>
+  </data>
+  <data name="RemovingFilesToTrash" xml:space="preserve">
+    <value>Möchten Sie diese {0} Dateien in den Papierkorb entfernen?</value>
+  </data>
+  <data name="RemovingFilesAndDirectoriesFrom" xml:space="preserve">
+    <value>Entfernen von {0} Dateien und {1} Verzeichnissen aus {2}</value>
+  </data>
+  <data name="MovingFromFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Verschieben von {0} Dateien und {1} Verzeichnissen nach {2}</value>
+  </data>
+  <data name="MovingFileFromTo" xml:space="preserve">
+    <value>Verschieben von {0} nach {1}</value>
+  </data>
+  <data name="MovedFilesFromAndDirectoriesTo" xml:space="preserve">
+    <value>{0} Dateien und {1} Verzeichnisse nach {2} verschoben</value>
+  </data>
+  <data name="MovedFileFromTo" xml:space="preserve">
+    <value>{0} nach {1} verschoben</value>
+  </data>
+  <data name="RegularExpression" xml:space="preserve">
+    <value>Regulärer Ausdruck</value>
+  </data>
+  <data name="FailedToDeleteFilesAndDirectoriesFrom" xml:space="preserve">
+    <value>Fehler beim Löschen von {0} Dateien und {1} Verzeichnissen aus {2}</value>
+  </data>
+  <data name="FailedToMoveFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Fehler beim Verschieben von {0} Dateien und {1} Verzeichnissen nach {2}</value>
+  </data>
+  <data name="FailedToMoveFileFromTo" xml:space="preserve">
+    <value>Fehler beim Verschieben von {0} nach {1}</value>
+  </data>
+  <data name="InnerDirectoriesWithColon" xml:space="preserve">
+    <value>Innere Verzeichnisse:</value>
+  </data>
+  <data name="InnerFilesWithColon" xml:space="preserve">
+    <value>Innere Dateien:</value>
+  </data>
+  <data name="FailedToExtractArchiveTo" xml:space="preserve">
+    <value>Fehler beim Extrahieren von Archiv-{0} in {1}</value>
+  </data>
+  <data name="CreateArchive" xml:space="preserve">
+    <value>Archiv erstellen</value>
+  </data>
+  <data name="ExtractArchiveToNewDirectory" xml:space="preserve">
+    <value>Archiv in neues Verzeichnis extrahieren</value>
+  </data>
+  <data name="ExtractArchiveHere" xml:space="preserve">
+    <value>Archiv hier extrahieren</value>
+  </data>
+  <data name="ExtractingArchiveTo" xml:space="preserve">
+    <value>Extrahieren von {0} nach {1}</value>
+  </data>
+  <data name="PasteFromClipboard" xml:space="preserve">
+    <value>Aus der Zwischenablage einfügen</value>
+  </data>
+  <data name="AccessToDirectoryIsDenied" xml:space="preserve">
+    <value>Zugriff auf Verzeichnis {0} wird verweigert</value>
+  </data>
+  <data name="AccessDeniedTitle" xml:space="preserve">
+    <value>Zugriff verweigert</value>
+  </data>
 </root>

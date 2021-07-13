@@ -445,4 +445,13 @@
   <data name="AboutCamelotTitle" xml:space="preserve">
     <value>关于 Camelot</value>
   </data>
+  <data name="InnerDirectoriesWithColon" xml:space="preserve">
+    <value>文件夹数量:</value>
+  </data>
+  <data name="InnerFilesWithColon" xml:space="preserve">
+    <value>文件数量:</value>
+  </data>
+  <data name="PasteFromClipboard" xml:space="preserve">
+    <value>从剪贴板粘贴</value>
+  </data>
 </root>
