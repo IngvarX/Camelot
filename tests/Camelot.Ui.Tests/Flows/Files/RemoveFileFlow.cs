@@ -10,16 +10,16 @@ using Camelot.Ui.Tests.Steps;
 using Camelot.Views.Dialogs;
 using Xunit;
 
-namespace Camelot.Ui.Tests.Flows.Directories
+namespace Camelot.Ui.Tests.Flows.Files
 {
-    public class RemoveDirectoryFlow : IDisposable
+    public class RemoveFileFlow : IDisposable
     {
-        private const string DirectoryName = "RemoveDirectoryTest__Directory";
+        private const string FileName = "RemoveFileTest__File.txt";
 
-        private string _directoryFullPath;
+        private string _fileFullPath;
 
-        [Fact(DisplayName = "Remove directory")]
-        public async Task TestRemoveDirectory()
+        [Fact(DisplayName = "Remove file")]
+        public async Task TestRemoveFile()
         {
             var app = AvaloniaApp.GetApp();
             var window = AvaloniaApp.GetMainWindow();
@@ -27,18 +27,14 @@ namespace Camelot.Ui.Tests.Flows.Directories
             await FocusFilePanelStep.FocusFilePanelAsync(window);
 
             var viewModel = ActiveFilePanelProvider.GetActiveFilePanelViewModel(window);
-            _directoryFullPath = Path.Combine(viewModel.CurrentDirectory, DirectoryName);
-            Directory.CreateDirectory(_directoryFullPath);
+            _fileFullPath = Path.Combine(viewModel.CurrentDirectory, FileName);
+            await File.Create(_fileFullPath).DisposeAsync();
 
             ToggleSearchPanelStep.ToggleSearchPanelVisibility(window);
 
             await Task.Delay(100);
 
-            var filesPanel = ActiveFilePanelProvider.GetActiveFilePanelView(window);
-            Assert.NotNull(filesPanel);
-
-            SearchNodeStep.SearchNode(window, DirectoryName);
-
+            SearchNodeStep.SearchNode(window, FileName);
             await Task.Delay(1000);
 
             ChangeActiveFilePanelStep.ChangeActiveFilePanel(window);
@@ -60,7 +56,7 @@ namespace Camelot.Ui.Tests.Flows.Directories
 
             ToggleSearchPanelStep.ToggleSearchPanelVisibility(window);
 
-            Assert.False(Directory.Exists(_directoryFullPath));
+            Assert.False(File.Exists(_fileFullPath));
         }
 
         public void Dispose()
@@ -72,9 +68,9 @@ namespace Camelot.Ui.Tests.Flows.Directories
             };
             dialogs.ForEach(d => d?.Close());
 
-            if (!string.IsNullOrEmpty(_directoryFullPath) && Directory.Exists(_directoryFullPath))
+            if (!string.IsNullOrEmpty(_fileFullPath) && File.Exists(_fileFullPath))
             {
-                Directory.Delete(_directoryFullPath, true);
+                File.Delete(_fileFullPath);
             }
         }
     }

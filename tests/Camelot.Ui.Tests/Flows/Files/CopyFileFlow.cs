@@ -1,14 +1,9 @@
 using System;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
-using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.VisualTree;
 using Camelot.Ui.Tests.Common;
-using Camelot.Ui.Tests.Extensions;
 using Camelot.Ui.Tests.Steps;
-using Camelot.Views.Main.Controls;
 using Xunit;
 
 namespace Camelot.Ui.Tests.Flows.Files
@@ -25,7 +20,6 @@ namespace Camelot.Ui.Tests.Flows.Files
         [Fact(DisplayName = "Copy file")]
         public async Task TestCopyFile()
         {
-            var app = AvaloniaApp.GetApp();
             var window = AvaloniaApp.GetMainWindow();
 
             await FocusFilePanelStep.FocusFilePanelAsync(window);
