@@ -6,6 +6,8 @@ using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Specifications;
 using Camelot.ViewModels.Factories.Interfaces;
+using Camelot.ViewModels.Implementations.Dialogs;
+using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Nodes;
@@ -222,6 +224,64 @@ namespace Camelot.ViewModels.Tests.FilePanels
             _autoMocker
                 .Verify<IDirectoryService, DirectoryModel>(m => m.GetParentDirectory(NewDirectory),
                     Times.Exactly(2));
+        }
+
+        [Fact]
+        public void TestDirectoryUpdatedNoAccess()
+        {
+            var currentDirectory = AppRootDirectory;
+            var tabViewModelMock = new Mock<ITabViewModel>();
+            tabViewModelMock
+                .SetupGet(m => m.CurrentDirectory)
+                .Returns(() => currentDirectory);
+            tabViewModelMock
+                .SetupSet(m => m.CurrentDirectory = NewDirectory)
+                .Callback<string>(s => currentDirectory = s);
+            _autoMocker
+                .Setup<ITabsListViewModel, ITabViewModel>(m => m.SelectedTab)
+                .Returns(tabViewModelMock.Object);
+            _autoMocker
+                .Setup<IDirectoryService, bool>(m => m.CheckIfExists(NewDirectory))
+                .Returns(true);
+            _autoMocker
+                .Setup<IDirectoryService, IReadOnlyList<DirectoryModel>>(m => m.GetChildDirectories(It.IsAny<string>(), It.IsAny<ISpecification<DirectoryModel>>()))
+                .Returns(new DirectoryModel[] {});
+            _autoMocker
+                .Setup<ISearchViewModel, INodeSpecification>(m => m.GetSpecification())
+                .Returns(new Mock<INodeSpecification>().Object);
+            _autoMocker
+                .Setup<IFilePanelDirectoryObserver, string>(m => m.CurrentDirectory)
+                .Returns(AppRootDirectory);
+            _autoMocker
+                .Setup<IPermissionsService, bool>(m => m.CheckIfHasAccess(It.IsAny<string>()))
+                .Returns<string>(s => s != NewDirectory);
+            _autoMocker
+                .Setup<IDialogService, Task>(m => m.ShowDialogAsync(nameof(AccessDeniedDialogViewModel),
+                    It.Is<AccessDeniedNavigationParameter>(p => p.Directory == NewDirectory)))
+                .Verifiable();
+
+            var filesPanelViewModel = _autoMocker.CreateInstance<FilesPanelViewModel>();
+
+            _autoMocker
+                .Verify<IDirectoryService, DirectoryModel>(m => m.GetParentDirectory(NewDirectory),
+                    Times.Never);
+            _autoMocker
+                .Setup<IFilePanelDirectoryObserver, string>(m => m.CurrentDirectory)
+                .Returns(NewDirectory);
+            _autoMocker
+                .GetMock<IFilePanelDirectoryObserver>()
+                .Raise(m => m.CurrentDirectoryChanged += null, EventArgs.Empty);
+
+            Assert.Equal(AppRootDirectory, filesPanelViewModel.CurrentDirectory);
+
+            _autoMocker
+                .Verify<IDialogService, Task>(m => m.ShowDialogAsync(nameof(AccessDeniedDialogViewModel),
+                    It.Is<AccessDeniedNavigationParameter>(p => p.Directory == NewDirectory)),
+                    Times.Once);
+            _autoMocker
+                .GetMock<IFilePanelDirectoryObserver>()
+                .VerifySet(m => m.CurrentDirectory = AppRootDirectory,
+                    Times.Once);
         }
 
         [Fact]

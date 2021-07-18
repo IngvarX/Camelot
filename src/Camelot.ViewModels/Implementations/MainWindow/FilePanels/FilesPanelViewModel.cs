@@ -261,6 +261,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
                 return;
             }
 
+            RemoveNode(nodePath);
+
             var index = GetInsertIndex(newNodeModel);
             _fileSystemNodes.Insert(index, newNodeModel);
         }
