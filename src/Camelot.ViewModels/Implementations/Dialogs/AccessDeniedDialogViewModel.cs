@@ -1,6 +1,4 @@
-using System.Windows.Input;
 using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
-using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
 namespace Camelot.ViewModels.Implementations.Dialogs

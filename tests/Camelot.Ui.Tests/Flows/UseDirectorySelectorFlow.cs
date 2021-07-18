@@ -43,8 +43,6 @@ namespace Camelot.Ui.Tests.Flows
                 Keyboard.PressKey(window, Key.Back);
             }
 
-            await Task.Delay(5000);
-
             var isParentDirectoryOpened = await DirectoryOpenedCondition.CheckIfParentDirectoryIsOpenedAsync(window, currentDirectory);
             Assert.True(isParentDirectoryOpened);
 

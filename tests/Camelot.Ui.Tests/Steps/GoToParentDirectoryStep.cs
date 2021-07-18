@@ -8,8 +8,8 @@ namespace Camelot.Ui.Tests.Steps
     {
         public static void GoToParentDirectoryViaFilePanel(MainWindow window)
         {
-            Keyboard.PressKey(window, Key.Tab);
-            Keyboard.PressKey(window, Key.Tab);
+            ChangeActiveFilePanelStep.ChangeActiveFilePanel(window);
+            ChangeActiveFilePanelStep.ChangeActiveFilePanel(window);
             Keyboard.PressKey(window, Key.Down);
             Keyboard.PressKey(window, Key.Up);
             Keyboard.PressKey(window, Key.Up);

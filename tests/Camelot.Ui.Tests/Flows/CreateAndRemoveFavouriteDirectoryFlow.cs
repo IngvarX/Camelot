@@ -9,7 +9,7 @@ using Xunit;
 
 namespace Camelot.Ui.Tests.Flows
 {
-    public class CreateDeleteFavouriteDirectoryFlow
+    public class CreateAndRemoveFavouriteDirectoryFlow
     {
         [Fact(DisplayName = "Toggle favourite directory")]
         public async Task ToggleFavouriteDirectoryTest()

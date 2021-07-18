@@ -10,41 +10,56 @@ using Camelot.Ui.Tests.Common;
 using Camelot.Ui.Tests.Conditions;
 using Camelot.Ui.Tests.Extensions;
 using Camelot.Ui.Tests.Steps;
-using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Nodes;
 using Camelot.Views.Dialogs;
 using Camelot.Views.Main.Controls;
 using Xunit;
 
 namespace Camelot.Ui.Tests.Flows
 {
-    public class CreateAndRemoveDirectoryFlow : IDisposable
+    public class CopyFileFlow : IDisposable
     {
-        private const string DirectoryName = "CreateDirectoryTest__Directory";
+        private const string DirectoryName = "CopyFileTest__Directory";
+        private const string FileName = "CopyFileTest__File.txt";
+        private const string FileContent = "TestContent1234";
 
         private string _directoryFullPath;
+        private string _fileFullPath;
 
-        [Fact(DisplayName = "Create and remove directory")]
-        public async Task CreateAndRemoveDirectoryTest()
+        [Fact(DisplayName = "Copy file")]
+        public async Task TestCopyFile()
         {
             var app = AvaloniaApp.GetApp();
             var window = AvaloniaApp.GetMainWindow();
 
             await FocusFilePanelStep.FocusFilePanelAsync(window);
 
+            CreateNewTabStep.CreateNewTab(window);
             OpenCreateDirectoryDialogStep.OpenCreateDirectoryDialog(window);
             var isDialogOpened = await DialogOpenedCondition.CheckIfDialogIsOpenedAsync<CreateDirectoryDialog>(app);
             Assert.True(isDialogOpened);
 
+            CreateDirectoryStep.CreateDirectory(app, window, DirectoryName);
             var viewModel = ActiveFilePanelProvider.GetActiveFilePanelViewModel(window);
             _directoryFullPath = Path.Combine(viewModel.CurrentDirectory, DirectoryName);
-
-            CreateDirectoryStep.CreateDirectory(app, window, DirectoryName);
 
             var isDialogClosed = await DialogClosedCondition.CheckIfDialogIsClosedAsync<CreateDirectoryDialog>(app);
             Assert.True(isDialogClosed);
 
             var filesPanel = ActiveFilePanelProvider.GetActiveFilePanelView(window);
             Assert.NotNull(filesPanel);
+
+            _fileFullPath = Path.Combine(viewModel.CurrentDirectory, FileName);
+            await File.WriteAllTextAsync(_fileFullPath, FileContent);
+
+            ChangeActiveFilePanelStep.ChangeActiveFilePanel(window);
+            CreateNewTabStep.CreateNewTab(window);
+            FocusDirectorySelectorStep.FocusDirectorySelector(window);
+            var textSet = SetDirectoryTextStep.SetDirectoryText(window, _directoryFullPath);
+            Assert.True(textSet);
+
+            await Task.Delay(1000);
+
+            ChangeActiveFilePanelStep.ChangeActiveFilePanel(window);
 
             ToggleSearchPanelStep.ToggleSearchPanelVisibility(window);
 
@@ -62,7 +77,7 @@ namespace Camelot.Ui.Tests.Flows
                 .SingleOrDefault();
             Assert.NotNull(searchTextBox);
 
-            searchTextBox.SendText(DirectoryName);
+            searchTextBox.SendText(FileName);
 
             await Task.Delay(1000);
 
@@ -71,24 +86,18 @@ namespace Camelot.Ui.Tests.Flows
             Keyboard.PressKey(window, Key.Down);
             Keyboard.PressKey(window, Key.Down);
 
-            await Task.Delay(100);
+            CopySelectedNodesStep.CopySelectedNodes(window);
 
-            var selectedItemText = GetSelectedItemText(filesPanel);
-            Assert.Equal(DirectoryName, selectedItemText);
+            ToggleSearchPanelStep.ToggleSearchPanelVisibility(window);
+            await Task.Delay(1000);
 
-            OpenRemoveDialogStep.OpenRemoveDialog(window);
-            var isRemoveDialogOpened =
-                await DialogOpenedCondition.CheckIfDialogIsOpenedAsync<RemoveNodesConfirmationDialog>(app);
-            Assert.True(isRemoveDialogOpened);
+            var copiedFilePath = Path.Combine(_directoryFullPath, FileName);
+            await WaitService.WaitForConditionAsync(() => File.Exists(copiedFilePath));
 
-            Keyboard.PressKey(window, Key.Enter);
-            await Task.Delay(100);
+            var fileContent = await File.ReadAllTextAsync(copiedFilePath);
+            Assert.Equal(FileContent, fileContent);
 
-            var isRemoveDialogClosed =
-                await DialogClosedCondition.CheckIfDialogIsClosedAsync<RemoveNodesConfirmationDialog>(app);
-            Assert.True(isRemoveDialogClosed);
-
-            Assert.False(Directory.Exists(_directoryFullPath));
+            Assert.True(File.Exists(_fileFullPath));
         }
 
         public void Dispose()
@@ -97,29 +106,26 @@ namespace Camelot.Ui.Tests.Flows
             var dialogs = new Window[]
             {
                 DialogProvider.GetDialog<CreateDirectoryDialog>(app),
-                DialogProvider.GetDialog<RemoveNodesConfirmationDialog>(app)
             };
             dialogs.ForEach(d => d?.Close());
 
+            var window = AvaloniaApp.GetMainWindow();
+
+            for (var i = 0; i < 2; i++)
+            {
+                ChangeActiveFilePanelStep.ChangeActiveFilePanel(window);
+                CloseCurrentTabStep.CloseCurrentTab(window);
+            }
+
             if (!string.IsNullOrEmpty(_directoryFullPath) && Directory.Exists(_directoryFullPath))
             {
-                Directory.Delete(_directoryFullPath);
+                Directory.Delete(_directoryFullPath, true);
+            }
+
+            if (!string.IsNullOrEmpty(_fileFullPath) && File.Exists(_fileFullPath))
+            {
+                File.Delete(_fileFullPath);
             }
         }
-
-        private string GetSelectedItemText(IVisual filesPanel)
-        {
-            var dataGrid = GetDataGrid(filesPanel);
-            var directoryViewModel = (DirectoryViewModel) dataGrid.SelectedItem;
-            _directoryFullPath = directoryViewModel.FullPath;
-
-            return directoryViewModel.FullName;
-        }
-
-        private static DataGrid GetDataGrid(IVisual filesPanel) =>
-            filesPanel
-                .GetVisualDescendants()
-                .OfType<DataGrid>()
-                .Single();
     }
 }

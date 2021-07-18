@@ -15,10 +15,10 @@ namespace Camelot.Ui.Tests.Conditions
         {
             var viewModel = ActiveFilePanelProvider.GetActiveFilePanelViewModel(mainWindow);
 
-            return await WaitService.WaitForConditionAsync(() => CheckIfDirectoryWasOpened(viewModel, directory));
+            return await WaitService.WaitForConditionAsync(() => CheckIfDirectoryWasOpened(viewModel, directory), 100, 50);
         }
 
-         private static bool CheckIfDirectoryWasOpened(IFilesPanelViewModel viewModel, string directoryPath) =>
+        private static bool CheckIfDirectoryWasOpened(IFilesPanelViewModel viewModel, string directoryPath) =>
             viewModel.CurrentDirectory == directoryPath;
     }
 }

@@ -1,6 +1,5 @@
 using System.Linq;
 using System.Threading.Tasks;
-using Avalonia.Input;
 using Avalonia.VisualTree;
 using Camelot.Ui.Tests.Common;
 using Camelot.Ui.Tests.Steps;
@@ -30,7 +29,7 @@ namespace Camelot.Ui.Tests.Flows
                 var isTabClosed = await WaitService.WaitForConditionAsync(() => initialCount == GetTabsCount(window));
                 Assert.True(isTabClosed);
 
-                Keyboard.PressKey(window, Key.Tab);
+                ChangeActiveFilePanelStep.ChangeActiveFilePanel(window);
             }
 
             ReopenClosedTabStep.ReopenClosedTab(window);

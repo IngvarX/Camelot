@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Archive;
-using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Models.State;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Implementations.Dialogs.Archives;
