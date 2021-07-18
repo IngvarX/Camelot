@@ -6,7 +6,7 @@ using Camelot.Ui.Tests.Steps;
 using Camelot.Views.Main.Controls.Tabs;
 using Xunit;
 
-namespace Camelot.Ui.Tests.Flows
+namespace Camelot.Ui.Tests.Flows.Tabs
 {
     public class CreateAndCloseNewTabFlow
     {

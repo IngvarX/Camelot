@@ -7,14 +7,13 @@ using Avalonia.Input;
 using Avalonia.VisualTree;
 using Camelot.Extensions;
 using Camelot.Ui.Tests.Common;
-using Camelot.Ui.Tests.Conditions;
 using Camelot.Ui.Tests.Extensions;
 using Camelot.Ui.Tests.Steps;
 using Camelot.Views.Dialogs;
 using Camelot.Views.Main.Controls;
 using Xunit;
 
-namespace Camelot.Ui.Tests.Flows
+namespace Camelot.Ui.Tests.Flows.Files
 {
     public class MoveFileFlow : IDisposable
     {
@@ -26,7 +25,7 @@ namespace Camelot.Ui.Tests.Flows
         private string _fileFullPath;
 
         [Fact(DisplayName = "Move file")]
-        public async Task TestCopyFile()
+        public async Task TestMoveFile()
         {
             var app = AvaloniaApp.GetApp();
             var window = AvaloniaApp.GetMainWindow();
@@ -34,19 +33,10 @@ namespace Camelot.Ui.Tests.Flows
             await FocusFilePanelStep.FocusFilePanelAsync(window);
 
             CreateNewTabStep.CreateNewTab(window);
-            OpenCreateDirectoryDialogStep.OpenCreateDirectoryDialog(window);
-            var isDialogOpened = await DialogOpenedCondition.CheckIfDialogIsOpenedAsync<CreateDirectoryDialog>(app);
-            Assert.True(isDialogOpened);
 
-            CreateDirectoryStep.CreateDirectory(app, window, DirectoryName);
             var viewModel = ActiveFilePanelProvider.GetActiveFilePanelViewModel(window);
             _directoryFullPath = Path.Combine(viewModel.CurrentDirectory, DirectoryName);
-
-            var isDialogClosed = await DialogClosedCondition.CheckIfDialogIsClosedAsync<CreateDirectoryDialog>(app);
-            Assert.True(isDialogClosed);
-
-            var filesPanel = ActiveFilePanelProvider.GetActiveFilePanelView(window);
-            Assert.NotNull(filesPanel);
+            Directory.CreateDirectory(_directoryFullPath);
 
             _fileFullPath = Path.Combine(viewModel.CurrentDirectory, FileName);
             await File.WriteAllTextAsync(_fileFullPath, FileContent);
@@ -61,25 +51,10 @@ namespace Camelot.Ui.Tests.Flows
 
             ChangeActiveFilePanelStep.ChangeActiveFilePanel(window);
             ToggleSearchPanelStep.ToggleSearchPanelVisibility(window);
-
             await Task.Delay(100);
+            SearchNodeStep.SearchNode(window, FileName);
 
-            var searchPanel = filesPanel
-                .GetVisualDescendants()
-                .OfType<SearchView>()
-                .SingleOrDefault();
-            Assert.NotNull(searchPanel);
-
-            var searchTextBox = searchPanel
-                .GetVisualDescendants()
-                .OfType<TextBox>()
-                .SingleOrDefault();
-            Assert.NotNull(searchTextBox);
-
-            searchTextBox.SendText(FileName);
-
-            await Task.Delay(1000);
-
+            await Task.Delay(300);
             ChangeActiveFilePanelStep.ChangeActiveFilePanel(window);
             ChangeActiveFilePanelStep.ChangeActiveFilePanel(window);
             Keyboard.PressKey(window, Key.Down);
@@ -88,10 +63,10 @@ namespace Camelot.Ui.Tests.Flows
             MoveSelectedNodesStep.MoveSelectedNodes(window);
 
             ToggleSearchPanelStep.ToggleSearchPanelVisibility(window);
-            await Task.Delay(1000);
 
             var copiedFilePath = Path.Combine(_directoryFullPath, FileName);
-            await WaitService.WaitForConditionAsync(() => File.Exists(copiedFilePath));
+            var fileExists = await WaitService.WaitForConditionAsync(() => File.Exists(copiedFilePath));
+            Assert.True(fileExists);
 
             var fileContent = await File.ReadAllTextAsync(copiedFilePath);
             Assert.Equal(FileContent, fileContent);
@@ -101,13 +76,6 @@ namespace Camelot.Ui.Tests.Flows
 
         public void Dispose()
         {
-            var app = AvaloniaApp.GetApp();
-            var dialogs = new Window[]
-            {
-                DialogProvider.GetDialog<CreateDirectoryDialog>(app),
-            };
-            dialogs.ForEach(d => d?.Close());
-
             var window = AvaloniaApp.GetMainWindow();
 
             for (var i = 0; i < 2; i++)

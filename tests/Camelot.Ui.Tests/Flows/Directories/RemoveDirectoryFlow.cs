@@ -10,45 +10,36 @@ using Camelot.Ui.Tests.Common;
 using Camelot.Ui.Tests.Conditions;
 using Camelot.Ui.Tests.Extensions;
 using Camelot.Ui.Tests.Steps;
-using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Nodes;
 using Camelot.Views.Dialogs;
 using Camelot.Views.Main.Controls;
 using Xunit;
 
-namespace Camelot.Ui.Tests.Flows
+namespace Camelot.Ui.Tests.Flows.Directories
 {
-    public class CreateAndRemoveDirectoryFlow : IDisposable
+    public class RemoveDirectoryFlow : IDisposable
     {
-        private const string DirectoryName = "CreateDirectoryTest__Directory";
+        private const string DirectoryName = "RemoveDirectoryTest__Directory";
 
         private string _directoryFullPath;
 
-        [Fact(DisplayName = "Create and remove directory")]
-        public async Task CreateAndRemoveDirectoryTest()
+        [Fact(DisplayName = "Remove directory")]
+        public async Task TestRemoveDirectory()
         {
             var app = AvaloniaApp.GetApp();
             var window = AvaloniaApp.GetMainWindow();
 
             await FocusFilePanelStep.FocusFilePanelAsync(window);
 
-            OpenCreateDirectoryDialogStep.OpenCreateDirectoryDialog(window);
-            var isDialogOpened = await DialogOpenedCondition.CheckIfDialogIsOpenedAsync<CreateDirectoryDialog>(app);
-            Assert.True(isDialogOpened);
-
             var viewModel = ActiveFilePanelProvider.GetActiveFilePanelViewModel(window);
             _directoryFullPath = Path.Combine(viewModel.CurrentDirectory, DirectoryName);
-
-            CreateDirectoryStep.CreateDirectory(app, window, DirectoryName);
-
-            var isDialogClosed = await DialogClosedCondition.CheckIfDialogIsClosedAsync<CreateDirectoryDialog>(app);
-            Assert.True(isDialogClosed);
-
-            var filesPanel = ActiveFilePanelProvider.GetActiveFilePanelView(window);
-            Assert.NotNull(filesPanel);
+            Directory.CreateDirectory(_directoryFullPath);
 
             ToggleSearchPanelStep.ToggleSearchPanelVisibility(window);
 
             await Task.Delay(100);
+
+            var filesPanel = ActiveFilePanelProvider.GetActiveFilePanelView(window);
+            Assert.NotNull(filesPanel);
 
             var searchPanel = filesPanel
                 .GetVisualDescendants()
@@ -71,11 +62,6 @@ namespace Camelot.Ui.Tests.Flows
             Keyboard.PressKey(window, Key.Down);
             Keyboard.PressKey(window, Key.Down);
 
-            await Task.Delay(100);
-
-            var selectedItemText = GetSelectedItemText(filesPanel);
-            Assert.Equal(DirectoryName, selectedItemText);
-
             OpenRemoveDialogStep.OpenRemoveDialog(window);
             var isRemoveDialogOpened =
                 await DialogOpenedCondition.CheckIfDialogIsOpenedAsync<RemoveNodesConfirmationDialog>(app);
@@ -88,6 +74,8 @@ namespace Camelot.Ui.Tests.Flows
                 await DialogClosedCondition.CheckIfDialogIsClosedAsync<RemoveNodesConfirmationDialog>(app);
             Assert.True(isRemoveDialogClosed);
 
+            ToggleSearchPanelStep.ToggleSearchPanelVisibility(window);
+
             Assert.False(Directory.Exists(_directoryFullPath));
         }
 
@@ -96,30 +84,14 @@ namespace Camelot.Ui.Tests.Flows
             var app = AvaloniaApp.GetApp();
             var dialogs = new Window[]
             {
-                DialogProvider.GetDialog<CreateDirectoryDialog>(app),
                 DialogProvider.GetDialog<RemoveNodesConfirmationDialog>(app)
             };
             dialogs.ForEach(d => d?.Close());
 
             if (!string.IsNullOrEmpty(_directoryFullPath) && Directory.Exists(_directoryFullPath))
             {
-                Directory.Delete(_directoryFullPath);
+                Directory.Delete(_directoryFullPath, true);
             }
         }
-
-        private string GetSelectedItemText(IVisual filesPanel)
-        {
-            var dataGrid = GetDataGrid(filesPanel);
-            var directoryViewModel = (DirectoryViewModel) dataGrid.SelectedItem;
-            _directoryFullPath = directoryViewModel.FullPath;
-
-            return directoryViewModel.FullName;
-        }
-
-        private static DataGrid GetDataGrid(IVisual filesPanel) =>
-            filesPanel
-                .GetVisualDescendants()
-                .OfType<DataGrid>()
-                .Single();
     }
 }

@@ -9,7 +9,7 @@ using Camelot.Ui.Tests.Steps;
 using Camelot.Views.Dialogs;
 using Xunit;
 
-namespace Camelot.Ui.Tests.Flows
+namespace Camelot.Ui.Tests.Flows.Dialogs
 {
     public class OpenCloseSettingsDialogFlow : IDisposable
     {

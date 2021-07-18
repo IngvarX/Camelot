@@ -1,6 +1,7 @@
 using System;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Headless;
 using Avalonia.ReactiveUI;
 using Avalonia.Threading;
 using Camelot.Configuration;
@@ -42,6 +43,7 @@ namespace Camelot.Ui.Tests.Common
             AppBuilder
                 .Configure<App>()
                 .UsePlatformDetect()
-                .UseReactiveUI();
+                .UseReactiveUI()
+                .UseHeadless();
     }
 }

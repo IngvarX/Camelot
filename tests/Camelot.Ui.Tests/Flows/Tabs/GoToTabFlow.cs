@@ -5,14 +5,14 @@ using Camelot.Ui.Tests.Conditions;
 using Camelot.Ui.Tests.Steps;
 using Xunit;
 
-namespace Camelot.Ui.Tests.Flows
+namespace Camelot.Ui.Tests.Flows.Tabs
 {
     public class GoToTabFlow : IDisposable
     {
         private const int TabsCount = 10;
 
         [Fact(DisplayName = "Go to tab by index")]
-        public async Task GoToTabTest()
+        public async Task TestGoToTab()
         {
             var app = AvaloniaApp.GetApp();
             var window = AvaloniaApp.GetMainWindow();
