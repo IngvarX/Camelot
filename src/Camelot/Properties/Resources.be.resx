@@ -445,4 +445,13 @@
   <data name="AboutCamelotTitle" xml:space="preserve">
     <value>Пра Camelot</value>
   </data>
+  <data name="PasteFromClipboard" xml:space="preserve">
+    <value>Уставіць з буфера абмену</value>
+  </data>
+  <data name="InnerDirectoriesWithColon" xml:space="preserve">
+    <value>Укладзеныя каталогі:</value>
+  </data>
+  <data name="InnerFilesWithColon" xml:space="preserve">
+    <value>Укладзеныя файлы:</value>
+  </data>
 </root>

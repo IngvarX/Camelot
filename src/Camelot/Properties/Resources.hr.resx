@@ -445,4 +445,19 @@
   <data name="AboutCamelotTitle" xml:space="preserve">
     <value>Camelot podaci</value>
   </data>
+  <data name="InnerDirectoriesWithColon" xml:space="preserve">
+    <value>Unutarnje mape:</value>
+  </data>
+  <data name="InnerFilesWithColon" xml:space="preserve">
+    <value>Unutarnje datoteke:</value>
+  </data>
+  <data name="PasteFromClipboard" xml:space="preserve">
+    <value>Umetni iz međuspremnika</value>
+  </data>
+  <data name="AccessToDirectoryIsDenied" xml:space="preserve">
+    <value>Pristup mapi {0} je zabranjen</value>
+  </data>
+  <data name="AccessDeniedTitle" xml:space="preserve">
+    <value>Zabranjen pristup</value>
+  </data>
 </root>

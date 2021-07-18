@@ -448,4 +448,19 @@
   <data name="Pack" xml:space="preserve">
     <value>Compacter</value>
   </data>
+  <data name="InnerDirectoriesWithColon" xml:space="preserve">
+    <value>Répertoires internes :</value>
+  </data>
+  <data name="InnerFilesWithColon" xml:space="preserve">
+    <value>Fichiers intérieurs :</value>
+  </data>
+  <data name="PasteFromClipboard" xml:space="preserve">
+    <value>Coller depuis le presse-papier</value>
+  </data>
+  <data name="AccessToDirectoryIsDenied" xml:space="preserve">
+    <value>L’accès au répertoire {0} est refusé</value>
+  </data>
+  <data name="AccessDeniedTitle" xml:space="preserve">
+    <value>Accès refusé</value>
+  </data>
 </root>
