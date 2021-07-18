@@ -158,12 +158,12 @@
     <PackageReference Include="Avalonia.Diagnostics" Version="0.10.6" />
     <PackageReference Include="CommandLineParser" Version="2.8.0" />
     <PackageReference Include="Dotnet.Bundle" Version="0.9.13" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.16" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="3.1.16" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.16" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.17" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="3.1.17" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.17" />
     <PackageReference Include="Serilog" Version="2.10.0" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="3.0.1" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="4.0.0" />
     <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.0" />
   </ItemGroup>
   <ItemGroup>
