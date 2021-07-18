@@ -291,6 +291,7 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IFileService>(),
                 resolver.GetRequiredService<IDirectoryService>(),
                 resolver.GetRequiredService<INodesSelectionService>(),
+                resolver.GetRequiredService<INodeService>(),
                 resolver.GetRequiredService<IFileSystemNodeViewModelFactory>(),
                 resolver.GetRequiredService<IFileSystemWatchingService>(),
                 resolver.GetRequiredService<IApplicationDispatcher>(),

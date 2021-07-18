@@ -17,8 +17,10 @@ namespace Camelot.Ui.Tests.Flows
     public class UseSearchFlow : IDisposable
     {
         private const string DirectoryName = "UseSearchFlowTest__Directory";
+        private const string FileName = "UseSearchFlowTest__File.txt";
 
         private string _directoryFullPath;
+        private string _fileFullPath;
 
         [Fact(DisplayName = "Use search")]
         public async Task TestSearch()
@@ -64,6 +66,14 @@ namespace Camelot.Ui.Tests.Flows
 
             var selectedItemText = GetSelectedItemText(filesPanel);
             Assert.Equal(DirectoryName, selectedItemText);
+
+            _fileFullPath = Path.Combine(viewModel.CurrentDirectory, FileName);
+            await File.Create(_fileFullPath).DisposeAsync();
+
+            await Task.Delay(1000);
+
+            var fileIsVisible = CheckIfFilesExist(filesPanel);
+            Assert.False(fileIsVisible);
         }
 
         public void Dispose()
@@ -76,6 +86,11 @@ namespace Camelot.Ui.Tests.Flows
             {
                 Directory.Delete(_directoryFullPath, true);
             }
+
+            if (!string.IsNullOrEmpty(_fileFullPath) && File.Exists(_fileFullPath))
+            {
+                File.Delete(_fileFullPath);
+            }
         }
 
         private string GetSelectedItemText(IVisual filesPanel)
@@ -85,6 +100,13 @@ namespace Camelot.Ui.Tests.Flows
             _directoryFullPath = directoryViewModel.FullPath;
 
             return directoryViewModel.FullName;
+        }
+
+        private static bool CheckIfFilesExist(IVisual filesPanel)
+        {
+            var dataGrid = GetDataGrid(filesPanel);
+
+            return dataGrid.Items.OfType<FileViewModel>().Any();
         }
 
         private static DataGrid GetDataGrid(IVisual filesPanel) =>

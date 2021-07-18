@@ -1,4 +1,5 @@
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Models;
 
 namespace Camelot.Services
 {
@@ -17,5 +18,10 @@ namespace Camelot.Services
 
         public bool CheckIfExists(string nodePath) =>
             _fileService.CheckIfExists(nodePath) || _directoryService.CheckIfExists(nodePath);
+
+        public NodeModelBase GetNode(string nodePath) =>
+            _fileService.CheckIfExists(nodePath)
+                ? _fileService.GetFile(nodePath)
+                : (NodeModelBase) _directoryService.GetDirectory(nodePath);
     }
 }

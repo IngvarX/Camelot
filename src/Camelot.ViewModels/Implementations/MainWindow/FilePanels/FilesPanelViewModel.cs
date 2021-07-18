@@ -33,6 +33,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private readonly IFileService _fileService;
         private readonly IDirectoryService _directoryService;
         private readonly INodesSelectionService _nodesSelectionService;
+        private readonly INodeService _nodeService;
         private readonly IFileSystemNodeViewModelFactory _fileSystemNodeViewModelFactory;
         private readonly IFileSystemWatchingService _fileSystemWatchingService;
         private readonly IApplicationDispatcher _applicationDispatcher;
@@ -49,6 +50,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         private CancellationTokenSource _cancellationTokenSource;
         private string _currentDirectory;
+        private INodeSpecification _specification;
 
         private IEnumerable<IFileViewModel> SelectedFiles => _selectedFileSystemNodes.OfType<IFileViewModel>();
 
@@ -109,6 +111,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             IFileService fileService,
             IDirectoryService directoryService,
             INodesSelectionService nodesSelectionService,
+            INodeService nodeService,
             IFileSystemNodeViewModelFactory fileSystemNodeViewModelFactory,
             IFileSystemWatchingService fileSystemWatchingService,
             IApplicationDispatcher applicationDispatcher,
@@ -128,6 +131,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             _fileService = fileService;
             _directoryService = directoryService;
             _nodesSelectionService = nodesSelectionService;
+            _nodeService = nodeService;
             _fileSystemNodeViewModelFactory = fileSystemNodeViewModelFactory;
             _fileSystemWatchingService = fileSystemWatchingService;
             _applicationDispatcher = applicationDispatcher;
@@ -255,6 +259,11 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         private void InsertNode(string nodePath)
         {
+            if (!CheckIfShouldShowNode(nodePath))
+            {
+                return;
+            }
+
             var newNodeModel = _fileSystemNodeViewModelFactory.Create(nodePath);
             if (newNodeModel is null)
             {
@@ -286,14 +295,14 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         {
             CancelPreviousSearchIfNeeded();
 
-            var specification = SearchViewModel.GetSpecification();
-            if (specification.IsRecursive)
+            _specification = SearchViewModel.GetSpecification();
+            if (_specification.IsRecursive)
             {
-                RecursiveSearch(specification);
+                RecursiveSearch(_specification);
             }
             else
             {
-                Search(specification);
+                Search(_specification);
             }
 
             InsertParentDirectory();
@@ -397,5 +406,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             _fileSystemNodes.FirstOrDefault(n => n.FullPath == nodePath);
 
         private void ExecuteInUiThread(Action action) => _applicationDispatcher.Dispatch(action);
+
+        private bool CheckIfShouldShowNode(string nodePath) =>
+            _specification is null || _specification.IsSatisfiedBy(_nodeService.GetNode(nodePath));
     }
 }
