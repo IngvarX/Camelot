@@ -18,8 +18,10 @@ namespace Camelot.Ui.Tests.Flows.Files
 
         private string _fileFullPath;
 
-        [Fact(DisplayName = "Remove file")]
-        public async Task TestRemoveFile()
+        [Theory(DisplayName = "Remove file")]
+        [InlineData(true)]
+        [InlineData(false)]
+        public async Task TestRemoveFile(bool removePermanently)
         {
             var app = AvaloniaApp.GetApp();
             var window = AvaloniaApp.GetMainWindow();
@@ -42,7 +44,15 @@ namespace Camelot.Ui.Tests.Flows.Files
             Keyboard.PressKey(window, Key.Down);
             Keyboard.PressKey(window, Key.Down);
 
-            OpenRemoveDialogStep.OpenRemoveDialog(window);
+            if (removePermanently)
+            {
+                OpenRemoveDialogStep.OpenPermanentRemoveDialog(window);
+            }
+            else
+            {
+                OpenRemoveDialogStep.OpenRemoveDialog(window);
+            }
+
             var isRemoveDialogOpened =
                 await DialogOpenedCondition.CheckIfDialogIsOpenedAsync<RemoveNodesConfirmationDialog>(app);
             Assert.True(isRemoveDialogOpened);

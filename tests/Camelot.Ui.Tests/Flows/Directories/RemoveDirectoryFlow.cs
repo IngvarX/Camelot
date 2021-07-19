@@ -18,8 +18,10 @@ namespace Camelot.Ui.Tests.Flows.Directories
 
         private string _directoryFullPath;
 
-        [Fact(DisplayName = "Remove directory")]
-        public async Task TestRemoveDirectory()
+        [Theory(DisplayName = "Remove directory")]
+        [InlineData(true)]
+        [InlineData(false)]
+        public async Task TestRemoveDirectory(bool removePermanently)
         {
             var app = AvaloniaApp.GetApp();
             var window = AvaloniaApp.GetMainWindow();
@@ -46,7 +48,15 @@ namespace Camelot.Ui.Tests.Flows.Directories
             Keyboard.PressKey(window, Key.Down);
             Keyboard.PressKey(window, Key.Down);
 
-            OpenRemoveDialogStep.OpenRemoveDialog(window);
+            if (removePermanently)
+            {
+                OpenRemoveDialogStep.OpenPermanentRemoveDialog(window);
+            }
+            else
+            {
+                OpenRemoveDialogStep.OpenRemoveDialog(window);
+            }
+
             var isRemoveDialogOpened =
                 await DialogOpenedCondition.CheckIfDialogIsOpenedAsync<RemoveNodesConfirmationDialog>(app);
             Assert.True(isRemoveDialogOpened);
