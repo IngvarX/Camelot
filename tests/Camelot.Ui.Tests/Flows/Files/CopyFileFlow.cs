@@ -62,11 +62,11 @@ namespace Camelot.Ui.Tests.Flows.Files
             ToggleSearchPanelStep.ToggleSearchPanelVisibility(window);
             await Task.Delay(1000);
 
-            var copiedFilePath = Path.Combine(_directoryFullPath, FileName);
-            var fileExists = await WaitService.WaitForConditionAsync(() => File.Exists(copiedFilePath));
+            var copiedFullPath = Path.Combine(_directoryFullPath, FileName);
+            var fileExists = await WaitService.WaitForConditionAsync(() => File.Exists(copiedFullPath));
             Assert.True(fileExists);
 
-            var fileContent = await File.ReadAllTextAsync(copiedFilePath);
+            var fileContent = await File.ReadAllTextAsync(copiedFullPath);
             Assert.Equal(FileContent, fileContent);
 
             Assert.True(File.Exists(_fileFullPath));
