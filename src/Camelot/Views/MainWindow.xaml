@@ -130,6 +130,8 @@
         <KeyBinding Gesture="F1" Command="{Binding MenuViewModel.AboutCommand}" />
         <KeyBinding Gesture="F2" Command="{Binding MenuViewModel.OpenSettingsCommand}" />
         <KeyBinding Gesture="F9" Command="{Binding TopOperationsViewModel.OpenTerminalCommand}" />
+        <KeyBinding Gesture="F10" Command="{Binding TopOperationsViewModel.PackCommand}" />
+        <KeyBinding Gesture="F11" Command="{Binding TopOperationsViewModel.ExtractCommand}" />
     </Window.KeyBindings>
 
     <Grid RowDefinitions="35,Auto,*,Auto">
