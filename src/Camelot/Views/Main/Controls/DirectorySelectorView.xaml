@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:filePanels="clr-namespace:Camelot.ViewModels.Implementations.MainWindow.FilePanels;assembly=Camelot.ViewModels"
              xmlns:controls="clr-namespace:Camelot.Views.Main.Controls"
+             xmlns:p="clr-namespace:Camelot.Properties"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Camelot.Views.Main.Controls.DirectorySelectorView">
 
@@ -66,6 +67,15 @@
                     </Image.Source>
                 </Image>
             </Grid>
+
+            <ToolTip.Tip>
+                <Grid>
+                    <TextBlock Classes="mainWindowTextBlock" Text="{x:Static p:Resources.MarkAsFavourite}"
+                               IsVisible="{Binding !$parent[ToggleButton].IsChecked}" />
+                    <TextBlock Classes="mainWindowTextBlock" Text="{x:Static p:Resources.UnmarkAsFavourite}"
+                               IsVisible="{Binding $parent[ToggleButton].IsChecked}" />
+                </Grid>
+            </ToolTip.Tip>
         </ToggleButton>
     </Grid>
 

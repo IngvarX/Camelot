@@ -872,5 +872,17 @@ namespace Camelot.Properties {
                 return ResourceManager.GetString("GoForward", resourceCulture);
             }
         }
+        
+        public static string UnmarkAsFavourite {
+            get {
+                return ResourceManager.GetString("UnmarkAsFavourite", resourceCulture);
+            }
+        }
+        
+        public static string MarkAsFavourite {
+            get {
+                return ResourceManager.GetString("MarkAsFavourite", resourceCulture);
+            }
+        }
     }
 }

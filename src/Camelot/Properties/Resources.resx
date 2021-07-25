@@ -531,4 +531,10 @@
   <data name="GoForward" xml:space="preserve">
     <value>Go forward</value>
   </data>
+  <data name="UnmarkAsFavourite" xml:space="preserve">
+    <value>Unmark as favourite</value>
+  </data>
+  <data name="MarkAsFavourite" xml:space="preserve">
+    <value>Mark as favourite</value>
+  </data>
 </root>

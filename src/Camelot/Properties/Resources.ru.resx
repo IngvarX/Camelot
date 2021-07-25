@@ -531,4 +531,10 @@
   <data name="GoForward" xml:space="preserve">
     <value>Вперёд</value>
   </data>
+  <data name="UnmarkAsFavourite" xml:space="preserve">
+    <value>Удалить из закладок</value>
+  </data>
+  <data name="MarkAsFavourite" xml:space="preserve">
+    <value>Добавить в закладки</value>
+  </data>
 </root>
