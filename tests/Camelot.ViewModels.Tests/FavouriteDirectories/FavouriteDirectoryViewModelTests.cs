@@ -26,13 +26,15 @@ namespace Camelot.ViewModels.Tests.FavouriteDirectories
         {
             var driveModel = new DirectoryModel
             {
-                Name = DirName
+                Name = DirName,
+                FullPath = DirPath
             };
             _autoMocker.Use(driveModel);
 
             var viewModel = _autoMocker.CreateInstance<FavouriteDirectoryViewModel>();
 
             Assert.Equal(driveModel.Name, viewModel.DirectoryName);
+            Assert.Equal(driveModel.FullPath, viewModel.FullPath);
         }
 
         [Fact]

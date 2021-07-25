@@ -519,4 +519,16 @@
   <data name="AccessToDirectoryIsDenied" xml:space="preserve">
     <value>Доступ к каталогу {0} запрещён</value>
   </data>
+  <data name="MountPointWithColon" xml:space="preserve">
+    <value>Точка монтирования:</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Обновить</value>
+  </data>
+  <data name="GoBack" xml:space="preserve">
+    <value>Назад</value>
+  </data>
+  <data name="GoForward" xml:space="preserve">
+    <value>Вперёд</value>
+  </data>
 </root>

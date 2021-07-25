@@ -148,9 +148,6 @@
   <data name="HelpHeader" xml:space="preserve">
     <value>_Yardım</value>
   </data>
-  <data name="Github" xml:space="preserve">
-    <value>GitHub</value>
-  </data>
   <data name="General" xml:space="preserve">
     <value>Genel</value>
   </data>

@@ -24,9 +24,13 @@
                 </Image.Source>
             </Image>
 
-            <TextBlock Grid.Column="1" Classes="driveNameTextBlock"
+            <TextBlock Grid.Column="1" Classes="mainWindowTextBlock"
                        Text="{Binding DirectoryName}" />
         </Grid>
+
+        <ToolTip.Tip>
+            <TextBlock Classes="mainWindowTextBlock" Text="{Binding FullPath}" />
+        </ToolTip.Tip>
 
         <Button.ContextMenu>
             <ContextMenu>

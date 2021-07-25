@@ -18,11 +18,11 @@ namespace Camelot.ViewModels.Implementations.MainWindow.Drives
         private readonly IFilesOperationsMediator _filesOperationsMediator;
         private readonly IMountedDriveService _mountedDriveService;
 
-        private readonly string _rootDirectory;
-
         private string _name;
         private long _freeSpaceBytes;
         private long _totalSpaceBytes;
+
+        public string RootDirectory { get; }
 
         public string Name
         {
@@ -87,8 +87,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.Drives
             _filesOperationsMediator = filesOperationsMediator;
             _mountedDriveService = mountedDriveService;
 
-            _rootDirectory = driveModel.RootDirectory;
-
+            RootDirectory = driveModel.RootDirectory;
             Name = driveModel.Name;
             FreeSpaceBytes = driveModel.FreeSpaceBytes;
             TotalSpaceBytes = driveModel.TotalSpaceBytes;
@@ -108,10 +107,10 @@ namespace Camelot.ViewModels.Implementations.MainWindow.Drives
             };
 
         private void Open() =>
-            _filesOperationsMediator.ActiveFilesPanelViewModel.CurrentDirectory = _rootDirectory;
+            _filesOperationsMediator.ActiveFilesPanelViewModel.CurrentDirectory = RootDirectory;
 
-        private void Unmount() => _mountedDriveService.Unmount(_rootDirectory);
+        private void Unmount() => _mountedDriveService.Unmount(RootDirectory);
 
-        private Task EjectAsync() => _mountedDriveService.EjectAsync(_rootDirectory);
+        private Task EjectAsync() => _mountedDriveService.EjectAsync(RootDirectory);
     }
 }

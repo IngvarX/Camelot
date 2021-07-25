@@ -848,5 +848,29 @@ namespace Camelot.Properties {
                 return ResourceManager.GetString("AccessToDirectoryIsDenied", resourceCulture);
             }
         }
+        
+        public static string MountPointWithColon {
+            get {
+                return ResourceManager.GetString("MountPointWithColon", resourceCulture);
+            }
+        }
+        
+        public static string Reload {
+            get {
+                return ResourceManager.GetString("Reload", resourceCulture);
+            }
+        }
+        
+        public static string GoBack {
+            get {
+                return ResourceManager.GetString("GoBack", resourceCulture);
+            }
+        }
+        
+        public static string GoForward {
+            get {
+                return ResourceManager.GetString("GoForward", resourceCulture);
+            }
+        }
     }
 }

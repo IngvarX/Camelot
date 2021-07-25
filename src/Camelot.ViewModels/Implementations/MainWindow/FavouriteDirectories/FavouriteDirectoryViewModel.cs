@@ -11,9 +11,9 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FavouriteDirectories
     {
         private readonly IFilesOperationsMediator _filesOperationsMediator;
         private readonly IFavouriteDirectoriesService _favouriteDirectoriesService;
-
-        private readonly string _fullPath;
-
+        
+        public string FullPath { get; }
+        
         public string DirectoryName { get; }
 
         public ICommand OpenCommand { get; }
@@ -28,7 +28,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FavouriteDirectories
             _filesOperationsMediator = filesOperationsMediator;
             _favouriteDirectoriesService = favouriteDirectoriesService;
 
-            _fullPath = directoryModel.FullPath;
+            FullPath = directoryModel.FullPath;
             DirectoryName = directoryModel.Name;
 
             OpenCommand = ReactiveCommand.Create(Open);
@@ -36,8 +36,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FavouriteDirectories
         }
 
         private void Open() =>
-            _filesOperationsMediator.ActiveFilesPanelViewModel.CurrentDirectory = _fullPath;
+            _filesOperationsMediator.ActiveFilesPanelViewModel.CurrentDirectory = FullPath;
 
-        private void Remove() => _favouriteDirectoriesService.RemoveDirectory(_fullPath);
+        private void Remove() => _favouriteDirectoriesService.RemoveDirectory(FullPath);
     }
 }

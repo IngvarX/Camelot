@@ -65,6 +65,7 @@ namespace Camelot.ViewModels.Tests.Drives
             Assert.Equal(driveModel.Name, viewModel.Name);
             Assert.Equal(driveModel.TotalSpaceBytes, viewModel.TotalSpaceBytes);
             Assert.Equal(driveModel.FreeSpaceBytes, viewModel.FreeSpaceBytes);
+            Assert.Equal(driveModel.RootDirectory, viewModel.RootDirectory);
         }
 
         [Fact]
