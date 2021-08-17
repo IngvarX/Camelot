@@ -238,7 +238,7 @@
     <value>Информация о файле</value>
   </data>
   <data name="FilesRemovingConfirmationTitle" xml:space="preserve">
-    <value>Подтвердите удаление файлов</value>
+    <value>Подтверждение удаления файлов</value>
   </data>
   <data name="General" xml:space="preserve">
     <value>Общий</value>

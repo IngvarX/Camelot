@@ -418,4 +418,19 @@
   <data name="AccessDeniedTitle" xml:space="preserve">
     <value>Zugriff verweigert</value>
   </data>
+  <data name="MarkAsFavourite" xml:space="preserve">
+    <value>Als Favorit markieren</value>
+  </data>
+  <data name="UnmarkAsFavourite" xml:space="preserve">
+    <value>Von Favoriten entfernen</value>
+  </data>
+  <data name="GoForward" xml:space="preserve">
+    <value>Weiter</value>
+  </data>
+  <data name="GoBack" xml:space="preserve">
+    <value>Zurück</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Neu laden</value>
+  </data>
 </root>

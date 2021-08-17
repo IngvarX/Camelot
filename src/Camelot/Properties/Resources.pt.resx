@@ -460,4 +460,22 @@
   <data name="AccessDeniedTitle" xml:space="preserve">
     <value>Acesso negado</value>
   </data>
+  <data name="MarkAsFavourite" xml:space="preserve">
+    <value>Adicionar aos favoritos</value>
+  </data>
+  <data name="UnmarkAsFavourite" xml:space="preserve">
+    <value>Retirar dos favoritos</value>
+  </data>
+  <data name="GoForward" xml:space="preserve">
+    <value>Avançar</value>
+  </data>
+  <data name="GoBack" xml:space="preserve">
+    <value>Voltar</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Recarregar</value>
+  </data>
+  <data name="MountPointWithColon" xml:space="preserve">
+    <value>Ponto de montagem:</value>
+  </data>
 </root>

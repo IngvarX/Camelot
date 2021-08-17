@@ -58,112 +58,154 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="FailedToDeleteFileFromTo" xml:space="preserve">
-    <value>{0} poistaminen kohteesta {1} epäonnistui</value>
-  </data>
-  <data name="FailedCopyFromFilesAndDirectoriesTo" xml:space="preserve">
-    <value>{0} tiedoston ja {1} hakemiston kopiointi kohteeseen {2} epäonnistui</value>
-  </data>
-  <data name="FailedCopyFileFromTo" xml:space="preserve">
-    <value>Virhe kopioidessa {0} kohteeseen {1}</value>
-  </data>
-  <data name="Extension" xml:space="preserve">
-    <value>Laajennus</value>
-  </data>
-  <data name="ExitHeader" xml:space="preserve">
-    <value>Poistu</value>
-  </data>
-  <data name="EnterDirectoryNameWithColon" xml:space="preserve">
-    <value>Syötä kansion nimi:</value>
-  </data>
-  <data name="DirectoryTemplate" xml:space="preserve">
-    <value>&lt;KANSIO&gt;</value>
-  </data>
-  <data name="DirectoryInformationTitle" xml:space="preserve">
-    <value>Kansion lisätiedot</value>
-  </data>
-  <data name="Directory" xml:space="preserve">
-    <value>Kansio</value>
-  </data>
-  <data name="DeletedFilesAndDirectories" xml:space="preserve">
-    <value>{0} tiedostoa ja {1} kansiota poistettu kohteesta {2}</value>
-  </data>
-  <data name="DeletedFileFromTo" xml:space="preserve">
-    <value>{0} poistettu kohteesta {1}</value>
-  </data>
-  <data name="Delete" xml:space="preserve">
-    <value>Poista</value>
-  </data>
-  <data name="Date" xml:space="preserve">
-    <value>Päivämäärä</value>
-  </data>
-  <data name="CreationDateWithColon" xml:space="preserve">
-    <value>Luontipäivä:</value>
-  </data>
-  <data name="CreateDirectoryTitle" xml:space="preserve">
-    <value>Uusi kansio</value>
-  </data>
-  <data name="Create" xml:space="preserve">
-    <value>Uusi</value>
-  </data>
-  <data name="CopyToClipboard" xml:space="preserve">
-    <value>Kopioi leikepöydälle</value>
-  </data>
-  <data name="CopyingFilesFromAndDirectoriesTo" xml:space="preserve">
-    <value>{0} tiedostoa ja {1} kansiota kopioidaan kohteeseen {2}</value>
-  </data>
-  <data name="CopyingFileFromTo" xml:space="preserve">
-    <value>Kopioidaan {0} kohteeseen {1}</value>
-  </data>
-  <data name="Copy" xml:space="preserve">
-    <value>Kopioi</value>
-  </data>
-  <data name="CopiedFilesFromAndDirectoriesTo" xml:space="preserve">
-    <value>{0} tiedostoa ja {1} kansiota kopioitu kohteeseen {2}</value>
-  </data>
-  <data name="CopiedFileFromTo" xml:space="preserve">
-    <value>{0} kopioitu kohteeseen {1}</value>
-  </data>
-  <data name="ConfigurationHeader" xml:space="preserve">
-    <value>Määrittelyt</value>
-  </data>
   <data name="CommandWithColon" xml:space="preserve">
-    <value>Komento:</value>
-  </data>
-  <data name="CloseTabsToTheRight" xml:space="preserve">
-    <value>Sulje välilehdet oikealta</value>
-  </data>
-  <data name="CloseTabsToTheLeft" xml:space="preserve">
-    <value>Sulje välilehdet vasemmalta</value>
-  </data>
-  <data name="CloseTab" xml:space="preserve">
-    <value>Sulje välilehti</value>
-  </data>
-  <data name="CloseAllButThis" xml:space="preserve">
-    <value>Sulje kaikki paitsi tämä</value>
-  </data>
-  <data name="Close" xml:space="preserve">
-    <value>Sulje</value>
-  </data>
-  <data name="Cancel" xml:space="preserve">
-    <value>Peruuta</value>
+    <value>Ordre:</value>
   </data>
   <data name="ArgumentsWithColon" xml:space="preserve">
-    <value>Argumentit:</value>
+    <value>Arguments:</value>
   </data>
   <data name="ApplyActionToTheAllFilesAndFolders" xml:space="preserve">
-    <value>Käytä kaikissa tiedostoissa ja kansioissa</value>
+    <value>Aplica aquesta acció a tots els fitxers i carpetes</value>
   </data>
   <data name="Apply" xml:space="preserve">
-    <value>Käytä</value>
+    <value>Aplica</value>
+  </data>
+  <data name="MovedFileFromTo" xml:space="preserve">
+    <value>S'ha mogut {0} a {1}</value>
+  </data>
+  <data name="Move" xml:space="preserve">
+    <value>Mou</value>
+  </data>
+  <data name="LastModificationWithColon" xml:space="preserve">
+    <value>Darrera modificació:</value>
+  </data>
+  <data name="LastAccessWithColon" xml:space="preserve">
+    <value>Darrer accés:</value>
+  </data>
+  <data name="LanguageWithColon" xml:space="preserve">
+    <value>Idioma:</value>
+  </data>
+  <data name="GitHub" xml:space="preserve">
+    <value>GitHub</value>
+  </data>
+  <data name="FailedToMoveFilesAndDirectoriesTo" xml:space="preserve">
+    <value>No s'han pogut moure {0} arxius i {1} carpetes a {2}</value>
+  </data>
+  <data name="FailedToMoveFileFromTo" xml:space="preserve">
+    <value>No s'ha pogut moure {0} a {1}</value>
+  </data>
+  <data name="FailedToDeleteFilesAndDirectoriesFrom" xml:space="preserve">
+    <value>No s'han pogut esborrar {0} arxius i {1} carpetes de {2}</value>
+  </data>
+  <data name="FailedToDeleteFileFromTo" xml:space="preserve">
+    <value>No s'ha pogut esborrar {0} de {1}</value>
+  </data>
+  <data name="FailedCopyFromFilesAndDirectoriesTo" xml:space="preserve">
+    <value>No s'han pogut copiar {0} arxius i {1} carpetes a {2}</value>
+  </data>
+  <data name="FailedCopyFileFromTo" xml:space="preserve">
+    <value>No s'ha pogut copiar de {0} a {1}</value>
+  </data>
+  <data name="Extension" xml:space="preserve">
+    <value>Extensió</value>
+  </data>
+  <data name="ExitHeader" xml:space="preserve">
+    <value>_Tanca</value>
+  </data>
+  <data name="EnterDirectoryNameWithColon" xml:space="preserve">
+    <value>Introdueix el nom de la carpeta:</value>
+  </data>
+  <data name="DirectoryTemplate" xml:space="preserve">
+    <value>&lt;CARPETA&gt;</value>
+  </data>
+  <data name="DirectoryInformationTitle" xml:space="preserve">
+    <value>Informació de la carpeta</value>
+  </data>
+  <data name="Directory" xml:space="preserve">
+    <value>Carpeta</value>
+  </data>
+  <data name="DeletedFilesAndDirectories" xml:space="preserve">
+    <value>S'han esborrat {0} arxius i {1} carpetes de {2}</value>
+  </data>
+  <data name="DeletedFileFromTo" xml:space="preserve">
+    <value>S'ha esborrat {0} de {1}</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Esborra</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Data</value>
+  </data>
+  <data name="CreationDateWithColon" xml:space="preserve">
+    <value>Data de creació:</value>
+  </data>
+  <data name="CreateDirectoryTitle" xml:space="preserve">
+    <value>Crea una carpeta</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Crea</value>
+  </data>
+  <data name="CopyToClipboard" xml:space="preserve">
+    <value>Copia al porta-retalls</value>
+  </data>
+  <data name="CopyingFilesFromAndDirectoriesTo" xml:space="preserve">
+    <value>Copiant {0} arxius i {1} carpetes a {2}</value>
+  </data>
+  <data name="CopyingFileFromTo" xml:space="preserve">
+    <value>Copiant {0] a {1}</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Copia</value>
+  </data>
+  <data name="CopiedFilesFromAndDirectoriesTo" xml:space="preserve">
+    <value>S'han copiat {0} arxius i {1} carpetes a {2}</value>
+  </data>
+  <data name="CopiedFileFromTo" xml:space="preserve">
+    <value>S'ha copiat {0} a {1}</value>
+  </data>
+  <data name="ConfigurationHeader" xml:space="preserve">
+    <value>_Configuració</value>
+  </data>
+  <data name="CloseTabsToTheRight" xml:space="preserve">
+    <value>Tanca les pestanyes a la dreta</value>
+  </data>
+  <data name="CloseTabsToTheLeft" xml:space="preserve">
+    <value>Tanca les pestanyes a l'esquerra</value>
+  </data>
+  <data name="CloseTab" xml:space="preserve">
+    <value>Tanca la pestanya</value>
+  </data>
+  <data name="CloseAllButThis" xml:space="preserve">
+    <value>Tanca totes menys aquesta</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Tanca</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel·la</value>
   </data>
   <data name="AboutPage" xml:space="preserve">
-    <value>Camelot on C#-kielellä kirjoitettu kaksipaneelinen tiedostonhallintaohjelma</value>
+    <value>Camelot és un gestor de fitxers amb dos panells escrit en C#</value>
   </data>
   <data name="AboutHeader" xml:space="preserve">
-    <value>Tietoja</value>
+    <value>_Quant al</value>
   </data>
   <data name="AboutCamelotTitle" xml:space="preserve">
-    <value>Tietoja Camelotista</value>
+    <value>Quant al Camelot</value>
+  </data>
+  <data name="HelpHeader" xml:space="preserve">
+    <value>_Ajuda</value>
+  </data>
+  <data name="General" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="FilesRemovingConfirmationTitle" xml:space="preserve">
+    <value>Confirma l'esborrament dels arxius</value>
+  </data>
+  <data name="FileInformationTitle" xml:space="preserve">
+    <value>Informació de l'arxiu</value>
+  </data>
+  <data name="FileHeader" xml:space="preserve">
+    <value>_Arxiu</value>
   </data>
 </root>

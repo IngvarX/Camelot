@@ -454,4 +454,28 @@
   <data name="PasteFromClipboard" xml:space="preserve">
     <value>从剪贴板粘贴</value>
   </data>
+  <data name="AccessToDirectoryIsDenied" xml:space="preserve">
+    <value>拒绝访问目录{0}</value>
+  </data>
+  <data name="AccessDeniedTitle" xml:space="preserve">
+    <value>拒绝访问</value>
+  </data>
+  <data name="MarkAsFavourite" xml:space="preserve">
+    <value>收藏</value>
+  </data>
+  <data name="UnmarkAsFavourite" xml:space="preserve">
+    <value>取消收藏</value>
+  </data>
+  <data name="GoForward" xml:space="preserve">
+    <value>前进</value>
+  </data>
+  <data name="GoBack" xml:space="preserve">
+    <value>返回</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>重新加载</value>
+  </data>
+  <data name="MountPointWithColon" xml:space="preserve">
+    <value>装载点：</value>
+  </data>
 </root>
