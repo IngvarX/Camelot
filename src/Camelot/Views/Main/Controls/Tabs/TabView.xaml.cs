@@ -81,9 +81,16 @@ namespace Camelot.Views.Main.Controls.Tabs
             var dragData = new DataObject();
             dragData.Set(DataFormat, ViewModel);
 
-            await DragDrop.DoDragDrop(e, dragData, DragDropEffects.Move);
+            try
+            {
+                await DragDrop.DoDragDrop(e, dragData, DragDropEffects.Move);
 
-            ViewModel.ActivateCommand.Execute(null);
+                ViewModel.ActivateCommand.Execute(null);
+            }
+            catch
+            {
+                // ignore
+            }
         }
 
         private void GridOnPointerReleased(object sender, PointerReleasedEventArgs e)

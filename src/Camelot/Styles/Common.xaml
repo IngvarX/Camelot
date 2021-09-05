@@ -67,7 +67,7 @@
                                MinWidth="{Binding Bounds.Width, RelativeSource={RelativeSource TemplatedParent}}"
                                MaxHeight="{TemplateBinding MaxDropDownHeight}"
                                PlacementTarget="{TemplateBinding}"
-                               StaysOpen="False">
+                               IsLightDismissEnabled="True">
                             <Border Background="{DynamicResource ThemeControlLowBrush}">
                                 <ScrollViewer>
                                     <ItemsPresenter Name="PART_ItemsPresenter"
