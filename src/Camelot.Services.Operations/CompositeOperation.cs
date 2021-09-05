@@ -99,16 +99,6 @@ namespace Camelot.Services.Operations
             }
 
             await _taskCompletionSource.Task;
-
-            var cancelOperations = _groupedOperationsToExecute
-                .Reverse()
-                .Where(g => g.IsCancellationAvailable)
-                .Select(g =>
-                    g.CancelOperations
-                        .Where((o, i) => g.Operations[i].State.IsCancellationAvailable()).ToArray())
-                        .ToArray();
-
-            await ExecuteOperationsAsync(cancelOperations);
         }
 
         private async Task ExecuteOperationsAsync(

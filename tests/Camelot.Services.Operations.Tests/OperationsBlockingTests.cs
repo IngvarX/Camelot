@@ -116,13 +116,12 @@ namespace Camelot.Services.Operations.Tests
 
                     await secondTaskCompletionSource.Task;
                 });
-            var cancelOperation = new Mock<IInternalOperation>();
             IReadOnlyList<OperationGroup> operationGroups = new List<OperationGroup>
             {
                 new OperationGroup(
-                    new[] {copyOperation.Object}, new[] {cancelOperation.Object}),
+                    new[] {copyOperation.Object}),
                 new OperationGroup(
-                    new[] {secondCopyOperation.Object}, new[] {cancelOperation.Object})
+                    new[] {secondCopyOperation.Object})
             };
             _autoMocker.Use(operationGroups);
             var settings = new BinaryFileSystemOperationSettings(
@@ -189,9 +188,6 @@ namespace Camelot.Services.Operations.Tests
                              && o.FilePath == SecondSourceName
                              && o.NewFilePath == FourthDestinationName)),
                     Times.Exactly(expectedWriteCallsCountFourthFile));
-            cancelOperation
-                .Verify(m => m.RunAsync(It.IsAny<CancellationToken>()),
-                    Times.Never);
         }
 
         [Theory]

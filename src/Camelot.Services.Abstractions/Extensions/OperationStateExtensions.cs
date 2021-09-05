@@ -20,20 +20,5 @@ namespace Camelot.Services.Abstractions.Extensions
 
         public static bool IsFailedOrCancelled(this OperationState operationState) =>
             operationState is OperationState.Failed || operationState is OperationState.Cancelled;
-
-        public static bool IsCancellationAvailable(this OperationState operationState)
-        {
-            var cancellableOperationStates = new[]
-            {
-                OperationState.InProgress,
-                OperationState.Paused,
-                OperationState.Pausing,
-                OperationState.Unpausing,
-                OperationState.Cancelled,
-                OperationState.Finished
-            };
-
-            return cancellableOperationStates.Contains(operationState);
-        }
     }
 }

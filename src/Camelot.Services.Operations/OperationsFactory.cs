@@ -39,8 +39,7 @@ namespace Camelot.Services.Operations
         public IOperation CreateCopyOperation(BinaryFileSystemOperationSettings settings)
         {
             var copyOperations = CreateCopyOperations(settings.FilesDictionary, settings.EmptyDirectories);
-            var deleteNewFilesOperations = CreateDeleteOperations(settings.OutputTopLevelDirectories, settings.OutputTopLevelFiles);
-            var operationGroup = CreateOperationGroup(copyOperations, deleteNewFilesOperations);
+            var operationGroup = CreateOperationGroup(copyOperations);
 
             var operations = CreateOperationsGroupsList(operationGroup);
             var operationInfo = CreateOperationInfo(OperationType.Copy, settings);
@@ -53,8 +52,7 @@ namespace Camelot.Services.Operations
         public IOperation CreateMoveOperation(BinaryFileSystemOperationSettings settings)
         {
             var copyOperations = CreateCopyOperations(settings.FilesDictionary, settings.EmptyDirectories);
-            var deleteNewFilesOperations = CreateDeleteOperations(settings.OutputTopLevelDirectories, settings.OutputTopLevelFiles);
-            var copyOperationGroup = CreateOperationGroup(copyOperations, deleteNewFilesOperations);
+            var copyOperationGroup = CreateOperationGroup(copyOperations);
 
             var deleteOldFilesOperations = CreateDeleteOperations(settings.InputTopLevelDirectories, settings.InputTopLevelFiles);
             var deleteOperationGroup = CreateOperationGroup(deleteOldFilesOperations);
@@ -180,7 +178,7 @@ namespace Camelot.Services.Operations
             params OperationGroup[] operations) => operations;
 
         private static OperationGroup CreateOperationGroup(
-            IReadOnlyList<IInternalOperation> operations, IReadOnlyList<IInternalOperation> cancelOperations = null) =>
-            new OperationGroup(operations, cancelOperations);
+            IReadOnlyList<IInternalOperation> operations) =>
+            new OperationGroup(operations);
     }
 }
