@@ -56,6 +56,10 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         private IEnumerable<IDirectoryViewModel> SelectedDirectories => _selectedFileSystemNodes.OfType<IDirectoryViewModel>();
 
+        private DirectoryModel ParentDirectory => CurrentDirectory is null
+            ? null
+            : _directoryService.GetParentDirectory(CurrentDirectory);
+
         public ITabViewModel SelectedTab => TabsListViewModel.SelectedTab;
 
         public ISearchViewModel SearchViewModel { get; }
@@ -100,6 +104,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         public ICommand ActivateCommand { get; }
 
         public ICommand RefreshCommand { get; }
+
+        public ICommand GoToParentDirectoryCommand { get; }
 
         public ICommand SortFilesCommand { get; }
 
@@ -154,6 +160,9 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
             ActivateCommand = ReactiveCommand.Create(Activate);
             RefreshCommand = ReactiveCommand.Create(ReloadFiles);
+            var canGoToParentDirectory = this.WhenAnyValue(vm => vm.ParentDirectory,
+                (DirectoryModel dm) => dm != null);
+            GoToParentDirectoryCommand = ReactiveCommand.Create(GoToParentDirectory, canGoToParentDirectory);
             SortFilesCommand = ReactiveCommand.Create<SortingMode>(SortFiles);
             CopyToClipboardCommand = ReactiveCommand.CreateFromTask(CopyToClipboardAsync);
             PasteFromClipboardCommand = ReactiveCommand.CreateFromTask(PasteFromClipboardAsync);
@@ -249,6 +258,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             LoadDirectoryViewModel();
 
             CurrentDirectoryChanged.Raise(this, EventArgs.Empty);
+            this.RaisePropertyChanged(nameof(ParentDirectory));
         }
 
         private void RenameNode(string oldName, string newName)
@@ -308,6 +318,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             InsertParentDirectory();
         }
 
+        private void GoToParentDirectory() => _filePanelDirectoryObserver.CurrentDirectory = ParentDirectory.FullPath;
+
         private void LoadDirectoryViewModel()
         {
             var directory = _directoryService.GetDirectory(CurrentDirectory);
@@ -353,10 +365,9 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         private void InsertParentDirectory()
         {
-            var parentDirectory = _directoryService.GetParentDirectory(CurrentDirectory);
-            if (parentDirectory != null)
+            if (ParentDirectory != null)
             {
-                var parentDirectoryViewModel = _fileSystemNodeViewModelFactory.Create(parentDirectory, true);
+                var parentDirectoryViewModel = _fileSystemNodeViewModelFactory.Create(ParentDirectory, true);
 
                 _fileSystemNodes.Insert(0, parentDirectoryViewModel);
             }

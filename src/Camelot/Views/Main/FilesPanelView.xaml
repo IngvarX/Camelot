@@ -25,7 +25,7 @@
     <Grid Classes="defaultBackgroundColorGrid" RowDefinitions="Auto,Auto,*,Auto,Auto">
 
         <Grid Margin="7,0,0,0"
-              ColumnDefinitions="Auto,Auto,Auto,*">
+              ColumnDefinitions="Auto,Auto,Auto,Auto,*">
             <Button Classes="iconButton"
                     Command="{Binding SelectedTab.GoToPreviousDirectoryCommand}">
                 <Image Classes="iconImage">
@@ -80,8 +80,27 @@
                     <TextBlock Classes="mainWindowTextBlock" Text="{x:Static p:Resources.Reload}" />
                 </ToolTip.Tip>
             </Button>
+            
+            <Button Grid.Column="3"
+                    Classes="iconButton"
+                    Command="{Binding GoToParentDirectoryCommand}">
+                <Image Classes="iconImage">
+                    <Image.Source>
+                        <DrawingImage>
+                            <DrawingImage.Drawing>
+                                <GeometryDrawing Brush="{DynamicResource MainWindowForegroundBrush}"
+                                                 Geometry="M177 159.7l136 136c9.4 9.4 9.4 24.6 0 33.9l-22.6 22.6c-9.4 9.4-24.6 9.4-33.9 0L160 255.9l-96.4 96.4c-9.4 9.4-24.6 9.4-33.9 0L7 329.7c-9.4-9.4-9.4-24.6 0-33.9l136-136c9.4-9.5 24.6-9.5 34-.1z"/>
+                            </DrawingImage.Drawing>
+                        </DrawingImage>
+                    </Image.Source>
+                </Image>
 
-            <controls:DirectorySelectorView Name="DirectorySelectorView" Grid.Column="3"
+                <ToolTip.Tip>
+                    <TextBlock Classes="mainWindowTextBlock" Text="{x:Static p:Resources.GoToParentDirectory}" />
+                </ToolTip.Tip>
+            </Button>
+
+            <controls:DirectorySelectorView Name="DirectorySelectorView" Grid.Column="4"
                                             DataContext="{Binding DirectorySelectorViewModel}" />
         </Grid>
 

@@ -12,7 +12,7 @@
         <filePanels:DirectorySelectorViewModel />
     </Design.DataContext>
 
-    <Grid Margin="7,0,0,0" ColumnDefinitions="*,Auto">
+    <Grid Margin="2,0,0,0" ColumnDefinitions="*,Auto">
         <Popup IsOpen="{Binding ShouldShowSuggestions}"
                PlacementTarget="DirectoryTextBox">
             <Border BorderBrush="{DynamicResource ThemeBorderMidBrush}"

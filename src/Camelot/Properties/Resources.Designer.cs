@@ -884,5 +884,11 @@ namespace Camelot.Properties {
                 return ResourceManager.GetString("MarkAsFavourite", resourceCulture);
             }
         }
+        
+        public static string GoToParentDirectory {
+            get {
+                return ResourceManager.GetString("GoToParentDirectory", resourceCulture);
+            }
+        }
     }
 }

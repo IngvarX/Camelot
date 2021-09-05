@@ -79,9 +79,6 @@
   <data name="RemovingFilesToTrash" xml:space="preserve">
     <value>Ønsker du å slette disse {0} filene fra papirkurven?</value>
   </data>
-  <data name="DuplicateOnOtherPanel" xml:space="preserve">
-    <value>Dupliser på motsatt panel</value>
-  </data>
   <data name="RecommendedApplications" xml:space="preserve">
     <value>Anbefalte programmer</value>
   </data>

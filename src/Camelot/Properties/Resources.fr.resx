@@ -166,9 +166,6 @@
   <data name="OpenInNewTab" xml:space="preserve">
     <value>Ouvrir dans un nouvel onglet</value>
   </data>
-  <data name="DuplicateOnOtherPanel" xml:space="preserve">
-    <value>Dupliquer sur l’autre volet</value>
-  </data>
   <data name="Eject" xml:space="preserve">
     <value>Éjecter</value>
   </data>

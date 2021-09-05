@@ -537,4 +537,7 @@
   <data name="MarkAsFavourite" xml:space="preserve">
     <value>Добавить в закладки</value>
   </data>
+  <data name="GoToParentDirectory" xml:space="preserve">
+    <value>Перейти в родительский каталог</value>
+  </data>
 </root>

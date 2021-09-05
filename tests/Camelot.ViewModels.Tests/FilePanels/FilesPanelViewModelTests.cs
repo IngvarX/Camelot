@@ -22,6 +22,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
     public class FilesPanelViewModelTests
     {
         private const string AppRootDirectory = "Root";
+        private const string ParentDirectory = "Parent";
         private const string NewDirectory = "New";
         private const string File = "File";
 
@@ -482,6 +483,55 @@ namespace Camelot.ViewModels.Tests.FilePanels
                 .Verify<IFileService, IReadOnlyList<FileModel>>(
                     m => m.GetFiles(AppRootDirectory, It.IsAny<ISpecification<NodeModelBase>>()),
                     Times.Exactly(refreshCount + 2));
+        }
+
+        [Fact]
+        public void TestGoToParentDirectoryCommandNoDirectory()
+        {
+            _autoMocker
+                .Setup<IFilePanelDirectoryObserver, string>(m => m.CurrentDirectory)
+                .Returns(AppRootDirectory);
+            _autoMocker
+                .Setup<IDirectoryService, bool>(m => m.CheckIfExists(AppRootDirectory))
+                .Returns(true);
+            _autoMocker
+                .Setup<ITabsListViewModel, ITabViewModel>(m => m.SelectedTab)
+                .Returns(new Mock<ITabViewModel>().Object);
+
+            var filesPanelViewModel = _autoMocker.CreateInstance<FilesPanelViewModel>();
+
+            Assert.False(filesPanelViewModel.GoToParentDirectoryCommand.CanExecute(null));
+        }
+
+        [Fact]
+        public void TestGoToParentDirectoryCommand()
+        {
+            _autoMocker
+                .Setup<IFilePanelDirectoryObserver, string>(m => m.CurrentDirectory)
+                .Returns(AppRootDirectory);
+            _autoMocker
+                .Setup<IDirectoryService, bool>(m => m.CheckIfExists(AppRootDirectory))
+                .Returns(true);
+            _autoMocker
+                .Setup<ITabsListViewModel, ITabViewModel>(m => m.SelectedTab)
+                .Returns(new Mock<ITabViewModel>().Object);
+
+            var model = new DirectoryModel
+            {
+                FullPath = ParentDirectory
+            };
+            _autoMocker
+                .Setup<IDirectoryService, DirectoryModel>(m => m.GetParentDirectory(AppRootDirectory))
+                .Returns(model);
+
+            var filesPanelViewModel = _autoMocker.CreateInstance<FilesPanelViewModel>();
+
+            Assert.True(filesPanelViewModel.GoToParentDirectoryCommand.CanExecute(null));
+            filesPanelViewModel.GoToParentDirectoryCommand.Execute(null);
+
+            _autoMocker
+                .GetMock<IFilePanelDirectoryObserver>()
+                .VerifySet(m => m.CurrentDirectory = ParentDirectory);
         }
 
         [Theory]
