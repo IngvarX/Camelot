@@ -214,7 +214,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
 
             _autoMocker
                 .Verify<IDirectoryService, DirectoryModel>(m => m.GetParentDirectory(NewDirectory),
-                    Times.Once);
+                    Times.Exactly(3));
             _autoMocker
                 .GetMock<IFilePanelDirectoryObserver>()
                 .Raise(m => m.CurrentDirectoryChanged += null, EventArgs.Empty);
@@ -224,7 +224,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
 
             _autoMocker
                 .Verify<IDirectoryService, DirectoryModel>(m => m.GetParentDirectory(NewDirectory),
-                    Times.Exactly(2));
+                    Times.Exactly(6));
         }
 
         [Fact]
