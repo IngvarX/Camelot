@@ -478,4 +478,7 @@
   <data name="Reload" xml:space="preserve">
     <value>Recharger</value>
   </data>
+  <data name="GoToParentDirectory" xml:space="preserve">
+    <value>Aller au répertoire parent</value>
+  </data>
 </root>

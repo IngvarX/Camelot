@@ -433,4 +433,25 @@
   <data name="Reload" xml:space="preserve">
     <value>Neu laden</value>
   </data>
+  <data name="ExtractedArchiveTo" xml:space="preserve">
+    <value>Extrahierte Archiv {0} nach {1}</value>
+  </data>
+  <data name="PackingFileTo" xml:space="preserve">
+    <value>Packen von Datei {0} nach {1}</value>
+  </data>
+  <data name="PackingFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Packen von {0} Dateien und {1} Verzeichnissen nach {2}</value>
+  </data>
+  <data name="Pack" xml:space="preserve">
+    <value>Komprimieren</value>
+  </data>
+  <data name="PackFilesTitle" xml:space="preserve">
+    <value>Dateien komprimieren</value>
+  </data>
+  <data name="PackedFileTo" xml:space="preserve">
+    <value>Datei {0} nach {1} gepackt</value>
+  </data>
+  <data name="ClickToMount" xml:space="preserve">
+    <value>Zum Einhängen klicken</value>
+  </data>
 </root>

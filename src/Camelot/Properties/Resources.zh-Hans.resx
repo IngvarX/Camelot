@@ -478,4 +478,7 @@
   <data name="MountPointWithColon" xml:space="preserve">
     <value>装载点：</value>
   </data>
+  <data name="GoToParentDirectory" xml:space="preserve">
+    <value>转到上一级目录</value>
+  </data>
 </root>

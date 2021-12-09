@@ -478,4 +478,7 @@
   <data name="MountPointWithColon" xml:space="preserve">
     <value>Ponto de montagem:</value>
   </data>
+  <data name="GoToParentDirectory" xml:space="preserve">
+    <value>Ir para o diretório pai</value>
+  </data>
 </root>

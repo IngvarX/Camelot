@@ -238,4 +238,7 @@
   <data name="Apply" xml:space="preserve">
     <value>Toepassen</value>
   </data>
+  <data name="FailedToMoveFileFromTo" xml:space="preserve">
+    <value>Verplaatsen van {0} naar {1} is mislukt</value>
+  </data>
 </root>

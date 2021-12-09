@@ -232,4 +232,181 @@
   <data name="AboutCamelotTitle" xml:space="preserve">
     <value>Camelot에 대하여</value>
   </data>
+  <data name="ThemeWithColon" xml:space="preserve">
+    <value>테마:</value>
+  </data>
+  <data name="LightThemeName" xml:space="preserve">
+    <value>밝음</value>
+  </data>
+  <data name="DarkThemeName" xml:space="preserve">
+    <value>어두움</value>
+  </data>
+  <data name="ConfigurationHeader" xml:space="preserve">
+    <value>_설정</value>
+  </data>
+  <data name="AboutHeader" xml:space="preserve">
+    <value>_정보</value>
+  </data>
+  <data name="FailedToPackTo" xml:space="preserve">
+    <value>{0}을 {1}로 압축하는 데 실패했습니다</value>
+  </data>
+  <data name="FailedToExtractArchiveTo" xml:space="preserve">
+    <value>{0}을 {1}에 압축 해제하는 데 실패했습니다</value>
+  </data>
+  <data name="CreateArchive" xml:space="preserve">
+    <value>압축 파일 만들기</value>
+  </data>
+  <data name="PackFilesTitle" xml:space="preserve">
+    <value>파일 압축하기</value>
+  </data>
+  <data name="ExtractArchiveToNewDirectory" xml:space="preserve">
+    <value>새 폴더에 압축 해제하기</value>
+  </data>
+  <data name="ExtractArchiveHere" xml:space="preserve">
+    <value>여기에 압축 해제하기</value>
+  </data>
+  <data name="PackedFilesAndDirectoriesTo" xml:space="preserve">
+    <value>{0} 개의 파일과 {1} 개의 디렉토리를 {2}에 압축했습니다</value>
+  </data>
+  <data name="PackedFileTo" xml:space="preserve">
+    <value>{0}을 {1}에 압축했습니다</value>
+  </data>
+  <data name="ExtractedArchiveTo" xml:space="preserve">
+    <value>{0}을 {1}에 압축 해제했습니다</value>
+  </data>
+  <data name="PackingFileTo" xml:space="preserve">
+    <value>{0}을 {1}로 압축하는 중입니다</value>
+  </data>
+  <data name="PackingFilesAndDirectoriesTo" xml:space="preserve">
+    <value>{0} 개의 파일과 {1} 개의 폴더를 {2}로 압축하는 중입니다</value>
+  </data>
+  <data name="ExtractingArchiveTo" xml:space="preserve">
+    <value>{0]을 {1}로 압축하는 중입니다</value>
+  </data>
+  <data name="Extract" xml:space="preserve">
+    <value>압축 해제</value>
+  </data>
+  <data name="Pack" xml:space="preserve">
+    <value>압축</value>
+  </data>
+  <data name="SearchForFilesAndDirectories" xml:space="preserve">
+    <value>파일 또는 디렉토리 찾기</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>검색</value>
+  </data>
+  <data name="Terminal" xml:space="preserve">
+    <value>터미널</value>
+  </data>
+  <data name="Skip" xml:space="preserve">
+    <value>건너뛰기</value>
+  </data>
+  <data name="SizeWithColon" xml:space="preserve">
+    <value>크기:</value>
+  </data>
+  <data name="Size" xml:space="preserve">
+    <value>크기</value>
+  </data>
+  <data name="ShowProperties" xml:space="preserve">
+    <value>속성</value>
+  </data>
+  <data name="SettingsTitle" xml:space="preserve">
+    <value>설정</value>
+  </data>
+  <data name="ReplaceIfOlder" xml:space="preserve">
+    <value>오래된 파일이면 덮어쓰기</value>
+  </data>
+  <data name="ReplaceFileDestinationDirectory" xml:space="preserve">
+    <value>같은 이름의 다른 파일이 {0} 폴더에 있습니다. 덮어쓰시겠습니까?</value>
+  </data>
+  <data name="Replace" xml:space="preserve">
+    <value>덮어쓰기</value>
+  </data>
+  <data name="ReplaceFile" xml:space="preserve">
+    <value>파일 덮어쓰기</value>
+  </data>
+  <data name="Rename" xml:space="preserve">
+    <value>이름 바꾸기</value>
+  </data>
+  <data name="RemovingFilesToTrash" xml:space="preserve">
+    <value>{0} 개의 파일을 휴지통으로 이동하시겠습니까?</value>
+  </data>
+  <data name="TotalSpaceWithColon" xml:space="preserve">
+    <value>전체 공간:</value>
+  </data>
+  <data name="InvalidRegex" xml:space="preserve">
+    <value>잘못된 정규 표현식입니다</value>
+  </data>
+  <data name="RegularExpression" xml:space="preserve">
+    <value>정규 표현식</value>
+  </data>
+  <data name="Recursive" xml:space="preserve">
+    <value>재귀</value>
+  </data>
+  <data name="CloseSearchPanel" xml:space="preserve">
+    <value>검색창 닫기</value>
+  </data>
+  <data name="CaseSensitive" xml:space="preserve">
+    <value>대소문자 구분</value>
+  </data>
+  <data name="EnterFileNameWithColon" xml:space="preserve">
+    <value>파일명을 입력하세요:</value>
+  </data>
+  <data name="CreateFileTitle" xml:space="preserve">
+    <value>파일 만들기</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>파일</value>
+  </data>
+  <data name="AvailableSpaceWithColon" xml:space="preserve">
+    <value>사용 가능한 공간:</value>
+  </data>
+  <data name="GoToParentDirectory" xml:space="preserve">
+    <value>상위 디렉토리로 이동</value>
+  </data>
+  <data name="MarkAsFavourite" xml:space="preserve">
+    <value>즐겨찾기로 표시</value>
+  </data>
+  <data name="AccessToDirectoryIsDenied" xml:space="preserve">
+    <value>폴더 {0}으로의 접근이 거부되었습니다</value>
+  </data>
+  <data name="AccessDeniedTitle" xml:space="preserve">
+    <value>접근이 거부되었습니다</value>
+  </data>
+  <data name="CloseTabsToTheRight" xml:space="preserve">
+    <value>오른쪽에 있는 모든 탭 닫기</value>
+  </data>
+  <data name="CloseTabsToTheLeft" xml:space="preserve">
+    <value>왼쪽에 있는 모든 탭 닫기</value>
+  </data>
+  <data name="CloseAllButThis" xml:space="preserve">
+    <value>이 탭을 제외하고 모두 닫기</value>
+  </data>
+  <data name="ExitHeader" xml:space="preserve">
+    <value>_종료</value>
+  </data>
+  <data name="HelpHeader" xml:space="preserve">
+    <value>_도움말</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>선택</value>
+  </data>
+  <data name="SearchForApplications" xml:space="preserve">
+    <value>프로그램 찾기</value>
+  </data>
+  <data name="EnterNewNameWithColon" xml:space="preserve">
+    <value>변경할 이름 입력:</value>
+  </data>
+  <data name="SelectOtherApplications" xml:space="preserve">
+    <value>다른 프로그램 선택</value>
+  </data>
+  <data name="FileHeader" xml:space="preserve">
+    <value>_파일</value>
+  </data>
+  <data name="SetAsDefaultApplication" xml:space="preserve">
+    <value>기본 프로그램으로 설정하기</value>
+  </data>
+  <data name="SettingsHeader" xml:space="preserve">
+    <value>_설정</value>
+  </data>
 </root>

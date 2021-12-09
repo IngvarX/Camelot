@@ -478,4 +478,7 @@
   <data name="Reload" xml:space="preserve">
     <value>Učitaj ponovo</value>
   </data>
+  <data name="GoToParentDirectory" xml:space="preserve">
+    <value>Idi u nadređenu mapu</value>
+  </data>
 </root>
