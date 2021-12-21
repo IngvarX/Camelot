@@ -13,4 +13,10 @@
       <ProjectReference Include="..\Camelot.Services.Environment\Camelot.Services.Environment.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Update="Packaging.Targets">
+        <Version>0.1.220</Version>
+      </PackageReference>
+    </ItemGroup>
+
 </Project>

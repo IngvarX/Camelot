@@ -61,22 +61,20 @@ namespace Camelot.Services.RecursiveSearch
         }
 
         private void ProcessFile(string filePath, ISpecification<NodeModelBase> specification,
-            INodeFoundEventPublisher publisher)
-        {
-            var model = _fileService.GetFile(filePath);
-            if (specification.IsSatisfiedBy(model))
-            {
-                publisher.RaiseNodeFoundEvent(filePath);
-            }
-        }
+            INodeFoundEventPublisher publisher) =>
+            ProcessNode(filePath, specification, publisher, _fileService.GetFile);
 
         private void ProcessDirectory(string directoryPath, ISpecification<NodeModelBase> specification,
-            INodeFoundEventPublisher recursiveSearchResult)
+            INodeFoundEventPublisher publisher) =>
+            ProcessNode(directoryPath, specification, publisher, _directoryService.GetDirectory);
+
+        private static void ProcessNode(string nodePath, ISpecification<NodeModelBase> specification,
+            INodeFoundEventPublisher publisher, Func<string, NodeModelBase> factory)
         {
-            var model = _directoryService.GetDirectory(directoryPath);
+            var model = factory(nodePath);
             if (specification.IsSatisfiedBy(model))
             {
-                recursiveSearchResult.RaiseNodeFoundEvent(directoryPath);
+                publisher.RaiseNodeFoundEvent(nodePath);
             }
         }
     }

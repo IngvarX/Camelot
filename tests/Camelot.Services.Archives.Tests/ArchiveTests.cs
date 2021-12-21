@@ -113,6 +113,7 @@ namespace Camelot.Services.Archives.Tests
         {
             Directory.CreateDirectory(_testDirectory);
             Directory.CreateDirectory(_testInnerDirectory);
+            Directory.CreateDirectory(_testExtractDirectory);
             File.WriteAllText(_testInnerFile, TestInnerFileText);
             File.WriteAllText(_testInnerDirectoryFile, TestInnerDirFileText);
         }

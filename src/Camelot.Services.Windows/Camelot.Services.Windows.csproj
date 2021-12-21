@@ -6,6 +6,9 @@
 
     <ItemGroup>
       <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
+      <PackageReference Update="Packaging.Targets">
+        <Version>0.1.220</Version>
+      </PackageReference>
     </ItemGroup>
 
     <ItemGroup>
