@@ -26,7 +26,7 @@ Stable release:
 
 ## Build from sources (all platforms)
 
-1) Install .Net Core 3.1 SDK
+1) Install .NET 6 SDK
 
 2) Clone repository and build solution:
 

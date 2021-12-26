@@ -10,10 +10,10 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Setup .NET Core
+    - name: Setup .NET 6
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.101
+        dotnet-version: 6.0.x
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v1.0.2
     - name: Setup .NET Framework 3.5
