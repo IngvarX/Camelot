@@ -5,7 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Avalonia" Version="0.10.10" />
+      <PackageReference Include="Avalonia" Version="0.10.11" />
       <PackageReference Include="Microsoft.Extensions.PlatformAbstractions" Version="1.1.0" />
       <PackageReference Update="Packaging.Targets">
         <Version>0.1.220</Version>
