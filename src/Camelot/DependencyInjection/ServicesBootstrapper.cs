@@ -316,6 +316,7 @@ namespace Camelot.DependencyInjection
 
         private static void RegisterWindowsServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
+#pragma warning disable CA1416
             services.RegisterLazySingleton<IWindowsRemovedFileMetadataBuilderFactory>(() => new WindowsRemovedFileMetadataBuilderFactory());
             services.RegisterLazySingleton<IWindowsTrashCanNodeNameGenerator>(() => new WindowsTrashCanNodeNameGenerator());
             services.RegisterLazySingleton<IHomeDirectoryProvider>(() => new WindowsHomeDirectoryProvider(
@@ -359,6 +360,7 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IEnvironmentDriveService>(),
                 resolver.GetRequiredService<IProcessService>()
             ));
+#pragma warning restore CA1416
         }
     }
 }

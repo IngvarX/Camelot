@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <TargetFramework>net6</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
@@ -10,7 +10,7 @@
         <Version>0.1.220</Version>
       </PackageReference>
     </ItemGroup>
-
+    
     <ItemGroup>
       <ProjectReference Include="..\Camelot.Extensions\Camelot.Extensions.csproj" />
       <ProjectReference Include="..\Camelot.Services.Abstractions\Camelot.Services.Abstractions.csproj" />

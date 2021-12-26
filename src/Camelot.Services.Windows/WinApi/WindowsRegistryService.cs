@@ -1,10 +1,12 @@
 using System;
+using System.Runtime.Versioning;
 using Camelot.Services.Windows.Enums;
 using Camelot.Services.Windows.Interfaces;
 using Microsoft.Win32;
 
 namespace Camelot.Services.Windows.WinApi
 {
+    [SupportedOSPlatform("windows")]
     public class WindowsRegistryService : IRegistryService
     {
         public IRegistryKey GetRegistryKey(RootRegistryKey rootRegistryKey)

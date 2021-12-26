@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Versioning;
 using Camelot.Services.Windows.Interfaces;
 using WinRegistryKey = Microsoft.Win32.RegistryKey;
 
 namespace Camelot.Services.Windows.WinApi
 {
+    [SupportedOSPlatform("windows")]
     public class RegistryKey : IRegistryKey
     {
         private readonly WinRegistryKey _winRegistryKey;
