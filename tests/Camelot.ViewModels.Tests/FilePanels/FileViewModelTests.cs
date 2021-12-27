@@ -1,4 +1,5 @@
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Nodes;
 using Moq.AutoMock;
 using Xunit;
@@ -30,6 +31,23 @@ namespace Camelot.ViewModels.Tests.FilePanels
 
             var actualFormattedSize = viewModel.FormattedSize;
             Assert.Equal(formattedSize, actualFormattedSize);
+        }
+        
+        [Theory]
+        [InlineData("mp3", FileMimeType.Music)]
+        [InlineData("txt", FileMimeType.Other)]
+        public void TestFileType(string extension, FileMimeType fileType)
+        {
+            _autoMocker
+                .Setup<IFileTypeMapper, FileMimeType>(m => m.GetFileType(extension))
+                .Returns(fileType);
+            _autoMocker.Use(false);
+
+            var viewModel = _autoMocker.CreateInstance<FileViewModel>();
+            viewModel.Extension = extension;
+
+            var actualType = viewModel.Type;
+            Assert.Equal(fileType, actualType);
         }
     }
 }
