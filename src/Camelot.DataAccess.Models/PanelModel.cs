@@ -4,7 +4,7 @@ namespace Camelot.DataAccess.Models
 {
     public class PanelModel
     {
-        public static PanelModel Empty => new PanelModel();
+        public static PanelModel Empty => new();
 
         public List<TabModel> Tabs { get; set; }
 

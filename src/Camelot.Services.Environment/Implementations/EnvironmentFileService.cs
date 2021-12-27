@@ -6,8 +6,8 @@ namespace Camelot.Services.Environment.Implementations
 {
     public class EnvironmentFileService : IEnvironmentFileService
     {
-        public FileInfo GetFile(string file) =>
-            new FileInfo(file);
+        public FileInfo GetFile(string file) => 
+            new(file);
 
         public string[] GetFiles(string directory) =>
             Directory.GetFiles(directory);

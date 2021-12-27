@@ -146,7 +146,7 @@ namespace Camelot.Services.Windows
             baseKeyName = @$"{baseKeyName?.TrimEnd('\\')}\{fileExtension}\OpenWithList";
 
             using var baseKey = _registryService.GetRegistryKey(rootKey).OpenSubKey(baseKeyName);
-            if (!(baseKey?.GetValue("MRUList") is string mruList))
+            if (baseKey?.GetValue("MRUList") is not string mruList)
             {
                 return results;
             }

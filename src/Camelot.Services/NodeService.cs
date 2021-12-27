@@ -22,6 +22,6 @@ namespace Camelot.Services
         public NodeModelBase GetNode(string nodePath) =>
             _fileService.CheckIfExists(nodePath)
                 ? _fileService.GetFile(nodePath)
-                : (NodeModelBase) _directoryService.GetDirectory(nodePath);
+                : _directoryService.GetDirectory(nodePath);
     }
 }

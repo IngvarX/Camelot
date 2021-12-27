@@ -23,8 +23,7 @@ namespace Camelot.Services
             }
 
             var commonPrefix = new string(
-                paths
-                    .First()[..paths.Min(s => s.Length)]
+                paths[0][..paths.Min(s => s.Length)]
                     .TakeWhile((c, i) => paths.All(s => s[i] == c)).ToArray()
             );
 

@@ -161,7 +161,7 @@ namespace Camelot.Services.FileSystemWatcher.Implementations
                         Renamed.Raise(this, (RenamedEventArgs) args);
                         break;
                     default:
-                        throw new ArgumentOutOfRangeException(nameof(args.ChangeType));
+                        throw new ArgumentOutOfRangeException(nameof(args.ChangeType), args.ChangeType, null);
                 }
             }
         }

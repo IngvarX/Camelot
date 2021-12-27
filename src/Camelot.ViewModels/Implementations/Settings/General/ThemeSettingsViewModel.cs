@@ -60,6 +60,6 @@ namespace Camelot.ViewModels.Implementations.Settings.General
         }
 
         private ThemeSettingsModel CreateSettings() =>
-            new ThemeSettingsModel(CurrentTheme.Theme);
+            new(CurrentTheme.Theme);
     }
 }

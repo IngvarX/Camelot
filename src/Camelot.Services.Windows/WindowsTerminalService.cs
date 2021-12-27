@@ -16,7 +16,7 @@ namespace Camelot.Services.Windows
         }
 
         protected override TerminalSettingsStateModel GetDefaultSettings() =>
-            new TerminalSettingsStateModel
+            new()
             {
                 Command = "cmd",
                 Arguments = "/K \"cd /d {0}\""

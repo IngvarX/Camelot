@@ -119,7 +119,7 @@ namespace Camelot.Services.AllPlatforms
         }
 
         private static MountedDriveEventArgs CreateFrom(DriveModel driveModel) =>
-            new MountedDriveEventArgs(driveModel);
+            new(driveModel);
 
         private static bool CheckIfDiffer(DriveModel oldDriveModel, DriveModel newDriveModel) =>
             oldDriveModel.Name != newDriveModel.Name

@@ -30,6 +30,6 @@ namespace Camelot.ViewModels.Factories.Implementations
                 .ToArray();
 
         private static ArchiveTypeViewModel CreateFrom(KeyValuePair<ArchiveType, string> kvp) =>
-            new ArchiveTypeViewModel(kvp.Key, kvp.Value);
+            new(kvp.Key, kvp.Value);
     }
 }

@@ -34,7 +34,7 @@ namespace Camelot.Services.Linux.Implementations
                     case '/':
                         continue;
                     case '[' when line[^1] == ']':
-                        sectionPrefix = line.Substring(1, line.Length - 2) + KeyDelimiter;
+                        sectionPrefix = string.Concat(line.AsSpan(1, line.Length - 2), KeyDelimiter);
                         continue;
                 }
 
@@ -44,8 +44,8 @@ namespace Camelot.Services.Linux.Implementations
                     continue;
                 }
 
-                var key = sectionPrefix + line.Substring(0, separator).Trim();
-                var value = line.Substring(separator + 1).Trim();
+                var key = sectionPrefix + line[..separator].Trim();
+                var value = line[(separator + 1)..].Trim();
 
                 if (value.Length > 1 && value[0] == '"' && value[^1] == '"')
                 {

@@ -19,6 +19,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Comparers
         protected abstract int Compare(T x, T y, SortingMode sortingColumn, bool isAscending);
 
         protected static string PreprocessFileName(string fileName) =>
-            fileName.StartsWith(".") ? fileName.Substring(1) : fileName;
+            fileName.StartsWith(".") ? fileName[1..] : fileName;
     }
 }

@@ -96,9 +96,9 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         private void SubscribeToEvents()
         {
-            _favouriteDirectoriesService.DirectoryAdded += (sender, args) => UpdateFavouriteDirectoryStatus();
-            _favouriteDirectoriesService.DirectoryRemoved += (sender, args) => UpdateFavouriteDirectoryStatus();
-            _filePanelDirectoryObserver.CurrentDirectoryChanged += (sender, args) =>
+            _favouriteDirectoriesService.DirectoryAdded += (_, _) => UpdateFavouriteDirectoryStatus();
+            _favouriteDirectoriesService.DirectoryRemoved += (_, _) => UpdateFavouriteDirectoryStatus();
+            _filePanelDirectoryObserver.CurrentDirectoryChanged += (_, _) =>
                 CurrentDirectory = _filePanelDirectoryObserver.CurrentDirectory;
         }
 

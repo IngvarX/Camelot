@@ -41,7 +41,7 @@ namespace Camelot.Services.Linux
         protected override string Escape(string directory) =>
             directory.Replace("\"", @"\\\""");
 
-        private static TerminalSettingsStateModel CreateFrom(string command, string arguments) =>
-            new TerminalSettingsStateModel {Command = command, Arguments = arguments};
+        private static TerminalSettingsStateModel CreateFrom(string command, string arguments) => 
+            new() {Command = command, Arguments = arguments};
     }
 }

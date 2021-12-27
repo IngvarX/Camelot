@@ -4,16 +4,12 @@ using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Drives;
 using Camelot.Services.Abstractions.Operations;
 using Camelot.Services.AllPlatforms;
-using Camelot.Services.Environment.Interfaces;
 
 namespace Camelot.Services.Mac
 {
     public class MacTrashCanService : TrashCanServiceBase
     {
         private readonly IPathService _pathService;
-        private readonly IFileService _fileService;
-        private readonly IEnvironmentService _environmentService;
-        private readonly IDirectoryService _directoryService;
         private readonly INodeService _nodeService;
         private readonly IHomeDirectoryProvider _homeDirectoryProvider;
 
@@ -21,17 +17,11 @@ namespace Camelot.Services.Mac
             IMountedDriveService mountedDriveService,
             IOperationsService operationsService,
             IPathService pathService,
-            IFileService fileService,
-            IEnvironmentService environmentService,
-            IDirectoryService directoryService,
             INodeService nodeService,
             IHomeDirectoryProvider homeDirectoryProvider)
             : base(mountedDriveService, operationsService, pathService)
         {
             _pathService = pathService;
-            _fileService = fileService;
-            _environmentService = environmentService;
-            _directoryService = directoryService;
             _nodeService = nodeService;
             _homeDirectoryProvider = homeDirectoryProvider;
         }

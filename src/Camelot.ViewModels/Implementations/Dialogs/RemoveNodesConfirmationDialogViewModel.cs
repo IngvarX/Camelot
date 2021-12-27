@@ -60,6 +60,6 @@ namespace Camelot.ViewModels.Implementations.Dialogs
         private void Cancel() => Close(CreateResult(false));
 
         private static RemoveNodesConfirmationDialogResult CreateResult(bool isConfirmed) =>
-            new RemoveNodesConfirmationDialogResult(isConfirmed);
+            new(isConfirmed);
     }
 }

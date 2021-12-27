@@ -17,7 +17,7 @@ namespace Camelot.Services.Windows
         }
 
         public string Generate() =>
-            new string(
+            new(
                 Enumerable
                     .Repeat(FileNameChars, FileNameLength)
                     .Select(s => s[_random.Next(s.Length)])

@@ -85,7 +85,7 @@ namespace Camelot.Services.Operations
                     await CopyFileAsync(options.NewFilePath);
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(options.Mode));
+                    throw new ArgumentOutOfRangeException(nameof(options.Mode), options.Mode, null);
             }
 
             SetFinalProgress();

@@ -91,7 +91,7 @@ namespace Camelot.Services.Mac
         {
             var fullName = driveInfo.Split()[0];
 
-            return fullName.Substring(0, fullName.Length - 2);
+            return fullName[..^2];
         }
 
         private static UnmountedDriveModel CreateFrom(string driveName) =>
@@ -102,6 +102,6 @@ namespace Camelot.Services.Mac
             };
 
         private static string GetShortName(string fullName) =>
-            fullName.Substring(fullName.LastIndexOf("/", StringComparison.InvariantCulture) + 1);
+            fullName[(fullName.LastIndexOf("/", StringComparison.InvariantCulture) + 1)..];
     }
 }

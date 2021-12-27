@@ -61,7 +61,7 @@ namespace Camelot.Services
                 };
 
         private static Language CreateFrom(LanguageStateModel model) =>
-            new Language
+            new()
             {
                 Code = model.Code,
                 Name = model.Name

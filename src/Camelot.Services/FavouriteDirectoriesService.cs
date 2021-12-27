@@ -101,7 +101,6 @@ namespace Camelot.Services
             Directories = directories
         };
 
-        private static FavouriteDirectoriesListChangedEventArgs CreateArgs(string path) =>
-            new FavouriteDirectoriesListChangedEventArgs(path);
+        private static FavouriteDirectoriesListChangedEventArgs CreateArgs(string path) => new(path);
     }
 }

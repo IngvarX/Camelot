@@ -81,8 +81,7 @@ namespace Camelot.Services.Mac
         }
 
         private static IEnumerable<string> ExtractUtis(string line) =>
-            line
-                .Substring(UtiSubstring.Length)
+            line[UtiSubstring.Length..]
                 .Trim()
                 .Split(", ", StringSplitOptions.RemoveEmptyEntries);
 

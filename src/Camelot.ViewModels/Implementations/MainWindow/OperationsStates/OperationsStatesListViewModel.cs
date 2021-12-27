@@ -69,7 +69,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.OperationsStates
 
         private void SubscribeToEvents()
         {
-            _activeOperations.CollectionChanged += (sender, args) => this.RaisePropertyChanged(nameof(IsInProgress));
+            _activeOperations.CollectionChanged += (_, _) => this.RaisePropertyChanged(nameof(IsInProgress));
             _operationsStateService.OperationStarted += OperationsStateServiceOnOperationStarted;
         }
 

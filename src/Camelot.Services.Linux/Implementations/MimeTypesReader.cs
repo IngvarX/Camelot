@@ -32,7 +32,7 @@ namespace Camelot.Services.Linux.Implementations
                 var mimeTypeInfo = line.Split(new[] {'\t', ' '}, StringSplitOptions.RemoveEmptyEntries);
 
                 var key = mimeTypeInfo[0];
-                if (!key.Contains("/"))
+                if (!key.Contains('/'))
                 {
                     continue;
                 }

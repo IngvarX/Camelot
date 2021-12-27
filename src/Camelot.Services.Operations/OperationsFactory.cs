@@ -163,22 +163,22 @@ namespace Camelot.Services.Operations
             new AsyncOperationStateMachine(compositeOperation, _logger);
 
         private static OperationInfo CreateOperationInfo(OperationType operationType, BinaryFileSystemOperationSettings settings) =>
-            new OperationInfo(operationType, settings);
+            new(operationType, settings);
 
         private static OperationInfo CreateOperationInfo(OperationType operationType, UnaryFileSystemOperationSettings settings) =>
-            new OperationInfo(operationType, settings);
+            new(operationType, settings);
 
         private static OperationInfo CreateOperationInfo(PackOperationSettings settings) =>
-            new OperationInfo(settings);
+            new(settings);
 
         private static OperationInfo CreateOperationInfo(ExtractArchiveOperationSettings settings) =>
-            new OperationInfo(settings);
+            new(settings);
 
         private static IReadOnlyList<OperationGroup> CreateOperationsGroupsList(
             params OperationGroup[] operations) => operations;
 
         private static OperationGroup CreateOperationGroup(
             IReadOnlyList<IInternalOperation> operations) =>
-            new OperationGroup(operations);
+            new(operations);
     }
 }

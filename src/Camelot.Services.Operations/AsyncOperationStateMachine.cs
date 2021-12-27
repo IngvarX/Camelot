@@ -2,7 +2,6 @@ using System;
 using System.Threading.Tasks;
 using Camelot.Extensions;
 using Camelot.Services.Abstractions.Exceptions;
-using Camelot.Services.Abstractions.Extensions;
 using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Models.EventArgs;
 using Camelot.Services.Abstractions.Models.Operations;

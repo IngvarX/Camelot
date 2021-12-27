@@ -58,6 +58,6 @@ namespace Camelot.Services.AllPlatforms
         protected abstract Task<IReadOnlyList<UnmountedDriveModel>> GetUnmountedDrivesAsync();
 
         private static UnmountedDriveEventArgs CreateFrom(UnmountedDriveModel unmountedDriveModel) =>
-            new UnmountedDriveEventArgs(unmountedDriveModel);
+            new(unmountedDriveModel);
     }
 }

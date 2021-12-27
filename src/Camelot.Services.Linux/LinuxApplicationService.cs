@@ -133,7 +133,7 @@ namespace Camelot.Services.Linux
             }
 
             var startIndex = Math.Min(executePath.Length + 1, startCommand.Length);
-            var arguments = _regexService.Replace(startCommand.Substring(startIndex),
+            var arguments = _regexService.Replace(startCommand[startIndex..],
                 "%[F|U]", "{0}", RegexOptions.IgnoreCase);
 
             return (executePath, arguments);

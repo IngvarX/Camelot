@@ -10,34 +10,31 @@ namespace Camelot.Services
         {
             if (bytes < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(bytes));
+                throw new ArgumentOutOfRangeException(nameof(bytes), bytes, null);
             }
 
             string suffix;
             double readable;
-            if (bytes >= 0x10000000000)
+            switch (bytes)
             {
-                suffix = "TB";
-                readable = bytes >> 30;
-            }
-            else if (bytes >= 0x40000000)
-            {
-                suffix = "GB";
-                readable = bytes >> 20;
-            }
-            else if (bytes >= 0x100000)
-            {
-                suffix = "MB";
-                readable = bytes >> 10;
-            }
-            else if (bytes >= 0x400)
-            {
-                suffix = "KB";
-                readable = bytes;
-            }
-            else
-            {
-                return bytes.ToString("0 B");
+                case >= 0x10000000000:
+                    suffix = "TB";
+                    readable = bytes >> 30;
+                    break;
+                case >= 0x40000000:
+                    suffix = "GB";
+                    readable = bytes >> 20;
+                    break;
+                case >= 0x100000:
+                    suffix = "MB";
+                    readable = bytes >> 10;
+                    break;
+                case >= 0x400:
+                    suffix = "KB";
+                    readable = bytes;
+                    break;
+                default:
+                    return bytes.ToString("0 B");
             }
 
             readable /= 1024;
@@ -49,7 +46,7 @@ namespace Camelot.Services
         {
             if (bytes < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(bytes));
+                throw new ArgumentOutOfRangeException(nameof(bytes), bytes, null);
             }
 
             var numberFormatInfo = new NumberFormatInfo {NumberGroupSeparator = " "};

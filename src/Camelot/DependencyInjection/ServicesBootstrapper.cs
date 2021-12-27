@@ -282,9 +282,6 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IMountedDriveService>(),
                 resolver.GetRequiredService<IOperationsService>(),
                 resolver.GetRequiredService<IPathService>(),
-                resolver.GetRequiredService<IFileService>(),
-                resolver.GetRequiredService<IEnvironmentService>(),
-                resolver.GetRequiredService<IDirectoryService>(),
                 resolver.GetRequiredService<INodeService>(),
                 resolver.GetRequiredService<IHomeDirectoryProvider>()
             ));

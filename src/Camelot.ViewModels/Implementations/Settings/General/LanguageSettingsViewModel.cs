@@ -63,7 +63,7 @@ namespace Camelot.ViewModels.Implementations.Settings.General
             _languageManager.AllLanguages.OrderBy(l => l.Name);
 
         private LanguageStateModel GetLanguageStateModel() =>
-            new LanguageStateModel
+            new()
             {
                 Code = CurrentLanguage.Code,
                 Name = CurrentLanguage.Name

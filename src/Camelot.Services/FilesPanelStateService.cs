@@ -47,14 +47,14 @@ namespace Camelot.Services
         }
 
         private static PanelStateModel CreateFrom(PanelModel model) =>
-            new PanelStateModel
+            new()
             {
                 SelectedTabIndex = model.SelectedTabIndex,
                 Tabs = model.Tabs.Select(CreateFrom).ToArray()
             };
 
         private static TabStateModel CreateFrom(TabModel model) =>
-            new TabStateModel
+            new()
             {
                 Directory = model.Directory,
                 SortingSettings = CreateFrom(model.SortingSettings),
@@ -63,21 +63,21 @@ namespace Camelot.Services
             };
 
         private static SortingSettingsStateModel CreateFrom(SortingSettings model) =>
-            new SortingSettingsStateModel
+            new()
             {
                 IsAscending = model.IsAscending,
                 SortingMode = (SortingMode) model.SortingMode
             };
 
         private static PanelModel CreateFrom(PanelStateModel model) =>
-            new PanelModel
+            new()
             {
                 SelectedTabIndex = model.SelectedTabIndex,
                 Tabs = model.Tabs.Select(CreateFrom).ToList()
             };
 
         private static TabModel CreateFrom(TabStateModel model) =>
-            new TabModel
+            new()
             {
                 Directory = model.Directory,
                 SortingSettings = CreateFrom(model.SortingSettings),
@@ -86,7 +86,7 @@ namespace Camelot.Services
             };
 
         private static SortingSettings CreateFrom(SortingSettingsStateModel model) =>
-            new SortingSettings
+            new()
             {
                 IsAscending = model.IsAscending,
                 SortingMode = (int) model.SortingMode

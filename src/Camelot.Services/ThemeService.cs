@@ -58,7 +58,7 @@ namespace Camelot.Services
             dbModel is null ? null : new ThemeSettingsModel((Theme) dbModel.SelectedTheme);
 
         private static ThemeSettings CreateFrom(ThemeSettingsModel settingsModel) =>
-            new ThemeSettings
+            new()
             {
                 SelectedTheme = (int) settingsModel.SelectedTheme
             };

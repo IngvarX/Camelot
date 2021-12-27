@@ -18,8 +18,8 @@ namespace Camelot.Services.Environment.Implementations
         public IEnumerable<string> EnumerateFileSystemEntriesRecursively(string directory) =>
             Directory.EnumerateFileSystemEntries(directory, "*.*", SearchOption.AllDirectories);
 
-        public DirectoryInfo GetDirectory(string directory) =>
-            new DirectoryInfo(directory);
+        public DirectoryInfo GetDirectory(string directory) => 
+            new(directory);
 
         public string[] GetDirectories(string directory) =>
             Directory.GetDirectories(directory);

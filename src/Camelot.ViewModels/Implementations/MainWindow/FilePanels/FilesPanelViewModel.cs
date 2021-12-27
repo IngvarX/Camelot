@@ -212,13 +212,13 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             _filePanelDirectoryObserver.CurrentDirectoryChanged += async (sender, args) => await UpdateStateAsync();
             _selectedFileSystemNodes.CollectionChanged += SelectedFileSystemNodesOnCollectionChanged;
 
-            _fileSystemWatchingService.NodeCreated += (sender, args) =>
+            _fileSystemWatchingService.NodeCreated += (_, args) =>
                 ExecuteInUiThread(() => InsertNode(args.Node));
-            _fileSystemWatchingService.NodeChanged += (sender, args) =>
+            _fileSystemWatchingService.NodeChanged += (_, args) =>
                 ExecuteInUiThread(() => UpdateNode(args.Node));
-            _fileSystemWatchingService.NodeRenamed += (sender, args) =>
+            _fileSystemWatchingService.NodeRenamed += (_, args) =>
                 ExecuteInUiThread(() => RenameNode(args.Node, args.NewName));
-            _fileSystemWatchingService.NodeDeleted += (sender, args) =>
+            _fileSystemWatchingService.NodeDeleted += (_, args) =>
                 ExecuteInUiThread(() => RemoveNode(args.Node));
         }
 

@@ -16,7 +16,7 @@ namespace Camelot.Services.Mac
         }
 
         protected override TerminalSettingsStateModel GetDefaultSettings() =>
-            new TerminalSettingsStateModel
+            new()
             {
                 Command = "open",
                 Arguments = "-a Terminal \"{0}\""

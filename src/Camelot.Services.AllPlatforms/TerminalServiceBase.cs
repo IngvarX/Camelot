@@ -66,7 +66,7 @@ namespace Camelot.Services.AllPlatforms
                 };
 
         private static TerminalSettings CreateFrom(TerminalSettingsStateModel stateModel) =>
-            new TerminalSettings
+            new()
             {
                 Arguments = stateModel.Arguments,
                 Command = stateModel.Command

@@ -44,13 +44,13 @@ namespace Camelot.Services
         }
 
         private static CreateArchiveStateModel CreateFrom(CreateArchiveSettings model) =>
-            new CreateArchiveStateModel
+            new()
             {
                 ArchiveType = (ArchiveType) model.ArchiveType
             };
 
         private static CreateArchiveSettings CreateFrom(CreateArchiveStateModel model) =>
-            new CreateArchiveSettings
+            new()
             {
                 ArchiveType = (int) model.ArchiveType
             };

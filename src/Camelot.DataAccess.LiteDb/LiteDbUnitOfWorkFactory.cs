@@ -26,6 +26,6 @@ namespace Camelot.DataAccess.LiteDb
         private static LiteDatabase CreateInMemoryDatabase() => new LiteDatabase(new MemoryStream());
 
         private LiteDatabase CreateDatabaseFromConnectionString() =>
-            new LiteDatabase(_databaseConfiguration.ConnectionString);
+            new(_databaseConfiguration.ConnectionString);
     }
 }
