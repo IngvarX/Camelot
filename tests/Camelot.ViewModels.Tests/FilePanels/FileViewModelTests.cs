@@ -34,7 +34,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
         }
         
         [Theory]
-        [InlineData("mp3", FileMimeType.Music)]
+        [InlineData("mp3", FileMimeType.Audio)]
         [InlineData("txt", FileMimeType.Other)]
         public void TestFileType(string extension, FileMimeType fileType)
         {

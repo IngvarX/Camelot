@@ -2,6 +2,11 @@ namespace Camelot.Services.Abstractions.Models.Enums;
 
 public enum FileMimeType
 {
-    Music,
+    Audio,
+    PowerPoint,
+    Word,
+    Excel,
+    Video,
+    Image,
     Other
 }

@@ -18,7 +18,7 @@
 
     <Grid>
         <Image Classes="iconImage" Margin="10,3,3,3" VerticalAlignment="Center"
-               IsVisible="{Binding Type, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:FileMimeType.Music}}">
+               IsVisible="{Binding Type, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:FileMimeType.Audio}}">
             <Image.Source>
                 <DrawingImage>
                     <DrawingImage.Drawing>

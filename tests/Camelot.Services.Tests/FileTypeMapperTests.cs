@@ -13,21 +13,25 @@ public class FileTypeMapperTests
     {
         var config = new FileTypeMapperConfiguration
         {
-            ExtensionToFileTypeDictionary = new Dictionary<string, FileMimeType>
+            FileTypeToExtensionDictionary = new Dictionary<FileMimeType, string[]>
             {
-                ["mp3"] = FileMimeType.Music,
-                ["m4a"] = FileMimeType.Music
+                [FileMimeType.Audio] = new[] {"mp3", "m4a"},
+                [FileMimeType.Video] = new[] {"mp4"},
+                [FileMimeType.Image] = new[] {"gif", "png", "jpg"}
             }
         };
         _fileTypeMapper = new FileTypeMapper(config);
     }
 
     [Theory]
-    [InlineData("mp3", FileMimeType.Music)]
-    [InlineData("MP3", FileMimeType.Music)]
-    [InlineData(" Mp3 ", FileMimeType.Music)]
+    [InlineData("mp3", FileMimeType.Audio)]
+    [InlineData("MP3", FileMimeType.Audio)]
+    [InlineData("Mp4", FileMimeType.Video)]
+    [InlineData(" gif", FileMimeType.Image)]
+    [InlineData("png ", FileMimeType.Image)]
+    [InlineData(" jPG  ", FileMimeType.Image)]
     [InlineData("m5a", FileMimeType.Other)]
-    [InlineData("m4a", FileMimeType.Music)]
+    [InlineData("m4a", FileMimeType.Audio)]
     public void TestMapping(string extension, FileMimeType expectedType)
     {
         var actualType = _fileTypeMapper.GetFileType(extension);

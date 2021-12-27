@@ -5,10 +5,10 @@ namespace Camelot.Services.Configuration;
 
 public class FileTypeMapperConfiguration
 {
-    public Dictionary<string, FileMimeType> ExtensionToFileTypeDictionary { get; set; }
+    public Dictionary<FileMimeType, string[]> FileTypeToExtensionDictionary { get; set; }
 
     public FileTypeMapperConfiguration()
     {
-        ExtensionToFileTypeDictionary = new Dictionary<string, FileMimeType>();
+        FileTypeToExtensionDictionary = new Dictionary<FileMimeType, string[]>();
     }
 }
