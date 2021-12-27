@@ -10,5 +10,6 @@ public enum FileMimeType
     Image,
     Pdf,
     Archive,
+    Code,
     Other
 }
