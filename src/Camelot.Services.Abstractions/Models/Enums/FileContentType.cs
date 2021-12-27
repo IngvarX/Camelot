@@ -1,6 +1,6 @@
 namespace Camelot.Services.Abstractions.Models.Enums;
 
-public enum FileMimeType
+public enum FileContentType
 {
     Audio,
     PowerPoint,

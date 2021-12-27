@@ -8,25 +8,25 @@ namespace Camelot.Services;
 
 public class FileTypeMapper : IFileTypeMapper
 {
-    private readonly Dictionary<string, FileMimeType> _dictionary;
+    private readonly Dictionary<string, FileContentType> _dictionary;
 
     public FileTypeMapper(FileTypeMapperConfiguration configuration)
     {
         _dictionary = BuildDictionary(configuration);
     }
 
-    public FileMimeType GetFileType(string extension)
+    public FileContentType GetFileType(string extension)
     {
         var preprocessedExtension = Preprocess(extension);
 
-        return _dictionary.GetValueOrDefault(preprocessedExtension, FileMimeType.Other);
+        return _dictionary.GetValueOrDefault(preprocessedExtension, FileContentType.Other);
     }
     
-    private static Dictionary<string, FileMimeType> BuildDictionary(FileTypeMapperConfiguration configuration) =>
+    private static Dictionary<string, FileContentType> BuildDictionary(FileTypeMapperConfiguration configuration) =>
         configuration
             .FileTypeToExtensionDictionary
-            .SelectMany(kvp => kvp.Value.Select(v => (v, kvp.Key)))
-            .ToDictionary(t => t.v, t => t.Key);
+            .SelectMany(kvp => kvp.Value.Select(v => (Key: v, Value: kvp.Key)))
+            .ToDictionary(t => t.Key, t => t.Value);
 
     private static string Preprocess(string extension) => extension.Trim().ToLower();
 }

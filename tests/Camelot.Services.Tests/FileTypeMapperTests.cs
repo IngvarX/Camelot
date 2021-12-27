@@ -13,26 +13,26 @@ public class FileTypeMapperTests
     {
         var config = new FileTypeMapperConfiguration
         {
-            FileTypeToExtensionDictionary = new Dictionary<FileMimeType, string[]>
+            FileTypeToExtensionDictionary = new Dictionary<FileContentType, string[]>
             {
-                [FileMimeType.Audio] = new[] {"mp3", "m4a"},
-                [FileMimeType.Video] = new[] {"mp4"},
-                [FileMimeType.Image] = new[] {"gif", "png", "jpg"}
+                [FileContentType.Audio] = new[] {"mp3", "m4a"},
+                [FileContentType.Video] = new[] {"mp4"},
+                [FileContentType.Image] = new[] {"gif", "png", "jpg"}
             }
         };
         _fileTypeMapper = new FileTypeMapper(config);
     }
 
     [Theory]
-    [InlineData("mp3", FileMimeType.Audio)]
-    [InlineData("MP3", FileMimeType.Audio)]
-    [InlineData("Mp4", FileMimeType.Video)]
-    [InlineData(" gif", FileMimeType.Image)]
-    [InlineData("png ", FileMimeType.Image)]
-    [InlineData(" jPG  ", FileMimeType.Image)]
-    [InlineData("m5a", FileMimeType.Other)]
-    [InlineData("m4a", FileMimeType.Audio)]
-    public void TestMapping(string extension, FileMimeType expectedType)
+    [InlineData("mp3", FileContentType.Audio)]
+    [InlineData("MP3", FileContentType.Audio)]
+    [InlineData("Mp4", FileContentType.Video)]
+    [InlineData(" gif", FileContentType.Image)]
+    [InlineData("png ", FileContentType.Image)]
+    [InlineData(" jPG  ", FileContentType.Image)]
+    [InlineData("m5a", FileContentType.Other)]
+    [InlineData("m4a", FileContentType.Audio)]
+    public void TestMapping(string extension, FileContentType expectedType)
     {
         var actualType = _fileTypeMapper.GetFileType(extension);
         

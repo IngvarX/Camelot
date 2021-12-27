@@ -4,5 +4,5 @@ namespace Camelot.Services.Abstractions;
 
 public interface IFileTypeMapper
 {
-    FileMimeType GetFileType(string extension);
+    FileContentType GetFileType(string extension);
 }

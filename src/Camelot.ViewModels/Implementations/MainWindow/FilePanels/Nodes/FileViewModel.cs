@@ -28,7 +28,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Nodes
 
         public string FormattedSize => _fileSizeFormatter.GetFormattedSize(Size);
 
-        public FileMimeType Type => _fileTypeMapper.GetFileType(Extension);
+        public FileContentType Type => _fileTypeMapper.GetFileType(Extension);
 
         public FileViewModel(
             IFileSystemNodeOpeningBehavior fileSystemNodeOpeningBehavior,

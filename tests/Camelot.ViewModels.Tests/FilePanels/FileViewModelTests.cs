@@ -34,12 +34,12 @@ namespace Camelot.ViewModels.Tests.FilePanels
         }
         
         [Theory]
-        [InlineData("mp3", FileMimeType.Audio)]
-        [InlineData("txt", FileMimeType.Other)]
-        public void TestFileType(string extension, FileMimeType fileType)
+        [InlineData("mp3", FileContentType.Audio)]
+        [InlineData("txt", FileContentType.Other)]
+        public void TestFileType(string extension, FileContentType fileType)
         {
             _autoMocker
-                .Setup<IFileTypeMapper, FileMimeType>(m => m.GetFileType(extension))
+                .Setup<IFileTypeMapper, FileContentType>(m => m.GetFileType(extension))
                 .Returns(fileType);
             _autoMocker.Use(false);
 

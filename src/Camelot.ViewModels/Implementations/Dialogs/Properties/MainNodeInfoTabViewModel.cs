@@ -2,6 +2,7 @@ using System;
 using Avalonia.Media.Imaging;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
+using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.ViewModels.Configuration;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Interfaces.Properties;
@@ -14,6 +15,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs.Properties
         private readonly IFileSizeFormatter _fileSizeFormatter;
         private readonly IPathService _pathService;
         private readonly IBitmapFactory _bitmapFactory;
+        private readonly IFileTypeMapper _fileTypeMapper;
         private readonly ImagePreviewConfiguration _configuration;
         private string _fullPath;
         private long _size;
@@ -40,6 +42,8 @@ namespace Camelot.ViewModels.Implementations.Dialogs.Properties
         public string FormattedSize => _fileSizeFormatter.GetFormattedSize(Size);
 
         public string FormattedSizeAsNumber => _fileSizeFormatter.GetSizeAsNumber(Size);
+        
+        public FileContentType FileType => _fileTypeMapper.GetFileType(Extension);
 
         public DateTime CreatedDateTime { get; set; }
 
@@ -51,15 +55,19 @@ namespace Camelot.ViewModels.Implementations.Dialogs.Properties
 
         public int InnerDirectoriesCount { get; set; }
 
+        private string Extension => _pathService.GetExtension(_fullPath);
+
         public MainNodeInfoTabViewModel(
             IFileSizeFormatter fileSizeFormatter,
             IPathService pathService,
             IBitmapFactory bitmapFactory,
+            IFileTypeMapper fileTypeMapper,
             ImagePreviewConfiguration configuration)
         {
             _fileSizeFormatter = fileSizeFormatter;
             _pathService = pathService;
             _bitmapFactory = bitmapFactory;
+            _fileTypeMapper = fileTypeMapper;
             _configuration = configuration;
         }
 
@@ -79,11 +87,6 @@ namespace Camelot.ViewModels.Implementations.Dialogs.Properties
 
         private bool CheckIfImage() => !IsDirectory && CheckIfImageFormatIsSupported();
 
-        private bool CheckIfImageFormatIsSupported()
-        {
-            var extension = _pathService.GetExtension(_fullPath);
-
-            return _configuration.SupportedFormats.Contains(extension);
-        }
+        private bool CheckIfImageFormatIsSupported() => _configuration.SupportedFormats.Contains(Extension);
     }
 }

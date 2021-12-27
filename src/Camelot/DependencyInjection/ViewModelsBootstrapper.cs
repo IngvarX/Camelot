@@ -105,6 +105,7 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IFileSizeFormatter>(),
                 resolver.GetRequiredService<IPathService>(),
                 resolver.GetRequiredService<IBitmapFactory>(),
+                resolver.GetRequiredService<IFileTypeMapper>(),
                 resolver.GetRequiredService<ImagePreviewConfiguration>()
             ));
             services.RegisterLazySingleton<IDriveViewModelFactory>(() => new DriveViewModelFactory(
