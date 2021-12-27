@@ -8,5 +8,7 @@ public enum FileMimeType
     Excel,
     Video,
     Image,
+    Pdf,
+    Archive,
     Other
 }
