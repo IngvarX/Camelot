@@ -1,0 +1,46 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:nodes="clr-namespace:Camelot.ViewModels.Implementations.MainWindow.FilePanels.Nodes;assembly=Camelot.ViewModels"
+             xmlns:enums="clr-namespace:Camelot.Services.Abstractions.Models.Enums;assembly=Camelot.Services.Abstractions"
+             xmlns:converters="clr-namespace:Camelot.Converters"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Camelot.Views.Main.Controls.FileIconView">
+
+    <Design.DataContext>
+        <nodes:FileViewModel />
+    </Design.DataContext>
+    
+    <UserControl.Resources>
+        <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
+    </UserControl.Resources>
+
+    <Grid>
+        <Image Classes="iconImage" Margin="10,3,3,3" VerticalAlignment="Center"
+               IsVisible="{Binding Type, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:FileMimeType.Music}}">
+            <Image.Source>
+                <DrawingImage>
+                    <DrawingImage.Drawing>
+                        <GeometryDrawing Brush="{DynamicResource MainWindowForegroundBrush}"
+                                         Geometry="M470.38 1.51L150.41 96A32 32 0 0 0 128 126.51v261.41A139 139 0 0 0 96 384c-53 0-96 28.66-96 64s43 64 96 64 96-28.66 96-64V214.32l256-75v184.61a138.4 138.4 0 0 0-32-3.93c-53 0-96 28.66-96 64s43 64 96 64 96-28.65 96-64V32a32 32 0 0 0-41.62-30.49z"/>
+                    </DrawingImage.Drawing>
+                </DrawingImage>
+            </Image.Source>
+        </Image>
+        
+        <Image Classes="iconImage" Margin="10,3,3,3" VerticalAlignment="Center"
+               IsVisible="{Binding Type, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:FileMimeType.Other}}">
+            <Image.Source>
+                <DrawingImage>
+                    <DrawingImage.Drawing>
+                        <GeometryDrawing Brush="{DynamicResource MainWindowForegroundBrush}"
+                                         Geometry="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm160-14.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z"/>
+                    </DrawingImage.Drawing>
+                </DrawingImage>
+            </Image.Source>
+        </Image>
+    </Grid>
+    
+
+</UserControl>

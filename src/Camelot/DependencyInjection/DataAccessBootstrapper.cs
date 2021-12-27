@@ -1,5 +1,3 @@
-using Camelot.Avalonia.Implementations;
-using Camelot.Avalonia.Interfaces;
 using Camelot.DataAccess.Configuration;
 using Camelot.DataAccess.LiteDb;
 using Camelot.DataAccess.UnitOfWork;
@@ -14,8 +12,6 @@ namespace Camelot.DependencyInjection
             services.RegisterLazySingleton<IUnitOfWorkFactory>(() => new LiteDbUnitOfWorkFactory(
                 resolver.GetRequiredService<DatabaseConfiguration>()
             ));
-            services.RegisterLazySingleton<IClipboardService>(() => new ClipboardService());
-            services.RegisterLazySingleton<IMainWindowProvider>(() => new MainWindowProvider());
         }
     }
 }

@@ -97,7 +97,8 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<DirectoryPropertiesBehavior>(),
                 resolver.GetRequiredService<IFileService>(),
                 resolver.GetRequiredService<IDirectoryService>(),
-                resolver.GetRequiredService<IFileSystemNodeFacade>()
+                resolver.GetRequiredService<IFileSystemNodeFacade>(),
+                resolver.GetRequiredService<IFileTypeMapper>()
             ));
             services.RegisterLazySingleton<IBitmapFactory>(() => new BitmapFactory());
             services.Register(() => new MainNodeInfoTabViewModel(
@@ -338,7 +339,8 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<DirectoryPropertiesBehavior>(),
                 resolver.GetRequiredService<IFileService>(),
                 resolver.GetRequiredService<IDirectoryService>(),
-                resolver.GetRequiredService<IFileSystemNodeFacade>()
+                resolver.GetRequiredService<IFileSystemNodeFacade>(),
+                resolver.GetRequiredService<IFileTypeMapper>()
             ));
         }
     }

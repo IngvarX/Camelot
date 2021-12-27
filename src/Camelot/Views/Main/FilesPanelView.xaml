@@ -11,6 +11,7 @@
              xmlns:enumsViewModels="clr-namespace:Camelot.ViewModels.Implementations.MainWindow.FilePanels.Enums;assembly=Camelot.ViewModels"
              xmlns:tabs="clr-namespace:Camelot.Views.Main.Controls.Tabs"
              xmlns:nodes="clr-namespace:Camelot.ViewModels.Implementations.MainWindow.FilePanels.Nodes;assembly=Camelot.ViewModels"
+             xmlns:main="clr-namespace:Camelot.Views.Main"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Camelot.Views.Main.FilesPanelView">
 
@@ -215,16 +216,7 @@
                                     </DataTemplate>
 
                                     <DataTemplate DataType="{x:Type nodes:FileViewModel}">
-                                        <Image Classes="iconImage" Margin="10,3,3,3" VerticalAlignment="Center">
-                                            <Image.Source>
-                                                <DrawingImage>
-                                                    <DrawingImage.Drawing>
-                                                        <GeometryDrawing Brush="{DynamicResource MainWindowForegroundBrush}"
-                                                                         Geometry="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm160-14.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z"/>
-                                                    </DrawingImage.Drawing>
-                                                </DrawingImage>
-                                            </Image.Source>
-                                        </Image>
+                                        <controls:FileIconView />
                                     </DataTemplate>
                                 </ContentControl.DataTemplates>
                             </ContentControl>

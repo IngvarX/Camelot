@@ -89,6 +89,9 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<SuggestionsConfiguration>()
             ));
             services.RegisterLazySingleton<IDateTimeProvider>(() => new DateTimeProvider());
+            services.RegisterLazySingleton<IFileTypeMapper>(() => new FileTypeMapper(
+                resolver.GetRequiredService<FileTypeMapperConfiguration>()
+            ));
             services.RegisterLazySingleton<IFavouriteDirectoriesService>(() => new FavouriteDirectoriesService(
                 resolver.GetRequiredService<IUnitOfWorkFactory>(),
                 resolver.GetRequiredService<IPathService>(),

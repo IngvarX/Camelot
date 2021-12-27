@@ -42,6 +42,7 @@ namespace Camelot.DependencyInjection
             RegisterThemesNamesConfiguration(services, configuration);
             RegisterLanguagesConfiguration(services, configuration);
             RegisterSuggestionsConfiguration(services, configuration);
+            RegisterFileTypeMapperConfiguration(services, configuration);
         }
 
         private static IConfiguration BuildConfiguration() =>
@@ -245,6 +246,14 @@ namespace Camelot.DependencyInjection
         {
             var config = new SuggestionsConfiguration();
             configuration.GetSection("Suggestions").Bind(config);
+            services.RegisterConstant(config);
+        }
+        
+        private static void RegisterFileTypeMapperConfiguration(IMutableDependencyResolver services,
+            IConfiguration configuration)
+        {
+            var config = new FileTypeMapperConfiguration();
+            configuration.GetSection("FileTypeMappings").Bind(config);
             services.RegisterConstant(config);
         }
     }

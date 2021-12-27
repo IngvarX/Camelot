@@ -11,6 +11,8 @@ namespace Camelot.DependencyInjection
             services.RegisterLazySingleton<IApplicationCloser>(() => new ApplicationCloser());
             services.RegisterLazySingleton<IApplicationDispatcher>(() => new AvaloniaDispatcher());
             services.RegisterLazySingleton<IApplicationVersionProvider>(() => new ApplicationVersionProvider());
+            services.RegisterLazySingleton<IClipboardService>(() => new ClipboardService());
+            services.RegisterLazySingleton<IMainWindowProvider>(() => new MainWindowProvider());
         }
     }
 }
