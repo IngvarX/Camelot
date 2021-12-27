@@ -73,7 +73,7 @@ namespace Camelot.Views.Main
             var addedItems = args
                 .AddedItems
                 .Cast<IFileSystemNodeViewModel>()
-                .Where(i => !(i is IDirectoryViewModel {IsParentDirectory: true}))
+                .Where(i => i is not IDirectoryViewModel {IsParentDirectory: true})
                 .ToArray();
 
             if (!ViewModel.IsActive)
@@ -103,12 +103,12 @@ namespace Camelot.Views.Main
 
         private void OnDataGridDoubleTapped(object sender, RoutedEventArgs args)
         {
-            if (!(args.Source is IDataContextProvider dataContextProvider))
+            if (args.Source is not IDataContextProvider dataContextProvider)
             {
                 return;
             }
 
-            if (!(dataContextProvider.DataContext is IFileSystemNodeViewModel nodeViewModel))
+            if (dataContextProvider.DataContext is not IFileSystemNodeViewModel nodeViewModel)
             {
                 return;
             }
@@ -155,7 +155,7 @@ namespace Camelot.Views.Main
             else if (point.Properties.IsLeftButtonPressed
                      && args.Source is TextBlock {Name: "NameTextBlock"} textBlock)
             {
-                if (!(textBlock.DataContext is IFileSystemNodeViewModel viewModel))
+                if (textBlock.DataContext is not IFileSystemNodeViewModel viewModel)
                 {
                     return;
                 }
@@ -195,7 +195,7 @@ namespace Camelot.Views.Main
                 return;
             }
 
-            if (!(e.Cell.DataContext is IFileSystemNodeViewModel {IsEditing: false}))
+            if (e.Cell.DataContext is not IFileSystemNodeViewModel {IsEditing: false})
             {
                 return;
             }
@@ -227,7 +227,7 @@ namespace Camelot.Views.Main
                 return;
             }
 
-            if (!(sender.DataContext is IFileSystemNodeViewModel viewModel))
+            if (sender.DataContext is not IFileSystemNodeViewModel viewModel)
             {
                 return;
             }
@@ -257,7 +257,7 @@ namespace Camelot.Views.Main
                 return;
             }
 
-            if (!(e.Source is IDataContextProvider dataContextProvider))
+            if (e.Source is not IDataContextProvider dataContextProvider)
             {
                 return;
             }

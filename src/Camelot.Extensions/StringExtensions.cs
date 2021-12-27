@@ -14,7 +14,7 @@
                 return value.ToUpper();
             }
 
-            return char.ToUpper(value[0]) + value.Substring(1);
+            return char.ToUpper(value[0]) + value[1..];
         }
     }
 }

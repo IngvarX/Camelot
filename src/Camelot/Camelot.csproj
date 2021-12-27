@@ -24,9 +24,6 @@
     <NSHighResolutionCapable>true</NSHighResolutionCapable>
   </PropertyGroup>
   <ItemGroup>
-    <PublishReadyToRunExclude Include="Microsoft.CodeAnalysis.dll" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Update="**\*.xaml.cs">
       <DependentUpon>%(Filename)</DependentUpon>
     </Compile>
@@ -37,7 +34,7 @@
     <AvaloniaResource Update="Views\Main\AboutDialog.xaml">
       <SubType>Designer</SubType>
     </AvaloniaResource>
-    <AvaloniaResource Update="Views\Main\Dialogs\RemoveNodesConfirmationDialog .xaml">
+    <AvaloniaResource Update="Views\Main\Dialogs\RemoveNodesConfirmationDialog.xaml">
       <SubType>Designer</SubType>
     </AvaloniaResource>
     <Compile Update="Properties\Resources.Designer.cs">
@@ -88,9 +85,6 @@
       <SubType>Designer</SubType>
     </AvaloniaResource>
     <AvaloniaResource Update="Views\Main\Dialogs\FileSystemNodeInformationDialog.xaml">
-      <SubType>Designer</SubType>
-    </AvaloniaResource>
-    <AvaloniaResource Update="Views\Main\Controls\TabView - Copy.xaml">
       <SubType>Designer</SubType>
     </AvaloniaResource>
     <Compile Update="Views\Main\Controls\MainNodeInfoTabView.xaml.cs">

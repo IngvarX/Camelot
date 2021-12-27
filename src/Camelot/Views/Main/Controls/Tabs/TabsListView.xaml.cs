@@ -30,7 +30,7 @@ namespace Camelot.Views.Main.Controls.Tabs
 
         protected override void OnDataContextChanged(EventArgs e)
         {
-            ViewModel.SelectedTabChanged += (sender, args) => ScrollToSelectedTab();
+            ViewModel.SelectedTabChanged += (_, _) => ScrollToSelectedTab();
             var dispatcher = Locator.Current.GetRequiredService<IApplicationDispatcher>();
             dispatcher.Dispatch(ScrollToSelectedTab);
 
