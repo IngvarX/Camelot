@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -58,4 +58,280 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CopiedFilesFromAndDirectoriesTo" xml:space="preserve">
+    <value>Скопійовано файлів {0} і {1} каталогів до {2}</value>
+  </data>
+  <data name="CopyingFileFromTo" xml:space="preserve">
+    <value>Копіювання {0} до {1}</value>
+  </data>
+  <data name="CopiedFileFromTo" xml:space="preserve">
+    <value>Скопійовано {0} до {1}</value>
+  </data>
+  <data name="FailedToDeleteFileFromTo" xml:space="preserve">
+    <value>Не вдалося видалити {0} з {1}</value>
+  </data>
+  <data name="FileInformationTitle" xml:space="preserve">
+    <value>Інформація про файл</value>
+  </data>
+  <data name="FailedCopyFileFromTo" xml:space="preserve">
+    <value>Не вдалося скопіювати {0} до {1}</value>
+  </data>
+  <data name="FailedToMoveFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Не вдалося перемістити {0} файлів і {1} каталогів до {2}</value>
+  </data>
+  <data name="EnterDirectoryNameWithColon" xml:space="preserve">
+    <value>Введіть назву каталогу:</value>
+  </data>
+  <data name="FailedCopyFromFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Не вдалося скопіювати файли {0} і {1} каталоги до {2}</value>
+  </data>
+  <data name="FailedToMoveFileFromTo" xml:space="preserve">
+    <value>Не вдалося перемістити {0} до {1}</value>
+  </data>
+  <data name="FileHeader" xml:space="preserve">
+    <value>Файл</value>
+  </data>
+  <data name="FilesRemovingConfirmationTitle" xml:space="preserve">
+    <value>Підтвердьте видалення файлів</value>
+  </data>
+  <data name="GitHub" xml:space="preserve">
+    <value>GitHub</value>
+  </data>
+  <data name="LastModified" xml:space="preserve">
+    <value>Остання зміна</value>
+  </data>
+  <data name="MovedFileFromTo" xml:space="preserve">
+    <value>Переміщено {0} до {1}</value>
+  </data>
+  <data name="NewDirectory" xml:space="preserve">
+    <value>Новий каталог</value>
+  </data>
+  <data name="MovingFromFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Переміщення {0} файлів і {1} каталогів до {2}</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Ім'я</value>
+  </data>
+  <data name="NewTab" xml:space="preserve">
+    <value>Нова вкладка</value>
+  </data>
+  <data name="LastAccessWithColon" xml:space="preserve">
+    <value>Останній доступ:</value>
+  </data>
+  <data name="LastModificationWithColon" xml:space="preserve">
+    <value>Остання модифікація:</value>
+  </data>
+  <data name="ShowProperties" xml:space="preserve">
+    <value>Показати властивості</value>
+  </data>
+  <data name="Size" xml:space="preserve">
+    <value>Розмір</value>
+  </data>
+  <data name="AboutCamelotTitle" xml:space="preserve">
+    <value>Про Camelot</value>
+  </data>
+  <data name="AboutPage" xml:space="preserve">
+    <value>Camelot - це двопанельний файловий менеджер, написаний на C#</value>
+  </data>
+  <data name="ApplyActionToTheAllFilesAndFolders" xml:space="preserve">
+    <value>Застосувати цю дію до усіх файлів та каталогів</value>
+  </data>
+  <data name="ArgumentsWithColon" xml:space="preserve">
+    <value>Аргументи:</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Скасувати</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Закрити</value>
+  </data>
+  <data name="CloseAllButThis" xml:space="preserve">
+    <value>Закрийте все, крім цього</value>
+  </data>
+  <data name="CloseTab" xml:space="preserve">
+    <value>Закрити вкладку</value>
+  </data>
+  <data name="CloseTabsToTheLeft" xml:space="preserve">
+    <value>Закрити вкладки зліва</value>
+  </data>
+  <data name="CloseTabsToTheRight" xml:space="preserve">
+    <value>Закрити вкладки зправа</value>
+  </data>
+  <data name="CommandWithColon" xml:space="preserve">
+    <value>Команда:</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Скопіювати</value>
+  </data>
+  <data name="CopyingFilesFromAndDirectoriesTo" xml:space="preserve">
+    <value>Копіювання файлів {0} і {1} каталогів у {2}</value>
+  </data>
+  <data name="CopyToClipboard" xml:space="preserve">
+    <value>Скопіювати до буферу обміну</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Створити</value>
+  </data>
+  <data name="CreateDirectoryTitle" xml:space="preserve">
+    <value>Створити каталог</value>
+  </data>
+  <data name="CreationDateWithColon" xml:space="preserve">
+    <value>Дата створення:</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Дата</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Видалити</value>
+  </data>
+  <data name="DeletedFileFromTo" xml:space="preserve">
+    <value>Видалено {0} з {1}</value>
+  </data>
+  <data name="DeletedFilesAndDirectories" xml:space="preserve">
+    <value>Видалено файли {0} і {1} каталоги з {2}</value>
+  </data>
+  <data name="Directory" xml:space="preserve">
+    <value>Каталог</value>
+  </data>
+  <data name="DirectoryInformationTitle" xml:space="preserve">
+    <value>Інформація про каталог</value>
+  </data>
+  <data name="DirectoryTemplate" xml:space="preserve">
+    <value>&lt;DIR&gt;</value>
+  </data>
+  <data name="Extension" xml:space="preserve">
+    <value>Розширення</value>
+  </data>
+  <data name="ExitHeader" xml:space="preserve">
+    <value>_Вихід</value>
+  </data>
+  <data name="FailedToDeleteFilesAndDirectoriesFrom" xml:space="preserve">
+    <value>Не вдалося видалити {0} файли та {1} каталоги з {2}</value>
+  </data>
+  <data name="General" xml:space="preserve">
+    <value>Загальне</value>
+  </data>
+  <data name="HelpHeader" xml:space="preserve">
+    <value>_Допомога</value>
+  </data>
+  <data name="LanguageWithColon" xml:space="preserve">
+    <value>Мова:</value>
+  </data>
+  <data name="Maintainers" xml:space="preserve">
+    <value>Розробники</value>
+  </data>
+  <data name="Move" xml:space="preserve">
+    <value>Перемістити</value>
+  </data>
+  <data name="MovedFilesFromAndDirectoriesTo" xml:space="preserve">
+    <value>Переміщено файли {0} і {1} каталоги в {2}</value>
+  </data>
+  <data name="MovingFileFromTo" xml:space="preserve">
+    <value>Переміщення {0} до {1}</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Відкрити</value>
+  </data>
+  <data name="OriginalFile" xml:space="preserve">
+    <value>Оригінальний файл</value>
+  </data>
+  <data name="OverwriteOptionsTitle" xml:space="preserve">
+    <value>Параметри перезапису</value>
+  </data>
+  <data name="PathWithColon" xml:space="preserve">
+    <value>Шлях:</value>
+  </data>
+  <data name="PermanentlyRemoveFiles" xml:space="preserve">
+    <value>Ви хочете назавжди видалити ці {0} файли?</value>
+  </data>
+  <data name="RemovingFileFromTo" xml:space="preserve">
+    <value>Видалення {0} з {1}</value>
+  </data>
+  <data name="RemovingFilesToTrash" xml:space="preserve">
+    <value>Видалити ці {0} файли у кошик?</value>
+  </data>
+  <data name="Replace" xml:space="preserve">
+    <value>Замінити</value>
+  </data>
+  <data name="ReplaceFile" xml:space="preserve">
+    <value>Замінити файл</value>
+  </data>
+  <data name="SettingsHeader" xml:space="preserve">
+    <value>_Налаштування</value>
+  </data>
+  <data name="SettingsTitle" xml:space="preserve">
+    <value>Налаштування</value>
+  </data>
+  <data name="SizeWithColon" xml:space="preserve">
+    <value>Розмір:</value>
+  </data>
+  <data name="Skip" xml:space="preserve">
+    <value>Пропустити</value>
+  </data>
+  <data name="Terminal" xml:space="preserve">
+    <value>Термінал</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Пошук</value>
+  </data>
+  <data name="InvalidRegex" xml:space="preserve">
+    <value>Неправильний регулярний вираз</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>Файл</value>
+  </data>
+  <data name="CreateFileTitle" xml:space="preserve">
+    <value>Створити файл</value>
+  </data>
+  <data name="ClickToMount" xml:space="preserve">
+    <value>Натисніть, щоб змонтувати пристрій</value>
+  </data>
+  <data name="Pack" xml:space="preserve">
+    <value>Архівувати</value>
+  </data>
+  <data name="Extract" xml:space="preserve">
+    <value>Розархівувати</value>
+  </data>
+  <data name="PackingFileTo" xml:space="preserve">
+    <value>Архірувати файл {0} до {1}</value>
+  </data>
+  <data name="ExtractedArchiveTo" xml:space="preserve">
+    <value>Розархірувати архів {0} до {1}</value>
+  </data>
+  <data name="RemovingFilesAndDirectoriesFrom" xml:space="preserve">
+    <value>Видалення файлів {0} і {1} каталогів з {2}</value>
+  </data>
+  <data name="SelectFromFilesAndDirectories" xml:space="preserve">
+    <value>{0} файлів ({1}) і {2} каталогів</value>
+  </data>
+  <data name="Rename" xml:space="preserve">
+    <value>Перейменувати</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Видалити</value>
+  </data>
+  <data name="ReplaceFileDestinationDirectory" xml:space="preserve">
+    <value>Інший файл з такою ж назвою вже існує в "{0}". Замінити його?</value>
+  </data>
+  <data name="ReplaceIfOlder" xml:space="preserve">
+    <value>Замініть, якщо старше</value>
+  </data>
+  <data name="SearchForFilesAndDirectories" xml:space="preserve">
+    <value>Пошук файлів і каталогів</value>
+  </data>
+  <data name="TotalSpaceWithColon" xml:space="preserve">
+    <value>Загальний обсяг:</value>
+  </data>
+  <data name="AvailableSpaceWithColon" xml:space="preserve">
+    <value>Доступно:</value>
+  </data>
+  <data name="PackingFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Архірування файлів {0} і {1} каталогів у (2)</value>
+  </data>
+  <data name="EnterFileNameWithColon" xml:space="preserve">
+    <value>Введіть ім'я файлу:</value>
+  </data>
+  <data name="ExtractingArchiveTo" xml:space="preserve">
+    <value>Розпакування {0} до {1}</value>
+  </data>
 </root>

@@ -346,4 +346,16 @@
   <data name="FilesRemovingConfirmationTitle" xml:space="preserve">
     <value>Potvrdit odstranění souborů</value>
   </data>
+  <data name="ReplaceIfOlder" xml:space="preserve">
+    <value>Nahradit pokud je starší</value>
+  </data>
+  <data name="ReplaceWith" xml:space="preserve">
+    <value>Nahradit</value>
+  </data>
+  <data name="RemovingFileFromTo" xml:space="preserve">
+    <value>Odstraňování {0} z {1}</value>
+  </data>
+  <data name="RemovingFilesAndDirectoriesFrom" xml:space="preserve">
+    <value>Odstraňování {0} souborů a {1} adresářů z {2}</value>
+  </data>
 </root>

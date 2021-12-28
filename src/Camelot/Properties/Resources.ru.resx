@@ -403,7 +403,7 @@
     <value>Распакован архив {0} в {1}</value>
   </data>
   <data name="PackedFileTo" xml:space="preserve">
-    <value>Архивирован файл {0} в {1}</value>
+    <value>Файл {0} архівован до {1}</value>
   </data>
   <data name="PackedFilesAndDirectoriesTo" xml:space="preserve">
     <value>Архивировано {0} файлов и {1} каталогов в {2}</value>
