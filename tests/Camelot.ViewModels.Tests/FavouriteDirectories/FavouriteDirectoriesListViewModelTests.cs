@@ -101,6 +101,8 @@ namespace Camelot.ViewModels.Tests.FavouriteDirectories
         [InlineData(1, 2, 0, 2, 1)]
         [InlineData(2, 1, 0, 2, 1)]
         [InlineData(0, 1, 1, 0, 2)]
+        [InlineData(2, 2, 0, 1, 2)]
+        [InlineData(0, 0, 0, 1, 2)]
         public void TestMoveRequested(int sourceIndex, int targetIndex, int firstIndex, int secondIndex, int thirdIndex)
         {
             var favDirMock = new Mock<IFavouriteDirectoryViewModel>();
@@ -132,7 +134,9 @@ namespace Camelot.ViewModels.Tests.FavouriteDirectories
             _autoMocker
                 .Verify<IFavouriteDirectoriesService>(m => m.MoveDirectory(sourceIndex, targetIndex),
                     Times.Once);
+
             Assert.Equal(3, viewModel.Directories.Count());
+
             var models = viewModel.Directories.ToArray();
             Assert.Equal(mocks[firstIndex].Object, models[0]);
             Assert.Equal(mocks[secondIndex].Object, models[1]);

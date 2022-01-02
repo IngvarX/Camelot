@@ -282,6 +282,8 @@ namespace Camelot.Services.Tests
         [InlineData(1, 1, DirectoryPath, SecondDirectory, ThirdDirectory)]
         [InlineData(0, 1, SecondDirectory, DirectoryPath, ThirdDirectory)]
         [InlineData(2, 1, DirectoryPath, ThirdDirectory, SecondDirectory)]
+        [InlineData(2, 2, DirectoryPath, SecondDirectory, ThirdDirectory)]
+        [InlineData(0, 0, DirectoryPath, SecondDirectory, ThirdDirectory)]
         public void TestMoveDirectory(int fromIndex, int toIndex, string newFirst, string newSecond, string newThird)
         {
             var repository = new Mock<IRepository<FavouriteDirectories>>();

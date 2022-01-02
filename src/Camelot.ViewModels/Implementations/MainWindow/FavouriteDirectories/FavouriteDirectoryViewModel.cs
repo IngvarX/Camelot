@@ -18,13 +18,13 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FavouriteDirectories
 
         public string DirectoryName { get; }
 
+        public event EventHandler<FavouriteDirectoryMoveRequestedEventArgs> MoveRequested;
+
         public ICommand OpenCommand { get; }
 
         public ICommand RemoveCommand { get; }
 
         public ICommand RequestMoveCommand { get; }
-
-        public event EventHandler<FavouriteDirectoryMoveRequestedEventArgs> MoveRequested;
 
         public FavouriteDirectoryViewModel(
             IFilesOperationsMediator filesOperationsMediator,
