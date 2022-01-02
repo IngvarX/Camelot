@@ -1,6 +1,7 @@
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
 using Camelot.ViewModels.Implementations.MainWindow.FavouriteDirectories;
+using Camelot.ViewModels.Interfaces.MainWindow.Directories;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Services.Interfaces;
 using Moq;
@@ -83,6 +84,22 @@ namespace Camelot.ViewModels.Tests.FavouriteDirectories
 
             _autoMocker
                 .Verify<IFavouriteDirectoriesService>(m => m.RemoveDirectory(DirPath));
+        }
+
+        [Fact]
+        public void TestRequestMoveCommand()
+        {
+            var viewModel = _autoMocker.CreateInstance<FavouriteDirectoryViewModel>();
+            var targetViewModel = _autoMocker.CreateInstance<FavouriteDirectoryViewModel>();
+
+            var isCallbackCalled = false;
+            viewModel.MoveRequested += (_, e) =>
+                isCallbackCalled = e.Target == targetViewModel;
+
+            Assert.True(viewModel.RequestMoveCommand.CanExecute(null));
+            viewModel.RequestMoveCommand.Execute(targetViewModel);
+
+            Assert.True(isCallbackCalled);
         }
     }
 }

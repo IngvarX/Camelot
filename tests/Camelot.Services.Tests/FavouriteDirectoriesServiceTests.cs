@@ -15,6 +15,7 @@ namespace Camelot.Services.Tests
         private const string DirectoryPath = "Dir";
         private const string DirectoryWithSlashPath = "Dir/";
         private const string SecondDirectory = "SecondDir";
+        private const string ThirdDirectory = "ThirdDir";
         private const string FavouriteDirectoriesKey = "FavouriteDirectories";
 
         private readonly AutoMocker _autoMocker;
@@ -274,6 +275,60 @@ namespace Camelot.Services.Tests
                 .Verify(m => m.Upsert(FavouriteDirectoriesKey,
                         It.Is<FavouriteDirectories>(fd => !fd.Directories.Any())),
                     Times.Once);
+        }
+
+        [Theory]
+        [InlineData(0, 2, ThirdDirectory, DirectoryPath, SecondDirectory)]
+        [InlineData(1, 1, DirectoryPath, SecondDirectory, ThirdDirectory)]
+        [InlineData(0, 1, SecondDirectory, DirectoryPath, ThirdDirectory)]
+        [InlineData(2, 1, DirectoryPath, ThirdDirectory, SecondDirectory)]
+        public void TestMoveDirectory(int fromIndex, int toIndex, string newFirst, string newSecond, string newThird)
+        {
+            var repository = new Mock<IRepository<FavouriteDirectories>>();
+            repository
+                .Setup(m => m.GetById(FavouriteDirectoriesKey))
+                .Returns(new FavouriteDirectories
+                {
+                    Directories = new List<FavouriteDirectory>
+                    {
+                        new() {FullPath = DirectoryPath},
+                        new() {FullPath = SecondDirectory},
+                        new() {FullPath = ThirdDirectory}
+                    }
+                });
+            var updatedDirectories = new List<FavouriteDirectory>
+            {
+                new() { FullPath = newFirst },
+                new() { FullPath = newSecond },
+                new() { FullPath = newThird }
+            };
+            repository
+                .Setup(m => m.Upsert(FavouriteDirectoriesKey,
+                    It.Is<FavouriteDirectories>(fd =>
+                        fd.Directories.Equals(updatedDirectories))))
+                .Verifiable();
+            var uow = new Mock<IUnitOfWork>();
+            uow
+                .Setup(m => m.GetRepository<FavouriteDirectories>())
+                .Returns(repository.Object);
+            _autoMocker
+                .Setup<IUnitOfWorkFactory, IUnitOfWork>(m => m.Create())
+                .Returns(uow.Object);
+            _autoMocker
+                .Setup<IPathService, string>(m => m.RightTrimPathSeparators(It.IsAny<string>()))
+                .Returns<string>(s => s);
+
+            var service = _autoMocker.CreateInstance<FavouriteDirectoriesService>();
+
+            Assert.NotNull(service.FavouriteDirectories);
+
+            service.MoveDirectory(fromIndex, toIndex);
+
+            repository
+                .Setup(m => m.Upsert(FavouriteDirectoriesKey,
+                    It.Is<FavouriteDirectories>(fd =>
+                        fd.Directories.Equals(updatedDirectories))))
+                .Verifiable();
         }
 
         [Theory]

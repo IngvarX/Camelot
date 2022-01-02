@@ -29,13 +29,13 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FavouriteDirectories
             _directories = new ObservableCollection<IFavouriteDirectoryViewModel>(
                 favouriteDirectoriesService.FavouriteDirectories.Select(CreateFrom));
 
-            SubscribeToEvents(favouriteDirectoriesService);
+            SubscribeToEvents();
         }
 
-        private void SubscribeToEvents(IFavouriteDirectoriesService favouriteDirectoriesService)
+        private void SubscribeToEvents()
         {
-            favouriteDirectoriesService.DirectoryAdded += FavouriteDirectoriesServiceOnDirectoryAdded;
-            favouriteDirectoriesService.DirectoryRemoved += FavouriteDirectoriesServiceOnDirectoryRemoved;
+            _favouriteDirectoriesService.DirectoryAdded += FavouriteDirectoriesServiceOnDirectoryAdded;
+            _favouriteDirectoriesService.DirectoryRemoved += FavouriteDirectoriesServiceOnDirectoryRemoved;
         }
 
         private void FavouriteDirectoriesServiceOnDirectoryAdded(object sender, FavouriteDirectoriesListChangedEventArgs args)
