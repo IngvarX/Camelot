@@ -305,7 +305,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
             tabsToClose.ForEach(Remove);
         }
 
-        private void TabViewModelOnMoveRequested(object sender, MoveRequestedEventArgs e)
+        private void TabViewModelOnMoveRequested(object sender, TabMoveRequestedEventArgs e)
         {
             if (_tabs.Count == 1)
             {

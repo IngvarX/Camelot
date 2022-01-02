@@ -760,7 +760,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
             var firstTab = tabs[0].Object;
             var secondTabMock = tabs[1];
             var thirdTab = tabs[2].Object;
-            var args = new MoveRequestedEventArgs(firstTab);
+            var args = new TabMoveRequestedEventArgs(firstTab);
             secondTabMock.Raise(m => m.MoveRequested += null, args);
 
             Assert.Equal(3, tabsListViewModel.Tabs.Count);
@@ -802,7 +802,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
             var firstTab = tabs[0].Object;
             var secondTabMock = tabs[1];
             var thirdTab = tabs[2].Object;
-            var args = new MoveRequestedEventArgs(thirdTab);
+            var args = new TabMoveRequestedEventArgs(thirdTab);
             secondTabMock.Raise(m => m.MoveRequested += null, args);
 
             Assert.Equal(3, tabsListViewModel.Tabs.Count);
@@ -841,7 +841,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
 
             var firstTab = tabs[0].Object;
             var secondTabMock = new Mock<ITabViewModel>();
-            var args = new MoveRequestedEventArgs(secondTabMock.Object);
+            var args = new TabMoveRequestedEventArgs(secondTabMock.Object);
             tabs[0].Raise(m => m.MoveRequested += null, args);
 
             Assert.Single(tabsListViewModel.Tabs);
@@ -886,7 +886,7 @@ namespace Camelot.ViewModels.Tests.FilePanels
                 .SetupGet(m => m.IsGloballyActive)
                 .Returns(isGloballyActive);
             var tabFromOppositePanel = Mock.Of<ITabViewModel>();
-            var args = new MoveRequestedEventArgs(tabFromOppositePanel);
+            var args = new TabMoveRequestedEventArgs(tabFromOppositePanel);
 
             var inactiveTabsListMock = new Mock<ITabsListViewModel>();
             inactiveTabsListMock

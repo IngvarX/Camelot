@@ -28,7 +28,7 @@ namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs
 
         event EventHandler<EventArgs> ClosingAllTabsButThisRequested;
 
-        event EventHandler<MoveRequestedEventArgs> MoveRequested;
+        event EventHandler<TabMoveRequestedEventArgs> MoveRequested;
 
         ICommand ActivateCommand { get; }
 

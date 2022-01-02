@@ -63,7 +63,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
 
         public event EventHandler<EventArgs> ClosingAllTabsButThisRequested;
 
-        public event EventHandler<MoveRequestedEventArgs> MoveRequested;
+        public event EventHandler<TabMoveRequestedEventArgs> MoveRequested;
 
         public ICommand ActivateCommand { get; }
 
@@ -141,7 +141,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
 
         private void RequestClosingAllTabsButThis() => ClosingAllTabsButThisRequested.Raise(this, EventArgs.Empty);
 
-        private void RequestMoveTo(ITabViewModel target) => MoveRequested.Raise(this, new MoveRequestedEventArgs(target));
+        private void RequestMoveTo(ITabViewModel target) => MoveRequested.Raise(this, new TabMoveRequestedEventArgs(target));
 
         private void GoToPreviousDirectory() => SetDirectory(_history.GoToPrevious());
 
