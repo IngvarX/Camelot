@@ -11,6 +11,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FavouriteDirectories
     public class FavouriteDirectoriesListViewModel : ViewModelBase, IFavouriteDirectoriesListViewModel
     {
         private readonly IFavouriteDirectoryViewModelFactory _favouriteDirectoryViewModelFactory;
+        private readonly IFavouriteDirectoriesService _favouriteDirectoriesService;
 
         private readonly IDictionary<string, IFavouriteDirectoryViewModel> _directoriesDictionary;
         private readonly ObservableCollection<IFavouriteDirectoryViewModel> _directories;
@@ -22,6 +23,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FavouriteDirectories
             IFavouriteDirectoriesService favouriteDirectoriesService)
         {
             _favouriteDirectoryViewModelFactory = favouriteDirectoryViewModelFactory;
+            _favouriteDirectoriesService = favouriteDirectoriesService;
 
             _directoriesDictionary = new Dictionary<string, IFavouriteDirectoryViewModel>();
             _directories = new ObservableCollection<IFavouriteDirectoryViewModel>(
@@ -48,6 +50,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FavouriteDirectories
             var viewModel = _directoriesDictionary[args.FullPath];
             _directoriesDictionary.Remove(args.FullPath);
 
+            UnsubscribeFromEvents(viewModel);
             _directories.Remove(viewModel);
         }
 
@@ -55,8 +58,29 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FavouriteDirectories
         {
             var viewModel = _favouriteDirectoryViewModelFactory.Create(fullPath);
             _directoriesDictionary[fullPath] = viewModel;
+            SubscribeToEvents(viewModel);
 
             return viewModel;
+        }
+
+        private void SubscribeToEvents(IFavouriteDirectoryViewModel model) =>
+            model.MoveRequested += ModelOnMoveRequested;
+
+        private void UnsubscribeFromEvents(IFavouriteDirectoryViewModel model) =>
+            model.MoveRequested -= ModelOnMoveRequested;
+
+        private void ModelOnMoveRequested(object sender, FavouriteDirectoryMoveRequestedEventArgs e)
+        {
+            var source = (IFavouriteDirectoryViewModel)sender;
+            var target = e.Target;
+
+            var sourceIndex = _directories.IndexOf(source);
+            var targetIndex = _directories.IndexOf(target);
+
+            _directories.RemoveAt(sourceIndex);
+            _directories.Insert(targetIndex, source);
+
+            _favouriteDirectoriesService.MoveDirectory(sourceIndex, targetIndex);
         }
     }
 }

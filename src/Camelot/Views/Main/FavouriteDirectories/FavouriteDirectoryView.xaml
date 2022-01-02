@@ -12,7 +12,7 @@
     </Design.DataContext>
 
     <Button Classes="iconButton" Command="{Binding OpenCommand}">
-        <Grid ColumnDefinitions="Auto,Auto">
+        <Grid ColumnDefinitions="Auto,Auto" Name="FavDirGrid" DragDrop.AllowDrop="True">
             <Image Width="20" Height="20" Margin="0,0,0,6">
                 <Image.Source>
                     <DrawingImage>

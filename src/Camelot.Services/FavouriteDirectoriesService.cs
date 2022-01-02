@@ -17,7 +17,7 @@ namespace Camelot.Services
         private readonly IPathService _pathService;
         private readonly IHomeDirectoryProvider _homeDirectoryProvider;
 
-        private readonly HashSet<string> _favouriteDirectories;
+        private readonly List<string> _favouriteDirectories;
 
         public IReadOnlyCollection<string> FavouriteDirectories => _favouriteDirectories;
 
@@ -40,11 +40,14 @@ namespace Camelot.Services
         public void AddDirectory(string fullPath)
         {
             var preprocessedPath = PreprocessPath(fullPath);
-            if (_favouriteDirectories.Add(preprocessedPath))
+            if (_favouriteDirectories.Contains(preprocessedPath))
             {
-                SaveFavouriteDirectories();
-                DirectoryAdded.Raise(this, CreateArgs(preprocessedPath));
+                return;
             }
+
+            _favouriteDirectories.Add(preprocessedPath);
+            SaveFavouriteDirectories();
+            DirectoryAdded.Raise(this, CreateArgs(preprocessedPath));
         }
 
         public void RemoveDirectory(string fullPath)
@@ -57,6 +60,16 @@ namespace Camelot.Services
             }
         }
 
+        public void MoveDirectory(int fromIndex, int toIndex)
+        {
+            var path = _favouriteDirectories[fromIndex];
+
+            _favouriteDirectories.RemoveAt(fromIndex);
+            _favouriteDirectories.Insert(toIndex, path);
+
+            SaveFavouriteDirectories();
+        }
+
         public bool ContainsDirectory(string fullPath)
         {
             var preprocessedPath = PreprocessPath(fullPath);
@@ -64,7 +77,7 @@ namespace Camelot.Services
             return _favouriteDirectories.Contains(preprocessedPath);
         }
 
-        private HashSet<string> GetFavouriteDirectories()
+        private List<string> GetFavouriteDirectories()
         {
             using var uow = _unitOfWorkFactory.Create();
             var repository = uow.GetRepository<FavouriteDirectories>();
@@ -73,7 +86,7 @@ namespace Camelot.Services
                 ?.Directories
                 ?.Select(d => d.FullPath) ?? GetDefaultDirectories();
 
-            return directories.ToHashSet();
+            return directories.ToList();
         }
 
         private IEnumerable<string> GetDefaultDirectories() =>
@@ -91,12 +104,12 @@ namespace Camelot.Services
             repository.Upsert(FavouriteDirectoriesKey, dbEntity);
         }
 
-        private static FavouriteDirectory CreateFrom(string fullPath) => new FavouriteDirectory
+        private static FavouriteDirectory CreateFrom(string fullPath) => new()
         {
             FullPath = fullPath
         };
 
-        private static FavouriteDirectories CreateFrom(List<FavouriteDirectory> directories) => new FavouriteDirectories
+        private static FavouriteDirectories CreateFrom(List<FavouriteDirectory> directories) => new()
         {
             Directories = directories
         };
