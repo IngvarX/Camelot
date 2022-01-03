@@ -1,11 +1,10 @@
 using System.Collections.Generic;
 
-namespace Camelot.Services.Abstractions.Models.State
-{
-    public class PanelStateModel
-    {
-        public IReadOnlyList<TabStateModel> Tabs { get; set; }
+namespace Camelot.Services.Abstractions.Models.State;
 
-        public int SelectedTabIndex { get; set; }
-    }
+public class PanelStateModel
+{
+    public IReadOnlyList<TabStateModel> Tabs { get; set; }
+
+    public int SelectedTabIndex { get; set; }
 }

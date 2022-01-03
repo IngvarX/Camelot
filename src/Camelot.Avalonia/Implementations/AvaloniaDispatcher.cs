@@ -3,14 +3,13 @@ using System.Threading.Tasks;
 using Avalonia.Threading;
 using Camelot.Avalonia.Interfaces;
 
-namespace Camelot.Avalonia.Implementations
+namespace Camelot.Avalonia.Implementations;
+
+public class AvaloniaDispatcher : IApplicationDispatcher
 {
-    public class AvaloniaDispatcher : IApplicationDispatcher
-    {
-        private static Dispatcher Dispatcher => Dispatcher.UIThread;
+    private static Dispatcher Dispatcher => Dispatcher.UIThread;
 
-        public void Dispatch(Action action) => Dispatcher.Post(action);
+    public void Dispatch(Action action) => Dispatcher.Post(action);
 
-        public Task DispatchAsync(Func<Task> task) => Dispatcher.InvokeAsync(task);
-    }
+    public Task DispatchAsync(Func<Task> task) => Dispatcher.InvokeAsync(task);
 }

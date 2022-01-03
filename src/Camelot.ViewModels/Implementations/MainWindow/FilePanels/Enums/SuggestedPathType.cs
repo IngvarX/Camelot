@@ -1,8 +1,7 @@
-namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Enums
+namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Enums;
+
+public enum SuggestedPathType
 {
-    public enum SuggestedPathType
-    {
-        Directory,
-        FavouriteDirectory
-    }
+    Directory,
+    FavouriteDirectory
 }

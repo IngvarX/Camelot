@@ -10,406 +10,405 @@ using Moq;
 using Moq.AutoMock;
 using Xunit;
 
-namespace Camelot.Services.Operations.Tests
+namespace Camelot.Services.Operations.Tests;
+
+public class OperationsServiceTests
 {
-    public class OperationsServiceTests
+    private const string FileName = "FileName";
+    private const string NewFileName = "NewFileName";
+    private const string SelectedDirectoryName = "SelectedDirectoryName";
+    private const string DirectoryName = "DirectoryName";
+    private const string NewDirectoryName = "NewDirectoryName";
+
+    private readonly AutoMocker _autoMocker;
+
+    private static string CurrentDirectory => Directory.GetCurrentDirectory();
+
+    public OperationsServiceTests()
     {
-        private const string FileName = "FileName";
-        private const string NewFileName = "NewFileName";
-        private const string SelectedDirectoryName = "SelectedDirectoryName";
-        private const string DirectoryName = "DirectoryName";
-        private const string NewDirectoryName = "NewDirectoryName";
+        _autoMocker = new AutoMocker();
+    }
 
-        private readonly AutoMocker _autoMocker;
+    [Fact]
+    public void TestEditSelectedFiles()
+    {
+        _autoMocker
+            .Setup<IResourceOpeningService>(m => m.Open(FileName))
+            .Verifiable();
 
-        private static string CurrentDirectory => Directory.GetCurrentDirectory();
+        var operationsService = _autoMocker.CreateInstance<OperationsService>();
 
-        public OperationsServiceTests()
-        {
-            _autoMocker = new AutoMocker();
-        }
+        operationsService.OpenFiles(new[] {FileName});
 
-        [Fact]
-        public void TestEditSelectedFiles()
-        {
-            _autoMocker
-                .Setup<IResourceOpeningService>(m => m.Open(FileName))
-                .Verifiable();
+        _autoMocker
+            .Verify<IResourceOpeningService>(m => m.Open(FileName), Times.Once);
+    }
 
-            var operationsService = _autoMocker.CreateInstance<OperationsService>();
+    [Fact]
+    public async Task TestFilesRemoving()
+    {
+        var operationMock = new Mock<IOperation>();
+        operationMock
+            .Setup(m => m.RunAsync())
+            .Verifiable();
+        _autoMocker
+            .Setup<IOperationsFactory, IOperation>(m => m.CreateDeleteOperation(It.IsAny<UnaryFileSystemOperationSettings>()))
+            .Callback<UnaryFileSystemOperationSettings>(s =>
+            {
+                Assert.Equal(FileName, s.TopLevelFiles.Single());
+            })
+            .Returns(operationMock.Object);
 
-            operationsService.OpenFiles(new[] {FileName});
+        _autoMocker
+            .Setup<IFileService, bool>(m => m.CheckIfExists(FileName))
+            .Returns(true)
+            .Verifiable();
+        _autoMocker
+            .Setup<IOperationsStateService>(m => m.AddOperation(operationMock.Object))
+            .Verifiable();
 
-            _autoMocker
-                .Verify<IResourceOpeningService>(m => m.Open(FileName), Times.Once);
-        }
+        var operationsService = _autoMocker.CreateInstance<OperationsService>();
 
-        [Fact]
-        public async Task TestFilesRemoving()
-        {
-            var operationMock = new Mock<IOperation>();
-            operationMock
-                .Setup(m => m.RunAsync())
-                .Verifiable();
-            _autoMocker
-                .Setup<IOperationsFactory, IOperation>(m => m.CreateDeleteOperation(It.IsAny<UnaryFileSystemOperationSettings>()))
-                .Callback<UnaryFileSystemOperationSettings>(s =>
-                {
-                    Assert.Equal(FileName, s.TopLevelFiles.Single());
-                })
-                .Returns(operationMock.Object);
+        await operationsService.RemoveAsync(new[] {FileName});
 
-            _autoMocker
-                .Setup<IFileService, bool>(m => m.CheckIfExists(FileName))
-                .Returns(true)
-                .Verifiable();
-            _autoMocker
-                .Setup<IOperationsStateService>(m => m.AddOperation(operationMock.Object))
-                .Verifiable();
+        operationMock.Verify(m => m.RunAsync(), Times.Once);
+        _autoMocker
+            .Verify<IFileService, bool>(m => m.CheckIfExists(FileName), Times.Once);
+        _autoMocker
+            .Verify<IOperationsStateService>(m => m.AddOperation(operationMock.Object), Times.Once);
+    }
 
-            var operationsService = _autoMocker.CreateInstance<OperationsService>();
+    [Theory]
+    [InlineData(ArchiveType.Zip)]
+    [InlineData(ArchiveType.Gz)]
+    [InlineData(ArchiveType.Tar)]
+    [InlineData(ArchiveType.SevenZip)]
+    [InlineData(ArchiveType.TarGz)]
+    [InlineData(ArchiveType.TarBz2)]
+    [InlineData(ArchiveType.Bz2)]
+    [InlineData(ArchiveType.TarXz)]
+    [InlineData(ArchiveType.Xz)]
+    [InlineData(ArchiveType.TarLz)]
+    [InlineData(ArchiveType.Lz)]
+    public async Task TestFilesPack(ArchiveType archiveType)
+    {
+        var operationMock = new Mock<IOperation>();
+        operationMock
+            .Setup(m => m.RunAsync())
+            .Verifiable();
+        _autoMocker
+            .Setup<IOperationsFactory, IOperation>(m => m.CreatePackOperation(
+                It.Is<PackOperationSettings>(s => s.ArchiveType == archiveType && s.InputTopLevelFiles.Single() == FileName)))
+            .Returns(operationMock.Object);
 
-            await operationsService.RemoveAsync(new[] {FileName});
+        _autoMocker
+            .Setup<IFileService, bool>(m => m.CheckIfExists(FileName))
+            .Returns(true)
+            .Verifiable();
+        _autoMocker
+            .Setup<IOperationsStateService>(m => m.AddOperation(operationMock.Object))
+            .Verifiable();
 
-            operationMock.Verify(m => m.RunAsync(), Times.Once);
-            _autoMocker
-                .Verify<IFileService, bool>(m => m.CheckIfExists(FileName), Times.Once);
-            _autoMocker
-                .Verify<IOperationsStateService>(m => m.AddOperation(operationMock.Object), Times.Once);
-        }
+        var operationsService = _autoMocker.CreateInstance<OperationsService>();
 
-        [Theory]
-        [InlineData(ArchiveType.Zip)]
-        [InlineData(ArchiveType.Gz)]
-        [InlineData(ArchiveType.Tar)]
-        [InlineData(ArchiveType.SevenZip)]
-        [InlineData(ArchiveType.TarGz)]
-        [InlineData(ArchiveType.TarBz2)]
-        [InlineData(ArchiveType.Bz2)]
-        [InlineData(ArchiveType.TarXz)]
-        [InlineData(ArchiveType.Xz)]
-        [InlineData(ArchiveType.TarLz)]
-        [InlineData(ArchiveType.Lz)]
-        public async Task TestFilesPack(ArchiveType archiveType)
-        {
-            var operationMock = new Mock<IOperation>();
-            operationMock
-                .Setup(m => m.RunAsync())
-                .Verifiable();
-            _autoMocker
-                .Setup<IOperationsFactory, IOperation>(m => m.CreatePackOperation(
-                    It.Is<PackOperationSettings>(s => s.ArchiveType == archiveType && s.InputTopLevelFiles.Single() == FileName)))
-                .Returns(operationMock.Object);
+        await operationsService.PackAsync(new[] {FileName}, NewFileName, archiveType);
 
-            _autoMocker
-                .Setup<IFileService, bool>(m => m.CheckIfExists(FileName))
-                .Returns(true)
-                .Verifiable();
-            _autoMocker
-                .Setup<IOperationsStateService>(m => m.AddOperation(operationMock.Object))
-                .Verifiable();
+        operationMock.Verify(m => m.RunAsync(), Times.Once);
+        _autoMocker
+            .Verify<IFileService, bool>(m => m.CheckIfExists(FileName), Times.Once);
+        _autoMocker
+            .Verify<IOperationsStateService>(m => m.AddOperation(operationMock.Object), Times.Once);
+    }
 
-            var operationsService = _autoMocker.CreateInstance<OperationsService>();
+    [Theory]
+    [InlineData(ArchiveType.Zip)]
+    [InlineData(ArchiveType.Gz)]
+    [InlineData(ArchiveType.Tar)]
+    [InlineData(ArchiveType.SevenZip)]
+    [InlineData(ArchiveType.TarGz)]
+    [InlineData(ArchiveType.TarBz2)]
+    [InlineData(ArchiveType.Bz2)]
+    [InlineData(ArchiveType.TarXz)]
+    [InlineData(ArchiveType.Xz)]
+    [InlineData(ArchiveType.TarLz)]
+    [InlineData(ArchiveType.Lz)]
+    public async Task TestFilesExtract(ArchiveType archiveType)
+    {
+        var operationMock = new Mock<IOperation>();
+        operationMock
+            .Setup(m => m.RunAsync())
+            .Verifiable();
+        _autoMocker
+            .Setup<IOperationsFactory, IOperation>(m => m.CreateExtractOperation(
+                It.Is<ExtractArchiveOperationSettings>(s => s.ArchiveType == archiveType && s.InputTopLevelFile == FileName && s.TargetDirectory == DirectoryName)))
+            .Returns(operationMock.Object);
 
-            await operationsService.PackAsync(new[] {FileName}, NewFileName, archiveType);
+        _autoMocker
+            .Setup<IOperationsStateService>(m => m.AddOperation(operationMock.Object))
+            .Verifiable();
 
-            operationMock.Verify(m => m.RunAsync(), Times.Once);
-            _autoMocker
-                .Verify<IFileService, bool>(m => m.CheckIfExists(FileName), Times.Once);
-            _autoMocker
-                .Verify<IOperationsStateService>(m => m.AddOperation(operationMock.Object), Times.Once);
-        }
+        var operationsService = _autoMocker.CreateInstance<OperationsService>();
 
-        [Theory]
-        [InlineData(ArchiveType.Zip)]
-        [InlineData(ArchiveType.Gz)]
-        [InlineData(ArchiveType.Tar)]
-        [InlineData(ArchiveType.SevenZip)]
-        [InlineData(ArchiveType.TarGz)]
-        [InlineData(ArchiveType.TarBz2)]
-        [InlineData(ArchiveType.Bz2)]
-        [InlineData(ArchiveType.TarXz)]
-        [InlineData(ArchiveType.Xz)]
-        [InlineData(ArchiveType.TarLz)]
-        [InlineData(ArchiveType.Lz)]
-        public async Task TestFilesExtract(ArchiveType archiveType)
-        {
-            var operationMock = new Mock<IOperation>();
-            operationMock
-                .Setup(m => m.RunAsync())
-                .Verifiable();
-            _autoMocker
-                .Setup<IOperationsFactory, IOperation>(m => m.CreateExtractOperation(
-                    It.Is<ExtractArchiveOperationSettings>(s => s.ArchiveType == archiveType && s.InputTopLevelFile == FileName && s.TargetDirectory == DirectoryName)))
-                .Returns(operationMock.Object);
+        await operationsService.ExtractAsync(FileName, DirectoryName, archiveType);
 
-            _autoMocker
-                .Setup<IOperationsStateService>(m => m.AddOperation(operationMock.Object))
-                .Verifiable();
+        operationMock.Verify(m => m.RunAsync(), Times.Once);
+        _autoMocker
+            .Verify<IOperationsStateService>(m => m.AddOperation(operationMock.Object), Times.Once);
+    }
 
-            var operationsService = _autoMocker.CreateInstance<OperationsService>();
+    [Fact]
+    public async Task TestFilesMove()
+    {
+        var fullPath = Path.Combine(DirectoryName, FileName);
+        var operationMock = new Mock<IOperation>();
+        operationMock
+            .Setup(m => m.RunAsync())
+            .Verifiable();
+        _autoMocker
+            .Setup<IOperationsFactory, IOperation>(m => m.CreateMoveOperation(It.IsAny<BinaryFileSystemOperationSettings>()))
+            .Callback<BinaryFileSystemOperationSettings>(s =>
+            {
+                var (key, value) = s.FilesDictionary.Single();
 
-            await operationsService.ExtractAsync(FileName, DirectoryName, archiveType);
+                Assert.Equal(FileName, key);
+                Assert.Equal(fullPath, value);
+            })
+            .Returns(operationMock.Object);
 
-            operationMock.Verify(m => m.RunAsync(), Times.Once);
-            _autoMocker
-                .Verify<IOperationsStateService>(m => m.AddOperation(operationMock.Object), Times.Once);
-        }
+        _autoMocker
+            .Setup<IDirectoryService, string>(m => m.SelectedDirectory)
+            .Returns(CurrentDirectory);
+        _autoMocker
+            .Setup<IFileService, bool>(m => m.CheckIfExists(FileName))
+            .Returns(true);
+        _autoMocker
+            .Setup<IOperationsStateService>(m => m.AddOperation(operationMock.Object))
+            .Verifiable();
+        _autoMocker
+            .Setup<IPathService, string>(m => m.GetCommonRootDirectory(It.IsAny<IReadOnlyList<string>>()))
+            .Returns(string.Empty);
+        _autoMocker
+            .Setup<IPathService, string>(m => m.Combine(DirectoryName, FileName))
+            .Returns(fullPath);
+        _autoMocker
+            .Setup<IPathService, string>(m => m.GetRelativePath(string.Empty, FileName))
+            .Returns(FileName);
 
-        [Fact]
-        public async Task TestFilesMove()
-        {
-            var fullPath = Path.Combine(DirectoryName, FileName);
-            var operationMock = new Mock<IOperation>();
-            operationMock
-                .Setup(m => m.RunAsync())
-                .Verifiable();
-            _autoMocker
-                .Setup<IOperationsFactory, IOperation>(m => m.CreateMoveOperation(It.IsAny<BinaryFileSystemOperationSettings>()))
-                .Callback<BinaryFileSystemOperationSettings>(s =>
-                {
-                    var (key, value) = s.FilesDictionary.Single();
+        var operationsService = _autoMocker.CreateInstance<OperationsService>();
 
-                    Assert.Equal(FileName, key);
-                    Assert.Equal(fullPath, value);
-                })
-                .Returns(operationMock.Object);
+        await operationsService.MoveAsync(new[] {FileName}, DirectoryName);
 
-            _autoMocker
-                .Setup<IDirectoryService, string>(m => m.SelectedDirectory)
-                .Returns(CurrentDirectory);
-            _autoMocker
-                .Setup<IFileService, bool>(m => m.CheckIfExists(FileName))
-                .Returns(true);
-            _autoMocker
-                .Setup<IOperationsStateService>(m => m.AddOperation(operationMock.Object))
-                .Verifiable();
-            _autoMocker
-                .Setup<IPathService, string>(m => m.GetCommonRootDirectory(It.IsAny<IReadOnlyList<string>>()))
-                .Returns(string.Empty);
-            _autoMocker
-                .Setup<IPathService, string>(m => m.Combine(DirectoryName, FileName))
-                .Returns(fullPath);
-            _autoMocker
-                .Setup<IPathService, string>(m => m.GetRelativePath(string.Empty, FileName))
-                .Returns(FileName);
+        operationMock.Verify(m => m.RunAsync(), Times.Once);
+        _autoMocker
+            .Verify<IOperationsStateService>(m => m.AddOperation(operationMock.Object), Times.Once);
+    }
 
-            var operationsService = _autoMocker.CreateInstance<OperationsService>();
+    [Fact]
+    public async Task TestFilesCopy()
+    {
+        var fullPath = Path.Combine(DirectoryName, FileName);
+        var operationMock = new Mock<IOperation>();
+        operationMock
+            .Setup(m => m.RunAsync())
+            .Verifiable();
+        _autoMocker
+            .Setup<IOperationsFactory, IOperation>(m => m.CreateCopyOperation(It.IsAny<BinaryFileSystemOperationSettings>()))
+            .Callback<BinaryFileSystemOperationSettings>(s =>
+            {
+                var (key, value) = s.FilesDictionary.Single();
 
-            await operationsService.MoveAsync(new[] {FileName}, DirectoryName);
+                Assert.Equal(FileName,key);
+                Assert.Equal(fullPath, value);
+            })
+            .Returns(operationMock.Object);
 
-            operationMock.Verify(m => m.RunAsync(), Times.Once);
-            _autoMocker
-                .Verify<IOperationsStateService>(m => m.AddOperation(operationMock.Object), Times.Once);
-        }
+        _autoMocker
+            .Setup<IDirectoryService, string>(m => m.SelectedDirectory)
+            .Returns(CurrentDirectory);
+        _autoMocker
+            .Setup<IFileService, bool>(m => m.CheckIfExists(FileName))
+            .Returns(true);
+        _autoMocker
+            .Setup<IOperationsStateService>(m => m.AddOperation(operationMock.Object))
+            .Verifiable();
+        _autoMocker
+            .Setup<IPathService, string>(m => m.GetCommonRootDirectory(It.IsAny<IReadOnlyList<string>>()))
+            .Returns(string.Empty);
+        _autoMocker
+            .Setup<IPathService, string>(m => m.Combine(DirectoryName, FileName))
+            .Returns(fullPath);
+        _autoMocker
+            .Setup<IPathService, string>(m => m.GetRelativePath(string.Empty, FileName))
+            .Returns(FileName);
 
-        [Fact]
-        public async Task TestFilesCopy()
-        {
-            var fullPath = Path.Combine(DirectoryName, FileName);
-            var operationMock = new Mock<IOperation>();
-            operationMock
-                .Setup(m => m.RunAsync())
-                .Verifiable();
-            _autoMocker
-                .Setup<IOperationsFactory, IOperation>(m => m.CreateCopyOperation(It.IsAny<BinaryFileSystemOperationSettings>()))
-                .Callback<BinaryFileSystemOperationSettings>(s =>
-                {
-                    var (key, value) = s.FilesDictionary.Single();
+        var operationsService = _autoMocker.CreateInstance<OperationsService>();
 
-                    Assert.Equal(FileName,key);
-                    Assert.Equal(fullPath, value);
-                })
-                .Returns(operationMock.Object);
+        await operationsService.CopyAsync(new[] {FileName}, DirectoryName);
 
-            _autoMocker
-                .Setup<IDirectoryService, string>(m => m.SelectedDirectory)
-                .Returns(CurrentDirectory);
-            _autoMocker
-                .Setup<IFileService, bool>(m => m.CheckIfExists(FileName))
-                .Returns(true);
-            _autoMocker
-                .Setup<IOperationsStateService>(m => m.AddOperation(operationMock.Object))
-                .Verifiable();
-            _autoMocker
-                .Setup<IPathService, string>(m => m.GetCommonRootDirectory(It.IsAny<IReadOnlyList<string>>()))
-                .Returns(string.Empty);
-            _autoMocker
-                .Setup<IPathService, string>(m => m.Combine(DirectoryName, FileName))
-                .Returns(fullPath);
-            _autoMocker
-                .Setup<IPathService, string>(m => m.GetRelativePath(string.Empty, FileName))
-                .Returns(FileName);
+        operationMock.Verify(m => m.RunAsync(), Times.Once);
+        _autoMocker
+            .Verify<IOperationsStateService>(m => m.AddOperation(operationMock.Object), Times.Once);
+    }
 
-            var operationsService = _autoMocker.CreateInstance<OperationsService>();
+    [Fact]
+    public async Task TestMoveByDictionary()
+    {
+        var fullPath = Path.Combine(DirectoryName, FileName);
+        var newFullPath = Path.Combine(NewDirectoryName, NewFileName);
+        var operationMock = new Mock<IOperation>();
+        operationMock
+            .Setup(m => m.RunAsync())
+            .Verifiable();
+        _autoMocker
+            .Setup<IOperationsFactory, IOperation>(m => m.CreateMoveOperation(It.Is<BinaryFileSystemOperationSettings>(s =>
+                s.FilesDictionary.ContainsKey(fullPath) && s.FilesDictionary[fullPath] == newFullPath)))
+            .Returns(operationMock.Object);
 
-            await operationsService.CopyAsync(new[] {FileName}, DirectoryName);
+        _autoMocker
+            .Setup<IDirectoryService, string>(m => m.SelectedDirectory)
+            .Returns(CurrentDirectory);
+        _autoMocker
+            .Setup<IFileService, bool>(m => m.CheckIfExists(fullPath))
+            .Returns(true);
+        _autoMocker
+            .Setup<IOperationsStateService>(m => m.AddOperation(operationMock.Object))
+            .Verifiable();
+        _autoMocker
+            .Setup<IPathService, string>(m => m.GetCommonRootDirectory(It.IsAny<IReadOnlyList<string>>()))
+            .Returns(string.Empty);
+        _autoMocker
+            .Setup<IPathService, string>(m => m.Combine(DirectoryName, FileName))
+            .Returns(fullPath);
+        _autoMocker
+            .Setup<IPathService, string>(m => m.GetRelativePath(string.Empty, FileName))
+            .Returns(FileName);
 
-            operationMock.Verify(m => m.RunAsync(), Times.Once);
-            _autoMocker
-                .Verify<IOperationsStateService>(m => m.AddOperation(operationMock.Object), Times.Once);
-        }
+        var operationsService = _autoMocker.CreateInstance<OperationsService>();
 
-        [Fact]
-        public async Task TestMoveByDictionary()
-        {
-            var fullPath = Path.Combine(DirectoryName, FileName);
-            var newFullPath = Path.Combine(NewDirectoryName, NewFileName);
-            var operationMock = new Mock<IOperation>();
-            operationMock
-                .Setup(m => m.RunAsync())
-                .Verifiable();
-            _autoMocker
-                .Setup<IOperationsFactory, IOperation>(m => m.CreateMoveOperation(It.Is<BinaryFileSystemOperationSettings>(s =>
-                    s.FilesDictionary.ContainsKey(fullPath) && s.FilesDictionary[fullPath] == newFullPath)))
-                .Returns(operationMock.Object);
+        await operationsService.MoveAsync(new Dictionary<string, string> {[fullPath] = newFullPath});
 
-            _autoMocker
-                .Setup<IDirectoryService, string>(m => m.SelectedDirectory)
-                .Returns(CurrentDirectory);
-            _autoMocker
-                .Setup<IFileService, bool>(m => m.CheckIfExists(fullPath))
-                .Returns(true);
-            _autoMocker
-                .Setup<IOperationsStateService>(m => m.AddOperation(operationMock.Object))
-                .Verifiable();
-            _autoMocker
-                .Setup<IPathService, string>(m => m.GetCommonRootDirectory(It.IsAny<IReadOnlyList<string>>()))
-                .Returns(string.Empty);
-            _autoMocker
-                .Setup<IPathService, string>(m => m.Combine(DirectoryName, FileName))
-                .Returns(fullPath);
-            _autoMocker
-                .Setup<IPathService, string>(m => m.GetRelativePath(string.Empty, FileName))
-                .Returns(FileName);
+        operationMock.Verify(m => m.RunAsync(), Times.Once);
+        _autoMocker
+            .Verify<IOperationsStateService>(m => m.AddOperation(operationMock.Object), Times.Once);
+    }
 
-            var operationsService = _autoMocker.CreateInstance<OperationsService>();
+    [Fact]
+    public async Task TestMoveEmptyDirectoryByDictionary()
+    {
+        var operationMock = new Mock<IOperation>();
+        operationMock
+            .Setup(m => m.RunAsync())
+            .Verifiable();
+        _autoMocker
+            .Setup<IOperationsFactory, IOperation>(m => m.CreateMoveOperation(It.Is<BinaryFileSystemOperationSettings>(s =>
+                s.EmptyDirectories.Single() == NewDirectoryName)))
+            .Returns(operationMock.Object);
 
-            await operationsService.MoveAsync(new Dictionary<string, string> {[fullPath] = newFullPath});
+        _autoMocker
+            .Setup<IDirectoryService, bool>(m => m.CheckIfExists(DirectoryName))
+            .Returns(true);
+        _autoMocker
+            .Setup<IDirectoryService, IReadOnlyList<string>>(m => m.GetEmptyDirectoriesRecursively(DirectoryName))
+            .Returns(new[] {DirectoryName});
+        _autoMocker
+            .Setup<IOperationsStateService>(m => m.AddOperation(operationMock.Object))
+            .Verifiable();
+        _autoMocker
+            .Setup<IPathService, string>(m => m.GetCommonRootDirectory(It.IsAny<IReadOnlyList<string>>()))
+            .Returns(string.Empty);
+        _autoMocker
+            .Setup<IPathService, string>(m => m.GetRelativePath(string.Empty, DirectoryName))
+            .Returns(DirectoryName);
+        _autoMocker
+            .Setup<IPathService, string>(m => m.GetRelativePath(DirectoryName, DirectoryName))
+            .Returns(string.Empty);
+        _autoMocker
+            .Setup<IPathService, string>(m => m.Combine(NewDirectoryName, string.Empty))
+            .Returns(NewDirectoryName);
+        _autoMocker
+            .Setup<IDirectoryService, IEnumerable<string>>(m => m.GetFilesRecursively(It.IsAny<string>()))
+            .Returns(new List<string>());
 
-            operationMock.Verify(m => m.RunAsync(), Times.Once);
-            _autoMocker
-                .Verify<IOperationsStateService>(m => m.AddOperation(operationMock.Object), Times.Once);
-        }
+        var operationsService = _autoMocker.CreateInstance<OperationsService>();
 
-        [Fact]
-        public async Task TestMoveEmptyDirectoryByDictionary()
-        {
-            var operationMock = new Mock<IOperation>();
-            operationMock
-                .Setup(m => m.RunAsync())
-                .Verifiable();
-            _autoMocker
-                .Setup<IOperationsFactory, IOperation>(m => m.CreateMoveOperation(It.Is<BinaryFileSystemOperationSettings>(s =>
-                    s.EmptyDirectories.Single() == NewDirectoryName)))
-                .Returns(operationMock.Object);
+        await operationsService.MoveAsync(new Dictionary<string, string> {[DirectoryName] = NewDirectoryName});
 
-            _autoMocker
-                .Setup<IDirectoryService, bool>(m => m.CheckIfExists(DirectoryName))
-                .Returns(true);
-            _autoMocker
-                .Setup<IDirectoryService, IReadOnlyList<string>>(m => m.GetEmptyDirectoriesRecursively(DirectoryName))
-                .Returns(new[] {DirectoryName});
-            _autoMocker
-                .Setup<IOperationsStateService>(m => m.AddOperation(operationMock.Object))
-                .Verifiable();
-            _autoMocker
-                .Setup<IPathService, string>(m => m.GetCommonRootDirectory(It.IsAny<IReadOnlyList<string>>()))
-                .Returns(string.Empty);
-            _autoMocker
-                .Setup<IPathService, string>(m => m.GetRelativePath(string.Empty, DirectoryName))
-                .Returns(DirectoryName);
-            _autoMocker
-                .Setup<IPathService, string>(m => m.GetRelativePath(DirectoryName, DirectoryName))
-                .Returns(string.Empty);
-            _autoMocker
-                .Setup<IPathService, string>(m => m.Combine(NewDirectoryName, string.Empty))
-                .Returns(NewDirectoryName);
-            _autoMocker
-                .Setup<IDirectoryService, IEnumerable<string>>(m => m.GetFilesRecursively(It.IsAny<string>()))
-                .Returns(new List<string>());
+        operationMock.Verify(m => m.RunAsync(), Times.Once);
+        _autoMocker
+            .Verify<IOperationsStateService>(m => m.AddOperation(operationMock.Object), Times.Once);
+    }
 
-            var operationsService = _autoMocker.CreateInstance<OperationsService>();
+    [Fact]
+    public void TestDirectoryCreation()
+    {
+        var fullDirectoryPath = Path.Combine(SelectedDirectoryName, DirectoryName);
+        _autoMocker
+            .Setup<IDirectoryService>(m => m.Create(fullDirectoryPath))
+            .Verifiable();
+        _autoMocker
+            .Setup<IPathService, string>(m => m.Combine(SelectedDirectoryName, DirectoryName))
+            .Returns(fullDirectoryPath);
 
-            await operationsService.MoveAsync(new Dictionary<string, string> {[DirectoryName] = NewDirectoryName});
+        var operationsService = _autoMocker.CreateInstance<OperationsService>();
 
-            operationMock.Verify(m => m.RunAsync(), Times.Once);
-            _autoMocker
-                .Verify<IOperationsStateService>(m => m.AddOperation(operationMock.Object), Times.Once);
-        }
+        operationsService.CreateDirectory(SelectedDirectoryName, DirectoryName);
 
-        [Fact]
-        public void TestDirectoryCreation()
-        {
-            var fullDirectoryPath = Path.Combine(SelectedDirectoryName, DirectoryName);
-            _autoMocker
-                .Setup<IDirectoryService>(m => m.Create(fullDirectoryPath))
-                .Verifiable();
-            _autoMocker
-                .Setup<IPathService, string>(m => m.Combine(SelectedDirectoryName, DirectoryName))
-                .Returns(fullDirectoryPath);
+        _autoMocker
+            .Verify<IDirectoryService, bool>(m => m.Create(fullDirectoryPath), Times.Once);
+    }
 
-            var operationsService = _autoMocker.CreateInstance<OperationsService>();
+    [Fact]
+    public void TestFileCreation()
+    {
+        var fullDirectoryPath = Path.Combine(SelectedDirectoryName, DirectoryName);
+        _autoMocker
+            .Setup<IFileService>(m => m.CreateFile(fullDirectoryPath))
+            .Verifiable();
+        _autoMocker
+            .Setup<IPathService, string>(m => m.Combine(SelectedDirectoryName, FileName))
+            .Returns(fullDirectoryPath);
 
-            operationsService.CreateDirectory(SelectedDirectoryName, DirectoryName);
+        var operationsService = _autoMocker.CreateInstance<OperationsService>();
 
-            _autoMocker
-                .Verify<IDirectoryService, bool>(m => m.Create(fullDirectoryPath), Times.Once);
-        }
+        operationsService.CreateFile(SelectedDirectoryName, FileName);
 
-        [Fact]
-        public void TestFileCreation()
-        {
-            var fullDirectoryPath = Path.Combine(SelectedDirectoryName, DirectoryName);
-            _autoMocker
-                .Setup<IFileService>(m => m.CreateFile(fullDirectoryPath))
-                .Verifiable();
-            _autoMocker
-                .Setup<IPathService, string>(m => m.Combine(SelectedDirectoryName, FileName))
-                .Returns(fullDirectoryPath);
+        _autoMocker
+            .Verify<IFileService>(m => m.CreateFile(fullDirectoryPath), Times.Once);
+    }
 
-            var operationsService = _autoMocker.CreateInstance<OperationsService>();
+    [Fact]
+    public void TestFileRenaming()
+    {
+        _autoMocker
+            .Setup<IFileService>(m => m.Rename(FileName, NewFileName))
+            .Verifiable();
+        _autoMocker
+            .Setup<IFileService, bool>(m => m.CheckIfExists(FileName))
+            .Returns(true);
 
-            operationsService.CreateFile(SelectedDirectoryName, FileName);
+        var operationsService = _autoMocker.CreateInstance<OperationsService>();
 
-            _autoMocker
-                .Verify<IFileService>(m => m.CreateFile(fullDirectoryPath), Times.Once);
-        }
+        operationsService.Rename(FileName, NewFileName);
 
-        [Fact]
-        public void TestFileRenaming()
-        {
-            _autoMocker
-                .Setup<IFileService>(m => m.Rename(FileName, NewFileName))
-                .Verifiable();
-            _autoMocker
-                .Setup<IFileService, bool>(m => m.CheckIfExists(FileName))
-                .Returns(true);
+        _autoMocker
+            .Verify<IFileService, bool>(m => m.Rename(FileName, NewFileName), Times.Once);
+    }
 
-            var operationsService = _autoMocker.CreateInstance<OperationsService>();
+    [Fact]
+    public void TestDirectoryRenaming()
+    {
+        _autoMocker
+            .Setup<IDirectoryService>(m => m.Rename(DirectoryName, NewDirectoryName))
+            .Verifiable();
+        _autoMocker
+            .Setup<IDirectoryService, bool>(m => m.CheckIfExists(DirectoryName))
+            .Returns(true);
 
-            operationsService.Rename(FileName, NewFileName);
+        var operationsService = _autoMocker.CreateInstance<OperationsService>();
 
-            _autoMocker
-                .Verify<IFileService, bool>(m => m.Rename(FileName, NewFileName), Times.Once);
-        }
+        operationsService.Rename(DirectoryName, NewDirectoryName);
 
-        [Fact]
-        public void TestDirectoryRenaming()
-        {
-            _autoMocker
-                .Setup<IDirectoryService>(m => m.Rename(DirectoryName, NewDirectoryName))
-                .Verifiable();
-            _autoMocker
-                .Setup<IDirectoryService, bool>(m => m.CheckIfExists(DirectoryName))
-                .Returns(true);
-
-            var operationsService = _autoMocker.CreateInstance<OperationsService>();
-
-            operationsService.Rename(DirectoryName, NewDirectoryName);
-
-            _autoMocker
-                .Verify<IDirectoryService, bool>(m => m.Rename(DirectoryName, NewDirectoryName), Times.Once);
-        }
+        _autoMocker
+            .Verify<IDirectoryService, bool>(m => m.Rename(DirectoryName, NewDirectoryName), Times.Once);
     }
 }

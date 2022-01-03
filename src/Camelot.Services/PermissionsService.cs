@@ -2,30 +2,29 @@ using System;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Environment.Interfaces;
 
-namespace Camelot.Services
+namespace Camelot.Services;
+
+public class PermissionsService : IPermissionsService
 {
-    public class PermissionsService : IPermissionsService
+    private readonly IEnvironmentDirectoryService _environmentDirectoryService;
+
+    public PermissionsService(
+        IEnvironmentDirectoryService environmentDirectoryService)
     {
-        private readonly IEnvironmentDirectoryService _environmentDirectoryService;
+        _environmentDirectoryService = environmentDirectoryService;
+    }
 
-        public PermissionsService(
-            IEnvironmentDirectoryService environmentDirectoryService)
+    public bool CheckIfHasAccess(string directory)
+    {
+        try
         {
-            _environmentDirectoryService = environmentDirectoryService;
+            _environmentDirectoryService.GetDirectories(directory);
+
+            return true;
         }
-
-        public bool CheckIfHasAccess(string directory)
+        catch (UnauthorizedAccessException)
         {
-            try
-            {
-                _environmentDirectoryService.GetDirectories(directory);
-
-                return true;
-            }
-            catch (UnauthorizedAccessException)
-            {
-                return false;
-            }
+            return false;
         }
     }
 }

@@ -3,33 +3,32 @@ using Camelot.Services.Linux.Specifications;
 using Moq.AutoMock;
 using Xunit;
 
-namespace Camelot.Services.Linux.Tests
+namespace Camelot.Services.Linux.Tests;
+
+public class DesktopFileSpecificationTests
 {
-    public class DesktopFileSpecificationTests
+    private readonly AutoMocker _autoMocker;
+
+    public DesktopFileSpecificationTests()
     {
-        private readonly AutoMocker _autoMocker;
+        _autoMocker = new AutoMocker();
+    }
 
-        public DesktopFileSpecificationTests()
+    [Theory]
+    [InlineData("desktop", true)]
+    [InlineData("desktop ", false)]
+    [InlineData("Desktop", false)]
+    [InlineData("DesKtop", false)]
+    [InlineData("pdf", false)]
+    public void Test(string extension, bool expected)
+    {
+        var fileModel = new FileModel
         {
-            _autoMocker = new AutoMocker();
-        }
+            Extension = extension
+        };
+        var specification = _autoMocker.CreateInstance<DesktopFileSpecification>();
+        var actual = specification.IsSatisfiedBy(fileModel);
 
-        [Theory]
-        [InlineData("desktop", true)]
-        [InlineData("desktop ", false)]
-        [InlineData("Desktop", false)]
-        [InlineData("DesKtop", false)]
-        [InlineData("pdf", false)]
-        public void Test(string extension, bool expected)
-        {
-            var fileModel = new FileModel
-            {
-                Extension = extension
-            };
-            var specification = _autoMocker.CreateInstance<DesktopFileSpecification>();
-            var actual = specification.IsSatisfiedBy(fileModel);
-
-            Assert.Equal(expected, actual);
-        }
+        Assert.Equal(expected, actual);
     }
 }

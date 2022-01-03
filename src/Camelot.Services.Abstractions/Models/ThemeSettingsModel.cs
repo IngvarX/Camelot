@@ -1,14 +1,13 @@
 using Camelot.Services.Abstractions.Models.Enums;
 
-namespace Camelot.Services.Abstractions.Models
-{
-    public class ThemeSettingsModel
-    {
-        public Theme SelectedTheme { get; }
+namespace Camelot.Services.Abstractions.Models;
 
-        public ThemeSettingsModel(Theme selectedTheme)
-        {
-            SelectedTheme = selectedTheme;
-        }
+public class ThemeSettingsModel
+{
+    public Theme SelectedTheme { get; }
+
+    public ThemeSettingsModel(Theme selectedTheme)
+    {
+        SelectedTheme = selectedTheme;
     }
 }

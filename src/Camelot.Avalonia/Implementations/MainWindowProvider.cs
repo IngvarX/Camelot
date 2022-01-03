@@ -3,15 +3,14 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Camelot.Avalonia.Interfaces;
 
-namespace Camelot.Avalonia.Implementations
-{
-    public class MainWindowProvider : IMainWindowProvider
-    {
-        public Window GetMainWindow()
-        {
-            var lifetime = (IClassicDesktopStyleApplicationLifetime) Application.Current.ApplicationLifetime;
+namespace Camelot.Avalonia.Implementations;
 
-            return lifetime.MainWindow;
-        }
+public class MainWindowProvider : IMainWindowProvider
+{
+    public Window GetMainWindow()
+    {
+        var lifetime = (IClassicDesktopStyleApplicationLifetime) Application.Current.ApplicationLifetime;
+
+        return lifetime.MainWindow;
     }
 }

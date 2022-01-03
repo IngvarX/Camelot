@@ -1,13 +1,12 @@
 using System;
 
-namespace Camelot.Services.Linux.Interfaces.Builders
+namespace Camelot.Services.Linux.Interfaces.Builders;
+
+public interface ILinuxRemovedFileMetadataBuilder
 {
-    public interface ILinuxRemovedFileMetadataBuilder
-    {
-        ILinuxRemovedFileMetadataBuilder WithFilePath(string filePath);
+    ILinuxRemovedFileMetadataBuilder WithFilePath(string filePath);
 
-        ILinuxRemovedFileMetadataBuilder WithRemovingDateTime(DateTime removingDateTime);
+    ILinuxRemovedFileMetadataBuilder WithRemovingDateTime(DateTime removingDateTime);
 
-        string Build();
-    }
+    string Build();
 }

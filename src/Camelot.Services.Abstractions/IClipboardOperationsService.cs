@@ -1,14 +1,13 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Camelot.Services.Abstractions
+namespace Camelot.Services.Abstractions;
+
+public interface IClipboardOperationsService
 {
-    public interface IClipboardOperationsService
-    {
-        Task CopyFilesAsync(IReadOnlyList<string> files);
+    Task CopyFilesAsync(IReadOnlyList<string> files);
 
-        Task PasteFilesAsync(string destinationDirectory);
+    Task PasteFilesAsync(string destinationDirectory);
 
-        Task<bool> CanPasteAsync();
-    }
+    Task<bool> CanPasteAsync();
 }

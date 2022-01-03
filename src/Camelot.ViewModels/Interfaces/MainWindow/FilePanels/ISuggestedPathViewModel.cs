@@ -1,7 +1,6 @@
-namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels
+namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
+
+public interface ISuggestedPathViewModel
 {
-    public interface ISuggestedPathViewModel
-    {
-        string FullPath { get; }
-    }
+    string FullPath { get; }
 }

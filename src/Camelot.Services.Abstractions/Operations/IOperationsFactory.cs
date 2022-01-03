@@ -1,17 +1,16 @@
 using Camelot.Services.Abstractions.Models.Operations;
 
-namespace Camelot.Services.Abstractions.Operations
+namespace Camelot.Services.Abstractions.Operations;
+
+public interface IOperationsFactory
 {
-    public interface IOperationsFactory
-    {
-        IOperation CreateCopyOperation(BinaryFileSystemOperationSettings settings);
+    IOperation CreateCopyOperation(BinaryFileSystemOperationSettings settings);
 
-        IOperation CreateMoveOperation(BinaryFileSystemOperationSettings settings);
+    IOperation CreateMoveOperation(BinaryFileSystemOperationSettings settings);
 
-        IOperation CreateDeleteOperation(UnaryFileSystemOperationSettings settings);
+    IOperation CreateDeleteOperation(UnaryFileSystemOperationSettings settings);
 
-        IOperation CreatePackOperation(PackOperationSettings settings);
+    IOperation CreatePackOperation(PackOperationSettings settings);
 
-        IOperation CreateExtractOperation(ExtractArchiveOperationSettings settings);
-    }
+    IOperation CreateExtractOperation(ExtractArchiveOperationSettings settings);
 }

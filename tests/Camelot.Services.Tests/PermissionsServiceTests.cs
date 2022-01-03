@@ -4,43 +4,42 @@ using Moq;
 using Moq.AutoMock;
 using Xunit;
 
-namespace Camelot.Services.Tests
+namespace Camelot.Services.Tests;
+
+public class PermissionsServiceTests
 {
-    public class PermissionsServiceTests
+    private const string Directory = "Dir";
+        
+    private readonly AutoMocker _autoMocker;
+
+    public PermissionsServiceTests()
     {
-        private const string Directory = "Dir";
-        
-        private readonly AutoMocker _autoMocker;
+        _autoMocker = new AutoMocker();
+    }
 
-        public PermissionsServiceTests()
-        {
-            _autoMocker = new AutoMocker();
-        }
-
-        [Fact]
-        public void TestCheckIfHasAccessSuccess()
-        {
-            var service = _autoMocker.CreateInstance<PermissionsService>();
-            var result = service.CheckIfHasAccess(Directory);
+    [Fact]
+    public void TestCheckIfHasAccessSuccess()
+    {
+        var service = _autoMocker.CreateInstance<PermissionsService>();
+        var result = service.CheckIfHasAccess(Directory);
             
-            Assert.True(result);
+        Assert.True(result);
             
-            _autoMocker
-                .Verify<IEnvironmentDirectoryService, string[]>(m => m.GetDirectories(Directory),
-                    Times.Once);
-        }
+        _autoMocker
+            .Verify<IEnvironmentDirectoryService, string[]>(m => m.GetDirectories(Directory),
+                Times.Once);
+    }
         
-        [Fact]
-        public void TestCheckIfHasAccessFail()
-        {
-            _autoMocker
-                .Setup<IEnvironmentDirectoryService, string[]>(m => m.GetDirectories(Directory))
-                .Throws<UnauthorizedAccessException>();
+    [Fact]
+    public void TestCheckIfHasAccessFail()
+    {
+        _autoMocker
+            .Setup<IEnvironmentDirectoryService, string[]>(m => m.GetDirectories(Directory))
+            .Throws<UnauthorizedAccessException>();
             
-            var service = _autoMocker.CreateInstance<PermissionsService>();
-            var result = service.CheckIfHasAccess(Directory);
+        var service = _autoMocker.CreateInstance<PermissionsService>();
+        var result = service.CheckIfHasAccess(Directory);
             
-            Assert.False(result);
-        }
+        Assert.False(result);
     }
 }

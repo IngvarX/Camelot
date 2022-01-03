@@ -12,267 +12,266 @@ using Moq;
 using Moq.AutoMock;
 using Xunit;
 
-namespace Camelot.ViewModels.Tests.Operations
+namespace Camelot.ViewModels.Tests.Operations;
+
+public class OperationsViewModelTests
 {
-    public class OperationsViewModelTests
+    private const string Directory = "Directory";
+    private const int DelayMs = 1000;
+
+    private readonly AutoMocker _autoMocker;
+    private readonly string[] _files;
+
+    public OperationsViewModelTests()
     {
-        private const string Directory = "Directory";
-        private const int DelayMs = 1000;
+        _autoMocker = new AutoMocker();
+        _files = new[] {"File1", "File2"};
+    }
 
-        private readonly AutoMocker _autoMocker;
-        private readonly string[] _files;
+    [Fact]
+    public void TestOpenInDefaultEditor()
+    {
+        _autoMocker
+            .Setup<IOperationsService>(m => m.OpenFiles(_files))
+            .Verifiable();
+        _autoMocker
+            .Setup<INodesSelectionService, IReadOnlyList<string>>(m => m.SelectedNodes)
+            .Returns(_files);
 
-        public OperationsViewModelTests()
-        {
-            _autoMocker = new AutoMocker();
-            _files = new[] {"File1", "File2"};
-        }
+        var viewModel = _autoMocker.CreateInstance<OperationsViewModel>();
 
-        [Fact]
-        public void TestOpenInDefaultEditor()
-        {
-            _autoMocker
-                .Setup<IOperationsService>(m => m.OpenFiles(_files))
-                .Verifiable();
-            _autoMocker
-                .Setup<INodesSelectionService, IReadOnlyList<string>>(m => m.SelectedNodes)
-                .Returns(_files);
+        Assert.True(viewModel.OpenInDefaultEditorCommand.CanExecute(null));
+        viewModel.OpenInDefaultEditorCommand.Execute(null);
 
-            var viewModel = _autoMocker.CreateInstance<OperationsViewModel>();
+        _autoMocker
+            .Verify<IOperationsService>(m => m.OpenFiles(_files), Times.Once);
+    }
 
-            Assert.True(viewModel.OpenInDefaultEditorCommand.CanExecute(null));
-            viewModel.OpenInDefaultEditorCommand.Execute(null);
+    [Fact]
+    public async Task TestCopy()
+    {
+        var taskCompletionSource = new TaskCompletionSource<bool>();
+        _autoMocker
+            .Setup<IOperationsService>(m => m.CopyAsync(_files, Directory))
+            .Callback(() => taskCompletionSource.SetResult(true))
+            .Verifiable();
+        _autoMocker
+            .Setup<INodesSelectionService, IReadOnlyList<string>>(m => m.SelectedNodes)
+            .Returns(_files);
+        _autoMocker
+            .Setup<IFilesOperationsMediator, string>(m => m.OutputDirectory)
+            .Returns(Directory);
 
-            _autoMocker
-                .Verify<IOperationsService>(m => m.OpenFiles(_files), Times.Once);
-        }
+        var viewModel = _autoMocker.CreateInstance<OperationsViewModel>();
 
-        [Fact]
-        public async Task TestCopy()
-        {
-            var taskCompletionSource = new TaskCompletionSource<bool>();
-            _autoMocker
-                .Setup<IOperationsService>(m => m.CopyAsync(_files, Directory))
-                .Callback(() => taskCompletionSource.SetResult(true))
-                .Verifiable();
-            _autoMocker
-                .Setup<INodesSelectionService, IReadOnlyList<string>>(m => m.SelectedNodes)
-                .Returns(_files);
-            _autoMocker
-                .Setup<IFilesOperationsMediator, string>(m => m.OutputDirectory)
-                .Returns(Directory);
+        Assert.True(viewModel.CopyCommand.CanExecute(null));
+        viewModel.CopyCommand.Execute(null);
 
-            var viewModel = _autoMocker.CreateInstance<OperationsViewModel>();
+        await Task.WhenAny(Task.Delay(DelayMs), taskCompletionSource.Task);
 
-            Assert.True(viewModel.CopyCommand.CanExecute(null));
-            viewModel.CopyCommand.Execute(null);
+        _autoMocker
+            .Verify<IOperationsService>(m => m.CopyAsync(_files, Directory), Times.Once);
+    }
 
-            await Task.WhenAny(Task.Delay(DelayMs), taskCompletionSource.Task);
+    [Fact]
+    public async Task TestMove()
+    {
+        var taskCompletionSource = new TaskCompletionSource<bool>();
+        _autoMocker
+            .Setup<IOperationsService>(m => m.MoveAsync(_files, Directory))
+            .Callback(() => taskCompletionSource.SetResult(true))
+            .Verifiable();
+        _autoMocker
+            .Setup<INodesSelectionService, IReadOnlyList<string>>(m => m.SelectedNodes)
+            .Returns(_files);
+        _autoMocker
+            .Setup<IFilesOperationsMediator, string>(m => m.OutputDirectory)
+            .Returns(Directory);
 
-            _autoMocker
-                .Verify<IOperationsService>(m => m.CopyAsync(_files, Directory), Times.Once);
-        }
+        var viewModel = _autoMocker.CreateInstance<OperationsViewModel>();
 
-        [Fact]
-        public async Task TestMove()
-        {
-            var taskCompletionSource = new TaskCompletionSource<bool>();
-            _autoMocker
-                .Setup<IOperationsService>(m => m.MoveAsync(_files, Directory))
-                .Callback(() => taskCompletionSource.SetResult(true))
-                .Verifiable();
-            _autoMocker
-                .Setup<INodesSelectionService, IReadOnlyList<string>>(m => m.SelectedNodes)
-                .Returns(_files);
-            _autoMocker
-                .Setup<IFilesOperationsMediator, string>(m => m.OutputDirectory)
-                .Returns(Directory);
+        Assert.True(viewModel.MoveCommand.CanExecute(null));
+        viewModel.MoveCommand.Execute(null);
 
-            var viewModel = _autoMocker.CreateInstance<OperationsViewModel>();
+        await Task.WhenAny(Task.Delay(DelayMs), taskCompletionSource.Task);
 
-            Assert.True(viewModel.MoveCommand.CanExecute(null));
-            viewModel.MoveCommand.Execute(null);
+        _autoMocker
+            .Verify<IOperationsService>(m => m.MoveAsync(_files, Directory), Times.Once);
+    }
 
-            await Task.WhenAny(Task.Delay(DelayMs), taskCompletionSource.Task);
+    [Theory]
+    [InlineData(null, false)]
+    [InlineData("", false)]
+    [InlineData("Test", true)]
+    public async Task TestCreateNewDirectory(string directoryName, bool isCalled)
+    {
+        var taskCompletionSource = new TaskCompletionSource<bool>();
+        _autoMocker
+            .Setup<IOperationsService>(m => m.CreateDirectory(Directory, directoryName))
+            .Callback(() => taskCompletionSource.SetResult(true))
+            .Verifiable();
+        _autoMocker
+            .Setup<IDirectoryService, string>(m => m.SelectedDirectory)
+            .Returns(Directory);
+        _autoMocker
+            .Setup<IDialogService, Task<CreateDirectoryDialogResult>>(m =>
+                m.ShowDialogAsync<CreateDirectoryDialogResult, CreateNodeNavigationParameter>(
+                    nameof(CreateDirectoryDialogViewModel), It.Is<CreateNodeNavigationParameter>(p =>
+                        p.DirectoryPath == Directory)))
+            .Returns(Task.FromResult(new CreateDirectoryDialogResult(directoryName)));
 
-            _autoMocker
-                .Verify<IOperationsService>(m => m.MoveAsync(_files, Directory), Times.Once);
-        }
+        var viewModel = _autoMocker.CreateInstance<OperationsViewModel>();
 
-        [Theory]
-        [InlineData(null, false)]
-        [InlineData("", false)]
-        [InlineData("Test", true)]
-        public async Task TestCreateNewDirectory(string directoryName, bool isCalled)
-        {
-            var taskCompletionSource = new TaskCompletionSource<bool>();
-            _autoMocker
-                .Setup<IOperationsService>(m => m.CreateDirectory(Directory, directoryName))
-                .Callback(() => taskCompletionSource.SetResult(true))
-                .Verifiable();
-            _autoMocker
-                .Setup<IDirectoryService, string>(m => m.SelectedDirectory)
-                .Returns(Directory);
-            _autoMocker
-                .Setup<IDialogService, Task<CreateDirectoryDialogResult>>(m =>
-                    m.ShowDialogAsync<CreateDirectoryDialogResult, CreateNodeNavigationParameter>(
-                        nameof(CreateDirectoryDialogViewModel), It.Is<CreateNodeNavigationParameter>(p =>
-                            p.DirectoryPath == Directory)))
-                .Returns(Task.FromResult(new CreateDirectoryDialogResult(directoryName)));
+        Assert.True(viewModel.CreateNewDirectoryCommand.CanExecute(null));
+        viewModel.CreateNewDirectoryCommand.Execute(null);
 
-            var viewModel = _autoMocker.CreateInstance<OperationsViewModel>();
+        await Task.WhenAny(Task.Delay(DelayMs), taskCompletionSource.Task);
 
-            Assert.True(viewModel.CreateNewDirectoryCommand.CanExecute(null));
-            viewModel.CreateNewDirectoryCommand.Execute(null);
+        _autoMocker
+            .Verify<IOperationsService>(m => m.CreateDirectory(Directory, directoryName),
+                isCalled ? Times.Once() : Times.Never());
+    }
 
-            await Task.WhenAny(Task.Delay(DelayMs), taskCompletionSource.Task);
+    [Theory]
+    [InlineData(null, false)]
+    [InlineData("", false)]
+    [InlineData("Test", true)]
+    public async Task TestCreateNewFile(string fileName, bool isCalled)
+    {
+        var taskCompletionSource = new TaskCompletionSource<bool>();
+        _autoMocker
+            .Setup<IOperationsService>(m => m.CreateFile(Directory, fileName))
+            .Callback(() => taskCompletionSource.SetResult(true))
+            .Verifiable();
+        _autoMocker
+            .Setup<IDirectoryService, string>(m => m.SelectedDirectory)
+            .Returns(Directory);
+        _autoMocker
+            .Setup<IDialogService, Task<CreateFileDialogResult>>(m =>
+                m.ShowDialogAsync<CreateFileDialogResult, CreateNodeNavigationParameter>(
+                    nameof(CreateFileDialogViewModel), It.Is<CreateNodeNavigationParameter>(p =>
+                        p.DirectoryPath == Directory)))
+            .Returns(Task.FromResult(new CreateFileDialogResult(fileName)));
 
-            _autoMocker
-                .Verify<IOperationsService>(m => m.CreateDirectory(Directory, directoryName),
-                    isCalled ? Times.Once() : Times.Never());
-        }
+        var viewModel = _autoMocker.CreateInstance<OperationsViewModel>();
 
-        [Theory]
-        [InlineData(null, false)]
-        [InlineData("", false)]
-        [InlineData("Test", true)]
-        public async Task TestCreateNewFile(string fileName, bool isCalled)
-        {
-            var taskCompletionSource = new TaskCompletionSource<bool>();
-            _autoMocker
-                .Setup<IOperationsService>(m => m.CreateFile(Directory, fileName))
-                .Callback(() => taskCompletionSource.SetResult(true))
-                .Verifiable();
-            _autoMocker
-                .Setup<IDirectoryService, string>(m => m.SelectedDirectory)
-                .Returns(Directory);
-            _autoMocker
-                .Setup<IDialogService, Task<CreateFileDialogResult>>(m =>
-                    m.ShowDialogAsync<CreateFileDialogResult, CreateNodeNavigationParameter>(
-                        nameof(CreateFileDialogViewModel), It.Is<CreateNodeNavigationParameter>(p =>
-                            p.DirectoryPath == Directory)))
-                .Returns(Task.FromResult(new CreateFileDialogResult(fileName)));
+        Assert.True(viewModel.CreateNewFileCommand.CanExecute(null));
+        viewModel.CreateNewFileCommand.Execute(null);
 
-            var viewModel = _autoMocker.CreateInstance<OperationsViewModel>();
+        await Task.WhenAny(Task.Delay(DelayMs), taskCompletionSource.Task);
 
-            Assert.True(viewModel.CreateNewFileCommand.CanExecute(null));
-            viewModel.CreateNewFileCommand.Execute(null);
+        _autoMocker
+            .Verify<IOperationsService>(m => m.CreateFile(Directory, fileName),
+                isCalled ? Times.Once() : Times.Never());
+    }
 
-            await Task.WhenAny(Task.Delay(DelayMs), taskCompletionSource.Task);
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task TestRemove(bool isConfirmed)
+    {
+        var taskCompletionSource = new TaskCompletionSource<bool>();
+        _autoMocker
+            .Setup<IOperationsService>(m => m.RemoveAsync(_files))
+            .Callback(() => taskCompletionSource.SetResult(true))
+            .Verifiable();
+        _autoMocker
+            .Setup<INodesSelectionService, IReadOnlyList<string>>(m => m.SelectedNodes)
+            .Returns(_files);
+        _autoMocker
+            .Setup<IDialogService, Task<RemoveNodesConfirmationDialogResult>>(m =>
+                m.ShowDialogAsync<RemoveNodesConfirmationDialogResult, NodesRemovingNavigationParameter>(
+                    nameof(RemoveNodesConfirmationDialogViewModel), It.Is<NodesRemovingNavigationParameter>(p =>
+                        !p.IsRemovingToTrash && p.Files.Count == _files.Length && p.Files[0] == _files[0] && p.Files[1] == _files[1])))
+            .Returns(Task.FromResult(new RemoveNodesConfirmationDialogResult(isConfirmed)));
 
-            _autoMocker
-                .Verify<IOperationsService>(m => m.CreateFile(Directory, fileName),
-                    isCalled ? Times.Once() : Times.Never());
-        }
+        var viewModel = _autoMocker.CreateInstance<OperationsViewModel>();
 
-        [Theory]
-        [InlineData(false)]
-        [InlineData(true)]
-        public async Task TestRemove(bool isConfirmed)
-        {
-            var taskCompletionSource = new TaskCompletionSource<bool>();
-            _autoMocker
-                .Setup<IOperationsService>(m => m.RemoveAsync(_files))
-                .Callback(() => taskCompletionSource.SetResult(true))
-                .Verifiable();
-            _autoMocker
-                .Setup<INodesSelectionService, IReadOnlyList<string>>(m => m.SelectedNodes)
-                .Returns(_files);
-            _autoMocker
-                .Setup<IDialogService, Task<RemoveNodesConfirmationDialogResult>>(m =>
-                    m.ShowDialogAsync<RemoveNodesConfirmationDialogResult, NodesRemovingNavigationParameter>(
-                        nameof(RemoveNodesConfirmationDialogViewModel), It.Is<NodesRemovingNavigationParameter>(p =>
-                            !p.IsRemovingToTrash && p.Files.Count == _files.Length && p.Files[0] == _files[0] && p.Files[1] == _files[1])))
-                .Returns(Task.FromResult(new RemoveNodesConfirmationDialogResult(isConfirmed)));
+        Assert.True(viewModel.RemoveCommand.CanExecute(null));
+        viewModel.RemoveCommand.Execute(null);
 
-            var viewModel = _autoMocker.CreateInstance<OperationsViewModel>();
+        await Task.WhenAny(Task.Delay(DelayMs), taskCompletionSource.Task);
 
-            Assert.True(viewModel.RemoveCommand.CanExecute(null));
-            viewModel.RemoveCommand.Execute(null);
+        _autoMocker
+            .Verify<IOperationsService>(m => m.RemoveAsync(_files),
+                isConfirmed ? Times.Once() : Times.Never());
+    }
 
-            await Task.WhenAny(Task.Delay(DelayMs), taskCompletionSource.Task);
+    [Fact]
+    public void TestRemoveNoFiles()
+    {
+        _autoMocker
+            .Setup<INodesSelectionService, IReadOnlyList<string>>(m => m.SelectedNodes)
+            .Returns(new string[0]);
+        _autoMocker
+            .Setup<IDialogService, Task<RemoveNodesConfirmationDialogResult>>(m =>
+                m.ShowDialogAsync<RemoveNodesConfirmationDialogResult, NodesRemovingNavigationParameter>(
+                    It.IsAny<string>(), It.IsAny<NodesRemovingNavigationParameter>()))
+            .Verifiable();
 
-            _autoMocker
-                .Verify<IOperationsService>(m => m.RemoveAsync(_files),
-                    isConfirmed ? Times.Once() : Times.Never());
-        }
+        var viewModel = _autoMocker.CreateInstance<OperationsViewModel>();
 
-        [Fact]
-        public void TestRemoveNoFiles()
-        {
-            _autoMocker
-                .Setup<INodesSelectionService, IReadOnlyList<string>>(m => m.SelectedNodes)
-                .Returns(new string[0]);
-            _autoMocker
-                .Setup<IDialogService, Task<RemoveNodesConfirmationDialogResult>>(m =>
-                    m.ShowDialogAsync<RemoveNodesConfirmationDialogResult, NodesRemovingNavigationParameter>(
-                        It.IsAny<string>(), It.IsAny<NodesRemovingNavigationParameter>()))
-                .Verifiable();
+        Assert.True(viewModel.RemoveCommand.CanExecute(null));
+        viewModel.RemoveCommand.Execute(null);
 
-            var viewModel = _autoMocker.CreateInstance<OperationsViewModel>();
+        _autoMocker
+            .Verify<IDialogService, Task<RemoveNodesConfirmationDialogResult>>(m =>
+                m.ShowDialogAsync<RemoveNodesConfirmationDialogResult, NodesRemovingNavigationParameter>(
+                    It.IsAny<string>(), It.IsAny<NodesRemovingNavigationParameter>()), Times.Never);
+    }
 
-            Assert.True(viewModel.RemoveCommand.CanExecute(null));
-            viewModel.RemoveCommand.Execute(null);
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task TestMoveToTrash(bool isConfirmed)
+    {
+        var taskCompletionSource = new TaskCompletionSource<bool>();
+        _autoMocker
+            .Setup<ITrashCanService>(m => m.MoveToTrashAsync(_files, It.IsAny<CancellationToken>()))
+            .Callback(() => taskCompletionSource.SetResult(true))
+            .Verifiable();
+        _autoMocker
+            .Setup<INodesSelectionService, IReadOnlyList<string>>(m => m.SelectedNodes)
+            .Returns(_files);
+        _autoMocker
+            .Setup<IDialogService, Task<RemoveNodesConfirmationDialogResult>>(m =>
+                m.ShowDialogAsync<RemoveNodesConfirmationDialogResult, NodesRemovingNavigationParameter>(
+                    nameof(RemoveNodesConfirmationDialogViewModel), It.Is<NodesRemovingNavigationParameter>(p =>
+                        p.IsRemovingToTrash && p.Files.Count == _files.Length && p.Files[0] == _files[0] && p.Files[1] == _files[1])))
+            .Returns(Task.FromResult(new RemoveNodesConfirmationDialogResult(isConfirmed)));
 
-            _autoMocker
-                .Verify<IDialogService, Task<RemoveNodesConfirmationDialogResult>>(m =>
-                    m.ShowDialogAsync<RemoveNodesConfirmationDialogResult, NodesRemovingNavigationParameter>(
-                        It.IsAny<string>(), It.IsAny<NodesRemovingNavigationParameter>()), Times.Never);
-        }
+        var viewModel = _autoMocker.CreateInstance<OperationsViewModel>();
 
-        [Theory]
-        [InlineData(false)]
-        [InlineData(true)]
-        public async Task TestMoveToTrash(bool isConfirmed)
-        {
-            var taskCompletionSource = new TaskCompletionSource<bool>();
-            _autoMocker
-                .Setup<ITrashCanService>(m => m.MoveToTrashAsync(_files, It.IsAny<CancellationToken>()))
-                .Callback(() => taskCompletionSource.SetResult(true))
-                .Verifiable();
-            _autoMocker
-                .Setup<INodesSelectionService, IReadOnlyList<string>>(m => m.SelectedNodes)
-                .Returns(_files);
-            _autoMocker
-                .Setup<IDialogService, Task<RemoveNodesConfirmationDialogResult>>(m =>
-                    m.ShowDialogAsync<RemoveNodesConfirmationDialogResult, NodesRemovingNavigationParameter>(
-                        nameof(RemoveNodesConfirmationDialogViewModel), It.Is<NodesRemovingNavigationParameter>(p =>
-                            p.IsRemovingToTrash && p.Files.Count == _files.Length && p.Files[0] == _files[0] && p.Files[1] == _files[1])))
-                .Returns(Task.FromResult(new RemoveNodesConfirmationDialogResult(isConfirmed)));
+        Assert.True(viewModel.MoveToTrashCommand.CanExecute(null));
+        viewModel.MoveToTrashCommand.Execute(null);
 
-            var viewModel = _autoMocker.CreateInstance<OperationsViewModel>();
+        await Task.WhenAny(Task.Delay(DelayMs), taskCompletionSource.Task);
 
-            Assert.True(viewModel.MoveToTrashCommand.CanExecute(null));
-            viewModel.MoveToTrashCommand.Execute(null);
+        _autoMocker
+            .Verify<ITrashCanService>(m => m.MoveToTrashAsync(_files, It.IsAny<CancellationToken>()),
+                isConfirmed ? Times.Once() : Times.Never());
+    }
 
-            await Task.WhenAny(Task.Delay(DelayMs), taskCompletionSource.Task);
+    [Fact]
+    public void TestMoveToTrashNoFiles()
+    {
+        _autoMocker
+            .Setup<INodesSelectionService, IReadOnlyList<string>>(m => m.SelectedNodes)
+            .Returns(new string[0]);
+        _autoMocker
+            .Setup<IDialogService, Task<RemoveNodesConfirmationDialogResult>>(m =>
+                m.ShowDialogAsync<RemoveNodesConfirmationDialogResult, NodesRemovingNavigationParameter>(
+                    It.IsAny<string>(), It.IsAny<NodesRemovingNavigationParameter>()))
+            .Verifiable();
 
-            _autoMocker
-                .Verify<ITrashCanService>(m => m.MoveToTrashAsync(_files, It.IsAny<CancellationToken>()),
-                    isConfirmed ? Times.Once() : Times.Never());
-        }
+        var viewModel = _autoMocker.CreateInstance<OperationsViewModel>();
 
-        [Fact]
-        public void TestMoveToTrashNoFiles()
-        {
-            _autoMocker
-                .Setup<INodesSelectionService, IReadOnlyList<string>>(m => m.SelectedNodes)
-                .Returns(new string[0]);
-            _autoMocker
-                .Setup<IDialogService, Task<RemoveNodesConfirmationDialogResult>>(m =>
-                    m.ShowDialogAsync<RemoveNodesConfirmationDialogResult, NodesRemovingNavigationParameter>(
-                        It.IsAny<string>(), It.IsAny<NodesRemovingNavigationParameter>()))
-                .Verifiable();
+        Assert.True(viewModel.MoveToTrashCommand.CanExecute(null));
+        viewModel.MoveToTrashCommand.Execute(null);
 
-            var viewModel = _autoMocker.CreateInstance<OperationsViewModel>();
-
-            Assert.True(viewModel.MoveToTrashCommand.CanExecute(null));
-            viewModel.MoveToTrashCommand.Execute(null);
-
-            _autoMocker
-                .Verify<IDialogService, Task<RemoveNodesConfirmationDialogResult>>(m =>
-                    m.ShowDialogAsync<RemoveNodesConfirmationDialogResult, NodesRemovingNavigationParameter>(
-                        It.IsAny<string>(), It.IsAny<NodesRemovingNavigationParameter>()), Times.Never);
-        }
+        _autoMocker
+            .Verify<IDialogService, Task<RemoveNodesConfirmationDialogResult>>(m =>
+                m.ShowDialogAsync<RemoveNodesConfirmationDialogResult, NodesRemovingNavigationParameter>(
+                    It.IsAny<string>(), It.IsAny<NodesRemovingNavigationParameter>()), Times.Never);
     }
 }

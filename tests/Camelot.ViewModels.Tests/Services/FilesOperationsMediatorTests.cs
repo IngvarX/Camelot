@@ -6,149 +6,148 @@ using Camelot.ViewModels.Services.Implementations;
 using Moq;
 using Xunit;
 
-namespace Camelot.ViewModels.Tests.Services
+namespace Camelot.ViewModels.Tests.Services;
+
+public class FilesOperationsMediatorTests
 {
-    public class FilesOperationsMediatorTests
+    private const string Directory = "Dir";
+    private const string NewDirectory = "NewDir";
+
+    [Fact]
+    public void TestRegister()
     {
-        private const string Directory = "Dir";
-        private const string NewDirectory = "NewDir";
+        var activeFilesPanelViewModelMock = new Mock<IFilesPanelViewModel>();
+        activeFilesPanelViewModelMock
+            .SetupGet(m => m.CurrentDirectory)
+            .Returns(Directory);
+        var inactiveFilesPanelViewModelMock = new Mock<IFilesPanelViewModel>();
+        inactiveFilesPanelViewModelMock
+            .SetupGet(m => m.CurrentDirectory)
+            .Returns(NewDirectory);
+        var directoryServiceMock = new Mock<IDirectoryService>();
+        directoryServiceMock
+            .SetupSet(m => m.SelectedDirectory = Directory)
+            .Verifiable();
+        var mediator = new FilesOperationsMediator(directoryServiceMock.Object);
+        var isCallbackCalled = false;
+        mediator.ActiveFilesPanelChanged += (sender, args) => isCallbackCalled = true;
+        mediator.Register(activeFilesPanelViewModelMock.Object, inactiveFilesPanelViewModelMock.Object);
 
-        [Fact]
-        public void TestRegister()
-        {
-            var activeFilesPanelViewModelMock = new Mock<IFilesPanelViewModel>();
-            activeFilesPanelViewModelMock
-                .SetupGet(m => m.CurrentDirectory)
-                .Returns(Directory);
-            var inactiveFilesPanelViewModelMock = new Mock<IFilesPanelViewModel>();
-            inactiveFilesPanelViewModelMock
-                .SetupGet(m => m.CurrentDirectory)
-                .Returns(NewDirectory);
-            var directoryServiceMock = new Mock<IDirectoryService>();
-            directoryServiceMock
-                .SetupSet(m => m.SelectedDirectory = Directory)
-                .Verifiable();
-            var mediator = new FilesOperationsMediator(directoryServiceMock.Object);
-            var isCallbackCalled = false;
-            mediator.ActiveFilesPanelChanged += (sender, args) => isCallbackCalled = true;
-            mediator.Register(activeFilesPanelViewModelMock.Object, inactiveFilesPanelViewModelMock.Object);
+        Assert.True(isCallbackCalled);
+        Assert.Equal(activeFilesPanelViewModelMock.Object, mediator.ActiveFilesPanelViewModel);
+        Assert.Equal(inactiveFilesPanelViewModelMock.Object, mediator.InactiveFilesPanelViewModel);
+        Assert.Equal(NewDirectory, mediator.OutputDirectory);
+        directoryServiceMock
+            .VerifySet(m => m.SelectedDirectory = Directory, Times.Once);
+    }
 
-            Assert.True(isCallbackCalled);
-            Assert.Equal(activeFilesPanelViewModelMock.Object, mediator.ActiveFilesPanelViewModel);
-            Assert.Equal(inactiveFilesPanelViewModelMock.Object, mediator.InactiveFilesPanelViewModel);
-            Assert.Equal(NewDirectory, mediator.OutputDirectory);
-            directoryServiceMock
-                .VerifySet(m => m.SelectedDirectory = Directory, Times.Once);
-        }
+    [Fact]
+    public void TestDirectoryServiceDirectoryChangedNoModels()
+    {
+        var directoryServiceMock = new Mock<IDirectoryService>();
+        var mediator = new FilesOperationsMediator(directoryServiceMock.Object);
+        var args = new SelectedDirectoryChangedEventArgs(Directory);
+        directoryServiceMock
+            .Raise(m => m.SelectedDirectoryChanged += null, args);
 
-        [Fact]
-        public void TestDirectoryServiceDirectoryChangedNoModels()
-        {
-            var directoryServiceMock = new Mock<IDirectoryService>();
-            var mediator = new FilesOperationsMediator(directoryServiceMock.Object);
-            var args = new SelectedDirectoryChangedEventArgs(Directory);
-            directoryServiceMock
-                .Raise(m => m.SelectedDirectoryChanged += null, args);
+        Assert.Null(mediator.ActiveFilesPanelViewModel);
+        Assert.Null(mediator.InactiveFilesPanelViewModel);
+    }
 
-            Assert.Null(mediator.ActiveFilesPanelViewModel);
-            Assert.Null(mediator.InactiveFilesPanelViewModel);
-        }
+    [Fact]
+    public void TestDirectoryServiceDirectoryChanged()
+    {
+        var activeFilesPanelViewModelMock = new Mock<IFilesPanelViewModel>();
+        activeFilesPanelViewModelMock
+            .SetupSet(m => m.CurrentDirectory = Directory)
+            .Verifiable();
+        var inactiveFilesPanelViewModelMock = new Mock<IFilesPanelViewModel>();
+        var directoryServiceMock = new Mock<IDirectoryService>();
+        var mediator = new FilesOperationsMediator(directoryServiceMock.Object);
+        mediator.Register(activeFilesPanelViewModelMock.Object, inactiveFilesPanelViewModelMock.Object);
 
-        [Fact]
-        public void TestDirectoryServiceDirectoryChanged()
-        {
-            var activeFilesPanelViewModelMock = new Mock<IFilesPanelViewModel>();
-            activeFilesPanelViewModelMock
-                .SetupSet(m => m.CurrentDirectory = Directory)
-                .Verifiable();
-            var inactiveFilesPanelViewModelMock = new Mock<IFilesPanelViewModel>();
-            var directoryServiceMock = new Mock<IDirectoryService>();
-            var mediator = new FilesOperationsMediator(directoryServiceMock.Object);
-            mediator.Register(activeFilesPanelViewModelMock.Object, inactiveFilesPanelViewModelMock.Object);
+        var args = new SelectedDirectoryChangedEventArgs(Directory);
+        directoryServiceMock
+            .Raise(m => m.SelectedDirectoryChanged += null, args);
 
-            var args = new SelectedDirectoryChangedEventArgs(Directory);
-            directoryServiceMock
-                .Raise(m => m.SelectedDirectoryChanged += null, args);
+        activeFilesPanelViewModelMock
+            .VerifySet(m => m.CurrentDirectory = Directory, Times.Once);
+    }
 
-            activeFilesPanelViewModelMock
-                .VerifySet(m => m.CurrentDirectory = Directory, Times.Once);
-        }
+    [Fact]
+    public void TestFilesPanelViewModelDirectoryChanged()
+    {
+        var activeFilesPanelViewModelMock = new Mock<IFilesPanelViewModel>();
+        activeFilesPanelViewModelMock
+            .SetupGet(m => m.CurrentDirectory)
+            .Returns(Directory);
+        var inactiveFilesPanelViewModelMock = new Mock<IFilesPanelViewModel>();
+        var directoryServiceMock = new Mock<IDirectoryService>();
+        directoryServiceMock
+            .SetupSet(m => m.SelectedDirectory = NewDirectory)
+            .Verifiable();
+        var mediator = new FilesOperationsMediator(directoryServiceMock.Object);
+        mediator.Register(activeFilesPanelViewModelMock.Object, inactiveFilesPanelViewModelMock.Object);
 
-        [Fact]
-        public void TestFilesPanelViewModelDirectoryChanged()
-        {
-            var activeFilesPanelViewModelMock = new Mock<IFilesPanelViewModel>();
-            activeFilesPanelViewModelMock
-                .SetupGet(m => m.CurrentDirectory)
-                .Returns(Directory);
-            var inactiveFilesPanelViewModelMock = new Mock<IFilesPanelViewModel>();
-            var directoryServiceMock = new Mock<IDirectoryService>();
-            directoryServiceMock
-                .SetupSet(m => m.SelectedDirectory = NewDirectory)
-                .Verifiable();
-            var mediator = new FilesOperationsMediator(directoryServiceMock.Object);
-            mediator.Register(activeFilesPanelViewModelMock.Object, inactiveFilesPanelViewModelMock.Object);
+        activeFilesPanelViewModelMock
+            .SetupGet(m => m.CurrentDirectory)
+            .Returns(NewDirectory);
+        activeFilesPanelViewModelMock.Raise(m => m.CurrentDirectoryChanged += null, EventArgs.Empty);
 
-            activeFilesPanelViewModelMock
-                .SetupGet(m => m.CurrentDirectory)
-                .Returns(NewDirectory);
-           activeFilesPanelViewModelMock.Raise(m => m.CurrentDirectoryChanged += null, EventArgs.Empty);
+        directoryServiceMock
+            .VerifySet(m => m.SelectedDirectory = NewDirectory, Times.Once);
+    }
 
-           directoryServiceMock
-               .VerifySet(m => m.SelectedDirectory = NewDirectory, Times.Once);
-        }
+    [Fact]
+    public void TestFilesPanelViewModelActivation()
+    {
+        var activeFilesPanelViewModelMock = new Mock<IFilesPanelViewModel>();
+        activeFilesPanelViewModelMock
+            .SetupGet(m => m.CurrentDirectory)
+            .Returns(Directory);
+        var inactiveFilesPanelViewModelMock = new Mock<IFilesPanelViewModel>();
+        inactiveFilesPanelViewModelMock
+            .SetupGet(m => m.CurrentDirectory)
+            .Returns(NewDirectory);
+        var directoryServiceMock = new Mock<IDirectoryService>();
+        directoryServiceMock
+            .SetupSet(m => m.SelectedDirectory = NewDirectory)
+            .Verifiable();
+        var mediator = new FilesOperationsMediator(directoryServiceMock.Object);
+        mediator.Register(activeFilesPanelViewModelMock.Object, inactiveFilesPanelViewModelMock.Object);
 
-        [Fact]
-        public void TestFilesPanelViewModelActivation()
-        {
-            var activeFilesPanelViewModelMock = new Mock<IFilesPanelViewModel>();
-            activeFilesPanelViewModelMock
-                .SetupGet(m => m.CurrentDirectory)
-                .Returns(Directory);
-            var inactiveFilesPanelViewModelMock = new Mock<IFilesPanelViewModel>();
-            inactiveFilesPanelViewModelMock
-                .SetupGet(m => m.CurrentDirectory)
-                .Returns(NewDirectory);
-            var directoryServiceMock = new Mock<IDirectoryService>();
-            directoryServiceMock
-                .SetupSet(m => m.SelectedDirectory = NewDirectory)
-                .Verifiable();
-            var mediator = new FilesOperationsMediator(directoryServiceMock.Object);
-            mediator.Register(activeFilesPanelViewModelMock.Object, inactiveFilesPanelViewModelMock.Object);
+        var isCallbackCalled = false;
+        mediator.ActiveFilesPanelChanged += (sender, args) => isCallbackCalled = true;
+        inactiveFilesPanelViewModelMock
+            .Raise(m => m.Activated += null, EventArgs.Empty);
 
-            var isCallbackCalled = false;
-            mediator.ActiveFilesPanelChanged += (sender, args) => isCallbackCalled = true;
-            inactiveFilesPanelViewModelMock
-                .Raise(m => m.Activated += null, EventArgs.Empty);
+        Assert.True(isCallbackCalled);
+        Assert.Equal(inactiveFilesPanelViewModelMock.Object, mediator.ActiveFilesPanelViewModel);
+        Assert.Equal(activeFilesPanelViewModelMock.Object, mediator.InactiveFilesPanelViewModel);
+        directoryServiceMock
+            .VerifySet(m => m.SelectedDirectory = NewDirectory, Times.Once);
+    }
 
-            Assert.True(isCallbackCalled);
-            Assert.Equal(inactiveFilesPanelViewModelMock.Object, mediator.ActiveFilesPanelViewModel);
-            Assert.Equal(activeFilesPanelViewModelMock.Object, mediator.InactiveFilesPanelViewModel);
-            directoryServiceMock
-                .VerifySet(m => m.SelectedDirectory = NewDirectory, Times.Once);
-        }
+    [Fact]
+    public void TestToggleSearchVisibility()
+    {
+        var searchViewModelMock = new Mock<ISearchViewModel>();
+        searchViewModelMock
+            .Setup(m => m.ToggleSearch())
+            .Verifiable();
+        var activeFilesPanelViewModelMock = new Mock<IFilesPanelViewModel>();
+        activeFilesPanelViewModelMock
+            .SetupGet(m => m.SearchViewModel)
+            .Returns(searchViewModelMock.Object);
+        var inactiveFilesPanelViewModelMock = new Mock<IFilesPanelViewModel>();
+        var directoryServiceMock = new Mock<IDirectoryService>();
 
-        [Fact]
-        public void TestToggleSearchVisibility()
-        {
-            var searchViewModelMock = new Mock<ISearchViewModel>();
-            searchViewModelMock
-                .Setup(m => m.ToggleSearch())
-                .Verifiable();
-            var activeFilesPanelViewModelMock = new Mock<IFilesPanelViewModel>();
-            activeFilesPanelViewModelMock
-                .SetupGet(m => m.SearchViewModel)
-                .Returns(searchViewModelMock.Object);
-            var inactiveFilesPanelViewModelMock = new Mock<IFilesPanelViewModel>();
-            var directoryServiceMock = new Mock<IDirectoryService>();
+        var mediator = new FilesOperationsMediator(directoryServiceMock.Object);
+        mediator.Register(activeFilesPanelViewModelMock.Object, inactiveFilesPanelViewModelMock.Object);
 
-            var mediator = new FilesOperationsMediator(directoryServiceMock.Object);
-            mediator.Register(activeFilesPanelViewModelMock.Object, inactiveFilesPanelViewModelMock.Object);
+        mediator.ToggleSearchPanelVisibility();
 
-            mediator.ToggleSearchPanelVisibility();
-
-            searchViewModelMock
-                .Verify(m => m.ToggleSearch(), Times.Once);
-        }
+        searchViewModelMock
+            .Verify(m => m.ToggleSearch(), Times.Once);
     }
 }

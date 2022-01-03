@@ -9,50 +9,49 @@ using Camelot.Ui.Tests.Steps;
 using Camelot.Views.Dialogs;
 using Xunit;
 
-namespace Camelot.Ui.Tests.Flows.Directories
+namespace Camelot.Ui.Tests.Flows.Directories;
+
+public class CreateDirectoryFlow : IDisposable
 {
-    public class CreateDirectoryFlow : IDisposable
+    private const string DirectoryName = "CreateDirectoryTest__Directory";
+
+    private string _directoryFullPath;
+
+    [Fact(DisplayName = "Create directory")]
+    public async Task CreateDirectoryTest()
     {
-        private const string DirectoryName = "CreateDirectoryTest__Directory";
+        var app = AvaloniaApp.GetApp();
+        var window = AvaloniaApp.GetMainWindow();
 
-        private string _directoryFullPath;
+        await FocusFilePanelStep.FocusFilePanelAsync(window);
 
-        [Fact(DisplayName = "Create directory")]
-        public async Task CreateDirectoryTest()
+        OpenCreateDirectoryDialogStep.OpenCreateDirectoryDialog(window);
+        var isDialogOpened = await DialogOpenedCondition.CheckIfDialogIsOpenedAsync<CreateDirectoryDialog>(app);
+        Assert.True(isDialogOpened);
+
+        var viewModel = ActiveFilePanelProvider.GetActiveFilePanelViewModel(window);
+        _directoryFullPath = Path.Combine(viewModel.CurrentDirectory, DirectoryName);
+
+        CreateDirectoryStep.CreateDirectory(app, window, DirectoryName);
+
+        var isDialogClosed = await DialogClosedCondition.CheckIfDialogIsClosedAsync<CreateDirectoryDialog>(app);
+        Assert.True(isDialogClosed);
+
+        Assert.True(Directory.Exists(_directoryFullPath));
+    }
+
+    public void Dispose()
+    {
+        var app = AvaloniaApp.GetApp();
+        var dialogs = new Window[]
         {
-            var app = AvaloniaApp.GetApp();
-            var window = AvaloniaApp.GetMainWindow();
+            DialogProvider.GetDialog<CreateDirectoryDialog>(app)
+        };
+        dialogs.ForEach(d => d?.Close());
 
-            await FocusFilePanelStep.FocusFilePanelAsync(window);
-
-            OpenCreateDirectoryDialogStep.OpenCreateDirectoryDialog(window);
-            var isDialogOpened = await DialogOpenedCondition.CheckIfDialogIsOpenedAsync<CreateDirectoryDialog>(app);
-            Assert.True(isDialogOpened);
-
-            var viewModel = ActiveFilePanelProvider.GetActiveFilePanelViewModel(window);
-            _directoryFullPath = Path.Combine(viewModel.CurrentDirectory, DirectoryName);
-
-            CreateDirectoryStep.CreateDirectory(app, window, DirectoryName);
-
-            var isDialogClosed = await DialogClosedCondition.CheckIfDialogIsClosedAsync<CreateDirectoryDialog>(app);
-            Assert.True(isDialogClosed);
-
-            Assert.True(Directory.Exists(_directoryFullPath));
-        }
-
-        public void Dispose()
+        if (!string.IsNullOrEmpty(_directoryFullPath) && Directory.Exists(_directoryFullPath))
         {
-            var app = AvaloniaApp.GetApp();
-            var dialogs = new Window[]
-            {
-                DialogProvider.GetDialog<CreateDirectoryDialog>(app)
-            };
-            dialogs.ForEach(d => d?.Close());
-
-            if (!string.IsNullOrEmpty(_directoryFullPath) && Directory.Exists(_directoryFullPath))
-            {
-                Directory.Delete(_directoryFullPath, true);
-            }
+            Directory.Delete(_directoryFullPath, true);
         }
     }
 }

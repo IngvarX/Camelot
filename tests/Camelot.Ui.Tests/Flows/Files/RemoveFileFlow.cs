@@ -10,78 +10,77 @@ using Camelot.Ui.Tests.Steps;
 using Camelot.Views.Dialogs;
 using Xunit;
 
-namespace Camelot.Ui.Tests.Flows.Files
+namespace Camelot.Ui.Tests.Flows.Files;
+
+public class RemoveFileFlow : IDisposable
 {
-    public class RemoveFileFlow : IDisposable
+    private const string FileName = "RemoveFileTest__File.txt";
+
+    private string _fileFullPath;
+
+    [Theory(DisplayName = "Remove file")]
+    [InlineData(true)]
+    [InlineData(false)]
+    public async Task TestRemoveFile(bool removePermanently)
     {
-        private const string FileName = "RemoveFileTest__File.txt";
+        var app = AvaloniaApp.GetApp();
+        var window = AvaloniaApp.GetMainWindow();
 
-        private string _fileFullPath;
+        await FocusFilePanelStep.FocusFilePanelAsync(window);
 
-        [Theory(DisplayName = "Remove file")]
-        [InlineData(true)]
-        [InlineData(false)]
-        public async Task TestRemoveFile(bool removePermanently)
+        var viewModel = ActiveFilePanelProvider.GetActiveFilePanelViewModel(window);
+        _fileFullPath = Path.Combine(viewModel.CurrentDirectory, FileName);
+        await File.Create(_fileFullPath).DisposeAsync();
+
+        ToggleSearchPanelStep.ToggleSearchPanelVisibility(window);
+
+        await Task.Delay(100);
+
+        SearchNodeStep.SearchNode(window, FileName);
+        await Task.Delay(1000);
+
+        ChangeActiveFilePanelStep.ChangeActiveFilePanel(window);
+        ChangeActiveFilePanelStep.ChangeActiveFilePanel(window);
+        Keyboard.PressKey(window, Key.Down);
+        Keyboard.PressKey(window, Key.Down);
+
+        if (removePermanently)
         {
-            var app = AvaloniaApp.GetApp();
-            var window = AvaloniaApp.GetMainWindow();
-
-            await FocusFilePanelStep.FocusFilePanelAsync(window);
-
-            var viewModel = ActiveFilePanelProvider.GetActiveFilePanelViewModel(window);
-            _fileFullPath = Path.Combine(viewModel.CurrentDirectory, FileName);
-            await File.Create(_fileFullPath).DisposeAsync();
-
-            ToggleSearchPanelStep.ToggleSearchPanelVisibility(window);
-
-            await Task.Delay(100);
-
-            SearchNodeStep.SearchNode(window, FileName);
-            await Task.Delay(1000);
-
-            ChangeActiveFilePanelStep.ChangeActiveFilePanel(window);
-            ChangeActiveFilePanelStep.ChangeActiveFilePanel(window);
-            Keyboard.PressKey(window, Key.Down);
-            Keyboard.PressKey(window, Key.Down);
-
-            if (removePermanently)
-            {
-                OpenRemoveDialogStep.OpenPermanentRemoveDialog(window);
-            }
-            else
-            {
-                OpenRemoveDialogStep.OpenRemoveDialog(window);
-            }
-
-            var isRemoveDialogOpened =
-                await DialogOpenedCondition.CheckIfDialogIsOpenedAsync<RemoveNodesConfirmationDialog>(app);
-            Assert.True(isRemoveDialogOpened);
-
-            Keyboard.PressKey(window, Key.Enter);
-            await Task.Delay(100);
-
-            var isRemoveDialogClosed =
-                await DialogClosedCondition.CheckIfDialogIsClosedAsync<RemoveNodesConfirmationDialog>(app);
-            Assert.True(isRemoveDialogClosed);
-
-            ToggleSearchPanelStep.ToggleSearchPanelVisibility(window);
-
-            Assert.False(File.Exists(_fileFullPath));
+            OpenRemoveDialogStep.OpenPermanentRemoveDialog(window);
+        }
+        else
+        {
+            OpenRemoveDialogStep.OpenRemoveDialog(window);
         }
 
-        public void Dispose()
-        {
-            var app = AvaloniaApp.GetApp();
-            var dialogs = new Window[]
-            {
-                DialogProvider.GetDialog<RemoveNodesConfirmationDialog>(app)
-            };
-            dialogs.ForEach(d => d?.Close());
+        var isRemoveDialogOpened =
+            await DialogOpenedCondition.CheckIfDialogIsOpenedAsync<RemoveNodesConfirmationDialog>(app);
+        Assert.True(isRemoveDialogOpened);
 
-            if (!string.IsNullOrEmpty(_fileFullPath) && File.Exists(_fileFullPath))
-            {
-                File.Delete(_fileFullPath);
-            }
+        Keyboard.PressKey(window, Key.Enter);
+        await Task.Delay(100);
+
+        var isRemoveDialogClosed =
+            await DialogClosedCondition.CheckIfDialogIsClosedAsync<RemoveNodesConfirmationDialog>(app);
+        Assert.True(isRemoveDialogClosed);
+
+        ToggleSearchPanelStep.ToggleSearchPanelVisibility(window);
+
+        Assert.False(File.Exists(_fileFullPath));
+    }
+
+    public void Dispose()
+    {
+        var app = AvaloniaApp.GetApp();
+        var dialogs = new Window[]
+        {
+            DialogProvider.GetDialog<RemoveNodesConfirmationDialog>(app)
+        };
+        dialogs.ForEach(d => d?.Close());
+
+        if (!string.IsNullOrEmpty(_fileFullPath) && File.Exists(_fileFullPath))
+        {
+            File.Delete(_fileFullPath);
         }
     }
 }

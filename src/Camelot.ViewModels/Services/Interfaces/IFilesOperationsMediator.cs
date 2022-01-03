@@ -1,20 +1,19 @@
 using System;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 
-namespace Camelot.ViewModels.Services.Interfaces
+namespace Camelot.ViewModels.Services.Interfaces;
+
+public interface IFilesOperationsMediator
 {
-    public interface IFilesOperationsMediator
-    {
-        IFilesPanelViewModel ActiveFilesPanelViewModel { get; }
+    IFilesPanelViewModel ActiveFilesPanelViewModel { get; }
 
-        IFilesPanelViewModel InactiveFilesPanelViewModel { get; }
+    IFilesPanelViewModel InactiveFilesPanelViewModel { get; }
 
-        string OutputDirectory { get; }
+    string OutputDirectory { get; }
 
-        event EventHandler<EventArgs> ActiveFilesPanelChanged;
+    event EventHandler<EventArgs> ActiveFilesPanelChanged;
 
-        void Register(IFilesPanelViewModel activeFilesPanelViewModel, IFilesPanelViewModel inactiveFilesPanelViewModel);
+    void Register(IFilesPanelViewModel activeFilesPanelViewModel, IFilesPanelViewModel inactiveFilesPanelViewModel);
 
-        void ToggleSearchPanelVisibility();
-    }
+    void ToggleSearchPanelVisibility();
 }

@@ -9,85 +9,84 @@ using Moq;
 using Moq.AutoMock;
 using Xunit;
 
-namespace Camelot.ViewModels.Tests.Services
+namespace Camelot.ViewModels.Tests.Services;
+
+public class ClipboardOperationsViewModelTests
 {
-    public class ClipboardOperationsViewModelTests
+    private const string Directory = "Dir";
+    private const string File = "File";
+
+    private readonly AutoMocker _autoMocker;
+
+    public ClipboardOperationsViewModelTests()
     {
-        private const string Directory = "Dir";
-        private const string File = "File";
+        _autoMocker = new AutoMocker();
+    }
 
-        private readonly AutoMocker _autoMocker;
+    [Fact]
+    public void TestCopyToClipboardCommand()
+    {
+        _autoMocker
+            .Setup<INodesSelectionService, IReadOnlyList<string>>(m => m.SelectedNodes)
+            .Returns(new[] {File});
+        _autoMocker
+            .Setup<IClipboardOperationsService>(m => m.CopyFilesAsync(
+                It.Is<IReadOnlyList<string>>(l => l.Single() == File)))
+            .Verifiable();
 
-        public ClipboardOperationsViewModelTests()
-        {
-            _autoMocker = new AutoMocker();
-        }
+        var viewModel = _autoMocker.CreateInstance<ClipboardOperationsViewModel>();
 
-        [Fact]
-        public void TestCopyToClipboardCommand()
-        {
-            _autoMocker
-                .Setup<INodesSelectionService, IReadOnlyList<string>>(m => m.SelectedNodes)
-                .Returns(new[] {File});
-            _autoMocker
-                .Setup<IClipboardOperationsService>(m => m.CopyFilesAsync(
-                    It.Is<IReadOnlyList<string>>(l => l.Single() == File)))
-                .Verifiable();
+        Assert.True(viewModel.CopyToClipboardCommand.CanExecute(null));
 
-           var viewModel = _autoMocker.CreateInstance<ClipboardOperationsViewModel>();
+        viewModel.CopyToClipboardCommand.Execute(null);
 
-           Assert.True(viewModel.CopyToClipboardCommand.CanExecute(null));
-
-           viewModel.CopyToClipboardCommand.Execute(null);
-
-            _autoMocker
-                .Verify<IClipboardOperationsService>(m => m.CopyFilesAsync(
+        _autoMocker
+            .Verify<IClipboardOperationsService>(m => m.CopyFilesAsync(
                     It.Is<IReadOnlyList<string>>(l => l.Single() == File)),
-                    Times.Once);
-        }
+                Times.Once);
+    }
 
-        [Fact]
-        public void TestPasteFromClipboardCommand()
-        {
-            _autoMocker
-                .Setup<IDirectoryService, string>(m => m.SelectedDirectory)
-                .Returns(Directory);
+    [Fact]
+    public void TestPasteFromClipboardCommand()
+    {
+        _autoMocker
+            .Setup<IDirectoryService, string>(m => m.SelectedDirectory)
+            .Returns(Directory);
 
-            var viewModel = _autoMocker.CreateInstance<ClipboardOperationsViewModel>();
+        var viewModel = _autoMocker.CreateInstance<ClipboardOperationsViewModel>();
 
-            Assert.True(viewModel.CopyToClipboardCommand.CanExecute(null));
+        Assert.True(viewModel.CopyToClipboardCommand.CanExecute(null));
 
-            _autoMocker
-                .GetMock<IFilePanelDirectoryObserver>()
-                .Raise(m => m.CurrentDirectoryChanged += null, EventArgs.Empty);
+        _autoMocker
+            .GetMock<IFilePanelDirectoryObserver>()
+            .Raise(m => m.CurrentDirectoryChanged += null, EventArgs.Empty);
 
-            Assert.True(viewModel.PasteFromClipboardCommand.CanExecute(null));
+        Assert.True(viewModel.PasteFromClipboardCommand.CanExecute(null));
 
-            viewModel.PasteFromClipboardCommand.Execute(null);
+        viewModel.PasteFromClipboardCommand.Execute(null);
 
-            _autoMocker
-                .Verify<IClipboardOperationsService>(m => m.PasteFilesAsync(Directory),
-                    Times.Once);
-        }
+        _autoMocker
+            .Verify<IClipboardOperationsService>(m => m.PasteFilesAsync(Directory),
+                Times.Once);
+    }
 
-        [Theory]
-        [InlineData(false, false)]
-        [InlineData(true, true)]
-        public async Task TestCanPaste(bool canPaste, bool expected)
-        {
-            _autoMocker
-                .Setup<IClipboardOperationsService, Task<bool>>(m => m.CanPasteAsync())
-                .ReturnsAsync(canPaste);
+    [Theory]
+    [InlineData(false, false)]
+    [InlineData(true, true)]
+    public async Task TestCanPaste(bool canPaste, bool expected)
+    {
+        _autoMocker
+            .Setup<IClipboardOperationsService, Task<bool>>(m => m.CanPasteAsync())
+            .ReturnsAsync(canPaste);
 
-            var viewModel = _autoMocker.CreateInstance<ClipboardOperationsViewModel>();
+        var viewModel = _autoMocker.CreateInstance<ClipboardOperationsViewModel>();
 
-            var actual = await viewModel.CanPasteAsync();
+        var actual = await viewModel.CanPasteAsync();
 
-            Assert.Equal(expected, actual);
+        Assert.Equal(expected, actual);
 
-            _autoMocker
-                .Verify<IClipboardOperationsService, Task<bool>>(m => m.CanPasteAsync(),
-                    Times.Once);
-        }
+        _autoMocker
+            .Verify<IClipboardOperationsService, Task<bool>>(m => m.CanPasteAsync(),
+                Times.Once);
     }
 }

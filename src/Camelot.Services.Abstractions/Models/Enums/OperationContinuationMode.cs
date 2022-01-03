@@ -1,10 +1,9 @@
-namespace Camelot.Services.Abstractions.Models.Enums
+namespace Camelot.Services.Abstractions.Models.Enums;
+
+public enum OperationContinuationMode : byte
 {
-    public enum OperationContinuationMode : byte
-    {
-        Skip,
-        Overwrite,
-        OverwriteIfOlder,
-        Rename
-    }
+    Skip,
+    Overwrite,
+    OverwriteIfOlder,
+    Rename
 }

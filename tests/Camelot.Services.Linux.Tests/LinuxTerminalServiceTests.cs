@@ -8,53 +8,52 @@ using Moq;
 using Moq.AutoMock;
 using Xunit;
 
-namespace Camelot.Services.Linux.Tests
+namespace Camelot.Services.Linux.Tests;
+
+public class LinuxTerminalServiceTests
 {
-    public class LinuxTerminalServiceTests
+    private const string Directory = "Dir";
+
+    private readonly AutoMocker _autoMocker;
+
+    public LinuxTerminalServiceTests()
     {
-        private const string Directory = "Dir";
+        _autoMocker = new AutoMocker();
+    }
 
-        private readonly AutoMocker _autoMocker;
+    [Theory]
+    [InlineData(DesktopEnvironment.Kde, "konsole")]
+    [InlineData(DesktopEnvironment.Cinnamon, "x-terminal-emulator")]
+    [InlineData(DesktopEnvironment.Gnome, "x-terminal-emulator")]
+    [InlineData(DesktopEnvironment.Lxde, "x-terminal-emulator")]
+    [InlineData(DesktopEnvironment.Lxqt, "x-terminal-emulator")]
+    [InlineData(DesktopEnvironment.Mate, "x-terminal-emulator")]
+    [InlineData(DesktopEnvironment.Unity, "x-terminal-emulator")]
+    [InlineData(DesktopEnvironment.Unknown, "x-terminal-emulator")]
+    public void TestOpening(DesktopEnvironment desktopEnvironment, string command)
+    {
+        var args = $@"--workdir \""{Directory}\""";
+        var uowMock = new Mock<IUnitOfWork>();
+        uowMock
+            .Setup(m => m.GetRepository<TerminalSettings>())
+            .Returns(new Mock<IRepository<TerminalSettings>>().Object);
+        _autoMocker
+            .Setup<IUnitOfWorkFactory, IUnitOfWork>(m => m.Create())
+            .Returns(uowMock.Object);
+        _autoMocker
+            .Setup<IProcessService>(m => m.Run(command, args))
+            .Verifiable();
+        _autoMocker
+            .Setup<IDesktopEnvironmentService, DesktopEnvironment>(m => m.GetDesktopEnvironment())
+            .Returns(desktopEnvironment);
+        _autoMocker
+            .Setup<IShellCommandWrappingService, (string, string)>(m => m.WrapWithNohup(It.IsAny<string>(), It.IsAny<string>()))
+            .Returns<string, string>((c, a) => (c, a));
 
-        public LinuxTerminalServiceTests()
-        {
-            _autoMocker = new AutoMocker();
-        }
+        var terminalService = _autoMocker.CreateInstance<LinuxTerminalService>();
 
-        [Theory]
-        [InlineData(DesktopEnvironment.Kde, "konsole")]
-        [InlineData(DesktopEnvironment.Cinnamon, "x-terminal-emulator")]
-        [InlineData(DesktopEnvironment.Gnome, "x-terminal-emulator")]
-        [InlineData(DesktopEnvironment.Lxde, "x-terminal-emulator")]
-        [InlineData(DesktopEnvironment.Lxqt, "x-terminal-emulator")]
-        [InlineData(DesktopEnvironment.Mate, "x-terminal-emulator")]
-        [InlineData(DesktopEnvironment.Unity, "x-terminal-emulator")]
-        [InlineData(DesktopEnvironment.Unknown, "x-terminal-emulator")]
-        public void TestOpening(DesktopEnvironment desktopEnvironment, string command)
-        {
-            var args = $@"--workdir \""{Directory}\""";
-            var uowMock = new Mock<IUnitOfWork>();
-            uowMock
-                .Setup(m => m.GetRepository<TerminalSettings>())
-                .Returns(new Mock<IRepository<TerminalSettings>>().Object);
-            _autoMocker
-                .Setup<IUnitOfWorkFactory, IUnitOfWork>(m => m.Create())
-                .Returns(uowMock.Object);
-            _autoMocker
-                .Setup<IProcessService>(m => m.Run(command, args))
-                .Verifiable();
-            _autoMocker
-                .Setup<IDesktopEnvironmentService, DesktopEnvironment>(m => m.GetDesktopEnvironment())
-                .Returns(desktopEnvironment);
-            _autoMocker
-                .Setup<IShellCommandWrappingService, (string, string)>(m => m.WrapWithNohup(It.IsAny<string>(), It.IsAny<string>()))
-                .Returns<string, string>((c, a) => (c, a));
+        terminalService.Open(Directory);
 
-            var terminalService = _autoMocker.CreateInstance<LinuxTerminalService>();
-
-            terminalService.Open(Directory);
-
-            _autoMocker.Verify<IProcessService>(m => m.Run(command, args), Times.Once);
-        }
+        _autoMocker.Verify<IProcessService>(m => m.Run(command, args), Times.Once);
     }
 }

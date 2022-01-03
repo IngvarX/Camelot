@@ -11,114 +11,113 @@ using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Nodes;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace Camelot.ViewModels.Implementations.Dialogs
+namespace Camelot.ViewModels.Implementations.Dialogs;
+
+public class OverwriteOptionsDialogViewModel : ParameterizedDialogViewModelBase<OverwriteOptionsDialogResult, OverwriteOptionsNavigationParameter>
 {
-    public class OverwriteOptionsDialogViewModel : ParameterizedDialogViewModelBase<OverwriteOptionsDialogResult, OverwriteOptionsNavigationParameter>
+    private readonly IFileService _fileService;
+    private readonly IFileSystemNodeViewModelFactory _fileSystemNodeViewModelFactory;
+    private readonly IFileNameGenerationService _fileNameGenerationService;
+    private readonly IPathService _pathService;
+
+    [Reactive]
+    public bool ShouldApplyToAll { get; set; }
+
+    [Reactive]
+    public string NewFileName { get; set; }
+
+    [Reactive]
+    public string DestinationDirectoryName { get; set; }
+
+    [Reactive]
+    public IFileSystemNodeViewModel ReplaceWithFileViewModel { get; set; }
+
+    [Reactive]
+    public IFileSystemNodeViewModel OriginalFileViewModel { get; set; }
+
+    [Reactive]
+    public bool AreMultipleFilesAvailable { get; set; }
+
+    public ICommand SkipCommand { get; }
+
+    public ICommand ReplaceCommand { get; }
+
+    public ICommand ReplaceIfOlderCommand { get; }
+
+    public ICommand RenameCommand { get; }
+
+    public OverwriteOptionsDialogViewModel(
+        IFileService fileService,
+        IFileSystemNodeViewModelFactory fileSystemNodeViewModelFactory,
+        IFileNameGenerationService fileNameGenerationService,
+        IPathService pathService)
     {
-        private readonly IFileService _fileService;
-        private readonly IFileSystemNodeViewModelFactory _fileSystemNodeViewModelFactory;
-        private readonly IFileNameGenerationService _fileNameGenerationService;
-        private readonly IPathService _pathService;
+        _fileService = fileService;
+        _fileSystemNodeViewModelFactory = fileSystemNodeViewModelFactory;
+        _fileNameGenerationService = fileNameGenerationService;
+        _pathService = pathService;
 
-        [Reactive]
-        public bool ShouldApplyToAll { get; set; }
+        SkipCommand = ReactiveCommand.Create(Skip);
+        ReplaceCommand = ReactiveCommand.Create(Replace);
+        ReplaceIfOlderCommand = ReactiveCommand.Create(ReplaceIfOlder);
 
-        [Reactive]
-        public string NewFileName { get; set; }
+        var canRename = this.WhenAnyValue(x => x.NewFileName,
+            (Func<string, bool>) (_ => CheckIfDestinationNotExists()));
+        RenameCommand = ReactiveCommand.Create(Rename, canRename);
+    }
 
-        [Reactive]
-        public string DestinationDirectoryName { get; set; }
+    public override void Activate(OverwriteOptionsNavigationParameter parameter)
+    {
+        var sourceFileModel = _fileService.GetFile(parameter.SourceFilePath);
+        ReplaceWithFileViewModel = CreateFrom(sourceFileModel);
 
-        [Reactive]
-        public IFileSystemNodeViewModel ReplaceWithFileViewModel { get; set; }
+        var destinationFileModel = _fileService.GetFile(parameter.DestinationFilePath);
+        OriginalFileViewModel = CreateFrom(destinationFileModel);
 
-        [Reactive]
-        public IFileSystemNodeViewModel OriginalFileViewModel { get; set; }
+        var destinationDirectory = _pathService.GetParentDirectory(destinationFileModel.FullPath);
+        NewFileName = _fileNameGenerationService.GenerateName(sourceFileModel.Name, destinationDirectory);
+        DestinationDirectoryName = _pathService.GetFileName(destinationDirectory);
 
-        [Reactive]
-        public bool AreMultipleFilesAvailable { get; set; }
+        AreMultipleFilesAvailable = parameter.AreMultipleFilesAvailable;
+    }
 
-        public ICommand SkipCommand { get; }
+    private void Skip() => Close(CreateFrom(OperationContinuationMode.Skip));
 
-        public ICommand ReplaceCommand { get; }
+    private void Replace() => Close(CreateFrom(OperationContinuationMode.Overwrite));
 
-        public ICommand ReplaceIfOlderCommand { get; }
+    private void ReplaceIfOlder() => Close(CreateFrom(OperationContinuationMode.OverwriteIfOlder));
 
-        public ICommand RenameCommand { get; }
+    private void Rename()
+    {
+        var options = OperationContinuationOptions.CreateRenamingContinuationOptions(
+            ReplaceWithFileViewModel.FullPath,
+            ShouldApplyToAll,
+            GetDestinationFilePath()
+        );
 
-        public OverwriteOptionsDialogViewModel(
-            IFileService fileService,
-            IFileSystemNodeViewModelFactory fileSystemNodeViewModelFactory,
-            IFileNameGenerationService fileNameGenerationService,
-            IPathService pathService)
-        {
-            _fileService = fileService;
-            _fileSystemNodeViewModelFactory = fileSystemNodeViewModelFactory;
-            _fileNameGenerationService = fileNameGenerationService;
-            _pathService = pathService;
+        Close(options);
+    }
 
-            SkipCommand = ReactiveCommand.Create(Skip);
-            ReplaceCommand = ReactiveCommand.Create(Replace);
-            ReplaceIfOlderCommand = ReactiveCommand.Create(ReplaceIfOlder);
+    private void Close(OperationContinuationOptions options) =>
+        Close(new OverwriteOptionsDialogResult(options));
 
-            var canRename = this.WhenAnyValue(x => x.NewFileName,
-                (Func<string, bool>) (_ => CheckIfDestinationNotExists()));
-            RenameCommand = ReactiveCommand.Create(Rename, canRename);
-        }
+    private OperationContinuationOptions CreateFrom(OperationContinuationMode mode) =>
+        OperationContinuationOptions.CreateContinuationOptions(
+            ReplaceWithFileViewModel.FullPath,
+            ShouldApplyToAll,
+            mode
+        );
 
-        public override void Activate(OverwriteOptionsNavigationParameter parameter)
-        {
-            var sourceFileModel = _fileService.GetFile(parameter.SourceFilePath);
-            ReplaceWithFileViewModel = CreateFrom(sourceFileModel);
+    private IFileSystemNodeViewModel CreateFrom(FileModel fileModel) =>
+        _fileSystemNodeViewModelFactory.Create(fileModel);
 
-            var destinationFileModel = _fileService.GetFile(parameter.DestinationFilePath);
-            OriginalFileViewModel = CreateFrom(destinationFileModel);
+    private bool CheckIfDestinationNotExists() =>
+        OriginalFileViewModel is null || !_fileService.CheckIfExists(GetDestinationFilePath());
 
-            var destinationDirectory = _pathService.GetParentDirectory(destinationFileModel.FullPath);
-            NewFileName = _fileNameGenerationService.GenerateName(sourceFileModel.Name, destinationDirectory);
-            DestinationDirectoryName = _pathService.GetFileName(destinationDirectory);
+    private string GetDestinationFilePath()
+    {
+        var destinationDirectory = _pathService.GetParentDirectory(OriginalFileViewModel.FullPath);
 
-            AreMultipleFilesAvailable = parameter.AreMultipleFilesAvailable;
-        }
-
-        private void Skip() => Close(CreateFrom(OperationContinuationMode.Skip));
-
-        private void Replace() => Close(CreateFrom(OperationContinuationMode.Overwrite));
-
-        private void ReplaceIfOlder() => Close(CreateFrom(OperationContinuationMode.OverwriteIfOlder));
-
-        private void Rename()
-        {
-            var options = OperationContinuationOptions.CreateRenamingContinuationOptions(
-                ReplaceWithFileViewModel.FullPath,
-                ShouldApplyToAll,
-                GetDestinationFilePath()
-            );
-
-            Close(options);
-        }
-
-        private void Close(OperationContinuationOptions options) =>
-            Close(new OverwriteOptionsDialogResult(options));
-
-        private OperationContinuationOptions CreateFrom(OperationContinuationMode mode) =>
-            OperationContinuationOptions.CreateContinuationOptions(
-                ReplaceWithFileViewModel.FullPath,
-                ShouldApplyToAll,
-                mode
-            );
-
-        private IFileSystemNodeViewModel CreateFrom(FileModel fileModel) =>
-            _fileSystemNodeViewModelFactory.Create(fileModel);
-
-        private bool CheckIfDestinationNotExists() =>
-            OriginalFileViewModel is null || !_fileService.CheckIfExists(GetDestinationFilePath());
-
-        private string GetDestinationFilePath()
-        {
-            var destinationDirectory = _pathService.GetParentDirectory(OriginalFileViewModel.FullPath);
-
-            return _pathService.Combine(destinationDirectory, NewFileName);
-        }
+        return _pathService.Combine(destinationDirectory, NewFileName);
     }
 }

@@ -8,105 +8,104 @@ using Camelot.DependencyInjection;
 using Camelot.ViewModels.Interfaces.MainWindow.Directories;
 using Splat;
 
-namespace Camelot.Views.Main.FavouriteDirectories
+namespace Camelot.Views.Main.FavouriteDirectories;
+
+public class FavouriteDirectoryView : UserControl
 {
-    public class FavouriteDirectoryView : UserControl
+    private const int DragAndDropDelay = 200;
+    private const string DataFormat = "FavDir";
+
+    private readonly Timer _timer;
+
+    private PointerEventArgs _pointerEventArgs;
+
+    private Grid Grid => this.Find<Grid>("FavDirGrid");
+
+    private IFavouriteDirectoryViewModel ViewModel => (IFavouriteDirectoryViewModel) DataContext;
+
+    private bool _isGridPressed;
+
+    public FavouriteDirectoryView()
     {
-        private const int DragAndDropDelay = 200;
-        private const string DataFormat = "FavDir";
+        InitializeComponent();
+        SetupDragAndDrop();
 
-        private readonly Timer _timer;
+        _timer = new Timer {Interval = DragAndDropDelay};
+        _timer.Elapsed += TimerOnElapsed;
+    }
 
-        private PointerEventArgs _pointerEventArgs;
+    private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
 
-        private Grid Grid => this.Find<Grid>("FavDirGrid");
+    private void SetupDragAndDrop()
+    {
+        Grid.PointerPressed += PrepareDrag;
 
-        private IFavouriteDirectoryViewModel ViewModel => (IFavouriteDirectoryViewModel) DataContext;
+        AddHandler(DragDrop.DropEvent, OnDrop);
+    }
 
-        private bool _isGridPressed;
+    private void PrepareDrag(object sender, PointerPressedEventArgs e)
+    {
+        _timer.Stop();
 
-        public FavouriteDirectoryView()
+        if (!e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
         {
-            InitializeComponent();
-            SetupDragAndDrop();
-
-            _timer = new Timer {Interval = DragAndDropDelay};
-            _timer.Elapsed += TimerOnElapsed;
+            return;
         }
 
-        private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
+        _isGridPressed = true;
+        Grid.PointerReleased += GridOnPointerReleased;
 
-        private void SetupDragAndDrop()
+        _pointerEventArgs = e;
+        _timer.Start();
+    }
+
+    private async Task DoDragAsync(PointerEventArgs e)
+    {
+        if (!_isGridPressed)
         {
-            Grid.PointerPressed += PrepareDrag;
-
-            AddHandler(DragDrop.DropEvent, OnDrop);
+            return;
         }
 
-        private void PrepareDrag(object sender, PointerPressedEventArgs e)
+        var dragData = new DataObject();
+        dragData.Set(DataFormat, ViewModel);
+
+        try
         {
-            _timer.Stop();
-
-            if (!e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
-            {
-                return;
-            }
-
-            _isGridPressed = true;
-            Grid.PointerReleased += GridOnPointerReleased;
-
-            _pointerEventArgs = e;
-            _timer.Start();
+            await DragDrop.DoDragDrop(e, dragData, DragDropEffects.Move);
         }
-
-        private async Task DoDragAsync(PointerEventArgs e)
+        catch
         {
-            if (!_isGridPressed)
-            {
-                return;
-            }
-
-            var dragData = new DataObject();
-            dragData.Set(DataFormat, ViewModel);
-
-            try
-            {
-                await DragDrop.DoDragDrop(e, dragData, DragDropEffects.Move);
-            }
-            catch
-            {
-                // ignore
-            }
+            // ignore
         }
+    }
 
-        private void GridOnPointerReleased(object sender, PointerReleasedEventArgs e)
+    private void GridOnPointerReleased(object sender, PointerReleasedEventArgs e)
+    {
+        Grid.PointerReleased -= GridOnPointerReleased;
+        _isGridPressed = false;
+    }
+
+    private void OnDrop(object sender, DragEventArgs e)
+    {
+        if (e.Data.Contains(DataFormat)
+            && e.Data.Get(DataFormat) is IFavouriteDirectoryViewModel favouriteDirectoryViewModel
+            && favouriteDirectoryViewModel != ViewModel)
         {
-            Grid.PointerReleased -= GridOnPointerReleased;
-            _isGridPressed = false;
+            favouriteDirectoryViewModel.RequestMoveCommand.Execute(ViewModel);
         }
+    }
 
-        private void OnDrop(object sender, DragEventArgs e)
-        {
-            if (e.Data.Contains(DataFormat)
-                && e.Data.Get(DataFormat) is IFavouriteDirectoryViewModel favouriteDirectoryViewModel
-                && favouriteDirectoryViewModel != ViewModel)
-            {
-                favouriteDirectoryViewModel.RequestMoveCommand.Execute(ViewModel);
-            }
-        }
+    private async void TimerOnElapsed(object sender, ElapsedEventArgs e)
+    {
+        _timer.Stop();
 
-        private async void TimerOnElapsed(object sender, ElapsedEventArgs e)
-        {
-            _timer.Stop();
+        await DoDragInUiThreadAsync();
+    }
 
-            await DoDragInUiThreadAsync();
-        }
+    private async Task DoDragInUiThreadAsync()
+    {
+        var dispatcher = Locator.Current.GetRequiredService<IApplicationDispatcher>();
 
-        private async Task DoDragInUiThreadAsync()
-        {
-            var dispatcher = Locator.Current.GetRequiredService<IApplicationDispatcher>();
-
-            await dispatcher.DispatchAsync(() => DoDragAsync(_pointerEventArgs));
-        }
+        await dispatcher.DispatchAsync(() => DoDragAsync(_pointerEventArgs));
     }
 }

@@ -1,9 +1,8 @@
 using Avalonia.Controls;
 
-namespace Camelot.Avalonia.Interfaces
+namespace Camelot.Avalonia.Interfaces;
+
+public interface IMainWindowProvider
 {
-    public interface IMainWindowProvider
-    {
-        Window GetMainWindow();
-    }
+    Window GetMainWindow();
 }

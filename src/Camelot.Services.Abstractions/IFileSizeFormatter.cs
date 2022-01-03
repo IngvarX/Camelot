@@ -1,9 +1,8 @@
-namespace Camelot.Services.Abstractions
-{
-    public interface IFileSizeFormatter
-    {
-        string GetFormattedSize(long bytes);
+namespace Camelot.Services.Abstractions;
 
-        string GetSizeAsNumber(long bytes);
-    }
+public interface IFileSizeFormatter
+{
+    string GetFormattedSize(long bytes);
+
+    string GetSizeAsNumber(long bytes);
 }

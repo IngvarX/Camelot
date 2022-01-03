@@ -1,7 +1,6 @@
-namespace Camelot.Configuration
+namespace Camelot.Configuration;
+
+public class DataAccessConfiguration
 {
-    public class DataAccessConfiguration
-    {
-        public bool UseInMemoryDatabase { get; set; }
-    }
+    public bool UseInMemoryDatabase { get; set; }
 }

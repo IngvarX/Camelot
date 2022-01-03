@@ -3,61 +3,60 @@ using Camelot.Services.Abstractions.Models;
 using Moq.AutoMock;
 using Xunit;
 
-namespace Camelot.Services.Tests
+namespace Camelot.Services.Tests;
+
+public class NodeServiceTests
 {
-    public class NodeServiceTests
+    private const string Node = "Node";
+
+    private readonly AutoMocker _autoMocker;
+
+    public NodeServiceTests()
     {
-        private const string Node = "Node";
+        _autoMocker = new AutoMocker();
+    }
 
-        private readonly AutoMocker _autoMocker;
+    [Theory]
+    [InlineData(false, false, false)]
+    [InlineData(false, true, true)]
+    [InlineData(true, false, true)]
+    [InlineData(true, true, true)]
+    public void TestCheckIfExists(bool fileExists, bool dirExists, bool expected)
+    {
+        _autoMocker
+            .Setup<IFileService, bool>(m => m.CheckIfExists(Node))
+            .Returns(fileExists);
+        _autoMocker
+            .Setup<IDirectoryService, bool>(m => m.CheckIfExists(Node))
+            .Returns(dirExists);
 
-        public NodeServiceTests()
-        {
-            _autoMocker = new AutoMocker();
-        }
+        var service = _autoMocker.CreateInstance<NodeService>();
+        var actual = service.CheckIfExists(Node);
 
-        [Theory]
-        [InlineData(false, false, false)]
-        [InlineData(false, true, true)]
-        [InlineData(true, false, true)]
-        [InlineData(true, true, true)]
-        public void TestCheckIfExists(bool fileExists, bool dirExists, bool expected)
-        {
-            _autoMocker
-                .Setup<IFileService, bool>(m => m.CheckIfExists(Node))
-                .Returns(fileExists);
-            _autoMocker
-                .Setup<IDirectoryService, bool>(m => m.CheckIfExists(Node))
-                .Returns(dirExists);
+        Assert.Equal(expected, actual);
+    }
 
-            var service = _autoMocker.CreateInstance<NodeService>();
-            var actual = service.CheckIfExists(Node);
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public void TestGetNode(bool fileExists)
+    {
+        var fileNode = new FileModel();
+        var directoryNode = new DirectoryModel();
 
-            Assert.Equal(expected, actual);
-        }
+        _autoMocker
+            .Setup<IFileService, bool>(m => m.CheckIfExists(Node))
+            .Returns(fileExists);
+        _autoMocker
+            .Setup<IFileService, FileModel>(m => m.GetFile(Node))
+            .Returns(fileNode);
+        _autoMocker
+            .Setup<IDirectoryService, DirectoryModel>(m => m.GetDirectory(Node))
+            .Returns(directoryNode);
 
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public void TestGetNode(bool fileExists)
-        {
-            var fileNode = new FileModel();
-            var directoryNode = new DirectoryModel();
+        var service = _autoMocker.CreateInstance<NodeService>();
+        var node = service.GetNode(Node);
 
-            _autoMocker
-                .Setup<IFileService, bool>(m => m.CheckIfExists(Node))
-                .Returns(fileExists);
-            _autoMocker
-                .Setup<IFileService, FileModel>(m => m.GetFile(Node))
-                .Returns(fileNode);
-            _autoMocker
-                .Setup<IDirectoryService, DirectoryModel>(m => m.GetDirectory(Node))
-                .Returns(directoryNode);
-
-            var service = _autoMocker.CreateInstance<NodeService>();
-            var node = service.GetNode(Node);
-
-            Assert.Equal(fileExists ? (NodeModelBase) fileNode : directoryNode, node);
-        }
+        Assert.Equal(fileExists ? (NodeModelBase) fileNode : directoryNode, node);
     }
 }

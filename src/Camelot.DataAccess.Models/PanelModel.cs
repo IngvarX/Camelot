@@ -1,18 +1,17 @@
 using System.Collections.Generic;
 
-namespace Camelot.DataAccess.Models
+namespace Camelot.DataAccess.Models;
+
+public class PanelModel
 {
-    public class PanelModel
+    public static PanelModel Empty => new();
+
+    public List<TabModel> Tabs { get; set; }
+
+    public int SelectedTabIndex { get; set; }
+
+    public PanelModel()
     {
-        public static PanelModel Empty => new();
-
-        public List<TabModel> Tabs { get; set; }
-
-        public int SelectedTabIndex { get; set; }
-
-        public PanelModel()
-        {
-            Tabs = new List<TabModel>();
-        }
+        Tabs = new List<TabModel>();
     }
 }

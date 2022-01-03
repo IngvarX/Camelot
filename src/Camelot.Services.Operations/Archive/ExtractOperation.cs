@@ -5,43 +5,42 @@ using Camelot.Services.Abstractions.Archive;
 using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Operations;
 
-namespace Camelot.Services.Operations.Archive
+namespace Camelot.Services.Operations.Archive;
+
+public class ExtractOperation : StatefulOperationWithProgressBase, IInternalOperation
 {
-    public class ExtractOperation : StatefulOperationWithProgressBase, IInternalOperation
+    private readonly IArchiveReader _archiveReader;
+    private readonly IDirectoryService _directoryService;
+    private readonly string _archiveFilePath;
+    private readonly string _outputDirectory;
+
+    public ExtractOperation(
+        IArchiveReader archiveReader,
+        IDirectoryService directoryService,
+        string archiveFilePath,
+        string outputDirectory)
     {
-        private readonly IArchiveReader _archiveReader;
-        private readonly IDirectoryService _directoryService;
-        private readonly string _archiveFilePath;
-        private readonly string _outputDirectory;
+        _archiveReader = archiveReader;
+        _directoryService = directoryService;
+        _archiveFilePath = archiveFilePath;
+        _outputDirectory = outputDirectory;
+    }
 
-        public ExtractOperation(
-            IArchiveReader archiveReader,
-            IDirectoryService directoryService,
-            string archiveFilePath,
-            string outputDirectory)
+    public async Task RunAsync(CancellationToken cancellationToken)
+    {
+        CreateOutputDirectoryIfNeeded(_outputDirectory);
+
+        State = OperationState.InProgress;
+        await _archiveReader.ExtractAsync(_archiveFilePath, _outputDirectory);
+        State = OperationState.Finished;
+        SetFinalProgress();
+    }
+
+    private void CreateOutputDirectoryIfNeeded(string outputDirectory)
+    {
+        if (!_directoryService.CheckIfExists(outputDirectory))
         {
-            _archiveReader = archiveReader;
-            _directoryService = directoryService;
-            _archiveFilePath = archiveFilePath;
-            _outputDirectory = outputDirectory;
-        }
-
-        public async Task RunAsync(CancellationToken cancellationToken)
-        {
-            CreateOutputDirectoryIfNeeded(_outputDirectory);
-
-            State = OperationState.InProgress;
-            await _archiveReader.ExtractAsync(_archiveFilePath, _outputDirectory);
-            State = OperationState.Finished;
-            SetFinalProgress();
-        }
-
-        private void CreateOutputDirectoryIfNeeded(string outputDirectory)
-        {
-            if (!_directoryService.CheckIfExists(outputDirectory))
-            {
-                _directoryService.Create(outputDirectory);
-            }
+            _directoryService.Create(outputDirectory);
         }
     }
 }

@@ -11,67 +11,66 @@ using Camelot.Extensions;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs;
 using Splat;
 
-namespace Camelot.Views.Main.Controls.Tabs
+namespace Camelot.Views.Main.Controls.Tabs;
+
+public class TabsListView : UserControl
 {
-    public class TabsListView : UserControl
+    private const int ScrollsCount = 5;
+
+    private ITabsListViewModel ViewModel => (ITabsListViewModel) DataContext;
+
+    private ScrollViewer ScrollViewer => this.FindControl<ScrollViewer>("TabsScrollViewer");
+
+    private ItemsControl ItemsControl => this.FindControl<ItemsControl>("TabsItemsControl");
+
+    public TabsListView()
     {
-        private const int ScrollsCount = 5;
+        InitializeComponent();
+    }
 
-        private ITabsListViewModel ViewModel => (ITabsListViewModel) DataContext;
+    protected override void OnDataContextChanged(EventArgs e)
+    {
+        ViewModel.SelectedTabChanged += (_, _) => ScrollToSelectedTab();
+        var dispatcher = Locator.Current.GetRequiredService<IApplicationDispatcher>();
+        dispatcher.Dispatch(ScrollToSelectedTab);
 
-        private ScrollViewer ScrollViewer => this.FindControl<ScrollViewer>("TabsScrollViewer");
+        base.OnDataContextChanged(e);
+    }
 
-        private ItemsControl ItemsControl => this.FindControl<ItemsControl>("TabsItemsControl");
+    private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
 
-        public TabsListView()
-        {
-            InitializeComponent();
-        }
+    private void ScrollToSelectedTab()
+    {
+        var selectedTab = ItemsControl
+            .GetLogicalDescendants()
+            .OfType<TabView>()
+            .SingleOrDefault(t => t.DataContext is ITabViewModel {IsActive: true});
 
-        protected override void OnDataContextChanged(EventArgs e)
-        {
-            ViewModel.SelectedTabChanged += (_, _) => ScrollToSelectedTab();
-            var dispatcher = Locator.Current.GetRequiredService<IApplicationDispatcher>();
-            dispatcher.Dispatch(ScrollToSelectedTab);
+        selectedTab?.BringIntoView();
+    }
 
-            base.OnDataContextChanged(e);
-        }
+    private void TabsListOnPointerWheelChanged(object sender, PointerWheelEventArgs e)
+    {
+        var command = e.Delta.Y > 0
+            ? ViewModel.SelectTabToTheLeftCommand
+            : ViewModel.SelectTabToTheRightCommand;
 
-        private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
+        command.Execute(null);
+    }
 
-        private void ScrollToSelectedTab()
-        {
-            var selectedTab = ItemsControl
-                .GetLogicalDescendants()
-                .OfType<TabView>()
-                .SingleOrDefault(t => t.DataContext is ITabViewModel {IsActive: true});
+    private void LeftButtonOnClick(object sender, RoutedEventArgs e) => Scroll(ScrollViewer.LineLeft);
 
-            selectedTab?.BringIntoView();
-        }
+    private void RightButtonOnClick(object sender, RoutedEventArgs e) => Scroll(ScrollViewer.LineRight);
 
-        private void TabsListOnPointerWheelChanged(object sender, PointerWheelEventArgs e)
-        {
-            var command = e.Delta.Y > 0
-                ? ViewModel.SelectTabToTheLeftCommand
-                : ViewModel.SelectTabToTheRightCommand;
+    private static void Scroll(Action scrollAction) =>
+        Enumerable.Repeat(0, ScrollsCount).ForEach(_ => scrollAction());
 
-            command.Execute(null);
-        }
+    private void ScrollViewerOnScrollChanged(object sender, ScrollChangedEventArgs e)
+    {
+        var leftButton = this.FindControl<Button>("LeftArrowButton");
+        var rightButton = this.FindControl<Button>("RightArrowButton");
 
-        private void LeftButtonOnClick(object sender, RoutedEventArgs e) => Scroll(ScrollViewer.LineLeft);
-
-        private void RightButtonOnClick(object sender, RoutedEventArgs e) => Scroll(ScrollViewer.LineRight);
-
-        private static void Scroll(Action scrollAction) =>
-            Enumerable.Repeat(0, ScrollsCount).ForEach(_ => scrollAction());
-
-        private void ScrollViewerOnScrollChanged(object sender, ScrollChangedEventArgs e)
-        {
-            var leftButton = this.FindControl<Button>("LeftArrowButton");
-            var rightButton = this.FindControl<Button>("RightArrowButton");
-
-            leftButton.IsVisible = ScrollViewer.Offset.X > 0;
-            rightButton.IsVisible = ScrollViewer.Offset.X < ScrollViewer.Extent.Width - ScrollViewer.Viewport.Width;
-        }
+        leftButton.IsVisible = ScrollViewer.Offset.X > 0;
+        rightButton.IsVisible = ScrollViewer.Offset.X < ScrollViewer.Extent.Width - ScrollViewer.Viewport.Width;
     }
 }

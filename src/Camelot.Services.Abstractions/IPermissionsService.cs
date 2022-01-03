@@ -1,7 +1,6 @@
-namespace Camelot.Services.Abstractions
+namespace Camelot.Services.Abstractions;
+
+public interface IPermissionsService
 {
-    public interface IPermissionsService
-    {
-        bool CheckIfHasAccess(string directory);
-    }
+    bool CheckIfHasAccess(string directory);
 }

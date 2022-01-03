@@ -1,7 +1,6 @@
-namespace Camelot.ViewModels.Interfaces.MainWindow.Drives
-{
-    public interface IDrivesListViewModel
-    {
+namespace Camelot.ViewModels.Interfaces.MainWindow.Drives;
 
-    }
+public interface IDrivesListViewModel
+{
+
 }

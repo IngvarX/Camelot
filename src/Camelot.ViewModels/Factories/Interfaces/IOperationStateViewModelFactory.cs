@@ -1,10 +1,9 @@
 using Camelot.Services.Abstractions.Operations;
 using Camelot.ViewModels.Interfaces.MainWindow.OperationsStates;
 
-namespace Camelot.ViewModels.Factories.Interfaces
+namespace Camelot.ViewModels.Factories.Interfaces;
+
+public interface IOperationStateViewModelFactory
 {
-    public interface IOperationStateViewModelFactory
-    {
-        IOperationStateViewModel Create(IOperation operation);
-    }
+    IOperationStateViewModel Create(IOperation operation);
 }

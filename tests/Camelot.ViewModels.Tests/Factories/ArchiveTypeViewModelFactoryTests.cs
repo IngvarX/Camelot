@@ -6,73 +6,72 @@ using Camelot.ViewModels.Factories.Implementations;
 using Moq.AutoMock;
 using Xunit;
 
-namespace Camelot.ViewModels.Tests.Factories
+namespace Camelot.ViewModels.Tests.Factories;
+
+public class ArchiveTypeViewModelFactoryTests
 {
-    public class ArchiveTypeViewModelFactoryTests
+    private readonly AutoMocker _autoMocker;
+
+    public ArchiveTypeViewModelFactoryTests()
     {
-        private readonly AutoMocker _autoMocker;
+        _autoMocker = new AutoMocker();
+    }
 
-        public ArchiveTypeViewModelFactoryTests()
+    [Fact]
+    public void TestCreateForSingleFile()
+    {
+        var config = new ArchiveTypeViewModelFactoryConfiguration
         {
-            _autoMocker = new AutoMocker();
-        }
+            SingleFileArchiveTypes = new Dictionary<ArchiveType, string>
+            {
+                [ArchiveType.Gz] = "Gz",
+                [ArchiveType.Tar] = "Tar",
+                [ArchiveType.Zip] = "Zip"
+            }
+        };
+        _autoMocker.Use(config);
 
-        [Fact]
-        public void TestCreateForSingleFile()
+        var factory = _autoMocker.CreateInstance<ArchiveTypeViewModelFactory>();
+        var viewModels = factory.CreateForSingleFile();
+
+        Assert.NotNull(viewModels);
+        Assert.Equal(config.SingleFileArchiveTypes.Count, viewModels.Count);
+
+        Assert.True(config.SingleFileArchiveTypes.All(kvp =>
         {
-            var config = new ArchiveTypeViewModelFactoryConfiguration
-            {
-                SingleFileArchiveTypes = new Dictionary<ArchiveType, string>
-                {
-                    [ArchiveType.Gz] = "Gz",
-                    [ArchiveType.Tar] = "Tar",
-                    [ArchiveType.Zip] = "Zip"
-                }
-            };
-            _autoMocker.Use(config);
+            var (key, value) = kvp;
+            var viewModel = viewModels.SingleOrDefault(vm => vm.ArchiveType == key);
 
-            var factory = _autoMocker.CreateInstance<ArchiveTypeViewModelFactory>();
-            var viewModels = factory.CreateForSingleFile();
+            return viewModel is not null && viewModel.Name == value;
+        }));
+    }
 
-            Assert.NotNull(viewModels);
-            Assert.Equal(config.SingleFileArchiveTypes.Count, viewModels.Count);
-
-            Assert.True(config.SingleFileArchiveTypes.All(kvp =>
-            {
-                var (key, value) = kvp;
-                var viewModel = viewModels.SingleOrDefault(vm => vm.ArchiveType == key);
-
-                return viewModel is not null && viewModel.Name == value;
-            }));
-        }
-
-        [Fact]
-        public void TestCreateForMultipleFiles()
+    [Fact]
+    public void TestCreateForMultipleFiles()
+    {
+        var config = new ArchiveTypeViewModelFactoryConfiguration
         {
-            var config = new ArchiveTypeViewModelFactoryConfiguration
+            MultipleFilesArchiveTypes = new Dictionary<ArchiveType, string>
             {
-                MultipleFilesArchiveTypes = new Dictionary<ArchiveType, string>
-                {
-                    [ArchiveType.Gz] = "Gz",
-                    [ArchiveType.Tar] = "Tar",
-                    [ArchiveType.Zip] = "Zip"
-                }
-            };
-            _autoMocker.Use(config);
+                [ArchiveType.Gz] = "Gz",
+                [ArchiveType.Tar] = "Tar",
+                [ArchiveType.Zip] = "Zip"
+            }
+        };
+        _autoMocker.Use(config);
 
-            var factory = _autoMocker.CreateInstance<ArchiveTypeViewModelFactory>();
-            var viewModels = factory.CreateForMultipleFiles();
+        var factory = _autoMocker.CreateInstance<ArchiveTypeViewModelFactory>();
+        var viewModels = factory.CreateForMultipleFiles();
 
-            Assert.NotNull(viewModels);
-            Assert.Equal(config.MultipleFilesArchiveTypes.Count, viewModels.Count);
+        Assert.NotNull(viewModels);
+        Assert.Equal(config.MultipleFilesArchiveTypes.Count, viewModels.Count);
 
-            Assert.True(config.MultipleFilesArchiveTypes.All(kvp =>
-            {
-                var (key, value) = kvp;
-                var viewModel = viewModels.SingleOrDefault(vm => vm.ArchiveType == key);
+        Assert.True(config.MultipleFilesArchiveTypes.All(kvp =>
+        {
+            var (key, value) = kvp;
+            var viewModel = viewModels.SingleOrDefault(vm => vm.ArchiveType == key);
 
-                return viewModel is not null && viewModel.Name == value;
-            }));
-        }
+            return viewModel is not null && viewModel.Name == value;
+        }));
     }
 }

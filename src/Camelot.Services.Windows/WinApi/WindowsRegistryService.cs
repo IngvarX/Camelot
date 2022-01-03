@@ -4,22 +4,21 @@ using Camelot.Services.Windows.Enums;
 using Camelot.Services.Windows.Interfaces;
 using Microsoft.Win32;
 
-namespace Camelot.Services.Windows.WinApi
+namespace Camelot.Services.Windows.WinApi;
+
+[SupportedOSPlatform("windows")]
+public class WindowsRegistryService : IRegistryService
 {
-    [SupportedOSPlatform("windows")]
-    public class WindowsRegistryService : IRegistryService
+    public IRegistryKey GetRegistryKey(RootRegistryKey rootRegistryKey)
     {
-        public IRegistryKey GetRegistryKey(RootRegistryKey rootRegistryKey)
+        var winRegistryKey = rootRegistryKey switch
         {
-            var winRegistryKey = rootRegistryKey switch
-            {
-                RootRegistryKey.CurrentUser => Registry.CurrentUser,
-                RootRegistryKey.ClassesRoot => Registry.ClassesRoot,
-                RootRegistryKey.LocalMachine => Registry.LocalMachine,
-                _ => throw new ArgumentOutOfRangeException(nameof(rootRegistryKey), rootRegistryKey, null)
-            };
+            RootRegistryKey.CurrentUser => Registry.CurrentUser,
+            RootRegistryKey.ClassesRoot => Registry.ClassesRoot,
+            RootRegistryKey.LocalMachine => Registry.LocalMachine,
+            _ => throw new ArgumentOutOfRangeException(nameof(rootRegistryKey), rootRegistryKey, null)
+        };
             
-            return new RegistryKey(winRegistryKey);
-        }
+        return new RegistryKey(winRegistryKey);
     }
 }

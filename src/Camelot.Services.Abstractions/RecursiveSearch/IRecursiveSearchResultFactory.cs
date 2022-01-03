@@ -1,10 +1,9 @@
 using System;
 using System.Threading.Tasks;
 
-namespace Camelot.Services.Abstractions.RecursiveSearch
+namespace Camelot.Services.Abstractions.RecursiveSearch;
+
+public interface IRecursiveSearchResultFactory
 {
-    public interface IRecursiveSearchResultFactory
-    {
-        IRecursiveSearchResult Create(Func<INodeFoundEventPublisher, Task> taskFactory);
-    }
+    IRecursiveSearchResult Create(Func<INodeFoundEventPublisher, Task> taskFactory);
 }

@@ -1,7 +1,6 @@
-namespace Camelot.Services.Windows.Interfaces
+namespace Camelot.Services.Windows.Interfaces;
+
+public interface IApplicationInfoProvider
 {
-    public interface IApplicationInfoProvider
-    {
-        (string Name, string StartCommand, string ExecutePath) GetInfo(string applicationFile);
-    }
+    (string Name, string StartCommand, string ExecutePath) GetInfo(string applicationFile);
 }

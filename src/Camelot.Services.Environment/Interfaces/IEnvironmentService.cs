@@ -1,11 +1,10 @@
-namespace Camelot.Services.Environment.Interfaces
+namespace Camelot.Services.Environment.Interfaces;
+
+public interface IEnvironmentService
 {
-    public interface IEnvironmentService
-    {
-        string NewLine { get; }
+    string NewLine { get; }
 
-        bool Is64BitProcess { get; }
+    bool Is64BitProcess { get; }
 
-        string GetEnvironmentVariable(string variableName);
-    }
+    string GetEnvironmentVariable(string variableName);
 }

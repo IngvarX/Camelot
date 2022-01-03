@@ -1,10 +1,9 @@
 using CommandLine;
 
-namespace Camelot
+namespace Camelot;
+
+public class CommandLineOptions
 {
-    public class CommandLineOptions
-    {
-        [Option('i', "incognito", Required = false, HelpText = "Private mode")]
-        public bool IsIncognitoModeEnabled { get; set; }
-    }
+    [Option('i', "incognito", Required = false, HelpText = "Private mode")]
+    public bool IsIncognitoModeEnabled { get; set; }
 }

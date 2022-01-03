@@ -1,13 +1,12 @@
 using Camelot.Services.Abstractions.Models.State;
 
-namespace Camelot.Services.Abstractions
+namespace Camelot.Services.Abstractions;
+
+public interface ITerminalService
 {
-    public interface ITerminalService
-    {
-        void Open(string directory);
+    void Open(string directory);
 
-        TerminalSettingsStateModel GetTerminalSettings();
+    TerminalSettingsStateModel GetTerminalSettings();
 
-        void SetTerminalSettings(TerminalSettingsStateModel terminalSettingsState);
-    }
+    void SetTerminalSettings(TerminalSettingsStateModel terminalSettingsState);
 }

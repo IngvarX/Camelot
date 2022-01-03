@@ -3,37 +3,36 @@ using Camelot.Services.Abstractions;
 using Camelot.Services.FileSystemWatcher.Configuration;
 using Camelot.Services.FileSystemWatcher.Interfaces;
 
-namespace Camelot.Services.FileSystemWatcher.Implementations
+namespace Camelot.Services.FileSystemWatcher.Implementations;
+
+public class FileSystemWatcherFactory : IFileSystemWatcherFactory
 {
-    public class FileSystemWatcherFactory : IFileSystemWatcherFactory
+    private readonly IPathService _pathService;
+    private readonly FileSystemWatcherConfiguration _fileSystemWatcherConfiguration;
+
+    public FileSystemWatcherFactory(
+        IPathService pathService,
+        FileSystemWatcherConfiguration fileSystemWatcherConfiguration)
     {
-        private readonly IPathService _pathService;
-        private readonly FileSystemWatcherConfiguration _fileSystemWatcherConfiguration;
+        _pathService = pathService;
+        _fileSystemWatcherConfiguration = fileSystemWatcherConfiguration;
+    }
 
-        public FileSystemWatcherFactory(
-            IPathService pathService,
-            FileSystemWatcherConfiguration fileSystemWatcherConfiguration)
+    public IFileSystemWatcher Create(string directory)
+    {
+        var fileSystemWatcher = new System.IO.FileSystemWatcher
         {
-            _pathService = pathService;
-            _fileSystemWatcherConfiguration = fileSystemWatcherConfiguration;
-        }
+            Path = directory,
+            NotifyFilter = NotifyFilters.Attributes |
+                           NotifyFilters.DirectoryName |
+                           NotifyFilters.FileName |
+                           NotifyFilters.LastWrite |
+                           NotifyFilters.Security |
+                           NotifyFilters.Size
+        };
 
-        public IFileSystemWatcher Create(string directory)
-        {
-            var fileSystemWatcher = new System.IO.FileSystemWatcher
-            {
-                Path = directory,
-                NotifyFilter = NotifyFilters.Attributes |
-                               NotifyFilters.DirectoryName |
-                               NotifyFilters.FileName |
-                               NotifyFilters.LastWrite |
-                               NotifyFilters.Security |
-                               NotifyFilters.Size
-            };
+        var wrapper = new FileSystemWatcherAdapter(fileSystemWatcher);
 
-            var wrapper = new FileSystemWatcherAdapter(fileSystemWatcher);
-
-            return new AggregatingFileSystemWatcherDecorator(_pathService, wrapper, _fileSystemWatcherConfiguration);
-        }
+        return new AggregatingFileSystemWatcherDecorator(_pathService, wrapper, _fileSystemWatcherConfiguration);
     }
 }

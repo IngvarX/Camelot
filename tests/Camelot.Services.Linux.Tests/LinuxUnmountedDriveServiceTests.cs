@@ -7,102 +7,101 @@ using Moq;
 using Moq.AutoMock;
 using Xunit;
 
-namespace Camelot.Services.Linux.Tests
+namespace Camelot.Services.Linux.Tests;
+
+public class LinuxUnmountedDriveServiceTests
 {
-    public class LinuxUnmountedDriveServiceTests
+    private readonly AutoMocker _autoMocker;
+
+    public LinuxUnmountedDriveServiceTests()
     {
-        private readonly AutoMocker _autoMocker;
+        _autoMocker = new AutoMocker();
+    }
 
-        public LinuxUnmountedDriveServiceTests()
+    [Fact]
+    public async Task TestGetUnmountedDrivesDisabled()
+    {
+        var service = _autoMocker.CreateInstance<LinuxUnmountedDriveService>();
+
+        await service.ReloadUnmountedDrivesAsync();
+        var drives = service.UnmountedDrives;
+
+        Assert.NotNull(drives);
+        Assert.Empty(drives);
+    }
+
+    [Theory]
+    [InlineData("sda1 /mnt/test", new string[] {}, new string[] {})]
+    [InlineData("sda1 ", new[] {"sda1"}, new[] {"/dev/sda1"})]
+    [InlineData("loop ", new string[] {}, new string[] {})]
+    [InlineData("sda \nsdc2 ", new[] {"sdc2"}, new[] {"/dev/sdc2"})]
+    [InlineData("\n\n \n", new string[] {}, new string[] {})]
+    [InlineData("sd \n,s", new string[] {}, new string[] {})]
+    [InlineData("sda1 \nsdc \nsdc2 \nsdc3 /mnt/test",  new[] {"sda1", "sdc2"}, new[] {"/dev/sda1", "/dev/sdc2"})]
+    public async Task TestGetUnmountedDrivesEnabled(string output, string[] names, string[] fullNames)
+    {
+        var configuration = new UnmountedDrivesConfiguration
         {
-            _autoMocker = new AutoMocker();
-        }
+            IsEnabled = true
+        };
+        _autoMocker.Use(configuration);
+        _autoMocker
+            .Setup<IEnvironmentService, string>(m => m.NewLine)
+            .Returns("\n");
+        _autoMocker
+            .Setup<IProcessService, Task<string>>(m =>
+                m.ExecuteAndGetOutputAsync("lsblk", "--noheadings --raw -o NAME,MOUNTPOINT"))
+            .ReturnsAsync(output);
 
-        [Fact]
-        public async Task TestGetUnmountedDrivesDisabled()
+        var service = _autoMocker.CreateInstance<LinuxUnmountedDriveService>();
+
+        await service.ReloadUnmountedDrivesAsync();
+        var drives = service.UnmountedDrives;
+
+        Assert.NotNull(drives);
+
+        var actualNames = drives.Select(d => d.Name).ToArray();
+        Assert.Equal(names, actualNames);
+
+        var actualFullNames = drives.Select(d => d.FullName).ToArray();
+        Assert.Equal(fullNames, actualFullNames);
+    }
+
+    [Fact]
+    public async Task TestGetUnmountedDrivesEnabledException()
+    {
+        var configuration = new UnmountedDrivesConfiguration
         {
-            var service = _autoMocker.CreateInstance<LinuxUnmountedDriveService>();
+            IsEnabled = true
+        };
+        _autoMocker.Use(configuration);
+        _autoMocker
+            .Setup<IProcessService, Task<string>>(m =>
+                m.ExecuteAndGetOutputAsync("lsblk", "--noheadings --raw -o NAME,MOUNTPOINT"))
+            .ThrowsAsync(new Exception());
 
-            await service.ReloadUnmountedDrivesAsync();
-            var drives = service.UnmountedDrives;
+        var service = _autoMocker.CreateInstance<LinuxUnmountedDriveService>();
 
-            Assert.NotNull(drives);
-            Assert.Empty(drives);
-        }
+        await service.ReloadUnmountedDrivesAsync();
+        var drives = service.UnmountedDrives;
 
-        [Theory]
-        [InlineData("sda1 /mnt/test", new string[] {}, new string[] {})]
-        [InlineData("sda1 ", new[] {"sda1"}, new[] {"/dev/sda1"})]
-        [InlineData("loop ", new string[] {}, new string[] {})]
-        [InlineData("sda \nsdc2 ", new[] {"sdc2"}, new[] {"/dev/sdc2"})]
-        [InlineData("\n\n \n", new string[] {}, new string[] {})]
-        [InlineData("sd \n,s", new string[] {}, new string[] {})]
-        [InlineData("sda1 \nsdc \nsdc2 \nsdc3 /mnt/test",  new[] {"sda1", "sdc2"}, new[] {"/dev/sda1", "/dev/sdc2"})]
-        public async Task TestGetUnmountedDrivesEnabled(string output, string[] names, string[] fullNames)
-        {
-            var configuration = new UnmountedDrivesConfiguration
-            {
-                IsEnabled = true
-            };
-            _autoMocker.Use(configuration);
-            _autoMocker
-                .Setup<IEnvironmentService, string>(m => m.NewLine)
-                .Returns("\n");
-            _autoMocker
-                .Setup<IProcessService, Task<string>>(m =>
-                    m.ExecuteAndGetOutputAsync("lsblk", "--noheadings --raw -o NAME,MOUNTPOINT"))
-                .ReturnsAsync(output);
+        Assert.NotNull(drives);
+        Assert.Empty(drives);
+    }
 
-            var service = _autoMocker.CreateInstance<LinuxUnmountedDriveService>();
+    [Theory]
+    [InlineData("/dev/sda1", "mount -b /dev/sda1")]
+    [InlineData("/dev/sdc2", "mount -b /dev/sdc2")]
+    public void TestMount(string driveName, string command)
+    {
+        _autoMocker
+            .Setup<IProcessService>(m => m.Run("udisksctl", command))
+            .Verifiable();
 
-            await service.ReloadUnmountedDrivesAsync();
-            var drives = service.UnmountedDrives;
+        var service = _autoMocker.CreateInstance<LinuxUnmountedDriveService>();
+        service.Mount(driveName);
 
-            Assert.NotNull(drives);
-
-            var actualNames = drives.Select(d => d.Name).ToArray();
-            Assert.Equal(names, actualNames);
-
-            var actualFullNames = drives.Select(d => d.FullName).ToArray();
-            Assert.Equal(fullNames, actualFullNames);
-        }
-
-        [Fact]
-        public async Task TestGetUnmountedDrivesEnabledException()
-        {
-            var configuration = new UnmountedDrivesConfiguration
-            {
-                IsEnabled = true
-            };
-            _autoMocker.Use(configuration);
-            _autoMocker
-                .Setup<IProcessService, Task<string>>(m =>
-                    m.ExecuteAndGetOutputAsync("lsblk", "--noheadings --raw -o NAME,MOUNTPOINT"))
-                .ThrowsAsync(new Exception());
-
-            var service = _autoMocker.CreateInstance<LinuxUnmountedDriveService>();
-
-            await service.ReloadUnmountedDrivesAsync();
-            var drives = service.UnmountedDrives;
-
-            Assert.NotNull(drives);
-            Assert.Empty(drives);
-        }
-
-        [Theory]
-        [InlineData("/dev/sda1", "mount -b /dev/sda1")]
-        [InlineData("/dev/sdc2", "mount -b /dev/sdc2")]
-        public void TestMount(string driveName, string command)
-        {
-            _autoMocker
-                .Setup<IProcessService>(m => m.Run("udisksctl", command))
-                .Verifiable();
-
-            var service = _autoMocker.CreateInstance<LinuxUnmountedDriveService>();
-            service.Mount(driveName);
-
-            _autoMocker
-                .Verify<IProcessService>(m => m.Run("udisksctl", command), Times.Once);
-        }
+        _autoMocker
+            .Verify<IProcessService>(m => m.Run("udisksctl", command), Times.Once);
     }
 }

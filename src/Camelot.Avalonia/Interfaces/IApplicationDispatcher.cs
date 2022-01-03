@@ -1,12 +1,11 @@
 using System;
 using System.Threading.Tasks;
 
-namespace Camelot.Avalonia.Interfaces
-{
-    public interface IApplicationDispatcher
-    {
-        void Dispatch(Action action);
+namespace Camelot.Avalonia.Interfaces;
 
-        Task DispatchAsync(Func<Task> task);
-    }
+public interface IApplicationDispatcher
+{
+    void Dispatch(Action action);
+
+    Task DispatchAsync(Func<Task> task);
 }

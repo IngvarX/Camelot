@@ -1,9 +1,8 @@
 using System.IO;
 
-namespace Camelot.Services.Archives.Interfaces
+namespace Camelot.Services.Archives.Interfaces;
+
+public interface IStreamFactory
 {
-    public interface IStreamFactory
-    {
-        Stream Create(Stream inputStream);
-    }
+    Stream Create(Stream inputStream);
 }

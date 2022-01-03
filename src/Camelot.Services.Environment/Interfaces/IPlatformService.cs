@@ -1,9 +1,8 @@
 using Camelot.Services.Environment.Enums;
 
-namespace Camelot.Services.Environment.Interfaces
+namespace Camelot.Services.Environment.Interfaces;
+
+public interface IPlatformService
 {
-    public interface IPlatformService
-    {
-        Platform GetPlatform();
-    }
+    Platform GetPlatform();
 }

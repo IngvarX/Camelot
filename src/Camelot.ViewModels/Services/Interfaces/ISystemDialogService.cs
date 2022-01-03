@@ -1,11 +1,10 @@
 using System.Threading.Tasks;
 
-namespace Camelot.ViewModels.Services.Interfaces
-{
-    public interface ISystemDialogService
-    {
-        Task<string> GetDirectoryAsync(string initialDirectory = null);
+namespace Camelot.ViewModels.Services.Interfaces;
 
-        Task<string> GetFileAsync(string initialFile = null);
-    }
+public interface ISystemDialogService
+{
+    Task<string> GetDirectoryAsync(string initialDirectory = null);
+
+    Task<string> GetFileAsync(string initialFile = null);
 }

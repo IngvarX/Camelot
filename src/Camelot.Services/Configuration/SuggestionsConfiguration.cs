@@ -1,7 +1,6 @@
-namespace Camelot.Services.Configuration
+namespace Camelot.Services.Configuration;
+
+public class SuggestionsConfiguration
 {
-    public class SuggestionsConfiguration
-    {
-        public int SuggestionsCount { get; set; }
-    }
+    public int SuggestionsCount { get; set; }
 }

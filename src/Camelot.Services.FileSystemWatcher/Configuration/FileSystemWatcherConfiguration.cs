@@ -1,7 +1,6 @@
-namespace Camelot.Services.FileSystemWatcher.Configuration
+namespace Camelot.Services.FileSystemWatcher.Configuration;
+
+public class FileSystemWatcherConfiguration
 {
-    public class FileSystemWatcherConfiguration
-    {
-        public int RefreshIntervalMs { get; set; }
-    }
+    public int RefreshIntervalMs { get; set; }
 }

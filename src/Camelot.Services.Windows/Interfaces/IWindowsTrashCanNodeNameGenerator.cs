@@ -1,7 +1,6 @@
-namespace Camelot.Services.Windows.Interfaces
+namespace Camelot.Services.Windows.Interfaces;
+
+public interface IWindowsTrashCanNodeNameGenerator
 {
-    public interface IWindowsTrashCanNodeNameGenerator
-    {
-        string Generate();
-    }
+    string Generate();
 }

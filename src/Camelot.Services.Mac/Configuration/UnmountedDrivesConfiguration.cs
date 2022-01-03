@@ -1,7 +1,6 @@
-namespace Camelot.Services.Mac.Configuration
+namespace Camelot.Services.Mac.Configuration;
+
+public class UnmountedDrivesConfiguration
 {
-    public class UnmountedDrivesConfiguration
-    {
-        public bool IsEnabled { get; set; }
-    }
+    public bool IsEnabled { get; set; }
 }

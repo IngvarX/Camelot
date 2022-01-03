@@ -10,284 +10,283 @@ using Moq;
 using Moq.AutoMock;
 using Xunit;
 
-namespace Camelot.Services.Operations.Tests
+namespace Camelot.Services.Operations.Tests;
+
+public class OperationsTests
 {
-    public class OperationsTests
+    private const string SourceName = "Source";
+    private const string DestinationName = "Destination";
+    private const string SourceDirName = "SourceDir";
+    private const string DestinationDirName = "DestinationDir";
+
+    private readonly AutoMocker _autoMocker;
+
+    public OperationsTests()
     {
-        private const string SourceName = "Source";
-        private const string DestinationName = "Destination";
-        private const string SourceDirName = "SourceDir";
-        private const string DestinationDirName = "DestinationDir";
+        _autoMocker = new AutoMocker();
+    }
 
-        private readonly AutoMocker _autoMocker;
+    [Theory]
+    [InlineData(true, OperationState.Failed, SourceName, DestinationName, 1, false)]
+    [InlineData(false, OperationState.Finished, SourceName, DestinationName, 1, false)]
+    [InlineData(false, OperationState.Finished, SourceName, SourceName, 0, true)]
+    public async Task TestCopyOperation(bool throws, OperationState state, string sourceName,
+        string destinationName, int copyCallsCount, bool destinationExists)
+    {
+        var copySetup = _autoMocker
+            .Setup<IFileService, Task<bool>>(m => m.CopyAsync(sourceName, destinationName, It.IsAny<CancellationToken>(), false))
+            .ReturnsAsync(!throws);
+        copySetup.Verifiable();
+        _autoMocker
+            .Setup<IFileService, bool>(m => m.CheckIfExists(destinationName))
+            .Returns(destinationExists);
 
-        public OperationsTests()
-        {
-            _autoMocker = new AutoMocker();
-        }
+        var operationsFactory = _autoMocker.CreateInstance<OperationsFactory>();
+        var settings = new BinaryFileSystemOperationSettings(
+            new string[] { },
+            new[] {SourceName},
+            new string[] { },
+            new[] {SourceName},
+            new Dictionary<string, string> {[sourceName] = destinationName},
+            new string[] { }
+        );
+        var copyOperation = operationsFactory.CreateCopyOperation(settings);
 
-        [Theory]
-        [InlineData(true, OperationState.Failed, SourceName, DestinationName, 1, false)]
-        [InlineData(false, OperationState.Finished, SourceName, DestinationName, 1, false)]
-        [InlineData(false, OperationState.Finished, SourceName, SourceName, 0, true)]
-        public async Task TestCopyOperation(bool throws, OperationState state, string sourceName,
-            string destinationName, int copyCallsCount, bool destinationExists)
-        {
-            var copySetup = _autoMocker
-                .Setup<IFileService, Task<bool>>(m => m.CopyAsync(sourceName, destinationName, It.IsAny<CancellationToken>(), false))
-                .ReturnsAsync(!throws);
-            copySetup.Verifiable();
-            _autoMocker
-                .Setup<IFileService, bool>(m => m.CheckIfExists(destinationName))
-                .Returns(destinationExists);
+        Assert.Equal(OperationState.NotStarted, copyOperation.State);
 
-            var operationsFactory = _autoMocker.CreateInstance<OperationsFactory>();
-            var settings = new BinaryFileSystemOperationSettings(
-                new string[] { },
-                new[] {SourceName},
-                new string[] { },
-                new[] {SourceName},
-                new Dictionary<string, string> {[sourceName] = destinationName},
-                new string[] { }
-            );
-            var copyOperation = operationsFactory.CreateCopyOperation(settings);
+        var isCallbackCalled = false;
+        copyOperation.StateChanged += (sender, args) => isCallbackCalled = true;
 
-            Assert.Equal(OperationState.NotStarted, copyOperation.State);
+        await copyOperation.RunAsync();
 
-            var isCallbackCalled = false;
-            copyOperation.StateChanged += (sender, args) => isCallbackCalled = true;
+        Assert.Equal(state, copyOperation.State);
 
-            await copyOperation.RunAsync();
+        Assert.True(isCallbackCalled);
+        _autoMocker
+            .Verify<IFileService>(m => m.CopyAsync(sourceName, destinationName, It.IsAny<CancellationToken>(), false),
+                Times.Exactly(copyCallsCount));
+    }
 
-            Assert.Equal(state, copyOperation.State);
+    [Theory]
+    [InlineData(true, true, OperationState.Failed, 0)]
+    [InlineData(true, false, OperationState.Failed, 0)]
+    [InlineData(false, true, OperationState.Failed, 1)]
+    [InlineData(false, false, OperationState.Finished, 1)]
+    public async Task TestMoveOperation(bool copyThrows, bool deleteThrows, OperationState state,
+        int removeCallsCount)
+    {
+        var copySetup = _autoMocker
+            .Setup<IFileService, Task<bool>>(m => m.CopyAsync(SourceName, DestinationName, It.IsAny<CancellationToken>(), false))
+            .ReturnsAsync(!copyThrows);
+        copySetup.Verifiable();
 
-            Assert.True(isCallbackCalled);
-            _autoMocker
-                .Verify<IFileService>(m => m.CopyAsync(sourceName, destinationName, It.IsAny<CancellationToken>(), false),
-                    Times.Exactly(copyCallsCount));
-        }
+        var deleteSetup = _autoMocker
+            .Setup<IFileService, bool>(m => m.Remove(SourceName))
+            .Returns(!deleteThrows);
+        deleteSetup.Verifiable();
 
-        [Theory]
-        [InlineData(true, true, OperationState.Failed, 0)]
-        [InlineData(true, false, OperationState.Failed, 0)]
-        [InlineData(false, true, OperationState.Failed, 1)]
-        [InlineData(false, false, OperationState.Finished, 1)]
-        public async Task TestMoveOperation(bool copyThrows, bool deleteThrows, OperationState state,
-            int removeCallsCount)
-        {
-            var copySetup = _autoMocker
-                .Setup<IFileService, Task<bool>>(m => m.CopyAsync(SourceName, DestinationName, It.IsAny<CancellationToken>(), false))
-                .ReturnsAsync(!copyThrows);
-            copySetup.Verifiable();
+        var operationsFactory = _autoMocker.CreateInstance<OperationsFactory>();
+        var settings = new BinaryFileSystemOperationSettings(
+            new string[] { },
+            new[] {SourceName},
+            new string[] { },
+            new[] {SourceName},
+            new Dictionary<string, string> {[SourceName] = DestinationName},
+            new string[] { }
+        );
+        var moveOperation = operationsFactory.CreateMoveOperation(settings);
 
-            var deleteSetup = _autoMocker
-                .Setup<IFileService, bool>(m => m.Remove(SourceName))
-                .Returns(!deleteThrows);
-            deleteSetup.Verifiable();
+        Assert.Equal(OperationState.NotStarted, moveOperation.State);
 
-            var operationsFactory = _autoMocker.CreateInstance<OperationsFactory>();
-            var settings = new BinaryFileSystemOperationSettings(
-                new string[] { },
-                new[] {SourceName},
-                new string[] { },
-                new[] {SourceName},
-                new Dictionary<string, string> {[SourceName] = DestinationName},
-                new string[] { }
-            );
-            var moveOperation = operationsFactory.CreateMoveOperation(settings);
+        var callbackCalled = false;
+        moveOperation.StateChanged += (sender, args) => callbackCalled = true;
 
-            Assert.Equal(OperationState.NotStarted, moveOperation.State);
+        await moveOperation.RunAsync();
 
-            var callbackCalled = false;
-            moveOperation.StateChanged += (sender, args) => callbackCalled = true;
+        Assert.Equal(state, moveOperation.State);
 
-            await moveOperation.RunAsync();
+        Assert.True(callbackCalled);
+        _autoMocker
+            .Verify<IFileService>(m => m.CopyAsync(SourceName, DestinationName, It.IsAny<CancellationToken>(), false),
+                Times.Once);
+        _autoMocker
+            .Verify<IFileService, bool>(m => m.Remove(SourceName),
+                Times.Exactly(removeCallsCount));
+    }
 
-            Assert.Equal(state, moveOperation.State);
+    [Theory]
+    [InlineData(true, OperationState.Failed)]
+    [InlineData(false, OperationState.Finished)]
+    public async Task TestDeleteFileOperation(bool throws, OperationState state)
+    {
+        var removeSetup = _autoMocker
+            .Setup<IFileService, bool>(m => m.Remove(SourceName))
+            .Returns(!throws);
+        removeSetup.Verifiable();
 
-            Assert.True(callbackCalled);
-            _autoMocker
-                .Verify<IFileService>(m => m.CopyAsync(SourceName, DestinationName, It.IsAny<CancellationToken>(), false),
-                    Times.Once);
-            _autoMocker
-                .Verify<IFileService, bool>(m => m.Remove(SourceName),
-                    Times.Exactly(removeCallsCount));
-        }
+        var operationsFactory = _autoMocker.CreateInstance<OperationsFactory>();
+        var deleteOperation = operationsFactory.CreateDeleteOperation(
+            new UnaryFileSystemOperationSettings(new string[] {}, new[] {SourceName}, SourceName));
 
-        [Theory]
-        [InlineData(true, OperationState.Failed)]
-        [InlineData(false, OperationState.Finished)]
-        public async Task TestDeleteFileOperation(bool throws, OperationState state)
-        {
-            var removeSetup = _autoMocker
-                .Setup<IFileService, bool>(m => m.Remove(SourceName))
-                .Returns(!throws);
-            removeSetup.Verifiable();
+        Assert.Equal(OperationState.NotStarted, deleteOperation.State);
+        var callbackCalled = false;
+        deleteOperation.StateChanged += (sender, args) => callbackCalled = true;
 
-            var operationsFactory = _autoMocker.CreateInstance<OperationsFactory>();
-            var deleteOperation = operationsFactory.CreateDeleteOperation(
-                new UnaryFileSystemOperationSettings(new string[] {}, new[] {SourceName}, SourceName));
+        await deleteOperation.RunAsync();
 
-            Assert.Equal(OperationState.NotStarted, deleteOperation.State);
-            var callbackCalled = false;
-            deleteOperation.StateChanged += (sender, args) => callbackCalled = true;
+        Assert.Equal(state, deleteOperation.State);
 
-            await deleteOperation.RunAsync();
+        Assert.True(callbackCalled);
+        _autoMocker.Verify<IFileService, bool>(m => m.Remove(SourceName), Times.Once);
+    }
 
-            Assert.Equal(state, deleteOperation.State);
+    [Theory]
+    [InlineData(true, OperationState.Failed)]
+    [InlineData(false, OperationState.Finished)]
+    public async Task TestDeleteDirectoryOperation(bool throws, OperationState state)
+    {
+        var removeSetup = _autoMocker
+            .Setup<IDirectoryService, bool>(m => m.RemoveRecursively(SourceName))
+            .Returns(!throws);
+        removeSetup.Verifiable();
 
-            Assert.True(callbackCalled);
-            _autoMocker.Verify<IFileService, bool>(m => m.Remove(SourceName), Times.Once);
-        }
+        var operationsFactory = _autoMocker.CreateInstance<OperationsFactory>();
+        var deleteOperation = operationsFactory.CreateDeleteOperation(
+            new UnaryFileSystemOperationSettings(new[] {SourceName}, new string[] {}, SourceName));
+        Assert.Equal(OperationState.NotStarted, deleteOperation.State);
 
-        [Theory]
-        [InlineData(true, OperationState.Failed)]
-        [InlineData(false, OperationState.Finished)]
-        public async Task TestDeleteDirectoryOperation(bool throws, OperationState state)
-        {
-            var removeSetup = _autoMocker
-                .Setup<IDirectoryService, bool>(m => m.RemoveRecursively(SourceName))
-                .Returns(!throws);
-            removeSetup.Verifiable();
+        var callbackCalled = false;
+        deleteOperation.StateChanged += (sender, args) => callbackCalled = true;
 
-            var operationsFactory = _autoMocker.CreateInstance<OperationsFactory>();
-            var deleteOperation = operationsFactory.CreateDeleteOperation(
-                new UnaryFileSystemOperationSettings(new[] {SourceName}, new string[] {}, SourceName));
-            Assert.Equal(OperationState.NotStarted, deleteOperation.State);
+        await deleteOperation.RunAsync();
 
-            var callbackCalled = false;
-            deleteOperation.StateChanged += (sender, args) => callbackCalled = true;
+        Assert.Equal(state, deleteOperation.State);
 
-            await deleteOperation.RunAsync();
+        Assert.True(callbackCalled);
+        _autoMocker.Verify<IDirectoryService, bool>(m => m.RemoveRecursively(SourceName), Times.Once);
+    }
 
-            Assert.Equal(state, deleteOperation.State);
+    [Theory]
+    [InlineData(false, OperationState.Failed)]
+    [InlineData(true, OperationState.Finished)]
+    public async Task TestCopyEmptyDirectoryOperation(bool success, OperationState state)
+    {
+        _autoMocker
+            .Setup<IDirectoryService, IReadOnlyList<string>>(m => m.GetEmptyDirectoriesRecursively(SourceName))
+            .Returns(new[] {SourceName});
+        _autoMocker
+            .Setup<IDirectoryService, bool>(m => m.Create(DestinationName))
+            .Returns(success)
+            .Verifiable();
 
-            Assert.True(callbackCalled);
-            _autoMocker.Verify<IDirectoryService, bool>(m => m.RemoveRecursively(SourceName), Times.Once);
-        }
+        var operationsFactory = _autoMocker.CreateInstance<OperationsFactory>();
+        var settings = new BinaryFileSystemOperationSettings(
+            new[] { SourceName },
+            new string[] { },
+            new[] { DestinationName },
+            new string[] { },
+            new Dictionary<string, string>(),
+            new[] {DestinationName }
+        );
+        var copyOperation = operationsFactory.CreateCopyOperation(settings);
+        Assert.Equal(OperationState.NotStarted, copyOperation.State);
 
-        [Theory]
-        [InlineData(false, OperationState.Failed)]
-        [InlineData(true, OperationState.Finished)]
-        public async Task TestCopyEmptyDirectoryOperation(bool success, OperationState state)
-        {
-            _autoMocker
-                .Setup<IDirectoryService, IReadOnlyList<string>>(m => m.GetEmptyDirectoriesRecursively(SourceName))
-                .Returns(new[] {SourceName});
-            _autoMocker
-                .Setup<IDirectoryService, bool>(m => m.Create(DestinationName))
-                .Returns(success)
-                .Verifiable();
+        var callbackCalled = false;
+        copyOperation.StateChanged += (sender, args) => callbackCalled = true;
 
-            var operationsFactory = _autoMocker.CreateInstance<OperationsFactory>();
-            var settings = new BinaryFileSystemOperationSettings(
-                new[] { SourceName },
-                new string[] { },
-                new[] { DestinationName },
-                new string[] { },
-                new Dictionary<string, string>(),
-                new[] {DestinationName }
-            );
-            var copyOperation = operationsFactory.CreateCopyOperation(settings);
-            Assert.Equal(OperationState.NotStarted, copyOperation.State);
+        await copyOperation.RunAsync();
 
-            var callbackCalled = false;
-            copyOperation.StateChanged += (sender, args) => callbackCalled = true;
+        Assert.Equal(state, copyOperation.State);
 
-            await copyOperation.RunAsync();
+        Assert.True(callbackCalled);
+        _autoMocker.Verify<IDirectoryService, bool>(m => m.Create(DestinationName), Times.Once);
+    }
 
-            Assert.Equal(state, copyOperation.State);
+    [Theory]
+    [InlineData(ArchiveType.Tar)]
+    [InlineData(ArchiveType.Zip)]
+    [InlineData(ArchiveType.Gz)]
+    [InlineData(ArchiveType.TarBz2)]
+    [InlineData(ArchiveType.TarGz)]
+    [InlineData(ArchiveType.Bz2)]
+    [InlineData(ArchiveType.TarXz)]
+    [InlineData(ArchiveType.Xz)]
+    [InlineData(ArchiveType.TarLz)]
+    [InlineData(ArchiveType.Lz)]
+    [InlineData(ArchiveType.SevenZip)]
+    public async Task TestPackOperation(ArchiveType archiveType)
+    {
+        var processorMock = new Mock<IArchiveWriter>();
+        processorMock
+            .Setup(m => m.PackAsync(
+                It.Is<IReadOnlyList<string>>(l => l.Single() == SourceName),
+                It.IsAny<IReadOnlyList<string>>(), SourceDirName, DestinationName))
+            .Verifiable();
+        _autoMocker
+            .Setup<IArchiveProcessorFactory, IArchiveWriter>(m => m.CreateWriter(archiveType))
+            .Returns(processorMock.Object);
 
-            Assert.True(callbackCalled);
-            _autoMocker.Verify<IDirectoryService, bool>(m => m.Create(DestinationName), Times.Once);
-        }
-
-        [Theory]
-        [InlineData(ArchiveType.Tar)]
-        [InlineData(ArchiveType.Zip)]
-        [InlineData(ArchiveType.Gz)]
-        [InlineData(ArchiveType.TarBz2)]
-        [InlineData(ArchiveType.TarGz)]
-        [InlineData(ArchiveType.Bz2)]
-        [InlineData(ArchiveType.TarXz)]
-        [InlineData(ArchiveType.Xz)]
-        [InlineData(ArchiveType.TarLz)]
-        [InlineData(ArchiveType.Lz)]
-        [InlineData(ArchiveType.SevenZip)]
-        public async Task TestPackOperation(ArchiveType archiveType)
-        {
-            var processorMock = new Mock<IArchiveWriter>();
-            processorMock
-                .Setup(m => m.PackAsync(
-                    It.Is<IReadOnlyList<string>>(l => l.Single() == SourceName),
-                    It.IsAny<IReadOnlyList<string>>(), SourceDirName, DestinationName))
-                .Verifiable();
-            _autoMocker
-                .Setup<IArchiveProcessorFactory, IArchiveWriter>(m => m.CreateWriter(archiveType))
-                .Returns(processorMock.Object);
-
-            var operationsFactory = _autoMocker.CreateInstance<OperationsFactory>();
-            var settings = new PackOperationSettings(
-                new string[] {}, new[] {SourceName},
+        var operationsFactory = _autoMocker.CreateInstance<OperationsFactory>();
+        var settings = new PackOperationSettings(
+            new string[] {}, new[] {SourceName},
             DestinationName, SourceDirName, DestinationDirName, archiveType);
-            var operation = operationsFactory.CreatePackOperation(settings);
+        var operation = operationsFactory.CreatePackOperation(settings);
 
-            Assert.Equal(OperationState.NotStarted, operation.State);
-            var callbackCalled = false;
-            operation.StateChanged += (sender, args) => callbackCalled = true;
+        Assert.Equal(OperationState.NotStarted, operation.State);
+        var callbackCalled = false;
+        operation.StateChanged += (sender, args) => callbackCalled = true;
 
-            await operation.RunAsync();
+        await operation.RunAsync();
 
-            Assert.Equal(OperationState.Finished, operation.State);
-            Assert.True(callbackCalled);
+        Assert.Equal(OperationState.Finished, operation.State);
+        Assert.True(callbackCalled);
 
-            processorMock
-                .Verify(m => m.PackAsync(
+        processorMock
+            .Verify(m => m.PackAsync(
                     It.Is<IReadOnlyList<string>>(l => l.Single() == SourceName),
                     It.IsAny<IReadOnlyList<string>>(), SourceDirName, DestinationName),
-                    Times.Once);
-        }
+                Times.Once);
+    }
 
-        [Theory]
-        [InlineData(ArchiveType.Tar)]
-        [InlineData(ArchiveType.Zip)]
-        [InlineData(ArchiveType.Gz)]
-        [InlineData(ArchiveType.TarBz2)]
-        [InlineData(ArchiveType.TarGz)]
-        [InlineData(ArchiveType.Bz2)]
-        [InlineData(ArchiveType.TarXz)]
-        [InlineData(ArchiveType.Xz)]
-        [InlineData(ArchiveType.TarLz)]
-        [InlineData(ArchiveType.Lz)]
-        [InlineData(ArchiveType.SevenZip)]
-        public async Task TestExtractOperation(ArchiveType archiveType)
-        {
-            var processorMock = new Mock<IArchiveReader>();
-            processorMock
-                .Setup(m => m.ExtractAsync(
-                    SourceName, DestinationDirName))
-                .Verifiable();
-            _autoMocker
-                .Setup<IArchiveProcessorFactory, IArchiveReader>(m => m.CreateReader(archiveType))
-                .Returns(processorMock.Object);
+    [Theory]
+    [InlineData(ArchiveType.Tar)]
+    [InlineData(ArchiveType.Zip)]
+    [InlineData(ArchiveType.Gz)]
+    [InlineData(ArchiveType.TarBz2)]
+    [InlineData(ArchiveType.TarGz)]
+    [InlineData(ArchiveType.Bz2)]
+    [InlineData(ArchiveType.TarXz)]
+    [InlineData(ArchiveType.Xz)]
+    [InlineData(ArchiveType.TarLz)]
+    [InlineData(ArchiveType.Lz)]
+    [InlineData(ArchiveType.SevenZip)]
+    public async Task TestExtractOperation(ArchiveType archiveType)
+    {
+        var processorMock = new Mock<IArchiveReader>();
+        processorMock
+            .Setup(m => m.ExtractAsync(
+                SourceName, DestinationDirName))
+            .Verifiable();
+        _autoMocker
+            .Setup<IArchiveProcessorFactory, IArchiveReader>(m => m.CreateReader(archiveType))
+            .Returns(processorMock.Object);
 
-            var operationsFactory = _autoMocker.CreateInstance<OperationsFactory>();
-            var settings = new ExtractArchiveOperationSettings(
-                SourceName, DestinationDirName, archiveType);
-            var operation = operationsFactory.CreateExtractOperation(settings);
+        var operationsFactory = _autoMocker.CreateInstance<OperationsFactory>();
+        var settings = new ExtractArchiveOperationSettings(
+            SourceName, DestinationDirName, archiveType);
+        var operation = operationsFactory.CreateExtractOperation(settings);
 
-            Assert.Equal(OperationState.NotStarted, operation.State);
-            var callbackCalled = false;
-            operation.StateChanged += (sender, args) => callbackCalled = true;
+        Assert.Equal(OperationState.NotStarted, operation.State);
+        var callbackCalled = false;
+        operation.StateChanged += (sender, args) => callbackCalled = true;
 
-            await operation.RunAsync();
+        await operation.RunAsync();
 
-            Assert.Equal(OperationState.Finished, operation.State);
-            Assert.True(callbackCalled);
+        Assert.Equal(OperationState.Finished, operation.State);
+        Assert.True(callbackCalled);
 
-            processorMock
-                .Verify(m => m.ExtractAsync(
-                    SourceName, DestinationDirName), Times.Once);
-        }
+        processorMock
+            .Verify(m => m.ExtractAsync(
+                SourceName, DestinationDirName), Times.Once);
     }
 }

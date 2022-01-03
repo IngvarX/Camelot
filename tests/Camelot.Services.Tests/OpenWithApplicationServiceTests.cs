@@ -6,152 +6,151 @@ using Moq;
 using Moq.AutoMock;
 using Xunit;
 
-namespace Camelot.Services.Tests
+namespace Camelot.Services.Tests;
+
+public class OpenWithApplicationServiceTests
 {
-    public class OpenWithApplicationServiceTests
+    private const string Extension = "txt";
+    private const string UppercaseExtension = "TXT";
+    private const string AnotherExtension = "pdf";
+    private const string DisplayName = "App";
+    private const string Arguments = "Args";
+    private const string ExecutePath = "app";
+
+    private readonly AutoMocker _autoMocker;
+
+    public OpenWithApplicationServiceTests()
     {
-        private const string Extension = "txt";
-        private const string UppercaseExtension = "TXT";
-        private const string AnotherExtension = "pdf";
-        private const string DisplayName = "App";
-        private const string Arguments = "Args";
-        private const string ExecutePath = "app";
+        _autoMocker = new AutoMocker();
+    }
 
-        private readonly AutoMocker _autoMocker;
+    [Fact]
+    public void TestEmptyState()
+    {
+        var repositoryMock = new Mock<IRepository<OpenWithApplicationSettings>>();
+        repositoryMock
+            .Setup(m => m.GetById(It.IsAny<string>()))
+            .Returns((OpenWithApplicationSettings)null);
 
-        public OpenWithApplicationServiceTests()
+        var unitOfWorkFactory = GetUnitOfWorkFactory(repositoryMock);
+        _autoMocker.Use(unitOfWorkFactory);
+        var service = _autoMocker.CreateInstance<OpenWithApplicationService>();
+
+        var application = service.GetSelectedApplication(Extension);
+
+        Assert.Null(application);
+    }
+
+    [Theory]
+    [InlineData(Extension)]
+    [InlineData(UppercaseExtension)]
+    public void TestNonEmptyStateAppFound(string extension)
+    {
+        var dbApplication = new Application
         {
-            _autoMocker = new AutoMocker();
-        }
-
-        [Fact]
-        public void TestEmptyState()
+            DisplayName = DisplayName,
+            Arguments = Arguments,
+            ExecutePath = ExecutePath
+        };
+        var settings = new OpenWithApplicationSettings
         {
-            var repositoryMock = new Mock<IRepository<OpenWithApplicationSettings>>();
-            repositoryMock
-                .Setup(m => m.GetById(It.IsAny<string>()))
-                .Returns((OpenWithApplicationSettings)null);
+            ApplicationByExtension = {[Extension] = dbApplication}
+        };
+        var repositoryMock = new Mock<IRepository<OpenWithApplicationSettings>>();
+        repositoryMock
+            .Setup(m => m.GetById(It.IsAny<string>()))
+            .Returns(settings);
 
-            var unitOfWorkFactory = GetUnitOfWorkFactory(repositoryMock);
-            _autoMocker.Use(unitOfWorkFactory);
-            var service = _autoMocker.CreateInstance<OpenWithApplicationService>();
+        var unitOfWorkFactory = GetUnitOfWorkFactory(repositoryMock);
+        _autoMocker.Use(unitOfWorkFactory);
+        var service = _autoMocker.CreateInstance<OpenWithApplicationService>();
 
-            var application = service.GetSelectedApplication(Extension);
+        var application = service.GetSelectedApplication(extension);
 
-            Assert.Null(application);
-        }
+        Assert.NotNull(application);
+        Assert.Equal(DisplayName, application.DisplayName);
+        Assert.Equal(Arguments, application.Arguments);
+        Assert.Equal(ExecutePath, application.ExecutePath);
+    }
 
-        [Theory]
-        [InlineData(Extension)]
-        [InlineData(UppercaseExtension)]
-        public void TestNonEmptyStateAppFound(string extension)
+    [Fact]
+    public void TestNonEmptyStateAppNotFound()
+    {
+        var dbApplication = new Application
         {
-            var dbApplication = new Application
+            DisplayName = DisplayName,
+            Arguments = Arguments,
+            ExecutePath = ExecutePath
+        };
+        var settings = new OpenWithApplicationSettings
+        {
+            ApplicationByExtension = {[Extension] = dbApplication}
+        };
+        var repositoryMock = new Mock<IRepository<OpenWithApplicationSettings>>();
+        repositoryMock
+            .Setup(m => m.GetById(It.IsAny<string>()))
+            .Returns(settings);
+
+        var unitOfWorkFactory = GetUnitOfWorkFactory(repositoryMock);
+        _autoMocker.Use(unitOfWorkFactory);
+        var service = _autoMocker.CreateInstance<OpenWithApplicationService>();
+
+        var application = service.GetSelectedApplication(AnotherExtension);
+
+        Assert.Null(application);
+    }
+
+    [Fact]
+    public void TestSave()
+    {
+        var isCallbackCalled = false;
+        var repositoryMock = new Mock<IRepository<OpenWithApplicationSettings>>();
+        repositoryMock
+            .Setup(m => m.Upsert(It.IsAny<string>(),
+                It.IsAny<OpenWithApplicationSettings>()))
+            .Callback<string, OpenWithApplicationSettings>((id, entity) =>
             {
-                DisplayName = DisplayName,
-                Arguments = Arguments,
-                ExecutePath = ExecutePath
-            };
-            var settings = new OpenWithApplicationSettings
-            {
-                ApplicationByExtension = {[Extension] = dbApplication}
-            };
-            var repositoryMock = new Mock<IRepository<OpenWithApplicationSettings>>();
-            repositoryMock
-                .Setup(m => m.GetById(It.IsAny<string>()))
-                .Returns(settings);
-
-            var unitOfWorkFactory = GetUnitOfWorkFactory(repositoryMock);
-            _autoMocker.Use(unitOfWorkFactory);
-            var service = _autoMocker.CreateInstance<OpenWithApplicationService>();
-
-            var application = service.GetSelectedApplication(extension);
-
-            Assert.NotNull(application);
-            Assert.Equal(DisplayName, application.DisplayName);
-            Assert.Equal(Arguments, application.Arguments);
-            Assert.Equal(ExecutePath, application.ExecutePath);
-        }
-
-        [Fact]
-        public void TestNonEmptyStateAppNotFound()
-        {
-            var dbApplication = new Application
-            {
-                DisplayName = DisplayName,
-                Arguments = Arguments,
-                ExecutePath = ExecutePath
-            };
-            var settings = new OpenWithApplicationSettings
-            {
-                ApplicationByExtension = {[Extension] = dbApplication}
-            };
-            var repositoryMock = new Mock<IRepository<OpenWithApplicationSettings>>();
-            repositoryMock
-                .Setup(m => m.GetById(It.IsAny<string>()))
-                .Returns(settings);
-
-            var unitOfWorkFactory = GetUnitOfWorkFactory(repositoryMock);
-            _autoMocker.Use(unitOfWorkFactory);
-            var service = _autoMocker.CreateInstance<OpenWithApplicationService>();
-
-            var application = service.GetSelectedApplication(AnotherExtension);
-
-            Assert.Null(application);
-        }
-
-        [Fact]
-        public void TestSave()
-        {
-            var isCallbackCalled = false;
-            var repositoryMock = new Mock<IRepository<OpenWithApplicationSettings>>();
-            repositoryMock
-                .Setup(m => m.Upsert(It.IsAny<string>(),
-                    It.IsAny<OpenWithApplicationSettings>()))
-                .Callback<string, OpenWithApplicationSettings>((id, entity) =>
+                if (id is null || entity?.ApplicationByExtension is null)
                 {
-                    if (id is null || entity?.ApplicationByExtension is null)
-                    {
-                        return;
-                    }
+                    return;
+                }
 
-                    if (!entity.ApplicationByExtension.TryGetValue(Extension, out var app) || app is null)
-                    {
-                        return;
-                    }
+                if (!entity.ApplicationByExtension.TryGetValue(Extension, out var app) || app is null)
+                {
+                    return;
+                }
 
-                    isCallbackCalled = app.DisplayName == DisplayName
-                                       && app.Arguments == Arguments
-                                       && app.ExecutePath == ExecutePath;
-                });
+                isCallbackCalled = app.DisplayName == DisplayName
+                                   && app.Arguments == Arguments
+                                   && app.ExecutePath == ExecutePath;
+            });
 
-            var unitOfWorkFactory = GetUnitOfWorkFactory(repositoryMock);
-            _autoMocker.Use(unitOfWorkFactory);
-            var service = _autoMocker.CreateInstance<OpenWithApplicationService>();
+        var unitOfWorkFactory = GetUnitOfWorkFactory(repositoryMock);
+        _autoMocker.Use(unitOfWorkFactory);
+        var service = _autoMocker.CreateInstance<OpenWithApplicationService>();
 
-            var application = new ApplicationModel
-            {
-                DisplayName = DisplayName,
-                Arguments = Arguments,
-                ExecutePath = ExecutePath
-            };
-            service.SaveSelectedApplication(Extension, application);
-
-            Assert.True(isCallbackCalled);
-        }
-
-        private static IUnitOfWorkFactory GetUnitOfWorkFactory(IMock<IRepository<OpenWithApplicationSettings>> repositoryMock)
+        var application = new ApplicationModel
         {
-            var unitOfWorkMock = new Mock<IUnitOfWork>();
-            unitOfWorkMock
-                .Setup(m => m.GetRepository<OpenWithApplicationSettings>())
-                .Returns(repositoryMock.Object);
-            var unitOfWorkFactoryMock = new Mock<IUnitOfWorkFactory>();
-            unitOfWorkFactoryMock
-                .Setup(m => m.Create())
-                .Returns(unitOfWorkMock.Object);
+            DisplayName = DisplayName,
+            Arguments = Arguments,
+            ExecutePath = ExecutePath
+        };
+        service.SaveSelectedApplication(Extension, application);
 
-            return unitOfWorkFactoryMock.Object;
-        }
+        Assert.True(isCallbackCalled);
+    }
+
+    private static IUnitOfWorkFactory GetUnitOfWorkFactory(IMock<IRepository<OpenWithApplicationSettings>> repositoryMock)
+    {
+        var unitOfWorkMock = new Mock<IUnitOfWork>();
+        unitOfWorkMock
+            .Setup(m => m.GetRepository<OpenWithApplicationSettings>())
+            .Returns(repositoryMock.Object);
+        var unitOfWorkFactoryMock = new Mock<IUnitOfWorkFactory>();
+        unitOfWorkFactoryMock
+            .Setup(m => m.Create())
+            .Returns(unitOfWorkMock.Object);
+
+        return unitOfWorkFactoryMock.Object;
     }
 }

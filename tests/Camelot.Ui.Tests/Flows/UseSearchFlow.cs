@@ -12,107 +12,106 @@ using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Nodes;
 using Camelot.Views.Main.Controls;
 using Xunit;
 
-namespace Camelot.Ui.Tests.Flows
+namespace Camelot.Ui.Tests.Flows;
+
+public class UseSearchFlow : IDisposable
 {
-    public class UseSearchFlow : IDisposable
+    private const string DirectoryName = "UseSearchFlowTest__Directory";
+    private const string FileName = "UseSearchFlowTest__File.txt";
+
+    private string _directoryFullPath;
+    private string _fileFullPath;
+
+    [Fact(DisplayName = "Use search")]
+    public async Task TestSearch()
     {
-        private const string DirectoryName = "UseSearchFlowTest__Directory";
-        private const string FileName = "UseSearchFlowTest__File.txt";
+        var window = AvaloniaApp.GetMainWindow();
 
-        private string _directoryFullPath;
-        private string _fileFullPath;
+        await FocusFilePanelStep.FocusFilePanelAsync(window);
+        CreateNewTabStep.CreateNewTab(window);
 
-        [Fact(DisplayName = "Use search")]
-        public async Task TestSearch()
-        {
-            var window = AvaloniaApp.GetMainWindow();
+        var viewModel = ActiveFilePanelProvider.GetActiveFilePanelViewModel(window);
+        _directoryFullPath = Path.Combine(viewModel.CurrentDirectory, DirectoryName);
+        Directory.CreateDirectory(_directoryFullPath);
 
-            await FocusFilePanelStep.FocusFilePanelAsync(window);
-            CreateNewTabStep.CreateNewTab(window);
+        var filesPanel = ActiveFilePanelProvider.GetActiveFilePanelView(window);
+        Assert.NotNull(filesPanel);
 
-            var viewModel = ActiveFilePanelProvider.GetActiveFilePanelViewModel(window);
-            _directoryFullPath = Path.Combine(viewModel.CurrentDirectory, DirectoryName);
-            Directory.CreateDirectory(_directoryFullPath);
+        ToggleSearchPanelStep.ToggleSearchPanelVisibility(window);
 
-            var filesPanel = ActiveFilePanelProvider.GetActiveFilePanelView(window);
-            Assert.NotNull(filesPanel);
+        await Task.Delay(100);
 
-            ToggleSearchPanelStep.ToggleSearchPanelVisibility(window);
+        var searchPanel = filesPanel
+            .GetVisualDescendants()
+            .OfType<SearchView>()
+            .SingleOrDefault();
+        Assert.NotNull(searchPanel);
 
-            await Task.Delay(100);
+        var searchTextBox = searchPanel
+            .GetVisualDescendants()
+            .OfType<TextBox>()
+            .SingleOrDefault();
+        Assert.NotNull(searchTextBox);
 
-            var searchPanel = filesPanel
-                .GetVisualDescendants()
-                .OfType<SearchView>()
-                .SingleOrDefault();
-            Assert.NotNull(searchPanel);
+        searchTextBox.SendText(DirectoryName);
 
-            var searchTextBox = searchPanel
-                .GetVisualDescendants()
-                .OfType<TextBox>()
-                .SingleOrDefault();
-            Assert.NotNull(searchTextBox);
+        await Task.Delay(1000);
 
-            searchTextBox.SendText(DirectoryName);
+        ChangeActiveFilePanelStep.ChangeActiveFilePanel(window);
+        ChangeActiveFilePanelStep.ChangeActiveFilePanel(window);
+        Keyboard.PressKey(window, Key.Down);
+        Keyboard.PressKey(window, Key.Down);
 
-            await Task.Delay(1000);
+        await Task.Delay(100);
 
-            ChangeActiveFilePanelStep.ChangeActiveFilePanel(window);
-            ChangeActiveFilePanelStep.ChangeActiveFilePanel(window);
-            Keyboard.PressKey(window, Key.Down);
-            Keyboard.PressKey(window, Key.Down);
+        var selectedItemText = GetSelectedItemText(filesPanel);
+        Assert.Equal(DirectoryName, selectedItemText);
 
-            await Task.Delay(100);
+        _fileFullPath = Path.Combine(viewModel.CurrentDirectory, FileName);
+        await File.Create(_fileFullPath).DisposeAsync();
 
-            var selectedItemText = GetSelectedItemText(filesPanel);
-            Assert.Equal(DirectoryName, selectedItemText);
+        await Task.Delay(1000);
 
-            _fileFullPath = Path.Combine(viewModel.CurrentDirectory, FileName);
-            await File.Create(_fileFullPath).DisposeAsync();
-
-            await Task.Delay(1000);
-
-            var fileIsVisible = CheckIfFilesExist(filesPanel);
-            Assert.False(fileIsVisible);
-        }
-
-        public void Dispose()
-        {
-            var window = AvaloniaApp.GetMainWindow();
-            ToggleSearchPanelStep.ToggleSearchPanelVisibility(window);
-            CloseCurrentTabStep.CloseCurrentTab(window);
-
-            if (!string.IsNullOrEmpty(_directoryFullPath) && Directory.Exists(_directoryFullPath))
-            {
-                Directory.Delete(_directoryFullPath, true);
-            }
-
-            if (!string.IsNullOrEmpty(_fileFullPath) && File.Exists(_fileFullPath))
-            {
-                File.Delete(_fileFullPath);
-            }
-        }
-
-        private string GetSelectedItemText(IVisual filesPanel)
-        {
-            var dataGrid = GetDataGrid(filesPanel);
-            var directoryViewModel = (DirectoryViewModel) dataGrid.SelectedItem;
-            _directoryFullPath = directoryViewModel.FullPath;
-
-            return directoryViewModel.FullName;
-        }
-
-        private static bool CheckIfFilesExist(IVisual filesPanel)
-        {
-            var dataGrid = GetDataGrid(filesPanel);
-
-            return dataGrid.Items.OfType<FileViewModel>().Any();
-        }
-
-        private static DataGrid GetDataGrid(IVisual filesPanel) =>
-            filesPanel
-                .GetVisualDescendants()
-                .OfType<DataGrid>()
-                .Single();
+        var fileIsVisible = CheckIfFilesExist(filesPanel);
+        Assert.False(fileIsVisible);
     }
+
+    public void Dispose()
+    {
+        var window = AvaloniaApp.GetMainWindow();
+        ToggleSearchPanelStep.ToggleSearchPanelVisibility(window);
+        CloseCurrentTabStep.CloseCurrentTab(window);
+
+        if (!string.IsNullOrEmpty(_directoryFullPath) && Directory.Exists(_directoryFullPath))
+        {
+            Directory.Delete(_directoryFullPath, true);
+        }
+
+        if (!string.IsNullOrEmpty(_fileFullPath) && File.Exists(_fileFullPath))
+        {
+            File.Delete(_fileFullPath);
+        }
+    }
+
+    private string GetSelectedItemText(IVisual filesPanel)
+    {
+        var dataGrid = GetDataGrid(filesPanel);
+        var directoryViewModel = (DirectoryViewModel) dataGrid.SelectedItem;
+        _directoryFullPath = directoryViewModel.FullPath;
+
+        return directoryViewModel.FullName;
+    }
+
+    private static bool CheckIfFilesExist(IVisual filesPanel)
+    {
+        var dataGrid = GetDataGrid(filesPanel);
+
+        return dataGrid.Items.OfType<FileViewModel>().Any();
+    }
+
+    private static DataGrid GetDataGrid(IVisual filesPanel) =>
+        filesPanel
+            .GetVisualDescendants()
+            .OfType<DataGrid>()
+            .Single();
 }

@@ -11,108 +11,107 @@ using Moq;
 using Moq.AutoMock;
 using Xunit;
 
-namespace Camelot.Services.Tests.RecursiveSearch
+namespace Camelot.Services.Tests.RecursiveSearch;
+
+public class RecursiveSearchServiceTests
 {
-    public class RecursiveSearchServiceTests
+    private const string Directory = "Dir";
+
+    private readonly AutoMocker _autoMocker;
+
+    public RecursiveSearchServiceTests()
     {
-        private const string Directory = "Dir";
+        _autoMocker = new AutoMocker();
+    }
 
-        private readonly AutoMocker _autoMocker;
+    [Theory]
+    [InlineData("File", true, true, 1)]
+    [InlineData("File", true, false, 0)]
+    [InlineData("Dir", false, true, 1)]
+    [InlineData("Dir", false, false, 0)]
+    public async Task TestSearch(string node, bool isFile, bool isSatisfiedBy, int expectedCallsCount)
+    {
+        var searchResult = new Mock<IRecursiveSearchResult>().Object;
+        var publisherMock = new Mock<INodeFoundEventPublisher>();
+        publisherMock
+            .Setup(m => m.RaiseNodeFoundEvent(node))
+            .Verifiable();
 
-        public RecursiveSearchServiceTests()
-        {
-            _autoMocker = new AutoMocker();
-        }
+        Func<INodeFoundEventPublisher, Task> factory = null;
 
-        [Theory]
-        [InlineData("File", true, true, 1)]
-        [InlineData("File", true, false, 0)]
-        [InlineData("Dir", false, true, 1)]
-        [InlineData("Dir", false, false, 0)]
-        public async Task TestSearch(string node, bool isFile, bool isSatisfiedBy, int expectedCallsCount)
-        {
-            var searchResult = new Mock<IRecursiveSearchResult>().Object;
-            var publisherMock = new Mock<INodeFoundEventPublisher>();
-            publisherMock
-                .Setup(m => m.RaiseNodeFoundEvent(node))
-                .Verifiable();
+        _autoMocker
+            .Setup<IFileService, bool>(m => m.CheckIfExists(node))
+            .Returns(isFile);
+        _autoMocker
+            .Setup<IFileService, FileModel>(m => m.GetFile(node))
+            .Returns(new FileModel
+            {
+                FullPath = node
+            });
+        _autoMocker
+            .Setup<IDirectoryService, DirectoryModel>(m => m.GetDirectory(node))
+            .Returns(new DirectoryModel()
+            {
+                FullPath = node
+            });
+        _autoMocker
+            .Setup<IDirectoryService, IEnumerable<string>>(m => m.GetNodesRecursively(Directory))
+            .Returns(new[] {node});
+        _autoMocker
+            .Setup<IRecursiveSearchResultFactory, IRecursiveSearchResult>(m =>
+                m.Create(It.IsAny<Func<INodeFoundEventPublisher, Task>>()))
+            .Callback<Func<INodeFoundEventPublisher, Task>>(f => factory = f)
+            .Returns(searchResult);
+        var specification = new Mock<ISpecification<NodeModelBase>>();
+        specification
+            .Setup(m => m.IsSatisfiedBy(It.Is<NodeModelBase>(n => n.FullPath == node)))
+            .Returns(isSatisfiedBy);
 
-            Func<INodeFoundEventPublisher, Task> factory = null;
+        var service = _autoMocker.CreateInstance<RecursiveSearchService>();
 
-            _autoMocker
-                .Setup<IFileService, bool>(m => m.CheckIfExists(node))
-                .Returns(isFile);
-            _autoMocker
-                .Setup<IFileService, FileModel>(m => m.GetFile(node))
-                .Returns(new FileModel
-                {
-                    FullPath = node
-                });
-            _autoMocker
-                .Setup<IDirectoryService, DirectoryModel>(m => m.GetDirectory(node))
-                .Returns(new DirectoryModel()
-                {
-                    FullPath = node
-                });
-            _autoMocker
-                .Setup<IDirectoryService, IEnumerable<string>>(m => m.GetNodesRecursively(Directory))
-                .Returns(new[] {node});
-            _autoMocker
-                .Setup<IRecursiveSearchResultFactory, IRecursiveSearchResult>(m =>
-                    m.Create(It.IsAny<Func<INodeFoundEventPublisher, Task>>()))
-                .Callback<Func<INodeFoundEventPublisher, Task>>(f => factory = f)
-                .Returns(searchResult);
-            var specification = new Mock<ISpecification<NodeModelBase>>();
-            specification
-                .Setup(m => m.IsSatisfiedBy(It.Is<NodeModelBase>(n => n.FullPath == node)))
-                .Returns(isSatisfiedBy);
+        var result = service.Search(Directory, specification.Object, default);
 
-            var service = _autoMocker.CreateInstance<RecursiveSearchService>();
+        Assert.Equal(searchResult, result);
 
-            var result = service.Search(Directory, specification.Object, default);
+        Assert.NotNull(factory);
+        await factory(publisherMock.Object);
 
-            Assert.Equal(searchResult, result);
+        publisherMock
+            .Verify(m => m.RaiseNodeFoundEvent(node),
+                Times.Exactly(expectedCallsCount));
+    }
 
-            Assert.NotNull(factory);
-            await factory(publisherMock.Object);
+    [Fact]
+    public async Task TestSearchThrows()
+    {
+        _autoMocker.MockLogError();
+        var publisherMock = new Mock<INodeFoundEventPublisher>();
+        publisherMock
+            .Setup(m => m.RaiseNodeFoundEvent(Directory))
+            .Verifiable();
+        _autoMocker
+            .Setup<IDirectoryService, IEnumerable<string>>(m => m.GetNodesRecursively(Directory))
+            .Returns(new[] {Directory});
+        _autoMocker
+            .Setup<IDirectoryService>(m => m.GetDirectory(Directory))
+            .Throws<InvalidOperationException>();
+        var specification = new Mock<ISpecification<NodeModelBase>>();
+        Func<INodeFoundEventPublisher, Task> factory = null;
+        _autoMocker
+            .Setup<IRecursiveSearchResultFactory, IRecursiveSearchResult>(m =>
+                m.Create(It.IsAny<Func<INodeFoundEventPublisher, Task>>()))
+            .Callback<Func<INodeFoundEventPublisher, Task>>(f => factory = f);
 
-            publisherMock
-                .Verify(m => m.RaiseNodeFoundEvent(node),
-                    Times.Exactly(expectedCallsCount));
-        }
+        var service = _autoMocker.CreateInstance<RecursiveSearchService>();
 
-        [Fact]
-        public async Task TestSearchThrows()
-        {
-            _autoMocker.MockLogError();
-            var publisherMock = new Mock<INodeFoundEventPublisher>();
-            publisherMock
-                .Setup(m => m.RaiseNodeFoundEvent(Directory))
-                .Verifiable();
-            _autoMocker
-                .Setup<IDirectoryService, IEnumerable<string>>(m => m.GetNodesRecursively(Directory))
-                .Returns(new[] {Directory});
-            _autoMocker
-                .Setup<IDirectoryService>(m => m.GetDirectory(Directory))
-                .Throws<InvalidOperationException>();
-            var specification = new Mock<ISpecification<NodeModelBase>>();
-            Func<INodeFoundEventPublisher, Task> factory = null;
-            _autoMocker
-                .Setup<IRecursiveSearchResultFactory, IRecursiveSearchResult>(m =>
-                    m.Create(It.IsAny<Func<INodeFoundEventPublisher, Task>>()))
-                .Callback<Func<INodeFoundEventPublisher, Task>>(f => factory = f);
+        service.Search(Directory, specification.Object, default);
 
-            var service = _autoMocker.CreateInstance<RecursiveSearchService>();
+        Assert.NotNull(factory);
 
-            service.Search(Directory, specification.Object, default);
+        await factory(publisherMock.Object);
 
-            Assert.NotNull(factory);
-
-            await factory(publisherMock.Object);
-
-            _autoMocker.VerifyLogError(Times.Once());
-            publisherMock
-                .Verify(m => m.RaiseNodeFoundEvent(Directory), Times.Never);
-        }
+        _autoMocker.VerifyLogError(Times.Once());
+        publisherMock
+            .Verify(m => m.RaiseNodeFoundEvent(Directory), Times.Never);
     }
 }

@@ -1,11 +1,10 @@
-namespace Camelot.Services.Abstractions.Models.Enums
+namespace Camelot.Services.Abstractions.Models.Enums;
+
+public enum OperationType : byte
 {
-    public enum OperationType : byte
-    {
-        Copy,
-        Move,
-        Delete,
-        Pack,
-        Extract
-    }
+    Copy,
+    Move,
+    Delete,
+    Pack,
+    Extract
 }

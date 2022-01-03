@@ -1,9 +1,8 @@
 using Camelot.Services.Abstractions.Models.Operations;
 
-namespace Camelot.Services.Abstractions.Operations
+namespace Camelot.Services.Abstractions.Operations;
+
+public interface IOperationWithInfo
 {
-    public interface IOperationWithInfo
-    {
-        OperationInfo Info { get; }
-    }
+    OperationInfo Info { get; }
 }

@@ -1,7 +1,6 @@
-namespace Camelot.Services.FileSystemWatcher.Interfaces
+namespace Camelot.Services.FileSystemWatcher.Interfaces;
+
+public interface IFileSystemWatcherFactory
 {
-    public interface IFileSystemWatcherFactory
-    {
-        IFileSystemWatcher Create(string directory);
-    }
+    IFileSystemWatcher Create(string directory);
 }

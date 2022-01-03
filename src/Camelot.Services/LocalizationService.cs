@@ -4,67 +4,66 @@ using Camelot.DataAccess.UnitOfWork;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models.State;
 
-namespace Camelot.Services
+namespace Camelot.Services;
+
+public class LocalizationService : ILocalizationService
 {
-    public class LocalizationService : ILocalizationService
+    private const string LanguageSettingsId = "LanguageSettings";
+
+    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+
+    public LocalizationService(IUnitOfWorkFactory unitOfWorkFactory)
     {
-        private const string LanguageSettingsId = "LanguageSettings";
+        _unitOfWorkFactory = unitOfWorkFactory;
+    }
 
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+    public LanguageStateModel GetSavedLanguage()
+    {
+        using var uow = _unitOfWorkFactory.Create();
+        var repository = uow.GetRepository<Language>();
+        var dbModel = repository.GetById(LanguageSettingsId);
 
-        public LocalizationService(IUnitOfWorkFactory unitOfWorkFactory)
+        return CreateFrom(dbModel);
+    }
+
+    public void SaveLanguage(LanguageStateModel languageModel)
+    {
+        if (languageModel is null)
         {
-            _unitOfWorkFactory = unitOfWorkFactory;
+            throw new ArgumentNullException(nameof(languageModel));
         }
 
-        public LanguageStateModel GetSavedLanguage()
+        if (string.IsNullOrEmpty(languageModel.Name))
         {
-            using var uow = _unitOfWorkFactory.Create();
-            var repository = uow.GetRepository<Language>();
-            var dbModel = repository.GetById(LanguageSettingsId);
-
-            return CreateFrom(dbModel);
+            throw new ArgumentException($"{nameof(languageModel.Name)} can't be empty.");
         }
 
-        public void SaveLanguage(LanguageStateModel languageModel)
+        if (string.IsNullOrEmpty(languageModel.Code))
         {
-            if (languageModel is null)
-            {
-                throw new ArgumentNullException(nameof(languageModel));
-            }
-
-            if (string.IsNullOrEmpty(languageModel.Name))
-            {
-                throw new ArgumentException($"{nameof(languageModel.Name)} can't be empty.");
-            }
-
-            if (string.IsNullOrEmpty(languageModel.Code))
-            {
-                throw new ArgumentException($"{nameof(languageModel.Code)} can't be empty.");
-            }
-
-            using var uow = _unitOfWorkFactory.Create();
-            var repository = uow.GetRepository<Language>();
-
-            var language = CreateFrom(languageModel);
-
-            repository.Upsert(LanguageSettingsId, language);
+            throw new ArgumentException($"{nameof(languageModel.Code)} can't be empty.");
         }
 
-        private static LanguageStateModel CreateFrom(Language model) =>
-            model is null
-                ? null
-                : new LanguageStateModel
-                {
-                    Code = model.Code,
-                    Name = model.Name
-                };
+        using var uow = _unitOfWorkFactory.Create();
+        var repository = uow.GetRepository<Language>();
 
-        private static Language CreateFrom(LanguageStateModel model) =>
-            new()
+        var language = CreateFrom(languageModel);
+
+        repository.Upsert(LanguageSettingsId, language);
+    }
+
+    private static LanguageStateModel CreateFrom(Language model) =>
+        model is null
+            ? null
+            : new LanguageStateModel
             {
                 Code = model.Code,
                 Name = model.Name
             };
-    }
+
+    private static Language CreateFrom(LanguageStateModel model) =>
+        new()
+        {
+            Code = model.Code,
+            Name = model.Name
+        };
 }

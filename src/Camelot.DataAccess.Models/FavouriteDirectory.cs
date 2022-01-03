@@ -1,7 +1,6 @@
-namespace Camelot.DataAccess.Models
+namespace Camelot.DataAccess.Models;
+
+public class FavouriteDirectory
 {
-    public class FavouriteDirectory
-    {
-        public string FullPath { get; set; }
-    }
+    public string FullPath { get; set; }
 }

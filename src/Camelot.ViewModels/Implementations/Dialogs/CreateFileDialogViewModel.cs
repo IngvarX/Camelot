@@ -5,48 +5,47 @@ using Camelot.ViewModels.Implementations.Dialogs.Results;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace Camelot.ViewModels.Implementations.Dialogs
+namespace Camelot.ViewModels.Implementations.Dialogs;
+
+public class CreateFileDialogViewModel : ParameterizedDialogViewModelBase<CreateFileDialogResult, CreateNodeNavigationParameter>
 {
-    public class CreateFileDialogViewModel : ParameterizedDialogViewModelBase<CreateFileDialogResult, CreateNodeNavigationParameter>
+    private readonly INodeService _nodeService;
+    private readonly IPathService _pathService;
+
+    private string _directoryPath;
+
+    [Reactive]
+    public string FileName { get; set; }
+
+    public ICommand CreateCommand { get; }
+
+    public CreateFileDialogViewModel(
+        INodeService nodeService,
+        IPathService pathService)
     {
-        private readonly INodeService _nodeService;
-        private readonly IPathService _pathService;
+        _nodeService = nodeService;
+        _pathService = pathService;
 
-        private string _directoryPath;
+        var canCreate = this.WhenAnyValue(x => x.FileName,
+            CheckIfNameIsValid);
 
-        [Reactive]
-        public string FileName { get; set; }
+        CreateCommand = ReactiveCommand.Create(CreateFile, canCreate);
+    }
 
-        public ICommand CreateCommand { get; }
+    public override void Activate(CreateNodeNavigationParameter navigationParameter) =>
+        _directoryPath = navigationParameter.DirectoryPath;
 
-        public CreateFileDialogViewModel(
-            INodeService nodeService,
-            IPathService pathService)
+    private void CreateFile() => Close(new CreateFileDialogResult(FileName));
+
+    private bool CheckIfNameIsValid(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
         {
-            _nodeService = nodeService;
-            _pathService = pathService;
-
-            var canCreate = this.WhenAnyValue(x => x.FileName,
-                CheckIfNameIsValid);
-
-            CreateCommand = ReactiveCommand.Create(CreateFile, canCreate);
+            return false;
         }
 
-        public override void Activate(CreateNodeNavigationParameter navigationParameter) =>
-            _directoryPath = navigationParameter.DirectoryPath;
+        var newFullPath = _pathService.Combine(_directoryPath, name);
 
-        private void CreateFile() => Close(new CreateFileDialogResult(FileName));
-
-        private bool CheckIfNameIsValid(string name)
-        {
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                return false;
-            }
-
-            var newFullPath = _pathService.Combine(_directoryPath, name);
-
-            return !_nodeService.CheckIfExists(newFullPath);
-        }
+        return !_nodeService.CheckIfExists(newFullPath);
     }
 }

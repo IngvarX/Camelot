@@ -8,70 +8,69 @@ using Camelot.ViewModels.Implementations;
 using Splat;
 using Xunit;
 
-namespace Camelot.Tests
+namespace Camelot.Tests;
+
+[Collection("DiTests")]
+public class DependencyInjectionTests
 {
-    [Collection("DiTests")]
-    public class DependencyInjectionTests
+    [Fact]
+    public void TestRegistrations()
     {
-        [Fact]
-        public void TestRegistrations()
-        {
-            var resolver = new MutableDependencyResolver(Locator.CurrentMutable);
-            Bootstrapper.Register(resolver, Locator.Current, new DataAccessConfiguration());
+        var resolver = new MutableDependencyResolver(Locator.CurrentMutable);
+        Bootstrapper.Register(resolver, Locator.Current, new DataAccessConfiguration());
 
-            resolver
-                .RegisteredTypes
-                .ForEach(type => Locator.Current.GetRequiredService(type));
+        resolver
+            .RegisteredTypes
+            .ForEach(type => Locator.Current.GetRequiredService(type));
+    }
+
+    [Fact]
+    public void TestDialogRegistrations()
+    {
+        var resolver = new MutableDependencyResolver(Locator.CurrentMutable);
+        Bootstrapper.Register(resolver, Locator.Current, new DataAccessConfiguration());
+
+        var viewModelsAssembly = Assembly.GetAssembly(typeof(ViewModelBase));
+        var dialogTypes = viewModelsAssembly
+            .GetTypes()
+            .Where(t => t.FullName.EndsWith("DialogViewModel"))
+            .ToArray();
+        Assert.NotEmpty(dialogTypes);
+
+        var areAllDialogsRegistered = dialogTypes.All(t => resolver.RegisteredTypes.Contains(t));
+        Assert.True(areAllDialogsRegistered);
+    }
+
+    private class MutableDependencyResolver : IMutableDependencyResolver
+    {
+        private readonly IMutableDependencyResolver _inner;
+
+        public List<Type> RegisteredTypes { get; }
+
+        public MutableDependencyResolver(IMutableDependencyResolver inner)
+        {
+            _inner = inner;
+
+            RegisteredTypes = new List<Type>();
         }
 
-        [Fact]
-        public void TestDialogRegistrations()
+        public bool HasRegistration(Type serviceType, string contract = null) =>
+            _inner.HasRegistration(serviceType, contract);
+
+        public void Register(Func<object> factory, Type serviceType, string contract = null)
         {
-            var resolver = new MutableDependencyResolver(Locator.CurrentMutable);
-            Bootstrapper.Register(resolver, Locator.Current, new DataAccessConfiguration());
+            RegisteredTypes.Add(serviceType);
 
-            var viewModelsAssembly = Assembly.GetAssembly(typeof(ViewModelBase));
-            var dialogTypes = viewModelsAssembly
-                .GetTypes()
-                .Where(t => t.FullName.EndsWith("DialogViewModel"))
-                .ToArray();
-            Assert.NotEmpty(dialogTypes);
-
-            var areAllDialogsRegistered = dialogTypes.All(t => resolver.RegisteredTypes.Contains(t));
-            Assert.True(areAllDialogsRegistered);
+            _inner.Register(factory, serviceType, contract);
         }
 
-        private class MutableDependencyResolver : IMutableDependencyResolver
-        {
-            private readonly IMutableDependencyResolver _inner;
+        public void UnregisterCurrent(Type serviceType, string contract = null) =>
+            _inner.UnregisterCurrent(serviceType, contract);
 
-            public List<Type> RegisteredTypes { get; }
+        public void UnregisterAll(Type serviceType, string contract = null) =>
+            _inner.UnregisterAll(serviceType, contract);
 
-            public MutableDependencyResolver(IMutableDependencyResolver inner)
-            {
-                _inner = inner;
-
-                RegisteredTypes = new List<Type>();
-            }
-
-            public bool HasRegistration(Type serviceType, string contract = null) =>
-                _inner.HasRegistration(serviceType, contract);
-
-            public void Register(Func<object> factory, Type serviceType, string contract = null)
-            {
-                RegisteredTypes.Add(serviceType);
-
-                _inner.Register(factory, serviceType, contract);
-            }
-
-            public void UnregisterCurrent(Type serviceType, string contract = null) =>
-                _inner.UnregisterCurrent(serviceType, contract);
-
-            public void UnregisterAll(Type serviceType, string contract = null) =>
-                _inner.UnregisterAll(serviceType, contract);
-
-            public IDisposable ServiceRegistrationCallback(Type serviceType, string contract, Action<IDisposable> callback) =>
-                _inner.ServiceRegistrationCallback(serviceType, contract, callback);
-        }
+        public IDisposable ServiceRegistrationCallback(Type serviceType, string contract, Action<IDisposable> callback) =>
+            _inner.ServiceRegistrationCallback(serviceType, contract, callback);
     }
 }
