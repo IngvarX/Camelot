@@ -38,7 +38,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private readonly IFileSystemWatchingService _fileSystemWatchingService;
         private readonly IApplicationDispatcher _applicationDispatcher;
         private readonly IFileSizeFormatter _fileSizeFormatter;
-        private readonly IClipboardOperationsService _clipboardOperationsService;
         private readonly IFileSystemNodeViewModelComparerFactory _comparerFactory;
         private readonly IRecursiveSearchService _recursiveSearchService;
         private readonly IFilePanelDirectoryObserver _filePanelDirectoryObserver;
@@ -71,6 +70,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         public IDirectorySelectorViewModel DirectorySelectorViewModel { get; }
 
         public IDragAndDropOperationsMediator DragAndDropOperationsMediator { get; }
+
+        public IClipboardOperationsMediator ClipboardOperationsMediator { get; }
 
         public bool IsActive => SelectedTab.IsGloballyActive;
 
@@ -113,10 +114,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         public ICommand SortFilesCommand { get; }
 
-        public ICommand CopyToClipboardCommand { get; }
-
-        public ICommand PasteFromClipboardCommand { get; }
-
         public FilesPanelViewModel(
             IFileService fileService,
             IDirectoryService directoryService,
@@ -126,7 +123,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             IFileSystemWatchingService fileSystemWatchingService,
             IApplicationDispatcher applicationDispatcher,
             IFileSizeFormatter fileSizeFormatter,
-            IClipboardOperationsService clipboardOperationsService,
             IFileSystemNodeViewModelComparerFactory comparerFactory,
             IRecursiveSearchService recursiveSearchService,
             IFilePanelDirectoryObserver filePanelDirectoryObserver,
@@ -136,7 +132,8 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             ITabsListViewModel tabsListViewModel,
             IOperationsViewModel operationsViewModel,
             IDirectorySelectorViewModel directorySelectorViewModel,
-            IDragAndDropOperationsMediator dragAndDropOperationsMediator)
+            IDragAndDropOperationsMediator dragAndDropOperationsMediator,
+            IClipboardOperationsMediator clipboardOperationsMediator)
         {
             _fileService = fileService;
             _directoryService = directoryService;
@@ -146,7 +143,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             _fileSystemWatchingService = fileSystemWatchingService;
             _applicationDispatcher = applicationDispatcher;
             _fileSizeFormatter = fileSizeFormatter;
-            _clipboardOperationsService = clipboardOperationsService;
             _comparerFactory = comparerFactory;
             _recursiveSearchService = recursiveSearchService;
             _filePanelDirectoryObserver = filePanelDirectoryObserver;
@@ -158,6 +154,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             OperationsViewModel = operationsViewModel;
             DirectorySelectorViewModel = directorySelectorViewModel;
             DragAndDropOperationsMediator = dragAndDropOperationsMediator;
+            ClipboardOperationsMediator = clipboardOperationsMediator;
 
             _fileSystemNodes = new ObservableCollection<IFileSystemNodeViewModel>();
             _selectedFileSystemNodes = new ObservableCollection<IFileSystemNodeViewModel>();
@@ -168,8 +165,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
                 (DirectoryModel dm) => dm is not null);
             GoToParentDirectoryCommand = ReactiveCommand.Create(GoToParentDirectory, canGoToParentDirectory);
             SortFilesCommand = ReactiveCommand.Create<SortingMode>(SortFiles);
-            CopyToClipboardCommand = ReactiveCommand.CreateFromTask(CopyToClipboardAsync);
-            PasteFromClipboardCommand = ReactiveCommand.CreateFromTask(PasteFromClipboardAsync);
 
             SubscribeToEvents();
             UpdateStateAsync().Forget();
@@ -192,8 +187,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
             SelectedTab.IsGloballyActive = false;
         }
-
-        public Task<bool> CanPasteAsync() => _clipboardOperationsService.CanPasteAsync();
 
         private void SortFiles(SortingMode sortingMode)
         {
@@ -426,11 +419,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             this.RaisePropertyChanged(nameof(SelectedDirectoriesCount));
             this.RaisePropertyChanged(nameof(AreAnyFileSystemNodesSelected));
         }
-
-        private Task CopyToClipboardAsync() =>
-            _clipboardOperationsService.CopyFilesAsync(_nodesSelectionService.SelectedNodes);
-
-        private Task PasteFromClipboardAsync() => _clipboardOperationsService.PasteFilesAsync(CurrentDirectory);
 
         private int GetInsertIndex(IFileSystemNodeViewModel newNodeViewModel)
         {

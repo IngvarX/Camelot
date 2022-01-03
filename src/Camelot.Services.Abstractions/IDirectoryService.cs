@@ -8,9 +8,9 @@ namespace Camelot.Services.Abstractions
 {
     public interface IDirectoryService
     {
-        event EventHandler<SelectedDirectoryChangedEventArgs> SelectedDirectoryChanged;
-
         string SelectedDirectory { get; set; }
+
+        event EventHandler<SelectedDirectoryChangedEventArgs> SelectedDirectoryChanged;
 
         bool Create(string directory);
 

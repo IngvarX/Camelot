@@ -126,61 +126,6 @@ namespace Camelot.ViewModels.Tests.FilePanels
         }
 
         [Fact]
-        public void TestCopyToClipboardCommand()
-        {
-            _autoMocker
-                .Setup<INodesSelectionService, IReadOnlyList<string>>(m => m.SelectedNodes)
-                .Returns(new[] {File});
-            _autoMocker
-                .Setup<IClipboardOperationsService>(m => m.CopyFilesAsync(
-                    It.Is<IReadOnlyList<string>>(l => l.Single() == File)))
-                .Verifiable();
-            _autoMocker
-                .Setup<ITabsListViewModel, ITabViewModel>(m => m.SelectedTab)
-                .Returns(Mock.Of<ITabViewModel>());
-
-           var filesPanelViewModel = _autoMocker.CreateInstance<FilesPanelViewModel>();
-
-           Assert.True(filesPanelViewModel.CopyToClipboardCommand.CanExecute(null));
-
-            filesPanelViewModel.CopyToClipboardCommand.Execute(null);
-
-            _autoMocker
-                .Verify<IClipboardOperationsService>(m => m.CopyFilesAsync(
-                    It.Is<IReadOnlyList<string>>(l => l.Single() == File)),
-                    Times.Once);
-        }
-
-        [Fact]
-        public void TestPasteFromClipboardCommand()
-        {
-            var tabViewModelMock = new Mock<ITabViewModel>();
-            tabViewModelMock
-                .SetupGet(m => m.CurrentDirectory)
-                .Returns(AppRootDirectory);
-            _autoMocker
-                .Setup<ITabsListViewModel, ITabViewModel>(m => m.SelectedTab)
-                .Returns(tabViewModelMock.Object);
-            _autoMocker
-                .Setup<IFilePanelDirectoryObserver, string>(m => m.CurrentDirectory)
-                .Returns(AppRootDirectory);
-
-            var filesPanelViewModel = _autoMocker.CreateInstance<FilesPanelViewModel>();
-
-            _autoMocker
-                .GetMock<IFilePanelDirectoryObserver>()
-                .Raise(m => m.CurrentDirectoryChanged += null, EventArgs.Empty);
-
-            Assert.True(filesPanelViewModel.PasteFromClipboardCommand.CanExecute(null));
-
-            filesPanelViewModel.PasteFromClipboardCommand.Execute(null);
-
-            _autoMocker
-                .Verify<IClipboardOperationsService>(m => m.PasteFilesAsync(AppRootDirectory),
-                    Times.Once);
-        }
-
-        [Fact]
         public void TestDirectoryUpdated()
         {
             var currentDirectory = AppRootDirectory;
@@ -532,28 +477,6 @@ namespace Camelot.ViewModels.Tests.FilePanels
             _autoMocker
                 .GetMock<IFilePanelDirectoryObserver>()
                 .VerifySet(m => m.CurrentDirectory = ParentDirectory);
-        }
-
-        [Theory]
-        [InlineData(false, false)]
-        [InlineData(true, true)]
-        public async Task TestCanPaste(bool canPaste, bool expected)
-        {
-            _autoMocker
-                .Setup<ITabsListViewModel, ITabViewModel>(m => m.SelectedTab)
-                .Returns(Mock.Of<ITabViewModel>());
-            _autoMocker
-                .Setup<IClipboardOperationsService, Task<bool>>(m => m.CanPasteAsync())
-                .ReturnsAsync(canPaste);
-
-            var filesPanelViewModel = _autoMocker.CreateInstance<FilesPanelViewModel>();
-
-            var actual = await filesPanelViewModel.CanPasteAsync();
-            Assert.Equal(expected, actual);
-
-            _autoMocker
-                .Verify<IClipboardOperationsService, Task<bool>>(m => m.CanPasteAsync(),
-                    Times.Once);
         }
     }
 }

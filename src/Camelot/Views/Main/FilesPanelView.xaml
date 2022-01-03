@@ -11,7 +11,6 @@
              xmlns:enumsViewModels="clr-namespace:Camelot.ViewModels.Implementations.MainWindow.FilePanels.Enums;assembly=Camelot.ViewModels"
              xmlns:tabs="clr-namespace:Camelot.Views.Main.Controls.Tabs"
              xmlns:nodes="clr-namespace:Camelot.ViewModels.Implementations.MainWindow.FilePanels.Nodes;assembly=Camelot.ViewModels"
-             xmlns:main="clr-namespace:Camelot.Views.Main"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Camelot.Views.Main.FilesPanelView">
 
@@ -81,7 +80,7 @@
                     <TextBlock Classes="mainWindowTextBlock" Text="{x:Static p:Resources.Reload}" />
                 </ToolTip.Tip>
             </Button>
-            
+
             <Button Grid.Column="3"
                     Classes="iconButton"
                     Command="{Binding GoToParentDirectoryCommand}">
@@ -145,7 +144,7 @@
                         <MenuItem Name="PasteFromClipboard"
                                   IsVisible="False"
                                   Header="{x:Static p:Resources.PasteFromClipboard}"
-                                  Command="{Binding $parent[DataGrid].DataContext.PasteFromClipboardCommand}" />
+                                  Command="{Binding $parent[DataGrid].DataContext.ClipboardOperationsMediator.PasteFromClipboardCommand}" />
                         <MenuItem Header="{x:Static p:Resources.Create}">
                             <MenuItem Header="{x:Static p:Resources.Directory}"
                                       Command="{Binding $parent[views:MainWindow].DataContext.OperationsViewModel.CreateNewDirectoryCommand}" />
@@ -164,10 +163,10 @@
             </DataGrid.Styles>
 
             <DataGrid.KeyBindings>
-                <KeyBinding Gesture="Ctrl+C" Command="{Binding CopyToClipboardCommand}" />
-                <KeyBinding Gesture="Meta+C" Command="{Binding CopyToClipboardCommand}" />
-                <KeyBinding Gesture="Ctrl+V" Command="{Binding PasteFromClipboardCommand}" />
-                <KeyBinding Gesture="Meta+V" Command="{Binding PasteFromClipboardCommand}" />
+                <KeyBinding Gesture="Ctrl+C" Command="{Binding ClipboardOperationsMediator.CopyToClipboardCommand}" />
+                <KeyBinding Gesture="Meta+C" Command="{Binding ClipboardOperationsMediator.CopyToClipboardCommand}" />
+                <KeyBinding Gesture="Ctrl+V" Command="{Binding ClipboardOperationsMediator.PasteFromClipboardCommand}" />
+                <KeyBinding Gesture="Meta+V" Command="{Binding ClipboardOperationsMediator.PasteFromClipboardCommand}" />
                 <KeyBinding Gesture="Enter" Command="{Binding $self.SelectedItem.OpenCommand}" />
                 <KeyBinding Gesture="F4" Command="{Binding OperationsViewModel.OpenInDefaultEditorCommand}" />
                 <KeyBinding Gesture="F5" Command="{Binding OperationsViewModel.CopyCommand}" />

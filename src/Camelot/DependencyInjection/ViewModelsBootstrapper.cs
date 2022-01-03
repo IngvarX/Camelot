@@ -68,6 +68,16 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IOpenWithApplicationService>(),
                 resolver.GetRequiredService<IPathService>()
             ));
+            services.RegisterLazySingleton<IDragAndDropOperationsMediator>(() => new DragAndDropOperationsMediator(
+                resolver.GetRequiredService<IOperationsService>(),
+                resolver.GetRequiredService<IDirectoryService>(),
+                resolver.GetRequiredService<IPathService>()
+            ));
+            services.RegisterLazySingleton<IClipboardOperationsMediator>(() => new ClipboardOperationsMediator(
+                resolver.GetRequiredService<IClipboardOperationsService>(),
+                resolver.GetRequiredService<INodesSelectionService>(),
+                resolver.GetRequiredService<IDirectoryService>()
+            ));
         }
 
         private static void RegisterFactories(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
@@ -226,11 +236,6 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IApplicationDispatcher>(),
                 resolver.GetRequiredService<SearchViewModelConfiguration>()
             ));
-            services.RegisterLazySingleton<IDragAndDropOperationsMediator>(() => new DragAndDropOperationsMediator(
-                resolver.GetRequiredService<IOperationsService>(),
-                resolver.GetRequiredService<IDirectoryService>(),
-                resolver.GetRequiredService<IPathService>()
-            ));
             services.RegisterLazySingleton<IDrivesListViewModel>(() => new DrivesListViewModel(
                 resolver.GetRequiredService<IMountedDriveService>(),
                 resolver.GetRequiredService<IUnmountedDriveService>(),
@@ -298,7 +303,6 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IFileSystemWatchingService>(),
                 resolver.GetRequiredService<IApplicationDispatcher>(),
                 resolver.GetRequiredService<IFileSizeFormatter>(),
-                resolver.GetRequiredService<IClipboardOperationsService>(),
                 resolver.GetRequiredService<IFileSystemNodeViewModelComparerFactory>(),
                 resolver.GetRequiredService<IRecursiveSearchService>(),
                 observer,
@@ -308,7 +312,8 @@ namespace Camelot.DependencyInjection
                 tabsListViewModel,
                 resolver.GetRequiredService<IOperationsViewModel>(),
                 directorySelectorViewModel,
-                resolver.GetRequiredService<IDragAndDropOperationsMediator>()
+                resolver.GetRequiredService<IDragAndDropOperationsMediator>(),
+                resolver.GetRequiredService<IClipboardOperationsMediator>()
             );
 
             return filesPanelViewModel;
