@@ -101,6 +101,10 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         public event EventHandler<EventArgs> CurrentDirectoryChanged;
 
+        public event EventHandler<SelectionAddedEventArgs> SelectionAdded;
+
+        public event EventHandler<SelectionRemovedEventArgs> SelectionRemoved;
+
         public ICommand ActivateCommand { get; }
 
         public ICommand RefreshCommand { get; }
@@ -193,13 +197,14 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         private void SortFiles(SortingMode sortingMode)
         {
-            if (SelectedTab.SortingViewModel.SortingColumn == sortingMode)
+            var sortingViewModel = SelectedTab.SortingViewModel;
+            if (sortingViewModel.SortingColumn == sortingMode)
             {
-                SelectedTab.SortingViewModel.ToggleSortingDirection();
+                sortingViewModel.ToggleSortingDirection();
             }
             else
             {
-                SelectedTab.SortingViewModel.SortingColumn = sortingMode;
+                sortingViewModel.SortingColumn = sortingMode;
             }
 
             ReloadFiles();
@@ -209,7 +214,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         {
             TabsListViewModel.SelectedTabChanged += TabsListViewModelOnSelectedTabChanged;
             SearchViewModel.SearchSettingsChanged += SearchViewModelOnSearchSettingsChanged;
-            _filePanelDirectoryObserver.CurrentDirectoryChanged += async (sender, args) => await UpdateStateAsync();
+            _filePanelDirectoryObserver.CurrentDirectoryChanged += async (_, _) => await UpdateStateAsync();
             _selectedFileSystemNodes.CollectionChanged += SelectedFileSystemNodesOnCollectionChanged;
 
             _fileSystemWatchingService.NodeCreated += (_, args) =>
@@ -217,9 +222,9 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             _fileSystemWatchingService.NodeChanged += (_, args) =>
                 ExecuteInUiThread(() => UpdateNode(args.Node));
             _fileSystemWatchingService.NodeRenamed += (_, args) =>
-                ExecuteInUiThread(() => RenameNode(args.Node, args.NewName));
+                ExecuteInUiThread(() => RecreateNode(args.Node, args.NewName));
             _fileSystemWatchingService.NodeDeleted += (_, args) =>
-                ExecuteInUiThread(() => RemoveNode(args.Node));
+                ExecuteInUiThread(() => DeleteNode(args.Node));
         }
 
         private void TabsListViewModelOnSelectedTabChanged(object sender, EventArgs e)
@@ -261,13 +266,16 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             this.RaisePropertyChanged(nameof(ParentDirectory));
         }
 
-        private void RenameNode(string oldName, string newName)
+        private void UpdateNode(string nodePath) => RecreateNode(nodePath, nodePath);
+
+        private void RecreateNode(string oldName, string newName)
         {
+            var isSelected = CleanupSelection(oldName);
             RemoveNode(oldName);
-            InsertNode(newName);
+            InsertNode(newName, isSelected);
         }
 
-        private void InsertNode(string nodePath)
+        private void InsertNode(string nodePath, bool isSelected = false)
         {
             if (!CheckIfShouldShowNode(nodePath))
             {
@@ -280,16 +288,19 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
                 return;
             }
 
-            RemoveNode(nodePath);
-
             var index = GetInsertIndex(newNodeModel);
             _fileSystemNodes.Insert(index, newNodeModel);
+
+            if (isSelected)
+            {
+                SelectNode(nodePath);
+            }
         }
 
-        private void UpdateNode(string nodePath)
+        private void DeleteNode(string nodePath)
         {
+            CleanupSelection(nodePath);
             RemoveNode(nodePath);
-            InsertNode(nodePath);
         }
 
         private void RemoveNode(string nodePath)
@@ -300,6 +311,26 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
                 _fileSystemNodes.Remove(nodeViewModel);
             }
         }
+
+        private bool CleanupSelection(string nodePath)
+        {
+            var isSelected = CheckIfSelected(nodePath);
+            if (isSelected)
+            {
+                UnselectNode(nodePath);
+            }
+
+            return isSelected;
+        }
+
+        private void SelectNode(string nodePath) =>
+            SelectionAdded.Raise(this, new SelectionAddedEventArgs(nodePath));
+
+        private void UnselectNode(string nodePath) =>
+            SelectionRemoved.Raise(this, new SelectionRemovedEventArgs(nodePath));
+
+        private bool CheckIfSelected(string nodePath) =>
+            _nodesSelectionService.SelectedNodes.Contains(nodePath);
 
         private void ReloadFiles()
         {
@@ -378,7 +409,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             var nodesToAdd = e.NewItems?
                 .Cast<IFileSystemNodeViewModel>()
                 .Select(f => f.FullPath);
-            if (nodesToAdd != null)
+            if (nodesToAdd is not null)
             {
                 _nodesSelectionService.SelectNodes(nodesToAdd);
             }
@@ -386,7 +417,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             var nodesToRemove = e.OldItems?
                 .Cast<IFileSystemNodeViewModel>()
                 .Select(f => f.FullPath);
-            if (nodesToRemove != null)
+            if (nodesToRemove is not null)
             {
                 _nodesSelectionService.UnselectNodes(nodesToRemove);
             }
@@ -419,6 +450,6 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private void ExecuteInUiThread(Action action) => _applicationDispatcher.Dispatch(action);
 
         private bool CheckIfShouldShowNode(string nodePath) =>
-            _specification is null || _specification.IsSatisfiedBy(_nodeService.GetNode(nodePath));
+            _specification?.IsSatisfiedBy(_nodeService.GetNode(nodePath)) ?? true;
     }
 }

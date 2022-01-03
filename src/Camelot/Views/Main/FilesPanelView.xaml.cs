@@ -53,6 +53,8 @@ namespace Camelot.Views.Main
         {
             ViewModel.Deactivated += ViewModelOnDeactivated;
             ViewModel.Activated += ViewModelOnActivated;
+            ViewModel.SelectionAdded += ViewModelOnSelectionAdded;
+            ViewModel.SelectionRemoved += ViewModelOnSelectionRemoved;
             DirectorySelectorView.DirectoryTextBox.GotFocus += OnDirectoryTextBoxGotFocus;
 
             FilesDataGrid.AddHandler(DragDrop.DropEvent, OnDrop);
@@ -67,6 +69,39 @@ namespace Camelot.Views.Main
                 FilesDataGrid.Focus();
             }
         }
+
+        private void ViewModelOnSelectionAdded(object sender, SelectionAddedEventArgs e)
+        {
+            var item = Get(e.NodePath);
+            if (item is not null)
+            {
+                FilesDataGrid.SelectedItems.Add(item);
+            }
+        }
+
+        private void ViewModelOnSelectionRemoved(object sender, SelectionRemovedEventArgs e)
+        {
+            var item = Get(e.NodePath);
+            if (item is null)
+            {
+                return;
+            }
+
+            if (FilesDataGrid.SelectedItems.Count == 1)
+            {
+                FilesDataGrid.SelectedIndex = -1;
+                FilesDataGrid.SelectedItems.Clear();
+            }
+            else
+            {
+                FilesDataGrid.SelectedItems.Remove(item);
+            }
+        }
+
+        private IFileSystemNodeViewModel Get(string nodePath) => FilesDataGrid
+            .Items
+            .Cast<IFileSystemNodeViewModel>()
+            .SingleOrDefault(m => m.FullPath == nodePath);
 
         private void OnDataGridSelectionChanged(object sender, SelectionChangedEventArgs args)
         {

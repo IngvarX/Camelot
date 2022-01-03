@@ -33,6 +33,10 @@ namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels
 
         event EventHandler<EventArgs> CurrentDirectoryChanged;
 
+        event EventHandler<SelectionAddedEventArgs> SelectionAdded;
+
+        event EventHandler<SelectionRemovedEventArgs> SelectionRemoved;
+
         ICommand ActivateCommand { get; }
 
         void Activate();
