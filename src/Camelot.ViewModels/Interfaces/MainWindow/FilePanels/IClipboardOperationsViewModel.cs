@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace Camelot.ViewModels.Services.Interfaces;
+namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 
-public interface IClipboardOperationsMediator
+public interface IClipboardOperationsViewModel
 {
     public ICommand CopyToClipboardCommand { get; }
 

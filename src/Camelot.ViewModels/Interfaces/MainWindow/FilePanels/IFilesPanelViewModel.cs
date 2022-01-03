@@ -20,7 +20,7 @@ namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels
 
         IDragAndDropOperationsMediator DragAndDropOperationsMediator { get; }
 
-        IClipboardOperationsMediator ClipboardOperationsMediator { get; }
+        IClipboardOperationsViewModel ClipboardOperationsViewModel { get; }
 
         IList<IFileSystemNodeViewModel> SelectedFileSystemNodes { get; }
 

@@ -73,7 +73,7 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IDirectoryService>(),
                 resolver.GetRequiredService<IPathService>()
             ));
-            services.RegisterLazySingleton<IClipboardOperationsMediator>(() => new ClipboardOperationsMediator(
+            services.RegisterLazySingleton<IClipboardOperationsViewModel>(() => new ClipboardOperationsViewModel(
                 resolver.GetRequiredService<IClipboardOperationsService>(),
                 resolver.GetRequiredService<INodesSelectionService>(),
                 resolver.GetRequiredService<IDirectoryService>()
@@ -313,7 +313,7 @@ namespace Camelot.DependencyInjection
                 resolver.GetRequiredService<IOperationsViewModel>(),
                 directorySelectorViewModel,
                 resolver.GetRequiredService<IDragAndDropOperationsMediator>(),
-                resolver.GetRequiredService<IClipboardOperationsMediator>()
+                resolver.GetRequiredService<IClipboardOperationsViewModel>()
             );
 
             return filesPanelViewModel;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions;
-using Camelot.ViewModels.Services.Implementations;
+using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
 using Camelot.ViewModels.Services.Interfaces;
 using Moq;
 using Moq.AutoMock;
@@ -11,14 +11,14 @@ using Xunit;
 
 namespace Camelot.ViewModels.Tests.Services
 {
-    public class ClipboardOperationsMediatorTests
+    public class ClipboardOperationsViewModelTests
     {
         private const string Directory = "Dir";
         private const string File = "File";
 
         private readonly AutoMocker _autoMocker;
 
-        public ClipboardOperationsMediatorTests()
+        public ClipboardOperationsViewModelTests()
         {
             _autoMocker = new AutoMocker();
         }
@@ -34,11 +34,11 @@ namespace Camelot.ViewModels.Tests.Services
                     It.Is<IReadOnlyList<string>>(l => l.Single() == File)))
                 .Verifiable();
 
-           var mediator = _autoMocker.CreateInstance<ClipboardOperationsMediator>();
+           var viewModel = _autoMocker.CreateInstance<ClipboardOperationsViewModel>();
 
-           Assert.True(mediator.CopyToClipboardCommand.CanExecute(null));
+           Assert.True(viewModel.CopyToClipboardCommand.CanExecute(null));
 
-           mediator.CopyToClipboardCommand.Execute(null);
+           viewModel.CopyToClipboardCommand.Execute(null);
 
             _autoMocker
                 .Verify<IClipboardOperationsService>(m => m.CopyFilesAsync(
@@ -53,17 +53,17 @@ namespace Camelot.ViewModels.Tests.Services
                 .Setup<IDirectoryService, string>(m => m.SelectedDirectory)
                 .Returns(Directory);
 
-            var mediator = _autoMocker.CreateInstance<ClipboardOperationsMediator>();
+            var viewModel = _autoMocker.CreateInstance<ClipboardOperationsViewModel>();
 
-            Assert.True(mediator.CopyToClipboardCommand.CanExecute(null));
+            Assert.True(viewModel.CopyToClipboardCommand.CanExecute(null));
 
             _autoMocker
                 .GetMock<IFilePanelDirectoryObserver>()
                 .Raise(m => m.CurrentDirectoryChanged += null, EventArgs.Empty);
 
-            Assert.True(mediator.PasteFromClipboardCommand.CanExecute(null));
+            Assert.True(viewModel.PasteFromClipboardCommand.CanExecute(null));
 
-            mediator.PasteFromClipboardCommand.Execute(null);
+            viewModel.PasteFromClipboardCommand.Execute(null);
 
             _autoMocker
                 .Verify<IClipboardOperationsService>(m => m.PasteFilesAsync(Directory),
@@ -79,9 +79,10 @@ namespace Camelot.ViewModels.Tests.Services
                 .Setup<IClipboardOperationsService, Task<bool>>(m => m.CanPasteAsync())
                 .ReturnsAsync(canPaste);
 
-            var mediator = _autoMocker.CreateInstance<ClipboardOperationsMediator>();
+            var viewModel = _autoMocker.CreateInstance<ClipboardOperationsViewModel>();
 
-            var actual = await mediator.CanPasteAsync();
+            var actual = await viewModel.CanPasteAsync();
+
             Assert.Equal(expected, actual);
 
             _autoMocker

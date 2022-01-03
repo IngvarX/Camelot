@@ -163,10 +163,10 @@
             </DataGrid.Styles>
 
             <DataGrid.KeyBindings>
-                <KeyBinding Gesture="Ctrl+C" Command="{Binding ClipboardOperationsMediator.CopyToClipboardCommand}" />
-                <KeyBinding Gesture="Meta+C" Command="{Binding ClipboardOperationsMediator.CopyToClipboardCommand}" />
-                <KeyBinding Gesture="Ctrl+V" Command="{Binding ClipboardOperationsMediator.PasteFromClipboardCommand}" />
-                <KeyBinding Gesture="Meta+V" Command="{Binding ClipboardOperationsMediator.PasteFromClipboardCommand}" />
+                <KeyBinding Gesture="Ctrl+C" Command="{Binding ClipboardOperationsViewModel.CopyToClipboardCommand}" />
+                <KeyBinding Gesture="Meta+C" Command="{Binding ClipboardOperationsViewModel.CopyToClipboardCommand}" />
+                <KeyBinding Gesture="Ctrl+V" Command="{Binding ClipboardOperationsViewModel.PasteFromClipboardCommand}" />
+                <KeyBinding Gesture="Meta+V" Command="{Binding ClipboardOperationsViewModel.PasteFromClipboardCommand}" />
                 <KeyBinding Gesture="Enter" Command="{Binding $self.SelectedItem.OpenCommand}" />
                 <KeyBinding Gesture="F4" Command="{Binding OperationsViewModel.OpenInDefaultEditorCommand}" />
                 <KeyBinding Gesture="F5" Command="{Binding OperationsViewModel.CopyCommand}" />

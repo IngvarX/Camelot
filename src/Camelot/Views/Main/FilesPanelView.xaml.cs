@@ -344,7 +344,7 @@ namespace Camelot.Views.Main
                 .SingleOrDefault(i => i.Name == PasteFromClipboardMenuItemName);
             if (item is not null)
             {
-                item.IsVisible = await ViewModel.ClipboardOperationsMediator.CanPasteAsync();
+                item.IsVisible = await ViewModel.ClipboardOperationsViewModel.CanPasteAsync();
             }
         }
     }

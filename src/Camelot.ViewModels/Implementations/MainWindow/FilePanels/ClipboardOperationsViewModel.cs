@@ -1,13 +1,12 @@
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Camelot.Services.Abstractions;
-using Camelot.ViewModels.Implementations;
-using Camelot.ViewModels.Services.Interfaces;
+using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using ReactiveUI;
 
-namespace Camelot.ViewModels.Services.Implementations;
+namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels;
 
-public class ClipboardOperationsMediator : ViewModelBase, IClipboardOperationsMediator
+public class ClipboardOperationsViewModel : ViewModelBase, IClipboardOperationsViewModel
 {
     private readonly IClipboardOperationsService _clipboardOperationsService;
     private readonly INodesSelectionService _nodesSelectionService;
@@ -17,7 +16,7 @@ public class ClipboardOperationsMediator : ViewModelBase, IClipboardOperationsMe
 
     public ICommand PasteFromClipboardCommand { get; }
 
-    public ClipboardOperationsMediator(
+    public ClipboardOperationsViewModel(
         IClipboardOperationsService clipboardOperationsService,
         INodesSelectionService nodesSelectionService,
         IDirectoryService directoryService)

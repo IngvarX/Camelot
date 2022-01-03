@@ -71,7 +71,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         public IDragAndDropOperationsMediator DragAndDropOperationsMediator { get; }
 
-        public IClipboardOperationsMediator ClipboardOperationsMediator { get; }
+        public IClipboardOperationsViewModel ClipboardOperationsViewModel { get; }
 
         public bool IsActive => SelectedTab.IsGloballyActive;
 
@@ -133,7 +133,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             IOperationsViewModel operationsViewModel,
             IDirectorySelectorViewModel directorySelectorViewModel,
             IDragAndDropOperationsMediator dragAndDropOperationsMediator,
-            IClipboardOperationsMediator clipboardOperationsMediator)
+            IClipboardOperationsViewModel clipboardOperationsViewModel)
         {
             _fileService = fileService;
             _directoryService = directoryService;
@@ -154,7 +154,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             OperationsViewModel = operationsViewModel;
             DirectorySelectorViewModel = directorySelectorViewModel;
             DragAndDropOperationsMediator = dragAndDropOperationsMediator;
-            ClipboardOperationsMediator = clipboardOperationsMediator;
+            ClipboardOperationsViewModel = clipboardOperationsViewModel;
 
             _fileSystemNodes = new ObservableCollection<IFileSystemNodeViewModel>();
             _selectedFileSystemNodes = new ObservableCollection<IFileSystemNodeViewModel>();
