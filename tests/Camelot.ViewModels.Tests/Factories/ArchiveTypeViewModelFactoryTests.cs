@@ -42,7 +42,7 @@ namespace Camelot.ViewModels.Tests.Factories
                 var (key, value) = kvp;
                 var viewModel = viewModels.SingleOrDefault(vm => vm.ArchiveType == key);
 
-                return viewModel != null && viewModel.Name == value;
+                return viewModel is not null && viewModel.Name == value;
             }));
         }
 
@@ -71,7 +71,7 @@ namespace Camelot.ViewModels.Tests.Factories
                 var (key, value) = kvp;
                 var viewModel = viewModels.SingleOrDefault(vm => vm.ArchiveType == key);
 
-                return viewModel != null && viewModel.Name == value;
+                return viewModel is not null && viewModel.Name == value;
             }));
         }
     }

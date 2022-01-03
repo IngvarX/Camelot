@@ -165,7 +165,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
             ActivateCommand = ReactiveCommand.Create(Activate);
             RefreshCommand = ReactiveCommand.Create(ReloadFiles);
             var canGoToParentDirectory = this.WhenAnyValue(vm => vm.ParentDirectory,
-                (DirectoryModel dm) => dm != null);
+                (DirectoryModel dm) => dm is not null);
             GoToParentDirectoryCommand = ReactiveCommand.Create(GoToParentDirectory, canGoToParentDirectory);
             SortFilesCommand = ReactiveCommand.Create<SortingMode>(SortFiles);
             CopyToClipboardCommand = ReactiveCommand.CreateFromTask(CopyToClipboardAsync);
@@ -253,7 +253,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
             this.RaiseAndSetIfChanged(ref _currentDirectory, newCurrentDirectory);
 
-            if (previousCurrentDirectory != null)
+            if (previousCurrentDirectory is not null)
             {
                 _fileSystemWatchingService.StopWatching(previousCurrentDirectory);
             }
@@ -306,7 +306,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private void RemoveNode(string nodePath)
         {
             var nodeViewModel = GetViewModel(nodePath);
-            if (nodeViewModel != null)
+            if (nodeViewModel is not null)
             {
                 _fileSystemNodes.Remove(nodeViewModel);
             }
@@ -396,7 +396,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
 
         private void InsertParentDirectory()
         {
-            if (ParentDirectory != null)
+            if (ParentDirectory is not null)
             {
                 var parentDirectoryViewModel = _fileSystemNodeViewModelFactory.Create(ParentDirectory, true);
 

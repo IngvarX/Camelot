@@ -50,7 +50,7 @@ namespace Camelot.ViewModels.Services.Implementations
         public async Task PackAsync(string fullPath)
         {
             var dialogResult = await ShowPackDialogAsync(fullPath);
-            if (dialogResult != null)
+            if (dialogResult is not null)
             {
                 await _archiveService.PackAsync(CreateFilesList(fullPath), dialogResult.ArchivePath,
                     dialogResult.ArchiveType);
@@ -108,7 +108,7 @@ namespace Camelot.ViewModels.Services.Implementations
         public async Task RenameInDialogAsync(string fullPath)
         {
             var newPath = await ShowRenameDialogAsync(fullPath);
-            if (newPath != null)
+            if (newPath is not null)
             {
                 _operationsService.Rename(fullPath, newPath);
             }

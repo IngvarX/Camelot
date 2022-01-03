@@ -32,7 +32,7 @@ namespace Camelot.Ui.Tests.Conditions
             var selectedTab = tabs.SingleOrDefault(IsSelected);
             var expectedIndex = (index + tabs.Length - 1) % tabs.Length;
 
-            return selectedTab != null && tabs.IndexOf(selectedTab) == expectedIndex;
+            return selectedTab is not null && tabs.IndexOf(selectedTab) == expectedIndex;
         }
 
         private static bool IsSelected(IDataContextProvider tabView)

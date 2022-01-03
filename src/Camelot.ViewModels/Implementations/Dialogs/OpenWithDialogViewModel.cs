@@ -96,7 +96,7 @@ namespace Camelot.ViewModels.Implementations.Dialogs
                 if (selectedApplication is null)
                 {
                     selectedApplication = FindApplication(_otherApplications, parameter.Application);
-                    if (selectedApplication != null)
+                    if (selectedApplication is not null)
                     {
                         _otherApplications.Remove(selectedApplication);
                     }
@@ -128,6 +128,6 @@ namespace Camelot.ViewModels.Implementations.Dialogs
             Close(new OpenWithDialogResult(OpenFileExtension, SelectedApplication, IsDefaultApplication));
 
         private static bool CheckIfSelectedApplicationIsValid(ApplicationModel defaultApp, ApplicationModel otherApp) =>
-            (defaultApp ?? otherApp) != null;
+            (defaultApp ?? otherApp) is not null;
     }
 }

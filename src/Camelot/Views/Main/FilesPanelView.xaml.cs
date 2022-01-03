@@ -343,7 +343,7 @@ namespace Camelot.Views.Main
                 .Items
                 .Cast<MenuItem>()
                 .SingleOrDefault(i => i.Name == PasteFromClipboardMenuItemName);
-            if (item != null)
+            if (item is not null)
             {
                 item.IsVisible = canPaste;
             }

@@ -159,7 +159,7 @@ namespace Camelot.ViewModels.Tests.Dialogs
             {
                 var result = args.Result;
 
-                isCallbackCalled = result != null
+                isCallbackCalled = result is not null
                                    && result.FileExtension == FileExtension
                                    && result.IsDefaultApplication == isDefaultApplication
                                    && result.Application == selectedApplication;

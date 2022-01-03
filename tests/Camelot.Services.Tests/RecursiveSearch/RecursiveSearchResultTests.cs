@@ -15,7 +15,7 @@ namespace Camelot.Services.Tests.RecursiveSearch
             var isTaskCalled = false;
             Task TaskFactory(INodeFoundEventPublisher r)
             {
-                isTaskCalled = r != null;
+                isTaskCalled = r is not null;
 
                 return Task.CompletedTask;
             }

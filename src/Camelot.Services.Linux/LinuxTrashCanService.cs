@@ -126,7 +126,7 @@ namespace Camelot.Services.Linux
         private string GetHomeTrashCanPath()
         {
             var xdgDataHome = _environmentService.GetEnvironmentVariable("XDG_DATA_HOME");
-            if (xdgDataHome != null)
+            if (xdgDataHome is not null)
             {
                 return _pathService.Combine(xdgDataHome, "Trash");
             }

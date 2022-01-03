@@ -164,7 +164,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
 
         private void SelectTab(ITabViewModel tabViewModel)
         {
-            if (SelectedTab != null)
+            if (SelectedTab is not null)
             {
                 SelectedTab.IsActive = SelectedTab.IsGloballyActive = false;
             }

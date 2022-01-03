@@ -44,7 +44,7 @@ namespace Camelot.Services.Mac
                 {
                     currentAppName = ExtractAppName(line);
                 }
-                else if (line.StartsWith(UtiSubstring) && currentAppName != null)
+                else if (line.StartsWith(UtiSubstring) && currentAppName is not null)
                 {
                     var app = installedAppsDictionary.GetValueOrDefault(currentAppName);
                     if (app is null)

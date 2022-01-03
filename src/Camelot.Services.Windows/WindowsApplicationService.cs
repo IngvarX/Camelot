@@ -170,7 +170,7 @@ namespace Camelot.Services.Windows
             baseKeyName = @$"{baseKeyName?.TrimEnd('\\')}\{fileExtension}\OpenWithProgids";
 
             using var baseKey = _registryService.GetRegistryKey(rootKey).OpenSubKey(baseKeyName);
-            if (baseKey != null)
+            if (baseKey is not null)
             {
                 results.AddRange(baseKey.GetValueNames());
             }
@@ -181,7 +181,7 @@ namespace Camelot.Services.Windows
         private void TryAddApplication(IDictionary<string, ApplicationModel> applications, string applicationFile)
         {
             var application = FindApplication(applicationFile);
-            if (application != null)
+            if (application is not null)
             {
                 applications.TryAdd(application.DisplayName, application);
             }

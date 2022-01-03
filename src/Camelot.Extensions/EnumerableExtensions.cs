@@ -24,6 +24,6 @@ namespace Camelot.Extensions
         }
 
         public static IEnumerable<T> WhereNotNull<T>(this IEnumerable<T> collection) =>
-            collection.Where(t => t != null);
+            collection.Where(t => t is not null);
     }
 }

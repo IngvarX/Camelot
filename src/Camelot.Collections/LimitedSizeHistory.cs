@@ -26,7 +26,7 @@ namespace Camelot.Collections
 
         public T GoToPrevious()
         {
-            if (_current.Previous != null)
+            if (_current.Previous is not null)
             {
                 _current = _current.Previous;
                 CurrentIndex--;
@@ -37,7 +37,7 @@ namespace Camelot.Collections
 
         public T GoToNext()
         {
-            if (_current.Next != null)
+            if (_current.Next is not null)
             {
                 _current = _current.Next;
                 CurrentIndex++;
