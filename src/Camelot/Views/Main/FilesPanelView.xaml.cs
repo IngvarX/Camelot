@@ -72,7 +72,7 @@ namespace Camelot.Views.Main
 
         private void ViewModelOnSelectionAdded(object sender, SelectionAddedEventArgs e)
         {
-            var item = Get(e.NodePath);
+            var item = GetNode(e.NodePath);
             if (item is not null)
             {
                 FilesDataGrid.SelectedItems.Add(item);
@@ -81,7 +81,7 @@ namespace Camelot.Views.Main
 
         private void ViewModelOnSelectionRemoved(object sender, SelectionRemovedEventArgs e)
         {
-            var item = Get(e.NodePath);
+            var item = GetNode(e.NodePath);
             if (item is null)
             {
                 return;
@@ -98,7 +98,7 @@ namespace Camelot.Views.Main
             }
         }
 
-        private IFileSystemNodeViewModel Get(string nodePath) => FilesDataGrid
+        private IFileSystemNodeViewModel GetNode(string nodePath) => FilesDataGrid
             .Items
             .Cast<IFileSystemNodeViewModel>()
             .SingleOrDefault(m => m.FullPath == nodePath);
@@ -338,14 +338,13 @@ namespace Camelot.Views.Main
         private async void DataGridOnContextMenuOpening(object sender, CancelEventArgs e)
         {
             var menu = (ContextMenu) sender;
-            var canPaste = await ViewModel.CanPasteAsync();
             var item = menu
                 .Items
                 .Cast<MenuItem>()
                 .SingleOrDefault(i => i.Name == PasteFromClipboardMenuItemName);
             if (item is not null)
             {
-                item.IsVisible = canPaste;
+                item.IsVisible = await ViewModel.CanPasteAsync();
             }
         }
     }

@@ -329,8 +329,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels
         private void UnselectNode(string nodePath) =>
             SelectionRemoved.Raise(this, new SelectionRemovedEventArgs(nodePath));
 
-        private bool CheckIfSelected(string nodePath) =>
-            _nodesSelectionService.SelectedNodes.Contains(nodePath);
+        private bool CheckIfSelected(string nodePath) => _nodesSelectionService.SelectedNodes.Contains(nodePath);
 
         private void ReloadFiles()
         {
