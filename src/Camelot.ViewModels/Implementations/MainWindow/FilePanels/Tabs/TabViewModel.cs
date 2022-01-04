@@ -113,7 +113,7 @@ public class TabViewModel : ViewModelBase, ITabViewModel
         GoToNextDirectoryCommand = ReactiveCommand.Create(GoToNextDirectory);
     }
 
-    public TabStateModel GetState() => new TabStateModel
+    public TabStateModel GetState() => new()
     {
         Directory = CurrentDirectory,
         SortingSettings = GetSortingSettings(),
@@ -121,7 +121,7 @@ public class TabViewModel : ViewModelBase, ITabViewModel
         CurrentPositionInHistory = _history.CurrentIndex
     };
 
-    private SortingSettingsStateModel GetSortingSettings() => new SortingSettingsStateModel
+    private SortingSettingsStateModel GetSortingSettings() => new()
     {
         IsAscending = SortingViewModel.IsSortingByAscendingEnabled,
         SortingMode = SortingViewModel.SortingColumn

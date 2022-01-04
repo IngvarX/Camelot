@@ -23,7 +23,7 @@ public class LiteDbUnitOfWorkFactory : IUnitOfWorkFactory
         return new LiteDbUnitOfWork(database);
     }
 
-    private static LiteDatabase CreateInMemoryDatabase() => new LiteDatabase(new MemoryStream());
+    private static LiteDatabase CreateInMemoryDatabase() => new(new MemoryStream());
 
     private LiteDatabase CreateDatabaseFromConnectionString() =>
         new(_databaseConfiguration.ConnectionString);

@@ -19,8 +19,8 @@ public class TerminalSettingsViewModel : ViewModelBase, ISettingsViewModel
     [Reactive]
     public string TerminalCommandArguments { get; set; }
 
-    public bool IsChanged => _initialCommandText != TerminalCommandText ||
-                             _initialCommandArguments != TerminalCommandArguments;
+    public bool IsChanged => _initialCommandText != TerminalCommandText
+                             || _initialCommandArguments != TerminalCommandArguments;
 
     public TerminalSettingsViewModel(
         ITerminalService terminalService)

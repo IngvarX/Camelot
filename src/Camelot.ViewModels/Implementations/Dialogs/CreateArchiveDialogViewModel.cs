@@ -108,7 +108,7 @@ public class CreateArchiveDialogViewModel : ParameterizedDialogViewModelBase<Cre
     private string GetUpdatedArchivePath(ArchiveTypeViewModel previous, ArchiveTypeViewModel current)
     {
         var currentExtensionLength = previous?.Name?.Length ?? 0;
-        var archivePathWithoutExtension = ArchivePath.Substring(0, ArchivePath.Length - currentExtensionLength);
+        var archivePathWithoutExtension = ArchivePath[..^currentExtensionLength];
 
         return $"{archivePathWithoutExtension}{current.Name}";
     }

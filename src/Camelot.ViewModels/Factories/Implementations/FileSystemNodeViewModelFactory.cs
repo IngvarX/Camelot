@@ -68,9 +68,8 @@ public class FileSystemNodeViewModelFactory : IFileSystemNodeViewModelFactory
         return null;
     }
 
-    public IFileSystemNodeViewModel Create(FileModel fileModel)
-    {
-        var fileViewModel = new FileViewModel(
+    public IFileSystemNodeViewModel Create(FileModel fileModel) =>
+        new FileViewModel(
             _fileOpeningBehavior,
             _filePropertiesBehavior,
             _fileSystemNodeFacade,
@@ -86,12 +85,8 @@ public class FileSystemNodeViewModelFactory : IFileSystemNodeViewModelFactory
             FullName = _pathService.GetFileName(fileModel.Name)
         };
 
-        return fileViewModel;
-    }
-
-    public IFileSystemNodeViewModel Create(DirectoryModel directoryModel, bool isParentDirectory)
-    {
-        var directoryViewModel = new DirectoryViewModel(
+    public IFileSystemNodeViewModel Create(DirectoryModel directoryModel, bool isParentDirectory) =>
+        new DirectoryViewModel(
             _directoryOpeningBehavior,
             _directoryPropertiesBehavior,
             _fileSystemNodeFacade,
@@ -104,7 +99,4 @@ public class FileSystemNodeViewModelFactory : IFileSystemNodeViewModelFactory
             FullName = directoryModel.Name,
             IsParentDirectory = isParentDirectory
         };
-
-        return directoryViewModel;
-    }
 }

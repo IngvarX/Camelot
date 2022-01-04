@@ -10,7 +10,7 @@ public class RecursiveSearchResult : IRecursiveSearchResult, INodeFoundEventPubl
 {
     private readonly Func<INodeFoundEventPublisher, Task> _taskFactory;
 
-    public Lazy<Task> Task => new Lazy<Task>(() => _taskFactory(this));
+    public Lazy<Task> Task => new(() => _taskFactory(this));
 
     public event EventHandler<NodeFoundEventArgs> NodeFoundEvent;
 

@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Camelot.Avalonia.Interfaces;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
+using Camelot.Services.Abstractions.RecursiveSearch;
 using Camelot.Services.Abstractions.Specifications;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Implementations.Dialogs;
@@ -12,6 +14,7 @@ using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Nodes;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs;
+using Camelot.ViewModels.Interfaces.MainWindow.Operations;
 using Camelot.ViewModels.Services.Interfaces;
 using Moq;
 using Moq.AutoMock;
@@ -48,6 +51,46 @@ public class FilesPanelViewModelTests
         _autoMocker
             .Setup<IPermissionsService, bool>(m => m.CheckIfHasAccess(It.IsAny<string>()))
             .Returns(true);
+    }
+
+    [Fact]
+    public void TestProperties()
+    {
+        var searchViewModel = _autoMocker.GetMock<ISearchViewModel>().Object;
+        var tabsListViewModel = _autoMocker.GetMock<ITabsListViewModel>().Object;
+        var operationsViewModel = _autoMocker.GetMock<IOperationsViewModel>().Object;
+        var directorySelectorViewModel = _autoMocker.GetMock<IDirectorySelectorViewModel>().Object;
+        var dragAndDropOperationsMediator = _autoMocker.GetMock<IDragAndDropOperationsMediator>().Object;
+        var clipboardOperationsViewModel = _autoMocker.GetMock<IClipboardOperationsViewModel>().Object;
+
+        var viewModel = new FilesPanelViewModel(
+            _autoMocker.GetMock<IFileService>().Object,
+            _autoMocker.GetMock<IDirectoryService>().Object,
+            _autoMocker.GetMock<INodesSelectionService>().Object,
+            _autoMocker.GetMock<INodeService>().Object,
+            _autoMocker.GetMock<IFileSystemNodeViewModelFactory>().Object,
+            _autoMocker.GetMock<IFileSystemWatchingService>().Object,
+            _autoMocker.GetMock<IApplicationDispatcher>().Object,
+            _autoMocker.GetMock<IFileSizeFormatter>().Object,
+            _autoMocker.GetMock<IFileSystemNodeViewModelComparerFactory>().Object,
+            _autoMocker.GetMock<IRecursiveSearchService>().Object,
+            _autoMocker.GetMock<IFilePanelDirectoryObserver>().Object,
+            _autoMocker.GetMock<IPermissionsService>().Object,
+            _autoMocker.GetMock<IDialogService>().Object,
+            searchViewModel,
+            tabsListViewModel,
+            operationsViewModel,
+            directorySelectorViewModel,
+            dragAndDropOperationsMediator,
+            clipboardOperationsViewModel
+        );
+
+        Assert.Equal(searchViewModel, viewModel.SearchViewModel);
+        Assert.Equal(tabsListViewModel, viewModel.TabsListViewModel);
+        Assert.Equal(operationsViewModel, viewModel.OperationsViewModel);
+        Assert.Equal(directorySelectorViewModel, viewModel.DirectorySelectorViewModel);
+        Assert.Equal(dragAndDropOperationsMediator, viewModel.DragAndDropOperationsMediator);
+        Assert.Equal(clipboardOperationsViewModel, viewModel.ClipboardOperationsViewModel);
     }
 
     [Theory]

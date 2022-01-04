@@ -239,7 +239,7 @@ public class TabsListViewModel : ViewModelBase, ITabsListViewModel
     }
 
     private void SubscribeToEvents() =>
-        _filePanelDirectoryObserver.CurrentDirectoryChanged += (sender, args) =>
+        _filePanelDirectoryObserver.CurrentDirectoryChanged += (_, _) =>
             SelectedTab.CurrentDirectory = _filePanelDirectoryObserver.CurrentDirectory;
 
     private void SubscribeToEvents(ITabViewModel tabViewModel)

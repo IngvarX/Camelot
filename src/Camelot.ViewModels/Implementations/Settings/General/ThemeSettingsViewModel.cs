@@ -59,6 +59,5 @@ public class ThemeSettingsViewModel : ViewModelBase, ISettingsViewModel
         _themeService.SaveThemeSettings(settings);
     }
 
-    private ThemeSettingsModel CreateSettings() =>
-        new(CurrentTheme.Theme);
+    private ThemeSettingsModel CreateSettings() => new(CurrentTheme.Theme);
 }
