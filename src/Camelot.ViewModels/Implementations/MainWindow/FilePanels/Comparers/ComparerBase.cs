@@ -19,5 +19,5 @@ public abstract class FileSystemNodesComparerBase<T> : IComparer<T>
     protected abstract int Compare(T x, T y, SortingMode sortingColumn, bool isAscending);
 
     protected static string PreprocessFileName(string fileName) =>
-        fileName.StartsWith(".") ? fileName[1..] : fileName;
+        (fileName.StartsWith(".") ? fileName[1..] : fileName).ToUpperInvariant();
 }
