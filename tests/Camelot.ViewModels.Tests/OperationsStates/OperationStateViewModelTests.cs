@@ -11,137 +11,136 @@ using Moq;
 using Moq.AutoMock;
 using Xunit;
 
-namespace Camelot.ViewModels.Tests.OperationsStates
+namespace Camelot.ViewModels.Tests.OperationsStates;
+
+public class OperationStateViewModelTests
 {
-    public class OperationStateViewModelTests
+    private const string File = "File";
+    private const string Directory = "Dir";
+    private const string SourceDirectory = "SourceDir";
+    private const string TargetDirectory = "TargetDir";
+
+    private readonly AutoMocker _autoMocker;
+
+    public OperationStateViewModelTests()
     {
-        private const string File = "File";
-        private const string Directory = "Dir";
-        private const string SourceDirectory = "SourceDir";
-        private const string TargetDirectory = "TargetDir";
+        _autoMocker = new AutoMocker();
+    }
 
-        private readonly AutoMocker _autoMocker;
+    [Theory]
+    [InlineData(OperationType.Copy, 1, 13, false, OperationState.NotStarted, null)]
+    [InlineData(OperationType.Move, 1, 0, true, OperationState.InProgress, File)]
+    [InlineData(OperationType.Move, 0, 1, true, OperationState.InProgress, Directory)]
+    public void TestProperties(OperationType operationType, int filesCount,
+        int dirsCount, bool isProcessingSingleFile, OperationState operationState,
+        string sourceFile)
+    {
+        var files = Enumerable
+            .Repeat(File, filesCount)
+            .ToArray();
+        var dirs = Enumerable
+            .Repeat(Directory, dirsCount)
+            .ToArray();
+        var settings = new BinaryFileSystemOperationSettings(dirs, files,
+            dirs, files, new Dictionary<string, string>(0),
+            new string[0], SourceDirectory, TargetDirectory);
+        var operationInfo = new OperationInfo(operationType, settings);
 
-        public OperationStateViewModelTests()
-        {
-            _autoMocker = new AutoMocker();
-        }
+        _autoMocker
+            .Setup<IOperation, OperationInfo>(m => m.Info)
+            .Returns(operationInfo);
+        _autoMocker
+            .Setup<IOperation, OperationState>(m => m.State)
+            .Returns(operationState);
+        _autoMocker
+            .Setup<IPathService, string>(m => m.GetFileName(It.IsAny<string>()))
+            .Returns<string>(s => s);
 
-        [Theory]
-        [InlineData(OperationType.Copy, 1, 13, false, OperationState.NotStarted, null)]
-        [InlineData(OperationType.Move, 1, 0, true, OperationState.InProgress, File)]
-        [InlineData(OperationType.Move, 0, 1, true, OperationState.InProgress, Directory)]
-        public void TestProperties(OperationType operationType, int filesCount,
-            int dirsCount, bool isProcessingSingleFile, OperationState operationState,
-            string sourceFile)
-        {
-            var files = Enumerable
-                .Repeat(File, filesCount)
-                .ToArray();
-            var dirs = Enumerable
-                .Repeat(Directory, dirsCount)
-                .ToArray();
-            var settings = new BinaryFileSystemOperationSettings(dirs, files,
-                dirs, files, new Dictionary<string, string>(0),
-                new string[0], SourceDirectory, TargetDirectory);
-            var operationInfo = new OperationInfo(operationType, settings);
+        var viewModel = _autoMocker.CreateInstance<OperationStateViewModel>();
 
-            _autoMocker
-                .Setup<IOperation, OperationInfo>(m => m.Info)
-                .Returns(operationInfo);
-            _autoMocker
-                .Setup<IOperation, OperationState>(m => m.State)
-                .Returns(operationState);
-            _autoMocker
-                .Setup<IPathService, string>(m => m.GetFileName(It.IsAny<string>()))
-                .Returns<string>(s => s);
+        Assert.Equal(0, viewModel.Progress);
+        Assert.Equal(operationState, viewModel.State);
+        Assert.Equal(filesCount, viewModel.SourceFilesCount);
+        Assert.Equal(dirsCount, viewModel.SourceDirectoriesCount);
+        Assert.Equal(isProcessingSingleFile, viewModel.IsProcessingSingleFile);
+        Assert.Equal(operationType, viewModel.OperationType);
+        Assert.Equal(sourceFile, viewModel.SourceFile);
+        Assert.Equal(SourceDirectory, viewModel.SourceDirectory);
+        Assert.Equal(TargetDirectory, viewModel.TargetDirectory);
+    }
 
-            var viewModel = _autoMocker.CreateInstance<OperationStateViewModel>();
+    [Fact]
+    public void TestCancelCommand()
+    {
+        var viewModel = _autoMocker.CreateInstance<OperationStateViewModel>();
 
-            Assert.Equal(0, viewModel.Progress);
-            Assert.Equal(operationState, viewModel.State);
-            Assert.Equal(filesCount, viewModel.SourceFilesCount);
-            Assert.Equal(dirsCount, viewModel.SourceDirectoriesCount);
-            Assert.Equal(isProcessingSingleFile, viewModel.IsProcessingSingleFile);
-            Assert.Equal(operationType, viewModel.OperationType);
-            Assert.Equal(sourceFile, viewModel.SourceFile);
-            Assert.Equal(SourceDirectory, viewModel.SourceDirectory);
-            Assert.Equal(TargetDirectory, viewModel.TargetDirectory);
-        }
+        Assert.True(viewModel.CancelCommand.CanExecute(null));
 
-        [Fact]
-        public void TestCancelCommand()
-        {
-            var viewModel = _autoMocker.CreateInstance<OperationStateViewModel>();
+        viewModel.CancelCommand.Execute(null);
 
-            Assert.True(viewModel.CancelCommand.CanExecute(null));
+        _autoMocker
+            .Verify<IOperation>(m => m.CancelAsync(), Times.Once);
+    }
 
-            viewModel.CancelCommand.Execute(null);
+    [Fact]
+    public void TestProgress()
+    {
+        var viewModel = _autoMocker.CreateInstance<OperationStateViewModel>();
 
-            _autoMocker
-                .Verify<IOperation>(m => m.CancelAsync(), Times.Once);
-        }
+        Assert.Equal(0, viewModel.Progress);
 
-        [Fact]
-        public void TestProgress()
-        {
-            var viewModel = _autoMocker.CreateInstance<OperationStateViewModel>();
+        _autoMocker
+            .GetMock<IOperation>()
+            .Raise(o => o.ProgressChanged += null, new OperationProgressChangedEventArgs(0.1));
 
-            Assert.Equal(0, viewModel.Progress);
+        Assert.Equal(10, viewModel.Progress);
 
-            _autoMocker
-                .GetMock<IOperation>()
-                .Raise(o => o.ProgressChanged += null, new OperationProgressChangedEventArgs(0.1));
+        _autoMocker
+            .GetMock<IOperation>()
+            .Raise(o => o.ProgressChanged += null, new OperationProgressChangedEventArgs(0.5));
 
-            Assert.Equal(10, viewModel.Progress);
+        Assert.Equal(50, viewModel.Progress);
+    }
 
-            _autoMocker
-                .GetMock<IOperation>()
-                .Raise(o => o.ProgressChanged += null, new OperationProgressChangedEventArgs(0.5));
+    [Theory]
+    [InlineData(OperationState.Failed)]
+    [InlineData(OperationState.Finished)]
+    [InlineData(OperationState.Cancelled)]
+    public void TestUnsubscribe(OperationState operationState)
+    {
+        var viewModel = _autoMocker.CreateInstance<OperationStateViewModel>();
 
-            Assert.Equal(50, viewModel.Progress);
-        }
+        Assert.Equal(0, viewModel.Progress);
 
-        [Theory]
-        [InlineData(OperationState.Failed)]
-        [InlineData(OperationState.Finished)]
-        [InlineData(OperationState.Cancelled)]
-        public void TestUnsubscribe(OperationState operationState)
-        {
-            var viewModel = _autoMocker.CreateInstance<OperationStateViewModel>();
+        _autoMocker
+            .GetMock<IOperation>()
+            .Raise(o => o.StateChanged += null, new OperationStateChangedEventArgs(operationState));
 
-            Assert.Equal(0, viewModel.Progress);
+        Assert.Equal(0, viewModel.Progress);
 
-            _autoMocker
-                .GetMock<IOperation>()
-                .Raise(o => o.StateChanged += null, new OperationStateChangedEventArgs(operationState));
+        _autoMocker
+            .GetMock<IOperation>()
+            .Raise(o => o.ProgressChanged += null, new OperationProgressChangedEventArgs(0.5));
 
-            Assert.Equal(0, viewModel.Progress);
+        Assert.Equal(0, viewModel.Progress);
+    }
 
-            _autoMocker
-                .GetMock<IOperation>()
-                .Raise(o => o.ProgressChanged += null, new OperationProgressChangedEventArgs(0.5));
+    [Fact]
+    public void TestIncorrectState()
+    {
+        var viewModel = _autoMocker.CreateInstance<OperationStateViewModel>();
 
-            Assert.Equal(0, viewModel.Progress);
-        }
+        Assert.Equal(0, viewModel.Progress);
 
-        [Fact]
-        public void TestIncorrectState()
-        {
-            var viewModel = _autoMocker.CreateInstance<OperationStateViewModel>();
+        const OperationState operationState = (OperationState) 42;
+        var args = new OperationStateChangedEventArgs(operationState);
 
-            Assert.Equal(0, viewModel.Progress);
+        void RaiseEvent() => _autoMocker
+            .GetMock<IOperation>()
+            .Raise(o => o.StateChanged += null, args);
 
-            const OperationState operationState = (OperationState) 42;
-            var args = new OperationStateChangedEventArgs(operationState);
+        Assert.Throws<ArgumentOutOfRangeException>(RaiseEvent);
 
-            void RaiseEvent() => _autoMocker
-                .GetMock<IOperation>()
-                .Raise(o => o.StateChanged += null, args);
-
-            Assert.Throws<ArgumentOutOfRangeException>(RaiseEvent);
-
-            Assert.Equal(0, viewModel.Progress);
-        }
+        Assert.Equal(0, viewModel.Progress);
     }
 }

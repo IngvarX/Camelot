@@ -119,6 +119,8 @@
         <KeyBinding Gesture="Meta+F" Command="{Binding SearchCommand}" />
         <KeyBinding Gesture="Ctrl+L" Command="{Binding FocusDirectorySelectorCommand}" />
         <KeyBinding Gesture="Meta+L" Command="{Binding FocusDirectorySelectorCommand}" />
+        <KeyBinding Gesture="Ctrl+D" Command="{Binding ActiveDirectorySelectorViewModel.ToggleFavouriteStatusCommand}" />
+        <KeyBinding Gesture="Meta+D" Command="{Binding ActiveDirectorySelectorViewModel.ToggleFavouriteStatusCommand}" />
         <KeyBinding Gesture="Ctrl+Tab" Command="{Binding ActiveTabsListViewModel.SelectTabToTheRightCommand}" />
         <KeyBinding Gesture="Ctrl+PageDown" Command="{Binding ActiveTabsListViewModel.SelectTabToTheRightCommand}" />
         <KeyBinding Gesture="Ctrl+Shift+Tab" Command="{Binding ActiveTabsListViewModel.SelectTabToTheLeftCommand}" />
@@ -128,6 +130,8 @@
         <KeyBinding Gesture="F1" Command="{Binding MenuViewModel.AboutCommand}" />
         <KeyBinding Gesture="F2" Command="{Binding MenuViewModel.OpenSettingsCommand}" />
         <KeyBinding Gesture="F9" Command="{Binding TopOperationsViewModel.OpenTerminalCommand}" />
+        <KeyBinding Gesture="F10" Command="{Binding TopOperationsViewModel.PackCommand}" />
+        <KeyBinding Gesture="F11" Command="{Binding TopOperationsViewModel.ExtractCommand}" />
     </Window.KeyBindings>
 
     <Grid RowDefinitions="35,Auto,*,Auto">

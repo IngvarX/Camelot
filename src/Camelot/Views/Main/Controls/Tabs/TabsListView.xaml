@@ -30,7 +30,8 @@
                       Grid.Column="0" Grid.ColumnSpan="3"
                       Classes="arrowScrollViewer"
                       ScrollChanged="ScrollViewerOnScrollChanged">
-            <ItemsControl Items="{Binding Tabs}"
+            <ItemsControl Name="TabsItemsControl"
+                          Items="{Binding Tabs}"
                           PointerWheelChanged="TabsListOnPointerWheelChanged">
 
                 <ItemsControl.ItemsPanel>

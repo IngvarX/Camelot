@@ -6,51 +6,50 @@ using Serilog;
 using Serilog.Extensions.Logging;
 using Splat;
 
-namespace Camelot.DependencyInjection
+namespace Camelot.DependencyInjection;
+
+public static class LoggingBootstrapper
 {
-    public static class LoggingBootstrapper
+    public static void RegisterLogging(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
     {
-        public static void RegisterLogging(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
+        services.RegisterLazySingleton(() =>
         {
-            services.RegisterLazySingleton(() =>
-            {
-                var config = resolver.GetRequiredService<LoggingConfiguration>();
-                var logFilePath = GetLogFileName(config, resolver);
-                var logger = new LoggerConfiguration()
-                    .MinimumLevel.Override("Default", config.DefaultLogLevel)
-                    .MinimumLevel.Override("Microsoft", config.MicrosoftLogLevel)
-                    .WriteTo.Console()
-                    .WriteTo.RollingFile(logFilePath, fileSizeLimitBytes: config.LimitBytes)
-                    .CreateLogger();
-                var factory = new SerilogLoggerFactory(logger);
+            var config = resolver.GetRequiredService<LoggingConfiguration>();
+            var logFilePath = GetLogFileName(config, resolver);
+            var logger = new LoggerConfiguration()
+                .MinimumLevel.Override("Default", config.DefaultLogLevel)
+                .MinimumLevel.Override("Microsoft", config.MicrosoftLogLevel)
+                .WriteTo.Console()
+                .WriteTo.RollingFile(logFilePath, fileSizeLimitBytes: config.LimitBytes)
+                .CreateLogger();
+            var factory = new SerilogLoggerFactory(logger);
 
-                return factory.CreateLogger("Default");
-            });
+            return factory.CreateLogger("Default");
+        });
+    }
+
+    private static string GetLogFileName(LoggingConfiguration config,
+        IReadonlyDependencyResolver resolver)
+    {
+        var platformService = resolver.GetRequiredService<IPlatformService>();
+
+        string logDirectory;
+        if (platformService.GetPlatform() == Platform.Linux)
+        {
+            var environmentService = resolver.GetRequiredService<IEnvironmentService>();
+
+            logDirectory = $"{environmentService.GetEnvironmentVariable("HOME")}/.config/camelot/logs";
+        }
+        else
+        {
+            logDirectory = Directory.GetCurrentDirectory();
         }
 
-        private static string GetLogFileName(LoggingConfiguration config,
-            IReadonlyDependencyResolver resolver)
+        if (!Directory.Exists(logDirectory))
         {
-            var platformService = resolver.GetRequiredService<IPlatformService>();
-
-            string logDirectory;
-            if (platformService.GetPlatform() == Platform.Linux)
-            {
-                var environmentService = resolver.GetRequiredService<IEnvironmentService>();
-
-                logDirectory = $"{environmentService.GetEnvironmentVariable("HOME")}/.config/camelot/logs";
-            }
-            else
-            {
-                logDirectory = Directory.GetCurrentDirectory();
-            }
-
-            if (!Directory.Exists(logDirectory))
-            {
-                Directory.CreateDirectory(logDirectory);
-            }
-
-            return Path.Combine(logDirectory, config.LogFileName);
+            Directory.CreateDirectory(logDirectory);
         }
+
+        return Path.Combine(logDirectory, config.LogFileName);
     }
 }

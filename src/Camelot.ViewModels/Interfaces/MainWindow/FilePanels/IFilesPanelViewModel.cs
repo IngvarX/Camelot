@@ -6,36 +6,41 @@ using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs;
 using Camelot.ViewModels.Interfaces.MainWindow.Operations;
 using Camelot.ViewModels.Services.Interfaces;
 
-namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels
+namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
+
+public interface IFilesPanelViewModel
 {
-    public interface IFilesPanelViewModel
-    {
-        ITabsListViewModel TabsListViewModel { get; }
+    ITabsListViewModel TabsListViewModel { get; }
 
-        ISearchViewModel SearchViewModel { get; }
+    ISearchViewModel SearchViewModel { get; }
 
-        IOperationsViewModel OperationsViewModel { get; }
+    IOperationsViewModel OperationsViewModel { get; }
 
-        IDirectorySelectorViewModel DirectorySelectorViewModel { get; }
+    IDirectorySelectorViewModel DirectorySelectorViewModel { get; }
 
-        IDragAndDropOperationsMediator DragAndDropOperationsMediator { get; }
+    IDragAndDropOperationsMediator DragAndDropOperationsMediator { get; }
 
-        IList<IFileSystemNodeViewModel> SelectedFileSystemNodes { get; }
+    IClipboardOperationsViewModel ClipboardOperationsViewModel { get; }
 
-        bool IsActive { get; }
+    IList<IFileSystemNodeViewModel> SelectedFileSystemNodes { get; }
 
-        string CurrentDirectory { get; set; }
+    bool IsActive { get; }
 
-        event EventHandler<EventArgs> Activated;
+    string CurrentDirectory { get; set; }
 
-        event EventHandler<EventArgs> Deactivated;
+    event EventHandler<EventArgs> Activated;
 
-        event EventHandler<EventArgs> CurrentDirectoryChanged;
+    event EventHandler<EventArgs> Deactivated;
 
-        ICommand ActivateCommand { get; }
+    event EventHandler<EventArgs> CurrentDirectoryChanged;
 
-        void Activate();
+    event EventHandler<SelectionAddedEventArgs> SelectionAdded;
 
-        void Deactivate();
-    }
+    event EventHandler<SelectionRemovedEventArgs> SelectionRemoved;
+
+    ICommand ActivateCommand { get; }
+
+    void Activate();
+
+    void Deactivate();
 }

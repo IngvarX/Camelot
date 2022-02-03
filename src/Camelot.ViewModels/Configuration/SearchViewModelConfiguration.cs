@@ -1,9 +1,8 @@
-namespace Camelot.ViewModels.Configuration
-{
-    public class SearchViewModelConfiguration
-    {
-        public int TimeoutMs { get; set; }
+namespace Camelot.ViewModels.Configuration;
 
-        public string InvalidRegexResourceName { get; set; }
-    }
+public class SearchViewModelConfiguration
+{
+    public int TimeoutMs { get; set; }
+
+    public string InvalidRegexResourceName { get; set; }
 }

@@ -1,12 +1,11 @@
-namespace Camelot.Services.Abstractions.Models.EventArgs
-{
-    public class MountedDriveEventArgs : System.EventArgs
-    {
-        public DriveModel DriveModel { get; }
+namespace Camelot.Services.Abstractions.Models.EventArgs;
 
-        public MountedDriveEventArgs(DriveModel driveModel)
-        {
-            DriveModel = driveModel;
-        }
+public class MountedDriveEventArgs : System.EventArgs
+{
+    public DriveModel DriveModel { get; }
+
+    public MountedDriveEventArgs(DriveModel driveModel)
+    {
+        DriveModel = driveModel;
     }
 }

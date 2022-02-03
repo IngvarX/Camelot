@@ -4,22 +4,21 @@ using Camelot.ViewModels.Implementations.Dialogs.Properties;
 using Camelot.ViewModels.Interfaces.Behaviors;
 using Camelot.ViewModels.Services.Interfaces;
 
-namespace Camelot.ViewModels.Implementations.Behaviors
+namespace Camelot.ViewModels.Implementations.Behaviors;
+
+public class FilePropertiesBehavior : IFileSystemNodePropertiesBehavior
 {
-    public class FilePropertiesBehavior : IFileSystemNodePropertiesBehavior
+    private readonly IDialogService _dialogService;
+
+    public FilePropertiesBehavior(IDialogService dialogService)
     {
-        private readonly IDialogService _dialogService;
+        _dialogService = dialogService;
+    }
 
-        public FilePropertiesBehavior(IDialogService dialogService)
-        {
-            _dialogService = dialogService;
-        }
+    public async Task ShowPropertiesAsync(string directoryPath)
+    {
+        var parameter = new FileSystemNodeNavigationParameter(directoryPath);
 
-        public async Task ShowPropertiesAsync(string directoryPath)
-        {
-            var parameter = new FileSystemNodeNavigationParameter(directoryPath);
-
-            await _dialogService.ShowDialogAsync(nameof(FileInformationDialogViewModel), parameter);
-        }
+        await _dialogService.ShowDialogAsync(nameof(FileInformationDialogViewModel), parameter);
     }
 }

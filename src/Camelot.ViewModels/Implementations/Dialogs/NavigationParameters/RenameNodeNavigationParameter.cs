@@ -1,14 +1,13 @@
 using Camelot.ViewModels.Services;
 
-namespace Camelot.ViewModels.Implementations.Dialogs.NavigationParameters
-{
-    public class RenameNodeNavigationParameter : NavigationParameterBase
-    {
-        public string NodePath { get; }
+namespace Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
 
-        public RenameNodeNavigationParameter(string nodePath)
-        {
-            NodePath = nodePath;
-        }
+public class RenameNodeNavigationParameter : NavigationParameterBase
+{
+    public string NodePath { get; }
+
+    public RenameNodeNavigationParameter(string nodePath)
+    {
+        NodePath = nodePath;
     }
 }

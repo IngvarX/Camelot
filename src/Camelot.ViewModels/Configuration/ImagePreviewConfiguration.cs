@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 
-namespace Camelot.ViewModels.Configuration
+namespace Camelot.ViewModels.Configuration;
+
+public class ImagePreviewConfiguration
 {
-    public class ImagePreviewConfiguration
-    {
-        public List<string> SupportedFormats { get; set; }
-    }
+    public List<string> SupportedFormats { get; set; }
 }

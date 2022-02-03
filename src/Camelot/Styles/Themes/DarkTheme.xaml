@@ -25,6 +25,7 @@
         <Color x:Key="SuccessPressedBackgroundColor">#2f972f</Color>
         <Color x:Key="SettingsTabBorderColor">#181614</Color>
         <Color x:Key="ErrorColor">#a34235</Color>
+        <Color x:Key="PopupBackgroundColor">#1f1e1a</Color>
 
         <!-- Avalonia brushes -->
         <SolidColorBrush x:Key="ThemeBackgroundBrush" Color="{DynamicResource MainBackgroundColor}" />
@@ -99,6 +100,7 @@
         <SolidColorBrush x:Key="TabArrowButtonBackgroundBrush" Color="{DynamicResource BlackColor}"
                          Opacity="0.4" />
         <SolidColorBrush x:Key="FavouriteDirectoryIconBrush" Color="{DynamicResource OrangeColor}" />
+        <SolidColorBrush x:Key="PopupBackgroundBrush" Color="{DynamicResource PopupBackgroundColor}" />
 
         <!-- Theme resources -->
         <system:Double x:Key="ThemeDisabledOpacity">0.5</system:Double>

@@ -2,31 +2,30 @@ using System;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Camelot.Services.Windows.Tests
+namespace Camelot.Services.Windows.Tests;
+
+public class WindowsUnmountedDriveServiceTests
 {
-    public class WindowsUnmountedDriveServiceTests
+    private const string DriveName = "Drive";
+
+    [Fact]
+    public async Task TestGetUnmountedDrives()
     {
-        private const string DriveName = "Drive";
+        var service = new WindowsUnmountedDriveService();
+        await service.ReloadUnmountedDrivesAsync();
+        var models = service.UnmountedDrives;
 
-        [Fact]
-        public async Task TestGetUnmountedDrives()
-        {
-            var service = new WindowsUnmountedDriveService();
-            await service.ReloadUnmountedDrivesAsync();
-            var models = service.UnmountedDrives;
+        Assert.NotNull(models);
+        Assert.Empty(models);
+    }
 
-            Assert.NotNull(models);
-            Assert.Empty(models);
-        }
+    [Fact]
+    public void TestMount()
+    {
+        var service = new WindowsUnmountedDriveService();
 
-        [Fact]
-        public void TestMount()
-        {
-            var service = new WindowsUnmountedDriveService();
+        void Mount() => service.Mount(DriveName);
 
-            void Mount() => service.Mount(DriveName);
-
-            Assert.Throws<InvalidOperationException>(Mount);
-        }
+        Assert.Throws<InvalidOperationException>(Mount);
     }
 }

@@ -1,0 +1,28 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:p="clr-namespace:Camelot.Properties"
+        xmlns:dialogs="clr-namespace:Camelot.ViewModels.Implementations.Dialogs;assembly=Camelot.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        Width="450" Height="200"
+        x:Class="Camelot.Views.Dialogs.AccessDeniedDialog"
+        Title="{x:Static p:Resources.AccessDeniedTitle}">
+
+    <Design.DataContext>
+        <dialogs:AccessDeniedDialogViewModel />
+    </Design.DataContext>
+
+    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+
+        <TextBlock Classes="dialogTextBlock"
+                   Text="{Binding Directory, StringFormat={x:Static p:Resources.AccessToDirectoryIsDenied}}" />
+
+        <Button Classes="dialogButton"
+                IsDefault="True"
+                Command="{Binding CloseCommand}"
+                Content="{x:Static p:Resources.Close}"
+                Width="100" />
+    </StackPanel>
+
+</Window>

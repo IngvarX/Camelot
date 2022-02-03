@@ -8,36 +8,35 @@ using Moq;
 using Moq.AutoMock;
 using Xunit;
 
-namespace Camelot.ViewModels.Tests.Factories
+namespace Camelot.ViewModels.Tests.Factories;
+
+public class TabViewModelFactoryTests
 {
-    public class TabViewModelFactoryTests
+    private readonly AutoMocker _autoMocker;
+
+    public TabViewModelFactoryTests()
     {
-        private readonly AutoMocker _autoMocker;
+        _autoMocker = new AutoMocker();
+    }
 
-        public TabViewModelFactoryTests()
+    [Fact]
+    public void TestDirectoryName()
+    {
+        var directoryName = Directory.GetCurrentDirectory();
+        var tabModel = new TabStateModel
         {
-            _autoMocker = new AutoMocker();
-        }
+            Directory = directoryName,
+            SortingSettings = new SortingSettingsStateModel(),
+            History = new List<string> {directoryName}
+        };
+        _autoMocker
+            .Setup<IPathService, string>(m => m.RightTrimPathSeparators(directoryName))
+            .Returns(directoryName);
 
-        [Fact]
-        public void TestDirectoryName()
-        {
-            var directoryName = Directory.GetCurrentDirectory();
-            var tabModel = new TabStateModel
-            {
-                Directory = directoryName,
-                SortingSettings = new SortingSettingsStateModel(),
-                History = new List<string> {directoryName}
-            };
-            _autoMocker
-                .Setup<IPathService, string>(m => m.RightTrimPathSeparators(directoryName))
-                .Returns(directoryName);
+        var tabViewModelFactory = _autoMocker.CreateInstance<TabViewModelFactory>();
+        var observer = Mock.Of<IFilePanelDirectoryObserver>();
+        var tabViewModel = tabViewModelFactory.Create(observer, tabModel);
 
-            var tabViewModelFactory = _autoMocker.CreateInstance<TabViewModelFactory>();
-            var observer = Mock.Of<IFilePanelDirectoryObserver>();
-            var tabViewModel = tabViewModelFactory.Create(observer, tabModel);
-
-            Assert.Equal(directoryName, tabViewModel.CurrentDirectory);
-        }
+        Assert.Equal(directoryName, tabViewModel.CurrentDirectory);
     }
 }

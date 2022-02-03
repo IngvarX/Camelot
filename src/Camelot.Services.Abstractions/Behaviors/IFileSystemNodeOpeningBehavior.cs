@@ -1,9 +1,8 @@
-namespace Camelot.Services.Abstractions.Behaviors
-{
-    public interface IFileSystemNodeOpeningBehavior
-    {
-        void Open(string node);
+namespace Camelot.Services.Abstractions.Behaviors;
 
-        void OpenWith(string command, string arguments, string node);
-    }
+public interface IFileSystemNodeOpeningBehavior
+{
+    void Open(string node);
+
+    void OpenWith(string command, string arguments, string node);
 }

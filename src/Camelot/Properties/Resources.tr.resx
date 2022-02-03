@@ -68,7 +68,7 @@
     <value>Daha eskiyse değiştir</value>
   </data>
   <data name="ReplaceFileDestinationDirectory" xml:space="preserve">
-    <value>Aynı ada sahip başka bir dosya "{0}" içinde zaten var Onu değiştirmek istiyor musunuz?</value>
+    <value>Aynı ada sahip başka bir dosya "{0}" içinde zaten var. Onu değiştirmek istiyor musunuz?</value>
   </data>
   <data name="ReplaceFile" xml:space="preserve">
     <value>Dosyayı değiştir</value>
@@ -83,7 +83,7 @@
     <value>Bu {0} dosyayı çöp kutusuna atmak istiyor musunuz?</value>
   </data>
   <data name="RemovingFilesAndDirectoriesFrom" xml:space="preserve">
-    <value>{0} dosya ve {1} dizini {2} dizininden kaldırılıyor</value>
+    <value>{0} dosya ve {1} dizini {2} konumundan kaldırılıyor</value>
   </data>
   <data name="RemovingFileFromTo" xml:space="preserve">
     <value>{0}, {1} konumundan kaldırılıyor</value>
@@ -122,7 +122,7 @@
     <value>{0}, {1} konumuna taşınıyor</value>
   </data>
   <data name="MovedFilesFromAndDirectoriesTo" xml:space="preserve">
-    <value>{0} dosya ve {1} dizini {2} klasörüne taşındı</value>
+    <value>{0} dosya ve {1} dizini {2} konumuna taşındı</value>
   </data>
   <data name="MovedFileFromTo" xml:space="preserve">
     <value>{0}, {1} konumuna taşındı</value>
@@ -134,10 +134,10 @@
     <value>Geliştiriciler</value>
   </data>
   <data name="LastModified" xml:space="preserve">
-    <value>Son güncelleme</value>
+    <value>Son düzenleme</value>
   </data>
   <data name="LastModificationWithColon" xml:space="preserve">
-    <value>Son güncelleme:</value>
+    <value>Son düzenleme:</value>
   </data>
   <data name="LastAccessWithColon" xml:space="preserve">
     <value>Son erişim:</value>
@@ -148,9 +148,6 @@
   <data name="HelpHeader" xml:space="preserve">
     <value>_Yardım</value>
   </data>
-  <data name="Github" xml:space="preserve">
-    <value>GitHub</value>
-  </data>
   <data name="General" xml:space="preserve">
     <value>Genel</value>
   </data>
@@ -158,7 +155,7 @@
     <value>Dosyaların kaldırılmasını onaylayın</value>
   </data>
   <data name="FileInformationTitle" xml:space="preserve">
-    <value>Dosya-bilgisi</value>
+    <value>Dosya bilgisi</value>
   </data>
   <data name="FileHeader" xml:space="preserve">
     <value>_Dosya</value>
@@ -170,7 +167,7 @@
     <value>{0}, {1} konumuna taşınamadı</value>
   </data>
   <data name="FailedToDeleteFilesAndDirectoriesFrom" xml:space="preserve">
-    <value>{2} dizininden {0} dosya ve {1} dizini silinemedi</value>
+    <value>{2} konumunda {0} dosya ve {1} dizini silinemedi</value>
   </data>
   <data name="FailedToDeleteFileFromTo" xml:space="preserve">
     <value>{0}, {1} konumundan silinemedi</value>
@@ -200,7 +197,7 @@
     <value>Dizin</value>
   </data>
   <data name="DeletedFilesAndDirectories" xml:space="preserve">
-    <value>{0} dosya ve {1} dizin {2} klasörüne silindi</value>
+    <value>{0} dosya ve {1} dizin {2} konumunda silindi</value>
   </data>
   <data name="CopyingFileFromTo" xml:space="preserve">
     <value>{0}, {1} konumuna kopyalanıyor</value>
@@ -230,13 +227,13 @@
     <value>Panoya kopyala</value>
   </data>
   <data name="CopyingFilesFromAndDirectoriesTo" xml:space="preserve">
-    <value>{0} dosya ve {1} dizin {2} klasörüne kopyalanıyor</value>
+    <value>{0} dosya ve {1} dizin {2} konumuna kopyalanıyor</value>
   </data>
   <data name="Copy" xml:space="preserve">
     <value>Kopyala</value>
   </data>
   <data name="CopiedFilesFromAndDirectoriesTo" xml:space="preserve">
-    <value>{0} dosya ve {1} dizin {2} klasörüne kopyalandı</value>
+    <value>{0} dosya ve {1} dizin {2} konumuna kopyalandı</value>
   </data>
   <data name="ConfigurationHeader" xml:space="preserve">
     <value>_Yapılandırma</value>
@@ -279,5 +276,80 @@
   </data>
   <data name="AboutCamelotTitle" xml:space="preserve">
     <value>Camelot Hakkında</value>
+  </data>
+  <data name="GitHub" xml:space="preserve">
+    <value>Github</value>
+  </data>
+  <data name="SelectNewNameForDestination" xml:space="preserve">
+    <value>Hedef için yeni isim seç</value>
+  </data>
+  <data name="SettingsHeader" xml:space="preserve">
+    <value>_Ayarlar</value>
+  </data>
+  <data name="SettingsTitle" xml:space="preserve">
+    <value>Ayarlar</value>
+  </data>
+  <data name="ShowProperties" xml:space="preserve">
+    <value>Özellikleri göster</value>
+  </data>
+  <data name="Size" xml:space="preserve">
+    <value>Boyut</value>
+  </data>
+  <data name="CreateFileTitle" xml:space="preserve">
+    <value>Dosya oluştur</value>
+  </data>
+  <data name="Terminal" xml:space="preserve">
+    <value>Terminal</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Ara</value>
+  </data>
+  <data name="SearchForFilesAndDirectories" xml:space="preserve">
+    <value>Dosya ve dizin ara</value>
+  </data>
+  <data name="InvalidRegex" xml:space="preserve">
+    <value>Geçersiz RegEx ifadesi</value>
+  </data>
+  <data name="TotalSpaceWithColon" xml:space="preserve">
+    <value>Toplam alan:</value>
+  </data>
+  <data name="AvailableSpaceWithColon" xml:space="preserve">
+    <value>Kullanılabilir alan:</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>Dosya</value>
+  </data>
+  <data name="EnterFileNameWithColon" xml:space="preserve">
+    <value>Dosya adını giriniz:</value>
+  </data>
+  <data name="ClickToMount" xml:space="preserve">
+    <value>Bağla'ya tıklayın</value>
+  </data>
+  <data name="Pack" xml:space="preserve">
+    <value>Paket</value>
+  </data>
+  <data name="Extract" xml:space="preserve">
+    <value>Çıkart</value>
+  </data>
+  <data name="ExtractingArchiveTo" xml:space="preserve">
+    <value>{0} öğesi {1} konumuna çıkartılıyor</value>
+  </data>
+  <data name="PackingFilesAndDirectoriesTo" xml:space="preserve">
+    <value>{0} dosya ve {1} dizin {2} konumuna paketleniyor</value>
+  </data>
+  <data name="PackingFileTo" xml:space="preserve">
+    <value>{0} dosyası {1} konumuna paketleniyor</value>
+  </data>
+  <data name="ExtractedArchiveTo" xml:space="preserve">
+    <value>{0} arşivi {1} konumuna çıkartıldı</value>
+  </data>
+  <data name="PackedFileTo" xml:space="preserve">
+    <value>{0} dosyası {1} konumuna paketlendi</value>
+  </data>
+  <data name="SizeWithColon" xml:space="preserve">
+    <value>Boyut:</value>
+  </data>
+  <data name="Skip" xml:space="preserve">
+    <value>Geç</value>
   </data>
 </root>

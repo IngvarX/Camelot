@@ -79,9 +79,6 @@
   <data name="RemovingFilesToTrash" xml:space="preserve">
     <value>Ønsker du å slette disse {0} filene fra papirkurven?</value>
   </data>
-  <data name="DuplicateOnOtherPanel" xml:space="preserve">
-    <value>Dupliser på motsatt panel</value>
-  </data>
   <data name="RecommendedApplications" xml:space="preserve">
     <value>Anbefalte programmer</value>
   </data>
@@ -447,5 +444,38 @@
   </data>
   <data name="GitHub" xml:space="preserve">
     <value>GitHub</value>
+  </data>
+  <data name="AccessToDirectoryIsDenied" xml:space="preserve">
+    <value>Tilgang til mappen {0} ble ikke innvilget</value>
+  </data>
+  <data name="MarkAsFavourite" xml:space="preserve">
+    <value>Merk som favoritt</value>
+  </data>
+  <data name="UnmarkAsFavourite" xml:space="preserve">
+    <value>Opphev favorittmerking</value>
+  </data>
+  <data name="GoForward" xml:space="preserve">
+    <value>Gå fremover</value>
+  </data>
+  <data name="GoBack" xml:space="preserve">
+    <value>Gå tilbake</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Last inn igjen</value>
+  </data>
+  <data name="MountPointWithColon" xml:space="preserve">
+    <value>Monteringspunkt:</value>
+  </data>
+  <data name="AccessDeniedTitle" xml:space="preserve">
+    <value>Tilgang nektet</value>
+  </data>
+  <data name="PasteFromClipboard" xml:space="preserve">
+    <value>Lim inn fra utklippstavle</value>
+  </data>
+  <data name="InnerDirectoriesWithColon" xml:space="preserve">
+    <value>Indre mapper:</value>
+  </data>
+  <data name="InnerFilesWithColon" xml:space="preserve">
+    <value>Indre filer:</value>
   </data>
 </root>

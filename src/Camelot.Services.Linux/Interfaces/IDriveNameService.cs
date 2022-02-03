@@ -1,9 +1,8 @@
 using System.Threading.Tasks;
 
-namespace Camelot.Services.Linux.Interfaces
+namespace Camelot.Services.Linux.Interfaces;
+
+public interface IDriveNameService
 {
-    public interface IDriveNameService
-    {
-        public Task<string> GetDriveNameAsync(string rootDirectory);
-    }
+    public Task<string> GetDriveNameAsync(string rootDirectory);
 }

@@ -510,4 +510,34 @@
   <data name="InnerDirectoriesWithColon" xml:space="preserve">
     <value>Inner directories:</value>
   </data>
+  <data name="PasteFromClipboard" xml:space="preserve">
+    <value>Paste from clipboard</value>
+  </data>
+  <data name="AccessDeniedTitle" xml:space="preserve">
+    <value>Access denied</value>
+  </data>
+  <data name="AccessToDirectoryIsDenied" xml:space="preserve">
+    <value>Access to directory {0} is denied</value>
+  </data>
+  <data name="MountPointWithColon" xml:space="preserve">
+    <value>Mount point:</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Reload</value>
+  </data>
+  <data name="GoBack" xml:space="preserve">
+    <value>Go back</value>
+  </data>
+  <data name="GoForward" xml:space="preserve">
+    <value>Go forward</value>
+  </data>
+  <data name="UnmarkAsFavourite" xml:space="preserve">
+    <value>Unmark as favourite</value>
+  </data>
+  <data name="MarkAsFavourite" xml:space="preserve">
+    <value>Mark as favourite</value>
+  </data>
+  <data name="GoToParentDirectory" xml:space="preserve">
+    <value>Go to parent directory</value>
+  </data>
 </root>

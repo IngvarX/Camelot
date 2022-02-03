@@ -22,7 +22,7 @@
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Classes="dialogButton transparentDialogButton"
                     Content="{x:Static p:Resources.Cancel}"
-                    Command="{Binding CancelCommand}" />
+                    Command="{Binding CloseCommand}" />
             <Button Classes="dialogButton"
                     IsDefault="True"
                     Content="{x:Static p:Resources.Rename}"

@@ -1,14 +1,13 @@
 using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Models.Enums;
 
-namespace Camelot.Services.Abstractions
+namespace Camelot.Services.Abstractions;
+
+public interface IThemeService
 {
-    public interface IThemeService
-    {
-        ThemeSettingsModel GetThemeSettings();
+    ThemeSettingsModel GetThemeSettings();
 
-        void SaveThemeSettings(ThemeSettingsModel themeSettingsModel);
+    void SaveThemeSettings(ThemeSettingsModel themeSettingsModel);
 
-        Theme GetCurrentTheme();
-    }
+    Theme GetCurrentTheme();
 }

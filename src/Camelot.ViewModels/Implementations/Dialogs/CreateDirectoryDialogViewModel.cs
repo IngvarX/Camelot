@@ -5,54 +5,47 @@ using Camelot.ViewModels.Implementations.Dialogs.Results;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace Camelot.ViewModels.Implementations.Dialogs
+namespace Camelot.ViewModels.Implementations.Dialogs;
+
+public class CreateDirectoryDialogViewModel : ParameterizedDialogViewModelBase<CreateDirectoryDialogResult, CreateNodeNavigationParameter>
 {
-    public class CreateDirectoryDialogViewModel : ParameterizedDialogViewModelBase<CreateDirectoryDialogResult, CreateNodeNavigationParameter>
+    private readonly INodeService _nodeService;
+    private readonly IPathService _pathService;
+
+    private string _directoryPath;
+
+    [Reactive]
+    public string DirectoryName { get; set; }
+
+    public ICommand CreateCommand { get; }
+
+    public CreateDirectoryDialogViewModel(
+        INodeService nodeService,
+        IPathService pathService)
     {
-        private readonly IDirectoryService _directoryService;
-        private readonly IFileService _fileService;
-        private readonly IPathService _pathService;
+        _nodeService = nodeService;
+        _pathService = pathService;
 
-        private string _directoryPath;
+        var canCreate = this.WhenAnyValue(x => x.DirectoryName,
+            CheckIfNameIsValid);
 
-        [Reactive]
-        public string DirectoryName { get; set; }
+        CreateCommand = ReactiveCommand.Create(CreateDirectory, canCreate);
+    }
 
-        public ICommand CreateCommand { get; }
+    public override void Activate(CreateNodeNavigationParameter navigationParameter) =>
+        _directoryPath = navigationParameter.DirectoryPath;
 
-        public ICommand CancelCommand { get; }
+    private void CreateDirectory() => Close(new CreateDirectoryDialogResult(DirectoryName));
 
-        public CreateDirectoryDialogViewModel(
-            IDirectoryService directoryService,
-            IFileService fileService,
-            IPathService pathService)
+    private bool CheckIfNameIsValid(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
         {
-            _directoryService = directoryService;
-            _fileService = fileService;
-            _pathService = pathService;
-
-            var canCreate = this.WhenAnyValue(x => x.DirectoryName,
-                CheckIfNameIsValid);
-
-            CreateCommand = ReactiveCommand.Create(CreateDirectory, canCreate);
-            CancelCommand = ReactiveCommand.Create(Close);
+            return false;
         }
 
-        public override void Activate(CreateNodeNavigationParameter navigationParameter) => 
-            _directoryPath = navigationParameter.DirectoryPath;
+        var newFullPath = _pathService.Combine(_directoryPath, name);
 
-        private void CreateDirectory() => Close(new CreateDirectoryDialogResult(DirectoryName));
-
-        private bool CheckIfNameIsValid(string name)
-        {
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                return false;
-            }
-
-            var newFullPath = _pathService.Combine(_directoryPath, name);
-
-            return !_fileService.CheckIfExists(newFullPath) && !_directoryService.CheckIfExists(newFullPath);
-        }
+        return !_nodeService.CheckIfExists(newFullPath);
     }
 }

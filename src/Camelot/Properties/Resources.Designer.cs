@@ -830,5 +830,65 @@ namespace Camelot.Properties {
                 return ResourceManager.GetString("InnerDirectoriesWithColon", resourceCulture);
             }
         }
+        
+        public static string PasteFromClipboard {
+            get {
+                return ResourceManager.GetString("PasteFromClipboard", resourceCulture);
+            }
+        }
+        
+        public static string AccessDeniedTitle {
+            get {
+                return ResourceManager.GetString("AccessDeniedTitle", resourceCulture);
+            }
+        }
+        
+        public static string AccessToDirectoryIsDenied {
+            get {
+                return ResourceManager.GetString("AccessToDirectoryIsDenied", resourceCulture);
+            }
+        }
+        
+        public static string MountPointWithColon {
+            get {
+                return ResourceManager.GetString("MountPointWithColon", resourceCulture);
+            }
+        }
+        
+        public static string Reload {
+            get {
+                return ResourceManager.GetString("Reload", resourceCulture);
+            }
+        }
+        
+        public static string GoBack {
+            get {
+                return ResourceManager.GetString("GoBack", resourceCulture);
+            }
+        }
+        
+        public static string GoForward {
+            get {
+                return ResourceManager.GetString("GoForward", resourceCulture);
+            }
+        }
+        
+        public static string UnmarkAsFavourite {
+            get {
+                return ResourceManager.GetString("UnmarkAsFavourite", resourceCulture);
+            }
+        }
+        
+        public static string MarkAsFavourite {
+            get {
+                return ResourceManager.GetString("MarkAsFavourite", resourceCulture);
+            }
+        }
+        
+        public static string GoToParentDirectory {
+            get {
+                return ResourceManager.GetString("GoToParentDirectory", resourceCulture);
+            }
+        }
     }
 }

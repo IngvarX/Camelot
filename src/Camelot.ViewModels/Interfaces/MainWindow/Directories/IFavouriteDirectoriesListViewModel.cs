@@ -1,7 +1,6 @@
-namespace Camelot.ViewModels.Interfaces.MainWindow.Directories
+namespace Camelot.ViewModels.Interfaces.MainWindow.Directories;
+
+public interface IFavouriteDirectoriesListViewModel
 {
-    public interface IFavouriteDirectoriesListViewModel
-    {
         
-    }
 }

@@ -1,7 +1,6 @@
-namespace Camelot.Services.Linux.Interfaces.Builders
+namespace Camelot.Services.Linux.Interfaces.Builders;
+
+public interface ILinuxRemovedFileMetadataBuilderFactory
 {
-    public interface ILinuxRemovedFileMetadataBuilderFactory
-    {
-        ILinuxRemovedFileMetadataBuilder Create();
-    }
+    ILinuxRemovedFileMetadataBuilder Create();
 }

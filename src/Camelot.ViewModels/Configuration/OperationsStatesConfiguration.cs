@@ -1,7 +1,6 @@
-namespace Camelot.ViewModels.Configuration
+namespace Camelot.ViewModels.Configuration;
+
+public class OperationsStatesConfiguration
 {
-    public class OperationsStatesConfiguration
-    {
-        public int MaximumFinishedOperationsCount { get; set; }
-    }
+    public int MaximumFinishedOperationsCount { get; set; }
 }

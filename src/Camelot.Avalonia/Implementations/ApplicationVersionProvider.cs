@@ -1,10 +1,9 @@
 using Camelot.Avalonia.Interfaces;
 using Microsoft.Extensions.PlatformAbstractions;
 
-namespace Camelot.Avalonia.Implementations
+namespace Camelot.Avalonia.Implementations;
+
+public class ApplicationVersionProvider : IApplicationVersionProvider
 {
-    public class ApplicationVersionProvider : IApplicationVersionProvider
-    {
-        public string Version => PlatformServices.Default.Application.ApplicationVersion;
-    }
+    public string Version => PlatformServices.Default.Application.ApplicationVersion;
 }

@@ -5,56 +5,55 @@ using Camelot.ViewModels.Services.Interfaces;
 using Moq;
 using Xunit;
 
-namespace Camelot.ViewModels.Tests
+namespace Camelot.ViewModels.Tests;
+
+public class MenuViewModelTests
 {
-    public class MenuViewModelTests
+    [Fact]
+    public void TestAppClosing()
     {
-        [Fact]
-        public void TestAppClosing()
-        {
-            var applicationCloserMock = new Mock<IApplicationCloser>();
-            applicationCloserMock
-                .Setup(m => m.CloseApp())
-                .Verifiable();
-            var dialogServiceMock = new Mock<IDialogService>();
-            var menuViewModel = new MenuViewModel(applicationCloserMock.Object, dialogServiceMock.Object);
+        var applicationCloserMock = new Mock<IApplicationCloser>();
+        applicationCloserMock
+            .Setup(m => m.CloseApp())
+            .Verifiable();
+        var dialogServiceMock = new Mock<IDialogService>();
+        var menuViewModel = new MenuViewModel(applicationCloserMock.Object, dialogServiceMock.Object);
 
-            Assert.True(menuViewModel.ExitCommand.CanExecute(null));
-            menuViewModel.ExitCommand.Execute(null);
+        Assert.True(menuViewModel.ExitCommand.CanExecute(null));
+        menuViewModel.ExitCommand.Execute(null);
 
-            applicationCloserMock.Verify(m => m.CloseApp(), Times.Once());
-        }
+        applicationCloserMock.Verify(m => m.CloseApp(), Times.Once());
+    }
 
-        [Fact]
-        public void TestAboutDialogOpening()
-        {
-            var applicationCloserMock = new Mock<IApplicationCloser>();
-            var dialogServiceMock = new Mock<IDialogService>();
-            dialogServiceMock
-                .Setup(m => m.ShowDialogAsync(nameof(AboutDialogViewModel)))
-                .Verifiable();
-            var menuViewModel = new MenuViewModel(applicationCloserMock.Object, dialogServiceMock.Object);
+    [Fact]
+    public void TestAboutDialogOpening()
+    {
+        var applicationCloserMock = new Mock<IApplicationCloser>();
+        var dialogServiceMock = new Mock<IDialogService>();
+        dialogServiceMock
+            .Setup(m => m.ShowDialogAsync(nameof(AboutDialogViewModel)))
+            .Verifiable();
+        var menuViewModel = new MenuViewModel(applicationCloserMock.Object, dialogServiceMock.Object);
 
-            Assert.True(menuViewModel.AboutCommand.CanExecute(null));
-            menuViewModel.AboutCommand.Execute(null);
+        Assert.True(menuViewModel.AboutCommand.CanExecute(null));
+        menuViewModel.AboutCommand.Execute(null);
 
-            dialogServiceMock.Verify(m => m.ShowDialogAsync(nameof(AboutDialogViewModel)), Times.Once());
-        }
+        dialogServiceMock.Verify(m => m.ShowDialogAsync(nameof(AboutDialogViewModel)), Times.Once());
+    }
 
-        [Fact]
-        public void TestSettingsDialogOpening()
-        {
-            var applicationCloserMock = new Mock<IApplicationCloser>();
-            var dialogServiceMock = new Mock<IDialogService>();
-            dialogServiceMock
-                .Setup(m => m.ShowDialogAsync(nameof(SettingsDialogViewModel)))
-                .Verifiable();
-            var menuViewModel = new MenuViewModel(applicationCloserMock.Object, dialogServiceMock.Object);
+    [Fact]
+    public void TestSettingsDialogOpening()
+    {
+        var applicationCloserMock = new Mock<IApplicationCloser>();
+        var dialogServiceMock = new Mock<IDialogService>();
+        dialogServiceMock
+            .Setup(m => m.ShowDialogAsync(nameof(SettingsDialogViewModel)))
+            .Verifiable();
+        var menuViewModel = new MenuViewModel(applicationCloserMock.Object, dialogServiceMock.Object);
 
-            Assert.True(menuViewModel.OpenSettingsCommand.CanExecute(null));
-            menuViewModel.OpenSettingsCommand.Execute(null);
+        Assert.True(menuViewModel.OpenSettingsCommand.CanExecute(null));
+        menuViewModel.OpenSettingsCommand.Execute(null);
 
-            dialogServiceMock.Verify(m => m.ShowDialogAsync(nameof(SettingsDialogViewModel)), Times.Once());
-        }
+        dialogServiceMock.Verify(m => m.ShowDialogAsync(nameof(SettingsDialogViewModel)), Times.Once());
     }
 }

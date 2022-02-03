@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6</TargetFramework>
     <IsPackable>false</IsPackable>
-    <Version>0.2.5</Version>
+    <Version>0.3.0</Version>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyName>camelot</AssemblyName>
@@ -14,8 +14,8 @@
     <CFBundleName>Camelot</CFBundleName>
     <CFBundleDisplayName>Camelot</CFBundleDisplayName>
     <CFBundleIdentifier>com.camelot</CFBundleIdentifier>
-    <CFBundleVersion>0.2.5</CFBundleVersion>
-    <CFBundleShortVersionString>0.2.5</CFBundleShortVersionString>
+    <CFBundleVersion>0.3.0</CFBundleVersion>
+    <CFBundleShortVersionString>0.3.0</CFBundleShortVersionString>
     <CFBundlePackageType>AAPL</CFBundlePackageType>
     <CFBundleSignature>????</CFBundleSignature>
     <CFBundleExecutable>Camelot</CFBundleExecutable>
@@ -34,7 +34,7 @@
     <AvaloniaResource Update="Views\Main\AboutDialog.xaml">
       <SubType>Designer</SubType>
     </AvaloniaResource>
-    <AvaloniaResource Update="Views\Main\Dialogs\RemoveNodesConfirmationDialog .xaml">
+    <AvaloniaResource Update="Views\Main\Dialogs\RemoveNodesConfirmationDialog.xaml">
       <SubType>Designer</SubType>
     </AvaloniaResource>
     <Compile Update="Properties\Resources.Designer.cs">
@@ -85,9 +85,6 @@
       <SubType>Designer</SubType>
     </AvaloniaResource>
     <AvaloniaResource Update="Views\Main\Dialogs\FileSystemNodeInformationDialog.xaml">
-      <SubType>Designer</SubType>
-    </AvaloniaResource>
-    <AvaloniaResource Update="Views\Main\Controls\TabView - Copy.xaml">
       <SubType>Designer</SubType>
     </AvaloniaResource>
     <Compile Update="Views\Main\Controls\MainNodeInfoTabView.xaml.cs">
@@ -149,23 +146,27 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.10.0" />
-    <PackageReference Include="Avalonia.Controls.DataGrid" Version="0.10.0" />
-    <PackageReference Include="Avalonia.Desktop" Version="0.10.0" />
-    <PackageReference Include="Avalonia.Diagnostics" Version="0.10.0" />
+    <PackageReference Include="Avalonia" Version="0.10.10" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="0.10.10" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.10.10" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="0.10.10" />
+    <PackageReference Include="CommandLineParser" Version="2.8.0" />
     <PackageReference Include="Dotnet.Bundle" Version="0.9.13" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.14" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="3.1.14" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.14" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
     <PackageReference Include="Serilog" Version="2.10.0" />
-    <PackageReference Include="Serilog.Extensions.Logging" Version="3.0.1" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="3.1.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
     <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.0" />
+    <PackageReference Update="Packaging.Targets">
+      <Version>0.1.220</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Camelot.Avalonia\Camelot.Avalonia.csproj" />
     <ProjectReference Include="..\Camelot.DataAccess.LiteDb\Camelot.DataAccess.LiteDb.csproj" />
-    <ProjectReference Include="..\Camelot.Operations\Camelot.Operations.csproj" />
+    <ProjectReference Include="..\Camelot.Services.Operations\Camelot.Services.Operations.csproj" />
     <ProjectReference Include="..\Camelot.Services.Archives\Camelot.Services.Archives.csproj" />
     <ProjectReference Include="..\Camelot.Services\Camelot.Services.csproj" />
     <ProjectReference Include="..\Camelot.ViewModels\Camelot.ViewModels.csproj" />

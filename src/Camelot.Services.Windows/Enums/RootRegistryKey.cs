@@ -1,9 +1,8 @@
-namespace Camelot.Services.Windows.Enums
+namespace Camelot.Services.Windows.Enums;
+
+public enum RootRegistryKey
 {
-    public enum RootRegistryKey
-    {
-        CurrentUser,
-        ClassesRoot,
-        LocalMachine
-    }
+    CurrentUser,
+    ClassesRoot,
+    LocalMachine
 }

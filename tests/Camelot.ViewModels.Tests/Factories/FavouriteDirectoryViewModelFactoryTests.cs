@@ -5,38 +5,37 @@ using Camelot.ViewModels.Implementations.MainWindow.FavouriteDirectories;
 using Moq.AutoMock;
 using Xunit;
 
-namespace Camelot.ViewModels.Tests.Factories
+namespace Camelot.ViewModels.Tests.Factories;
+
+public class FavouriteDirectoryViewModelFactoryTests
 {
-    public class FavouriteDirectoryViewModelFactoryTests
+    private const string DirPath = "Dir";
+    private const string DirName = "Name";
+
+    private readonly AutoMocker _autoMocker;
+
+    public FavouriteDirectoryViewModelFactoryTests()
     {
-        private const string DirPath = "Dir";
-        private const string DirName = "Name";
+        _autoMocker = new AutoMocker();
+    }
 
-        private readonly AutoMocker _autoMocker;
+    [Fact]
+    public void TestCreate()
+    {
+        _autoMocker
+            .Setup<IDirectoryService, DirectoryModel>(m => m.GetDirectory(DirPath))
+            .Returns(new DirectoryModel
+            {
+                Name = DirName
+            });
 
-        public FavouriteDirectoryViewModelFactoryTests()
-        {
-            _autoMocker = new AutoMocker();
-        }
+        var factory = _autoMocker.CreateInstance<FavouriteDirectoryViewModelFactory>();
 
-        [Fact]
-        public void TestCreate()
-        {
-            _autoMocker
-                .Setup<IDirectoryService, DirectoryModel>(m => m.GetDirectory(DirPath))
-                .Returns(new DirectoryModel
-                {
-                    Name = DirName
-                });
+        var viewModel = factory.Create(DirPath);
+        Assert.IsType<FavouriteDirectoryViewModel>(viewModel);
 
-            var factory = _autoMocker.CreateInstance<FavouriteDirectoryViewModelFactory>();
+        var favDirViewModel = (FavouriteDirectoryViewModel) viewModel;
 
-            var viewModel = factory.Create(DirPath);
-            Assert.IsType<FavouriteDirectoryViewModel>(viewModel);
-
-            var favDirViewModel = (FavouriteDirectoryViewModel) viewModel;
-
-            Assert.Equal(DirName, favDirViewModel.DirectoryName);
-        }
+        Assert.Equal(DirName, favDirViewModel.DirectoryName);
     }
 }

@@ -1,9 +1,8 @@
 using Camelot.Services.Abstractions.Models.Enums;
 
-namespace Camelot.Services.Configuration
+namespace Camelot.Services.Configuration;
+
+public class DefaultThemeConfiguration
 {
-    public class DefaultThemeConfiguration
-    {
-        public Theme DefaultTheme { get; set; }
-    }
+    public Theme DefaultTheme { get; set; }
 }

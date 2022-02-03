@@ -1,9 +1,8 @@
 using System;
 
-namespace Camelot.Services.Environment.Interfaces
+namespace Camelot.Services.Environment.Interfaces;
+
+public interface IDateTimeProvider
 {
-    public interface IDateTimeProvider
-    {
-        DateTime Now { get; }
-    }
+    DateTime Now { get; }
 }

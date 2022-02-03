@@ -100,7 +100,7 @@
 			<Grid Row="5" ColumnSpan="2" HorizontalAlignment="Center" Margin="0,15,0,0">
 				<StackPanel Orientation="Horizontal">
 					<Button Content="{x:Static p:Resources.Cancel}" Classes="dialogButton transparentDialogButton"
-							Command="{Binding CancelCommand}" />
+							Command="{Binding CloseCommand}" />
 					<Button Content="{x:Static p:Resources.Select}" Classes="dialogButton"
 							Command="{Binding SelectCommand}" />
 				</StackPanel>

@@ -1,11 +1,10 @@
-namespace Camelot.ViewModels.Interfaces.Settings
+namespace Camelot.ViewModels.Interfaces.Settings;
+
+public interface ISettingsViewModel
 {
-    public interface ISettingsViewModel
-    {
-        bool IsChanged { get; }
+    bool IsChanged { get; }
 
-        void Activate();
+    void Activate();
 
-        void SaveChanges();
-    }
+    void SaveChanges();
 }

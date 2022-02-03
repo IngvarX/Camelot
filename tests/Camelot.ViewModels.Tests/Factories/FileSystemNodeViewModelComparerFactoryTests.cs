@@ -5,28 +5,27 @@ using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs;
 using Moq;
 using Xunit;
 
-namespace Camelot.ViewModels.Tests.Factories
+namespace Camelot.ViewModels.Tests.Factories;
+
+public class FileSystemNodeViewModelComparerFactoryTests
 {
-    public class FileSystemNodeViewModelComparerFactoryTests
+    [Theory]
+    [InlineData(SortingMode.Date, true)]
+    [InlineData(SortingMode.Size, false)]
+    public void TestCreate(SortingMode sortingColumn, bool isSortingByAscendingEnabled)
     {
-        [Theory]
-        [InlineData(SortingMode.Date, true)]
-        [InlineData(SortingMode.Size, false)]
-        public void TestCreate(SortingMode sortingColumn, bool isSortingByAscendingEnabled)
-        {
-            var viewModelMock = new Mock<IFileSystemNodesSortingViewModel>();
-            viewModelMock
-                .SetupGet(m => m.SortingColumn)
-                .Returns(sortingColumn);
-            viewModelMock
-                .SetupGet(m => m.IsSortingByAscendingEnabled)
-                .Returns(isSortingByAscendingEnabled);
+        var viewModelMock = new Mock<IFileSystemNodesSortingViewModel>();
+        viewModelMock
+            .SetupGet(m => m.SortingColumn)
+            .Returns(sortingColumn);
+        viewModelMock
+            .SetupGet(m => m.IsSortingByAscendingEnabled)
+            .Returns(isSortingByAscendingEnabled);
 
-            var factory = new FileSystemNodeViewModelComparerFactory();
-            var comparer = factory.Create(viewModelMock.Object);
+        var factory = new FileSystemNodeViewModelComparerFactory();
+        var comparer = factory.Create(viewModelMock.Object);
 
-            Assert.NotNull(comparer);
-            Assert.IsType<FileSystemNodesComparer>(comparer);
-        }
+        Assert.NotNull(comparer);
+        Assert.IsType<FileSystemNodesComparer>(comparer);
     }
 }

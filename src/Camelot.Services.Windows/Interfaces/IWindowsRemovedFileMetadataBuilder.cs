@@ -1,15 +1,14 @@
 using System;
 
-namespace Camelot.Services.Windows.Interfaces
+namespace Camelot.Services.Windows.Interfaces;
+
+public interface IWindowsRemovedFileMetadataBuilder
 {
-    public interface IWindowsRemovedFileMetadataBuilder
-    {
-        IWindowsRemovedFileMetadataBuilder WithFileSize(long deletedFileSize);
+    IWindowsRemovedFileMetadataBuilder WithFileSize(long deletedFileSize);
 
-        IWindowsRemovedFileMetadataBuilder WithRemovingDateTime(DateTime removingDateTime);
+    IWindowsRemovedFileMetadataBuilder WithRemovingDateTime(DateTime removingDateTime);
 
-        IWindowsRemovedFileMetadataBuilder WithFilePath(string filePath);
+    IWindowsRemovedFileMetadataBuilder WithFilePath(string filePath);
 
-        byte[] Build();
-    }
+    byte[] Build();
 }

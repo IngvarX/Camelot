@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:filePanels="clr-namespace:Camelot.ViewModels.Implementations.MainWindow.FilePanels;assembly=Camelot.ViewModels"
              xmlns:controls="clr-namespace:Camelot.Views.Main.Controls"
+             xmlns:p="clr-namespace:Camelot.Properties"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Camelot.Views.Main.Controls.DirectorySelectorView">
 
@@ -11,7 +12,7 @@
         <filePanels:DirectorySelectorViewModel />
     </Design.DataContext>
 
-    <Grid Margin="7,0,0,0" ColumnDefinitions="*,Auto">
+    <Grid Margin="2,0,0,0" ColumnDefinitions="*,Auto">
         <Popup IsOpen="{Binding ShouldShowSuggestions}"
                PlacementTarget="DirectoryTextBox">
             <Border BorderBrush="{DynamicResource ThemeBorderMidBrush}"
@@ -39,7 +40,7 @@
 
         <ToggleButton Grid.Column="1"
                       Margin="5,0"
-                      Command="{Binding ToggleFavouriteStatusCommand}"
+                      Command="{Binding SaveFavouriteStatusCommand}"
                       IsChecked="{Binding IsFavouriteDirectory}">
             <Grid>
                 <Image Classes="favouriteDirectoryImage"
@@ -66,6 +67,15 @@
                     </Image.Source>
                 </Image>
             </Grid>
+
+            <ToolTip.Tip>
+                <Grid>
+                    <TextBlock Classes="mainWindowTextBlock" Text="{x:Static p:Resources.MarkAsFavourite}"
+                               IsVisible="{Binding !$parent[ToggleButton].IsChecked}" />
+                    <TextBlock Classes="mainWindowTextBlock" Text="{x:Static p:Resources.UnmarkAsFavourite}"
+                               IsVisible="{Binding $parent[ToggleButton].IsChecked}" />
+                </Grid>
+            </ToolTip.Tip>
         </ToggleButton>
     </Grid>
 

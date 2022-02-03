@@ -1,11 +1,10 @@
 using System;
 
-namespace Camelot.ViewModels.Services.Interfaces
-{
-    public interface IFilePanelDirectoryObserver
-    {
-        string CurrentDirectory { get; set; }
+namespace Camelot.ViewModels.Services.Interfaces;
 
-        event EventHandler<EventArgs> CurrentDirectoryChanged;
-    }
+public interface IFilePanelDirectoryObserver
+{
+    string CurrentDirectory { get; set; }
+
+    event EventHandler<EventArgs> CurrentDirectoryChanged;
 }

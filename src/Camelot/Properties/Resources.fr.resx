@@ -166,9 +166,6 @@
   <data name="OpenInNewTab" xml:space="preserve">
     <value>Ouvrir dans un nouvel onglet</value>
   </data>
-  <data name="DuplicateOnOtherPanel" xml:space="preserve">
-    <value>Dupliquer sur l’autre volet</value>
-  </data>
   <data name="Eject" xml:space="preserve">
     <value>Éjecter</value>
   </data>
@@ -447,5 +444,41 @@
   </data>
   <data name="Pack" xml:space="preserve">
     <value>Compacter</value>
+  </data>
+  <data name="InnerDirectoriesWithColon" xml:space="preserve">
+    <value>Répertoires internes :</value>
+  </data>
+  <data name="InnerFilesWithColon" xml:space="preserve">
+    <value>Fichiers intérieurs :</value>
+  </data>
+  <data name="PasteFromClipboard" xml:space="preserve">
+    <value>Coller depuis le presse-papier</value>
+  </data>
+  <data name="AccessToDirectoryIsDenied" xml:space="preserve">
+    <value>L’accès au répertoire {0} est refusé</value>
+  </data>
+  <data name="AccessDeniedTitle" xml:space="preserve">
+    <value>Accès refusé</value>
+  </data>
+  <data name="MountPointWithColon" xml:space="preserve">
+    <value>Point de montage :</value>
+  </data>
+  <data name="MarkAsFavourite" xml:space="preserve">
+    <value>Marquer comme favori</value>
+  </data>
+  <data name="UnmarkAsFavourite" xml:space="preserve">
+    <value>Retirer des favoris</value>
+  </data>
+  <data name="GoForward" xml:space="preserve">
+    <value>Avancer</value>
+  </data>
+  <data name="GoBack" xml:space="preserve">
+    <value>Retour</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Recharger</value>
+  </data>
+  <data name="GoToParentDirectory" xml:space="preserve">
+    <value>Aller au répertoire parent</value>
   </data>
 </root>

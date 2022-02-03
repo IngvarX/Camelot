@@ -1,7 +1,6 @@
-namespace Camelot.ViewModels.Configuration
+namespace Camelot.ViewModels.Configuration;
+
+public class TabConfiguration
 {
-    public class TabConfiguration
-    {
-        public int MaxHistorySize { get; set; }
-    }
+    public int MaxHistorySize { get; set; }
 }

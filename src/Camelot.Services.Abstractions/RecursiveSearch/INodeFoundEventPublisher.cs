@@ -1,7 +1,6 @@
-namespace Camelot.Services.Abstractions.RecursiveSearch
+namespace Camelot.Services.Abstractions.RecursiveSearch;
+
+public interface INodeFoundEventPublisher
 {
-    public interface INodeFoundEventPublisher
-    {
-        void RaiseNodeFoundEvent(string nodePath);
-    }
+    void RaiseNodeFoundEvent(string nodePath);
 }

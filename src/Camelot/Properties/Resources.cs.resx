@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -58,4 +58,292 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="FileHeader" xml:space="preserve">
+    <value>_Soubor</value>
+  </data>
+  <data name="GitHub" xml:space="preserve">
+    <value>GitHub</value>
+  </data>
+  <data name="CreationDateWithColon" xml:space="preserve">
+    <value>Datum vytvoření:</value>
+  </data>
+  <data name="FileInformationTitle" xml:space="preserve">
+    <value>Informace o souboru</value>
+  </data>
+  <data name="FailedToExtractArchiveTo" xml:space="preserve">
+    <value>Nepodařilo se extrahovat archiv {0} do {1}</value>
+  </data>
+  <data name="FailedToMoveFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Nepodařilo se přesunout {0} souborů a {1} adresářů do {2}</value>
+  </data>
+  <data name="NewDirectory" xml:space="preserve">
+    <value>Nový adresář</value>
+  </data>
+  <data name="NewTab" xml:space="preserve">
+    <value>Nová karta</value>
+  </data>
+  <data name="MovingFileFromTo" xml:space="preserve">
+    <value>Přesun {0} na {1}</value>
+  </data>
+  <data name="Recursive" xml:space="preserve">
+    <value>Rekurzivní</value>
+  </data>
+  <data name="MovedFilesFromAndDirectoriesTo" xml:space="preserve">
+    <value>Přesunuto {0} souborů a {1} adresářů do {2}</value>
+  </data>
+  <data name="CreateDirectoryTitle" xml:space="preserve">
+    <value>Vytvořit adresář</value>
+  </data>
+  <data name="AboutCamelotTitle" xml:space="preserve">
+    <value>O aplikaci Camelot</value>
+  </data>
+  <data name="AboutHeader" xml:space="preserve">
+    <value>_O</value>
+  </data>
+  <data name="AboutPage" xml:space="preserve">
+    <value>Camelot je dvoupanelový správce souborů napsaný v jazyce C#</value>
+  </data>
+  <data name="Apply" xml:space="preserve">
+    <value>Použít</value>
+  </data>
+  <data name="ApplyActionToTheAllFilesAndFolders" xml:space="preserve">
+    <value>Použít tuto akci na všechny soubory a složky</value>
+  </data>
+  <data name="ArgumentsWithColon" xml:space="preserve">
+    <value>Argumenty:</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Zrušit</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Zavřít</value>
+  </data>
+  <data name="CloseAllButThis" xml:space="preserve">
+    <value>Zavřít vše kromě tohoto</value>
+  </data>
+  <data name="CloseTab" xml:space="preserve">
+    <value>Zavřít kartu</value>
+  </data>
+  <data name="Maintainers" xml:space="preserve">
+    <value>Správci</value>
+  </data>
+  <data name="Move" xml:space="preserve">
+    <value>Přesunout</value>
+  </data>
+  <data name="CloseTabsToTheLeft" xml:space="preserve">
+    <value>Zavřít karty vlevo</value>
+  </data>
+  <data name="CloseTabsToTheRight" xml:space="preserve">
+    <value>Zavřít karty vpravo</value>
+  </data>
+  <data name="CommandWithColon" xml:space="preserve">
+    <value>Příkaz:</value>
+  </data>
+  <data name="ConfigurationHeader" xml:space="preserve">
+    <value>_Konfigurace</value>
+  </data>
+  <data name="CopiedFileFromTo" xml:space="preserve">
+    <value>Zkopírováno {0} do {1}</value>
+  </data>
+  <data name="CopiedFilesFromAndDirectoriesTo" xml:space="preserve">
+    <value>Zkopírováno {0} souborů a {1} adresářů do {2}</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Kopírovat</value>
+  </data>
+  <data name="CopyingFileFromTo" xml:space="preserve">
+    <value>Kopírování {0} do {1}</value>
+  </data>
+  <data name="CopyingFilesFromAndDirectoriesTo" xml:space="preserve">
+    <value>Kopírování {0} souborů a {1} adresářů do {2}</value>
+  </data>
+  <data name="CopyToClipboard" xml:space="preserve">
+    <value>Zkopírovat do schránky</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Vytvořit</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Datum</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Odstranit</value>
+  </data>
+  <data name="DeletedFileFromTo" xml:space="preserve">
+    <value>Odstraněno {0} z {1}</value>
+  </data>
+  <data name="MovedFileFromTo" xml:space="preserve">
+    <value>Přesunuto {0} na {1}</value>
+  </data>
+  <data name="DeletedFilesAndDirectories" xml:space="preserve">
+    <value>Odstraněno {0} souborů a {1} adresářů z {2}</value>
+  </data>
+  <data name="Directory" xml:space="preserve">
+    <value>Adresář</value>
+  </data>
+  <data name="DirectoryInformationTitle" xml:space="preserve">
+    <value>Informace o adresáři</value>
+  </data>
+  <data name="DirectoryTemplate" xml:space="preserve">
+    <value>&lt;DIR&gt;</value>
+  </data>
+  <data name="EnterDirectoryNameWithColon" xml:space="preserve">
+    <value>Zadejte název adresáře:</value>
+  </data>
+  <data name="Extension" xml:space="preserve">
+    <value>Rozšíření</value>
+  </data>
+  <data name="FailedCopyFileFromTo" xml:space="preserve">
+    <value>Nepodařilo se zkopírovat {0} do {1}</value>
+  </data>
+  <data name="ExitHeader" xml:space="preserve">
+    <value>_Odejít</value>
+  </data>
+  <data name="FailedCopyFromFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Nepodařilo se zkopírovat {0} souborů a {1} adresářů do {2}</value>
+  </data>
+  <data name="FailedToDeleteFileFromTo" xml:space="preserve">
+    <value>Nepodařilo se odstranit {0} z {1}</value>
+  </data>
+  <data name="FailedToDeleteFilesAndDirectoriesFrom" xml:space="preserve">
+    <value>Nepodařilo se odstranit {0} souborů a {1} adresářů z {2}</value>
+  </data>
+  <data name="FailedToMoveFileFromTo" xml:space="preserve">
+    <value>Nepodařilo se přesunout {0} do {1}</value>
+  </data>
+  <data name="General" xml:space="preserve">
+    <value>Obecné</value>
+  </data>
+  <data name="HelpHeader" xml:space="preserve">
+    <value>_Nápověda</value>
+  </data>
+  <data name="LanguageWithColon" xml:space="preserve">
+    <value>Jazyk:</value>
+  </data>
+  <data name="LastAccessWithColon" xml:space="preserve">
+    <value>Poslední přístup:</value>
+  </data>
+  <data name="LastModificationWithColon" xml:space="preserve">
+    <value>Poslední změna:</value>
+  </data>
+  <data name="LastModified" xml:space="preserve">
+    <value>Poslední změna</value>
+  </data>
+  <data name="MovingFromFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Přesun {0} souborů a {1} adresářů do {2}</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Název</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Otevřít</value>
+  </data>
+  <data name="OriginalFile" xml:space="preserve">
+    <value>Původní soubor</value>
+  </data>
+  <data name="OverwriteOptionsTitle" xml:space="preserve">
+    <value>Možnosti přepisu</value>
+  </data>
+  <data name="PathWithColon" xml:space="preserve">
+    <value>Cesta:</value>
+  </data>
+  <data name="PermanentlyRemoveFiles" xml:space="preserve">
+    <value>Chcete tyto soubory {0} trvale odstranit?</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Odstranit</value>
+  </data>
+  <data name="Skip" xml:space="preserve">
+    <value>Přeskočit</value>
+  </data>
+  <data name="Terminal" xml:space="preserve">
+    <value>Terminál</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Vyhledávání</value>
+  </data>
+  <data name="Size" xml:space="preserve">
+    <value>Velikost</value>
+  </data>
+  <data name="Rename" xml:space="preserve">
+    <value>Přejmenovat</value>
+  </data>
+  <data name="Replace" xml:space="preserve">
+    <value>Nahradit</value>
+  </data>
+  <data name="ReplaceFile" xml:space="preserve">
+    <value>Nahradit soubor</value>
+  </data>
+  <data name="ShowProperties" xml:space="preserve">
+    <value>Zobrazit vlastnosti</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>Soubor</value>
+  </data>
+  <data name="SettingsTitle" xml:space="preserve">
+    <value>Nastavení</value>
+  </data>
+  <data name="SettingsHeader" xml:space="preserve">
+    <value>_Nastavení</value>
+  </data>
+  <data name="SizeWithColon" xml:space="preserve">
+    <value>Velikost:</value>
+  </data>
+  <data name="CreateFileTitle" xml:space="preserve">
+    <value>Vytvořit soubor</value>
+  </data>
+  <data name="ReplaceFileDestinationDirectory" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TotalSpaceWithColon" xml:space="preserve">
+    <value>Celkové místo:</value>
+  </data>
+  <data name="AvailableSpaceWithColon" xml:space="preserve">
+    <value>Dostupné místo:</value>
+  </data>
+  <data name="Extract" xml:space="preserve">
+    <value>Extrahovat</value>
+  </data>
+  <data name="ExtractingArchiveTo" xml:space="preserve">
+    <value>Extrahování {0} do {1}</value>
+  </data>
+  <data name="ExtractArchiveHere" xml:space="preserve">
+    <value>Extrahovat archiv zde</value>
+  </data>
+  <data name="ExtractArchiveToNewDirectory" xml:space="preserve">
+    <value>Extrahovat archiv do nového adresáře</value>
+  </data>
+  <data name="SelectDirectoryForExtraction" xml:space="preserve">
+    <value />
+  </data>
+  <data name="CreateArchive" xml:space="preserve">
+    <value>Vytvořit archiv</value>
+  </data>
+  <data name="OpenWith" xml:space="preserve">
+    <value>Otevřít v</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>Vybrat</value>
+  </data>
+  <data name="ThemeWithColon" xml:space="preserve">
+    <value>Motiv:</value>
+  </data>
+  <data name="DarkThemeName" xml:space="preserve">
+    <value>Tmavý</value>
+  </data>
+  <data name="LightThemeName" xml:space="preserve">
+    <value>Světlý</value>
+  </data>
+  <data name="Eject" xml:space="preserve">
+    <value>Vysunout</value>
+  </data>
+  <data name="CaseSensitive" xml:space="preserve">
+    <value>Rozlišování velkých a malých písmen</value>
+  </data>
+  <data name="CloseSearchPanel" xml:space="preserve">
+    <value>Zavřít vyhledávací panel</value>
+  </data>
+  <data name="FilesRemovingConfirmationTitle" xml:space="preserve">
+    <value>Potvrdit odstranění souborů</value>
+  </data>
 </root>

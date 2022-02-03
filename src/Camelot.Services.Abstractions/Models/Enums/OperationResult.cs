@@ -1,9 +1,8 @@
-namespace Camelot.Services.Abstractions.Models.Enums
+namespace Camelot.Services.Abstractions.Models.Enums;
+
+public enum OperationResult : byte
 {
-    public enum OperationResult : byte
-    {
-        Success,
-        Blocked,
-        Failed
-    }
+    Success,
+    Blocked,
+    Failed
 }

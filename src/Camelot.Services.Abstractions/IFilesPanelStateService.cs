@@ -1,11 +1,10 @@
 using Camelot.Services.Abstractions.Models.State;
 
-namespace Camelot.Services.Abstractions
-{
-    public interface IFilesPanelStateService
-    {
-        PanelStateModel GetPanelState();
+namespace Camelot.Services.Abstractions;
 
-        void SavePanelState(PanelStateModel model);
-    }
+public interface IFilesPanelStateService
+{
+    PanelStateModel GetPanelState();
+
+    void SavePanelState(PanelStateModel model);
 }

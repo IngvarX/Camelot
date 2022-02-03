@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 
-namespace Camelot.Configuration
+namespace Camelot.Configuration;
+
+public class LanguagesConfiguration
 {
-    public class LanguagesConfiguration
-    {
-        public List<string> AvailableLocales { get; set; }
-    }
+    public List<string> AvailableLocales { get; set; }
 }

@@ -1,11 +1,10 @@
-namespace Camelot.Services.Abstractions
+namespace Camelot.Services.Abstractions;
+
+public interface IFileNameGenerationService
 {
-    public interface IFileNameGenerationService
-    {
-        string GenerateFullName(string filePath);
+    string GenerateFullName(string filePath);
 
-        string GenerateFullNameWithoutExtension(string filePath);
+    string GenerateFullNameWithoutExtension(string filePath);
 
-        string GenerateName(string initialName, string directory);
-    }
+    string GenerateName(string initialName, string directory);
 }

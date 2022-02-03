@@ -5,82 +5,81 @@ using Moq;
 using Moq.AutoMock;
 using Xunit;
 
-namespace Camelot.Services.Tests
+namespace Camelot.Services.Tests;
+
+public class ResourcesOpeningTests
 {
-    public class ResourcesOpeningTests
+    private const string FileName = "File.txt";
+    private const string Command = "Command";
+    private const string Arguments = "Args";
+
+    private static string CurrentDirectory => Directory.GetCurrentDirectory();
+
+    private readonly AutoMocker _autoMocker;
+
+    public ResourcesOpeningTests()
     {
-        private const string FileName = "File.txt";
-        private const string Command = "Command";
-        private const string Arguments = "Args";
+        _autoMocker = new AutoMocker();
+    }
 
-        private static string CurrentDirectory => Directory.GetCurrentDirectory();
+    [Fact]
+    public void TestDirectoryOpening()
+    {
+        var directoryServiceMock = new Mock<IDirectoryService>();
+        directoryServiceMock
+            .SetupSet<IDirectoryService>(m => m.SelectedDirectory = CurrentDirectory)
+            .Verifiable();
+        _autoMocker.Use(directoryServiceMock.Object);
 
-        private readonly AutoMocker _autoMocker;
+        var directoryOpeningBehavior = _autoMocker.CreateInstance<DirectoryOpeningBehavior>();
+        directoryOpeningBehavior.Open(CurrentDirectory);
 
-        public ResourcesOpeningTests()
-        {
-            _autoMocker = new AutoMocker();
-        }
+        directoryServiceMock
+            .VerifySet(c => c.SelectedDirectory = CurrentDirectory, Times.Once);
+    }
 
-        [Fact]
-        public void TestDirectoryOpening()
-        {
-            var directoryServiceMock = new Mock<IDirectoryService>();
-            directoryServiceMock
-                .SetupSet<IDirectoryService>(m => m.SelectedDirectory = CurrentDirectory)
-                .Verifiable();
-            _autoMocker.Use(directoryServiceMock.Object);
+    [Fact]
+    public void TestFileOpening()
+    {
+        _autoMocker
+            .Setup<IResourceOpeningService>(m => m.Open(FileName))
+            .Verifiable();
 
-            var directoryOpeningBehavior = _autoMocker.CreateInstance<DirectoryOpeningBehavior>();
-            directoryOpeningBehavior.Open(CurrentDirectory);
+        var fileOpeningBehavior = _autoMocker.CreateInstance<FileOpeningBehavior>();
+        fileOpeningBehavior.Open(FileName);
 
-            directoryServiceMock
-                .VerifySet(c => c.SelectedDirectory = CurrentDirectory, Times.Once);
-        }
+        _autoMocker
+            .Verify<IResourceOpeningService>(m => m.Open(FileName),
+                Times.Once);
+    }
 
-        [Fact]
-        public void TestFileOpening()
-        {
-            _autoMocker
-                .Setup<IResourceOpeningService>(m => m.Open(FileName))
-                .Verifiable();
+    [Fact]
+    public void TestFileOpeningWith()
+    {
+        _autoMocker
+            .Setup<IResourceOpeningService>(m => m.OpenWith(Command, Arguments, FileName))
+            .Verifiable();
 
-            var fileOpeningBehavior = _autoMocker.CreateInstance<FileOpeningBehavior>();
-            fileOpeningBehavior.Open(FileName);
+        var fileOpeningBehavior = _autoMocker.CreateInstance<FileOpeningBehavior>();
+        fileOpeningBehavior.OpenWith(Command, Arguments, FileName);
 
-            _autoMocker
-                .Verify<IResourceOpeningService>(m => m.Open(FileName),
-                    Times.Once);
-        }
+        _autoMocker
+            .Verify<IResourceOpeningService>(m => m.OpenWith(Command, Arguments, FileName),
+                Times.Once);
+    }
 
-        [Fact]
-        public void TestFileOpeningWith()
-        {
-            _autoMocker
-                .Setup<IResourceOpeningService>(m => m.OpenWith(Command, Arguments, FileName))
-                .Verifiable();
+    [Fact]
+    public void TestDirectoryOpeningWith()
+    {
+        _autoMocker
+            .Setup<IResourceOpeningService>(m => m.OpenWith(Command, Arguments, FileName))
+            .Verifiable();
 
-            var fileOpeningBehavior = _autoMocker.CreateInstance<FileOpeningBehavior>();
-            fileOpeningBehavior.OpenWith(Command, Arguments, FileName);
+        var directoryOpeningBehavior = _autoMocker.CreateInstance<DirectoryOpeningBehavior>();
+        directoryOpeningBehavior.OpenWith(Command, Arguments, FileName);
 
-            _autoMocker
-                .Verify<IResourceOpeningService>(m => m.OpenWith(Command, Arguments, FileName),
-                    Times.Once);
-        }
-
-        [Fact]
-        public void TestDirectoryOpeningWith()
-        {
-            _autoMocker
-                .Setup<IResourceOpeningService>(m => m.OpenWith(Command, Arguments, FileName))
-                .Verifiable();
-
-            var directoryOpeningBehavior = _autoMocker.CreateInstance<DirectoryOpeningBehavior>();
-            directoryOpeningBehavior.OpenWith(Command, Arguments, FileName);
-
-            _autoMocker
-                .Verify<IResourceOpeningService>(m => m.OpenWith(Command, Arguments, FileName),
-                    Times.Once);
-        }
+        _autoMocker
+            .Verify<IResourceOpeningService>(m => m.OpenWith(Command, Arguments, FileName),
+                Times.Once);
     }
 }

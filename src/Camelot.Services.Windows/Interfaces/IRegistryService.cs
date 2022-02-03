@@ -1,9 +1,8 @@
 using Camelot.Services.Windows.Enums;
 
-namespace Camelot.Services.Windows.Interfaces
+namespace Camelot.Services.Windows.Interfaces;
+
+public interface IRegistryService
 {
-    public interface IRegistryService
-    {
-        IRegistryKey GetRegistryKey(RootRegistryKey rootRegistryKey);
-    }
+    IRegistryKey GetRegistryKey(RootRegistryKey rootRegistryKey);
 }

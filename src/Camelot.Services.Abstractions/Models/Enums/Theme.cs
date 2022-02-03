@@ -1,8 +1,7 @@
-namespace Camelot.Services.Abstractions.Models.Enums
+namespace Camelot.Services.Abstractions.Models.Enums;
+
+public enum Theme : byte
 {
-    public enum Theme : byte
-    {
-        Dark,
-        Light
-    }
+    Dark,
+    Light
 }

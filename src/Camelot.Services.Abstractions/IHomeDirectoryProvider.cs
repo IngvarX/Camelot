@@ -1,7 +1,6 @@
-namespace Camelot.Services.Abstractions
+namespace Camelot.Services.Abstractions;
+
+public interface IHomeDirectoryProvider
 {
-    public interface IHomeDirectoryProvider
-    {
-        string HomeDirectoryPath { get; }
-    }
+    string HomeDirectoryPath { get; }
 }

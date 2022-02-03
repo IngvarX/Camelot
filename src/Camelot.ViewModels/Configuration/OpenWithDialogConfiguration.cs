@@ -1,7 +1,6 @@
-namespace Camelot.ViewModels.Configuration
+namespace Camelot.ViewModels.Configuration;
+
+public class OpenWithDialogConfiguration
 {
-    public class OpenWithDialogConfiguration
-    {
-        public int SearchTimeoutMs { get; set; }
-    }
+    public int SearchTimeoutMs { get; set; }
 }

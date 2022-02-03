@@ -1,9 +1,8 @@
 ﻿using ReactiveUI;
 
-namespace Camelot.ViewModels.Implementations
-{
-    public class ViewModelBase : ReactiveObject
-    {
+namespace Camelot.ViewModels.Implementations;
 
-    }
+public class ViewModelBase : ReactiveObject
+{
+
 }

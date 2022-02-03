@@ -1,26 +1,34 @@
 using System;
+using System.Windows.Input;
 using Camelot.Extensions;
 using Camelot.ViewModels.Services;
+using ReactiveUI;
 
-namespace Camelot.ViewModels.Implementations.Dialogs
+namespace Camelot.ViewModels.Implementations.Dialogs;
+
+public class DialogViewModelBase<TResult> : ViewModelBase
+    where TResult : DialogResultBase
 {
-    public class DialogViewModelBase<TResult> : ViewModelBase
-        where TResult : DialogResultBase
+    public event EventHandler<DialogResultEventArgs<TResult>> CloseRequested;
+
+    public ICommand CloseCommand { get; }
+
+    protected DialogViewModelBase()
     {
-        public event EventHandler<DialogResultEventArgs<TResult>> CloseRequested;
-
-        protected void Close() => Close(default);
-
-        protected void Close(TResult result)
-        {
-            var args = new DialogResultEventArgs<TResult>(result);
-
-            CloseRequested.Raise(this, args);
-        }
+        CloseCommand = ReactiveCommand.Create(Close);
     }
 
-    public class DialogViewModelBase : DialogViewModelBase<DialogResultBase>
-    {
+    protected void Close() => Close(default);
 
+    protected void Close(TResult result)
+    {
+        var args = new DialogResultEventArgs<TResult>(result);
+
+        CloseRequested.Raise(this, args);
     }
+}
+
+public class DialogViewModelBase : DialogViewModelBase<DialogResultBase>
+{
+
 }

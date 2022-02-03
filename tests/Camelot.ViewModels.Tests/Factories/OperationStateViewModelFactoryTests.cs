@@ -5,21 +5,20 @@ using Camelot.ViewModels.Implementations.MainWindow.OperationsStates;
 using Moq;
 using Xunit;
 
-namespace Camelot.ViewModels.Tests.Factories
+namespace Camelot.ViewModels.Tests.Factories;
+
+public class OperationStateViewModelFactoryTests
 {
-    public class OperationStateViewModelFactoryTests
+    [Fact]
+    public void TestCreate()
     {
-        [Fact]
-        public void TestCreate()
-        {
-            var pathServiceMock = new Mock<IPathService>();
-            var operationMock = new Mock<IOperation>();
+        var pathServiceMock = new Mock<IPathService>();
+        var operationMock = new Mock<IOperation>();
 
-            var factory = new OperationStateViewModelFactory(pathServiceMock.Object);
-            var viewModel = factory.Create(operationMock.Object);
+        var factory = new OperationStateViewModelFactory(pathServiceMock.Object);
+        var viewModel = factory.Create(operationMock.Object);
 
-            Assert.NotNull(viewModel);
-            Assert.IsType<OperationStateViewModel>(viewModel);
-        }
+        Assert.NotNull(viewModel);
+        Assert.IsType<OperationStateViewModel>(viewModel);
     }
 }

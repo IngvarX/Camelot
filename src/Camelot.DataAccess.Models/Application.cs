@@ -1,11 +1,10 @@
-namespace Camelot.DataAccess.Models
+namespace Camelot.DataAccess.Models;
+
+public class Application
 {
-    public class Application
-    {
-        public string DisplayName { get; set; }
+    public string DisplayName { get; set; }
 
-        public string Arguments { get; set; }
+    public string Arguments { get; set; }
 
-        public string ExecutePath { get; set; }
-    }
+    public string ExecutePath { get; set; }
 }

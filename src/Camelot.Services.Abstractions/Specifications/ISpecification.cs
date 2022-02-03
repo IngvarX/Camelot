@@ -1,7 +1,6 @@
-namespace Camelot.Services.Abstractions.Specifications
+namespace Camelot.Services.Abstractions.Specifications;
+
+public interface ISpecification<in T>
 {
-    public interface ISpecification<in T>
-    {
-        bool IsSatisfiedBy(T nodeModel);
-    }
+    bool IsSatisfiedBy(T nodeModel);
 }

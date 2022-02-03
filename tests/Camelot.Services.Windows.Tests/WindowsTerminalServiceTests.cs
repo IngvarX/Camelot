@@ -6,41 +6,40 @@ using Moq;
 using Moq.AutoMock;
 using Xunit;
 
-namespace Camelot.Services.Windows.Tests
+namespace Camelot.Services.Windows.Tests;
+
+public class WindowsTerminalServiceTests
 {
-    public class WindowsTerminalServiceTests
+    private const string Directory = "Dir";
+
+    private readonly AutoMocker _autoMocker;
+
+    public WindowsTerminalServiceTests()
     {
-        private const string Directory = "Dir";
+        _autoMocker = new AutoMocker();
+    }
 
-        private readonly AutoMocker _autoMocker;
+    [Fact]
+    public void TestOpening()
+    {
+        const string command = "cmd";
+        var args = $"/K \"cd /d {Directory}\"";
 
-        public WindowsTerminalServiceTests()
-        {
-            _autoMocker = new AutoMocker();
-        }
+        var uowMock = new Mock<IUnitOfWork>();
+        uowMock
+            .Setup(m => m.GetRepository<TerminalSettings>())
+            .Returns(new Mock<IRepository<TerminalSettings>>().Object);
+        _autoMocker
+            .Setup<IUnitOfWorkFactory, IUnitOfWork>(m => m.Create())
+            .Returns(uowMock.Object);
+        _autoMocker
+            .Setup<IProcessService>(m => m.Run(command, args))
+            .Verifiable();
 
-        [Fact]
-        public void TestOpening()
-        {
-            const string command = "cmd";
-            var args = $"/K \"cd /d {Directory}\"";
+        var terminalService = _autoMocker.CreateInstance<WindowsTerminalService>();
 
-            var uowMock = new Mock<IUnitOfWork>();
-            uowMock
-                .Setup(m => m.GetRepository<TerminalSettings>())
-                .Returns(new Mock<IRepository<TerminalSettings>>().Object);
-            _autoMocker
-                .Setup<IUnitOfWorkFactory, IUnitOfWork>(m => m.Create())
-                .Returns(uowMock.Object);
-            _autoMocker
-                .Setup<IProcessService>(m => m.Run(command, args))
-                .Verifiable();
+        terminalService.Open(Directory);
 
-            var terminalService = _autoMocker.CreateInstance<WindowsTerminalService>();
-
-            terminalService.Open(Directory);
-
-            _autoMocker.Verify<IProcessService>(m => m.Run(command, args), Times.Once);
-        }
+        _autoMocker.Verify<IProcessService>(m => m.Run(command, args), Times.Once);
     }
 }

@@ -1,18 +1,17 @@
 ﻿using System.Collections.Generic;
 using Camelot.Services.Abstractions.Models;
 
-namespace Camelot.Services.Abstractions
+namespace Camelot.Services.Abstractions;
+
+public interface ILanguageManager
 {
-    public interface ILanguageManager
-    {
-        LanguageModel CurrentLanguage { get; }
+    LanguageModel CurrentLanguage { get; }
 
-        LanguageModel DefaultLanguage { get; }
+    LanguageModel DefaultLanguage { get; }
 
-        IEnumerable<LanguageModel> AllLanguages { get; }
+    IEnumerable<LanguageModel> AllLanguages { get; }
 
-        void SetLanguage(string languageCode);
+    void SetLanguage(string languageCode);
 
-        void SetLanguage(LanguageModel languageModel);
-    }
+    void SetLanguage(LanguageModel languageModel);
 }

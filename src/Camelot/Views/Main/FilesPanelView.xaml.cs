@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
@@ -16,286 +17,334 @@ using Camelot.Views.Main.Controls;
 using DynamicData;
 using Splat;
 
-namespace Camelot.Views.Main
+namespace Camelot.Views.Main;
+
+public class FilesPanelView : UserControl
 {
-    public class FilesPanelView : UserControl
+    private const string PasteFromClipboardMenuItemName = "PasteFromClipboard";
+    private const int DragAndDropDelay = 300;
+
+    private readonly Timer _timer;
+
+    private bool _isCellPressed;
+    private PointerEventArgs _pointerEventArgs;
+    private IDataContextProvider _dataContextProvider;
+
+    private DataGrid FilesDataGrid => this.FindControl<DataGrid>("FilesDataGrid");
+
+    private DirectorySelectorView DirectorySelectorView => this.FindControl<DirectorySelectorView>("DirectorySelectorView");
+
+    private IFilesPanelViewModel ViewModel => (IFilesPanelViewModel) DataContext;
+
+    public FilesPanelView()
     {
-        private const int DragAndDropDelay = 300;
+        InitializeComponent();
+        SubscribeToEvents();
 
-        private readonly Timer _timer;
+        _timer = new Timer {Interval = DragAndDropDelay};
+        _timer.Elapsed += TimerOnElapsed;
+    }
 
-        private bool _isCellPressed;
-        private PointerEventArgs _pointerEventArgs;
-        private IDataContextProvider _dataContextProvider;
+    private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
 
-        private DataGrid FilesDataGrid => this.FindControl<DataGrid>("FilesDataGrid");
+    private void SubscribeToEvents() => DataContextChanged += OnDataContextChanged;
 
-        private DirectorySelectorView DirectorySelectorView => this.FindControl<DirectorySelectorView>("DirectorySelectorView");
+    private void OnDataContextChanged(object sender, EventArgs e)
+    {
+        ViewModel.Deactivated += ViewModelOnDeactivated;
+        ViewModel.Activated += ViewModelOnActivated;
+        ViewModel.SelectionAdded += ViewModelOnSelectionAdded;
+        ViewModel.SelectionRemoved += ViewModelOnSelectionRemoved;
+        DirectorySelectorView.DirectoryTextBox.GotFocus += OnDirectoryTextBoxGotFocus;
 
-        private IFilesPanelViewModel ViewModel => (IFilesPanelViewModel) DataContext;
+        FilesDataGrid.AddHandler(DragDrop.DropEvent, OnDrop);
+    }
 
-        public FilesPanelView()
+    private void ViewModelOnDeactivated(object sender, EventArgs e) => ClearSelection();
+
+    private void ViewModelOnActivated(object sender, EventArgs e)
+    {
+        if (!DirectorySelectorView.DirectoryTextBox.IsFocused)
         {
-            InitializeComponent();
-            SubscribeToEvents();
+            FilesDataGrid.Focus();
+        }
+    }
 
-            _timer = new Timer {Interval = DragAndDropDelay};
-            _timer.Elapsed += TimerOnElapsed;
+    private void ViewModelOnSelectionAdded(object sender, SelectionAddedEventArgs e)
+    {
+        var item = GetNode(e.NodePath);
+        if (item is not null)
+        {
+            FilesDataGrid.SelectedItems.Add(item);
+        }
+    }
+
+    private void ViewModelOnSelectionRemoved(object sender, SelectionRemovedEventArgs e)
+    {
+        var item = GetNode(e.NodePath);
+        if (item is null)
+        {
+            return;
         }
 
-        private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
-
-        private void SubscribeToEvents() => DataContextChanged += OnDataContextChanged;
-
-        private void OnDataContextChanged(object sender, EventArgs e)
+        if (FilesDataGrid.SelectedItems.Count == 1)
         {
-            ViewModel.Deactivated += ViewModelOnDeactivated;
-            ViewModel.Activated += ViewModelOnActivated;
-            DirectorySelectorView.DirectoryTextBox.GotFocus += OnDirectoryTextBoxGotFocus;
-
-            FilesDataGrid.AddHandler(DragDrop.DropEvent, OnDrop);
+            FilesDataGrid.SelectedIndex = -1;
+            FilesDataGrid.SelectedItems.Clear();
         }
-
-        private void ViewModelOnDeactivated(object sender, EventArgs e) => ClearSelection();
-
-        private void ViewModelOnActivated(object sender, EventArgs e)
+        else
         {
-            if (!DirectorySelectorView.DirectoryTextBox.IsFocused)
+            FilesDataGrid.SelectedItems.Remove(item);
+        }
+    }
+
+    private IFileSystemNodeViewModel GetNode(string nodePath) => FilesDataGrid
+        .Items
+        .Cast<IFileSystemNodeViewModel>()
+        .SingleOrDefault(m => m.FullPath == nodePath);
+
+    private void OnDataGridSelectionChanged(object sender, SelectionChangedEventArgs args)
+    {
+        var addedItems = args
+            .AddedItems
+            .Cast<IFileSystemNodeViewModel>()
+            .Where(i => i is not IDirectoryViewModel {IsParentDirectory: true})
+            .ToArray();
+
+        if (!ViewModel.IsActive)
+        {
+            // data grid inserted items in inactive file panel
+            // remove them if any
+            if (addedItems.Any())
             {
-                FilesDataGrid.Focus();
-            }
-        }
-
-        private void OnDataGridSelectionChanged(object sender, SelectionChangedEventArgs args)
-        {
-            var addedItems = args
-                .AddedItems
-                .Cast<IFileSystemNodeViewModel>()
-                .Where(i => !(i is IDirectoryViewModel {IsParentDirectory: true}))
-                .ToArray();
-
-            if (!ViewModel.IsActive)
-            {
-                // data grid inserted items in inactive file panel
-                // remove them if any
-                if (addedItems.Any())
-                {
-                   ClearSelection();
-                }
-
-                return;
-            }
-
-            ViewModel.SelectedFileSystemNodes.AddRange(addedItems);
-
-            var removedItems = args
-                .RemovedItems
-                .Cast<IFileSystemNodeViewModel>()
-                .ToArray();
-            ViewModel.SelectedFileSystemNodes.RemoveMany(removedItems);
-
-            addedItems
-                .Concat(removedItems)
-                .ForEach(StopEditing);
-        }
-
-        private void OnDataGridDoubleTapped(object sender, RoutedEventArgs args)
-        {
-            if (!(args.Source is IDataContextProvider dataContextProvider))
-            {
-                return;
+                ClearSelection();
             }
 
-            if (!(dataContextProvider.DataContext is IFileSystemNodeViewModel nodeViewModel))
+            return;
+        }
+
+        ViewModel.SelectedFileSystemNodes.AddRange(addedItems);
+
+        var removedItems = args
+            .RemovedItems
+            .Cast<IFileSystemNodeViewModel>()
+            .ToArray();
+        ViewModel.SelectedFileSystemNodes.RemoveMany(removedItems);
+
+        addedItems
+            .Concat(removedItems)
+            .ForEach(StopEditing);
+    }
+
+    private void OnDataGridDoubleTapped(object sender, RoutedEventArgs args)
+    {
+        if (args.Source is not IDataContextProvider dataContextProvider)
+        {
+            return;
+        }
+
+        if (dataContextProvider.DataContext is not IFileSystemNodeViewModel nodeViewModel)
+        {
+            return;
+        }
+
+        args.Handled = true;
+
+        StopEditing(nodeViewModel);
+        nodeViewModel.OpenCommand.Execute(null);
+    }
+
+    private void OnDataGridKeyDown(object sender, KeyEventArgs args)
+    {
+        if (args.Key != Key.Delete && args.Key != Key.Back)
+        {
+            return;
+        }
+
+        args.Handled = true;
+
+        ViewModel.OperationsViewModel.MoveToTrashCommand.Execute(null);
+    }
+
+    private void OnDataGridCellPointerPressed(object sender, DataGridCellPointerPressedEventArgs args)
+    {
+        ActivateViewModel();
+        ProcessPointerClickInCell(args.PointerPressedEventArgs, args.Cell);
+        PrepareDrag(args);
+    }
+
+    private void OnDirectoryTextBoxGotFocus(object sender, GotFocusEventArgs args) => ActivateViewModel();
+
+    private void ActivateViewModel() => ViewModel.ActivateCommand.Execute(null);
+
+    private void ProcessPointerClickInCell(PointerEventArgs args, IDataContextProvider cell)
+    {
+        var point = args.GetCurrentPoint(this);
+        if (point.Properties.IsMiddleButtonPressed &&
+            cell.DataContext is IDirectoryViewModel directoryViewModel)
+        {
+            args.Handled = true;
+
+            directoryViewModel.OpenInNewTabCommand.Execute(null);
+        }
+        else if (point.Properties.IsLeftButtonPressed
+                 && args.Source is TextBlock {Name: "NameTextBlock"} textBlock)
+        {
+            if (textBlock.DataContext is not IFileSystemNodeViewModel viewModel)
             {
                 return;
             }
 
             args.Handled = true;
 
-            StopEditing(nodeViewModel);
-            nodeViewModel.OpenCommand.Execute(null);
+            if (ViewModel.SelectedFileSystemNodes.Contains(viewModel))
+            {
+                viewModel.IsEditing = true;
+
+                // focus text box with file/dir name
+                var textBox = textBlock.Parent.VisualChildren.OfType<TextBox>().Single();
+                textBox.Focus();
+            }
+        }
+    }
+
+    private void OnFullNameTextBoxLostFocus(object sender, RoutedEventArgs args)
+    {
+        var textBox = (TextBox) sender;
+        if (textBox.DataContext is IFileSystemNodeViewModel viewModel)
+        {
+            viewModel.IsEditing = false;
+        }
+    }
+
+    private static void StopEditing(IFileSystemNodeViewModel viewModel) => viewModel.IsEditing = false;
+
+    private void ClearSelection() => FilesDataGrid.SelectedItems.Clear();
+
+    private void PrepareDrag(DataGridCellPointerPressedEventArgs e)
+    {
+        _timer.Stop();
+
+        if (!e.PointerPressedEventArgs.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
+        {
+            return;
         }
 
-        private void OnDataGridKeyDown(object sender, KeyEventArgs args)
+        if (e.Cell.DataContext is not IFileSystemNodeViewModel {IsEditing: false})
         {
-            if (args.Key != Key.Delete && args.Key != Key.Back)
+            return;
+        }
+
+        if (e.Cell.DataContext is IDirectoryViewModel {IsParentDirectory: true})
+        {
+            return;
+        }
+
+        _isCellPressed = true;
+        e.Cell.PointerReleased += CellOnPointerReleased;
+
+        _pointerEventArgs = e.PointerPressedEventArgs;
+        _dataContextProvider = e.Cell;
+        _timer.Start();
+    }
+
+    private void CellOnPointerReleased(object sender, PointerReleasedEventArgs e)
+    {
+        var cell = (DataGridCell) sender;
+        cell.PointerReleased -= CellOnPointerReleased;
+        _isCellPressed = false;
+    }
+
+    private async Task DoDragAsync(IDataContextProvider sender, PointerEventArgs e)
+    {
+        if (!_isCellPressed)
+        {
+            return;
+        }
+
+        if (sender.DataContext is not IFileSystemNodeViewModel viewModel)
+        {
+            return;
+        }
+
+        var dragData = new DataObject();
+        var fileNames = ViewModel
+            .SelectedFileSystemNodes
+            .Select(f => f.FullPath)
+            .Concat(new[] {viewModel.FullPath})
+            .ToHashSet();
+        dragData.Set(DataFormats.FileNames, fileNames);
+
+        await DragDrop.DoDragDrop(e, dragData,
+            DragDropEffects.Copy | DragDropEffects.Move | DragDropEffects.Link);
+    }
+
+    private async void OnDrop(object sender, DragEventArgs e)
+    {
+        if (!e.Data.Contains(DataFormats.FileNames))
+        {
+            return;
+        }
+
+        var fileNames = e.Data.GetFileNames()?.ToArray();
+        if (fileNames is null || !fileNames.Any())
+        {
+            return;
+        }
+
+        if (e.Source is not IDataContextProvider dataContextProvider)
+        {
+            return;
+        }
+
+        var fullPath = ViewModel.CurrentDirectory;
+        if (dataContextProvider.DataContext is IFileSystemNodeViewModel viewModel)
+        {
+            if (ViewModel.SelectedFileSystemNodes.Contains(viewModel))
             {
                 return;
             }
 
-            args.Handled = true;
-
-            ViewModel.OperationsViewModel.MoveToTrashCommand.Execute(null);
+            fullPath = viewModel.FullPath;
         }
 
-        private void OnDataGridCellPointerPressed(object sender, DataGridCellPointerPressedEventArgs args)
+        var mediator = ViewModel.DragAndDropOperationsMediator;
+        if ((e.KeyModifiers & KeyModifiers.Shift) > 0)
         {
-            ActivateViewModel();
-            ProcessPointerClickInCell(args.PointerPressedEventArgs, args.Cell);
-            PrepareDrag(args);
+            await mediator.MoveFilesAsync(fileNames, fullPath);
+        }
+        else
+        {
+            await mediator.CopyFilesAsync(fileNames, fullPath);
         }
 
-        private void OnDirectoryTextBoxGotFocus(object sender, GotFocusEventArgs args) => ActivateViewModel();
+        e.Handled = true;
+    }
 
-        private void ActivateViewModel() => ViewModel.ActivateCommand.Execute(null);
+    private async void TimerOnElapsed(object sender, ElapsedEventArgs e)
+    {
+        _timer.Stop();
 
-        private void ProcessPointerClickInCell(PointerEventArgs args, IDataContextProvider cell)
+        await DoDragInUiThreadAsync();
+    }
+
+    private async Task DoDragInUiThreadAsync()
+    {
+        var dispatcher = Locator.Current.GetRequiredService<IApplicationDispatcher>();
+
+        await dispatcher.DispatchAsync(() => DoDragAsync(_dataContextProvider, _pointerEventArgs));
+    }
+
+    private async void DataGridOnContextMenuOpening(object sender, CancelEventArgs e)
+    {
+        var menu = (ContextMenu) sender;
+        var item = menu
+            .Items
+            .Cast<MenuItem>()
+            .SingleOrDefault(i => i.Name == PasteFromClipboardMenuItemName);
+        if (item is not null)
         {
-            var point = args.GetCurrentPoint(this);
-            if (point.Properties.IsMiddleButtonPressed &&
-                cell.DataContext is IDirectoryViewModel directoryViewModel)
-            {
-                args.Handled = true;
-
-                directoryViewModel.OpenInNewTabCommand.Execute(null);
-            }
-            else if (point.Properties.IsLeftButtonPressed
-                     && args.Source is TextBlock {Name: "NameTextBlock"} textBlock)
-            {
-                if (!(textBlock.DataContext is IFileSystemNodeViewModel viewModel))
-                {
-                    return;
-                }
-
-                args.Handled = true;
-
-                if (ViewModel.SelectedFileSystemNodes.Contains(viewModel))
-                {
-                    viewModel.IsEditing = true;
-
-                    // focus text box with file/dir name
-                    var textBox = textBlock.Parent.VisualChildren.OfType<TextBox>().Single();
-                    textBox.Focus();
-                }
-            }
-        }
-
-        private void OnFullNameTextBoxLostFocus(object sender, RoutedEventArgs args)
-        {
-            var textBox = (TextBox) sender;
-            if (textBox.DataContext is IFileSystemNodeViewModel viewModel)
-            {
-                viewModel.IsEditing = false;
-            }
-        }
-
-        private static void StopEditing(IFileSystemNodeViewModel viewModel) => viewModel.IsEditing = false;
-
-        private void ClearSelection() => FilesDataGrid.SelectedItems.Clear();
-
-        private void PrepareDrag(DataGridCellPointerPressedEventArgs e)
-        {
-            _timer.Stop();
-
-            if (!e.PointerPressedEventArgs.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
-            {
-                return;
-            }
-
-            if (!(e.Cell.DataContext is IFileSystemNodeViewModel {IsEditing: false}))
-            {
-                return;
-            }
-
-            if (e.Cell.DataContext is IDirectoryViewModel {IsParentDirectory: true})
-            {
-                return;
-            }
-
-            _isCellPressed = true;
-            e.Cell.PointerReleased += CellOnPointerReleased;
-
-            _pointerEventArgs = e.PointerPressedEventArgs;
-            _dataContextProvider = e.Cell;
-            _timer.Start();
-        }
-
-        private void CellOnPointerReleased(object sender, PointerReleasedEventArgs e)
-        {
-            var cell = (DataGridCell) sender;
-            cell.PointerReleased -= CellOnPointerReleased;
-            _isCellPressed = false;
-        }
-
-        private async Task DoDragAsync(IDataContextProvider sender, PointerEventArgs e)
-        {
-            if (!_isCellPressed)
-            {
-                return;
-            }
-
-            if (!(sender.DataContext is IFileSystemNodeViewModel viewModel))
-            {
-                return;
-            }
-
-            var dragData = new DataObject();
-            var fileNames = ViewModel
-                .SelectedFileSystemNodes
-                .Select(f => f.FullPath)
-                .Concat(new[] {viewModel.FullPath})
-                .ToHashSet();
-            dragData.Set(DataFormats.FileNames, fileNames);
-
-            await DragDrop.DoDragDrop(e, dragData,
-                DragDropEffects.Copy | DragDropEffects.Move | DragDropEffects.Link);
-        }
-
-        private async void OnDrop(object sender, DragEventArgs e)
-        {
-            if (!e.Data.Contains(DataFormats.FileNames))
-            {
-                return;
-            }
-
-            var fileNames = e.Data.GetFileNames()?.ToArray();
-            if (fileNames is null || !fileNames.Any())
-            {
-                return;
-            }
-
-            if (!(e.Source is IDataContextProvider dataContextProvider))
-            {
-                return;
-            }
-
-            var fullPath = ViewModel.CurrentDirectory;
-            if (dataContextProvider.DataContext is IFileSystemNodeViewModel viewModel)
-            {
-                if (ViewModel.SelectedFileSystemNodes.Contains(viewModel))
-                {
-                    return;
-                }
-
-                fullPath = viewModel.FullPath;
-            }
-
-            var mediator = ViewModel.DragAndDropOperationsMediator;
-            if ((e.KeyModifiers & KeyModifiers.Shift) > 0)
-            {
-                await mediator.MoveFilesAsync(fileNames, fullPath);
-            }
-            else
-            {
-                await mediator.CopyFilesAsync(fileNames, fullPath);
-            }
-
-            e.Handled = true;
-        }
-
-        private async void TimerOnElapsed(object sender, ElapsedEventArgs e)
-        {
-            _timer.Stop();
-
-            await DoDragInUiThreadAsync();
-        }
-
-        private async Task DoDragInUiThreadAsync()
-        {
-            var dispatcher = Locator.Current.GetRequiredService<IApplicationDispatcher>();
-
-            await dispatcher.DispatchAsync(() => DoDragAsync(_dataContextProvider, _pointerEventArgs));
+            item.IsVisible = await ViewModel.ClipboardOperationsViewModel.CanPasteAsync();
         }
     }
 }

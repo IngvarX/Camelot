@@ -1,15 +1,14 @@
 using System.Windows.Input;
 
-namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Nodes
+namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Nodes;
+
+public interface IFileSystemNodeViewModel
 {
-    public interface IFileSystemNodeViewModel
-    {
-        string FullPath { get; }
+    string FullPath { get; }
 
-        string Name { get; set; }
+    string Name { get; set; }
 
-        bool IsEditing { get; set; }
+    bool IsEditing { get; set; }
 
-        ICommand OpenCommand { get; }
-    }
+    ICommand OpenCommand { get; }
 }

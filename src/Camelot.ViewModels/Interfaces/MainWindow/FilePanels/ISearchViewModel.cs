@@ -1,15 +1,14 @@
 using System;
 
-namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels
+namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
+
+public interface ISearchViewModel
 {
-    public interface ISearchViewModel
-    {
-        bool IsSearchEnabled { get; }
+    bool IsSearchEnabled { get; }
 
-        event EventHandler<EventArgs> SearchSettingsChanged;
+    event EventHandler<EventArgs> SearchSettingsChanged;
 
-        INodeSpecification GetSpecification();
+    INodeSpecification GetSpecification();
 
-        void ToggleSearch();
-    }
+    void ToggleSearch();
 }

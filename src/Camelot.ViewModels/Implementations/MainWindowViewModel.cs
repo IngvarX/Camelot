@@ -11,79 +11,79 @@ using Camelot.ViewModels.Interfaces.Menu;
 using Camelot.ViewModels.Services.Interfaces;
 using ReactiveUI;
 
-namespace Camelot.ViewModels.Implementations
+namespace Camelot.ViewModels.Implementations;
+
+public class MainWindowViewModel : ViewModelBase, IMainWindowViewModel
 {
-    public class MainWindowViewModel : ViewModelBase, IMainWindowViewModel
+    private readonly IFilesOperationsMediator _filesOperationsMediator;
+
+    public ITabsListViewModel ActiveTabsListViewModel =>
+        _filesOperationsMediator.ActiveFilesPanelViewModel.TabsListViewModel;
+
+    public IDirectorySelectorViewModel ActiveDirectorySelectorViewModel =>
+        _filesOperationsMediator.ActiveFilesPanelViewModel.DirectorySelectorViewModel;
+
+    public IOperationsViewModel OperationsViewModel { get; }
+
+    public IFilesPanelViewModel LeftFilesPanelViewModel { get; }
+
+    public IFilesPanelViewModel RightFilesPanelViewModel { get; }
+
+    public IMenuViewModel MenuViewModel { get; }
+
+    public IOperationsStateViewModel OperationsStateViewModel { get; }
+
+    public ITopOperationsViewModel TopOperationsViewModel { get; }
+
+    public IDrivesListViewModel DrivesListViewModel { get; }
+
+    public IFavouriteDirectoriesListViewModel FavouriteDirectoriesListViewModel { get; }
+
+    public ICommand SearchCommand { get; }
+
+    public ICommand SwitchPanelCommand { get; }
+
+    public ICommand FocusDirectorySelectorCommand { get; }
+
+    public MainWindowViewModel(
+        IFilesOperationsMediator filesOperationsMediator,
+        IOperationsViewModel operationsViewModel,
+        IFilesPanelViewModel leftFilesPanelViewModel,
+        IFilesPanelViewModel rightFilesPanelViewModel,
+        IMenuViewModel menuViewModel,
+        IOperationsStateViewModel operationsStateViewModel,
+        ITopOperationsViewModel topOperationsViewModel,
+        IDrivesListViewModel drivesListViewModel,
+        IFavouriteDirectoriesListViewModel favouriteDirectoriesListViewModel)
     {
-        private readonly IFilesOperationsMediator _filesOperationsMediator;
+        _filesOperationsMediator = filesOperationsMediator;
 
-        public ITabsListViewModel ActiveTabsListViewModel =>
-            _filesOperationsMediator.ActiveFilesPanelViewModel.TabsListViewModel;
+        OperationsViewModel = operationsViewModel;
+        LeftFilesPanelViewModel = leftFilesPanelViewModel;
+        RightFilesPanelViewModel = rightFilesPanelViewModel;
+        MenuViewModel = menuViewModel;
+        OperationsStateViewModel = operationsStateViewModel;
+        TopOperationsViewModel = topOperationsViewModel;
+        DrivesListViewModel = drivesListViewModel;
+        FavouriteDirectoriesListViewModel = favouriteDirectoriesListViewModel;
 
-        public IOperationsViewModel OperationsViewModel { get; }
+        SearchCommand = ReactiveCommand.Create(Search);
+        SwitchPanelCommand = ReactiveCommand.Create(SwitchPanel);
+        FocusDirectorySelectorCommand = ReactiveCommand.Create(FocusDirectorySelector);
 
-        public IFilesPanelViewModel LeftFilesPanelViewModel { get; }
+        filesOperationsMediator.Register(leftFilesPanelViewModel, rightFilesPanelViewModel);
+        filesOperationsMediator.ActiveFilesPanelChanged += FilesOperationsMediatorOnActiveFilesPanelChanged;
+    }
 
-        public IFilesPanelViewModel RightFilesPanelViewModel { get; }
+    private void Search() => _filesOperationsMediator.ToggleSearchPanelVisibility();
 
-        public IMenuViewModel MenuViewModel { get; }
+    private void SwitchPanel() => _filesOperationsMediator.InactiveFilesPanelViewModel.Activate();
 
-        public IOperationsStateViewModel OperationsStateViewModel { get; }
+    private void FocusDirectorySelector() => ActiveDirectorySelectorViewModel.Activate();
 
-        public ITopOperationsViewModel TopOperationsViewModel { get; }
-
-        public IDrivesListViewModel DrivesListViewModel { get; }
-
-        public IFavouriteDirectoriesListViewModel FavouriteDirectoriesListViewModel { get; }
-
-        public ICommand SearchCommand { get; }
-
-        public ICommand SwitchPanelCommand { get; }
-
-        public ICommand FocusDirectorySelectorCommand { get; }
-
-        public MainWindowViewModel(
-            IFilesOperationsMediator filesOperationsMediator,
-            IOperationsViewModel operationsViewModel,
-            IFilesPanelViewModel leftFilesPanelViewModel,
-            IFilesPanelViewModel rightFilesPanelViewModel,
-            IMenuViewModel menuViewModel,
-            IOperationsStateViewModel operationsStateViewModel,
-            ITopOperationsViewModel topOperationsViewModel,
-            IDrivesListViewModel drivesListViewModel,
-            IFavouriteDirectoriesListViewModel favouriteDirectoriesListViewModel)
-        {
-            _filesOperationsMediator = filesOperationsMediator;
-
-            OperationsViewModel = operationsViewModel;
-            LeftFilesPanelViewModel = leftFilesPanelViewModel;
-            RightFilesPanelViewModel = rightFilesPanelViewModel;
-            MenuViewModel = menuViewModel;
-            OperationsStateViewModel = operationsStateViewModel;
-            TopOperationsViewModel = topOperationsViewModel;
-            DrivesListViewModel = drivesListViewModel;
-            FavouriteDirectoriesListViewModel = favouriteDirectoriesListViewModel;
-
-            SearchCommand = ReactiveCommand.Create(Search);
-            SwitchPanelCommand = ReactiveCommand.Create(SwitchPanel);
-            FocusDirectorySelectorCommand = ReactiveCommand.Create(FocusDirectorySelector);
-
-            filesOperationsMediator.Register(leftFilesPanelViewModel, rightFilesPanelViewModel);
-            filesOperationsMediator.ActiveFilesPanelChanged += FilesOperationsMediatorOnActiveFilesPanelChanged;
-        }
-
-        private void Search() => _filesOperationsMediator.ToggleSearchPanelVisibility();
-
-        private void SwitchPanel() => _filesOperationsMediator.InactiveFilesPanelViewModel.Activate();
-
-        private void FocusDirectorySelector()
-        {
-            var directorySelector = _filesOperationsMediator.ActiveFilesPanelViewModel.DirectorySelectorViewModel;
-
-            directorySelector.Activate();
-        }
-
-        private void FilesOperationsMediatorOnActiveFilesPanelChanged(object sender, EventArgs e) =>
-            this.RaisePropertyChanged(nameof(ActiveTabsListViewModel));
+    private void FilesOperationsMediatorOnActiveFilesPanelChanged(object sender, EventArgs e)
+    {
+        this.RaisePropertyChanged(nameof(ActiveTabsListViewModel));
+        this.RaisePropertyChanged(nameof(ActiveDirectorySelectorViewModel));
     }
 }

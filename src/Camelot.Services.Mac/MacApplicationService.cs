@@ -5,43 +5,42 @@ using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Mac.Interfaces;
 
-namespace Camelot.Services.Mac
+namespace Camelot.Services.Mac;
+
+public class MacApplicationService : IApplicationService
 {
-    public class MacApplicationService : IApplicationService
+    private readonly IApplicationsListLoader _applicationsListLoader;
+    private readonly IApplicationsAssociationsLoader _applicationsAssociationsLoader;
+
+    private IReadOnlyDictionary<string, ISet<ApplicationModel>> _associatedApplications;
+    private IImmutableSet<ApplicationModel> _installedApplications;
+
+    public MacApplicationService(
+        IApplicationsListLoader applicationsListLoader,
+        IApplicationsAssociationsLoader applicationsAssociationsLoader)
     {
-        private readonly IApplicationsListLoader _applicationsListLoader;
-        private readonly IApplicationsAssociationsLoader _applicationsAssociationsLoader;
+        _applicationsListLoader = applicationsListLoader;
+        _applicationsAssociationsLoader = applicationsAssociationsLoader;
+    }
 
-        private IReadOnlyDictionary<string, ISet<ApplicationModel>> _associatedApplications;
-        private IImmutableSet<ApplicationModel> _installedApplications;
+    public async Task<IEnumerable<ApplicationModel>> GetAssociatedApplicationsAsync(string fileExtension)
+    {
+        _associatedApplications ??= await LoadAssociatedApplicationsAsync();
 
-        public MacApplicationService(
-            IApplicationsListLoader applicationsListLoader,
-            IApplicationsAssociationsLoader applicationsAssociationsLoader)
-        {
-            _applicationsListLoader = applicationsListLoader;
-            _applicationsAssociationsLoader = applicationsAssociationsLoader;
-        }
+        return _associatedApplications.GetValueOrDefault(fileExtension, new HashSet<ApplicationModel>());
+    }
 
-        public async Task<IEnumerable<ApplicationModel>> GetAssociatedApplicationsAsync(string fileExtension)
-        {
-            _associatedApplications ??= await LoadAssociatedApplicationsAsync();
+    public Task<IEnumerable<ApplicationModel>> GetInstalledApplicationsAsync()
+    {
+        _installedApplications ??= _applicationsListLoader.GetInstalledApplications();
 
-            return _associatedApplications.GetValueOrDefault(fileExtension, new HashSet<ApplicationModel>());
-        }
-
-        public Task<IEnumerable<ApplicationModel>> GetInstalledApplicationsAsync()
-        {
-            _installedApplications ??= _applicationsListLoader.GetInstalledApplications();
-
-            return Task.FromResult((IEnumerable<ApplicationModel>) _installedApplications);
-        }
+        return Task.FromResult((IEnumerable<ApplicationModel>) _installedApplications);
+    }
         
-        private async Task<IReadOnlyDictionary<string, ISet<ApplicationModel>>> LoadAssociatedApplicationsAsync()
-        {
-            var installedApps = await GetInstalledApplicationsAsync();
+    private async Task<IReadOnlyDictionary<string, ISet<ApplicationModel>>> LoadAssociatedApplicationsAsync()
+    {
+        var installedApps = await GetInstalledApplicationsAsync();
             
-            return await _applicationsAssociationsLoader.LoadAssociatedApplicationsAsync(installedApps);
-        }
+        return await _applicationsAssociationsLoader.LoadAssociatedApplicationsAsync(installedApps);
     }
 }

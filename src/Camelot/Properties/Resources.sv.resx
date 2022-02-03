@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -58,4 +58,370 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="MarkAsFavourite" xml:space="preserve">
+    <value>Markera som favorit</value>
+  </data>
+  <data name="UnmarkAsFavourite" xml:space="preserve">
+    <value>Avmarkera som favorit</value>
+  </data>
+  <data name="GoForward" xml:space="preserve">
+    <value>Gå framåt</value>
+  </data>
+  <data name="GoBack" xml:space="preserve">
+    <value>Gå bakåt</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Ladda om</value>
+  </data>
+  <data name="MountPointWithColon" xml:space="preserve">
+    <value>Monteringspunkt:</value>
+  </data>
+  <data name="AccessToDirectoryIsDenied" xml:space="preserve">
+    <value>Åtkomst till katalogen {0} nekas</value>
+  </data>
+  <data name="AccessDeniedTitle" xml:space="preserve">
+    <value>Nekat tillträde</value>
+  </data>
+  <data name="PasteFromClipboard" xml:space="preserve">
+    <value>Klistra in från urklipp</value>
+  </data>
+  <data name="Recursive" xml:space="preserve">
+    <value>Rekursiv</value>
+  </data>
+  <data name="CloseSearchPanel" xml:space="preserve">
+    <value>Stäng sökpanel</value>
+  </data>
+  <data name="OpenInNewTabOnOppositePanel" xml:space="preserve">
+    <value>Öppna i ny flik på den andra panelen</value>
+  </data>
+  <data name="OpenInNewTab" xml:space="preserve">
+    <value>Öppna i ny flik</value>
+  </data>
+  <data name="LightThemeName" xml:space="preserve">
+    <value>Ljust</value>
+  </data>
+  <data name="DarkThemeName" xml:space="preserve">
+    <value>Mörkt</value>
+  </data>
+  <data name="ThemeWithColon" xml:space="preserve">
+    <value>Tema:</value>
+  </data>
+  <data name="EnterNewNameWithColon" xml:space="preserve">
+    <value>Ange nytt namn:</value>
+  </data>
+  <data name="SearchForApplications" xml:space="preserve">
+    <value>Sök efter program</value>
+  </data>
+  <data name="SetAsDefaultApplication" xml:space="preserve">
+    <value>Ange som standard</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>Välj</value>
+  </data>
+  <data name="SelectOtherApplications" xml:space="preserve">
+    <value>Andra program</value>
+  </data>
+  <data name="RecommendedApplications" xml:space="preserve">
+    <value>Rekommenderade program</value>
+  </data>
+  <data name="OpeningFiles" xml:space="preserve">
+    <value>Öppnar "{0}" filer</value>
+  </data>
+  <data name="OpenWithTitle" xml:space="preserve">
+    <value>Öppna med</value>
+  </data>
+  <data name="OpenWith" xml:space="preserve">
+    <value>Öppna med</value>
+  </data>
+  <data name="FailedToPackFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Det gick inte att packa {0} filer och {1} kataloger till {2}</value>
+  </data>
+  <data name="FailedToPackTo" xml:space="preserve">
+    <value>Det gick inte att packa {0} till {1}</value>
+  </data>
+  <data name="FailedToExtractArchiveTo" xml:space="preserve">
+    <value>Det gick inte att extrahera arkiv {0} till {1}</value>
+  </data>
+  <data name="CreateArchive" xml:space="preserve">
+    <value>Skapa arkiv</value>
+  </data>
+  <data name="PackFilesTitle" xml:space="preserve">
+    <value>Packa filer</value>
+  </data>
+  <data name="SelectDirectoryForExtraction" xml:space="preserve">
+    <value>Välj katalog för uppackning</value>
+  </data>
+  <data name="ExtractArchiveToNewDirectory" xml:space="preserve">
+    <value>Extrahera arkiv till ny katalog</value>
+  </data>
+  <data name="ExtractArchiveHere" xml:space="preserve">
+    <value>Extrahera arkiv här</value>
+  </data>
+  <data name="PackedFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Packade {0} filer och {1} kataloger till {2}</value>
+  </data>
+  <data name="PackedFileTo" xml:space="preserve">
+    <value>Packade fil {0} till {1}</value>
+  </data>
+  <data name="ExtractedArchiveTo" xml:space="preserve">
+    <value>Extraherade arkiv {0} till {1}</value>
+  </data>
+  <data name="PackingFileTo" xml:space="preserve">
+    <value>Packar fil {0} till {1}</value>
+  </data>
+  <data name="PackingFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Packar {0} filer och {1} kataloger till (2)</value>
+  </data>
+  <data name="ExtractingArchiveTo" xml:space="preserve">
+    <value>Extrahera {0} till {1}</value>
+  </data>
+  <data name="Extract" xml:space="preserve">
+    <value>Extrahera</value>
+  </data>
+  <data name="Pack" xml:space="preserve">
+    <value>Packa</value>
+  </data>
+  <data name="EnterFileNameWithColon" xml:space="preserve">
+    <value>Ange filnamn:</value>
+  </data>
+  <data name="CreateFileTitle" xml:space="preserve">
+    <value>Skapa fil</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>Fil</value>
+  </data>
+  <data name="AvailableSpaceWithColon" xml:space="preserve">
+    <value>Tillgängligt utrymme:</value>
+  </data>
+  <data name="TotalSpaceWithColon" xml:space="preserve">
+    <value>Totalt utrymme:</value>
+  </data>
+  <data name="InvalidRegex" xml:space="preserve">
+    <value>Ogiltigt reguljärt uttryck</value>
+  </data>
+  <data name="SearchForFilesAndDirectories" xml:space="preserve">
+    <value>Sök efter filer och kataloger</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Sök</value>
+  </data>
+  <data name="Terminal" xml:space="preserve">
+    <value>Terminal</value>
+  </data>
+  <data name="Skip" xml:space="preserve">
+    <value>Hoppa över</value>
+  </data>
+  <data name="SizeWithColon" xml:space="preserve">
+    <value>Storlek:</value>
+  </data>
+  <data name="Size" xml:space="preserve">
+    <value>Storlek</value>
+  </data>
+  <data name="ShowProperties" xml:space="preserve">
+    <value>Visa egenskaper</value>
+  </data>
+  <data name="SettingsTitle" xml:space="preserve">
+    <value>Inställningar</value>
+  </data>
+  <data name="SettingsHeader" xml:space="preserve">
+    <value>_Inställningar</value>
+  </data>
+  <data name="SelectFromFilesAndDirectories" xml:space="preserve">
+    <value>{0} filer ({1}) och {2} kataloger</value>
+  </data>
+  <data name="ReplaceWith" xml:space="preserve">
+    <value>Byt ut med</value>
+  </data>
+  <data name="ReplaceFileDestinationDirectory" xml:space="preserve">
+    <value>En annan fil med samma namn finns redan i "{0}" Vill du ersätta den?</value>
+  </data>
+  <data name="ReplaceFile" xml:space="preserve">
+    <value>Byt ut fil</value>
+  </data>
+  <data name="Replace" xml:space="preserve">
+    <value>Byt ut</value>
+  </data>
+  <data name="Rename" xml:space="preserve">
+    <value>Döp om</value>
+  </data>
+  <data name="RemovingFilesAndDirectoriesFrom" xml:space="preserve">
+    <value>Tar bort {0} filer och {1} kataloger från {2}</value>
+  </data>
+  <data name="RemovingFileFromTo" xml:space="preserve">
+    <value>Tar bort {0} från {1}</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Ta bort</value>
+  </data>
+  <data name="PermanentlyRemoveFiles" xml:space="preserve">
+    <value>Vill du ta bort dessa {0} filer permanent?</value>
+  </data>
+  <data name="PathWithColon" xml:space="preserve">
+    <value>Sökväg:</value>
+  </data>
+  <data name="OriginalFile" xml:space="preserve">
+    <value>Original fil</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Öppna</value>
+  </data>
+  <data name="NewTab" xml:space="preserve">
+    <value>Ny flik</value>
+  </data>
+  <data name="NewDirectory" xml:space="preserve">
+    <value>Ny katalog</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Namn</value>
+  </data>
+  <data name="MovingFromFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Flyttar {0} filer och {1} kataloger till {2}</value>
+  </data>
+  <data name="MovingFileFromTo" xml:space="preserve">
+    <value>Flyttar {0} till {1}</value>
+  </data>
+  <data name="MovedFilesFromAndDirectoriesTo" xml:space="preserve">
+    <value>Flyttade {0} filer och {1} kataloger till {2}</value>
+  </data>
+  <data name="MovedFileFromTo" xml:space="preserve">
+    <value>Flyttade {0} till {1}</value>
+  </data>
+  <data name="Move" xml:space="preserve">
+    <value>Flytta</value>
+  </data>
+  <data name="LastModified" xml:space="preserve">
+    <value>Senast modifierad</value>
+  </data>
+  <data name="LastModificationWithColon" xml:space="preserve">
+    <value>Senaste modifikation:</value>
+  </data>
+  <data name="LastAccessWithColon" xml:space="preserve">
+    <value>Senaste åtkomst:</value>
+  </data>
+  <data name="LanguageWithColon" xml:space="preserve">
+    <value>Språk:</value>
+  </data>
+  <data name="HelpHeader" xml:space="preserve">
+    <value>_Hjälp</value>
+  </data>
+  <data name="GitHub" xml:space="preserve">
+    <value>GitHub</value>
+  </data>
+  <data name="General" xml:space="preserve">
+    <value>Allmäna</value>
+  </data>
+  <data name="FilesRemovingConfirmationTitle" xml:space="preserve">
+    <value>Bekräfta borttagning av filer</value>
+  </data>
+  <data name="FileInformationTitle" xml:space="preserve">
+    <value>Filinformation</value>
+  </data>
+  <data name="FileHeader" xml:space="preserve">
+    <value>_Fil</value>
+  </data>
+  <data name="FailedToMoveFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Det gick inte att flytta {0} filer och {1} kataloger till {2}</value>
+  </data>
+  <data name="FailedToMoveFileFromTo" xml:space="preserve">
+    <value>Det gick inte att flytta {0} till {1}</value>
+  </data>
+  <data name="FailedToDeleteFilesAndDirectoriesFrom" xml:space="preserve">
+    <value>Det gick inte att ta bort {0} filer och {1} kataloger från {2}</value>
+  </data>
+  <data name="FailedToDeleteFileFromTo" xml:space="preserve">
+    <value>Det gick inte att ta bort {0} från {1}</value>
+  </data>
+  <data name="FailedCopyFromFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Det gick inte att kopiera {0} filer och {1} kataloger till {2}</value>
+  </data>
+  <data name="FailedCopyFileFromTo" xml:space="preserve">
+    <value>Det gick inte att kopiera {0} till {1}</value>
+  </data>
+  <data name="Extension" xml:space="preserve">
+    <value>Tillägg</value>
+  </data>
+  <data name="ExitHeader" xml:space="preserve">
+    <value>_Avsluta</value>
+  </data>
+  <data name="EnterDirectoryNameWithColon" xml:space="preserve">
+    <value>Ange katalognamn:</value>
+  </data>
+  <data name="DirectoryTemplate" xml:space="preserve">
+    <value>&lt;KAT&gt;</value>
+  </data>
+  <data name="DirectoryInformationTitle" xml:space="preserve">
+    <value>Kataloginformation</value>
+  </data>
+  <data name="Directory" xml:space="preserve">
+    <value>Katalog</value>
+  </data>
+  <data name="DeletedFilesAndDirectories" xml:space="preserve">
+    <value>Tog bort {0} filer och {1} kataloger från {2}</value>
+  </data>
+  <data name="DeletedFileFromTo" xml:space="preserve">
+    <value>Ta bort {0} från {1}</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Ta bort</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Datum</value>
+  </data>
+  <data name="CreateDirectoryTitle" xml:space="preserve">
+    <value>Skapa katalog</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Skapa</value>
+  </data>
+  <data name="CopyToClipboard" xml:space="preserve">
+    <value>Kopiera till urklipp</value>
+  </data>
+  <data name="CopyingFilesFromAndDirectoriesTo" xml:space="preserve">
+    <value>Kopierar {0} filer och {1} kataloger till {2}</value>
+  </data>
+  <data name="CopyingFileFromTo" xml:space="preserve">
+    <value>Kopierar {0} till {1}</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Kopiera</value>
+  </data>
+  <data name="CopiedFilesFromAndDirectoriesTo" xml:space="preserve">
+    <value>Kopierade {0} filer och {1} kataloger till {2}</value>
+  </data>
+  <data name="CopiedFileFromTo" xml:space="preserve">
+    <value>Kopierade {0} till {1}</value>
+  </data>
+  <data name="ConfigurationHeader" xml:space="preserve">
+    <value>_Konfiguration</value>
+  </data>
+  <data name="CommandWithColon" xml:space="preserve">
+    <value>Kommando:</value>
+  </data>
+  <data name="CloseTabsToTheRight" xml:space="preserve">
+    <value>Stäng flikarna till höger</value>
+  </data>
+  <data name="CloseTabsToTheLeft" xml:space="preserve">
+    <value>Stäng flikarna till vänster</value>
+  </data>
+  <data name="CloseTab" xml:space="preserve">
+    <value>Stäng flik</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Stäng</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Avbryt</value>
+  </data>
+  <data name="ArgumentsWithColon" xml:space="preserve">
+    <value>Argument:</value>
+  </data>
+  <data name="Apply" xml:space="preserve">
+    <value>Verkställ</value>
+  </data>
+  <data name="AboutHeader" xml:space="preserve">
+    <value>_Om</value>
+  </data>
+  <data name="AboutCamelotTitle" xml:space="preserve">
+    <value>Om Camelot</value>
+  </data>
 </root>

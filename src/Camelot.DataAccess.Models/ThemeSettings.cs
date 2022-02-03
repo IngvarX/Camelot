@@ -1,7 +1,6 @@
-namespace Camelot.DataAccess.Models
+namespace Camelot.DataAccess.Models;
+
+public class ThemeSettings
 {
-    public class ThemeSettings
-    {
-        public int SelectedTheme { get; set; }
-    }
+    public int SelectedTheme { get; set; }
 }

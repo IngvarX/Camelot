@@ -1,10 +1,9 @@
-namespace Camelot.Services.Abstractions.Models.EventArgs
+namespace Camelot.Services.Abstractions.Models.EventArgs;
+
+public class FileDeletedEventArgs : FileEventArgsBase
 {
-    public class FileDeletedEventArgs : FileEventArgsBase
+    public FileDeletedEventArgs(string node)
+        : base(node)
     {
-        public FileDeletedEventArgs(string node)
-            : base(node)
-        {
-        }
     }
 }

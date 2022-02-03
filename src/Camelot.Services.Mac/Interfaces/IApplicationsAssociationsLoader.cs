@@ -2,11 +2,10 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Camelot.Services.Abstractions.Models;
 
-namespace Camelot.Services.Mac.Interfaces
+namespace Camelot.Services.Mac.Interfaces;
+
+public interface IApplicationsAssociationsLoader
 {
-    public interface IApplicationsAssociationsLoader
-    {
-        Task<IReadOnlyDictionary<string, ISet<ApplicationModel>>> LoadAssociatedApplicationsAsync(
-            IEnumerable<ApplicationModel> installedApps);
-    }
+    Task<IReadOnlyDictionary<string, ISet<ApplicationModel>>> LoadAssociatedApplicationsAsync(
+        IEnumerable<ApplicationModel> installedApps);
 }

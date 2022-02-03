@@ -1,7 +1,6 @@
-namespace Camelot.ViewModels.Interfaces.Menu
+namespace Camelot.ViewModels.Interfaces.Menu;
+
+public interface IMenuViewModel
 {
-    public interface IMenuViewModel
-    {
         
-    }
 }

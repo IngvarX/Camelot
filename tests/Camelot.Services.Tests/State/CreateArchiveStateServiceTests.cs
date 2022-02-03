@@ -8,105 +8,104 @@ using Moq;
 using Moq.AutoMock;
 using Xunit;
 
-namespace Camelot.Services.Tests.State
+namespace Camelot.Services.Tests.State;
+
+public class CreateArchiveStateServiceTests
 {
-    public class CreateArchiveStateServiceTests
+    private readonly AutoMocker _autoMocker;
+
+    public CreateArchiveStateServiceTests()
     {
-        private readonly AutoMocker _autoMocker;
+        _autoMocker = new AutoMocker();
+    }
 
-        public CreateArchiveStateServiceTests()
-        {
-            _autoMocker = new AutoMocker();
-        }
-
-        [Theory]
-        [InlineData(ArchiveType.Gz)]
-        [InlineData(ArchiveType.TarBz2)]
-        [InlineData(ArchiveType.Zip)]
-        public void TestGetState(ArchiveType archiveType)
-        {
-            var repoMock = new Mock<IRepository<CreateArchiveSettings>>();
-            repoMock
-                .Setup(m => m.GetById(It.IsAny<string>()))
-                .Returns(new CreateArchiveSettings
-                {
-                    ArchiveType = (int) archiveType
-                });
-            var uowMock = new Mock<IUnitOfWork>();
-            uowMock
-                .Setup(m => m.GetRepository<CreateArchiveSettings>())
-                .Returns(repoMock.Object);
-            _autoMocker
-                .Setup<IUnitOfWorkFactory, IUnitOfWork>(m => m.Create())
-                .Returns(uowMock.Object);
-
-            var service = _autoMocker.CreateInstance<CreateArchiveStateService>();
-
-            var state = service.GetState();
-
-            Assert.Equal(archiveType, state.ArchiveType);
-        }
-
-        [Fact]
-        public void TestGetStateEmpty()
-        {
-            var repoMock = new Mock<IRepository<CreateArchiveSettings>>();
-            var uowMock = new Mock<IUnitOfWork>();
-            uowMock
-                .Setup(m => m.GetRepository<CreateArchiveSettings>())
-                .Returns(repoMock.Object);
-            _autoMocker
-                .Setup<IUnitOfWorkFactory, IUnitOfWork>(m => m.Create())
-                .Returns(uowMock.Object);
-
-            var service = _autoMocker.CreateInstance<CreateArchiveStateService>();
-
-            var state = service.GetState();
-
-            Assert.Equal(ArchiveType.Zip, state.ArchiveType);
-        }
-
-        [Theory]
-        [InlineData(ArchiveType.Gz)]
-        [InlineData(ArchiveType.TarBz2)]
-        [InlineData(ArchiveType.Zip)]
-        public void TestSaveState(ArchiveType archiveType)
-        {
-            var repoMock = new Mock<IRepository<CreateArchiveSettings>>();
-            repoMock
-                .Setup(m => m.Upsert(It.IsAny<string>(),
-                    It.Is<CreateArchiveSettings>(s => s.ArchiveType == (int) archiveType)))
-                .Verifiable();
-            var uowMock = new Mock<IUnitOfWork>();
-            uowMock
-                .Setup(m => m.GetRepository<CreateArchiveSettings>())
-                .Returns(repoMock.Object);
-            _autoMocker
-                .Setup<IUnitOfWorkFactory, IUnitOfWork>(m => m.Create())
-                .Returns(uowMock.Object);
-
-            var service = _autoMocker.CreateInstance<CreateArchiveStateService>();
-
-            var state = new CreateArchiveStateModel
+    [Theory]
+    [InlineData(ArchiveType.Gz)]
+    [InlineData(ArchiveType.TarBz2)]
+    [InlineData(ArchiveType.Zip)]
+    public void TestGetState(ArchiveType archiveType)
+    {
+        var repoMock = new Mock<IRepository<CreateArchiveSettings>>();
+        repoMock
+            .Setup(m => m.GetById(It.IsAny<string>()))
+            .Returns(new CreateArchiveSettings
             {
-                ArchiveType = archiveType
-            };
-            service.SaveState(state);
+                ArchiveType = (int) archiveType
+            });
+        var uowMock = new Mock<IUnitOfWork>();
+        uowMock
+            .Setup(m => m.GetRepository<CreateArchiveSettings>())
+            .Returns(repoMock.Object);
+        _autoMocker
+            .Setup<IUnitOfWorkFactory, IUnitOfWork>(m => m.Create())
+            .Returns(uowMock.Object);
 
-            repoMock
-                .Verify(m => m.Upsert(It.IsAny<string>(),
-                        It.Is<CreateArchiveSettings>(s => s.ArchiveType == (int) archiveType)),
-                    Times.Once);
-        }
+        var service = _autoMocker.CreateInstance<CreateArchiveStateService>();
 
-        [Fact]
-        public void TestSaveStateFailed()
+        var state = service.GetState();
+
+        Assert.Equal(archiveType, state.ArchiveType);
+    }
+
+    [Fact]
+    public void TestGetStateEmpty()
+    {
+        var repoMock = new Mock<IRepository<CreateArchiveSettings>>();
+        var uowMock = new Mock<IUnitOfWork>();
+        uowMock
+            .Setup(m => m.GetRepository<CreateArchiveSettings>())
+            .Returns(repoMock.Object);
+        _autoMocker
+            .Setup<IUnitOfWorkFactory, IUnitOfWork>(m => m.Create())
+            .Returns(uowMock.Object);
+
+        var service = _autoMocker.CreateInstance<CreateArchiveStateService>();
+
+        var state = service.GetState();
+
+        Assert.Equal(ArchiveType.Zip, state.ArchiveType);
+    }
+
+    [Theory]
+    [InlineData(ArchiveType.Gz)]
+    [InlineData(ArchiveType.TarBz2)]
+    [InlineData(ArchiveType.Zip)]
+    public void TestSaveState(ArchiveType archiveType)
+    {
+        var repoMock = new Mock<IRepository<CreateArchiveSettings>>();
+        repoMock
+            .Setup(m => m.Upsert(It.IsAny<string>(),
+                It.Is<CreateArchiveSettings>(s => s.ArchiveType == (int) archiveType)))
+            .Verifiable();
+        var uowMock = new Mock<IUnitOfWork>();
+        uowMock
+            .Setup(m => m.GetRepository<CreateArchiveSettings>())
+            .Returns(repoMock.Object);
+        _autoMocker
+            .Setup<IUnitOfWorkFactory, IUnitOfWork>(m => m.Create())
+            .Returns(uowMock.Object);
+
+        var service = _autoMocker.CreateInstance<CreateArchiveStateService>();
+
+        var state = new CreateArchiveStateModel
         {
-            var service = _autoMocker.CreateInstance<CreateArchiveStateService>();
+            ArchiveType = archiveType
+        };
+        service.SaveState(state);
 
-            void SaveState() => service.SaveState(null);
+        repoMock
+            .Verify(m => m.Upsert(It.IsAny<string>(),
+                    It.Is<CreateArchiveSettings>(s => s.ArchiveType == (int) archiveType)),
+                Times.Once);
+    }
 
-            Assert.Throws<ArgumentNullException>(SaveState);
-        }
+    [Fact]
+    public void TestSaveStateFailed()
+    {
+        var service = _autoMocker.CreateInstance<CreateArchiveStateService>();
+
+        void SaveState() => service.SaveState(null);
+
+        Assert.Throws<ArgumentNullException>(SaveState);
     }
 }

@@ -8,7 +8,7 @@ Download precompiled binary from [releases page](https://github.com/IngvarX/Came
 
 ## Package (Linux)
 
-**RPM and DEB:** precompiled rpm and deb packages are availbale on [releases page](https://github.com/IngvarX/Camelot/releases)
+**RPM and DEB:** precompiled rpm and deb packages are available on [releases page](https://github.com/IngvarX/Camelot/releases)
 
 **AUR:**
 
@@ -26,7 +26,7 @@ Stable release:
 
 ## Build from sources (all platforms)
 
-1) Install .Net Core SDK
+1) Install .NET 6 SDK
 
 2) Clone repository and build solution:
 

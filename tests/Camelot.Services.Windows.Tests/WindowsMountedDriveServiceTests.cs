@@ -7,48 +7,47 @@ using Moq;
 using Moq.AutoMock;
 using Xunit;
 
-namespace Camelot.Services.Windows.Tests
+namespace Camelot.Services.Windows.Tests;
+
+public class WindowsMountedDriveServiceTests
 {
-    public class WindowsMountedDriveServiceTests
+    private readonly AutoMocker _autoMocker;
+
+    public WindowsMountedDriveServiceTests()
     {
-        private readonly AutoMocker _autoMocker;
+        _autoMocker = new AutoMocker();
+    }
 
-        public WindowsMountedDriveServiceTests()
-        {
-            _autoMocker = new AutoMocker();
-        }
+    [Theory]
+    [InlineData("D", "mountvol", "D /p")]
+    [InlineData("E", "mountvol", "E /p")]
+    [InlineData("Z", "mountvol", "Z /p")]
+    public void TestUnmount(string rootDirectory, string command, string arguments)
+    {
+        _autoMocker
+            .Setup<IEnvironmentDriveService, IReadOnlyList<DriveInfo>>(m => m.GetMountedDrives())
+            .Returns(Array.Empty<DriveInfo>());
+        _autoMocker
+            .Setup<IProcessService>(m => m.Run(command, arguments))
+            .Verifiable();
 
-        [Theory]
-        [InlineData("D", "mountvol", "D /p")]
-        [InlineData("E", "mountvol", "E /p")]
-        [InlineData("Z", "mountvol", "Z /p")]
-        public void TestUnmount(string rootDirectory, string command, string arguments)
-        {
-            _autoMocker
-                .Setup<IEnvironmentDriveService, IReadOnlyList<DriveInfo>>(m => m.GetMountedDrives())
-                .Returns(Array.Empty<DriveInfo>());
-            _autoMocker
-                .Setup<IProcessService>(m => m.Run(command, arguments))
-                .Verifiable();
+        var service = _autoMocker.CreateInstance<WindowsMountedDriveService>();
+        service.Unmount(rootDirectory);
 
-            var service = _autoMocker.CreateInstance<WindowsMountedDriveService>();
-            service.Unmount(rootDirectory);
+        _autoMocker
+            .Verify<IProcessService>(m => m.Run(command, arguments), Times.Once);
+    }
 
-            _autoMocker
-                .Verify<IProcessService>(m => m.Run(command, arguments), Times.Once);
-        }
+    [Fact]
+    public async Task TestEject()
+    {
+        _autoMocker
+            .Setup<IEnvironmentDriveService, IReadOnlyList<DriveInfo>>(m => m.GetMountedDrives())
+            .Returns(Array.Empty<DriveInfo>());
 
-        [Fact]
-        public async Task TestEject()
-        {
-            _autoMocker
-                .Setup<IEnvironmentDriveService, IReadOnlyList<DriveInfo>>(m => m.GetMountedDrives())
-                .Returns(Array.Empty<DriveInfo>());
+        var service = _autoMocker.CreateInstance<WindowsMountedDriveService>();
+        Task EjectAsync() => service.EjectAsync("C");
 
-            var service = _autoMocker.CreateInstance<WindowsMountedDriveService>();
-            Task EjectAsync() => service.EjectAsync("C");
-
-            await Assert.ThrowsAsync<NotSupportedException>(EjectAsync);
-        }
+        await Assert.ThrowsAsync<NotSupportedException>(EjectAsync);
     }
 }

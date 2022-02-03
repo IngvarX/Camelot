@@ -1,7 +1,6 @@
-namespace Camelot.Services.Linux.Configuration
+namespace Camelot.Services.Linux.Configuration;
+
+public class UnmountedDrivesConfiguration
 {
-    public class UnmountedDrivesConfiguration
-    {
-        public bool IsEnabled { get; set; }
-    }
+    public bool IsEnabled { get; set; }
 }
