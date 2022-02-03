@@ -24,12 +24,12 @@
                 </Image.Source>
             </Image>
 
-            <TextBlock Grid.Column="1" Classes="driveNameTextBlock"
+            <TextBlock Grid.Column="1" Classes="mainWindowTextBlock"
                        Text="{Binding DriveName}" />
         </Grid>
 
         <ToolTip.Tip>
-            <TextBlock Classes="driveNameTextBlock" Text="{x:Static p:Resources.ClickToMount}" />
+            <TextBlock Classes="mainWindowTextBlock" Text="{x:Static p:Resources.ClickToMount}" />
         </ToolTip.Tip>
     </Button>
 </UserControl>

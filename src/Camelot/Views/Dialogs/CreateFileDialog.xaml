@@ -20,7 +20,8 @@
                  Text="{Binding FileName}" />
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Classes="dialogButton transparentDialogButton" Content="{x:Static p:Resources.Cancel}" Command="{Binding CancelCommand}" />
+            <Button Classes="dialogButton transparentDialogButton" Content="{x:Static p:Resources.Cancel}"
+                    Command="{Binding CloseCommand}" />
             <Button Classes="dialogButton"
                     Content="{x:Static p:Resources.Create}"
                     Command="{Binding CreateCommand}"

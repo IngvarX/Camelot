@@ -1,7 +1,6 @@
-namespace Camelot.Services.Abstractions.Drives
+namespace Camelot.Services.Abstractions.Drives;
+
+public interface IDrivesUpdateService
 {
-    public interface IDrivesUpdateService
-    {
-        void Start();
-    }
+    void Start();
 }

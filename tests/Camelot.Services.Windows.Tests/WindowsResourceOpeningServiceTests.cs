@@ -3,34 +3,33 @@ using Moq;
 using Moq.AutoMock;
 using Xunit;
 
-namespace Camelot.Services.Windows.Tests
+namespace Camelot.Services.Windows.Tests;
+
+public class WindowsResourceOpeningServiceTests
 {
-    public class WindowsResourceOpeningServiceTests
+    private const string Command = "explorer";
+
+    private readonly AutoMocker _autoMocker;
+
+    public WindowsResourceOpeningServiceTests()
     {
-        private const string Command = "explorer";
+        _autoMocker = new AutoMocker();
+    }
 
-        private readonly AutoMocker _autoMocker;
+    [Theory]
+    [InlineData("File.txt", "File.txt")]
+    [InlineData("Fi le.txt", "\"Fi le.txt\"")]
+    public void TestFileServiceOpeningWindows(string fileName, string arguments)
+    {
+        _autoMocker
+            .Setup<IProcessService>(m => m.Run(Command, arguments))
+            .Verifiable();
 
-        public WindowsResourceOpeningServiceTests()
-        {
-            _autoMocker = new AutoMocker();
-        }
+        var fileOpeningService = _autoMocker.CreateInstance<WindowsResourceOpeningService>();
 
-        [Theory]
-        [InlineData("File.txt", "File.txt")]
-        [InlineData("Fi le.txt", "\"Fi le.txt\"")]
-        public void TestFileServiceOpeningWindows(string fileName, string arguments)
-        {
-            _autoMocker
-                .Setup<IProcessService>(m => m.Run(Command, arguments))
-                .Verifiable();
+        fileOpeningService.Open(fileName);
 
-            var fileOpeningService = _autoMocker.CreateInstance<WindowsResourceOpeningService>();
-
-            fileOpeningService.Open(fileName);
-
-            _autoMocker
-                .Verify<IProcessService>(m => m.Run(Command, arguments), Times.Once);
-        }
+        _autoMocker
+            .Verify<IProcessService>(m => m.Run(Command, arguments), Times.Once);
     }
 }

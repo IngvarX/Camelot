@@ -25,7 +25,7 @@
     <Grid Classes="defaultBackgroundColorGrid" RowDefinitions="Auto,Auto,*,Auto,Auto">
 
         <Grid Margin="7,0,0,0"
-              ColumnDefinitions="Auto,Auto,Auto,*">
+              ColumnDefinitions="Auto,Auto,Auto,Auto,*">
             <Button Classes="iconButton"
                     Command="{Binding SelectedTab.GoToPreviousDirectoryCommand}">
                 <Image Classes="iconImage">
@@ -38,6 +38,10 @@
                         </DrawingImage>
                     </Image.Source>
                 </Image>
+
+                <ToolTip.Tip>
+                    <TextBlock Classes="mainWindowTextBlock" Text="{x:Static p:Resources.GoBack}" />
+                </ToolTip.Tip>
             </Button>
 
             <Button Grid.Column="1" Classes="iconButton"
@@ -52,6 +56,10 @@
                         </DrawingImage>
                     </Image.Source>
                 </Image>
+
+                <ToolTip.Tip>
+                    <TextBlock Classes="mainWindowTextBlock" Text="{x:Static p:Resources.GoForward}" />
+                </ToolTip.Tip>
             </Button>
 
             <Button Grid.Column="2"
@@ -67,9 +75,32 @@
                         </DrawingImage>
                     </Image.Source>
                 </Image>
+
+                <ToolTip.Tip>
+                    <TextBlock Classes="mainWindowTextBlock" Text="{x:Static p:Resources.Reload}" />
+                </ToolTip.Tip>
             </Button>
 
-            <controls:DirectorySelectorView Name="DirectorySelectorView" Grid.Column="3"
+            <Button Grid.Column="3"
+                    Classes="iconButton"
+                    Command="{Binding GoToParentDirectoryCommand}">
+                <Image Classes="iconImage">
+                    <Image.Source>
+                        <DrawingImage>
+                            <DrawingImage.Drawing>
+                                <GeometryDrawing Brush="{DynamicResource MainWindowForegroundBrush}"
+                                                 Geometry="M177 159.7l136 136c9.4 9.4 9.4 24.6 0 33.9l-22.6 22.6c-9.4 9.4-24.6 9.4-33.9 0L160 255.9l-96.4 96.4c-9.4 9.4-24.6 9.4-33.9 0L7 329.7c-9.4-9.4-9.4-24.6 0-33.9l136-136c9.4-9.5 24.6-9.5 34-.1z"/>
+                            </DrawingImage.Drawing>
+                        </DrawingImage>
+                    </Image.Source>
+                </Image>
+
+                <ToolTip.Tip>
+                    <TextBlock Classes="mainWindowTextBlock" Text="{x:Static p:Resources.GoToParentDirectory}" />
+                </ToolTip.Tip>
+            </Button>
+
+            <controls:DirectorySelectorView Name="DirectorySelectorView" Grid.Column="4"
                                             DataContext="{Binding DirectorySelectorViewModel}" />
         </Grid>
 
@@ -86,7 +117,8 @@
 
             <DataGrid.Resources>
                 <Template x:Key="RowContextMenu">
-                    <ContextMenu Classes="smallContextMenu">
+                    <ContextMenu Classes="smallContextMenu"
+                                 ContextMenuOpening="DataGridOnContextMenuOpening">
                         <MenuItem Header="{x:Static p:Resources.Open}" Command="{Binding OpenCommand}" IsVisible="{Binding !ShouldShowOpenSubmenu}" />
                         <MenuItem Header="{x:Static p:Resources.OpenWith}" Command="{Binding OpenWithCommand}" IsVisible="{Binding !ShouldShowOpenSubmenu}" />
                         <MenuItem Header="{x:Static p:Resources.Open}" IsVisible="{Binding ShouldShowOpenSubmenu}">
@@ -109,13 +141,17 @@
                         <MenuItem Header="{x:Static p:Resources.Move}" Command="{Binding MoveCommand}" />
                         <MenuItem Header="{x:Static p:Resources.Delete}" Command="{Binding DeleteCommand}"/>
                         <MenuItem Header="{x:Static p:Resources.CopyToClipboard}" Command="{Binding CopyToClipboardCommand}"/>
+                        <MenuItem Name="PasteFromClipboard"
+                                  IsVisible="False"
+                                  Header="{x:Static p:Resources.PasteFromClipboard}"
+                                  Command="{Binding $parent[DataGrid].DataContext.ClipboardOperationsMediator.PasteFromClipboardCommand}" />
                         <MenuItem Header="{x:Static p:Resources.Create}">
                             <MenuItem Header="{x:Static p:Resources.Directory}"
                                       Command="{Binding $parent[views:MainWindow].DataContext.OperationsViewModel.CreateNewDirectoryCommand}" />
                             <MenuItem Header="{x:Static p:Resources.File}"
                                       Command="{Binding $parent[views:MainWindow].DataContext.OperationsViewModel.CreateNewFileCommand}" />
                         </MenuItem>
-                        <MenuItem Header="{x:Static p:Resources.ShowProperties}" Command="{Binding ShowPropertiesCommand}"/>
+                        <MenuItem Header="{x:Static p:Resources.ShowProperties}" Command="{Binding ShowPropertiesCommand}" />
                     </ContextMenu>
                 </Template>
             </DataGrid.Resources>
@@ -127,10 +163,10 @@
             </DataGrid.Styles>
 
             <DataGrid.KeyBindings>
-                <KeyBinding Gesture="Ctrl+C" Command="{Binding CopyToClipboardCommand}" />
-                <KeyBinding Gesture="Meta+C" Command="{Binding CopyToClipboardCommand}" />
-                <KeyBinding Gesture="Ctrl+V" Command="{Binding PasteFromClipboardCommand}" />
-                <KeyBinding Gesture="Meta+V" Command="{Binding PasteFromClipboardCommand}" />
+                <KeyBinding Gesture="Ctrl+C" Command="{Binding ClipboardOperationsViewModel.CopyToClipboardCommand}" />
+                <KeyBinding Gesture="Meta+C" Command="{Binding ClipboardOperationsViewModel.CopyToClipboardCommand}" />
+                <KeyBinding Gesture="Ctrl+V" Command="{Binding ClipboardOperationsViewModel.PasteFromClipboardCommand}" />
+                <KeyBinding Gesture="Meta+V" Command="{Binding ClipboardOperationsViewModel.PasteFromClipboardCommand}" />
                 <KeyBinding Gesture="Enter" Command="{Binding $self.SelectedItem.OpenCommand}" />
                 <KeyBinding Gesture="F4" Command="{Binding OperationsViewModel.OpenInDefaultEditorCommand}" />
                 <KeyBinding Gesture="F5" Command="{Binding OperationsViewModel.CopyCommand}" />
@@ -142,6 +178,22 @@
                 <KeyBinding Gesture="Left" Command="{Binding SelectedTab.GoToPreviousDirectoryCommand}" />
                 <KeyBinding Gesture="Right" Command="{Binding SelectedTab.GoToNextDirectoryCommand}" />
             </DataGrid.KeyBindings>
+
+            <DataGrid.ContextMenu>
+                <ContextMenu Classes="smallContextMenu" ContextMenuOpening="DataGridOnContextMenuOpening">
+                    <MenuItem Name="PasteFromClipboard"
+                              IsVisible="False"
+                              Header="{x:Static p:Resources.PasteFromClipboard}"
+                              Command="{Binding PasteFromClipboardCommand}" />
+                    <MenuItem Header="{x:Static p:Resources.Create}">
+                        <MenuItem Header="{x:Static p:Resources.Directory}"
+                                  Command="{Binding OperationsViewModel.CreateNewDirectoryCommand}" />
+                        <MenuItem Header="{x:Static p:Resources.File}"
+                                  Command="{Binding OperationsViewModel.CreateNewFileCommand}" />
+                    </MenuItem>
+                    <MenuItem Header="{x:Static p:Resources.ShowProperties}" Command="{Binding CurrentNode.ShowPropertiesCommand}" />
+                </ContextMenu>
+            </DataGrid.ContextMenu>
 
             <DataGrid.Columns>
                 <DataGridTemplateColumn Width="Auto">
@@ -163,16 +215,7 @@
                                     </DataTemplate>
 
                                     <DataTemplate DataType="{x:Type nodes:FileViewModel}">
-                                        <Image Classes="iconImage" Margin="10,3,3,3" VerticalAlignment="Center">
-                                            <Image.Source>
-                                                <DrawingImage>
-                                                    <DrawingImage.Drawing>
-                                                        <GeometryDrawing Brush="{DynamicResource MainWindowForegroundBrush}"
-                                                                         Geometry="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm160-14.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z"/>
-                                                    </DrawingImage.Drawing>
-                                                </DrawingImage>
-                                            </Image.Source>
-                                        </Image>
+                                        <controls:FileIconView />
                                     </DataTemplate>
                                 </ContentControl.DataTemplates>
                             </ContentControl>

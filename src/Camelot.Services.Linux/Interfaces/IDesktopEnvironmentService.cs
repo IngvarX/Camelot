@@ -1,9 +1,8 @@
 using Camelot.Services.Linux.Enums;
 
-namespace Camelot.Services.Linux.Interfaces
+namespace Camelot.Services.Linux.Interfaces;
+
+public interface IDesktopEnvironmentService
 {
-    public interface IDesktopEnvironmentService
-    {
-        DesktopEnvironment GetDesktopEnvironment();
-    }
+    DesktopEnvironment GetDesktopEnvironment();
 }

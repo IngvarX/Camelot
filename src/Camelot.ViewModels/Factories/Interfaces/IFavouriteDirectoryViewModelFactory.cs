@@ -1,9 +1,8 @@
 using Camelot.ViewModels.Interfaces.MainWindow.Directories;
 
-namespace Camelot.ViewModels.Factories.Interfaces
+namespace Camelot.ViewModels.Factories.Interfaces;
+
+public interface IFavouriteDirectoryViewModelFactory
 {
-    public interface IFavouriteDirectoryViewModelFactory
-    {
-        IFavouriteDirectoryViewModel Create(string directory);
-    }
+    IFavouriteDirectoryViewModel Create(string directory);
 }

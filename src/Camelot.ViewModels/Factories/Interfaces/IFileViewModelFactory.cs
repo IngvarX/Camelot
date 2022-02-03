@@ -1,14 +1,13 @@
 using Camelot.Services.Abstractions.Models;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Nodes;
 
-namespace Camelot.ViewModels.Factories.Interfaces
+namespace Camelot.ViewModels.Factories.Interfaces;
+
+public interface IFileSystemNodeViewModelFactory
 {
-    public interface IFileSystemNodeViewModelFactory
-    {
-        IFileSystemNodeViewModel Create(string path);
+    IFileSystemNodeViewModel Create(string path);
 
-        IFileSystemNodeViewModel Create(FileModel fileModel);
+    IFileSystemNodeViewModel Create(FileModel fileModel);
 
-        IFileSystemNodeViewModel Create(DirectoryModel directoryModel, bool isParentDirectory = false);
-    }
+    IFileSystemNodeViewModel Create(DirectoryModel directoryModel, bool isParentDirectory = false);
 }

@@ -1,8 +1,7 @@
-namespace Camelot.Services.Abstractions.Models.Enums
+namespace Camelot.Services.Abstractions.Models.Enums;
+
+public enum SuggestionType : byte
 {
-    public enum SuggestionType : byte
-    {
-        Directory,
-        FavouriteDirectory
-    }
+    Directory,
+    FavouriteDirectory
 }

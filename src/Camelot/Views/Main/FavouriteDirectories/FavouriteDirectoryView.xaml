@@ -12,7 +12,7 @@
     </Design.DataContext>
 
     <Button Classes="iconButton" Command="{Binding OpenCommand}">
-        <Grid ColumnDefinitions="Auto,Auto">
+        <Grid ColumnDefinitions="Auto,Auto" Name="FavDirGrid" DragDrop.AllowDrop="True">
             <Image Width="20" Height="20" Margin="0,0,0,6">
                 <Image.Source>
                     <DrawingImage>
@@ -24,9 +24,13 @@
                 </Image.Source>
             </Image>
 
-            <TextBlock Grid.Column="1" Classes="driveNameTextBlock"
+            <TextBlock Grid.Column="1" Classes="mainWindowTextBlock"
                        Text="{Binding DirectoryName}" />
         </Grid>
+
+        <ToolTip.Tip>
+            <TextBlock Classes="mainWindowTextBlock" Text="{Binding FullPath}" />
+        </ToolTip.Tip>
 
         <Button.ContextMenu>
             <ContextMenu>

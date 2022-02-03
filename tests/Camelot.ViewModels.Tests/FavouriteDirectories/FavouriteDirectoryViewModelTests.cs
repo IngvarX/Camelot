@@ -7,80 +7,97 @@ using Moq;
 using Moq.AutoMock;
 using Xunit;
 
-namespace Camelot.ViewModels.Tests.FavouriteDirectories
+namespace Camelot.ViewModels.Tests.FavouriteDirectories;
+
+public class FavouriteDirectoryViewModelTests
 {
-    public class FavouriteDirectoryViewModelTests
+    private const string DirPath = "/home/test";
+    private const string DirName = "Test";
+
+    private readonly AutoMocker _autoMocker;
+
+    public FavouriteDirectoryViewModelTests()
     {
-        private const string DirPath = "/home/test";
-        private const string DirName = "Test";
+        _autoMocker = new AutoMocker();
+    }
 
-        private readonly AutoMocker _autoMocker;
-
-        public FavouriteDirectoryViewModelTests()
+    [Fact]
+    public void TestProperties()
+    {
+        var driveModel = new DirectoryModel
         {
-            _autoMocker = new AutoMocker();
-        }
+            Name = DirName,
+            FullPath = DirPath
+        };
+        _autoMocker.Use(driveModel);
 
-        [Fact]
-        public void TestProperties()
+        var viewModel = _autoMocker.CreateInstance<FavouriteDirectoryViewModel>();
+
+        Assert.Equal(driveModel.Name, viewModel.DirectoryName);
+        Assert.Equal(driveModel.FullPath, viewModel.FullPath);
+    }
+
+    [Fact]
+    public void TestOpenCommand()
+    {
+        var directoryModel = new DirectoryModel
         {
-            var driveModel = new DirectoryModel
-            {
-                Name = DirName
-            };
-            _autoMocker.Use(driveModel);
+            FullPath = DirPath
+        };
+        _autoMocker.Use(directoryModel);
 
-            var viewModel = _autoMocker.CreateInstance<FavouriteDirectoryViewModel>();
+        var filePanelViewModelMock = new Mock<IFilesPanelViewModel>();
+        filePanelViewModelMock
+            .SetupSet(m => m.CurrentDirectory = directoryModel.FullPath)
+            .Verifiable();
+        _autoMocker
+            .Setup<IFilesOperationsMediator, IFilesPanelViewModel>(m => m.ActiveFilesPanelViewModel)
+            .Returns(filePanelViewModelMock.Object);
 
-            Assert.Equal(driveModel.Name, viewModel.DirectoryName);
-        }
+        var viewModel = _autoMocker.CreateInstance<FavouriteDirectoryViewModel>();
 
-        [Fact]
-        public void TestOpenCommand()
+        Assert.True(viewModel.OpenCommand.CanExecute(null));
+        viewModel.OpenCommand.Execute(null);
+
+        filePanelViewModelMock
+            .VerifySet(m => m.CurrentDirectory = directoryModel.FullPath, Times.Once);
+    }
+
+    [Fact]
+    public void TestRemoveCommand()
+    {
+        var directoryModel = new DirectoryModel
         {
-            var directoryModel = new DirectoryModel
-            {
-                FullPath = DirPath
-            };
-            _autoMocker.Use(directoryModel);
+            FullPath = DirPath
+        };
+        _autoMocker.Use(directoryModel);
 
-            var filePanelViewModelMock = new Mock<IFilesPanelViewModel>();
-            filePanelViewModelMock
-                .SetupSet(m => m.CurrentDirectory = directoryModel.FullPath)
-                .Verifiable();
-            _autoMocker
-                .Setup<IFilesOperationsMediator, IFilesPanelViewModel>(m => m.ActiveFilesPanelViewModel)
-                .Returns(filePanelViewModelMock.Object);
+        _autoMocker
+            .Setup<IFavouriteDirectoriesService>(m => m.RemoveDirectory(DirPath))
+            .Verifiable();
 
-            var viewModel = _autoMocker.CreateInstance<FavouriteDirectoryViewModel>();
+        var viewModel = _autoMocker.CreateInstance<FavouriteDirectoryViewModel>();
 
-            Assert.True(viewModel.OpenCommand.CanExecute(null));
-            viewModel.OpenCommand.Execute(null);
+        Assert.True(viewModel.RemoveCommand.CanExecute(null));
+        viewModel.RemoveCommand.Execute(null);
 
-            filePanelViewModelMock
-                .VerifySet(m => m.CurrentDirectory = directoryModel.FullPath, Times.Once);
-        }
+        _autoMocker
+            .Verify<IFavouriteDirectoriesService>(m => m.RemoveDirectory(DirPath));
+    }
 
-        [Fact]
-        public void TestRemoveCommand()
-        {
-            var directoryModel = new DirectoryModel
-            {
-                FullPath = DirPath
-            };
-            _autoMocker.Use(directoryModel);
+    [Fact]
+    public void TestRequestMoveCommand()
+    {
+        var viewModel = _autoMocker.CreateInstance<FavouriteDirectoryViewModel>();
+        var targetViewModel = _autoMocker.CreateInstance<FavouriteDirectoryViewModel>();
 
-            _autoMocker
-                .Setup<IFavouriteDirectoriesService>(m => m.RemoveDirectory(DirPath))
-                .Verifiable();
+        var isCallbackCalled = false;
+        viewModel.MoveRequested += (_, e) =>
+            isCallbackCalled = e.Target == targetViewModel;
 
-            var viewModel = _autoMocker.CreateInstance<FavouriteDirectoryViewModel>();
+        Assert.True(viewModel.RequestMoveCommand.CanExecute(null));
+        viewModel.RequestMoveCommand.Execute(targetViewModel);
 
-            Assert.True(viewModel.RemoveCommand.CanExecute(null));
-            viewModel.RemoveCommand.Execute(null);
-
-            _autoMocker
-                .Verify<IFavouriteDirectoriesService>(m => m.RemoveDirectory(DirPath));
-        }
+        Assert.True(isCallbackCalled);
     }
 }

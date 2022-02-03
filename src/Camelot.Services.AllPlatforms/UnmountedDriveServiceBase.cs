@@ -7,57 +7,56 @@ using Camelot.Services.Abstractions.Drives;
 using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Models.EventArgs;
 
-namespace Camelot.Services.AllPlatforms
+namespace Camelot.Services.AllPlatforms;
+
+public abstract class UnmountedDriveServiceBase : IUnmountedDriveService
 {
-    public abstract class UnmountedDriveServiceBase : IUnmountedDriveService
+    private readonly List<UnmountedDriveModel> _unmountedDrives;
+
+    public IReadOnlyList<UnmountedDriveModel> UnmountedDrives => _unmountedDrives;
+
+    public event EventHandler<UnmountedDriveEventArgs> DriveAdded;
+
+    public event EventHandler<UnmountedDriveEventArgs> DriveRemoved;
+
+    protected UnmountedDriveServiceBase()
     {
-        private readonly List<UnmountedDriveModel> _unmountedDrives;
-
-        public IReadOnlyList<UnmountedDriveModel> UnmountedDrives => _unmountedDrives;
-
-        public event EventHandler<UnmountedDriveEventArgs> DriveAdded;
-
-        public event EventHandler<UnmountedDriveEventArgs> DriveRemoved;
-
-        protected UnmountedDriveServiceBase()
-        {
-            _unmountedDrives = new List<UnmountedDriveModel>();
-        }
-
-        public async Task ReloadUnmountedDrivesAsync()
-        {
-            var unmountedDrives = await GetUnmountedDrivesAsync();
-
-            var oldRoots = _unmountedDrives.Select(d => d.FullName).ToHashSet();
-            var newRoots = unmountedDrives.Select(d => d.FullName).ToHashSet();
-
-            var addedDrives = unmountedDrives
-                .Where(udm => !oldRoots.Contains(udm.FullName))
-                .ToArray();
-            var removedDrives = UnmountedDrives
-                .Where(udm => !newRoots.Contains(udm.FullName))
-                .ToArray();
-
-            foreach (var unmountedDriveModel in addedDrives)
-            {
-                _unmountedDrives.Add(unmountedDriveModel);
-
-                DriveAdded.Raise(this, CreateFrom(unmountedDriveModel));
-            }
-
-            foreach (var unmountedDriveModel in removedDrives)
-            {
-                _unmountedDrives.Remove(unmountedDriveModel);
-
-                DriveRemoved.Raise(this, CreateFrom(unmountedDriveModel));
-            }
-        }
-
-        public abstract void Mount(string drive);
-
-        protected abstract Task<IReadOnlyList<UnmountedDriveModel>> GetUnmountedDrivesAsync();
-
-        private static UnmountedDriveEventArgs CreateFrom(UnmountedDriveModel unmountedDriveModel) =>
-            new UnmountedDriveEventArgs(unmountedDriveModel);
+        _unmountedDrives = new List<UnmountedDriveModel>();
     }
+
+    public async Task ReloadUnmountedDrivesAsync()
+    {
+        var unmountedDrives = await GetUnmountedDrivesAsync();
+
+        var oldRoots = _unmountedDrives.Select(d => d.FullName).ToHashSet();
+        var newRoots = unmountedDrives.Select(d => d.FullName).ToHashSet();
+
+        var addedDrives = unmountedDrives
+            .Where(udm => !oldRoots.Contains(udm.FullName))
+            .ToArray();
+        var removedDrives = UnmountedDrives
+            .Where(udm => !newRoots.Contains(udm.FullName))
+            .ToArray();
+
+        foreach (var unmountedDriveModel in addedDrives)
+        {
+            _unmountedDrives.Add(unmountedDriveModel);
+
+            DriveAdded.Raise(this, CreateFrom(unmountedDriveModel));
+        }
+
+        foreach (var unmountedDriveModel in removedDrives)
+        {
+            _unmountedDrives.Remove(unmountedDriveModel);
+
+            DriveRemoved.Raise(this, CreateFrom(unmountedDriveModel));
+        }
+    }
+
+    public abstract void Mount(string drive);
+
+    protected abstract Task<IReadOnlyList<UnmountedDriveModel>> GetUnmountedDrivesAsync();
+
+    private static UnmountedDriveEventArgs CreateFrom(UnmountedDriveModel unmountedDriveModel) =>
+        new(unmountedDriveModel);
 }

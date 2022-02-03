@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -58,4 +58,112 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="FailedToDeleteFileFromTo" xml:space="preserve">
+    <value>{0} poistaminen kohteesta {1} epäonnistui</value>
+  </data>
+  <data name="FailedCopyFromFilesAndDirectoriesTo" xml:space="preserve">
+    <value>{0} tiedoston ja {1} hakemiston kopiointi kohteeseen {2} epäonnistui</value>
+  </data>
+  <data name="FailedCopyFileFromTo" xml:space="preserve">
+    <value>Virhe kopioidessa {0} kohteeseen {1}</value>
+  </data>
+  <data name="Extension" xml:space="preserve">
+    <value>Laajennus</value>
+  </data>
+  <data name="ExitHeader" xml:space="preserve">
+    <value>Poistu</value>
+  </data>
+  <data name="EnterDirectoryNameWithColon" xml:space="preserve">
+    <value>Syötä kansion nimi:</value>
+  </data>
+  <data name="DirectoryTemplate" xml:space="preserve">
+    <value>&lt;KANSIO&gt;</value>
+  </data>
+  <data name="DirectoryInformationTitle" xml:space="preserve">
+    <value>Kansion lisätiedot</value>
+  </data>
+  <data name="Directory" xml:space="preserve">
+    <value>Kansio</value>
+  </data>
+  <data name="DeletedFilesAndDirectories" xml:space="preserve">
+    <value>{0} tiedostoa ja {1} kansiota poistettu kohteesta {2}</value>
+  </data>
+  <data name="DeletedFileFromTo" xml:space="preserve">
+    <value>{0} poistettu kohteesta {1}</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Poista</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Päivämäärä</value>
+  </data>
+  <data name="CreationDateWithColon" xml:space="preserve">
+    <value>Luontipäivä:</value>
+  </data>
+  <data name="CreateDirectoryTitle" xml:space="preserve">
+    <value>Uusi kansio</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Uusi</value>
+  </data>
+  <data name="CopyToClipboard" xml:space="preserve">
+    <value>Kopioi leikepöydälle</value>
+  </data>
+  <data name="CopyingFilesFromAndDirectoriesTo" xml:space="preserve">
+    <value>{0} tiedostoa ja {1} kansiota kopioidaan kohteeseen {2}</value>
+  </data>
+  <data name="CopyingFileFromTo" xml:space="preserve">
+    <value>Kopioidaan {0} kohteeseen {1}</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Kopioi</value>
+  </data>
+  <data name="CopiedFilesFromAndDirectoriesTo" xml:space="preserve">
+    <value>{0} tiedostoa ja {1} kansiota kopioitu kohteeseen {2}</value>
+  </data>
+  <data name="CopiedFileFromTo" xml:space="preserve">
+    <value>{0} kopioitu kohteeseen {1}</value>
+  </data>
+  <data name="ConfigurationHeader" xml:space="preserve">
+    <value>Määrittelyt</value>
+  </data>
+  <data name="CommandWithColon" xml:space="preserve">
+    <value>Komento:</value>
+  </data>
+  <data name="CloseTabsToTheRight" xml:space="preserve">
+    <value>Sulje välilehdet oikealta</value>
+  </data>
+  <data name="CloseTabsToTheLeft" xml:space="preserve">
+    <value>Sulje välilehdet vasemmalta</value>
+  </data>
+  <data name="CloseTab" xml:space="preserve">
+    <value>Sulje välilehti</value>
+  </data>
+  <data name="CloseAllButThis" xml:space="preserve">
+    <value>Sulje kaikki paitsi tämä</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Sulje</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Peruuta</value>
+  </data>
+  <data name="ArgumentsWithColon" xml:space="preserve">
+    <value>Argumentit:</value>
+  </data>
+  <data name="ApplyActionToTheAllFilesAndFolders" xml:space="preserve">
+    <value>Käytä kaikissa tiedostoissa ja kansioissa</value>
+  </data>
+  <data name="Apply" xml:space="preserve">
+    <value>Käytä</value>
+  </data>
+  <data name="AboutPage" xml:space="preserve">
+    <value>Camelot on C#-kielellä kirjoitettu kaksipaneelinen tiedostonhallintaohjelma</value>
+  </data>
+  <data name="AboutHeader" xml:space="preserve">
+    <value>Tietoja</value>
+  </data>
+  <data name="AboutCamelotTitle" xml:space="preserve">
+    <value>Tietoja Camelotista</value>
+  </data>
 </root>

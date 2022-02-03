@@ -1,7 +1,6 @@
-namespace Camelot.DataAccess.UnitOfWork
+namespace Camelot.DataAccess.UnitOfWork;
+
+public interface IUnitOfWorkFactory
 {
-    public interface IUnitOfWorkFactory
-    {
-        IUnitOfWork Create();
-    }
+    IUnitOfWork Create();
 }

@@ -206,7 +206,7 @@
     <value>Тэрмінал</value>
   </data>
   <data name="Skip" xml:space="preserve">
-    <value>Прамінуць</value>
+    <value>Прапусціць</value>
   </data>
   <data name="SizeWithColon" xml:space="preserve">
     <value>Памер:</value>
@@ -444,5 +444,38 @@
   </data>
   <data name="AboutCamelotTitle" xml:space="preserve">
     <value>Пра Camelot</value>
+  </data>
+  <data name="PasteFromClipboard" xml:space="preserve">
+    <value>Уставіць з буфера абмену</value>
+  </data>
+  <data name="InnerDirectoriesWithColon" xml:space="preserve">
+    <value>Укладзеныя каталогі:</value>
+  </data>
+  <data name="InnerFilesWithColon" xml:space="preserve">
+    <value>Укладзеныя файлы:</value>
+  </data>
+  <data name="MarkAsFavourite" xml:space="preserve">
+    <value>Дадаць ва ўлюбёнае</value>
+  </data>
+  <data name="UnmarkAsFavourite" xml:space="preserve">
+    <value>Прыбраць з улюбёнага</value>
+  </data>
+  <data name="GoForward" xml:space="preserve">
+    <value>Наперад</value>
+  </data>
+  <data name="GoBack" xml:space="preserve">
+    <value>Назад</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Перазагрузіць</value>
+  </data>
+  <data name="MountPointWithColon" xml:space="preserve">
+    <value>Пункт мантавання:</value>
+  </data>
+  <data name="AccessToDirectoryIsDenied" xml:space="preserve">
+    <value>Доступ да каталога {0} забаронены</value>
+  </data>
+  <data name="AccessDeniedTitle" xml:space="preserve">
+    <value>Доступ забаронены</value>
   </data>
 </root>

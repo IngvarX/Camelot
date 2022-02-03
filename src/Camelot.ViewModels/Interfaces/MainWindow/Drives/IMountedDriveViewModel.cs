@@ -1,11 +1,10 @@
-namespace Camelot.ViewModels.Interfaces.MainWindow.Drives
+namespace Camelot.ViewModels.Interfaces.MainWindow.Drives;
+
+public interface IMountedDriveViewModel
 {
-    public interface IMountedDriveViewModel
-    {
-        string Name { get; set; }
+    string Name { get; set; }
 
-        long FreeSpaceBytes { get; set; }
+    long FreeSpaceBytes { get; set; }
 
-        long TotalSpaceBytes { get; set; }
-    }
+    long TotalSpaceBytes { get; set; }
 }

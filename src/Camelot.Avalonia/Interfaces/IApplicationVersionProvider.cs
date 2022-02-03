@@ -1,7 +1,6 @@
-namespace Camelot.Avalonia.Interfaces
+namespace Camelot.Avalonia.Interfaces;
+
+public interface IApplicationVersionProvider
 {
-    public interface IApplicationVersionProvider
-    {
-        string Version { get; }
-    }
+    string Version { get; }
 }

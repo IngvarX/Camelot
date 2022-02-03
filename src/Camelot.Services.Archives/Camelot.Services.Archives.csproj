@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <TargetFramework>net6</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
@@ -9,7 +9,10 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="SharpCompress" Version="0.28.1" />
+      <PackageReference Include="SharpCompress" Version="0.30.1" />
+      <PackageReference Update="Packaging.Targets">
+        <Version>0.1.220</Version>
+      </PackageReference>
     </ItemGroup>
 
 </Project>

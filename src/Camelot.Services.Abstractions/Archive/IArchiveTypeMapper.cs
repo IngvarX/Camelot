@@ -1,9 +1,8 @@
 using Camelot.Services.Abstractions.Models.Enums;
 
-namespace Camelot.Services.Abstractions.Archive
+namespace Camelot.Services.Abstractions.Archive;
+
+public interface IArchiveTypeMapper
 {
-    public interface IArchiveTypeMapper
-    {
-        ArchiveType? GetArchiveTypeFrom(string filePath);
-    }
+    ArchiveType? GetArchiveTypeFrom(string filePath);
 }

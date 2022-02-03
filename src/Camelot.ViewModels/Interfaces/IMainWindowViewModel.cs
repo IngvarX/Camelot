@@ -1,7 +1,6 @@
-namespace Camelot.ViewModels.Interfaces
+namespace Camelot.ViewModels.Interfaces;
+
+public interface IMainWindowViewModel
 {
-    public interface IMainWindowViewModel
-    {
         
-    }
 }

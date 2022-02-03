@@ -1,10 +1,9 @@
-namespace Camelot.Services.Environment.Enums
+namespace Camelot.Services.Environment.Enums;
+
+public enum Platform : byte
 {
-    public enum Platform : byte
-    {
-        Linux,
-        MacOs,
-        Windows,
-        Unknown
-    }
+    Linux,
+    MacOs,
+    Windows,
+    Unknown
 }

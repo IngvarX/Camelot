@@ -1,17 +1,16 @@
-namespace Camelot.Services.Abstractions.Models.Enums
+namespace Camelot.Services.Abstractions.Models.Enums;
+
+public enum ArchiveType
 {
-    public enum ArchiveType
-    {
-        Zip,
-        Tar,
-        TarGz,
-        Bz2,
-        TarBz2,
-        TarXz,
-        Xz,
-        Lz,
-        TarLz,
-        Gz,
-        SevenZip
-    }
+    Zip,
+    Tar,
+    TarGz,
+    Bz2,
+    TarBz2,
+    TarXz,
+    Xz,
+    Lz,
+    TarLz,
+    Gz,
+    SevenZip
 }

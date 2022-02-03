@@ -1,9 +1,8 @@
 using Camelot.Services.Abstractions.Models.Enums;
 
-namespace Camelot.ViewModels.Interfaces.MainWindow.OperationsStates
+namespace Camelot.ViewModels.Interfaces.MainWindow.OperationsStates;
+
+public interface IOperationStateViewModel
 {
-    public interface IOperationStateViewModel
-    {
-        OperationState State { get; }
-    }
+    OperationState State { get; }
 }

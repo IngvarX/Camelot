@@ -5,29 +5,28 @@ using Avalonia.Input;
 using Avalonia.Input.Platform;
 using Camelot.Avalonia.Interfaces;
 
-namespace Camelot.Avalonia.Implementations
+namespace Camelot.Avalonia.Implementations;
+
+public class ClipboardService : IClipboardService
 {
-    public class ClipboardService : IClipboardService
+    private static IClipboard AvaloniaClipboard => Application.Current.Clipboard;
+
+    public Task<string> GetTextAsync() => AvaloniaClipboard.GetTextAsync();
+
+    public async Task<IReadOnlyList<string>> GetFilesAsync()
     {
-        private static IClipboard AvaloniaClipboard => Application.Current.Clipboard;
+        var data = await AvaloniaClipboard.GetDataAsync(DataFormats.FileNames);
 
-        public Task<string> GetTextAsync() => AvaloniaClipboard.GetTextAsync();
+        return (List<string>) data;
+    }
 
-        public async Task<IReadOnlyList<string>> GetFilesAsync()
-        {
-            var data = await AvaloniaClipboard.GetDataAsync(DataFormats.FileNames);
+    public Task SetTextAsync(string text) => AvaloniaClipboard.SetTextAsync(text);
 
-            return (List<string>) data;
-        }
+    public async Task SetFilesAsync(IReadOnlyList<string> files)
+    {
+        var dataObject = new DataObject();
+        dataObject.Set(DataFormats.FileNames, files);
 
-        public Task SetTextAsync(string text) => AvaloniaClipboard.SetTextAsync(text);
-
-        public async Task SetFilesAsync(IReadOnlyList<string> files)
-        {
-            var dataObject = new DataObject();
-            dataObject.Set(DataFormats.FileNames, files);
-
-            await AvaloniaClipboard.SetDataObjectAsync(dataObject);
-        }
+        await AvaloniaClipboard.SetDataObjectAsync(dataObject);
     }
 }

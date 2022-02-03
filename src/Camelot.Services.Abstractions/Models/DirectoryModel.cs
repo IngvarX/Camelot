@@ -1,7 +1,6 @@
-namespace Camelot.Services.Abstractions.Models
-{
-    public class DirectoryModel : NodeModelBase
-    {
+namespace Camelot.Services.Abstractions.Models;
 
-    }
+public class DirectoryModel : NodeModelBase
+{
+
 }

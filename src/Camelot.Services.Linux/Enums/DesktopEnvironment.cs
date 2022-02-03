@@ -1,14 +1,13 @@
-namespace Camelot.Services.Linux.Enums
+namespace Camelot.Services.Linux.Enums;
+
+public enum DesktopEnvironment : byte
 {
-    public enum DesktopEnvironment : byte
-    {
-        Kde,
-        Gnome,
-        Lxde,
-        Lxqt,
-        Mate,
-        Unity,
-        Cinnamon,
-        Unknown
-    }
+    Kde,
+    Gnome,
+    Lxde,
+    Lxqt,
+    Mate,
+    Unity,
+    Cinnamon,
+    Unknown
 }

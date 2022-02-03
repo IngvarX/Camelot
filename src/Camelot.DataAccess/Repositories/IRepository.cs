@@ -1,15 +1,14 @@
-namespace Camelot.DataAccess.Repositories
+namespace Camelot.DataAccess.Repositories;
+
+public interface IRepository<T>
 {
-    public interface IRepository<T>
-    {
-        T GetById(string id);
+    T GetById(string id);
 
-        void Add(string id, T entity);
+    void Add(string id, T entity);
 
-        void Update(string id, T entity);
+    void Update(string id, T entity);
 
-        void Upsert(string id, T entity);
+    void Upsert(string id, T entity);
 
-        void Remove(string id);
-    }
+    void Remove(string id);
 }

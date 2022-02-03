@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AboutCamelotTitle" xml:space="preserve">
+    <value>ക്യാമലോട്ടിനെ കുറിച്ച്</value>
+  </data>
+  <data name="AboutHeader" xml:space="preserve">
+    <value>ക്യാമലോട്ടിനെ കുറിച്ച്</value>
+  </data>
+  <data name="Apply" xml:space="preserve">
+    <value>പ്രയോഗിക്കുക</value>
+  </data>
+  <data name="ArgumentsWithColon" xml:space="preserve">
+    <value>വാദങ്ങൾ:</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>റദ്ദാക്കുക</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>അടയ്ക്കുക</value>
+  </data>
+  <data name="CloseAllButThis" xml:space="preserve">
+    <value>ഇതൊഴികെ എല്ലാം അടയ്ക്കുക</value>
+  </data>
+  <data name="CloseTab" xml:space="preserve">
+    <value>ടാബ് അടയ്ക്കുക</value>
+  </data>
+  <data name="CloseTabsToTheLeft" xml:space="preserve">
+    <value>ഇടതുവശത്തുള്ള ടാബുകൾ അടയ്ക്കുക</value>
+  </data>
+  <data name="CommandWithColon" xml:space="preserve">
+    <value>ആജ്ഞ:</value>
+  </data>
+  <data name="ConfigurationHeader" xml:space="preserve">
+    <value>_ക്രമീകരണം</value>
+  </data>
+  <data name="CopiedFileFromTo" xml:space="preserve">
+    <value>{0} ൽ നിന്ന് {1} ലേക്ക് പകർത്തി</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>പകർത്തുക</value>
+  </data>
+  <data name="CopyingFileFromTo" xml:space="preserve">
+    <value>{0} ൽ നിന്ന് {1} ലേക്ക് പകർത്തുന്നു</value>
+  </data>
+  <data name="CopyToClipboard" xml:space="preserve">
+    <value>ക്ലിപ്പ്ബോർഡിലേയ്ക്ക് പകർത്തുക</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>സൃഷ്ടിക്കുക</value>
+  </data>
+  <data name="CreateDirectoryTitle" xml:space="preserve">
+    <value>ഡയറക്ടറി സൃഷ്ടിക്കുക</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>തീയതി</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>ഇല്ലാതാക്കുക</value>
+  </data>
+  <data name="DeletedFileFromTo" xml:space="preserve">
+    <value>{1} ൽ നിന്ന് {0} ഇല്ലാതാക്കി</value>
+  </data>
+  <data name="Directory" xml:space="preserve">
+    <value>ഡയറക്ടറി</value>
+  </data>
+  <data name="DirectoryTemplate" xml:space="preserve">
+    <value>&lt;ഡയറ&gt;</value>
+  </data>
+  <data name="ExitHeader" xml:space="preserve">
+    <value>_പുറത്തുകടക്കുക</value>
+  </data>
+  <data name="Extension" xml:space="preserve">
+    <value>എക്സ്റ്റൻഷൻ</value>
+  </data>
+  <data name="ApplyActionToTheAllFilesAndFolders" xml:space="preserve">
+    <value>എല്ലാ ഫയലുകളിലും ഫോൾഡറുകളിലും ഈ പ്രവർത്തനം പ്രയോഗിക്കുക</value>
+  </data>
+  <data name="CreationDateWithColon" xml:space="preserve">
+    <value>സൃഷ്ടിച്ച തീയതി:</value>
+  </data>
+  <data name="AboutPage" xml:space="preserve">
+    <value>കാമലോട്ട് C#-ൽ എഴുതിയ ഒരു ഇരട്ട പാനൽ ഫയൽ മാനേജർ ആണ്</value>
+  </data>
+  <data name="CloseTabsToTheRight" xml:space="preserve">
+    <value>വലതുവശത്തുള്ള ടാബുകൾ അടയ്ക്കുക</value>
+  </data>
+  <data name="CopiedFilesFromAndDirectoriesTo" xml:space="preserve">
+    <value>{0} ഫയലുകളും {1} ഡയറക്ടറികളും {2} ലേക്ക് പകർത്തി</value>
+  </data>
+  <data name="DeletedFilesAndDirectories" xml:space="preserve">
+    <value>{2} എന്നതിൽ നിന്ന് {0} ഫയലുകളും {1} ഡയറക്ടറികളും ഇല്ലാതാക്കി</value>
+  </data>
+  <data name="CopyingFilesFromAndDirectoriesTo" xml:space="preserve">
+    <value>{0} ഫയലുകളും {1} ഡയറക്ടറികളും {2} ലേക്ക് പകർത്തുന്നു</value>
+  </data>
+  <data name="DirectoryInformationTitle" xml:space="preserve">
+    <value>ഡയറക്ടറി വിവരങ്ങൾ</value>
+  </data>
+  <data name="EnterDirectoryNameWithColon" xml:space="preserve">
+    <value>ഡയറക്ടറിയുടെ പേര് നൽകുക:</value>
+  </data>
+  <data name="FailedCopyFileFromTo" xml:space="preserve">
+    <value>{0} {1} ലേക്ക് പകർത്താനായില്ല</value>
+  </data>
+</root>

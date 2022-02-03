@@ -1,7 +1,6 @@
-namespace Camelot.ViewModels.Services.Interfaces
+namespace Camelot.ViewModels.Services.Interfaces;
+
+public interface IResourceProvider
 {
-    public interface IResourceProvider
-    {
-        string GetResourceByName(string name);
-    }
+    string GetResourceByName(string name);
 }

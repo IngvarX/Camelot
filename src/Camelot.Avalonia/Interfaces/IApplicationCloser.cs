@@ -1,7 +1,6 @@
-namespace Camelot.Avalonia.Interfaces
+namespace Camelot.Avalonia.Interfaces;
+
+public interface IApplicationCloser
 {
-    public interface IApplicationCloser
-    {
-        void CloseApp();
-    }
+    void CloseApp();
 }

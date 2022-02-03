@@ -2,18 +2,17 @@ using Avalonia.Input;
 using Camelot.Ui.Tests.Common;
 using Camelot.Views;
 
-namespace Camelot.Ui.Tests.Steps
+namespace Camelot.Ui.Tests.Steps;
+
+public static class GoToParentDirectoryStep
 {
-    public static class GoToParentDirectoryStep
+    public static void GoToParentDirectoryViaFilePanel(MainWindow window)
     {
-        public static void GoToParentDirectoryViaFilePanel(MainWindow window)
-        {
-            Keyboard.PressKey(window, Key.Tab);
-            Keyboard.PressKey(window, Key.Tab);
-            Keyboard.PressKey(window, Key.Down);
-            Keyboard.PressKey(window, Key.Up);
-            Keyboard.PressKey(window, Key.Up);
-            Keyboard.PressKey(window, Key.Enter);
-        }
+        ChangeActiveFilePanelStep.ChangeActiveFilePanel(window);
+        ChangeActiveFilePanelStep.ChangeActiveFilePanel(window);
+        Keyboard.PressKey(window, Key.Down);
+        Keyboard.PressKey(window, Key.Up);
+        Keyboard.PressKey(window, Key.Up);
+        Keyboard.PressKey(window, Key.Enter);
     }
 }

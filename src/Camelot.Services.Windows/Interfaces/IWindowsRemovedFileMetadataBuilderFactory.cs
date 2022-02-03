@@ -1,7 +1,6 @@
-namespace Camelot.Services.Windows.Interfaces
+namespace Camelot.Services.Windows.Interfaces;
+
+public interface IWindowsRemovedFileMetadataBuilderFactory
 {
-    public interface IWindowsRemovedFileMetadataBuilderFactory
-    {
-        IWindowsRemovedFileMetadataBuilder Create();
-    }
+    IWindowsRemovedFileMetadataBuilder Create();
 }

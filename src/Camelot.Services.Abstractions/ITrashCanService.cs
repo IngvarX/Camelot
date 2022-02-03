@@ -2,10 +2,9 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Camelot.Services.Abstractions
+namespace Camelot.Services.Abstractions;
+
+public interface ITrashCanService
 {
-    public interface ITrashCanService
-    {
-        Task<bool> MoveToTrashAsync(IReadOnlyList<string> nodes, CancellationToken cancellationToken = default);
-    }
+    Task<bool> MoveToTrashAsync(IReadOnlyList<string> nodes, CancellationToken cancellationToken = default);
 }

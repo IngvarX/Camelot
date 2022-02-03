@@ -1,9 +1,8 @@
-namespace Camelot.Services.Abstractions.Models.State
-{
-    public class LanguageStateModel
-    {
-        public string Name { get; set; }
+namespace Camelot.Services.Abstractions.Models.State;
 
-        public string Code { get; set; }
-    }
+public class LanguageStateModel
+{
+    public string Name { get; set; }
+
+    public string Code { get; set; }
 }

@@ -62,7 +62,7 @@
     <value>Extensión</value>
   </data>
   <data name="EnterDirectoryNameWithColon" xml:space="preserve">
-    <value>Insertar nombre de directorio:</value>
+    <value>Ingresar nombre de directorio:</value>
   </data>
   <data name="DirectoryTemplate" xml:space="preserve">
     <value>&lt;CARPETA&gt;</value>
@@ -117,5 +117,20 @@
   </data>
   <data name="Copy" xml:space="preserve">
     <value>Copiar</value>
+  </data>
+  <data name="Directory" xml:space="preserve">
+    <value>Directorio</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Borrar</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Fecha</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Crear</value>
+  </data>
+  <data name="CopyingFileFromTo" xml:space="preserve">
+    <value>Copiando {0} a {1}</value>
   </data>
 </root>

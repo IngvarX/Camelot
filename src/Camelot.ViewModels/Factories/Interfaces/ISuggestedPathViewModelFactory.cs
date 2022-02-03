@@ -1,10 +1,9 @@
 using Camelot.Services.Abstractions.Models;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 
-namespace Camelot.ViewModels.Factories.Interfaces
+namespace Camelot.ViewModels.Factories.Interfaces;
+
+public interface ISuggestedPathViewModelFactory
 {
-    public interface ISuggestedPathViewModelFactory
-    {
-        ISuggestedPathViewModel Create(string searchText, SuggestionModel model);
-    }
+    ISuggestedPathViewModel Create(string searchText, SuggestionModel model);
 }

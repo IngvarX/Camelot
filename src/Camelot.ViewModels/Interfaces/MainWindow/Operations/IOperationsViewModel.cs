@@ -1,9 +1,8 @@
 using System.Windows.Input;
 
-namespace Camelot.ViewModels.Interfaces.MainWindow.Operations
+namespace Camelot.ViewModels.Interfaces.MainWindow.Operations;
+
+public interface IOperationsViewModel
 {
-    public interface IOperationsViewModel
-    {
-        ICommand MoveToTrashCommand { get; }
-    }
+    ICommand MoveToTrashCommand { get; }
 }

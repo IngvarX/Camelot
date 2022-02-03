@@ -16,121 +16,117 @@ using DynamicData;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace Camelot.ViewModels.Implementations.Dialogs
+namespace Camelot.ViewModels.Implementations.Dialogs;
+
+public class OpenWithDialogViewModel : ParameterizedDialogViewModelBaseAsync<OpenWithDialogResult, OpenWithNavigationParameter>
 {
-    public class OpenWithDialogViewModel : ParameterizedDialogViewModelBaseAsync<OpenWithDialogResult, OpenWithNavigationParameter>
+    private readonly IApplicationService _applicationService;
+
+    private readonly ObservableCollection<ApplicationModel> _recommendedApplications;
+    private readonly ObservableCollection<ApplicationModel> _otherApplications;
+
+    private ApplicationModel SelectedApplication => SelectedDefaultApplication ?? SelectedOtherApplication;
+
+    public IEnumerable<ApplicationModel> RecommendedApplications => _recommendedApplications;
+
+    public IEnumerable<ApplicationModel> OtherApplications => _otherApplications.Where(Filter);
+
+    [Reactive]
+    public ApplicationModel SelectedDefaultApplication { get; set; }
+
+    [Reactive]
+    public ApplicationModel SelectedOtherApplication { get; set; }
+
+    [Reactive]
+    public string OpenFileExtension { get; private set; }
+
+    [Reactive]
+    public string ApplicationName { get; set; }
+
+    [Reactive]
+    public bool IsDefaultApplication { get; set; }
+
+    public ICommand SelectCommand { get; }
+
+    public OpenWithDialogViewModel(
+        IApplicationService applicationService,
+        OpenWithDialogConfiguration configuration)
     {
-        private readonly IApplicationService _applicationService;
+        _applicationService = applicationService;
 
-        private readonly ObservableCollection<ApplicationModel> _recommendedApplications;
-        private readonly ObservableCollection<ApplicationModel> _otherApplications;
+        _recommendedApplications = new ObservableCollection<ApplicationModel>();
+        _otherApplications = new ObservableCollection<ApplicationModel>();
 
-        private ApplicationModel SelectedApplication => SelectedDefaultApplication ?? SelectedOtherApplication;
+        var canSelect = this.WhenAnyValue(x => x.SelectedDefaultApplication,
+            x => x.SelectedOtherApplication,
+            CheckIfSelectedApplicationIsValid);
 
-        public IEnumerable<ApplicationModel> RecommendedApplications => _recommendedApplications;
+        SelectCommand = ReactiveCommand.Create(SelectApplication, canSelect);
 
-        public IEnumerable<ApplicationModel> OtherApplications => _otherApplications.Where(Filter);
+        this
+            .WhenAnyValue(vm => vm.ApplicationName)
+            .Throttle(TimeSpan.FromMilliseconds(configuration.SearchTimeoutMs))
+            .Subscribe(_ => this.RaisePropertyChanged(nameof(OtherApplications)));
+    }
 
-        [Reactive]
-        public ApplicationModel SelectedDefaultApplication { get; set; }
+    public override async Task ActivateAsync(OpenWithNavigationParameter parameter,
+        CancellationToken cancellationToken = default)
+    {
+        OpenFileExtension = parameter.FileExtension;
 
-        [Reactive]
-        public ApplicationModel SelectedOtherApplication { get; set; }
+        var associatedApps = await _applicationService.GetAssociatedApplicationsAsync(OpenFileExtension);
+        _recommendedApplications.AddRange(associatedApps);
 
-        [Reactive]
-        public string OpenFileExtension { get; private set; }
+        var installedApps = await _applicationService.GetInstalledApplicationsAsync();
+        var comparer = GetAppsComparer();
+        var otherApps = installedApps
+            .Except(_recommendedApplications, comparer)
+            .OrderBy(a => a.DisplayName);
+        _otherApplications.AddRange(otherApps);
 
-        [Reactive]
-        public string ApplicationName { get; set; }
+        ApplicationModel selectedApplication;
 
-        [Reactive]
-        public bool IsDefaultApplication { get; set; }
-
-        public ICommand CancelCommand { get; }
-
-        public ICommand SelectCommand { get; }
-
-        public OpenWithDialogViewModel(
-            IApplicationService applicationService,
-            OpenWithDialogConfiguration configuration)
+        if (parameter.Application is null)
         {
-            _applicationService = applicationService;
-
-            _recommendedApplications = new ObservableCollection<ApplicationModel>();
-            _otherApplications = new ObservableCollection<ApplicationModel>();
-
-            var canSelect = this.WhenAnyValue(x => x.SelectedDefaultApplication,
-                x => x.SelectedOtherApplication,
-                CheckIfSelectedApplicationIsValid);
-
-            CancelCommand = ReactiveCommand.Create(Close);
-            SelectCommand = ReactiveCommand.Create(SelectApplication, canSelect);
-
-            this
-                .WhenAnyValue(vm => vm.ApplicationName)
-                .Throttle(TimeSpan.FromMilliseconds(configuration.SearchTimeoutMs))
-                .Subscribe(_ => this.RaisePropertyChanged(nameof(OtherApplications)));
+            selectedApplication = _recommendedApplications.FirstOrDefault();
         }
-
-        public override async Task ActivateAsync(OpenWithNavigationParameter parameter,
-            CancellationToken cancellationToken = default)
+        else
         {
-            OpenFileExtension = parameter.FileExtension;
-
-            var associatedApps = await _applicationService.GetAssociatedApplicationsAsync(OpenFileExtension);
-            _recommendedApplications.AddRange(associatedApps);
-
-            var installedApps = await _applicationService.GetInstalledApplicationsAsync();
-            var comparer = GetAppsComparer();
-            var otherApps = installedApps
-                .Except(_recommendedApplications, comparer)
-                .OrderBy(a => a.DisplayName);
-            _otherApplications.AddRange(otherApps);
-
-            ApplicationModel selectedApplication;
-
-            if (parameter.Application is null)
+            selectedApplication = FindApplication(_recommendedApplications, parameter.Application);
+            if (selectedApplication is null)
             {
-                selectedApplication = _recommendedApplications.FirstOrDefault();
+                selectedApplication = FindApplication(_otherApplications, parameter.Application);
+                if (selectedApplication is not null)
+                {
+                    _otherApplications.Remove(selectedApplication);
+                }
             }
             else
             {
-                selectedApplication = FindApplication(_recommendedApplications, parameter.Application);
-                if (selectedApplication is null)
-                {
-                    selectedApplication = FindApplication(_otherApplications, parameter.Application);
-                    if (selectedApplication != null)
-                    {
-                        _otherApplications.Remove(selectedApplication);
-                    }
-                }
-                else
-                {
-                    _recommendedApplications.Remove(selectedApplication);
-                }
-
-                _recommendedApplications.Insert(0, selectedApplication);
+                _recommendedApplications.Remove(selectedApplication);
             }
 
-            SelectedDefaultApplication = selectedApplication;
-
-            this.RaisePropertyChanged(nameof(OtherApplications));
-
-            static ApplicationModel FindApplication(IEnumerable<ApplicationModel> applications, ApplicationModel application) =>
-                applications.FirstOrDefault(m => m.DisplayName == application.DisplayName);
+            _recommendedApplications.Insert(0, selectedApplication);
         }
 
-        private bool Filter(ApplicationModel model) =>
-            string.IsNullOrEmpty(ApplicationName)
-            || model.DisplayName.Contains(ApplicationName, StringComparison.InvariantCultureIgnoreCase);
+        SelectedDefaultApplication = selectedApplication;
 
-        private static IEqualityComparer<ApplicationModel> GetAppsComparer() =>
-            new ApplicationModelComparer();
+        this.RaisePropertyChanged(nameof(OtherApplications));
 
-        private void SelectApplication() =>
-            Close(new OpenWithDialogResult(OpenFileExtension, SelectedApplication, IsDefaultApplication));
-
-        private static bool CheckIfSelectedApplicationIsValid(ApplicationModel defaultApp, ApplicationModel otherApp) =>
-            (defaultApp ?? otherApp) != null;
+        static ApplicationModel FindApplication(IEnumerable<ApplicationModel> applications, ApplicationModel application) =>
+            applications.FirstOrDefault(m => m.DisplayName == application.DisplayName);
     }
+
+    private bool Filter(ApplicationModel model) =>
+        string.IsNullOrEmpty(ApplicationName)
+        || model.DisplayName.Contains(ApplicationName, StringComparison.InvariantCultureIgnoreCase);
+
+    private static IEqualityComparer<ApplicationModel> GetAppsComparer() =>
+        new ApplicationModelComparer();
+
+    private void SelectApplication() =>
+        Close(new OpenWithDialogResult(OpenFileExtension, SelectedApplication, IsDefaultApplication));
+
+    private static bool CheckIfSelectedApplicationIsValid(ApplicationModel defaultApp, ApplicationModel otherApp) =>
+        (defaultApp ?? otherApp) is not null;
 }

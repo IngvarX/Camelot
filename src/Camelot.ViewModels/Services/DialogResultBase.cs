@@ -1,7 +1,6 @@
-namespace Camelot.ViewModels.Services
-{
-    public class DialogResultBase
-    {
+namespace Camelot.ViewModels.Services;
 
-    }
+public class DialogResultBase
+{
+
 }

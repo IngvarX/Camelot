@@ -2,28 +2,27 @@ using System.Linq;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Environment.Interfaces;
 
-namespace Camelot.Services.Windows
+namespace Camelot.Services.Windows;
+
+public class WindowsResourceOpeningService : IResourceOpeningService
 {
-    public class WindowsResourceOpeningService : IResourceOpeningService
+    private readonly IProcessService _processService;
+
+    public WindowsResourceOpeningService(IProcessService processService)
     {
-        private readonly IProcessService _processService;
+        _processService = processService;
+    }
 
-        public WindowsResourceOpeningService(IProcessService processService)
+    public void Open(string resource) =>
+        OpenWith("explorer", "{0}", resource);
+
+    public void OpenWith(string command, string arguments, string resource)
+    {
+        if (resource.Any(char.IsWhiteSpace))
         {
-            _processService = processService;
+            resource = "\"" + resource + "\"";
         }
 
-        public void Open(string resource) =>
-            OpenWith("explorer", "{0}", resource);
-
-        public void OpenWith(string command, string arguments, string resource)
-        {
-            if (resource.Any(char.IsWhiteSpace))
-            {
-                resource = "\"" + resource + "\"";
-            }
-
-            _processService.Run(command, string.Format(arguments, resource).TrimStart());
-        }
+        _processService.Run(command, string.Format(arguments, resource).TrimStart());
     }
 }

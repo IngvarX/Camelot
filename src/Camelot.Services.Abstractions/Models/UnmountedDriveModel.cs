@@ -1,9 +1,8 @@
-namespace Camelot.Services.Abstractions.Models
+namespace Camelot.Services.Abstractions.Models;
+
+public class UnmountedDriveModel
 {
-    public class UnmountedDriveModel
-    {
-        public string Name { get; set; }
+    public string Name { get; set; }
         
-        public string FullName { get; set; }
-    }
+    public string FullName { get; set; }
 }

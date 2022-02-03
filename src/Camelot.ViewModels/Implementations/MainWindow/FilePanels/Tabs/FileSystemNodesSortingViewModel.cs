@@ -5,31 +5,30 @@ using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs
+namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs;
+
+public class FileSystemNodesSortingViewModel : ViewModelBase, IFileSystemNodesSortingViewModel
 {
-    public class FileSystemNodesSortingViewModel : ViewModelBase, IFileSystemNodesSortingViewModel
+    [Reactive]
+    public SortingMode SortingColumn { get; set; }
+
+    [Reactive]
+    public bool IsSortingByAscendingEnabled { get; private set; }
+
+    public event EventHandler<EventArgs> SortingSettingsChanged;
+
+    public FileSystemNodesSortingViewModel(
+        SortingMode sortingColumn,
+        bool isSortingByAscendingEnabled)
     {
-        [Reactive]
-        public SortingMode SortingColumn { get; set; }
+        SortingColumn = sortingColumn;
+        IsSortingByAscendingEnabled = isSortingByAscendingEnabled;
 
-        [Reactive]
-        public bool IsSortingByAscendingEnabled { get; private set; }
-
-        public event EventHandler<EventArgs> SortingSettingsChanged;
-
-        public FileSystemNodesSortingViewModel(
-            SortingMode sortingColumn,
-            bool isSortingByAscendingEnabled)
-        {
-            SortingColumn = sortingColumn;
-            IsSortingByAscendingEnabled = isSortingByAscendingEnabled;
-
-            this.WhenAnyValue(vm => vm.SortingColumn, vm => vm.IsSortingByAscendingEnabled)
-                .Subscribe(_ => FireSortingSettingsChangedEvent());
-        }
-
-        public void ToggleSortingDirection() => IsSortingByAscendingEnabled = !IsSortingByAscendingEnabled;
-
-        private void FireSortingSettingsChangedEvent() => SortingSettingsChanged.Raise(this, EventArgs.Empty);
+        this.WhenAnyValue(vm => vm.SortingColumn, vm => vm.IsSortingByAscendingEnabled)
+            .Subscribe(_ => FireSortingSettingsChangedEvent());
     }
+
+    public void ToggleSortingDirection() => IsSortingByAscendingEnabled = !IsSortingByAscendingEnabled;
+
+    private void FireSortingSettingsChangedEvent() => SortingSettingsChanged.Raise(this, EventArgs.Empty);
 }

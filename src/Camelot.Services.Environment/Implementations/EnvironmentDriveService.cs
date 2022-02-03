@@ -5,35 +5,34 @@ using Camelot.Services.Environment.Interfaces;
 using Camelot.Services.Environment.Models;
 using IoDriveInfo = System.IO.DriveInfo;
 
-namespace Camelot.Services.Environment.Implementations
-{
-    public class EnvironmentDriveService : IEnvironmentDriveService
-    {
-        public IReadOnlyList<DriveInfo> GetMountedDrives() =>
-            IoDriveInfo
-                .GetDrives()
-                .Select(CreateFrom)
-                .WhereNotNull()
-                .ToArray();
+namespace Camelot.Services.Environment.Implementations;
 
-        private static DriveInfo CreateFrom(IoDriveInfo ioDriveInfo)
+public class EnvironmentDriveService : IEnvironmentDriveService
+{
+    public IReadOnlyList<DriveInfo> GetMountedDrives() =>
+        IoDriveInfo
+            .GetDrives()
+            .Select(CreateFrom)
+            .WhereNotNull()
+            .ToArray();
+
+    private static DriveInfo CreateFrom(IoDriveInfo ioDriveInfo)
+    {
+        try
         {
-            try
+            return new DriveInfo
             {
-                return new DriveInfo
-                {
-                    RootDirectory = ioDriveInfo.RootDirectory.FullName,
-                    Name = ioDriveInfo.Name,
-                    TotalSpaceBytes = ioDriveInfo.TotalSize,
-                    FreeSpaceBytes = ioDriveInfo.AvailableFreeSpace,
-                    DriveType = ioDriveInfo.DriveType,
-                    DriveFormat = ioDriveInfo.DriveFormat
-                };
-            }
-            catch
-            {
-                return null;
-            }
+                RootDirectory = ioDriveInfo.RootDirectory.FullName,
+                Name = ioDriveInfo.Name,
+                TotalSpaceBytes = ioDriveInfo.TotalSize,
+                FreeSpaceBytes = ioDriveInfo.AvailableFreeSpace,
+                DriveType = ioDriveInfo.DriveType,
+                DriveFormat = ioDriveInfo.DriveFormat
+            };
+        }
+        catch
+        {
+            return null;
         }
     }
 }

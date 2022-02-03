@@ -2,10 +2,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace Camelot.Services.Linux.Interfaces
+namespace Camelot.Services.Linux.Interfaces;
+
+public interface IMimeTypesReader
 {
-    public interface IMimeTypesReader
-    {
-        Task<IReadOnlyDictionary<string, List<string>>> ReadAsync(Stream stream);
-    }
+    Task<IReadOnlyDictionary<string, List<string>>> ReadAsync(Stream stream);
 }

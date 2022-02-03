@@ -1,9 +1,8 @@
 using System.Threading.Tasks;
 
-namespace Camelot.ViewModels.Interfaces.Behaviors
+namespace Camelot.ViewModels.Interfaces.Behaviors;
+
+public interface IFileSystemNodePropertiesBehavior
 {
-    public interface IFileSystemNodePropertiesBehavior
-    {
-        Task ShowPropertiesAsync(string directoryPath);
-    }
+    Task ShowPropertiesAsync(string directoryPath);
 }

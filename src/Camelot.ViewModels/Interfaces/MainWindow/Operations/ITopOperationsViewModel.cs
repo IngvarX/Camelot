@@ -1,7 +1,6 @@
-namespace Camelot.ViewModels.Interfaces.MainWindow.Operations
+namespace Camelot.ViewModels.Interfaces.MainWindow.Operations;
+
+public interface ITopOperationsViewModel
 {
-    public interface ITopOperationsViewModel
-    {
         
-    }
 }

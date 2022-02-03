@@ -6,41 +6,40 @@ using Moq;
 using Moq.AutoMock;
 using Xunit;
 
-namespace Camelot.Services.Mac.Tests
+namespace Camelot.Services.Mac.Tests;
+
+public class MacTerminalServiceTests
 {
-    public class MacTerminalServiceTests
+    private const string Directory = "Dir";
+
+    private readonly AutoMocker _autoMocker;
+
+    public MacTerminalServiceTests()
     {
-        private const string Directory = "Dir";
+        _autoMocker = new AutoMocker();
+    }
 
-        private readonly AutoMocker _autoMocker;
+    [Fact]
+    public void TestOpening()
+    {
+        const string command = "open";
+        var args = $"-a Terminal \"{Directory}\"";
 
-        public MacTerminalServiceTests()
-        {
-            _autoMocker = new AutoMocker();
-        }
+        var uowMock = new Mock<IUnitOfWork>();
+        uowMock
+            .Setup(m => m.GetRepository<TerminalSettings>())
+            .Returns(new Mock<IRepository<TerminalSettings>>().Object);
+        _autoMocker
+            .Setup<IUnitOfWorkFactory, IUnitOfWork>(m => m.Create())
+            .Returns(uowMock.Object);
+        _autoMocker
+            .Setup<IProcessService>(m => m.Run(command, args))
+            .Verifiable();
 
-        [Fact]
-        public void TestOpening()
-        {
-            const string command = "open";
-            var args = $"-a Terminal \"{Directory}\"";
+        var terminalService = _autoMocker.CreateInstance<MacTerminalService>();
 
-            var uowMock = new Mock<IUnitOfWork>();
-            uowMock
-                .Setup(m => m.GetRepository<TerminalSettings>())
-                .Returns(new Mock<IRepository<TerminalSettings>>().Object);
-            _autoMocker
-                .Setup<IUnitOfWorkFactory, IUnitOfWork>(m => m.Create())
-                .Returns(uowMock.Object);
-            _autoMocker
-                .Setup<IProcessService>(m => m.Run(command, args))
-                .Verifiable();
+        terminalService.Open(Directory);
 
-            var terminalService = _autoMocker.CreateInstance<MacTerminalService>();
-
-            terminalService.Open(Directory);
-
-            _autoMocker.Verify<IProcessService>(m => m.Run(command, args), Times.Once);
-        }
+        _autoMocker.Verify<IProcessService>(m => m.Run(command, args), Times.Once);
     }
 }

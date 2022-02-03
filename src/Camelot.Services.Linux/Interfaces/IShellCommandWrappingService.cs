@@ -1,7 +1,6 @@
-namespace Camelot.Services.Linux.Interfaces
+namespace Camelot.Services.Linux.Interfaces;
+
+public interface IShellCommandWrappingService
 {
-    public interface IShellCommandWrappingService
-    {
-        (string, string) WrapWithNohup(string command, string arguments);
-    }
+    (string, string) WrapWithNohup(string command, string arguments);
 }

@@ -2,24 +2,23 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Input;
 
-namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs
+namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs;
+
+public interface ITabsListViewModel
 {
-    public interface ITabsListViewModel
-    {
-        ITabViewModel SelectedTab { get; }
+    ITabViewModel SelectedTab { get; }
 
-        IReadOnlyList<ITabViewModel> Tabs { get; }
+    IReadOnlyList<ITabViewModel> Tabs { get; }
 
-        event EventHandler<EventArgs> SelectedTabChanged;
+    event EventHandler<EventArgs> SelectedTabChanged;
 
-        ICommand SelectTabToTheLeftCommand { get; }
+    ICommand SelectTabToTheLeftCommand { get; }
 
-        ICommand SelectTabToTheRightCommand { get; }
+    ICommand SelectTabToTheRightCommand { get; }
 
-        ICommand ReopenClosedTabCommand { get; }
+    ICommand ReopenClosedTabCommand { get; }
 
-        void CreateNewTab(string directory);
+    void CreateNewTab(string directory);
 
-        void InsertBeforeTab(ITabViewModel tabViewModel, ITabViewModel tabViewModelToInsert);
-    }
+    void InsertBeforeTab(ITabViewModel tabViewModel, ITabViewModel tabViewModelToInsert);
 }

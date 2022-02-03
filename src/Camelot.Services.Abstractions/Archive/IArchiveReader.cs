@@ -1,9 +1,8 @@
 using System.Threading.Tasks;
 
-namespace Camelot.Services.Abstractions.Archive
+namespace Camelot.Services.Abstractions.Archive;
+
+public interface IArchiveReader
 {
-    public interface IArchiveReader
-    {
-        Task ExtractAsync(string archivePath, string outputDirectory);
-    }
+    Task ExtractAsync(string archivePath, string outputDirectory);
 }

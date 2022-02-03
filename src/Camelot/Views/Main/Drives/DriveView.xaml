@@ -24,14 +24,18 @@
                 </Image.Source>
             </Image>
 
-            <TextBlock Grid.Column="1" Classes="driveNameTextBlock"
+            <TextBlock Grid.Column="1" Classes="mainWindowTextBlock"
                        Text="{Binding DriveName}" />
         </Grid>
 
         <ToolTip.Tip>
-            <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,Auto">
-                <TextBlock Classes="driveNameTextBlock" Text="{x:Static p:Resources.TotalSpaceWithColon}" />
-                <TextBlock Grid.Column="1" Classes="driveNameTextBlock">
+            <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,Auto">
+                <TextBlock Classes="mainWindowTextBlock"
+                           Text="{x:Static p:Resources.MountPointWithColon}" />
+                <TextBlock Grid.Column="1" Classes="mainWindowTextBlock"
+                           Text="{Binding RootDirectory}" />
+                <TextBlock Grid.Row="1" Classes="mainWindowTextBlock" Text="{x:Static p:Resources.TotalSpaceWithColon}" />
+                <TextBlock Grid.Row="1" Grid.Column="1" Classes="mainWindowTextBlock">
                     <TextBlock.Text>
                         <MultiBinding StringFormat="{}{0} ({1})">
                             <Binding Path="TotalSizeAsNumber" />
@@ -40,8 +44,8 @@
                     </TextBlock.Text>
                 </TextBlock>
 
-                <TextBlock Grid.Row="1" Classes="driveNameTextBlock" Text="{x:Static p:Resources.AvailableSpaceWithColon}" />
-                <TextBlock Grid.Row="1" Grid.Column="1" Classes="driveNameTextBlock">
+                <TextBlock Grid.Row="2" Classes="mainWindowTextBlock" Text="{x:Static p:Resources.AvailableSpaceWithColon}" />
+                <TextBlock Grid.Row="2" Grid.Column="1" Classes="mainWindowTextBlock">
                     <TextBlock.Text>
                         <MultiBinding StringFormat="{}{0} ({1})">
                             <Binding Path="AvailableSizeAsNumber" />

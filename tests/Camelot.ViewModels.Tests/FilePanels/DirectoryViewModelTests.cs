@@ -6,68 +6,67 @@ using Moq;
 using Moq.AutoMock;
 using Xunit;
 
-namespace Camelot.ViewModels.Tests.FilePanels
+namespace Camelot.ViewModels.Tests.FilePanels;
+
+public class DirectoryViewModelTests
 {
-    public class DirectoryViewModelTests
+    private const string FullPath = "/home/camelot";
+
+    private readonly AutoMocker _autoMocker;
+
+    public DirectoryViewModelTests()
     {
-        private const string FullPath = "/home/camelot";
+        _autoMocker = new AutoMocker();
+        _autoMocker.Use(true);
+    }
 
-        private readonly AutoMocker _autoMocker;
+    [Fact]
+    public void TestOpenInNewTabCommand()
+    {
+        var tabListMock = new Mock<ITabsListViewModel>();
+        tabListMock
+            .Setup(m => m.CreateNewTab(FullPath))
+            .Verifiable();
+        var filesPanelMock = new Mock<IFilesPanelViewModel>();
+        filesPanelMock
+            .SetupGet(m => m.TabsListViewModel)
+            .Returns(tabListMock.Object);
+        _autoMocker
+            .Setup<IFilesOperationsMediator, IFilesPanelViewModel>(m => m.ActiveFilesPanelViewModel)
+            .Returns(filesPanelMock.Object);
 
-        public DirectoryViewModelTests()
-        {
-            _autoMocker = new AutoMocker();
-            _autoMocker.Use(true);
-        }
+        var viewModel = _autoMocker.CreateInstance<DirectoryViewModel>();
+        viewModel.FullPath = FullPath;
 
-        [Fact]
-        public void TestOpenInNewTabCommand()
-        {
-            var tabListMock = new Mock<ITabsListViewModel>();
-            tabListMock
-                .Setup(m => m.CreateNewTab(FullPath))
-                .Verifiable();
-            var filesPanelMock = new Mock<IFilesPanelViewModel>();
-            filesPanelMock
-                .SetupGet(m => m.TabsListViewModel)
-                .Returns(tabListMock.Object);
-            _autoMocker
-                .Setup<IFilesOperationsMediator, IFilesPanelViewModel>(m => m.ActiveFilesPanelViewModel)
-                .Returns(filesPanelMock.Object);
+        Assert.True(viewModel.OpenInNewTabCommand.CanExecute(null));
+        viewModel.OpenInNewTabCommand.Execute(null);
 
-            var viewModel = _autoMocker.CreateInstance<DirectoryViewModel>();
-            viewModel.FullPath = FullPath;
+        tabListMock
+            .Verify(m => m.CreateNewTab(FullPath), Times.Once);
+    }
 
-            Assert.True(viewModel.OpenInNewTabCommand.CanExecute(null));
-            viewModel.OpenInNewTabCommand.Execute(null);
+    [Fact]
+    public void TestOpenInNewTabOnOppositePanelCommand()
+    {
+        var tabListMock = new Mock<ITabsListViewModel>();
+        tabListMock
+            .Setup(m => m.CreateNewTab(FullPath))
+            .Verifiable();
+        var filesPanelMock = new Mock<IFilesPanelViewModel>();
+        filesPanelMock
+            .SetupGet(m => m.TabsListViewModel)
+            .Returns(tabListMock.Object);
+        _autoMocker
+            .Setup<IFilesOperationsMediator, IFilesPanelViewModel>(m => m.InactiveFilesPanelViewModel)
+            .Returns(filesPanelMock.Object);
 
-            tabListMock
-                .Verify(m => m.CreateNewTab(FullPath), Times.Once);
-        }
+        var viewModel = _autoMocker.CreateInstance<DirectoryViewModel>();
+        viewModel.FullPath = FullPath;
 
-        [Fact]
-        public void TestOpenInNewTabOnOppositePanelCommand()
-        {
-            var tabListMock = new Mock<ITabsListViewModel>();
-            tabListMock
-                .Setup(m => m.CreateNewTab(FullPath))
-                .Verifiable();
-            var filesPanelMock = new Mock<IFilesPanelViewModel>();
-            filesPanelMock
-                .SetupGet(m => m.TabsListViewModel)
-                .Returns(tabListMock.Object);
-            _autoMocker
-                .Setup<IFilesOperationsMediator, IFilesPanelViewModel>(m => m.InactiveFilesPanelViewModel)
-                .Returns(filesPanelMock.Object);
+        Assert.True(viewModel.OpenInNewTabOnOppositePanelCommand.CanExecute(null));
+        viewModel.OpenInNewTabOnOppositePanelCommand.Execute(null);
 
-            var viewModel = _autoMocker.CreateInstance<DirectoryViewModel>();
-            viewModel.FullPath = FullPath;
-
-            Assert.True(viewModel.OpenInNewTabOnOppositePanelCommand.CanExecute(null));
-            viewModel.OpenInNewTabOnOppositePanelCommand.Execute(null);
-
-            tabListMock
-                .Verify(m => m.CreateNewTab(FullPath), Times.Once);
-        }
+        tabListMock
+            .Verify(m => m.CreateNewTab(FullPath), Times.Once);
     }
 }

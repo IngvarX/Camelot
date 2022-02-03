@@ -67,7 +67,7 @@
                                MinWidth="{Binding Bounds.Width, RelativeSource={RelativeSource TemplatedParent}}"
                                MaxHeight="{TemplateBinding MaxDropDownHeight}"
                                PlacementTarget="{TemplateBinding}"
-                               StaysOpen="False">
+                               IsLightDismissEnabled="True">
                             <Border Background="{DynamicResource ThemeControlLowBrush}">
                                 <ScrollViewer>
                                     <ItemsPresenter Name="PART_ItemsPresenter"
@@ -119,12 +119,17 @@
     <Style Selector="GridSplitter">
         <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
     </Style>
-    
+
     <Style Selector="MenuItem">
         <Setter Property="FontSize" Value="16" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Padding" Value="10,6" />
         <Setter Property="FontFamily" Value="SansSerif" />
+        <Setter Property="Background" Value="{DynamicResource PopupBackgroundBrush}" />
+    </Style>
+
+    <Style Selector="ContextMenu">
+        <Setter Property="BorderThickness" Value="0" />
     </Style>
 
     <Style Selector="MenuItem:selected">

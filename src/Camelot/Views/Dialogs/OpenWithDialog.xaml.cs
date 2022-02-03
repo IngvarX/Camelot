@@ -3,29 +3,28 @@ using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using Camelot.ViewModels.Implementations.Dialogs.Results;
 
-namespace Camelot.Views.Dialogs
+namespace Camelot.Views.Dialogs;
+
+public class OpenWithDialog : DialogWindowBase<OpenWithDialogResult>
 {
-    public class OpenWithDialog : DialogWindowBase<OpenWithDialogResult>
+    public OpenWithDialog()
     {
-        public OpenWithDialog()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+    }
 
-        private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
+    private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
 
-        private void DefaultAppsListBoxOnGotFocus(object sender, GotFocusEventArgs e)
-        {
-            var otherAppsListBox = this.FindControl<ListBox>("OtherAppsListBox");
+    private void DefaultAppsListBoxOnGotFocus(object sender, GotFocusEventArgs e)
+    {
+        var otherAppsListBox = this.FindControl<ListBox>("OtherAppsListBox");
 
-            otherAppsListBox.Selection.Clear();
-        }
+        otherAppsListBox.Selection.Clear();
+    }
 
-        private void OtherAppsListBoxOnGotFocus(object sender, GotFocusEventArgs e)
-        {
-            var defaultAppsListBox = this.FindControl<ListBox>("DefaultAppsListBox");
+    private void OtherAppsListBoxOnGotFocus(object sender, GotFocusEventArgs e)
+    {
+        var defaultAppsListBox = this.FindControl<ListBox>("DefaultAppsListBox");
 
-            defaultAppsListBox.Selection.Clear();
-        }
+        defaultAppsListBox.Selection.Clear();
     }
 }

@@ -4,30 +4,29 @@ using Camelot.Services.Abstractions.Archive;
 using SharpCompress.Common;
 using SharpCompress.Readers;
 
-namespace Camelot.Services.Archives
+namespace Camelot.Services.Archives;
+
+public class ArchiveReader : IArchiveReader
 {
-    public class ArchiveReader : IArchiveReader
+    private readonly IFileService _fileService;
+
+    public ArchiveReader(
+        IFileService fileService)
     {
-        private readonly IFileService _fileService;
+        _fileService = fileService;
+    }
 
-        public ArchiveReader(
-            IFileService fileService)
+    public async Task ExtractAsync(string archivePath, string outputDirectory)
+    {
+        await using var inStream = _fileService.OpenRead(archivePath);
+        using var reader = ReaderFactory.Open(inStream);
+
+        var options = new ExtractionOptions
         {
-            _fileService = fileService;
-        }
+            ExtractFullPath = true,
+            Overwrite = true
+        };
 
-        public async Task ExtractAsync(string archivePath, string outputDirectory)
-        {
-            await using var inStream = _fileService.OpenRead(archivePath);
-            using var reader = ReaderFactory.Open(inStream);
-
-            var options = new ExtractionOptions
-            {
-                ExtractFullPath = true,
-                Overwrite = true
-            };
-
-            reader.WriteAllToDirectory(outputDirectory, options);
-        }
+        reader.WriteAllToDirectory(outputDirectory, options);
     }
 }

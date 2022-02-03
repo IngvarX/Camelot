@@ -2,19 +2,18 @@ using System.Threading.Tasks;
 using Camelot.Services.RecursiveSearch;
 using Xunit;
 
-namespace Camelot.Services.Tests.RecursiveSearch
+namespace Camelot.Services.Tests.RecursiveSearch;
+
+public class RecursiveSearchResultFactoryTests
 {
-    public class RecursiveSearchResultFactoryTests
+    [Fact]
+    public void TestCreate()
     {
-        [Fact]
-        public void TestCreate()
-        {
-            var factory = new RecursiveSearchResultFactory();
+        var factory = new RecursiveSearchResultFactory();
 
-            var result = factory.Create(r => Task.CompletedTask);
+        var result = factory.Create(r => Task.CompletedTask);
 
-            Assert.NotNull(result);
-            Assert.IsType<RecursiveSearchResult>(result);
-        }
+        Assert.NotNull(result);
+        Assert.IsType<RecursiveSearchResult>(result);
     }
 }

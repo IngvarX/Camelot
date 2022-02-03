@@ -1,7 +1,6 @@
-namespace Camelot.Services.Configuration
+namespace Camelot.Services.Configuration;
+
+public class DriveServiceConfiguration
 {
-    public class DriveServiceConfiguration
-    {
-        public int DrivesListRefreshIntervalMs { get; set; }
-    }
+    public int DrivesListRefreshIntervalMs { get; set; }
 }

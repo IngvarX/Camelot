@@ -1,9 +1,8 @@
-namespace Camelot.DataAccess.Models
+namespace Camelot.DataAccess.Models;
+
+public class SortingSettings
 {
-    public class SortingSettings
-    {
-        public int SortingMode { get; set; }
+    public int SortingMode { get; set; }
         
-        public bool IsAscending { get; set; }
-    }
+    public bool IsAscending { get; set; }
 }

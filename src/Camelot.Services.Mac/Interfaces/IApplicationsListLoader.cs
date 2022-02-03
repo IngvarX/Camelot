@@ -1,10 +1,9 @@
 using System.Collections.Immutable;
 using Camelot.Services.Abstractions.Models;
 
-namespace Camelot.Services.Mac.Interfaces
+namespace Camelot.Services.Mac.Interfaces;
+
+public interface IApplicationsListLoader
 {
-    public interface IApplicationsListLoader
-    {
-        IImmutableSet<ApplicationModel> GetInstalledApplications();
-    }
+    IImmutableSet<ApplicationModel> GetInstalledApplications();
 }

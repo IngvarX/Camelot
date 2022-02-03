@@ -1,10 +1,9 @@
 using System;
 using Camelot.Services.Environment.Interfaces;
 
-namespace Camelot.Services.Environment.Implementations
+namespace Camelot.Services.Environment.Implementations;
+
+public class DateTimeProvider : IDateTimeProvider
 {
-    public class DateTimeProvider : IDateTimeProvider
-    {
-        public DateTime Now => DateTime.Now;
-    }
+    public DateTime Now => DateTime.Now;
 }

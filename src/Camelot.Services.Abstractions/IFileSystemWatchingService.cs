@@ -1,20 +1,19 @@
 using System;
 using Camelot.Services.Abstractions.Models.EventArgs;
 
-namespace Camelot.Services.Abstractions
+namespace Camelot.Services.Abstractions;
+
+public interface IFileSystemWatchingService
 {
-    public interface IFileSystemWatchingService
-    {
-        event EventHandler<FileDeletedEventArgs> NodeDeleted;
+    event EventHandler<FileDeletedEventArgs> NodeDeleted;
 
-        event EventHandler<FileCreatedEventArgs> NodeCreated;
+    event EventHandler<FileCreatedEventArgs> NodeCreated;
 
-        event EventHandler<FileChangedEventArgs> NodeChanged;
+    event EventHandler<FileChangedEventArgs> NodeChanged;
 
-        event EventHandler<FileRenamedEventArgs> NodeRenamed;
+    event EventHandler<FileRenamedEventArgs> NodeRenamed;
 
-        void StartWatching(string directory);
+    void StartWatching(string directory);
 
-        void StopWatching(string directory);
-    }
+    void StopWatching(string directory);
 }

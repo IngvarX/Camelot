@@ -11,101 +11,100 @@ using Xunit.Sdk;
 
 [assembly: TestFramework("Camelot.Ui.Tests.AvaloniaUiTestFramework", "Camelot.Ui.Tests")]
 [assembly: CollectionBehavior(CollectionBehavior.CollectionPerAssembly, DisableTestParallelization = false, MaxParallelThreads = 1)]
-namespace Camelot.Ui.Tests
+namespace Camelot.Ui.Tests;
+
+public class AvaloniaUiTestFramework : XunitTestFramework
 {
-    public class AvaloniaUiTestFramework : XunitTestFramework
+    public AvaloniaUiTestFramework(IMessageSink messageSink)
+        : base(messageSink)
     {
-        public AvaloniaUiTestFramework(IMessageSink messageSink)
-            : base(messageSink)
+
+    }
+
+    protected override ITestFrameworkExecutor CreateExecutor(AssemblyName assemblyName)
+        => new Executor(assemblyName, SourceInformationProvider, DiagnosticMessageSink);
+
+    private class Executor : XunitTestFrameworkExecutor
+    {
+        public Executor(
+            AssemblyName assemblyName,
+            ISourceInformationProvider sourceInformationProvider,
+            IMessageSink diagnosticMessageSink)
+            : base(
+                assemblyName,
+                sourceInformationProvider,
+                diagnosticMessageSink)
         {
 
         }
 
-        protected override ITestFrameworkExecutor CreateExecutor(AssemblyName assemblyName)
-            => new Executor(assemblyName, SourceInformationProvider, DiagnosticMessageSink);
-
-        private class Executor : XunitTestFrameworkExecutor
+        protected override async void RunTestCases(IEnumerable<IXunitTestCase> testCases,
+            IMessageSink executionMessageSink,
+            ITestFrameworkExecutionOptions executionOptions)
         {
-            public Executor(
-                AssemblyName assemblyName,
-                ISourceInformationProvider sourceInformationProvider,
-                IMessageSink diagnosticMessageSink)
-                : base(
-                    assemblyName,
-                    sourceInformationProvider,
-                    diagnosticMessageSink)
-            {
+            executionOptions.SetValue("xunit.execution.DisableParallelization", false);
+            using var assemblyRunner = new Runner(
+                TestAssembly, testCases, DiagnosticMessageSink, executionMessageSink,
+                executionOptions);
 
-            }
+            await assemblyRunner.RunAsync();
+        }
+    }
 
-            protected override async void RunTestCases(IEnumerable<IXunitTestCase> testCases,
-                IMessageSink executionMessageSink,
-                ITestFrameworkExecutionOptions executionOptions)
-            {
-                executionOptions.SetValue("xunit.execution.DisableParallelization", false);
-                using var assemblyRunner = new Runner(
-                    TestAssembly, testCases, DiagnosticMessageSink, executionMessageSink,
-                    executionOptions);
+    private class Runner : XunitTestAssemblyRunner
+    {
+        public Runner(
+            ITestAssembly testAssembly,
+            IEnumerable<IXunitTestCase> testCases,
+            IMessageSink diagnosticMessageSink,
+            IMessageSink executionMessageSink,
+            ITestFrameworkExecutionOptions executionOptions)
+            : base(
+                testAssembly,
+                testCases,
+                diagnosticMessageSink,
+                executionMessageSink,
+                executionOptions)
+        {
 
-                await assemblyRunner.RunAsync();
-            }
         }
 
-        private class Runner : XunitTestAssemblyRunner
+        public override void Dispose()
         {
-            public Runner(
-                ITestAssembly testAssembly,
-                IEnumerable<IXunitTestCase> testCases,
-                IMessageSink diagnosticMessageSink,
-                IMessageSink executionMessageSink,
-                ITestFrameworkExecutionOptions executionOptions)
-                : base(
-                    testAssembly,
-                    testCases,
-                    diagnosticMessageSink,
-                    executionMessageSink,
-                    executionOptions)
+            AvaloniaApp.Stop();
+
+            base.Dispose();
+        }
+
+        protected override void SetupSyncContext(int maxParallelThreads)
+        {
+            var tcs = new TaskCompletionSource<SynchronizationContext>();
+            var thread = new Thread(() =>
             {
-
-            }
-
-            public override void Dispose()
-            {
-                AvaloniaApp.Stop();
-
-                base.Dispose();
-            }
-
-            protected override void SetupSyncContext(int maxParallelThreads)
-            {
-                var tcs = new TaskCompletionSource<SynchronizationContext>();
-                var thread = new Thread(() =>
+                try
                 {
-                    try
-                    {
-                        AvaloniaApp.RegisterDependencies();
+                    AvaloniaApp.RegisterDependencies();
 
-                        AvaloniaApp
-                            .BuildAvaloniaApp()
-                            .AfterSetup(_ =>
-                            {
-                                tcs.SetResult(SynchronizationContext.Current);
-                            })
-                            .StartWithClassicDesktopLifetime(new string[0]);
-                    }
-                    catch (Exception e)
-                    {
-                        tcs.SetException(e);
-                    }
-                })
+                    AvaloniaApp
+                        .BuildAvaloniaApp()
+                        .AfterSetup(_ =>
+                        {
+                            tcs.SetResult(SynchronizationContext.Current);
+                        })
+                        .StartWithClassicDesktopLifetime(new string[0]);
+                }
+                catch (Exception e)
                 {
-                    IsBackground = true
-                };
+                    tcs.SetException(e);
+                }
+            })
+            {
+                IsBackground = true
+            };
 
-                thread.Start();
+            thread.Start();
 
-                SynchronizationContext.SetSynchronizationContext(tcs.Task.Result);
-            }
+            SynchronizationContext.SetSynchronizationContext(tcs.Task.Result);
         }
     }
 }

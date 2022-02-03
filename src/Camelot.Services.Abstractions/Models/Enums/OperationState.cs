@@ -1,17 +1,16 @@
-namespace Camelot.Services.Abstractions.Models.Enums
+namespace Camelot.Services.Abstractions.Models.Enums;
+
+public enum OperationState : byte
 {
-    public enum OperationState : byte
-    {
-        NotStarted,
-        InProgress,
-        Paused,
-        Pausing,
-        Unpausing,
-        Blocked,
-        Finished,
-        Cancelling,
-        Cancelled,
-        Failed,
-        Skipped
-    }
+    NotStarted,
+    InProgress,
+    Paused,
+    Pausing,
+    Unpausing,
+    Blocked,
+    Finished,
+    Cancelling,
+    Cancelled,
+    Failed,
+    Skipped
 }

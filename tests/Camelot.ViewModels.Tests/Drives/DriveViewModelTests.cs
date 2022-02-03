@@ -10,128 +10,128 @@ using Moq;
 using Moq.AutoMock;
 using Xunit;
 
-namespace Camelot.ViewModels.Tests.Drives
+namespace Camelot.ViewModels.Tests.Drives;
+
+public class DriveViewModelTests
 {
-    public class DriveViewModelTests
+    private readonly AutoMocker _autoMocker;
+
+    public DriveViewModelTests()
     {
-        private readonly AutoMocker _autoMocker;
+        _autoMocker = new AutoMocker();
+    }
 
-        public DriveViewModelTests()
+    [Theory]
+    [InlineData(true, Platform.Linux)]
+    [InlineData(true, Platform.MacOs)]
+    [InlineData(false, Platform.Windows)]
+    [InlineData(false, Platform.Unknown)]
+    public void TestProperties(bool isEjectAvailable, Platform platform)
+    {
+        const string name = "tst";
+        var driveModel = new DriveModel
         {
-            _autoMocker = new AutoMocker();
-        }
+            Name = "Test",
+            RootDirectory = "/test",
+            TotalSpaceBytes = 42,
+            FreeSpaceBytes = 21
+        };
+        _autoMocker.Use(driveModel);
+        _autoMocker
+            .Setup<IFileSizeFormatter, string>(m => m.GetSizeAsNumber(It.IsAny<long>()))
+            .Returns<long>((bytes) => bytes.ToString());
+        _autoMocker
+            .Setup<IFileSizeFormatter, string>(m => m.GetFormattedSize(It.IsAny<long>()))
+            .Returns<long>((bytes) => bytes + " B");
+        _autoMocker
+            .Setup<IPathService, string>(m => m.GetFileName(driveModel.Name))
+            .Returns(name);
+        var filePanelViewModelMock = new Mock<IFilesPanelViewModel>();
+        _autoMocker
+            .Setup<IFilesOperationsMediator, IFilesPanelViewModel>(m => m.ActiveFilesPanelViewModel)
+            .Returns(filePanelViewModelMock.Object);
+        _autoMocker
+            .Setup<IPlatformService, Platform>(m => m.GetPlatform())
+            .Returns(platform);
 
-        [Theory]
-        [InlineData(true, Platform.Linux)]
-        [InlineData(true, Platform.MacOs)]
-        [InlineData(false, Platform.Windows)]
-        [InlineData(false, Platform.Unknown)]
-        public void TestProperties(bool isEjectAvailable, Platform platform)
+        var viewModel = _autoMocker.CreateInstance<DriveViewModel>();
+
+        Assert.Equal(name, viewModel.DriveName);
+        Assert.Equal("21", viewModel.AvailableSizeAsNumber);
+        Assert.Equal("21 B", viewModel.AvailableFormattedSize);
+        Assert.Equal("42", viewModel.TotalSizeAsNumber);
+        Assert.Equal("42 B", viewModel.TotalFormattedSize);
+        Assert.Equal(isEjectAvailable, viewModel.IsEjectAvailable);
+        Assert.Equal(driveModel.Name, viewModel.Name);
+        Assert.Equal(driveModel.TotalSpaceBytes, viewModel.TotalSpaceBytes);
+        Assert.Equal(driveModel.FreeSpaceBytes, viewModel.FreeSpaceBytes);
+        Assert.Equal(driveModel.RootDirectory, viewModel.RootDirectory);
+    }
+
+    [Fact]
+    public void TestOpenCommand()
+    {
+        var driveModel = new DriveModel
         {
-            const string name = "tst";
-            var driveModel = new DriveModel
-            {
-                Name = "Test",
-                RootDirectory = "/test",
-                TotalSpaceBytes = 42,
-                FreeSpaceBytes = 21
-            };
-            _autoMocker.Use(driveModel);
-            _autoMocker
-                .Setup<IFileSizeFormatter, string>(m => m.GetSizeAsNumber(It.IsAny<long>()))
-                .Returns<long>((bytes) => bytes.ToString());
-            _autoMocker
-                .Setup<IFileSizeFormatter, string>(m => m.GetFormattedSize(It.IsAny<long>()))
-                .Returns<long>((bytes) => bytes + " B");
-            _autoMocker
-                .Setup<IPathService, string>(m => m.GetFileName(driveModel.Name))
-                .Returns(name);
-            var filePanelViewModelMock = new Mock<IFilesPanelViewModel>();
-            _autoMocker
-                .Setup<IFilesOperationsMediator, IFilesPanelViewModel>(m => m.ActiveFilesPanelViewModel)
-                .Returns(filePanelViewModelMock.Object);
-            _autoMocker
-                .Setup<IPlatformService, Platform>(m => m.GetPlatform())
-                .Returns(platform);
+            Name = "Test",
+            RootDirectory = "/test",
+            TotalSpaceBytes = 42,
+            FreeSpaceBytes = 21
+        };
+        _autoMocker.Use(driveModel);
+        var filePanelViewModelMock = new Mock<IFilesPanelViewModel>();
+        _autoMocker
+            .GetMock<IFilesPanelViewModel>()
+            .SetupSet(m => m.CurrentDirectory = driveModel.RootDirectory)
+            .Verifiable();
+        _autoMocker
+            .Setup<IFilesOperationsMediator, IFilesPanelViewModel>(m => m.ActiveFilesPanelViewModel)
+            .Returns(filePanelViewModelMock.Object);
 
-            var viewModel = _autoMocker.CreateInstance<DriveViewModel>();
+        var viewModel = _autoMocker.CreateInstance<DriveViewModel>();
 
-            Assert.Equal(name, viewModel.DriveName);
-            Assert.Equal("21", viewModel.AvailableSizeAsNumber);
-            Assert.Equal("21 B", viewModel.AvailableFormattedSize);
-            Assert.Equal("42", viewModel.TotalSizeAsNumber);
-            Assert.Equal("42 B", viewModel.TotalFormattedSize);
-            Assert.Equal(isEjectAvailable, viewModel.IsEjectAvailable);
-            Assert.Equal(driveModel.Name, viewModel.Name);
-            Assert.Equal(driveModel.TotalSpaceBytes, viewModel.TotalSpaceBytes);
-            Assert.Equal(driveModel.FreeSpaceBytes, viewModel.FreeSpaceBytes);
-        }
+        Assert.True(viewModel.OpenCommand.CanExecute(null));
+        viewModel.OpenCommand.Execute(null);
 
-        [Fact]
-        public void TestOpenCommand()
+        filePanelViewModelMock
+            .VerifySet(m => m.CurrentDirectory = driveModel.RootDirectory, Times.Once);
+    }
+
+    [Fact]
+    public void TestUnmountCommand()
+    {
+        var driveModel = new DriveModel
         {
-            var driveModel = new DriveModel
-            {
-                Name = "Test",
-                RootDirectory = "/test",
-                TotalSpaceBytes = 42,
-                FreeSpaceBytes = 21
-            };
-            _autoMocker.Use(driveModel);
-            var filePanelViewModelMock = new Mock<IFilesPanelViewModel>();
-            _autoMocker
-                .GetMock<IFilesPanelViewModel>()
-                .SetupSet(m => m.CurrentDirectory = driveModel.RootDirectory)
-                .Verifiable();
-            _autoMocker
-                .Setup<IFilesOperationsMediator, IFilesPanelViewModel>(m => m.ActiveFilesPanelViewModel)
-                .Returns(filePanelViewModelMock.Object);
+            RootDirectory = "/test"
+        };
+        _autoMocker.Use(driveModel);
 
-            var viewModel = _autoMocker.CreateInstance<DriveViewModel>();
+        var viewModel = _autoMocker.CreateInstance<DriveViewModel>();
 
-            Assert.True(viewModel.OpenCommand.CanExecute(null));
-            viewModel.OpenCommand.Execute(null);
+        Assert.True(viewModel.UnmountCommand.CanExecute(null));
+        viewModel.UnmountCommand.Execute(null);
 
-            filePanelViewModelMock
-                .VerifySet(m => m.CurrentDirectory = driveModel.RootDirectory, Times.Once);
-        }
+        _autoMocker
+            .Verify<IMountedDriveService>(m => m.Unmount(driveModel.RootDirectory),
+                Times.Once);
+    }
 
-        [Fact]
-        public void TestUnmountCommand()
+    [Fact]
+    public void TestEjectCommand()
+    {
+        var driveModel = new DriveModel
         {
-            var driveModel = new DriveModel
-            {
-                RootDirectory = "/test"
-            };
-            _autoMocker.Use(driveModel);
+            RootDirectory = "/test"
+        };
+        _autoMocker.Use(driveModel);
 
-            var viewModel = _autoMocker.CreateInstance<DriveViewModel>();
+        var viewModel = _autoMocker.CreateInstance<DriveViewModel>();
 
-            Assert.True(viewModel.UnmountCommand.CanExecute(null));
-            viewModel.UnmountCommand.Execute(null);
+        Assert.True(viewModel.EjectCommand.CanExecute(null));
+        viewModel.EjectCommand.Execute(null);
 
-            _autoMocker
-                .Verify<IMountedDriveService>(m => m.Unmount(driveModel.RootDirectory),
-                    Times.Once);
-        }
-
-        [Fact]
-        public void TestEjectCommand()
-        {
-            var driveModel = new DriveModel
-            {
-                RootDirectory = "/test"
-            };
-            _autoMocker.Use(driveModel);
-
-            var viewModel = _autoMocker.CreateInstance<DriveViewModel>();
-
-            Assert.True(viewModel.EjectCommand.CanExecute(null));
-            viewModel.EjectCommand.Execute(null);
-
-            _autoMocker
-                .Verify<IMountedDriveService>(m => m.EjectAsync(driveModel.RootDirectory),
-                    Times.Once);
-        }
+        _autoMocker
+            .Verify<IMountedDriveService>(m => m.EjectAsync(driveModel.RootDirectory),
+                Times.Once);
     }
 }

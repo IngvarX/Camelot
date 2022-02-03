@@ -3,34 +3,33 @@ using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 
-namespace Camelot.Views.Main.Controls
+namespace Camelot.Views.Main.Controls;
+
+public class SearchView : UserControl
 {
-    public class SearchView : UserControl
+    private ISearchViewModel ViewModel => (ISearchViewModel) DataContext;
+
+    public SearchView()
     {
-        private ISearchViewModel ViewModel => (ISearchViewModel) DataContext;
+        InitializeComponent();
+    }
 
-        public SearchView()
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        ViewModel.SearchSettingsChanged += ViewModelOnSearchSettingsChanged;
+    }
+
+    private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
+
+    private void ViewModelOnSearchSettingsChanged(object sender, EventArgs e)
+    {
+        if (ViewModel.IsSearchEnabled)
         {
-            InitializeComponent();
-        }
+            var textBox = this.FindControl<TextBox>("SearchTextBox");
 
-        protected override void OnInitialized()
-        {
-            base.OnInitialized();
-
-            ViewModel.SearchSettingsChanged += ViewModelOnSearchSettingsChanged;
-        }
-
-        private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
-
-        private void ViewModelOnSearchSettingsChanged(object sender, EventArgs e)
-        {
-            if (ViewModel.IsSearchEnabled)
-            {
-                var textBox = this.FindControl<TextBox>("SearchTextBox");
-
-                textBox.Focus();
-            }
+            textBox.Focus();
         }
     }
 }
