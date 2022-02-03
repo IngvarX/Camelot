@@ -180,8 +180,8 @@ public class FilesPanelView : UserControl
     private void ProcessPointerClickInCell(PointerEventArgs args, IDataContextProvider cell)
     {
         var point = args.GetCurrentPoint(this);
-        if (point.Properties.IsMiddleButtonPressed &&
-            cell.DataContext is IDirectoryViewModel directoryViewModel)
+        if (point.Properties.IsMiddleButtonPressed 
+            && cell.DataContext is IDirectoryViewModel directoryViewModel)
         {
             args.Handled = true;
 
@@ -275,8 +275,15 @@ public class FilesPanelView : UserControl
             .ToHashSet();
         dragData.Set(DataFormats.FileNames, fileNames);
 
-        await DragDrop.DoDragDrop(e, dragData,
-            DragDropEffects.Copy | DragDropEffects.Move | DragDropEffects.Link);
+        try
+        {
+            await DragDrop.DoDragDrop(e, dragData,
+                DragDropEffects.Copy | DragDropEffects.Move | DragDropEffects.Link);
+        }
+        catch
+        {
+            // ignore
+        }
     }
 
     private async void OnDrop(object sender, DragEventArgs e)

@@ -38,10 +38,13 @@ public class TabViewModelTests
         _autoMocker.Use(new TabStateModel
         {
             Directory = CurrentDirectory,
-            History = new List<string> {PrevDirectory, CurrentDirectory, NextDirectory},
+            History = new List<string> {PrevDirectory, PrevDirectory, CurrentDirectory, NextDirectory, NextDirectory},
             SortingSettings = new SortingSettingsStateModel(),
-            CurrentPositionInHistory = 1
+            CurrentPositionInHistory = 2
         });
+        _autoMocker
+            .Setup<IDirectoryService, bool>(m => m.CheckIfExists(It.IsAny<string>()))
+            .Returns(true);
 
         _tabViewModel = _autoMocker.CreateInstance<TabViewModel>();
     }
@@ -155,11 +158,30 @@ public class TabViewModelTests
         _tabViewModel.GoToPreviousDirectoryCommand.Execute(null);
 
         Assert.Equal(PrevDirectory, _tabViewModel.CurrentDirectory);
-        Assert.Equal(0, _tabViewModel.GetState().CurrentPositionInHistory);
+        Assert.Equal(1, _tabViewModel.GetState().CurrentPositionInHistory);
 
         _autoMocker
             .GetMock<IFilePanelDirectoryObserver>()
             .VerifySet(m => m.CurrentDirectory = PrevDirectory);
+    }
+
+    [Fact]
+    public void TestGoToPreviousDirectoryCommandNoDirectory()
+    {
+        _autoMocker
+            .Setup<IDirectoryService, bool>(m => m.CheckIfExists(PrevDirectory))
+            .Returns(false);
+
+        Assert.True(_tabViewModel.GoToPreviousDirectoryCommand.CanExecute(null));
+        _tabViewModel.GoToPreviousDirectoryCommand.Execute(null);
+
+        Assert.Equal(CurrentDirectory, _tabViewModel.CurrentDirectory);
+        Assert.Equal(0, _tabViewModel.GetState().CurrentPositionInHistory);
+
+        _autoMocker
+            .GetMock<IFilePanelDirectoryObserver>()
+            .VerifySet(m => m.CurrentDirectory = PrevDirectory,
+                Times.Never);
     }
 
     [Fact]
@@ -169,11 +191,30 @@ public class TabViewModelTests
         _tabViewModel.GoToNextDirectoryCommand.Execute(null);
 
         Assert.Equal(NextDirectory, _tabViewModel.CurrentDirectory);
-        Assert.Equal(2, _tabViewModel.GetState().CurrentPositionInHistory);
+        Assert.Equal(3, _tabViewModel.GetState().CurrentPositionInHistory);
 
         _autoMocker
             .GetMock<IFilePanelDirectoryObserver>()
             .VerifySet(m => m.CurrentDirectory = NextDirectory);
+    }
+
+    [Fact]
+    public void TestGoToNextDirectoryCommandNoDirectory()
+    {
+        _autoMocker
+            .Setup<IDirectoryService, bool>(m => m.CheckIfExists(NextDirectory))
+            .Returns(false);
+
+        Assert.True(_tabViewModel.GoToNextDirectoryCommand.CanExecute(null));
+        _tabViewModel.GoToNextDirectoryCommand.Execute(null);
+
+        Assert.Equal(CurrentDirectory, _tabViewModel.CurrentDirectory);
+        Assert.Equal(4, _tabViewModel.GetState().CurrentPositionInHistory);
+
+        _autoMocker
+            .GetMock<IFilePanelDirectoryObserver>()
+            .VerifySet(m => m.CurrentDirectory = NextDirectory,
+                Times.Never);
     }
 
     [Fact]
@@ -184,8 +225,8 @@ public class TabViewModelTests
         _tabViewModel.CurrentDirectory = CurrentDirectory;
 
         var state = _tabViewModel.GetState();
-        Assert.Equal(3, state.History.Count);
-        Assert.Equal(1, state.CurrentPositionInHistory);
+        Assert.Equal(5, state.History.Count);
+        Assert.Equal(2, state.CurrentPositionInHistory);
     }
 
     [Fact]
@@ -198,12 +239,12 @@ public class TabViewModelTests
         Assert.Equal(PrevDirectory, _tabViewModel.CurrentDirectory);
 
         var state = _tabViewModel.GetState();
-        Assert.Equal(3, state.History.Count);
-        Assert.Equal(2, state.CurrentPositionInHistory);
-        Assert.Equal(2, state.CurrentPositionInHistory);
+        Assert.Equal(4, state.History.Count);
+        Assert.Equal(3, state.CurrentPositionInHistory);
         Assert.Equal(PrevDirectory, state.History[0]);
-        Assert.Equal(CurrentDirectory, state.History[1]);
-        Assert.Equal(PrevDirectory, state.History[2]);
+        Assert.Equal(PrevDirectory, state.History[1]);
+        Assert.Equal(CurrentDirectory, state.History[2]);
+        Assert.Equal(PrevDirectory, state.History[3]);
     }
 
     [Fact]

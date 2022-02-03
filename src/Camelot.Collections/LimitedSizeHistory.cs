@@ -15,6 +15,10 @@ public class LimitedSizeHistory<T>
 
     public IEnumerable<T> Items => _linkedList;
 
+    public bool HasPrevious => _current.Previous is not null;
+
+    public bool HasNext => _current.Next is not null;
+
     public LimitedSizeHistory(int capacity, IReadOnlyList<T> collection, int splitIndex)
     {
         _capacity = capacity;
@@ -26,7 +30,7 @@ public class LimitedSizeHistory<T>
 
     public T GoToPrevious()
     {
-        if (_current.Previous is not null)
+        if (HasPrevious)
         {
             _current = _current.Previous;
             CurrentIndex--;
@@ -37,7 +41,7 @@ public class LimitedSizeHistory<T>
 
     public T GoToNext()
     {
-        if (_current.Next is not null)
+        if (HasNext)
         {
             _current = _current.Next;
             CurrentIndex++;

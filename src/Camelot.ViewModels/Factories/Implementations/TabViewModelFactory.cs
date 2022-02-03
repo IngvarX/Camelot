@@ -11,13 +11,16 @@ namespace Camelot.ViewModels.Factories.Implementations;
 public class TabViewModelFactory : ITabViewModelFactory
 {
     private readonly IPathService _pathService;
+    private readonly IDirectoryService _directoryService;
     private readonly TabConfiguration _tabConfiguration;
 
     public TabViewModelFactory(
         IPathService pathService,
+        IDirectoryService directoryService,
         TabConfiguration tabConfiguration)
     {
         _pathService = pathService;
+        _directoryService = directoryService;
         _tabConfiguration = tabConfiguration;
     }
 
@@ -25,7 +28,8 @@ public class TabViewModelFactory : ITabViewModelFactory
     {
         var fileSystemNodeViewModel = Create(tabModel.SortingSettings);
 
-        return new TabViewModel(_pathService, observer, fileSystemNodeViewModel, _tabConfiguration, tabModel);
+        return new TabViewModel(_pathService, _directoryService, observer, fileSystemNodeViewModel, 
+            _tabConfiguration, tabModel);
     }
 
     private static IFileSystemNodesSortingViewModel Create(SortingSettingsStateModel sortingSettings) =>

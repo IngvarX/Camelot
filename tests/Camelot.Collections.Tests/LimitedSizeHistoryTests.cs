@@ -37,6 +37,7 @@ public class LimitedSizeHistoryTests
 
         for (var i = 0; i < ElementsSize; i++)
         {
+            Assert.Equal(i < SplitIndex, history.HasPrevious);
             var c = history.GoToPrevious();
             Assert.Equal(history.Current, c);
             Assert.Equal(history.Current, Math.Max(0, SplitIndex - i - 1));
@@ -51,6 +52,7 @@ public class LimitedSizeHistoryTests
 
         for (var i = 0; i < ElementsSize; i++)
         {
+            Assert.Equal(i < ElementsSize - SplitIndex - 1, history.HasNext);
             var c = history.GoToNext();
             Assert.Equal(history.Current, c);
             Assert.Equal(history.Current, Math.Min(ElementsSize - 1, SplitIndex + i + 1));

@@ -85,6 +85,7 @@ public static class ViewModelsBootstrapper
         services.RegisterLazySingleton<IFileSystemNodeViewModelComparerFactory>(() => new FileSystemNodeViewModelComparerFactory());
         services.RegisterLazySingleton<ITabViewModelFactory>(() => new TabViewModelFactory(
             resolver.GetRequiredService<IPathService>(),
+            resolver.GetRequiredService<IDirectoryService>(),
             resolver.GetRequiredService<TabConfiguration>()
         ));
         services.RegisterLazySingleton<ISuggestedPathViewModelFactory>(() => new SuggestedPathViewModelFactory(

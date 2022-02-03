@@ -16,6 +16,7 @@ namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Tabs;
 public class TabViewModel : ViewModelBase, ITabViewModel
 {
     private readonly IPathService _pathService;
+    private readonly IDirectoryService _directoryService;
     private readonly IFilePanelDirectoryObserver _filePanelDirectoryObserver;
 
     private readonly LimitedSizeHistory<string> _history;
@@ -87,12 +88,14 @@ public class TabViewModel : ViewModelBase, ITabViewModel
 
     public TabViewModel(
         IPathService pathService,
+        IDirectoryService directoryService,
         IFilePanelDirectoryObserver filePanelDirectoryObserver,
         IFileSystemNodesSortingViewModel fileSystemNodesSortingViewModel,
         TabConfiguration tabConfiguration,
         TabStateModel tabStateModel)
     {
         _pathService = pathService;
+        _directoryService = directoryService;
         _filePanelDirectoryObserver = filePanelDirectoryObserver;
 
         _history = new LimitedSizeHistory<string>(tabConfiguration.MaxHistorySize, tabStateModel.History,
@@ -143,9 +146,22 @@ public class TabViewModel : ViewModelBase, ITabViewModel
 
     private void RequestMoveTo(ITabViewModel target) => MoveRequested.Raise(this, new TabMoveRequestedEventArgs(target));
 
-    private void GoToPreviousDirectory() => SetDirectory(_history.GoToPrevious());
+    private void GoToPreviousDirectory() => GoToDirectoryIfExists(() => _history.HasPrevious, _history.GoToPrevious);
 
-    private void GoToNextDirectory() => SetDirectory(_history.GoToNext());
+    private void GoToNextDirectory() => GoToDirectoryIfExists(() => _history.HasNext, _history.GoToNext);
+
+    private void GoToDirectoryIfExists(Func<bool> directoryExists, Func<string> getDirectory)
+    {
+        while (directoryExists())
+        {
+            var directory = getDirectory();
+            if (_directoryService.CheckIfExists(directory))
+            {
+                SetDirectory(directory);
+                break;
+            }
+        }
+    }
 
     private void SetDirectory(string directory)
     {
