@@ -23,7 +23,7 @@ public class PathService : IPathService
         }
 
         var commonPrefix = new string(
-            paths[0][..paths.Min(s => s.Length)]
+            paths[0][..paths.Select(RightTrimPathSeparators).Min(s => s.Length)]
                 .TakeWhile((c, i) => paths.All(s => s[i] == c)).ToArray()
         );
 
