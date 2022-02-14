@@ -88,6 +88,9 @@ public class DirectoryServiceTests
         _autoMocker
             .Setup<IEnvironmentDirectoryService, DirectoryInfo>(m => m.GetDirectory(DirectoryName))
             .Returns(directoryInfo);
+        _autoMocker
+            .Setup<IPathService, string>(m => m.RightTrimPathSeparators(It.IsAny<string>()))
+            .Returns<string>(p => p);
         var directoryService = _autoMocker.CreateInstance<DirectoryService>();
         var parentDirectory = directoryService.GetParentDirectory(DirectoryName);
 

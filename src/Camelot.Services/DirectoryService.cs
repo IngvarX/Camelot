@@ -173,11 +173,11 @@ public class DirectoryService : IDirectoryService
     private long GetFileSize(string file) =>
         _environmentFileService.GetFile(file).Length;
 
-    private static DirectoryModel CreateFrom(FileSystemInfo directoryInfo) =>
-        new DirectoryModel
+    private DirectoryModel CreateFrom(FileSystemInfo directoryInfo) =>
+        new()
         {
             Name = directoryInfo.Name,
-            FullPath = directoryInfo.FullName,
+            FullPath = _pathService.RightTrimPathSeparators(directoryInfo.FullName),
             LastModifiedDateTime = directoryInfo.LastWriteTime,
             LastAccessDateTime = directoryInfo.LastAccessTime,
             CreatedDateTime = directoryInfo.CreationTime

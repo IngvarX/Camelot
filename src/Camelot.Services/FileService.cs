@@ -146,7 +146,7 @@ public class FileService : IFileService
             var fileModel = new FileModel
             {
                 Name = fileInfo.Name,
-                FullPath = fileInfo.FullName,
+                FullPath = _pathService.RightTrimPathSeparators(fileInfo.FullName),
                 LastModifiedDateTime = fileInfo.LastWriteTime,
                 Type = GetFileType(fileInfo),
                 SizeBytes = fileInfo.Length,
