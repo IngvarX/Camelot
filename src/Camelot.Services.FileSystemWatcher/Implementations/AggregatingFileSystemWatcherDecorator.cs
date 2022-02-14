@@ -70,7 +70,7 @@ public class AggregatingFileSystemWatcherDecorator : IFileSystemWatcher
 
         while (_eventsQueue.TryDequeue(out var fileSystemEventArgs))
         {
-            var filePath = GetFullPath(fileSystemEventArgs);
+            var filePath = _pathService.RightTrimPathSeparators(GetFullPath(fileSystemEventArgs));
             if (!filesDictionary.ContainsKey(filePath)) // always add first event
             {
                 filesDictionary[fileSystemEventArgs.FullPath] = fileSystemEventArgs;

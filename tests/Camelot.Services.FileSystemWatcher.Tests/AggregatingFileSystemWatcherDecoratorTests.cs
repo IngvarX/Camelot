@@ -26,6 +26,9 @@ public class AggregatingFileSystemWatcherDecoratorTests
     {
         _autoMocker = new AutoMocker();
         _autoMocker.Use(GetConfiguration());
+        _autoMocker
+            .Setup<IPathService, string>(m => m.RightTrimPathSeparators(It.IsAny<string>()))
+            .Returns<string>(path => path);
     }
 
     [Fact]
