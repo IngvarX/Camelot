@@ -454,4 +454,19 @@
   <data name="ClickToMount" xml:space="preserve">
     <value>Zum Einhängen klicken</value>
   </data>
+  <data name="GoToParentDirectory" xml:space="preserve">
+    <value>Ins übergeordnete Verzeichnis gehen</value>
+  </data>
+  <data name="PackedFilesAndDirectoriesTo" xml:space="preserve">
+    <value>{0} Dateien und {1} Verzeichnisse nach {2} gepackt</value>
+  </data>
+  <data name="Unmount" xml:space="preserve">
+    <value>Aushängen</value>
+  </data>
+  <data name="Eject" xml:space="preserve">
+    <value>Auswerfen</value>
+  </data>
+  <data name="MountPointWithColon" xml:space="preserve">
+    <value>Einhängepunkt:</value>
+  </data>
 </root>

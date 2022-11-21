@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AboutCamelotTitle" xml:space="preserve">
+    <value>Tentang Camelot</value>
+  </data>
+  <data name="AboutHeader" xml:space="preserve">
+    <value>_Tentang</value>
+  </data>
+  <data name="CopyToClipboard" xml:space="preserve">
+    <value>Salin ke papan klip</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Buat</value>
+  </data>
+  <data name="CreateDirectoryTitle" xml:space="preserve">
+    <value>Buat direktori</value>
+  </data>
+  <data name="CreationDateWithColon" xml:space="preserve">
+    <value>Tanggal pembuatan:</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Tanggal</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Hapus</value>
+  </data>
+  <data name="FileHeader" xml:space="preserve">
+    <value>_Berkas</value>
+  </data>
+  <data name="LastModified" xml:space="preserve">
+    <value>Terakhir dimodifikasi</value>
+  </data>
+  <data name="MovingFromFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Memindahkan {0} berkas dan {1} direktori ke {2}</value>
+  </data>
+  <data name="TotalSpaceWithColon" xml:space="preserve">
+    <value>Total ukuran:</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>Berkas</value>
+  </data>
+  <data name="ExtractArchiveHere" xml:space="preserve">
+    <value>Ekstrak arsip di sini</value>
+  </data>
+  <data name="OpenWith" xml:space="preserve">
+    <value>Buka dengan</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Batal</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Tutup</value>
+  </data>
+  <data name="CloseAllButThis" xml:space="preserve">
+    <value>Tutup semua kecuali ini</value>
+  </data>
+  <data name="CloseTab" xml:space="preserve">
+    <value>Tutup bilah</value>
+  </data>
+  <data name="CommandWithColon" xml:space="preserve">
+    <value>Perintah:</value>
+  </data>
+  <data name="ConfigurationHeader" xml:space="preserve">
+    <value>_Konfigurasi</value>
+  </data>
+  <data name="CopiedFilesFromAndDirectoriesTo" xml:space="preserve">
+    <value>Salin {0} berkas dan {1} direktori ke {2}</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Salin</value>
+  </data>
+  <data name="Directory" xml:space="preserve">
+    <value>Direktori</value>
+  </data>
+  <data name="DirectoryInformationTitle" xml:space="preserve">
+    <value>Informasi direktori</value>
+  </data>
+  <data name="DirectoryTemplate" xml:space="preserve">
+    <value>&lt;DIR&gt;</value>
+  </data>
+  <data name="EnterDirectoryNameWithColon" xml:space="preserve">
+    <value>Ketik nama direktori:</value>
+  </data>
+  <data name="ExitHeader" xml:space="preserve">
+    <value>_Keluar</value>
+  </data>
+  <data name="FileInformationTitle" xml:space="preserve">
+    <value>Informasi berkas</value>
+  </data>
+  <data name="General" xml:space="preserve">
+    <value>Umum</value>
+  </data>
+  <data name="GitHub" xml:space="preserve">
+    <value>GitHub</value>
+  </data>
+  <data name="HelpHeader" xml:space="preserve">
+    <value>_Bantuan</value>
+  </data>
+  <data name="LanguageWithColon" xml:space="preserve">
+    <value>Bahasa:</value>
+  </data>
+  <data name="LastAccessWithColon" xml:space="preserve">
+    <value>Akses terakhir:</value>
+  </data>
+  <data name="LastModificationWithColon" xml:space="preserve">
+    <value>Modifikasi terakhir:</value>
+  </data>
+  <data name="Maintainers" xml:space="preserve">
+    <value>Pengelola</value>
+  </data>
+  <data name="Move" xml:space="preserve">
+    <value>Pindah</value>
+  </data>
+  <data name="MovedFileFromTo" xml:space="preserve">
+    <value>Memindahkan {0} ke {1}</value>
+  </data>
+  <data name="MovedFilesFromAndDirectoriesTo" xml:space="preserve">
+    <value>Memindahkan {0} berkas dan {1} direktori ke {2}</value>
+  </data>
+  <data name="MovingFileFromTo" xml:space="preserve">
+    <value>Memindahkan {0} ke {1}</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Nama</value>
+  </data>
+  <data name="NewDirectory" xml:space="preserve">
+    <value>Direktori Baru</value>
+  </data>
+  <data name="NewTab" xml:space="preserve">
+    <value>Bilah baru</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Buka</value>
+  </data>
+  <data name="OriginalFile" xml:space="preserve">
+    <value>Berkas asli</value>
+  </data>
+  <data name="OverwriteOptionsTitle" xml:space="preserve">
+    <value>Pilihan menimpa</value>
+  </data>
+  <data name="PathWithColon" xml:space="preserve">
+    <value>Jalur:</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Hapus</value>
+  </data>
+  <data name="RemovingFileFromTo" xml:space="preserve">
+    <value>Menghapus {0} dari {1}</value>
+  </data>
+  <data name="RemovingFilesAndDirectoriesFrom" xml:space="preserve">
+    <value>Menghapus {0} berkas dan {1} direktori dari {2}</value>
+  </data>
+  <data name="RemovingFilesToTrash" xml:space="preserve">
+    <value>Apakah Anda ingin menghapus {0} berkas tersebut ke tong sampah?</value>
+  </data>
+  <data name="Rename" xml:space="preserve">
+    <value>Ubah nama</value>
+  </data>
+  <data name="Replace" xml:space="preserve">
+    <value>Ganti</value>
+  </data>
+  <data name="ReplaceFile" xml:space="preserve">
+    <value>Ganti berkas</value>
+  </data>
+  <data name="ReplaceIfOlder" xml:space="preserve">
+    <value>Ganti jika lebih lama</value>
+  </data>
+  <data name="ReplaceWith" xml:space="preserve">
+    <value>Ganti dengan</value>
+  </data>
+  <data name="SelectFromFilesAndDirectories" xml:space="preserve">
+    <value>{0} berkas ({1}) dan {2} direktori</value>
+  </data>
+  <data name="SettingsHeader" xml:space="preserve">
+    <value>_Pengaturan</value>
+  </data>
+  <data name="SettingsTitle" xml:space="preserve">
+    <value>Pengaturan</value>
+  </data>
+  <data name="Size" xml:space="preserve">
+    <value>Ukuran</value>
+  </data>
+  <data name="SizeWithColon" xml:space="preserve">
+    <value>Ukuran:</value>
+  </data>
+  <data name="Skip" xml:space="preserve">
+    <value>Lanjut</value>
+  </data>
+  <data name="Terminal" xml:space="preserve">
+    <value>Terminal</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Cari</value>
+  </data>
+  <data name="SearchForFilesAndDirectories" xml:space="preserve">
+    <value>Cari berkas dan direktori</value>
+  </data>
+  <data name="InvalidRegex" xml:space="preserve">
+    <value>Ekspresi reguler (regex) tidak valid</value>
+  </data>
+  <data name="CreateFileTitle" xml:space="preserve">
+    <value>Buat berkas</value>
+  </data>
+  <data name="EnterFileNameWithColon" xml:space="preserve">
+    <value>Ketik nama berkas:</value>
+  </data>
+  <data name="Extract" xml:space="preserve">
+    <value>Ekstrak</value>
+  </data>
+  <data name="OpenWithTitle" xml:space="preserve">
+    <value>Buka dengan</value>
+  </data>
+  <data name="OpeningFiles" xml:space="preserve">
+    <value>Membuka "{0}" berkas</value>
+  </data>
+  <data name="RecommendedApplications" xml:space="preserve">
+    <value>Aplikasi yang Direkomendasikan</value>
+  </data>
+  <data name="SelectOtherApplications" xml:space="preserve">
+    <value>Aplikasi Lain</value>
+  </data>
+  <data name="SetAsDefaultApplication" xml:space="preserve">
+    <value>Atur sebagai baku</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>Pilih</value>
+  </data>
+  <data name="SearchForApplications" xml:space="preserve">
+    <value>Cari aplikasi</value>
+  </data>
+  <data name="EnterNewNameWithColon" xml:space="preserve">
+    <value>Masukkan nama baru:</value>
+  </data>
+  <data name="ThemeWithColon" xml:space="preserve">
+    <value>Tema:</value>
+  </data>
+  <data name="DarkThemeName" xml:space="preserve">
+    <value>Gelap</value>
+  </data>
+  <data name="LightThemeName" xml:space="preserve">
+    <value>Terang</value>
+  </data>
+  <data name="OpenInNewTab" xml:space="preserve">
+    <value>Buka di bilah baru</value>
+  </data>
+  <data name="RegularExpression" xml:space="preserve">
+    <value>Ekspresi reguler</value>
+  </data>
+  <data name="PasteFromClipboard" xml:space="preserve">
+    <value>Tempel dari papan klip</value>
+  </data>
+  <data name="AccessDeniedTitle" xml:space="preserve">
+    <value>Akses ditolak</value>
+  </data>
+  <data name="AccessToDirectoryIsDenied" xml:space="preserve">
+    <value>Akses ke direktori {0} ditolak</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Muat ulang</value>
+  </data>
+  <data name="GoBack" xml:space="preserve">
+    <value>Kembali</value>
+  </data>
+  <data name="GoForward" xml:space="preserve">
+    <value>Maju</value>
+  </data>
+  <data name="GoToParentDirectory" xml:space="preserve">
+    <value>Ke direktori induk</value>
+  </data>
+  <data name="ApplyActionToTheAllFilesAndFolders" xml:space="preserve">
+    <value>Terapkan tindakan ini ke seluruh berkas dan folder</value>
+  </data>
+  <data name="CopyingFileFromTo" xml:space="preserve">
+    <value>Menyalin {0} ke {1}</value>
+  </data>
+  <data name="DeletedFileFromTo" xml:space="preserve">
+    <value>Menghapus {0} dari {1}</value>
+  </data>
+  <data name="DeletedFilesAndDirectories" xml:space="preserve">
+    <value>Menghapus {0} berkas dan {1} direktori dari {2}</value>
+  </data>
+  <data name="Extension" xml:space="preserve">
+    <value>Ekstensi</value>
+  </data>
+  <data name="FailedCopyFileFromTo" xml:space="preserve">
+    <value>Gagal menyalin {0} ke {1}</value>
+  </data>
+  <data name="FailedCopyFromFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Gagal menyalin {0} berkas dan {1} direktori ke {2}</value>
+  </data>
+  <data name="FailedToDeleteFileFromTo" xml:space="preserve">
+    <value>Gagal menghapus {0} dari {1}</value>
+  </data>
+  <data name="FailedToDeleteFilesAndDirectoriesFrom" xml:space="preserve">
+    <value>Gagal menghapus {0} berkas dan {1} direktori dari {2}</value>
+  </data>
+  <data name="FailedToMoveFileFromTo" xml:space="preserve">
+    <value>Gagal memindahkan {0} ke {1}</value>
+  </data>
+  <data name="FailedToMoveFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Gagal memindahkan {0} berkas dan {1} direktori ke {2}</value>
+  </data>
+  <data name="FilesRemovingConfirmationTitle" xml:space="preserve">
+    <value>Konfirmasi penghapusan berkas</value>
+  </data>
+  <data name="PermanentlyRemoveFiles" xml:space="preserve">
+    <value>Apakah Anda ingin menghapus {0} berkas tersebut secara permanen?</value>
+  </data>
+  <data name="ReplaceFileDestinationDirectory" xml:space="preserve">
+    <value>Berkas lain dengan nama yang sama telah ada di "{0}" Apakah Anda ingin menimpanya?</value>
+  </data>
+  <data name="SelectNewNameForDestination" xml:space="preserve">
+    <value>Pilih nama baru untuk tujuan</value>
+  </data>
+  <data name="ShowProperties" xml:space="preserve">
+    <value>Tampilkan properti</value>
+  </data>
+  <data name="AvailableSpaceWithColon" xml:space="preserve">
+    <value>Ruang yang tersedia:</value>
+  </data>
+  <data name="CreateArchive" xml:space="preserve">
+    <value>Buat arsip</value>
+  </data>
+  <data name="CloseSearchPanel" xml:space="preserve">
+    <value>Tutup bilah pencarian</value>
+  </data>
+  <data name="Recursive" xml:space="preserve">
+    <value>Rekursif</value>
+  </data>
+  <data name="UnmarkAsFavourite" xml:space="preserve">
+    <value>Batal tandai sebagai favorit</value>
+  </data>
+  <data name="MarkAsFavourite" xml:space="preserve">
+    <value>Tandai sebagai favorit</value>
+  </data>
+</root>

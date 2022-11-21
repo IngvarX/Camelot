@@ -409,4 +409,10 @@
   <data name="SettingsHeader" xml:space="preserve">
     <value>_설정</value>
   </data>
+  <data name="OpenInNewTab" xml:space="preserve">
+    <value>새 탭에서 열기</value>
+  </data>
+  <data name="PasteFromClipboard" xml:space="preserve">
+    <value>클립보드에서 붙여넣기</value>
+  </data>
 </root>

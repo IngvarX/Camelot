@@ -478,4 +478,7 @@
   <data name="InnerFilesWithColon" xml:space="preserve">
     <value>Indre filer:</value>
   </data>
+  <data name="GoToParentDirectory" xml:space="preserve">
+    <value>Gå til inneholdende mappe</value>
+  </data>
 </root>

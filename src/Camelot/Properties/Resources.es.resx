@@ -133,4 +133,352 @@
   <data name="CopyingFileFromTo" xml:space="preserve">
     <value>Copiando {0} a {1}</value>
   </data>
+  <data name="GitHub" xml:space="preserve">
+    <value>GitHub</value>
+  </data>
+  <data name="DuplicateOnOppositePanel" xml:space="preserve">
+    <value>Duplicar en panel opuesto</value>
+  </data>
+  <data name="OpenInNewTabOnOppositePanel" xml:space="preserve">
+    <value>Abrir en nueva pestaña en otro panel</value>
+  </data>
+  <data name="PasteFromClipboard" xml:space="preserve">
+    <value>Pegar desde el portapapeles</value>
+  </data>
+  <data name="InnerDirectoriesWithColon" xml:space="preserve">
+    <value>Directorios internos:</value>
+  </data>
+  <data name="ClickToMount" xml:space="preserve">
+    <value>Click para montar</value>
+  </data>
+  <data name="Pack" xml:space="preserve">
+    <value>Empaquetar</value>
+  </data>
+  <data name="Extract" xml:space="preserve">
+    <value>Extraer</value>
+  </data>
+  <data name="ExtractingArchiveTo" xml:space="preserve">
+    <value>Extrayendo {0} hacia {1}</value>
+  </data>
+  <data name="OpenWithTitle" xml:space="preserve">
+    <value>Abrir con</value>
+  </data>
+  <data name="OpeningFiles" xml:space="preserve">
+    <value>Abriendo "{0}" archivos</value>
+  </data>
+  <data name="RecommendedApplications" xml:space="preserve">
+    <value>Aplicaciones Recomendadas</value>
+  </data>
+  <data name="SelectOtherApplications" xml:space="preserve">
+    <value>Otras Aplicaciones</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>Seleccionar</value>
+  </data>
+  <data name="SetAsDefaultApplication" xml:space="preserve">
+    <value>Establecer por defecto</value>
+  </data>
+  <data name="SearchForApplications" xml:space="preserve">
+    <value>Buscar aplicaciones</value>
+  </data>
+  <data name="EnterNewNameWithColon" xml:space="preserve">
+    <value>Introducir nuevo nombre:</value>
+  </data>
+  <data name="ThemeWithColon" xml:space="preserve">
+    <value>Tema:</value>
+  </data>
+  <data name="CopiedFileFromTo" xml:space="preserve">
+    <value>Copiado {0} hacia {1}</value>
+  </data>
+  <data name="CopiedFilesFromAndDirectoriesTo" xml:space="preserve">
+    <value>Copidos {0} archivos y {1} directorios hacia {2}</value>
+  </data>
+  <data name="CopyingFilesFromAndDirectoriesTo" xml:space="preserve">
+    <value>Copiando {0} archivos y {1} directorios hacia {2}</value>
+  </data>
+  <data name="CopyToClipboard" xml:space="preserve">
+    <value>Copiar al portapapeles</value>
+  </data>
+  <data name="CreateDirectoryTitle" xml:space="preserve">
+    <value>Crear directorio</value>
+  </data>
+  <data name="CreationDateWithColon" xml:space="preserve">
+    <value>Fecha de creación:</value>
+  </data>
+  <data name="DeletedFileFromTo" xml:space="preserve">
+    <value>Eliminado {0} de {1}</value>
+  </data>
+  <data name="DeletedFilesAndDirectories" xml:space="preserve">
+    <value>Eliminados {0} archivos y {1} directorios de {2}</value>
+  </data>
+  <data name="DirectoryInformationTitle" xml:space="preserve">
+    <value>Información del directorio</value>
+  </data>
+  <data name="FailedCopyFileFromTo" xml:space="preserve">
+    <value>Fallo al copiar {0} hacia {1}</value>
+  </data>
+  <data name="FailedCopyFromFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Fallo al copiar {0} archivos y {1} directorios hacia {2}</value>
+  </data>
+  <data name="FailedToDeleteFileFromTo" xml:space="preserve">
+    <value>Fallo al eliminar {0} de {1}</value>
+  </data>
+  <data name="FailedToDeleteFilesAndDirectoriesFrom" xml:space="preserve">
+    <value>Fallo al eliminar {0} archivos y {1} directorios desde {2}</value>
+  </data>
+  <data name="FailedToMoveFileFromTo" xml:space="preserve">
+    <value>Fallo al mover {0} hacia {1}</value>
+  </data>
+  <data name="FailedToMoveFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Fallo al mover {0} archivos y {1} directorios hacia {2}</value>
+  </data>
+  <data name="FileHeader" xml:space="preserve">
+    <value>_Archivo</value>
+  </data>
+  <data name="FileInformationTitle" xml:space="preserve">
+    <value>Información de archivo</value>
+  </data>
+  <data name="FilesRemovingConfirmationTitle" xml:space="preserve">
+    <value>Confirmar eliminación de archivos</value>
+  </data>
+  <data name="General" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="HelpHeader" xml:space="preserve">
+    <value>_Ayuda</value>
+  </data>
+  <data name="LanguageWithColon" xml:space="preserve">
+    <value>Idioma:</value>
+  </data>
+  <data name="LastAccessWithColon" xml:space="preserve">
+    <value>Último acceso:</value>
+  </data>
+  <data name="LastModified" xml:space="preserve">
+    <value>Última modificación</value>
+  </data>
+  <data name="Maintainers" xml:space="preserve">
+    <value>Mantenedores</value>
+  </data>
+  <data name="Move" xml:space="preserve">
+    <value>Mover</value>
+  </data>
+  <data name="MovedFileFromTo" xml:space="preserve">
+    <value>Movido {0} hacia {1}</value>
+  </data>
+  <data name="MovedFilesFromAndDirectoriesTo" xml:space="preserve">
+    <value>Movidos {0} archivos y {1} directorios hacia {2}</value>
+  </data>
+  <data name="MovingFileFromTo" xml:space="preserve">
+    <value>Moviendo {0} hacia {1}</value>
+  </data>
+  <data name="MovingFromFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Moviendo {0} archivos y {1} directorios hacia {2}</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Nombre</value>
+  </data>
+  <data name="NewDirectory" xml:space="preserve">
+    <value>Nuevo Directorio</value>
+  </data>
+  <data name="NewTab" xml:space="preserve">
+    <value>Nueva pestaña</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Abrir</value>
+  </data>
+  <data name="OriginalFile" xml:space="preserve">
+    <value>Archivo original</value>
+  </data>
+  <data name="OverwriteOptionsTitle" xml:space="preserve">
+    <value>Sobreescribir opciones</value>
+  </data>
+  <data name="PathWithColon" xml:space="preserve">
+    <value>Ruta:</value>
+  </data>
+  <data name="PermanentlyRemoveFiles" xml:space="preserve">
+    <value>¿Usted desea borrar permanentemente esos {0} archivos?</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Eliminar</value>
+  </data>
+  <data name="RemovingFileFromTo" xml:space="preserve">
+    <value>Eliminando {0} desde {1}</value>
+  </data>
+  <data name="RemovingFilesAndDirectoriesFrom" xml:space="preserve">
+    <value>Eliminando {0} archivos y {1} directorios desde {2}</value>
+  </data>
+  <data name="RemovingFilesToTrash" xml:space="preserve">
+    <value>¿Deseas mover estos {0} archivos a la papelera de reciclaje?</value>
+  </data>
+  <data name="Rename" xml:space="preserve">
+    <value>Renombrar</value>
+  </data>
+  <data name="Replace" xml:space="preserve">
+    <value>Reemplazar</value>
+  </data>
+  <data name="ReplaceFile" xml:space="preserve">
+    <value>Reemplazar archivo</value>
+  </data>
+  <data name="AvailableSpaceWithColon" xml:space="preserve">
+    <value>Espacion disponible:</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>Archivo</value>
+  </data>
+  <data name="CreateFileTitle" xml:space="preserve">
+    <value>Crear archivo</value>
+  </data>
+  <data name="ReplaceFileDestinationDirectory" xml:space="preserve">
+    <value>Otro archivo con el mismo nombre existe en "{0}" ¿Desea reemplazarlo?</value>
+  </data>
+  <data name="ReplaceIfOlder" xml:space="preserve">
+    <value>Sustituir si es mas antiguo</value>
+  </data>
+  <data name="ReplaceWith" xml:space="preserve">
+    <value>Reemplazar con</value>
+  </data>
+  <data name="SelectFromFilesAndDirectories" xml:space="preserve">
+    <value>{0} archivos ({1}) y {2} directorios</value>
+  </data>
+  <data name="SelectNewNameForDestination" xml:space="preserve">
+    <value>Seleccione un nuevo nombre para el destino</value>
+  </data>
+  <data name="SettingsHeader" xml:space="preserve">
+    <value>_Ajustes</value>
+  </data>
+  <data name="SettingsTitle" xml:space="preserve">
+    <value>Ajustes</value>
+  </data>
+  <data name="ShowProperties" xml:space="preserve">
+    <value>Mostrar propiedades</value>
+  </data>
+  <data name="Size" xml:space="preserve">
+    <value>Tamaño</value>
+  </data>
+  <data name="SizeWithColon" xml:space="preserve">
+    <value>Tamaño:</value>
+  </data>
+  <data name="Skip" xml:space="preserve">
+    <value>Saltar</value>
+  </data>
+  <data name="Terminal" xml:space="preserve">
+    <value>Terminal</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Buscar</value>
+  </data>
+  <data name="SearchForFilesAndDirectories" xml:space="preserve">
+    <value>Buscar archivos y directorios</value>
+  </data>
+  <data name="InvalidRegex" xml:space="preserve">
+    <value>Expresión regular inválida</value>
+  </data>
+  <data name="TotalSpaceWithColon" xml:space="preserve">
+    <value>Espacio total:</value>
+  </data>
+  <data name="EnterFileNameWithColon" xml:space="preserve">
+    <value>Introduzca nombre de archivo:</value>
+  </data>
+  <data name="PackingFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Empaquetando {0} archivos y {1} directorios hacia {2}</value>
+  </data>
+  <data name="PackingFileTo" xml:space="preserve">
+    <value>Empaquetando archivo {0} hacia {1}</value>
+  </data>
+  <data name="ExtractedArchiveTo" xml:space="preserve">
+    <value>Extrayendo archivo {0} hacia {1}</value>
+  </data>
+  <data name="PackedFileTo" xml:space="preserve">
+    <value>Empaquetado archivo {0} hacia {1}</value>
+  </data>
+  <data name="PackedFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Empaquetados {0} archivos y {1} directorios hacia {2}</value>
+  </data>
+  <data name="ExtractArchiveHere" xml:space="preserve">
+    <value>Extraer archivo aquí</value>
+  </data>
+  <data name="ExtractArchiveToNewDirectory" xml:space="preserve">
+    <value>Extraer archivos a un nuevo directorio</value>
+  </data>
+  <data name="SelectDirectoryForExtraction" xml:space="preserve">
+    <value>Seleccionar directorio para extracción</value>
+  </data>
+  <data name="PackFilesTitle" xml:space="preserve">
+    <value>Empaquetar archivos</value>
+  </data>
+  <data name="PackToTheFileWithColon" xml:space="preserve">
+    <value>Empaquetar al archivo:</value>
+  </data>
+  <data name="CreateArchive" xml:space="preserve">
+    <value>Crear archivo</value>
+  </data>
+  <data name="FailedToExtractArchiveTo" xml:space="preserve">
+    <value>Fallo al extraer archivo {0} hacia {1}</value>
+  </data>
+  <data name="FailedToPackTo" xml:space="preserve">
+    <value>Fallo al empaquetar {0} hacia {1}</value>
+  </data>
+  <data name="FailedToPackFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Fallo al empaquetar {0} archivos y {1} directorios hacia {2}</value>
+  </data>
+  <data name="OpenWith" xml:space="preserve">
+    <value>Abrir con</value>
+  </data>
+  <data name="Eject" xml:space="preserve">
+    <value>Extraer</value>
+  </data>
+  <data name="DarkThemeName" xml:space="preserve">
+    <value>Oscuro</value>
+  </data>
+  <data name="LightThemeName" xml:space="preserve">
+    <value>Claro</value>
+  </data>
+  <data name="Unmount" xml:space="preserve">
+    <value>Desmontar</value>
+  </data>
+  <data name="OpenInNewTab" xml:space="preserve">
+    <value>Abrir en nueva pestaña</value>
+  </data>
+  <data name="CaseSensitive" xml:space="preserve">
+    <value>Distingue mayúsculas y minúsculas</value>
+  </data>
+  <data name="CloseSearchPanel" xml:space="preserve">
+    <value>Cerrar panel de búsqueda</value>
+  </data>
+  <data name="Recursive" xml:space="preserve">
+    <value>Recursivo</value>
+  </data>
+  <data name="RegularExpression" xml:space="preserve">
+    <value>Expresión regular</value>
+  </data>
+  <data name="AccessDeniedTitle" xml:space="preserve">
+    <value>Acceso denegado</value>
+  </data>
+  <data name="AccessToDirectoryIsDenied" xml:space="preserve">
+    <value>Acceso al directorio {0} ha sido denegado</value>
+  </data>
+  <data name="InnerFilesWithColon" xml:space="preserve">
+    <value>Archivos internos:</value>
+  </data>
+  <data name="GoToParentDirectory" xml:space="preserve">
+    <value>Ir al directorio principal</value>
+  </data>
+  <data name="MountPointWithColon" xml:space="preserve">
+    <value>Punto de montaje:</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Recargar</value>
+  </data>
+  <data name="GoBack" xml:space="preserve">
+    <value>Ir atrás</value>
+  </data>
+  <data name="GoForward" xml:space="preserve">
+    <value>Ir adelante</value>
+  </data>
+  <data name="UnmarkAsFavourite" xml:space="preserve">
+    <value>Desmarcar favorito</value>
+  </data>
+  <data name="MarkAsFavourite" xml:space="preserve">
+    <value>Marcar favorito</value>
+  </data>
 </root>
