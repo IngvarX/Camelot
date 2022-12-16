@@ -73,7 +73,11 @@ public class LinuxApplicationService : IApplicationService
         var specification = GetSpecification();
         var globalDesktopFiles = GetGlobalDesktopFiles(specification);
         var localDesktopFiles = GetLocalDesktopFiles(specification);
-        var desktopFilePaths = globalDesktopFiles.Concat(localDesktopFiles).Select(f => f.FullPath);
+        var snapDesktopFiles = GetSnapDesktopFiles(specification);
+        var desktopFilePaths = globalDesktopFiles
+            .Concat(localDesktopFiles)
+            .Concat(snapDesktopFiles)
+            .Select(f => f.FullPath);
 
         var mimeTypesExtensions = await GetMimeTypesAsync();
         var defaultApplications = await GetDefaultApplicationsAsync(mimeTypesExtensions);
@@ -153,6 +157,10 @@ public class LinuxApplicationService : IApplicationService
             .GetFiles(files)
             .Where(specification.IsSatisfiedBy);
     }
+    
+    private IEnumerable<FileModel> GetSnapDesktopFiles(ISpecification<FileModel> specification) =>
+        _fileService
+            .GetFiles("/var/lib/snapd/desktop/applications", specification);
 
     private async Task<IReadOnlyDictionary<string, List<string>>> GetMimeTypesAsync()
     {

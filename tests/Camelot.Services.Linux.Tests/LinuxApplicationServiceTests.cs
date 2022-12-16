@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -51,7 +52,7 @@ public class LinuxApplicationServiceTests
 
         _autoMocker
             .Setup<IFileService, IReadOnlyList<FileModel>>(m => m.GetFiles(It.IsAny<string>(), It.IsAny<ISpecification<FileModel>>()))
-            .Returns(files)
+            .Returns<string, ISpecification<FileModel>>((p, _) => p == "/var/lib/snapd/desktop/applications" ? Array.Empty<FileModel>() : files)
             .Verifiable();
         _autoMocker
             .Setup<IFileService, Stream>(m => m.OpenRead(FullPath))
@@ -140,7 +141,7 @@ public class LinuxApplicationServiceTests
 
         _autoMocker
             .Setup<IFileService, IReadOnlyList<FileModel>>(m => m.GetFiles(It.IsAny<string>(), It.IsAny<ISpecification<FileModel>>()))
-            .Returns(files)
+            .Returns<string, ISpecification<FileModel>>((p, _) => p == "/var/lib/snapd/desktop/applications" ? Array.Empty<FileModel>() : files)
             .Verifiable();
         _autoMocker
             .Setup<IFileService, Stream>(m => m.OpenRead(FullPath))
@@ -236,7 +237,7 @@ public class LinuxApplicationServiceTests
 
         _autoMocker
             .Verify<IFileService>(m => m.GetFiles(It.IsAny<string>(), It.IsAny<ISpecification<FileModel>>()),
-                Times.Once);
+                Times.Exactly(2));
         _autoMocker
             .Verify<IFileService>(m => m.GetFiles(It.IsAny<IReadOnlyList<string>>()),
                 Times.Once);
