@@ -469,4 +469,13 @@
   <data name="MountPointWithColon" xml:space="preserve">
     <value>Einhängepunkt:</value>
   </data>
+  <data name="FailedToPackTo" xml:space="preserve">
+    <value>Fehler beim Packen von {0} in {1}</value>
+  </data>
+  <data name="PackToTheFileWithColon" xml:space="preserve">
+    <value>In die Datei packen:</value>
+  </data>
+  <data name="FailedToPackFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Fehler beim Packen von {0} Dateien und {1} Verzeichnissen in {2}</value>
+  </data>
 </root>
