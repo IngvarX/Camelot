@@ -48,7 +48,7 @@ public class LinuxTrashCanService : TrashCanServiceBase
     protected override IReadOnlyList<string> GetTrashCanLocations(string volume)
     {
         var directories = new List<string>();
-        if (volume != "/")
+        if (volume != "/" && volume != "/home")
         {
             directories.AddRange(GetVolumeTrashCanPaths(volume));
         }

@@ -30,6 +30,7 @@ public class LinuxTrashCanServiceTests
 
     [Theory]
     [InlineData("/", "/home/camelot/.local/share/Trash/info/file.txt.trashinfo", "/home/camelot/.local/share/Trash/files/file.txt", new[] {FilePath})]
+    [InlineData("/home", "/home/camelot/.local/share/Trash/info/file.txt.trashinfo", "/home/camelot/.local/share/Trash/files/file.txt", new[] {FilePath})]
     [InlineData("/", "/home/camelot/.local/share/Trash/info/file.txt (1).trashinfo", "/home/camelot/.local/share/Trash/files/file.txt (1)", new[] {FilePath, "/home/camelot/.local/share/Trash/files/file.txt"})]
     [InlineData("/test", "/test/.Trash-42/info/file.txt.trashinfo", "/test/.Trash-42/files/file.txt", new[] {FilePath})]
     [InlineData("/test", "/test/.Trash-42/info/file.txt (1).trashinfo", "/test/.Trash-42/files/file.txt (1)", new[] {FilePath, "/test/.Trash-42/files/file.txt"})]
