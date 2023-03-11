@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using Camelot.Services.Environment.Interfaces;
@@ -33,6 +34,18 @@ public class EnvironmentFileServiceWindowsDecorator : IEnvironmentFileService
     public Stream OpenRead(string filePath) => _environmentFileService.OpenRead(filePath);
 
     public Stream OpenWrite(string filePath) => _environmentFileService.OpenWrite(filePath);
+    
+    public FileAttributes GetAttributes(string filePath) => _environmentFileService.GetAttributes(filePath);
+
+    public void SetAttributes(string filePath, FileAttributes attributes) => _environmentFileService.SetAttributes(filePath, attributes);
+
+    public DateTime GetCreationTimeUtc(string filePath) => _environmentFileService.GetCreationTimeUtc(filePath);
+    
+    public void SetCreationTimeUtc(string filePath, DateTime creationDate) => _environmentFileService.SetCreationTimeUtc(filePath, creationDate);
+
+    public DateTime GetLastWriteTimeUtc(string filePath) => _environmentFileService.GetLastWriteTimeUtc(filePath);
+
+    public void SetLastWriteTimeUtc(string filePath, DateTime lastWriteDate) => _environmentFileService.SetLastWriteTimeUtc(filePath, lastWriteDate);
 
     private static string PreprocessPath(string directory) =>
         directory.EndsWith("\\") ? directory : directory + "\\";

@@ -62,6 +62,8 @@ public class FileService : IFileService
             await using var readStream = _environmentFileService.OpenRead(source);
             await using var writeStream = _environmentFileService.OpenWrite(destination);
             await readStream.CopyToAsync(writeStream, cancellationToken);
+
+            CopyMetadata(source, destination, cancellationToken);
         }
         catch (TaskCanceledException)
         {
@@ -161,6 +163,31 @@ public class FileService : IFileService
         {
             return null;
         }
+    }
+    
+    private void CopyMetadata(string source, string destination, CancellationToken cancellationToken)
+    {
+        CopyAttributes(source, destination, cancellationToken);
+        CopyDates(source, destination, cancellationToken);
+    }
+
+    private void CopyAttributes(string source, string destination, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        var sourceAttributes = _environmentFileService.GetAttributes(source);
+        _environmentFileService.SetAttributes(destination, sourceAttributes);
+    }
+    
+    private void CopyDates(string source, string destination, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        var sourceCreateDate = _environmentFileService.GetCreationTimeUtc(source);
+        _environmentFileService.SetCreationTimeUtc(destination, sourceCreateDate);
+        
+        var sourceLastWriteDate = _environmentFileService.GetLastWriteTimeUtc(source);
+        _environmentFileService.SetLastWriteTimeUtc(destination, sourceLastWriteDate);
     }
 
     private static FileType GetFileType(FileSystemInfo fileInfo) =>

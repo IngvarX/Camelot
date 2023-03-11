@@ -122,6 +122,53 @@ public class FileServiceTests : IDisposable
                     Times.Once);
         }
     }
+    
+    [Fact]
+    public async Task TestCopyMetadata()
+    {
+        var inStream = new MemoryStream();
+        var outStream = new MemoryStream();
+        
+        const FileAttributes attributes = FileAttributes.Compressed | FileAttributes.Hidden | FileAttributes.Archive;
+        var creationTime = DateTime.Now.AddDays(-1);
+        var lastWriteTime = DateTime.Now.AddHours(-1);
+
+        _autoMocker
+            .Setup<IEnvironmentFileService, Stream>(m => m.OpenRead(FileName))
+            .Returns(inStream)
+            .Verifiable();
+        _autoMocker
+            .Setup<IEnvironmentFileService, FileAttributes>(m => m.GetAttributes(FileName))
+            .Returns(attributes)
+            .Verifiable();
+        _autoMocker
+            .Setup<IEnvironmentFileService, DateTime>(m => m.GetCreationTimeUtc(FileName))
+            .Returns(creationTime)
+            .Verifiable();
+        _autoMocker
+            .Setup<IEnvironmentFileService, DateTime>(m => m.GetLastWriteTimeUtc(FileName))
+            .Returns(lastWriteTime)
+            .Verifiable();
+        _autoMocker
+            .Setup<IEnvironmentFileService, Stream>(m => m.OpenWrite(NewFileName))
+            .Returns(outStream)
+            .Verifiable();
+
+        var fileService = _autoMocker.CreateInstance<FileService>();
+        var result = await fileService.CopyAsync(FileName, NewFileName, default, false);
+
+        Assert.True(result);
+
+        _autoMocker
+            .Verify<IEnvironmentFileService>(m => m.SetAttributes(NewFileName, attributes),
+                Times.Once);
+        _autoMocker
+            .Verify<IEnvironmentFileService>(m => m.SetCreationTimeUtc(NewFileName, creationTime),
+                Times.Once);
+        _autoMocker
+            .Verify<IEnvironmentFileService>(m => m.SetLastWriteTimeUtc(NewFileName, lastWriteTime),
+                Times.Once);
+    }
 
     [Theory]
     [InlineData(true, false)]

@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -24,4 +25,16 @@ public interface IEnvironmentFileService
     Stream OpenRead(string filePath);
 
     Stream OpenWrite(string filePath);
+
+    FileAttributes GetAttributes(string filePath);
+
+    void SetAttributes(string filePath, FileAttributes attributes);
+
+    DateTime GetCreationTimeUtc(string filePath);
+    
+    void SetCreationTimeUtc(string filePath, DateTime creationDate);
+    
+    DateTime GetLastWriteTimeUtc(string filePath);
+    
+    void SetLastWriteTimeUtc(string filePath, DateTime lastWriteDate);
 }

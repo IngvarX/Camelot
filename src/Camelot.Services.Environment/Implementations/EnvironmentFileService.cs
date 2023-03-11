@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using Camelot.Services.Environment.Interfaces;
@@ -35,4 +36,22 @@ public class EnvironmentFileService : IEnvironmentFileService
 
     public Stream OpenWrite(string filePath) =>
         File.OpenWrite(filePath);
+
+    public FileAttributes GetAttributes(string filePath) => 
+        File.GetAttributes(filePath);
+
+    public void SetAttributes(string filePath, FileAttributes attributes) => 
+        File.SetAttributes(filePath, attributes);
+
+    public DateTime GetCreationTimeUtc(string filePath) => 
+        File.GetCreationTimeUtc(filePath);
+
+    public void SetCreationTimeUtc(string filePath, DateTime creationDate) =>
+        File.SetCreationTimeUtc(filePath, creationDate);
+
+    public DateTime GetLastWriteTimeUtc(string filePath) => 
+        File.GetLastWriteTimeUtc(filePath);
+
+    public void SetLastWriteTimeUtc(string filePath, DateTime lastWriteDate) =>
+        File.SetLastWriteTimeUtc(filePath, lastWriteDate);
 }
