@@ -6,8 +6,8 @@
 
     <ItemGroup>
       <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.18" />
-      <PackageReference Include="ReactiveUI.Fody" Version="18.4.1" />
-      <PackageReference Include="ReactiveUI.Validation" Version="3.0.22" />
+      <PackageReference Include="ReactiveUI.Fody" Version="18.4.26" />
+      <PackageReference Include="ReactiveUI.Validation" Version="3.1.7" />
       <PackageReference Update="Packaging.Targets">
         <Version>0.1.220</Version>
       </PackageReference>
