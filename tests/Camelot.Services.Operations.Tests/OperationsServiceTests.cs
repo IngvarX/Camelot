@@ -44,13 +44,18 @@ public class OperationsServiceTests
             .Verify<IResourceOpeningService>(m => m.Open(FileName), Times.Once);
     }
 
-    [Fact]
-    public async Task TestFilesRemoving()
+    [Theory]
+    [InlineData(OperationState.Finished, true)]
+    [InlineData(OperationState.Failed, false)]
+    public async Task TestFilesRemoving(OperationState state, bool expected)
     {
         var operationMock = new Mock<IOperation>();
         operationMock
             .Setup(m => m.RunAsync())
             .Verifiable();
+        operationMock
+            .Setup(o => o.State)
+            .Returns(state);
         _autoMocker
             .Setup<IOperationsFactory, IOperation>(m => m.CreateDeleteOperation(It.IsAny<UnaryFileSystemOperationSettings>()))
             .Callback<UnaryFileSystemOperationSettings>(s =>
@@ -69,7 +74,8 @@ public class OperationsServiceTests
 
         var operationsService = _autoMocker.CreateInstance<OperationsService>();
 
-        await operationsService.RemoveAsync(new[] {FileName});
+        var actual = await operationsService.RemoveAsync(new[] {FileName});
+        Assert.Equal(expected, actual);
 
         operationMock.Verify(m => m.RunAsync(), Times.Once);
         _autoMocker
@@ -156,14 +162,19 @@ public class OperationsServiceTests
             .Verify<IOperationsStateService>(m => m.AddOperation(operationMock.Object), Times.Once);
     }
 
-    [Fact]
-    public async Task TestFilesMove()
+    [Theory]
+    [InlineData(OperationState.Finished, true)]
+    [InlineData(OperationState.Failed, false)]
+    public async Task TestFilesMove(OperationState state, bool expected)
     {
         var fullPath = Path.Combine(DirectoryName, FileName);
         var operationMock = new Mock<IOperation>();
         operationMock
             .Setup(m => m.RunAsync())
             .Verifiable();
+        operationMock
+            .Setup(o => o.State)
+            .Returns(state);
         _autoMocker
             .Setup<IOperationsFactory, IOperation>(m => m.CreateMoveOperation(It.IsAny<BinaryFileSystemOperationSettings>()))
             .Callback<BinaryFileSystemOperationSettings>(s =>
@@ -196,21 +207,27 @@ public class OperationsServiceTests
 
         var operationsService = _autoMocker.CreateInstance<OperationsService>();
 
-        await operationsService.MoveAsync(new[] {FileName}, DirectoryName);
+        var actual = await operationsService.MoveAsync(new[] {FileName}, DirectoryName);
+        Assert.Equal(expected, actual);
 
         operationMock.Verify(m => m.RunAsync(), Times.Once);
         _autoMocker
             .Verify<IOperationsStateService>(m => m.AddOperation(operationMock.Object), Times.Once);
     }
 
-    [Fact]
-    public async Task TestFilesCopy()
+    [Theory]
+    [InlineData(OperationState.Finished, true)]
+    [InlineData(OperationState.Failed, false)]
+    public async Task TestFilesCopy(OperationState state, bool expected)
     {
         var fullPath = Path.Combine(DirectoryName, FileName);
         var operationMock = new Mock<IOperation>();
         operationMock
             .Setup(m => m.RunAsync())
             .Verifiable();
+        operationMock
+            .Setup(o => o.State)
+            .Returns(state);
         _autoMocker
             .Setup<IOperationsFactory, IOperation>(m => m.CreateCopyOperation(It.IsAny<BinaryFileSystemOperationSettings>()))
             .Callback<BinaryFileSystemOperationSettings>(s =>
@@ -243,15 +260,18 @@ public class OperationsServiceTests
 
         var operationsService = _autoMocker.CreateInstance<OperationsService>();
 
-        await operationsService.CopyAsync(new[] {FileName}, DirectoryName);
+        var actual = await operationsService.CopyAsync(new[] {FileName}, DirectoryName);
+        Assert.Equal(expected, actual);
 
         operationMock.Verify(m => m.RunAsync(), Times.Once);
         _autoMocker
             .Verify<IOperationsStateService>(m => m.AddOperation(operationMock.Object), Times.Once);
     }
 
-    [Fact]
-    public async Task TestMoveByDictionary()
+    [Theory]
+    [InlineData(OperationState.Finished, true)]
+    [InlineData(OperationState.Failed, false)]
+    public async Task TestMoveByDictionary(OperationState state, bool expected)
     {
         var fullPath = Path.Combine(DirectoryName, FileName);
         var newFullPath = Path.Combine(NewDirectoryName, NewFileName);
@@ -259,6 +279,9 @@ public class OperationsServiceTests
         operationMock
             .Setup(m => m.RunAsync())
             .Verifiable();
+        operationMock
+            .Setup(o => o.State)
+            .Returns(state);
         _autoMocker
             .Setup<IOperationsFactory, IOperation>(m => m.CreateMoveOperation(It.Is<BinaryFileSystemOperationSettings>(s =>
                 s.FilesDictionary.ContainsKey(fullPath) && s.FilesDictionary[fullPath] == newFullPath)))
@@ -285,15 +308,18 @@ public class OperationsServiceTests
 
         var operationsService = _autoMocker.CreateInstance<OperationsService>();
 
-        await operationsService.MoveAsync(new Dictionary<string, string> {[fullPath] = newFullPath});
-
+        var actual = await operationsService.MoveAsync(new Dictionary<string, string> {[fullPath] = newFullPath});
+        Assert.Equal(expected, actual);
+        
         operationMock.Verify(m => m.RunAsync(), Times.Once);
         _autoMocker
             .Verify<IOperationsStateService>(m => m.AddOperation(operationMock.Object), Times.Once);
     }
 
-    [Fact]
-    public async Task TestMoveEmptyDirectoryByDictionary()
+    [Theory]
+    [InlineData(OperationState.Finished, true)]
+    [InlineData(OperationState.Failed, false)]
+    public async Task TestMoveEmptyDirectoryByDictionary(OperationState state, bool expected)
     {
         var operationMock = new Mock<IOperation>();
         operationMock
@@ -303,7 +329,9 @@ public class OperationsServiceTests
             .Setup<IOperationsFactory, IOperation>(m => m.CreateMoveOperation(It.Is<BinaryFileSystemOperationSettings>(s =>
                 s.EmptyDirectories.Single() == NewDirectoryName)))
             .Returns(operationMock.Object);
-
+        operationMock
+            .Setup(o => o.State)
+            .Returns(state);
         _autoMocker
             .Setup<IDirectoryService, bool>(m => m.CheckIfExists(DirectoryName))
             .Returns(true);
@@ -331,8 +359,9 @@ public class OperationsServiceTests
 
         var operationsService = _autoMocker.CreateInstance<OperationsService>();
 
-        await operationsService.MoveAsync(new Dictionary<string, string> {[DirectoryName] = NewDirectoryName});
-
+        var actual = await operationsService.MoveAsync(new Dictionary<string, string> {[DirectoryName] = NewDirectoryName});
+        Assert.Equal(expected, actual);
+        
         operationMock.Verify(m => m.RunAsync(), Times.Once);
         _autoMocker
             .Verify<IOperationsStateService>(m => m.AddOperation(operationMock.Object), Times.Once);

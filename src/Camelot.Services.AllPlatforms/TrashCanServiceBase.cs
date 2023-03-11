@@ -38,9 +38,13 @@ public abstract class TrashCanServiceBase : ITrashCanService
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var filesTrashCanLocation = GetFilesTrashCanLocation(trashCanLocation); // TODO: create if not exists?
+            var filesTrashCanLocation = GetFilesTrashCanLocation(trashCanLocation);
             var destinationPathsDictionary = GetFilesTrashCanPathsMapping(nodes, filesTrashCanLocation);
-            await _operationsService.MoveAsync(destinationPathsDictionary);
+            var moveResult = await _operationsService.MoveAsync(destinationPathsDictionary);
+            if (!moveResult)
+            {
+                continue;
+            }
 
             await WriteMetaDataAsync(destinationPathsDictionary, trashCanLocation);
             result = true;

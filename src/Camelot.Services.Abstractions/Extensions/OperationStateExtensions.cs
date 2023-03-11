@@ -17,7 +17,10 @@ public static class OperationStateExtensions
 
         return completedOperationStates.Contains(operationState);
     }
+    
+    public static bool IsSuccessful(this OperationState operationState) => 
+        operationState is OperationState.Finished or OperationState.Skipped;
 
     public static bool IsFailedOrCancelled(this OperationState operationState) =>
-        operationState is OperationState.Failed || operationState is OperationState.Cancelled;
+        operationState is OperationState.Failed or OperationState.Cancelled;
 }

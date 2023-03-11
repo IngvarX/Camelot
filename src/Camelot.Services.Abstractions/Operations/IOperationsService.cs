@@ -8,21 +8,21 @@ public interface IOperationsService
 {
     void OpenFiles(IReadOnlyList<string> nodes);
 
-    Task CopyAsync(IReadOnlyList<string> nodes, string destinationDirectory);
+    Task<bool> CopyAsync(IReadOnlyList<string> nodes, string destinationDirectory);
 
-    Task MoveAsync(IReadOnlyList<string> nodes, string destinationDirectory);
+    Task<bool> MoveAsync(IReadOnlyList<string> nodes, string destinationDirectory);
 
-    Task MoveAsync(IReadOnlyDictionary<string, string> nodes);
+    Task<bool> MoveAsync(IReadOnlyDictionary<string, string> nodes);
 
-    Task PackAsync(IReadOnlyList<string> nodes, string outputFilePath, ArchiveType archiveType);
+    Task<bool> PackAsync(IReadOnlyList<string> nodes, string outputFilePath, ArchiveType archiveType);
 
-    Task ExtractAsync(string archivePath, string outputDirectory, ArchiveType archiveType);
+    Task<bool> ExtractAsync(string archivePath, string outputDirectory, ArchiveType archiveType);
 
     void CreateDirectory(string sourceDirectory, string directoryName);
 
     void CreateFile(string sourceDirectory, string fileName);
 
-    Task RemoveAsync(IReadOnlyList<string> nodes);
+    Task<bool> RemoveAsync(IReadOnlyList<string> nodes);
 
     bool Rename(string path, string newName);
 }

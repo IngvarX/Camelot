@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Camelot.Extensions;
 using Camelot.Services.Abstractions;
+using Camelot.Services.Abstractions.Extensions;
 using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.Services.Abstractions.Models.Operations;
 using Camelot.Services.Abstractions.Operations;
@@ -36,58 +37,70 @@ public class OperationsService : IOperationsService
 
     public void OpenFiles(IReadOnlyList<string> files) => files.ForEach(_resourceOpeningService.Open);
 
-    public async Task CopyAsync(IReadOnlyList<string> nodes, string destinationDirectory)
+    public async Task<bool> CopyAsync(IReadOnlyList<string> nodes, string destinationDirectory)
     {
         var settings = GetBinaryFileSystemOperationSettings(nodes, destinationDirectory);
         var copyOperation = _operationsFactory.CreateCopyOperation(settings);
         _operationsStateService.AddOperation(copyOperation);
 
         await copyOperation.RunAsync();
+
+        return IsCompleted(copyOperation);
     }
 
-    public async Task MoveAsync(IReadOnlyList<string> nodes, string destinationDirectory)
+    public async Task<bool> MoveAsync(IReadOnlyList<string> nodes, string destinationDirectory)
     {
         var settings = GetBinaryFileSystemOperationSettings(nodes, destinationDirectory);
         var moveOperation = _operationsFactory.CreateMoveOperation(settings);
         _operationsStateService.AddOperation(moveOperation);
 
         await moveOperation.RunAsync();
+        
+        return IsCompleted(moveOperation);
     }
 
-    public async Task MoveAsync(IReadOnlyDictionary<string, string> nodes)
+    public async Task<bool> MoveAsync(IReadOnlyDictionary<string, string> nodes)
     {
         var settings = GetBinaryFileSystemOperationSettings(nodes);
         var moveOperation = _operationsFactory.CreateMoveOperation(settings);
         _operationsStateService.AddOperation(moveOperation);
 
         await moveOperation.RunAsync();
+
+        return IsCompleted(moveOperation);
     }
 
-    public async Task PackAsync(IReadOnlyList<string> nodes, string outputFilePath, ArchiveType archiveType)
+    public async Task<bool> PackAsync(IReadOnlyList<string> nodes, string outputFilePath, ArchiveType archiveType)
     {
         var settings = GetPackOperationSettings(nodes, outputFilePath, archiveType);
         var packOperation = _operationsFactory.CreatePackOperation(settings);
         _operationsStateService.AddOperation(packOperation);
 
         await packOperation.RunAsync();
+
+        return IsCompleted(packOperation);
     }
 
-    public async Task ExtractAsync(string archivePath, string outputDirectory, ArchiveType archiveType)
+    public async Task<bool> ExtractAsync(string archivePath, string outputDirectory, ArchiveType archiveType)
     {
         var settings = GetExtractOperationSettings(archivePath, outputDirectory, archiveType);
         var extractOperation = _operationsFactory.CreateExtractOperation(settings);
         _operationsStateService.AddOperation(extractOperation);
 
         await extractOperation.RunAsync();
+
+        return IsCompleted(extractOperation);
     }
 
-    public async Task RemoveAsync(IReadOnlyList<string> nodes)
+    public async Task<bool> RemoveAsync(IReadOnlyList<string> nodes)
     {
         var settings = GetUnaryFileSystemOperationSettings(nodes);
         var deleteOperation = _operationsFactory.CreateDeleteOperation(settings);
         _operationsStateService.AddOperation(deleteOperation);
 
         await deleteOperation.RunAsync();
+
+        return IsCompleted(deleteOperation);
     }
 
     public bool Rename(string path, string newName)
@@ -113,6 +126,8 @@ public class OperationsService : IOperationsService
 
         _fileService.CreateFile(fullPath);
     }
+
+    private static bool IsCompleted(IStatefulOperation operation) => operation.State.IsSuccessful();
 
     private BinaryFileSystemOperationSettings GetBinaryFileSystemOperationSettings(
         IReadOnlyList<string> nodes, string outputDirectory)
@@ -192,7 +207,7 @@ public class OperationsService : IOperationsService
 
     private static ExtractArchiveOperationSettings GetExtractOperationSettings(
         string archivePath, string outputDirectory, ArchiveType archiveType) =>
-        new ExtractArchiveOperationSettings(archivePath, outputDirectory, archiveType);
+        new(archivePath, outputDirectory, archiveType);
 
     private string GetDestinationPath(string sourceDirectory,
         string sourcePath, string destinationDirectory)
