@@ -83,7 +83,8 @@ public class LinuxTrashCanServiceTests
             .Returns(builderMock.Object);
 
         var linuxTrashCanService = _autoMocker.CreateInstance<LinuxTrashCanService>();
-        await linuxTrashCanService.MoveToTrashAsync(new[] {FilePath}, CancellationToken.None);
+        var result = await linuxTrashCanService.MoveToTrashAsync(new[] {FilePath}, CancellationToken.None);
+        Assert.True(result);
 
         _autoMocker
             .Verify<IOperationsService>(m => m.MoveAsync(

@@ -45,7 +45,7 @@ public class OperationsService : IOperationsService
 
         await copyOperation.RunAsync();
 
-        return IsCompleted(copyOperation);
+        return IsSuccessful(copyOperation);
     }
 
     public async Task<bool> MoveAsync(IReadOnlyList<string> nodes, string destinationDirectory)
@@ -56,7 +56,7 @@ public class OperationsService : IOperationsService
 
         await moveOperation.RunAsync();
         
-        return IsCompleted(moveOperation);
+        return IsSuccessful(moveOperation);
     }
 
     public async Task<bool> MoveAsync(IReadOnlyDictionary<string, string> nodes)
@@ -67,7 +67,7 @@ public class OperationsService : IOperationsService
 
         await moveOperation.RunAsync();
 
-        return IsCompleted(moveOperation);
+        return IsSuccessful(moveOperation);
     }
 
     public async Task<bool> PackAsync(IReadOnlyList<string> nodes, string outputFilePath, ArchiveType archiveType)
@@ -78,7 +78,7 @@ public class OperationsService : IOperationsService
 
         await packOperation.RunAsync();
 
-        return IsCompleted(packOperation);
+        return IsSuccessful(packOperation);
     }
 
     public async Task<bool> ExtractAsync(string archivePath, string outputDirectory, ArchiveType archiveType)
@@ -89,7 +89,7 @@ public class OperationsService : IOperationsService
 
         await extractOperation.RunAsync();
 
-        return IsCompleted(extractOperation);
+        return IsSuccessful(extractOperation);
     }
 
     public async Task<bool> RemoveAsync(IReadOnlyList<string> nodes)
@@ -100,7 +100,7 @@ public class OperationsService : IOperationsService
 
         await deleteOperation.RunAsync();
 
-        return IsCompleted(deleteOperation);
+        return IsSuccessful(deleteOperation);
     }
 
     public bool Rename(string path, string newName)
@@ -127,7 +127,7 @@ public class OperationsService : IOperationsService
         _fileService.CreateFile(fullPath);
     }
 
-    private static bool IsCompleted(IStatefulOperation operation) => operation.State.IsSuccessful();
+    private static bool IsSuccessful(IStatefulOperation operation) => operation.State.IsSuccessful();
 
     private BinaryFileSystemOperationSettings GetBinaryFileSystemOperationSettings(
         IReadOnlyList<string> nodes, string outputDirectory)

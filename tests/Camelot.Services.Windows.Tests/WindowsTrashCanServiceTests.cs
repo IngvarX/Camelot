@@ -98,7 +98,8 @@ public class WindowsTrashCanServiceTests
             .Returns(builderMock.Object);
 
         var windowsTrashCanService = _autoMocker.CreateInstance<WindowsTrashCanService>();
-        await windowsTrashCanService.MoveToTrashAsync(new[] {FilePath}, CancellationToken.None);
+        var result = await windowsTrashCanService.MoveToTrashAsync(new[] {FilePath}, CancellationToken.None);
+        Assert.True(result);
 
         _autoMocker
             .Verify<IOperationsService>(m => m.MoveAsync(

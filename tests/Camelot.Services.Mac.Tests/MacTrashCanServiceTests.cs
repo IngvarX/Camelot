@@ -54,7 +54,8 @@ public class MacTrashCanServiceTests
             .Returns(HomePath);
 
         var macTrashCanService = _autoMocker.CreateInstance<MacTrashCanService>();
-        await macTrashCanService.MoveToTrashAsync(new[] {FilePath}, CancellationToken.None);
+        var result = await macTrashCanService.MoveToTrashAsync(new[] {FilePath}, CancellationToken.None);
+        Assert.True(result);
 
         _autoMocker
             .Verify<IOperationsService>(m => m.MoveAsync(

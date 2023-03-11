@@ -38,9 +38,7 @@ public class MacTrashCanService : TrashCanServiceBase
 
         return directories;
     }
-
-    protected override string GetFilesTrashCanLocation(string trashCanLocation) => trashCanLocation;
-
+    
     protected override Task WriteMetaDataAsync(IReadOnlyDictionary<string, string> filePathsDictionary,
         string trashCanLocation) => Task.CompletedTask;
 

@@ -61,7 +61,7 @@ public abstract class TrashCanServiceBase : ITrashCanService
 
     protected abstract IReadOnlyList<string> GetTrashCanLocations(string volume);
 
-    protected abstract string GetFilesTrashCanLocation(string trashCanLocation);
+    protected virtual string GetFilesTrashCanLocation(string trashCanLocation) => trashCanLocation;
 
     protected abstract Task WriteMetaDataAsync(IReadOnlyDictionary<string, string> filePathsDictionary,
         string trashCanLocation);
@@ -70,11 +70,12 @@ public abstract class TrashCanServiceBase : ITrashCanService
 
     protected virtual Task CleanupAsync() => Task.CompletedTask;
 
-    private IReadOnlyDictionary<string, string> GetFilesTrashCanPathsMapping(IReadOnlyList<string> files,
-        string filesTrashCanLocation)
+    private IReadOnlyDictionary<string, string> GetFilesTrashCanPathsMapping(
+        IReadOnlyList<string> files, string filesTrashCanLocation)
     {
         var fileNames = new HashSet<string>();
         var dictionary = new Dictionary<string, string>();
+        
         foreach (var file in files)
         {
             var fileName = _pathService.GetFileName(file);

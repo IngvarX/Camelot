@@ -47,7 +47,9 @@ public class WindowsTrashCanService : TrashCanServiceBase
 
     protected override async Task PrepareAsync(IReadOnlyList<string> nodes)
     {
-        var files = nodes.Where(_fileService.CheckIfExists).ToArray();
+        var files = nodes
+            .Where(_fileService.CheckIfExists)
+            .ToArray();
         _fileSizesDictionary = _fileService
             .GetFiles(files)
             .ToDictionary(f => f.FullPath, f => f.SizeBytes);
@@ -57,9 +59,7 @@ public class WindowsTrashCanService : TrashCanServiceBase
 
     protected override IReadOnlyList<string> GetTrashCanLocations(string volume) =>
         new[] {$"{volume}$Recycle.Bin\\{_sid}"};
-
-    protected override string GetFilesTrashCanLocation(string trashCanLocation) => trashCanLocation;
-
+    
     protected override async Task WriteMetaDataAsync(IReadOnlyDictionary<string, string> filePathsDictionary,
         string trashCanLocation)
     {
