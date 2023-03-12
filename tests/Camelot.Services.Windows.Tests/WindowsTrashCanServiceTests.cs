@@ -42,8 +42,9 @@ public class WindowsTrashCanServiceTests
             .Setup<IMountedDriveService, DriveModel>(m => m.GetFileDrive(It.IsAny<string>()))
             .Returns(new DriveModel {RootDirectory = volume});
         _autoMocker
-            .Setup<IOperationsService>(m => m.MoveAsync(
+            .Setup<IOperationsService, Task<bool>>(m => m.MoveAsync(
                 It.Is<IReadOnlyDictionary<string, string>>(d => d.ContainsKey(FilePath) && d[FilePath] == newFilePath)))
+            .ReturnsAsync(true)
             .Verifiable();
         _autoMocker
             .Setup<IPathService, string>(m => m.GetFileName(It.IsAny<string>()))

@@ -62,9 +62,7 @@ public class TrashCanServiceBaseTests
 
         protected override IReadOnlyList<string> GetTrashCanLocations(string volume) =>
             new[] { "1", "2" };
-
-        protected override string GetFilesTrashCanLocation(string trashCanLocation) => trashCanLocation;
-
+        
         protected override Task WriteMetaDataAsync(
             IReadOnlyDictionary<string, string> filePathsDictionary, string trashCanLocation) =>
             Task.CompletedTask;
