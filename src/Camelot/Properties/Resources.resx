@@ -540,4 +540,16 @@
   <data name="GoToParentDirectory" xml:space="preserve">
     <value>Go to parent directory</value>
   </data>
+  <data name="Icons" xml:space="preserve">
+    <value>Icons</value>
+  </data>
+  <data name="FilesIconsWithColon" xml:space="preserve">
+    <value>Files icons:</value>
+  </data>
+  <data name="ChangesRequireRestart" xml:space="preserve">
+    <value>Changes requires restart of application to take effect.</value>
+  </data>
+  <data name="SupportedOnWindowsOnly" xml:space="preserve">
+    <value>* Supported on Windows only</value>
+  </data>
 </root>

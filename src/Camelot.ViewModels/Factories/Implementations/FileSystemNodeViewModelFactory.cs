@@ -22,6 +22,8 @@ public class FileSystemNodeViewModelFactory : IFileSystemNodeViewModelFactory
     private readonly IDirectoryService _directoryService;
     private readonly IFileSystemNodeFacade _fileSystemNodeFacade;
     private readonly IFileTypeMapper _fileTypeMapper;
+    private readonly IShellIconsCacheService _shellIconsCacheService;
+    private readonly IIconsSettingsService _iconsSettingsService;
 
     public FileSystemNodeViewModelFactory(
         IFileSystemNodeOpeningBehavior fileOpeningBehavior,
@@ -34,7 +36,9 @@ public class FileSystemNodeViewModelFactory : IFileSystemNodeViewModelFactory
         IFileService fileService,
         IDirectoryService directoryService,
         IFileSystemNodeFacade fileSystemNodeFacade,
-        IFileTypeMapper fileTypeMapper)
+        IFileTypeMapper fileTypeMapper,
+        IShellIconsCacheService shellIconsCacheService,
+        IIconsSettingsService iconsSettingsService)
     {
         _fileOpeningBehavior = fileOpeningBehavior;
         _directoryOpeningBehavior = directoryOpeningBehavior;
@@ -47,6 +51,8 @@ public class FileSystemNodeViewModelFactory : IFileSystemNodeViewModelFactory
         _directoryService = directoryService;
         _fileSystemNodeFacade = fileSystemNodeFacade;
         _fileTypeMapper = fileTypeMapper;
+        _shellIconsCacheService = shellIconsCacheService;
+        _iconsSettingsService = iconsSettingsService;
     }
 
     public IFileSystemNodeViewModel Create(string path)
@@ -75,7 +81,9 @@ public class FileSystemNodeViewModelFactory : IFileSystemNodeViewModelFactory
             _fileSystemNodeFacade,
             false,
             _fileSizeFormatter,
-            _fileTypeMapper)
+            _fileTypeMapper,
+            _shellIconsCacheService,
+            _iconsSettingsService)
         {
             FullPath = fileModel.FullPath,
             Size = fileModel.SizeBytes,

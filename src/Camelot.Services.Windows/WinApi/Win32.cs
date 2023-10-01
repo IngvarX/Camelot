@@ -29,7 +29,9 @@ public static class Win32
     {
         Command = 1,
         Executable = 2,
-        FriendlyAppName = 4
+        FriendlyAppName = 4,
+        DefaultIcon = 15,
+        AppIconRreference = 23
     }
 
     [Flags]

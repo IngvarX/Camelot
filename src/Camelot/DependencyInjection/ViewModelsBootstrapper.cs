@@ -109,7 +109,9 @@ public static class ViewModelsBootstrapper
             resolver.GetRequiredService<IFileService>(),
             resolver.GetRequiredService<IDirectoryService>(),
             resolver.GetRequiredService<IFileSystemNodeFacade>(),
-            resolver.GetRequiredService<IFileTypeMapper>()
+            resolver.GetRequiredService<IFileTypeMapper>(),
+            resolver.GetRequiredService<IShellIconsCacheService>(),
+            resolver.GetRequiredService<IIconsSettingsService>()
         ));
         services.RegisterLazySingleton<IBitmapFactory>(() => new BitmapFactory());
         services.Register(() => new MainNodeInfoTabViewModel(
@@ -157,7 +159,11 @@ public static class ViewModelsBootstrapper
         ));
         services.Register(() => new SettingsDialogViewModel(
             resolver.GetRequiredService<GeneralSettingsViewModel>(),
-            resolver.GetRequiredService<TerminalSettingsViewModel>()
+            resolver.GetRequiredService<TerminalSettingsViewModel>(),
+            resolver.GetRequiredService<IconsSettingsViewModel>()
+        ));
+        services.Register(() => new IconsSettingsViewModel(
+            resolver.GetRequiredService<IIconsSettingsService>()
         ));
         services.RegisterLazySingleton(() => new FilePropertiesBehavior(
             resolver.GetRequiredService<IDialogService>()
@@ -347,7 +353,9 @@ public static class ViewModelsBootstrapper
             resolver.GetRequiredService<IFileService>(),
             resolver.GetRequiredService<IDirectoryService>(),
             resolver.GetRequiredService<IFileSystemNodeFacade>(),
-            resolver.GetRequiredService<IFileTypeMapper>()
+            resolver.GetRequiredService<IFileTypeMapper>(),
+            resolver.GetRequiredService<IShellIconsCacheService>(),
+            resolver.GetRequiredService<IIconsSettingsService>()
         ));
     }
 }
