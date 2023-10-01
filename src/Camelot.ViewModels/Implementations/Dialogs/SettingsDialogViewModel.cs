@@ -15,6 +15,7 @@ public class SettingsDialogViewModel : DialogViewModelBase
     public ISettingsViewModel TerminalSettingsViewModel { get; set; }
 
     public ISettingsViewModel GeneralSettingsViewModel { get; set; }
+    public ISettingsViewModel IconsSettingsViewModel { get; set; }
 
     public int SelectedIndex
     {
@@ -30,15 +31,18 @@ public class SettingsDialogViewModel : DialogViewModelBase
 
     public SettingsDialogViewModel(
         ISettingsViewModel generalSettingsViewModel,
-        ISettingsViewModel terminalSettingsViewModel)
+        ISettingsViewModel terminalSettingsViewModel,
+        ISettingsViewModel iconsSettingsViewModel)
     {
         TerminalSettingsViewModel = terminalSettingsViewModel;
         GeneralSettingsViewModel = generalSettingsViewModel;
+        IconsSettingsViewModel = iconsSettingsViewModel;
 
         _settingsViewModels = new[]
         {
             generalSettingsViewModel,
-            terminalSettingsViewModel
+            terminalSettingsViewModel,
+            iconsSettingsViewModel
         };
 
         Activate(_settingsViewModels.First());
