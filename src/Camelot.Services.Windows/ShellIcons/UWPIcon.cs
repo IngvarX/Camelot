@@ -1,19 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Dynamic;
-using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Text;
-using System.Threading.Tasks;
-//using System.Windows.Media;
-//using System.Windows.Media.Imaging;
-//using AppxPackaing;
-//using Shell;
-//using Rect = System.Windows.Rect;
-//using LoggerLib;
 
 namespace Camelot.Services.Windows.ShellIcons;
 
