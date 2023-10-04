@@ -352,4 +352,133 @@
   <data name="Skip" xml:space="preserve">
     <value>Geç</value>
   </data>
+  <data name="DuplicateOnOppositePanel" xml:space="preserve">
+    <value>Karşı panelde çoğalt</value>
+  </data>
+  <data name="OpenInNewTabOnOppositePanel" xml:space="preserve">
+    <value>Diğer paneldeki yeni sekmede aç</value>
+  </data>
+  <data name="PasteFromClipboard" xml:space="preserve">
+    <value>Panodan yapıştır</value>
+  </data>
+  <data name="InnerFilesWithColon" xml:space="preserve">
+    <value>İç dosyalar:</value>
+  </data>
+  <data name="ThemeWithColon" xml:space="preserve">
+    <value>Tema:</value>
+  </data>
+  <data name="DarkThemeName" xml:space="preserve">
+    <value>Koyu</value>
+  </data>
+  <data name="LightThemeName" xml:space="preserve">
+    <value>Açık</value>
+  </data>
+  <data name="Unmount" xml:space="preserve">
+    <value>Bağı Kaldır</value>
+  </data>
+  <data name="Eject" xml:space="preserve">
+    <value>Çıkar</value>
+  </data>
+  <data name="SearchForApplications" xml:space="preserve">
+    <value>Uygulama ara</value>
+  </data>
+  <data name="ExtractArchiveHere" xml:space="preserve">
+    <value>Arşivi buraya çıkar</value>
+  </data>
+  <data name="EnterNewNameWithColon" xml:space="preserve">
+    <value>Yeni ad girin:</value>
+  </data>
+  <data name="PackedFilesAndDirectoriesTo" xml:space="preserve">
+    <value>{0} dosya ve {1} dizin {2} içine paketlendi</value>
+  </data>
+  <data name="ExtractArchiveToNewDirectory" xml:space="preserve">
+    <value>Arşivi yeni dizine çıkar</value>
+  </data>
+  <data name="SelectDirectoryForExtraction" xml:space="preserve">
+    <value>Çıkarma için dizin seçin</value>
+  </data>
+  <data name="PackFilesTitle" xml:space="preserve">
+    <value>Dosyaları paketle</value>
+  </data>
+  <data name="PackToTheFileWithColon" xml:space="preserve">
+    <value>Dosyaya paketle:</value>
+  </data>
+  <data name="CreateArchive" xml:space="preserve">
+    <value>Arşiv oluştur</value>
+  </data>
+  <data name="OpenWith" xml:space="preserve">
+    <value>Birlikte aç</value>
+  </data>
+  <data name="OpenWithTitle" xml:space="preserve">
+    <value>Birlikte aç</value>
+  </data>
+  <data name="RecommendedApplications" xml:space="preserve">
+    <value>Önerilen Uygulamalar</value>
+  </data>
+  <data name="SelectOtherApplications" xml:space="preserve">
+    <value>Diğer Uygulamalar</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>Seç</value>
+  </data>
+  <data name="SetAsDefaultApplication" xml:space="preserve">
+    <value>Öntanımlı olarak ayarla</value>
+  </data>
+  <data name="FailedToExtractArchiveTo" xml:space="preserve">
+    <value>{0} arşivi {1} olarak çıkarılamadı</value>
+  </data>
+  <data name="FailedToPackTo" xml:space="preserve">
+    <value>{0}, {1} olarak paketlenemedi</value>
+  </data>
+  <data name="FailedToPackFilesAndDirectoriesTo" xml:space="preserve">
+    <value>{0} dosya ve {1} dizin {2} olarak paketlenemedi</value>
+  </data>
+  <data name="OpeningFiles" xml:space="preserve">
+    <value>"{0}" dosyaları açılıyor</value>
+  </data>
+  <data name="OpenInNewTab" xml:space="preserve">
+    <value>Yeni sekmede aç</value>
+  </data>
+  <data name="CaseSensitive" xml:space="preserve">
+    <value>Büyük küçük harf duyarlı</value>
+  </data>
+  <data name="CloseSearchPanel" xml:space="preserve">
+    <value>Arama panelini kapat</value>
+  </data>
+  <data name="Recursive" xml:space="preserve">
+    <value>Özyinelemeli</value>
+  </data>
+  <data name="RegularExpression" xml:space="preserve">
+    <value>Düzenli ifade</value>
+  </data>
+  <data name="AccessDeniedTitle" xml:space="preserve">
+    <value>Erişim reddedildi</value>
+  </data>
+  <data name="AccessToDirectoryIsDenied" xml:space="preserve">
+    <value>{0} dizinine erişim reddedildi</value>
+  </data>
+  <data name="MountPointWithColon" xml:space="preserve">
+    <value>Bağlama noktası:</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Yeniden yükle</value>
+  </data>
+  <data name="GoBack" xml:space="preserve">
+    <value>Geri git</value>
+  </data>
+  <data name="GoForward" xml:space="preserve">
+    <value>İleri git</value>
+  </data>
+  <data name="UnmarkAsFavourite" xml:space="preserve">
+    <value>Gözdelerden çıkar</value>
+  </data>
+  <data name="MarkAsFavourite" xml:space="preserve">
+    <value>Gözde olarak imle</value>
+  </data>
+  <data name="InnerDirectoriesWithColon" xml:space="preserve">
+    <value>İç dizinler:</value>
+  </data>
+  <data name="GoToParentDirectory" xml:space="preserve">
+    <value>Ana dizine git</value>
+  </data>
 </root>

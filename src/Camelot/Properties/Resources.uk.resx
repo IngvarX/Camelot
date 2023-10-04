@@ -314,7 +314,7 @@
     <value>Інший файл з такою ж назвою вже існує в "{0}". Замінити його?</value>
   </data>
   <data name="ReplaceIfOlder" xml:space="preserve">
-    <value>Замініть, якщо старше</value>
+    <value>Замінити, якщо старше</value>
   </data>
   <data name="SearchForFilesAndDirectories" xml:space="preserve">
     <value>Пошук файлів і каталогів</value>
@@ -333,5 +333,23 @@
   </data>
   <data name="ExtractingArchiveTo" xml:space="preserve">
     <value>Розпакування {0} до {1}</value>
+  </data>
+  <data name="Apply" xml:space="preserve">
+    <value>Застосувати</value>
+  </data>
+  <data name="ReplaceWith" xml:space="preserve">
+    <value>Замінити з</value>
+  </data>
+  <data name="PackedFileTo" xml:space="preserve">
+    <value>Упаковано файл {0} в {1}</value>
+  </data>
+  <data name="ExtractArchiveHere" xml:space="preserve">
+    <value>Розпакувати архів сюди</value>
+  </data>
+  <data name="ExtractArchiveToNewDirectory" xml:space="preserve">
+    <value>Розпакувати архів в нову папку</value>
+  </data>
+  <data name="PackedFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Упаковано {0} файлів та {1} папок в {2}</value>
   </data>
 </root>

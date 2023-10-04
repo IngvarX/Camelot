@@ -68,7 +68,7 @@
     <value>Kopiowanie {0} do {1}</value>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>Kopiować</value>
+    <value>Kopiuj</value>
   </data>
   <data name="CopiedFilesFromAndDirectoriesTo" xml:space="preserve">
     <value>Skopiowano {0} plików i {1} katalogów do {2}</value>
@@ -477,5 +477,8 @@
   </data>
   <data name="Reload" xml:space="preserve">
     <value>Odśwież</value>
+  </data>
+  <data name="GoToParentDirectory" xml:space="preserve">
+    <value>Przejdź do katalogu nadrzędnego</value>
   </data>
 </root>

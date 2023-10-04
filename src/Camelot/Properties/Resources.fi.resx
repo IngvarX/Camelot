@@ -166,4 +166,10 @@
   <data name="AboutCamelotTitle" xml:space="preserve">
     <value>Tietoja Camelotista</value>
   </data>
+  <data name="FailedToMoveFileFromTo" xml:space="preserve">
+    <value>Kohteen {0} siirtäminen kohteeseen {1} epäonnistui</value>
+  </data>
+  <data name="FailedToDeleteFilesAndDirectoriesFrom" xml:space="preserve">
+    <value>{0} tiedoston ja {1} hakemiston poistaminen kohteesta {2} epäonnistui</value>
+  </data>
 </root>

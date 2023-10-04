@@ -361,4 +361,112 @@
   <data name="CopiedFileFromTo" xml:space="preserve">
     <value>Copiato da {0} a {1}</value>
   </data>
+  <data name="NewDirectory" xml:space="preserve">
+    <value>Nuova Cartella</value>
+  </data>
+  <data name="FailedCopyFromFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Copia di {0} file e {1} cartelle in {2} non riuscita</value>
+  </data>
+  <data name="FailedToDeleteFileFromTo" xml:space="preserve">
+    <value>Cancellazione fallita di {0} da {1}</value>
+  </data>
+  <data name="FailedToDeleteFilesAndDirectoriesFrom" xml:space="preserve">
+    <value>Eliminazione fallita di {0} file e {1} cartelle da {2}</value>
+  </data>
+  <data name="FailedToMoveFileFromTo" xml:space="preserve">
+    <value>Spostamento fallito da {0} a {1}</value>
+  </data>
+  <data name="FilesRemovingConfirmationTitle" xml:space="preserve">
+    <value>Conferma la rimozione di file</value>
+  </data>
+  <data name="FailedToMoveFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Spostamento fallito di {0} file e {1} cartelle in {2}</value>
+  </data>
+  <data name="MovingFromFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Spostamento di {0} file e {1} cartelle in {2}</value>
+  </data>
+  <data name="NewTab" xml:space="preserve">
+    <value>Nuova Scheda</value>
+  </data>
+  <data name="OpenInNewTabOnOppositePanel" xml:space="preserve">
+    <value>Apri in una nuova scheda in un altro pannello</value>
+  </data>
+  <data name="GoToParentDirectory" xml:space="preserve">
+    <value>Vai alla directory superiore</value>
+  </data>
+  <data name="RemovingFilesAndDirectoriesFrom" xml:space="preserve">
+    <value>Rimozione di {0} file e {1} cartelle da {2} in corso</value>
+  </data>
+  <data name="RemovingFilesToTrash" xml:space="preserve">
+    <value>Vuoi spostare questi {0} file nel cestino?</value>
+  </data>
+  <data name="Terminal" xml:space="preserve">
+    <value>Terminale</value>
+  </data>
+  <data name="ClickToMount" xml:space="preserve">
+    <value>Clicca per montare il disco</value>
+  </data>
+  <data name="ExtractedArchiveTo" xml:space="preserve">
+    <value>Archivio {0} estratto in {1}</value>
+  </data>
+  <data name="PackedFileTo" xml:space="preserve">
+    <value>File {0} compresso in {1}</value>
+  </data>
+  <data name="PackedFilesAndDirectoriesTo" xml:space="preserve">
+    <value>{0} File e {1} Cartelle compresse in {2}</value>
+  </data>
+  <data name="PackToTheFileWithColon" xml:space="preserve">
+    <value>Comprimi nel file:</value>
+  </data>
+  <data name="FailedToExtractArchiveTo" xml:space="preserve">
+    <value>Estrazione dell'archivio {0} in {1} fallita</value>
+  </data>
+  <data name="FailedToPackTo" xml:space="preserve">
+    <value>Compressione di {0} in {1} fallita</value>
+  </data>
+  <data name="FailedToPackFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Compressione di {0} file e {1} cartella/e fallita</value>
+  </data>
+  <data name="EnterNewNameWithColon" xml:space="preserve">
+    <value>Inserisci un nuovo nome:</value>
+  </data>
+  <data name="DarkThemeName" xml:space="preserve">
+    <value>Scuro</value>
+  </data>
+  <data name="ThemeWithColon" xml:space="preserve">
+    <value>Tema:</value>
+  </data>
+  <data name="LightThemeName" xml:space="preserve">
+    <value>Chiaro</value>
+  </data>
+  <data name="Unmount" xml:space="preserve">
+    <value>Smonta Disco</value>
+  </data>
+  <data name="Eject" xml:space="preserve">
+    <value>Espelli</value>
+  </data>
+  <data name="OpenInNewTab" xml:space="preserve">
+    <value>Apri in un'altra scheda</value>
+  </data>
+  <data name="Recursive" xml:space="preserve">
+    <value>Ricorsivo</value>
+  </data>
+  <data name="CaseSensitive" xml:space="preserve">
+    <value>Distingui Maiuscole e Minuscole</value>
+  </data>
+  <data name="AccessDeniedTitle" xml:space="preserve">
+    <value>Accesso Negato</value>
+  </data>
+  <data name="AccessToDirectoryIsDenied" xml:space="preserve">
+    <value>Accesso negato alla directory {0}</value>
+  </data>
+  <data name="MountPointWithColon" xml:space="preserve">
+    <value>Mount Point:</value>
+  </data>
+  <data name="UnmarkAsFavourite" xml:space="preserve">
+    <value>Deseleziona come preferito</value>
+  </data>
+  <data name="MarkAsFavourite" xml:space="preserve">
+    <value>Seleziona come preferito</value>
+  </data>
 </root>

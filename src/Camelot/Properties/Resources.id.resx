@@ -365,7 +365,7 @@
     <value>Apakah Anda ingin menghapus {0} berkas tersebut secara permanen?</value>
   </data>
   <data name="ReplaceFileDestinationDirectory" xml:space="preserve">
-    <value>Berkas lain dengan nama yang sama telah ada di "{0}" Apakah Anda ingin menimpanya?</value>
+    <value>File lain dengan nama yang sama sudah ada di "{0}" Apakah Anda ingin menggantinya?</value>
   </data>
   <data name="SelectNewNameForDestination" xml:space="preserve">
     <value>Pilih nama baru untuk tujuan</value>
@@ -390,5 +390,95 @@
   </data>
   <data name="MarkAsFavourite" xml:space="preserve">
     <value>Tandai sebagai favorit</value>
+  </data>
+  <data name="AboutPage" xml:space="preserve">
+    <value>Camelot adalah manajer file panel ganda yang dibuat dengan C#</value>
+  </data>
+  <data name="Apply" xml:space="preserve">
+    <value>Terapkan</value>
+  </data>
+  <data name="ArgumentsWithColon" xml:space="preserve">
+    <value>Argumen:</value>
+  </data>
+  <data name="CloseTabsToTheLeft" xml:space="preserve">
+    <value>Tutup tab ke kiri</value>
+  </data>
+  <data name="CloseTabsToTheRight" xml:space="preserve">
+    <value>Tutup tab di sebelah kanan</value>
+  </data>
+  <data name="CopiedFileFromTo" xml:space="preserve">
+    <value>Menyalin {0} ke {1}</value>
+  </data>
+  <data name="CopyingFilesFromAndDirectoriesTo" xml:space="preserve">
+    <value>Menyalin file {0} dan direktori {1} ke {2}</value>
+  </data>
+  <data name="ClickToMount" xml:space="preserve">
+    <value>Klik untuk memasang</value>
+  </data>
+  <data name="Pack" xml:space="preserve">
+    <value>Bungkus</value>
+  </data>
+  <data name="ExtractingArchiveTo" xml:space="preserve">
+    <value>Mengekstrak {0} ke {1}</value>
+  </data>
+  <data name="PackingFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Mengemas file {0} dan direktori {1} ke (2)</value>
+  </data>
+  <data name="PackingFileTo" xml:space="preserve">
+    <value>Mengemas file {0} ke {1}</value>
+  </data>
+  <data name="ExtractedArchiveTo" xml:space="preserve">
+    <value>Arsip yang diekstrak {0} ke {1}</value>
+  </data>
+  <data name="PackedFileTo" xml:space="preserve">
+    <value>File yang dikemas {0} ke {1}</value>
+  </data>
+  <data name="PackedFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Mengemas file {0} dan direktori {1} ke {2}</value>
+  </data>
+  <data name="ExtractArchiveToNewDirectory" xml:space="preserve">
+    <value>Ekstrak arsip ke direktori baru</value>
+  </data>
+  <data name="SelectDirectoryForExtraction" xml:space="preserve">
+    <value>Pilih direktori untuk ekstraksi</value>
+  </data>
+  <data name="PackFilesTitle" xml:space="preserve">
+    <value>Kemas file</value>
+  </data>
+  <data name="PackToTheFileWithColon" xml:space="preserve">
+    <value>Kemas ke file:</value>
+  </data>
+  <data name="FailedToExtractArchiveTo" xml:space="preserve">
+    <value>Gagal mengekstrak arsip {0} ke {1}</value>
+  </data>
+  <data name="FailedToPackTo" xml:space="preserve">
+    <value>Gagal mengemas {0} ke {1}</value>
+  </data>
+  <data name="FailedToPackFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Gagal mengemas file {0} dan direktori {1} ke {2}</value>
+  </data>
+  <data name="Unmount" xml:space="preserve">
+    <value>Lepaskan</value>
+  </data>
+  <data name="Eject" xml:space="preserve">
+    <value>Keluarkan</value>
+  </data>
+  <data name="DuplicateOnOppositePanel" xml:space="preserve">
+    <value>Duplikat pada panel yang berlawanan</value>
+  </data>
+  <data name="MountPointWithColon" xml:space="preserve">
+    <value>Titik pemasangan:</value>
+  </data>
+  <data name="OpenInNewTabOnOppositePanel" xml:space="preserve">
+    <value>Buka di tab baru pada panel lain</value>
+  </data>
+  <data name="InnerDirectoriesWithColon" xml:space="preserve">
+    <value>Direktori dalam:</value>
+  </data>
+  <data name="CaseSensitive" xml:space="preserve">
+    <value>Sensitif dengan huruf besar kecil</value>
+  </data>
+  <data name="InnerFilesWithColon" xml:space="preserve">
+    <value>File dalam:</value>
   </data>
 </root>

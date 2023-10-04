@@ -140,7 +140,7 @@
     <value>Søk etter filer og mapper</value>
   </data>
   <data name="SettingsHeader" xml:space="preserve">
-    <value>_Innstillinger</value>
+    <value>Inn_stillinger</value>
   </data>
   <data name="SelectNewNameForDestination" xml:space="preserve">
     <value>Velg et nytt filnavn for målet</value>
@@ -269,7 +269,7 @@
     <value>Vis egenskaper</value>
   </data>
   <data name="SettingsTitle" xml:space="preserve">
-    <value>_Innstillinger</value>
+    <value>Innstillinger</value>
   </data>
   <data name="ReplaceFile" xml:space="preserve">
     <value>Erstatt fil</value>
@@ -434,7 +434,7 @@
     <value>Forskjell på små og store bokstaver</value>
   </data>
   <data name="RegularExpression" xml:space="preserve">
-    <value>Regulært uttrykk</value>
+    <value>Regulæruttrykk</value>
   </data>
   <data name="Recursive" xml:space="preserve">
     <value>Rekursivt</value>
