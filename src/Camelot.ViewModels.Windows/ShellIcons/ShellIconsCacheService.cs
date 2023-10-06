@@ -1,21 +1,19 @@
-using System;
-using System.Collections.Generic;
-using Camelot.Services.Abstractions;
-using System.IO;
-using Camelot.Services.Abstractions.Models;
-using Camelot.Images;
 using Avalonia.Media.Imaging;
-using Camelot.Services.Environment.Interfaces;
 using Camelot.Services.Environment.Enums;
+using Camelot.Services.Environment.Interfaces;
+using Camelot.ViewModels.Services.Interfaces;
+using Camelot.ViewModels.Services.Interfaces.Enums;
+using Camelot.ViewModels.Services.Interfaces.Models;
 
-namespace Camelot.Services.AllPlatforms;
+namespace Camelot.ViewModels.Windows.ShellIcons;
 
 public class ShellIconsCacheService : IShellIconsCacheService
 {
     private readonly IShellLinksService _shellLinksService;
     private readonly IShellIconsService _shellIconsService;
-    private readonly Dictionary<string, Bitmap> _cache = new();
+    private readonly Dictionary<string, Bitmap> _cache;
     private readonly Platform _platform;
+    
     public ShellIconsCacheService(
         IPlatformService platformService,
         IShellLinksService shellLinksService,
@@ -25,20 +23,17 @@ public class ShellIconsCacheService : IShellIconsCacheService
         if (platform != Platform.Windows)
             throw new InvalidOperationException($"Need to you other c'tor, without arg of {typeof(IShellLinksService)}");
 
-        _platform = platform;
         _shellLinksService = shellLinksService;
         _shellIconsService = shellIconsService;
+        _cache = new Dictionary<string, Bitmap>();
+        _platform = platform;
     }
 
     // The c'tor is for Mac/Linux, where cache is not implemented yet.
     public ShellIconsCacheService(
      IPlatformService platformService)
     {
-        var platform = platformService.GetPlatform();
-        if (platform == Platform.Windows)
-            throw new InvalidOperationException($"Need to you other c'tor, with arg of {typeof(IShellLinksService)}");
-
-        _platform = platform;
+        _platform = platformService.GetPlatform();
     }
 
     public ImageModel GetIcon(string filename)
@@ -47,8 +42,8 @@ public class ShellIconsCacheService : IShellIconsCacheService
             throw new ArgumentNullException(nameof(filename));
 
         var bitmap = GetShellIcon(filename);
-        var result = new ConcreteImage(bitmap);
-        return result;
+        
+        return new ImageModel(bitmap);
     }
 
     private string ResolveIfLink(string filename)
@@ -88,6 +83,7 @@ public class ShellIconsCacheService : IShellIconsCacheService
         {
             result = filename;
         }
+        
         return result;
     }
 
@@ -96,7 +92,6 @@ public class ShellIconsCacheService : IShellIconsCacheService
         if (string.IsNullOrEmpty(filename))
             throw new ArgumentNullException(nameof(filename));
 
-        Bitmap result = null;
         string path;
 
         // step #1
@@ -111,7 +106,14 @@ public class ShellIconsCacheService : IShellIconsCacheService
         {
             path = filename;
         }
+        
+        return ShellIcon(path);
+    }
 
+    private Bitmap ShellIcon(string path)
+    {
+        Bitmap result;
+        
         // step #2
         // check if cache, and if not, get from shell.
         // IMPORTANT:
@@ -122,59 +124,43 @@ public class ShellIconsCacheService : IShellIconsCacheService
         var iconType = _shellIconsService.GetIconType(path);
         switch (iconType)
         {
-            case IShellIconsService.ShellIconType.Extension:
+            case ShellIconType.Extension:
+            {
+                var ext = Path.GetExtension(path);
+                if (string.IsNullOrEmpty(ext))
                 {
-                    var ext = Path.GetExtension(path);
-                    if (string.IsNullOrEmpty(ext))
-                    {
-                        // a file with no extension. caller should use other icon.
-                        return null;
-                    }
-                    else
-                    {
-                        if (_cache.ContainsKey(ext))
-                        {
-                            result = _cache[ext];
-                        }
-                        else
-                        {
-                            var image = _shellIconsService.GetIconForExtension(ext);
-                            if (image != null)
-                            {
-                                var concreteImage = image as ConcreteImage;
-                                if (concreteImage == null)
-                                    throw new InvalidCastException();
-                                result = concreteImage.Bitmap;
-                            }
-                            _cache[ext] = result;
-                        }
-                    }
+                    // a file with no extension. caller should use other icon.
+                    return null;
                 }
+
+                if (_cache.TryGetValue(ext, out var value))
+                {
+                    result = value;
+                }
+                else
+                {
+                    var image = _shellIconsService.GetIconForExtension(ext);
+                    _cache[ext] = result = image.Bitmap;
+                }
+            }
                 break;
-            case IShellIconsService.ShellIconType.FullPath:
+            case ShellIconType.FullPath:
+            {
+                if (_cache.TryGetValue(path, out var value))
                 {
-                    if (_cache.ContainsKey(path))
-                    {
-                        result = _cache[path];
-                    }
-                    else
-                    {
-                        var image = _shellIconsService.GetIconForPath(path);
-                        if (image != null)
-                        {
-                            var concreteImage = image as ConcreteImage;
-                            if (concreteImage == null)
-                                throw new InvalidCastException();
-                            result = concreteImage.Bitmap;
-                        }
-                        _cache[path] = result;
-                    }
+                    result = value;
                 }
+                else
+                {
+                    var image = _shellIconsService.GetIconForPath(path);
+                    _cache[path] = result = image.Bitmap;
+                }
+            }
                 break;
             default:
-                throw new ArgumentOutOfRangeException(nameof(iconType));
+                throw new ArgumentOutOfRangeException(nameof(iconType), iconType, null);
         }
-        
+
         return result;
     }
 }

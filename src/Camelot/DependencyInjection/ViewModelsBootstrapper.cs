@@ -35,6 +35,7 @@ using Camelot.ViewModels.Interfaces.MainWindow.OperationsStates;
 using Camelot.ViewModels.Interfaces.Menu;
 using Camelot.ViewModels.Services.Implementations;
 using Camelot.ViewModels.Services.Interfaces;
+using Camelot.ViewModels.Windows.ShellIcons;
 using Splat;
 
 namespace Camelot.DependencyInjection;
@@ -44,6 +45,7 @@ public static class ViewModelsBootstrapper
     public static void RegisterViewModels(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
     {
         RegisterServices(services, resolver);
+        RegisterPlatformSpecificServices(services, resolver);
         RegisterFactories(services, resolver);
         RegisterCommonViewModels(services, resolver);
         RegisterPlatformSpecificViewModels(services, resolver);
@@ -51,6 +53,12 @@ public static class ViewModelsBootstrapper
 
     private static void RegisterServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
     {
+        services.RegisterLazySingleton<IShellIconsCacheService>(() => new ShellIconsCacheService(
+            resolver.GetRequiredService<IPlatformService>()
+        ));
+        services.RegisterLazySingleton<IShellIconsCacheService>(() => new ShellIconsCacheService(
+            resolver.GetRequiredService<IPlatformService>()
+        ));
         services.RegisterLazySingleton<IFilesOperationsMediator>(() => new FilesOperationsMediator(
             resolver.GetRequiredService<IDirectoryService>()
         ));
@@ -77,6 +85,38 @@ public static class ViewModelsBootstrapper
             resolver.GetRequiredService<IClipboardOperationsService>(),
             resolver.GetRequiredService<INodesSelectionService>(),
             resolver.GetRequiredService<IDirectoryService>()
+        ));
+    }
+
+    private static void RegisterPlatformSpecificServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
+    {
+        var platformService = resolver.GetRequiredService<IPlatformService>();
+        var platform = platformService.GetPlatform();
+        if (platform is Platform.Windows)
+        {
+            RegisterWindowsServices(services, resolver);
+        }
+        else
+        {
+            RegisterNonWindowsServices(services, resolver);
+        }
+    }
+    
+    private static void RegisterWindowsServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
+    {
+        services.RegisterLazySingleton<IShellIconsService>(() => new WindowsShellIconsService());
+        services.RegisterLazySingleton<IShellLinksService>(() => new WindowsShellLinksService());
+        services.RegisterLazySingleton<IShellIconsCacheService>(() => new ShellIconsCacheService(
+            resolver.GetRequiredService<IPlatformService>(),
+            resolver.GetRequiredService<IShellLinksService>(),
+            resolver.GetRequiredService<IShellIconsService>()
+        ));
+    }
+    
+    private static void RegisterNonWindowsServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
+    {
+        services.RegisterLazySingleton<IShellIconsCacheService>(() => new ShellIconsCacheService(
+            resolver.GetRequiredService<IPlatformService>()
         ));
     }
 

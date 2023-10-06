@@ -1,10 +1,8 @@
-﻿using System;
+﻿using System.Drawing;
 using System.Runtime.InteropServices;
-using System.IO;
-using System.Drawing;
 using System.Runtime.Versioning;
 
-namespace Camelot.Services.Windows.ShellIcons;
+namespace Camelot.ViewModels.Windows.ShellIcons;
 
 [SupportedOSPlatform("windows")]
 internal class IconExtractor

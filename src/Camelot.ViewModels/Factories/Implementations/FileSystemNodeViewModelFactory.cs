@@ -1,6 +1,7 @@
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Behaviors;
 using Camelot.Services.Abstractions.Models;
+using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Nodes;
 using Camelot.ViewModels.Interfaces.Behaviors;
@@ -23,7 +24,7 @@ public class FileSystemNodeViewModelFactory : IFileSystemNodeViewModelFactory
     private readonly IFileSystemNodeFacade _fileSystemNodeFacade;
     private readonly IFileTypeMapper _fileTypeMapper;
     private readonly IShellIconsCacheService _shellIconsCacheService;
-    private readonly IIconsSettingsService _iconsSettingsService;
+    private readonly IconsType _iconsType;
 
     public FileSystemNodeViewModelFactory(
         IFileSystemNodeOpeningBehavior fileOpeningBehavior,
@@ -52,7 +53,7 @@ public class FileSystemNodeViewModelFactory : IFileSystemNodeViewModelFactory
         _fileSystemNodeFacade = fileSystemNodeFacade;
         _fileTypeMapper = fileTypeMapper;
         _shellIconsCacheService = shellIconsCacheService;
-        _iconsSettingsService = iconsSettingsService;
+        _iconsType = iconsSettingsService.GetIconsSettings().SelectedIconsType;
     }
 
     public IFileSystemNodeViewModel Create(string path)
@@ -83,7 +84,7 @@ public class FileSystemNodeViewModelFactory : IFileSystemNodeViewModelFactory
             _fileSizeFormatter,
             _fileTypeMapper,
             _shellIconsCacheService,
-            _iconsSettingsService)
+            _iconsType)
         {
             FullPath = fileModel.FullPath,
             Size = fileModel.SizeBytes,

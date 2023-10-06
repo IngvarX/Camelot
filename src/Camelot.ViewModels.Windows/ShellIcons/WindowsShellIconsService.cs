@@ -1,20 +1,13 @@
-using System;
-using System.IO;
-using System.Linq;
-using System.Runtime.Versioning;
-using Camelot.Services.Abstractions;
-using Camelot.Services.Abstractions.Models;
-using Camelot.Services.Windows.ShellIcons;
-using Camelot.Images;
-
+using Camelot.ViewModels.Services.Interfaces;
+using Camelot.ViewModels.Services.Interfaces.Enums;
+using Camelot.ViewModels.Services.Interfaces.Models;
 using SystemBitmap = System.Drawing.Bitmap;
 using AvaloniaBitmap = Avalonia.Media.Imaging.Bitmap;
 
 
-namespace Camelot.Services.Windows;
+namespace Camelot.ViewModels.Windows.ShellIcons;
 
 
-[SupportedOSPlatform("windows")]
 public class WindowsShellIconsService : IShellIconsService
 {
     public ImageModel GetIconForExtension(string extension)
@@ -46,7 +39,7 @@ public class WindowsShellIconsService : IShellIconsService
         if (string.IsNullOrEmpty(path))
             throw new ArgumentNullException(nameof(path));
 
-        if (GetIconType(path) != IShellIconsService.ShellIconType.FullPath)
+        if (GetIconType(path) != ShellIconType.FullPath)
             throw new ArgumentOutOfRangeException(nameof(path));
 
         var ext = Path.GetExtension(path).ToLower();
@@ -70,15 +63,15 @@ public class WindowsShellIconsService : IShellIconsService
             // TODO: check if lossy and/or try other options, see url below. (iksi4prs).
             // https://learn.microsoft.com/en-us/dotnet/api/system.drawing.imageconverter.canconvertfrom?view=dotnet-plat-ext-7.0
             SystemBitmap systemBitmap = icon.ToBitmap();
-            AvaloniaBitmap avaloniaBitmap = SystemImageToAvaloniaBitmapConverter.Convert(systemBitmap);
-            result = new ConcreteImage(avaloniaBitmap);
+            var avaloniaBitmap = SystemImageToAvaloniaBitmapConverter.Convert(systemBitmap);
+            result = new ImageModel(avaloniaBitmap);
         }
         else
         {
             if (File.Exists(path))
             {
                 AvaloniaBitmap avaloniaBitmap = new AvaloniaBitmap(path);
-                result = new ConcreteImage(avaloniaBitmap);
+                result = new ImageModel(avaloniaBitmap);
             }
             else
             {
@@ -90,7 +83,7 @@ public class WindowsShellIconsService : IShellIconsService
         return result;
     }
 
-    public IShellIconsService.ShellIconType GetIconType(string filename)
+    public ShellIconType GetIconType(string filename)
     {
         if (string.IsNullOrEmpty(filename))
             throw new ArgumentNullException(nameof(filename));
@@ -99,10 +92,10 @@ public class WindowsShellIconsService : IShellIconsService
 
         // next extensions require that the icon will be resolved by full path,
         // and not just the extension itself.
-        var extensionForFullPaths = new string[] { ".exe", ".cpl", ".appref-ms", ".msc" };
-        if (extensionForFullPaths.Contains(ext))
-            return IShellIconsService.ShellIconType.FullPath;
+        var extensionForFullPaths = new[] { ".exe", ".cpl", ".appref-ms", ".msc" };
         
-        return IShellIconsService.ShellIconType.Extension;
+        return extensionForFullPaths.Contains(ext) 
+            ? ShellIconType.FullPath 
+            : ShellIconType.Extension;
     }
 }

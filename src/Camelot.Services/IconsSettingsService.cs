@@ -11,16 +11,19 @@ namespace Camelot.Services;
 public class IconsSettingsService : IIconsSettingsService
 {
     private const string SettingsId = "IconsSettings";
+
+    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+    
+    private readonly Platform _platform;
     private readonly IconsSettingsModel _default;
     private readonly IconsSettingsModel _builtin;
-    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-    private readonly Platform _platform;
-    private IconsSettingsModel _cachedValue = null;
-
-    public IconsSettingsService(IUnitOfWorkFactory unitOfWorkFactory,
+    
+    public IconsSettingsService(
+        IUnitOfWorkFactory unitOfWorkFactory,
         IPlatformService platformService)
     {
         _unitOfWorkFactory = unitOfWorkFactory;
+        
         _platform = platformService.GetPlatform();
         _default = new IconsSettingsModel(IconsType.Shell);
         _builtin = new IconsSettingsModel(IconsType.Builtin);
@@ -32,22 +35,10 @@ public class IconsSettingsService : IIconsSettingsService
         if (_platform != Platform.Windows)
             return _builtin;
 
-        if (_cachedValue == null)
-        {
-            using var uow = _unitOfWorkFactory.Create();
-            var repository = uow.GetRepository<IconsSettingsModel>();
-            var dbModel = repository.GetById(SettingsId);
-            if (dbModel != null)
-                _cachedValue = dbModel;
-            else
-                _cachedValue = _default;
-        }
-        else
-        {
-            // we set value of _cachedValue in 'save',
-            // so no need to read from the repository every time.
-        }
-        return _cachedValue;
+        using var uow = _unitOfWorkFactory.Create();
+        var repository = uow.GetRepository<IconsSettingsModel>();
+        
+        return repository.GetById(SettingsId) ?? _default;
     }
 
     public void SaveIconsSettings(IconsSettingsModel iconsSettingsModel)
@@ -62,7 +53,7 @@ public class IconsSettingsService : IIconsSettingsService
 
         using var uow = _unitOfWorkFactory.Create();
         var repository = uow.GetRepository<IconsSettingsModel>();
+        
         repository.Upsert(SettingsId, iconsSettingsModel);
-        _cachedValue = iconsSettingsModel;
     }
 }

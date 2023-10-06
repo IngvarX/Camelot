@@ -17,7 +17,6 @@
       <ProjectReference Include="..\Camelot.Avalonia\Camelot.Avalonia.csproj" />
       <ProjectReference Include="..\Camelot.Collections\Camelot.Collections.csproj" />
       <ProjectReference Include="..\Camelot.Extensions\Camelot.Extensions.csproj" />
-      <ProjectReference Include="..\Camelot.Images\Camelot.Images.csproj" />
       <ProjectReference Include="..\Camelot.Services.Abstractions\Camelot.Services.Abstractions.csproj" />
       <ProjectReference Include="..\Camelot.Services.Environment\Camelot.Services.Environment.csproj" />
     </ItemGroup>
