@@ -15,6 +15,7 @@ public class FileViewModelsComparerTests
     {
         _autoMocker = new AutoMocker();
         _autoMocker.Use(true);
+        _autoMocker.Use(IconsType.Builtin);
     }
 
     [Theory]

@@ -27,6 +27,7 @@ public class FileSystemNodesComparerTests
     public void TestSortingFileAndDirectory(bool isAscending, SortingMode sortingColumn)
     {
         _autoMocker.Use(true);
+        _autoMocker.Use(IconsType.Builtin);
 
         var directoryViewModel =  _autoMocker.CreateInstance<DirectoryViewModel>();
         var fileViewModel =  _autoMocker.CreateInstance<FileViewModel>();
@@ -48,6 +49,7 @@ public class FileSystemNodesComparerTests
     public void TestThrows(bool isAscending, SortingMode sortingColumn)
     {
         _autoMocker.Use(true);
+        _autoMocker.Use(IconsType.Builtin);
 
         var directoryViewModel = _autoMocker.CreateInstance<DirectoryViewModel>();
         var nodeViewModel = _autoMocker.CreateInstance<NodeViewModel>();
