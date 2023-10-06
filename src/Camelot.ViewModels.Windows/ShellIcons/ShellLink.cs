@@ -1,18 +1,14 @@
-﻿using System;
-using System.IO;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Text;
 
-namespace Camelot.Services.Windows.ShellIcons;
-
-[SupportedOSPlatform("windows")]
+namespace Camelot.ViewModels.Windows.ShellIcons;
 
 // see:
 // https://stackoverflow.com/questions/139010/how-to-resolve-a-lnk-in-c-sharp
 // Using this implementatiion, and not tlb file, or IWshShell,
 // so all code contained in one file, and no need to add references.
-internal class ShellLink
+internal static class ShellLink
 {
     public static string ResolveLink(string path)
     {

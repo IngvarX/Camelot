@@ -169,6 +169,7 @@
     <ProjectReference Include="..\Camelot.Services.Operations\Camelot.Services.Operations.csproj" />
     <ProjectReference Include="..\Camelot.Services.Archives\Camelot.Services.Archives.csproj" />
     <ProjectReference Include="..\Camelot.Services\Camelot.Services.csproj" />
+    <ProjectReference Include="..\Camelot.ViewModels.Windows\Camelot.ViewModels.Windows.csproj" />
     <ProjectReference Include="..\Camelot.ViewModels\Camelot.ViewModels.csproj" />
   </ItemGroup>
   <ItemGroup>

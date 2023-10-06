@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-
-namespace Camelot.Services.Windows.ShellIcons
+﻿namespace Camelot.ViewModels.Windows.ShellIcons
 {
     public class WindowsIconTypes
     {

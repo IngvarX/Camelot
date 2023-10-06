@@ -16,7 +16,6 @@
 
     <UserControl.Resources>
         <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
-        <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
     </UserControl.Resources>
 
 
@@ -33,7 +32,7 @@
         </Grid>
         
         <Grid Name="Builtin SVG (GeometryDrawing) Icons"
-              IsVisible="{Binding Path=UseShellIcons, Converter={StaticResource InverseBooleanConverter}}">
+              IsVisible="{Binding Path=!UseShellIcons}">
 
             <Image Classes="iconImage" Margin="10,3,3,3" VerticalAlignment="Center"
                    IsVisible="{Binding Type, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static enums:FileContentType.Audio}}">

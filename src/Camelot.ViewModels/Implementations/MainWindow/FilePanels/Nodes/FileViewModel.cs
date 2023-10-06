@@ -1,14 +1,11 @@
 using Avalonia.Media.Imaging;
-using Camelot.Images;
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Behaviors;
-using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.ViewModels.Interfaces.Behaviors;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Nodes;
 using Camelot.ViewModels.Services.Interfaces;
 using ReactiveUI;
-using System;
 
 namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Nodes;
 
@@ -17,15 +14,17 @@ public class FileViewModel : FileSystemNodeViewModelBase, IFileViewModel
     private readonly IFileSizeFormatter _fileSizeFormatter;
     private readonly IFileTypeMapper _fileTypeMapper;
     private readonly IShellIconsCacheService _shellIconsCacheService;
-    private readonly IIconsSettingsService _iconsSettingsService;
+    private readonly IconsType _iconsType;
+    
     private long _size;
-    private Bitmap _shellIcon = null;
-    private bool? _useShellIcon = null;
+    private IBitmap _shellIcon;
+    private bool? _useShellIcon;
 
     // Helper to load icon only on demand.
     // (Reason: Can't use icon member itself, since null is valid value,
     // in case file has no shell icon)
-    private bool _loadedShellIcon = false;
+    private bool _loadedShellIcon;
+    
     public string Extension { get; set; }
 
     public long Size
@@ -50,7 +49,7 @@ public class FileViewModel : FileSystemNodeViewModelBase, IFileViewModel
         IFileSizeFormatter fileSizeFormatter,
         IFileTypeMapper fileTypeMapper,
         IShellIconsCacheService shellIconsCacheService,
-        IIconsSettingsService iconsSettingsService)
+        IconsType iconsType)
         : base(
             fileSystemNodeOpeningBehavior,
             fileSystemNodePropertiesBehavior,
@@ -60,70 +59,50 @@ public class FileViewModel : FileSystemNodeViewModelBase, IFileViewModel
         _fileSizeFormatter = fileSizeFormatter;
         _fileTypeMapper = fileTypeMapper;
         _shellIconsCacheService = shellIconsCacheService;
-        _iconsSettingsService = iconsSettingsService;
+        _iconsType = iconsType;
     }
 
-    public Bitmap ShellIcon
+    public IBitmap ShellIcon
     {
         get
         {
-            if (!_loadedShellIcon)
-            {
-                var imageModel = _shellIconsCacheService.GetIcon(FullPath);
-                _shellIcon = FromImageModel(imageModel);
-                _loadedShellIcon = true;
-            }
+            TryLoadIcon();
+            
             return _shellIcon;
         }
     }
 
-    private IconsType GetUserSelectedType()
-    {
-        var model = _iconsSettingsService.GetIconsSettings();
-        return  model.SelectedIconsType;
-    }
     public bool UseShellIcons
     {
         get
         {
-            if (_useShellIcon == null)
-                _useShellIcon = ComputeUseShellIcons();
+            _useShellIcon ??= ComputeUseShellIcons();
+            
             return (bool)_useShellIcon;
         }
     }
+    
     private bool ComputeUseShellIcons()
     {
-        var selected = GetUserSelectedType();
-        if (selected == IconsType.Builtin)
+        if (_iconsType == IconsType.Builtin)
             return false;
 
         // still need to some check, before can return true
         // if not first time, and already have value
-        if (!_loadedShellIcon)
-        {
-            var imageModel = _shellIconsCacheService.GetIcon(FullPath);
-            _shellIcon = FromImageModel(imageModel);
-            _loadedShellIcon = true;
-        }
+        TryLoadIcon();
 
-        if (_shellIcon != null)
-        {
-            return true;
-        }
-        else
-        {
-            // file has no shell icon, so fallback to use builtin icons
-            return false;
-        }
+        // file has no shell icon, so fallback to use builtin icons
+        return _shellIcon != null;
     }
 
-    private static Bitmap FromImageModel(ImageModel imageModel)
+    private void TryLoadIcon()
     {
-        if (imageModel == null)
-            throw new ArgumentNullException(nameof(imageModel));
-
-        var concreteImage = imageModel as ConcreteImage;
-        var result = concreteImage.Bitmap;
-        return result;
+        if (_loadedShellIcon)
+        {
+            return;
+        }
+        
+        _shellIcon = _shellIconsCacheService.GetIcon(FullPath).Bitmap;
+        _loadedShellIcon = true;
     }
 }

@@ -1,5 +1,5 @@
-﻿using System.Runtime.Versioning;
-using System.Drawing.Imaging;
+﻿using System.Drawing.Imaging;
+using System.Runtime.Versioning;
 using AvaloniaBitmap = Avalonia.Media.Imaging.Bitmap;
 using Rectangle = System.Drawing.Rectangle;
 using AvaloniaPixelFormat = Avalonia.Platform.PixelFormat;
@@ -8,7 +8,7 @@ using PixelSize = Avalonia.PixelSize;
 using Vector = Avalonia.Vector;
 
 
-namespace Camelot.Services.Windows.ShellIcons;
+namespace Camelot.ViewModels.Windows.ShellIcons;
 
 [SupportedOSPlatform("windows")]
 

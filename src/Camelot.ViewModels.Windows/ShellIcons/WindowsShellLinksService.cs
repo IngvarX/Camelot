@@ -1,12 +1,7 @@
-using System;
-using System.IO;
-using System.Runtime.Versioning;
-using Camelot.Services.Abstractions;
-using Camelot.Services.Windows.ShellIcons;
+using Camelot.ViewModels.Services.Interfaces;
 
-namespace Camelot.Services.Windows;
+namespace Camelot.ViewModels.Windows.ShellIcons;
 
-[SupportedOSPlatform("windows")]
 public class WindowsShellLinksService : IShellLinksService
 {
     public bool IsShellLink(string path)
@@ -23,8 +18,7 @@ public class WindowsShellLinksService : IShellLinksService
     {
         if (!IsShellLink(path))
             throw new ArgumentOutOfRangeException(nameof(path));
-
-       var result = ShellLink.ResolveLink(path);
-       return result;
+        
+        return ShellLink.ResolveLink(path);;
     }
 }

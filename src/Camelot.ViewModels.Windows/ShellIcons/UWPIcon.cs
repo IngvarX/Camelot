@@ -1,9 +1,8 @@
-﻿using System;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Text;
 
-namespace Camelot.Services.Windows.ShellIcons;
+namespace Camelot.ViewModels.Windows.ShellIcons;
 
 [SupportedOSPlatform("windows")]
 public class UWPIcon
