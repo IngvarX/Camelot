@@ -25,6 +25,7 @@ public class FileViewModelTests
             .Setup<IFileSizeFormatter, string>(m => m.GetFormattedSize(size))
             .Returns(formattedSize);
         _autoMocker.Use(false);
+        _autoMocker.Use(IconsType.Builtin);
 
         var viewModel = _autoMocker.CreateInstance<FileViewModel>();
         viewModel.Size = size;
@@ -42,6 +43,7 @@ public class FileViewModelTests
             .Setup<IFileTypeMapper, FileContentType>(m => m.GetFileType(extension))
             .Returns(fileType);
         _autoMocker.Use(false);
+        _autoMocker.Use(IconsType.Builtin);
 
         var viewModel = _autoMocker.CreateInstance<FileViewModel>();
         viewModel.Extension = extension;

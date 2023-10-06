@@ -1,5 +1,6 @@
 using Camelot.Services.Abstractions;
 using Camelot.Services.Abstractions.Models;
+using Camelot.Services.Abstractions.Models.Enums;
 using Camelot.ViewModels.Factories.Implementations;
 using Moq.AutoMock;
 using Xunit;
@@ -37,6 +38,9 @@ public class FileSystemNodeViewModelFactoryTests
         _autoMocker
             .Setup<IPathService, string>(m => m.GetExtension(fileModel.Name))
             .Returns(Extension);
+        _autoMocker
+            .Setup<IIconsSettingsService, IconsSettingsModel>(m => m.GetIconsSettings())
+            .Returns(new IconsSettingsModel(IconsType.Builtin));
 
         var factory = _autoMocker.CreateInstance<FileSystemNodeViewModelFactory>();
 
@@ -74,6 +78,9 @@ public class FileSystemNodeViewModelFactoryTests
         _autoMocker
             .Setup<IFileService, bool>(m => m.CheckIfExists(FullPath))
             .Returns(true);
+        _autoMocker
+            .Setup<IIconsSettingsService, IconsSettingsModel>(m => m.GetIconsSettings())
+            .Returns(new IconsSettingsModel(IconsType.Builtin));
 
         var factory = _autoMocker.CreateInstance<FileSystemNodeViewModelFactory>();
 
@@ -102,6 +109,10 @@ public class FileSystemNodeViewModelFactoryTests
             Name = Name,
             FullPath = FullPath
         };
+        
+        _autoMocker
+            .Setup<IIconsSettingsService, IconsSettingsModel>(m => m.GetIconsSettings())
+            .Returns(new IconsSettingsModel(IconsType.Builtin));
 
         var factory = _autoMocker.CreateInstance<FileSystemNodeViewModelFactory>();
 
@@ -130,6 +141,9 @@ public class FileSystemNodeViewModelFactoryTests
         _autoMocker
             .Setup<IDirectoryService, DirectoryModel>(m => m.GetDirectory(FullPath))
             .Returns(shouldReturnNull ? null : directoryModel);
+        _autoMocker
+            .Setup<IIconsSettingsService, IconsSettingsModel>(m => m.GetIconsSettings())
+            .Returns(new IconsSettingsModel(IconsType.Builtin));
 
         var factory = _autoMocker.CreateInstance<FileSystemNodeViewModelFactory>();
 
@@ -157,6 +171,9 @@ public class FileSystemNodeViewModelFactoryTests
         _autoMocker
             .Setup<IFileService, bool>(m => m.CheckIfExists(FullPath))
             .Returns(false);
+        _autoMocker
+            .Setup<IIconsSettingsService, IconsSettingsModel>(m => m.GetIconsSettings())
+            .Returns(new IconsSettingsModel(IconsType.Builtin));
 
         var factory = _autoMocker.CreateInstance<FileSystemNodeViewModelFactory>();
 
