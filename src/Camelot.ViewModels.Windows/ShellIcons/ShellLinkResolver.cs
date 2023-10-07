@@ -1,34 +1,45 @@
 ﻿using System.Runtime.InteropServices;
-using System.Runtime.Versioning;
 using System.Text;
+using Camelot.Services.Abstractions;
+using Camelot.ViewModels.Windows.ShellIcons.Abstractions;
 
 namespace Camelot.ViewModels.Windows.ShellIcons;
 
 // see:
 // https://stackoverflow.com/questions/139010/how-to-resolve-a-lnk-in-c-sharp
-// Using this implementatiion, and not tlb file, or IWshShell,
+// Using this implementation, and not tlb file, or IWshShell,
 // so all code contained in one file, and no need to add references.
-internal static class ShellLink
+public class ShellLinkResolver : IShellLinkResolver
 {
-    public static string ResolveLink(string path)
+    private readonly IPathService _pathService;
+
+    public ShellLinkResolver(IPathService pathService)
+    {
+        _pathService = pathService;
+    }
+
+    public string ResolveLink(string path)
     {
         if (string.IsNullOrEmpty(path))
+        {
             throw new ArgumentNullException(nameof(path));
+        }
 
-        var ext = Path.GetExtension(path).ToLower();
+        var ext = _pathService.GetExtension(path).ToLower();
         if (ext != ".lnk")
-            throw new ArgumentOutOfRangeException(nameof(path));
+        {
+            throw new ArgumentNullException(nameof(path));
+        }
 
         return ResolveShortcut(path);
     }
 
     private static string ResolveShortcut(string filename)
     {
-        ComShellLink link = new ComShellLink();
+        var link = new ComShellLink();
         ((IPersistFile)link).Load(filename, STGM_READ);
-        StringBuilder sb = new StringBuilder(MAX_PATH);
-        WIN32_FIND_DATAW data = new WIN32_FIND_DATAW();
-        ((IShellLinkW)link).GetPath(sb, sb.Capacity, out data, 0);
+        var sb = new StringBuilder(MAX_PATH);
+        ((IShellLinkW)link).GetPath(sb, sb.Capacity, out _, 0);
         return sb.ToString();
     }
 
@@ -176,7 +187,7 @@ internal static class ShellLink
     const uint STGM_READ = 0;
     const int MAX_PATH = 260;
 
-    // CLSID_ShellLink from ShlGuid.h 
+    // CLSID_ShellLink from ShlGuid.h
     [
         ComImport(),
         Guid("00021401-0000-0000-C000-000000000046")

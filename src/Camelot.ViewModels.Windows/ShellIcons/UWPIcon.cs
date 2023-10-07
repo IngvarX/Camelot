@@ -4,38 +4,51 @@ using System.Text;
 
 namespace Camelot.ViewModels.Windows.ShellIcons;
 
-[SupportedOSPlatform("windows")]
 public class UWPIcon
 {
     // "PRI" = "Package resource indexing"
     // https://docs.microsoft.com/en-us/windows/uwp/app-resources/pri-apis-scenario-1
-    static public string ReslovePackageResource(string pri)
+    public static string ReslovePackageResource(string pri)
     {
         if (string.IsNullOrEmpty(pri))
+        {
             throw new ArgumentNullException(nameof(pri));
+        }
+
         if (!IsPriString(pri))
-            throw new ArgumentOutOfRangeException(nameof(pri));
+        {
+            throw new ArgumentException(nameof(pri));
+        }
 
         var outBuffer = new StringBuilder(512);
-        string source = pri;
         var capacity = (uint)outBuffer.Capacity;
-        var hResult = SHLoadIndirectString(source, outBuffer, capacity, IntPtr.Zero);
-        if (hResult == Hresult.Ok)
-            return outBuffer.ToString();
-        return null;
+        var hResult = SHLoadIndirectString(pri, outBuffer, capacity, IntPtr.Zero);
+
+        return hResult == Hresult.Ok ? outBuffer.ToString() : null;
     }
 
-    static public bool IsPriString(string pri)
+    public static bool IsPriString(string pri)
     {
         if (string.IsNullOrEmpty(pri))
+        {
             throw new ArgumentNullException(nameof(pri));
+        }
 
         if (!pri.StartsWith("@{"))
+        {
             return false;
+        }
+
         if (!pri.EndsWith("}"))
+        {
             return false;
+        }
+
         if (!pri.Contains("ms-resource:"))
+        {
             return false;
+        }
+
         return true;
     }
 
@@ -43,6 +56,7 @@ public class UWPIcon
     {
         Ok = 0x0000,
     }
+
     [DllImport("shlwapi.dll", CharSet = CharSet.Unicode)]
     private static extern Hresult SHLoadIndirectString(string pszSource,
         StringBuilder pszOutBuf, uint cchOutBuf, IntPtr ppvReserved);
