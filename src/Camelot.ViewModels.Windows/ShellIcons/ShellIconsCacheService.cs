@@ -99,7 +99,7 @@ public class ShellIconsCacheService : IShellIconsCacheService
         if (_platform == Platform.Windows)
         {
             path = ResolveIfLink(filename);
-            if (path == null)
+            if (path is null)
                 return null;
         }
         else

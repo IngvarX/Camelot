@@ -13,11 +13,19 @@ public class WindowsShellIconsService : IShellIconsService
     public ImageModel GetIconForExtension(string extension)
     {
         if (string.IsNullOrEmpty(extension))
+        {
             throw new ArgumentNullException(nameof(extension));
+        }
+
         if (!extension.StartsWith("."))
-            throw new ArgumentOutOfRangeException(nameof(extension));
+        {
+            throw new ArgumentException(nameof(extension));
+        }
+
         if (extension.ToLower() == ".lnk")
-            throw new ArgumentOutOfRangeException("Need to resolve .lnk first");
+        {
+            throw new ArgumentException("Need to resolve .lnk first");
+        }
 
         var iconFilename = ShellIcon.GetIconForExtension(extension);
 
@@ -62,7 +70,7 @@ public class WindowsShellIconsService : IShellIconsService
             var icon = IconExtractor.ExtractIcon(path);
             // TODO: check if lossy and/or try other options, see url below. (iksi4prs).
             // https://learn.microsoft.com/en-us/dotnet/api/system.drawing.imageconverter.canconvertfrom?view=dotnet-plat-ext-7.0
-            SystemBitmap systemBitmap = icon.ToBitmap();
+            var systemBitmap = icon.ToBitmap();
             var avaloniaBitmap = SystemImageToAvaloniaBitmapConverter.Convert(systemBitmap);
             result = new ImageModel(avaloniaBitmap);
         }
@@ -70,7 +78,7 @@ public class WindowsShellIconsService : IShellIconsService
         {
             if (File.Exists(path))
             {
-                AvaloniaBitmap avaloniaBitmap = new AvaloniaBitmap(path);
+                var avaloniaBitmap = new AvaloniaBitmap(path);
                 result = new ImageModel(avaloniaBitmap);
             }
             else
@@ -78,7 +86,7 @@ public class WindowsShellIconsService : IShellIconsService
                 // no shell icon, caller should use other icon
                 result = null;
             }
-            
+
         }
         return result;
     }
@@ -87,15 +95,15 @@ public class WindowsShellIconsService : IShellIconsService
     {
         if (string.IsNullOrEmpty(filename))
             throw new ArgumentNullException(nameof(filename));
-        
+
         var ext = Path.GetExtension(filename).ToLower();
 
         // next extensions require that the icon will be resolved by full path,
         // and not just the extension itself.
         var extensionForFullPaths = new[] { ".exe", ".cpl", ".appref-ms", ".msc" };
-        
-        return extensionForFullPaths.Contains(ext) 
-            ? ShellIconType.FullPath 
+
+        return extensionForFullPaths.Contains(ext)
+            ? ShellIconType.FullPath
             : ShellIconType.Extension;
     }
 }

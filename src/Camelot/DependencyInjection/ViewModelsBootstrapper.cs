@@ -36,6 +36,7 @@ using Camelot.ViewModels.Interfaces.Menu;
 using Camelot.ViewModels.Services.Implementations;
 using Camelot.ViewModels.Services.Interfaces;
 using Camelot.ViewModels.Windows.ShellIcons;
+using Camelot.ViewModels.Windows.ShellIcons.Abstractions;
 using Splat;
 
 namespace Camelot.DependencyInjection;
@@ -101,18 +102,24 @@ public static class ViewModelsBootstrapper
             RegisterNonWindowsServices(services, resolver);
         }
     }
-    
+
     private static void RegisterWindowsServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
     {
+        services.RegisterLazySingleton<IShellLinkResolver>(() => new ShellLinkResolver(
+            resolver.GetRequiredService<IPathService>()
+        ));
         services.RegisterLazySingleton<IShellIconsService>(() => new WindowsShellIconsService());
-        services.RegisterLazySingleton<IShellLinksService>(() => new WindowsShellLinksService());
+        services.RegisterLazySingleton<IShellLinksService>(() => new WindowsShellLinksService(
+            resolver.GetRequiredService<IPathService>(),
+            resolver.GetRequiredService<IShellLinkResolver>()
+        ));
         services.RegisterLazySingleton<IShellIconsCacheService>(() => new ShellIconsCacheService(
             resolver.GetRequiredService<IPlatformService>(),
             resolver.GetRequiredService<IShellLinksService>(),
             resolver.GetRequiredService<IShellIconsService>()
         ));
     }
-    
+
     private static void RegisterNonWindowsServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
     {
         services.RegisterLazySingleton<IShellIconsCacheService>(() => new ShellIconsCacheService(
