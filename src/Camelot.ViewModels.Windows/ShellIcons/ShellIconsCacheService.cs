@@ -1,4 +1,5 @@
 using Avalonia.Media.Imaging;
+using Camelot.Services.Abstractions;
 using Camelot.Services.Environment.Enums;
 using Camelot.Services.Environment.Interfaces;
 using Camelot.ViewModels.Services.Interfaces;
@@ -11,20 +12,32 @@ public class ShellIconsCacheService : IShellIconsCacheService
 {
     private readonly IShellLinksService _shellLinksService;
     private readonly IShellIconsService _shellIconsService;
+    private readonly IFileService _fileService;
+    private readonly IDirectoryService _directoryService;
+    private readonly IPathService _pathService;
     private readonly Dictionary<string, Bitmap> _cache;
     private readonly Platform _platform;
-    
+
     public ShellIconsCacheService(
         IPlatformService platformService,
         IShellLinksService shellLinksService,
-        IShellIconsService shellIconsService)
+        IShellIconsService shellIconsService,
+        IFileService fileService,
+        IDirectoryService directoryService,
+        IPathService pathService)
     {
         var platform = platformService.GetPlatform();
         if (platform != Platform.Windows)
+        {
             throw new InvalidOperationException($"Need to you other c'tor, without arg of {typeof(IShellLinksService)}");
+        }
 
         _shellLinksService = shellLinksService;
         _shellIconsService = shellIconsService;
+        _fileService = fileService;
+        _directoryService = directoryService;
+        _pathService = pathService;
+
         _cache = new Dictionary<string, Bitmap>();
         _platform = platform;
     }
@@ -39,17 +52,21 @@ public class ShellIconsCacheService : IShellIconsCacheService
     public ImageModel GetIcon(string filename)
     {
         if (string.IsNullOrEmpty(filename))
+        {
             throw new ArgumentNullException(nameof(filename));
+        }
 
         var bitmap = GetShellIcon(filename);
-        
+
         return new ImageModel(bitmap);
     }
 
     private string ResolveIfLink(string filename)
     {
         if (string.IsNullOrEmpty(filename))
+        {
             throw new ArgumentNullException(nameof(filename));
+        }
 
         string result;
 
@@ -60,13 +77,13 @@ public class ShellIconsCacheService : IShellIconsCacheService
             // Check if resolved still exists,
             // sometimes the target of .lnk files
             // dont exist anymore, or links to a folder.
-            if (File.Exists(resolved))
+            if (_fileService.CheckIfExists(resolved))
             {
                 result = resolved;
             }
             else
             {
-                if (Directory.Exists(resolved))
+                if (_directoryService.CheckIfExists(resolved))
                 {
                     // resolved is folder.
                     // TODO: need to add support for icons for folders. (iksi4prs: planned in future PR).
@@ -83,14 +100,16 @@ public class ShellIconsCacheService : IShellIconsCacheService
         {
             result = filename;
         }
-        
+
         return result;
     }
 
     private Bitmap GetShellIcon(string filename)
     {
         if (string.IsNullOrEmpty(filename))
+        {
             throw new ArgumentNullException(nameof(filename));
+        }
 
         string path;
 
@@ -100,20 +119,22 @@ public class ShellIconsCacheService : IShellIconsCacheService
         {
             path = ResolveIfLink(filename);
             if (path is null)
+            {
                 return null;
+            }
         }
         else
         {
             path = filename;
         }
-        
+
         return ShellIcon(path);
     }
 
     private Bitmap ShellIcon(string path)
     {
         Bitmap result;
-        
+
         // step #2
         // check if cache, and if not, get from shell.
         // IMPORTANT:
@@ -126,7 +147,7 @@ public class ShellIconsCacheService : IShellIconsCacheService
         {
             case ShellIconType.Extension:
             {
-                var ext = Path.GetExtension(path);
+                var ext = _pathService.GetExtension(path);
                 if (string.IsNullOrEmpty(ext))
                 {
                     // a file with no extension. caller should use other icon.

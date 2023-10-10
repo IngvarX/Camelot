@@ -1,15 +1,25 @@
+using Camelot.Services.Abstractions;
 using Camelot.ViewModels.Services.Interfaces;
 using Camelot.ViewModels.Services.Interfaces.Enums;
 using Camelot.ViewModels.Services.Interfaces.Models;
 using SystemBitmap = System.Drawing.Bitmap;
 using AvaloniaBitmap = Avalonia.Media.Imaging.Bitmap;
 
-
 namespace Camelot.ViewModels.Windows.ShellIcons;
-
 
 public class WindowsShellIconsService : IShellIconsService
 {
+    private readonly IPathService _pathService;
+    private readonly IFileService _fileService;
+
+    public WindowsShellIconsService(
+        IPathService pathService,
+        IFileService fileService)
+    {
+        _pathService = pathService;
+        _fileService = fileService;
+    }
+
     public ImageModel GetIconForExtension(string extension)
     {
         if (string.IsNullOrEmpty(extension))
@@ -39,20 +49,27 @@ public class WindowsShellIconsService : IShellIconsService
         {
             iconFilename = UWPIcon.ReslovePackageResource(iconFilename);
         }
+
         return LoadIcon(iconFilename);
     }
 
     public ImageModel GetIconForPath(string path)
     {
         if (string.IsNullOrEmpty(path))
+        {
             throw new ArgumentNullException(nameof(path));
+        }
 
         if (GetIconType(path) != ShellIconType.FullPath)
+        {
             throw new ArgumentOutOfRangeException(nameof(path));
+        }
 
-        var ext = Path.GetExtension(path).ToLower();
+        var ext = GetExtension(path);
         if (ext == ".lnk")
-           throw new ArgumentOutOfRangeException("Need to resolve .lnk first");
+        {
+            throw new ArgumentException("Need to resolve .lnk first");
+        }
 
         return LoadIcon(path);
     }
@@ -60,7 +77,9 @@ public class WindowsShellIconsService : IShellIconsService
     private ImageModel LoadIcon(string path)
     {
         if (string.IsNullOrEmpty(path))
+        {
             throw new ArgumentNullException(nameof(path));
+        }
 
         ImageModel result;
 
@@ -76,7 +95,7 @@ public class WindowsShellIconsService : IShellIconsService
         }
         else
         {
-            if (File.Exists(path))
+            if (_fileService.CheckIfExists(path))
             {
                 var avaloniaBitmap = new AvaloniaBitmap(path);
                 result = new ImageModel(avaloniaBitmap);
@@ -94,9 +113,11 @@ public class WindowsShellIconsService : IShellIconsService
     public ShellIconType GetIconType(string filename)
     {
         if (string.IsNullOrEmpty(filename))
+        {
             throw new ArgumentNullException(nameof(filename));
+        }
 
-        var ext = Path.GetExtension(filename).ToLower();
+        var ext = GetExtension(filename);
 
         // next extensions require that the icon will be resolved by full path,
         // and not just the extension itself.
@@ -105,5 +126,10 @@ public class WindowsShellIconsService : IShellIconsService
         return extensionForFullPaths.Contains(ext)
             ? ShellIconType.FullPath
             : ShellIconType.Extension;
+    }
+
+    private string GetExtension(string filename)
+    {
+        return _pathService.GetExtension(filename).ToLower();
     }
 }

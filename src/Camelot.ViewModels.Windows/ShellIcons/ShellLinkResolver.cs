@@ -43,10 +43,6 @@ public class ShellLinkResolver : IShellLinkResolver
         return sb.ToString();
     }
 
-
-    [DllImport("shfolder.dll", CharSet = CharSet.Auto)]
-    private static extern int SHGetFolderPath(IntPtr hwndOwner, int nFolder, IntPtr hToken, int dwFlags, StringBuilder lpszPath);
-
     [Flags()]
     enum SLGP_FLAGS
     {

@@ -20,18 +20,18 @@
 
 
     <Grid>
-        <Grid Name="Shell Icons (aka System Icons)"
+        <Grid Name="ShellIconsGrid"
               IsVisible="{Binding Path=UseShellIcons}">
-            
-            <Image Classes="iconImage" 
+
+            <Image Classes="iconImage"
                     Margin="10,3,3,3"
-                    VerticalAlignment="Stretch" 
+                    VerticalAlignment="Stretch"
                     HorizontalAlignment="Stretch"
                     IsVisible="True"
                     Source="{Binding ShellIcon}" />
         </Grid>
-        
-        <Grid Name="Builtin SVG (GeometryDrawing) Icons"
+
+        <Grid Name="BuiltinSVGIconsGrid"
               IsVisible="{Binding Path=!UseShellIcons}">
 
             <Image Classes="iconImage" Margin="10,3,3,3" VerticalAlignment="Center"

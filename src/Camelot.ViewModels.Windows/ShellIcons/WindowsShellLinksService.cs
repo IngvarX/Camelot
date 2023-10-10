@@ -36,6 +36,6 @@ public class WindowsShellLinksService : IShellLinksService
             throw new ArgumentException(nameof(path));
         }
 
-        return _resolver.ResolveLink(path);;
+        return _resolver.ResolveLink(path);
     }
 }
