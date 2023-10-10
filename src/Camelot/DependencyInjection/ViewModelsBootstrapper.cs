@@ -108,7 +108,10 @@ public static class ViewModelsBootstrapper
         services.RegisterLazySingleton<IShellLinkResolver>(() => new ShellLinkResolver(
             resolver.GetRequiredService<IPathService>()
         ));
-        services.RegisterLazySingleton<IShellIconsService>(() => new WindowsShellIconsService());
+        services.RegisterLazySingleton<IShellIconsService>(() => new WindowsShellIconsService(
+            resolver.GetRequiredService<IPathService>(),
+            resolver.GetRequiredService<IFileService>()
+        ));
         services.RegisterLazySingleton<IShellLinksService>(() => new WindowsShellLinksService(
             resolver.GetRequiredService<IPathService>(),
             resolver.GetRequiredService<IShellLinkResolver>()
@@ -116,7 +119,10 @@ public static class ViewModelsBootstrapper
         services.RegisterLazySingleton<IShellIconsCacheService>(() => new ShellIconsCacheService(
             resolver.GetRequiredService<IPlatformService>(),
             resolver.GetRequiredService<IShellLinksService>(),
-            resolver.GetRequiredService<IShellIconsService>()
+            resolver.GetRequiredService<IShellIconsService>(),
+            resolver.GetRequiredService<IFileService>(),
+            resolver.GetRequiredService<IDirectoryService>(),
+            resolver.GetRequiredService<IPathService>()
         ));
     }
 
