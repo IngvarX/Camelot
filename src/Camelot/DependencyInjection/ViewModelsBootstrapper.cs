@@ -35,8 +35,9 @@ using Camelot.ViewModels.Interfaces.MainWindow.OperationsStates;
 using Camelot.ViewModels.Interfaces.Menu;
 using Camelot.ViewModels.Services.Implementations;
 using Camelot.ViewModels.Services.Interfaces;
+using Camelot.ViewModels.Windows.Interfaces;
 using Camelot.ViewModels.Windows.ShellIcons;
-using Camelot.ViewModels.Windows.ShellIcons.Abstractions;
+using Camelot.ViewModels.Windows.WinApi;
 using Splat;
 
 namespace Camelot.DependencyInjection;

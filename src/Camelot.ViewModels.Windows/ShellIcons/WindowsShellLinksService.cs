@@ -1,6 +1,6 @@
 using Camelot.Services.Abstractions;
 using Camelot.ViewModels.Services.Interfaces;
-using Camelot.ViewModels.Windows.ShellIcons.Abstractions;
+using Camelot.ViewModels.Windows.Interfaces;
 
 namespace Camelot.ViewModels.Windows.ShellIcons;
 

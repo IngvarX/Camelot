@@ -1,9 +1,9 @@
 ﻿using System.Runtime.InteropServices;
 using System.Text;
 using Camelot.Services.Abstractions;
-using Camelot.ViewModels.Windows.ShellIcons.Abstractions;
+using Camelot.ViewModels.Windows.Interfaces;
 
-namespace Camelot.ViewModels.Windows.ShellIcons;
+namespace Camelot.ViewModels.Windows.WinApi;
 
 // see:
 // https://stackoverflow.com/questions/139010/how-to-resolve-a-lnk-in-c-sharp

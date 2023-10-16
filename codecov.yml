@@ -18,6 +18,7 @@ ignore:
   - "src/Camelot.WindowsInstaller/**/*"
   - "src/Camelot.DataAccess.Models/*"
   - "src/Camelot.ViewModels/Configuration/*"
+  - "src/Camelot.ViewModels.Windows/WinApi/*"
   - "src/Camelot.Services.Abstractions/**/*"
   - "src/Camelot.DataAccess.LiteDb/**/*"
   - "src/Camelot.DataAccess.LiteDb/*"
