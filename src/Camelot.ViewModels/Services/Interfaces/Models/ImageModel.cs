@@ -4,9 +4,9 @@ namespace Camelot.ViewModels.Services.Interfaces.Models;
 
 public class ImageModel
 {
-    public Bitmap Bitmap { get; }
-    
-    public ImageModel(Bitmap bitmap)
+    public IBitmap Bitmap { get; }
+
+    public ImageModel(IBitmap bitmap)
     {
         Bitmap = bitmap;
     }

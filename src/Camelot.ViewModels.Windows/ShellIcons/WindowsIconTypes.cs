@@ -1,22 +1,22 @@
 ﻿namespace Camelot.ViewModels.Windows.ShellIcons
 {
-    public class WindowsIconTypes
+    public static class WindowsIconTypes
     {
-        public static bool IsIconThatRequiresExtract(string filename)
+        public static bool IsIconThatRequiresExtract(string fileName, string extension)
         {
-            if (string.IsNullOrEmpty(filename))
-                throw new ArgumentNullException(nameof(filename));
+            if (string.IsNullOrEmpty(fileName))
+            {
+                throw new ArgumentNullException(nameof(fileName));
+            }
 
-            if (filename.Contains("?"))
+            if (fileName.Contains('?') || fileName.Contains(','))
+            {
                 return true; // icon in indexed resource
-            if (filename.Contains(","))
-                return true; // icon in indexed resource
+            }
 
-            var ext = Path.GetExtension(filename).ToLower();
-            var extensionsOfIcoFiles = new List<string>() { ".ico", ".exe", ".dll" , ".cpl", ".appref-ms", ".msc" };
-            if (extensionsOfIcoFiles.Contains(ext))
-                return true;
-            return false;
+            var extensionsOfIcoFiles = new List<string> { ".ico", ".exe", ".dll" , ".cpl", ".appref-ms", ".msc" };
+
+            return extensionsOfIcoFiles.Contains(extension);
         }
     }
 }

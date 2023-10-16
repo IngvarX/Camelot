@@ -2,6 +2,7 @@ using Camelot.Services.Abstractions;
 using Camelot.ViewModels.Services.Interfaces;
 using Camelot.ViewModels.Services.Interfaces.Enums;
 using Camelot.ViewModels.Services.Interfaces.Models;
+using Camelot.ViewModels.Windows.WinApi;
 using SystemBitmap = System.Drawing.Bitmap;
 using AvaloniaBitmap = Avalonia.Media.Imaging.Bitmap;
 
@@ -45,9 +46,9 @@ public class WindowsShellIconsService : IShellIconsService
             return null;
         }
 
-        if (UWPIcon.IsPriString(iconFilename))
+        if (UwpIcon.IsPriString(iconFilename))
         {
-            iconFilename = UWPIcon.ReslovePackageResource(iconFilename);
+            iconFilename = UwpIcon.ReslovePackageResource(iconFilename);
         }
 
         return LoadIcon(iconFilename);
@@ -83,7 +84,7 @@ public class WindowsShellIconsService : IShellIconsService
 
         ImageModel result;
 
-        var needsExtract = WindowsIconTypes.IsIconThatRequiresExtract(path);
+        var needsExtract = WindowsIconTypes.IsIconThatRequiresExtract(path, GetExtension(path));
         if (needsExtract)
         {
             var icon = IconExtractor.ExtractIcon(path);

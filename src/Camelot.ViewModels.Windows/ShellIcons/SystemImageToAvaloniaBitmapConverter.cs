@@ -14,7 +14,10 @@ internal class SystemImageToAvaloniaBitmapConverter
     public static AvaloniaBitmap Convert(System.Drawing.Image image)
     {
         if (image is null)
+        {
             return null;
+        }
+
         var bitmapTmp = new System.Drawing.Bitmap(image);
         var bitmapData = bitmapTmp.LockBits(
             new Rectangle(0, 0, bitmapTmp.Width, bitmapTmp.Height),
@@ -27,7 +30,7 @@ internal class SystemImageToAvaloniaBitmapConverter
             bitmapData.Stride);
         bitmapTmp.UnlockBits(bitmapData);
         bitmapTmp.Dispose();
-        
+
         return bitmap;
     }
 }

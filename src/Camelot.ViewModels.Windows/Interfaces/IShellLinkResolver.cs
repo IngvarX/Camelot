@@ -1,4 +1,4 @@
-namespace Camelot.ViewModels.Windows.ShellIcons.Abstractions;
+namespace Camelot.ViewModels.Windows.Interfaces;
 
 public interface IShellLinkResolver
 {

@@ -15,7 +15,7 @@ public class ShellIconsCacheService : IShellIconsCacheService
     private readonly IFileService _fileService;
     private readonly IDirectoryService _directoryService;
     private readonly IPathService _pathService;
-    private readonly Dictionary<string, Bitmap> _cache;
+    private readonly Dictionary<string, IBitmap> _cache;
     private readonly Platform _platform;
 
     public ShellIconsCacheService(
@@ -38,7 +38,7 @@ public class ShellIconsCacheService : IShellIconsCacheService
         _directoryService = directoryService;
         _pathService = pathService;
 
-        _cache = new Dictionary<string, Bitmap>();
+        _cache = new Dictionary<string, IBitmap>();
         _platform = platform;
     }
 
@@ -104,7 +104,7 @@ public class ShellIconsCacheService : IShellIconsCacheService
         return result;
     }
 
-    private Bitmap GetShellIcon(string filename)
+    private IBitmap GetShellIcon(string filename)
     {
         if (string.IsNullOrEmpty(filename))
         {
@@ -131,9 +131,9 @@ public class ShellIconsCacheService : IShellIconsCacheService
         return ShellIcon(path);
     }
 
-    private Bitmap ShellIcon(string path)
+    private IBitmap ShellIcon(string path)
     {
-        Bitmap result;
+        IBitmap result;
 
         // step #2
         // check if cache, and if not, get from shell.
@@ -163,8 +163,9 @@ public class ShellIconsCacheService : IShellIconsCacheService
                     var image = _shellIconsService.GetIconForExtension(ext);
                     _cache[ext] = result = image.Bitmap;
                 }
-            }
+
                 break;
+            }
             case ShellIconType.FullPath:
             {
                 if (_cache.TryGetValue(path, out var value))
@@ -176,8 +177,9 @@ public class ShellIconsCacheService : IShellIconsCacheService
                     var image = _shellIconsService.GetIconForPath(path);
                     _cache[path] = result = image.Bitmap;
                 }
-            }
+
                 break;
+            }
             default:
                 throw new ArgumentOutOfRangeException(nameof(iconType), iconType, null);
         }

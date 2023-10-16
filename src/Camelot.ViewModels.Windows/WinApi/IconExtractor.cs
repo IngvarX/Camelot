@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using System.Runtime.InteropServices;
 
-namespace Camelot.ViewModels.Windows.ShellIcons;
+namespace Camelot.ViewModels.Windows.WinApi;
 
 internal class IconExtractor
 {
@@ -96,7 +96,7 @@ internal class IconExtractor
 
             return result;
         }
-        catch(Exception)
+        catch (Exception)
         {
             return null;
         }

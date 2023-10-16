@@ -1,10 +1,9 @@
 ﻿using System.Runtime.InteropServices;
-using System.Runtime.Versioning;
 using System.Text;
 
-namespace Camelot.ViewModels.Windows.ShellIcons;
+namespace Camelot.ViewModels.Windows.WinApi;
 
-public class UWPIcon
+public class UwpIcon
 {
     // "PRI" = "Package resource indexing"
     // https://docs.microsoft.com/en-us/windows/uwp/app-resources/pri-apis-scenario-1
@@ -34,22 +33,7 @@ public class UWPIcon
             throw new ArgumentNullException(nameof(pri));
         }
 
-        if (!pri.StartsWith("@{"))
-        {
-            return false;
-        }
-
-        if (!pri.EndsWith("}"))
-        {
-            return false;
-        }
-
-        if (!pri.Contains("ms-resource:"))
-        {
-            return false;
-        }
-
-        return true;
+        return pri.StartsWith("@{") && pri.EndsWith("}") && pri.Contains("ms-resource:");
     }
 
     private enum Hresult : uint
