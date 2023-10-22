@@ -6,12 +6,11 @@
 
     <ItemGroup>
       <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
-      <PackageReference Include="System.Drawing.Common" Version="4.5.0" />   
       <PackageReference Update="Packaging.Targets">
         <Version>0.1.220</Version>
       </PackageReference>
     </ItemGroup>
-    
+
     <ItemGroup>
       <ProjectReference Include="..\Camelot.Extensions\Camelot.Extensions.csproj" />
       <ProjectReference Include="..\Camelot.Services.Abstractions\Camelot.Services.Abstractions.csproj" />
