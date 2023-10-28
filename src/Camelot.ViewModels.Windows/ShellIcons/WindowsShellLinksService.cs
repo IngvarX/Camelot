@@ -25,8 +25,7 @@ public class WindowsShellLinksService : IShellLinksService
         }
 
         var ext = _pathService.GetExtension(path).ToLower();
-
-        return ext == ".lnk";
+        return ext == "lnk";
     }
 
     public string ResolveLink(string path)

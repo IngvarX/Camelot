@@ -26,7 +26,7 @@ public class ShellLinkResolver : IShellLinkResolver
         }
 
         var ext = _pathService.GetExtension(path).ToLower();
-        if (ext != ".lnk")
+        if (ext != "lnk")
         {
             throw new ArgumentNullException(nameof(path));
         }

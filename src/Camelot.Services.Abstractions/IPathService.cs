@@ -18,6 +18,8 @@ public interface IPathService
 
     string GetExtension(string path);
 
+    bool IsExtension(string extension);
+
     string RightTrimPathSeparators(string path);
 
     string LeftTrimPathSeparators(string relativePath);

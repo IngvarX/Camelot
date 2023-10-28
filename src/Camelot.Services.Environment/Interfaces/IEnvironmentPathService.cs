@@ -13,4 +13,6 @@ public interface IEnvironmentPathService
     string GetFileName(string path);
 
     string GetExtension(string path);
+
+    char GetDirectorySeparator();
 }
