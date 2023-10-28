@@ -11,10 +11,14 @@ public static class ShellIcon
             throw new ArgumentNullException(nameof(extension));
         }
 
-        if (!extension.StartsWith("."))
+        if (extension.StartsWith("."))
         {
-            throw new ArgumentException(nameof(extension));
+            // As per stanards of this project, extension don't have dot prefix.
+            throw new ArgumentOutOfRangeException(nameof(extension));
         }
+
+        // But to work with Windows API, we still need to add dot prefix...
+        extension = "." + extension;
 
         const Win32.AssocF assocFlag = Win32.AssocF.None;
         var currentAppIcon = Win32.AssocQueryString(assocFlag, Win32.AssocStr.AppIconRreference, extension);

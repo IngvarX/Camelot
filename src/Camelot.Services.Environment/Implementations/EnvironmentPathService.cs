@@ -16,4 +16,6 @@ public class EnvironmentPathService : IEnvironmentPathService
     public string GetFileName(string path) => Path.GetFileName(path);
 
     public string GetExtension(string path) => Path.GetExtension(path);
+
+    public char GetDirectorySeparator() => Path.DirectorySeparatorChar;
 }

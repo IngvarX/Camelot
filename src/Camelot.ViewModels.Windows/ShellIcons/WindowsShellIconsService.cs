@@ -23,19 +23,14 @@ public class WindowsShellIconsService : IShellIconsService
 
     public ImageModel GetIconForExtension(string extension)
     {
-        if (string.IsNullOrEmpty(extension))
+        if (!_pathService.IsExtension(extension))
         {
-            throw new ArgumentNullException(nameof(extension));
+            throw new ArgumentException(extension, nameof(extension));
         }
 
-        if (!extension.StartsWith("."))
+        if (extension.ToLower() == "lnk")
         {
-            throw new ArgumentException(nameof(extension));
-        }
-
-        if (extension.ToLower() == ".lnk")
-        {
-            throw new ArgumentException("Need to resolve .lnk first");
+            throw new ArgumentException("Need to resolve 'lnk' first");
         }
 
         var iconFilename = ShellIcon.GetIconForExtension(extension);
@@ -65,11 +60,10 @@ public class WindowsShellIconsService : IShellIconsService
         {
             throw new ArgumentOutOfRangeException(nameof(path));
         }
-
-        var ext = GetExtension(path);
-        if (ext == ".lnk")
+        var ext = GetExtensionAsLowerCase(path);
+        if (ext == "lnk")
         {
-            throw new ArgumentException("Need to resolve .lnk first");
+            throw new ArgumentException("Need to resolve 'lnk' first");
         }
 
         return LoadIcon(path);
@@ -84,7 +78,7 @@ public class WindowsShellIconsService : IShellIconsService
 
         ImageModel result;
 
-        var needsExtract = WindowsIconTypes.IsIconThatRequiresExtract(path, GetExtension(path));
+        var needsExtract = WindowsIconTypes.IsIconThatRequiresExtract(path, GetExtensionAsLowerCase(path));
         if (needsExtract)
         {
             var icon = IconExtractor.ExtractIcon(path);
@@ -118,18 +112,18 @@ public class WindowsShellIconsService : IShellIconsService
             throw new ArgumentNullException(nameof(filename));
         }
 
-        var ext = GetExtension(filename);
-
-        // next extensions require that the icon will be resolved by full path,
+        var ext = GetExtensionAsLowerCase(filename);
+        // Next extensions require that the icon will be resolved by full path,
         // and not just the extension itself.
-        var extensionForFullPaths = new[] { ".exe", ".cpl", ".appref-ms", ".msc" };
+        // As per stanards of this project, extension don't have dot prefix.
+        var extensionForFullPaths = new[] { "exe", "cpl", "appref-ms", "msc" };
 
         return extensionForFullPaths.Contains(ext)
             ? ShellIconType.FullPath
             : ShellIconType.Extension;
     }
 
-    private string GetExtension(string filename)
+    private string GetExtensionAsLowerCase(string filename)
     {
         return _pathService.GetExtension(filename).ToLower();
     }

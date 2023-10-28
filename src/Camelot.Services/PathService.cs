@@ -63,6 +63,12 @@ public class PathService : IPathService
         return string.IsNullOrEmpty(fileName) ? path : fileName;
     }
 
+    /// <summary>
+    /// Returns the extension of the given path, without the prefix of dot.
+    /// This is intentionally returns different result than <see cref="System.IO.Path.GetExtension"/
+    /// </summary>
+    /// <param name="path"></param>
+    /// <returns></returns>
     public string GetExtension(string path)
     {
         if (path.StartsWith("."))
@@ -80,6 +86,17 @@ public class PathService : IPathService
         var extension = _environmentPathService.GetExtension(path);
 
         return extension.StartsWith(".") ? extension[1..] : extension;
+    }
+
+    public bool IsExtension(string extension)
+    {
+        if (string.IsNullOrWhiteSpace(extension))
+            return false;
+        if (extension.Contains("."))
+            return false;
+        if (extension.Contains(_environmentPathService.GetDirectorySeparator()))
+            return false;
+        return true;
     }
 
     public string RightTrimPathSeparators(string path) => path == "/" ? path : path.TrimEnd('/').TrimEnd('\\');
