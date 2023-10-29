@@ -1,4 +1,5 @@
 ﻿using Camelot.Services.Windows.WinApi;
+using System.Diagnostics;
 
 namespace Camelot.ViewModels.Windows.WinApi;
 
@@ -23,9 +24,29 @@ public static class ShellIcon
         const Win32.AssocF assocFlag = Win32.AssocF.None;
         var currentAppIcon = Win32.AssocQueryString(assocFlag, Win32.AssocStr.AppIconRreference, extension);
 
-        return string.IsNullOrEmpty(currentAppIcon)
-            ? Win32.AssocQueryString(assocFlag, Win32.AssocStr.DefaultIcon, extension)
-            : currentAppIcon;
+        string result;
+        if (IsValid(currentAppIcon))
+        {
+            result = currentAppIcon;
+        }
+        else
+        {
+            // fallback to use default
+            result = Win32.AssocQueryString(assocFlag, Win32.AssocStr.DefaultIcon, extension);
+        }
+        return result;
+    }
+
+    private static bool IsValid(string icon)
+    {
+        if (string.IsNullOrEmpty(icon))
+            return false;
+        if (icon.TrimStart().StartsWith("%"))
+        {
+            // looks like because of invalid values in registry
+            return false;
+        }
+        return true;
     }
 }
 
