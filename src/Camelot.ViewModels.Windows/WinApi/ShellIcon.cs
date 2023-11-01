@@ -12,12 +12,6 @@ public static class ShellIcon
             throw new ArgumentNullException(nameof(extension));
         }
 
-        if (extension.StartsWith("."))
-        {
-            // As per stanards of this project, extension don't have dot prefix.
-            throw new ArgumentOutOfRangeException(nameof(extension));
-        }
-
         // But to work with Windows API, we still need to add dot prefix...
         extension = "." + extension;
 

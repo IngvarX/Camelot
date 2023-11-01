@@ -23,7 +23,7 @@ public class WindowsShellIconsService : IShellIconsService
 
     public ImageModel GetIconForExtension(string extension)
     {
-        if (!_pathService.IsExtension(extension))
+        if (string.IsNullOrEmpty(extension))
         {
             throw new ArgumentException(extension, nameof(extension));
         }
