@@ -9,6 +9,7 @@ public interface IFileSystemNodeViewModel
     string Name { get; set; }
 
     bool IsEditing { get; set; }
+    bool IsFilteredOut { get; set; }
 
     ICommand OpenCommand { get; }
 }

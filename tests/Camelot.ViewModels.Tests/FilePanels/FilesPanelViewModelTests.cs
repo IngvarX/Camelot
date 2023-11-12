@@ -62,7 +62,7 @@ public class FilesPanelViewModelTests
         var directorySelectorViewModel = _autoMocker.GetMock<IDirectorySelectorViewModel>().Object;
         var dragAndDropOperationsMediator = _autoMocker.GetMock<IDragAndDropOperationsMediator>().Object;
         var clipboardOperationsViewModel = _autoMocker.GetMock<IClipboardOperationsViewModel>().Object;
-
+        
         var viewModel = new FilesPanelViewModel(
             _autoMocker.GetMock<IFileService>().Object,
             _autoMocker.GetMock<IDirectoryService>().Object,
@@ -82,7 +82,8 @@ public class FilesPanelViewModelTests
             operationsViewModel,
             directorySelectorViewModel,
             dragAndDropOperationsMediator,
-            clipboardOperationsViewModel
+            clipboardOperationsViewModel,
+            _autoMocker.GetMock<IQuickSearchService>().Object
         );
 
         Assert.Equal(searchViewModel, viewModel.SearchViewModel);

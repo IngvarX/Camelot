@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Avalonia.Input;
 using Camelot.Avalonia.Interfaces;
 using Camelot.Extensions;
 using Camelot.Services.Abstractions;
@@ -22,6 +23,7 @@ using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Nodes;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs;
 using Camelot.ViewModels.Interfaces.MainWindow.Operations;
 using Camelot.ViewModels.Services.Interfaces;
+
 using DynamicData;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -43,6 +45,7 @@ public class FilesPanelViewModel : ViewModelBase, IFilesPanelViewModel
     private readonly IFilePanelDirectoryObserver _filePanelDirectoryObserver;
     private readonly IPermissionsService _permissionsService;
     private readonly IDialogService _dialogService;
+    private readonly IQuickSearchService _quickSearchService;
 
     private readonly ObservableCollection<IFileSystemNodeViewModel> _fileSystemNodes;
     private readonly ObservableCollection<IFileSystemNodeViewModel> _selectedFileSystemNodes;
@@ -79,6 +82,7 @@ public class FilesPanelViewModel : ViewModelBase, IFilesPanelViewModel
 
     public IList<IFileSystemNodeViewModel> SelectedFileSystemNodes => _selectedFileSystemNodes;
 
+
     [Reactive]
     public IFileSystemNodeViewModel CurrentNode { get; private set; }
 
@@ -113,7 +117,6 @@ public class FilesPanelViewModel : ViewModelBase, IFilesPanelViewModel
     public ICommand GoToParentDirectoryCommand { get; }
 
     public ICommand SortFilesCommand { get; }
-
     public FilesPanelViewModel(
         IFileService fileService,
         IDirectoryService directoryService,
@@ -133,7 +136,8 @@ public class FilesPanelViewModel : ViewModelBase, IFilesPanelViewModel
         IOperationsViewModel operationsViewModel,
         IDirectorySelectorViewModel directorySelectorViewModel,
         IDragAndDropOperationsMediator dragAndDropOperationsMediator,
-        IClipboardOperationsViewModel clipboardOperationsViewModel)
+        IClipboardOperationsViewModel clipboardOperationsViewModel,
+        IQuickSearchService quickSearchService)
     {
         _fileService = fileService;
         _directoryService = directoryService;
@@ -148,6 +152,7 @@ public class FilesPanelViewModel : ViewModelBase, IFilesPanelViewModel
         _filePanelDirectoryObserver = filePanelDirectoryObserver;
         _permissionsService = permissionsService;
         _dialogService = dialogService;
+        _quickSearchService = quickSearchService;
 
         SearchViewModel = searchViewModel;
         TabsListViewModel = tabsListViewModel;
@@ -165,7 +170,6 @@ public class FilesPanelViewModel : ViewModelBase, IFilesPanelViewModel
             (DirectoryModel dm) => dm is not null);
         GoToParentDirectoryCommand = ReactiveCommand.Create(GoToParentDirectory, canGoToParentDirectory);
         SortFilesCommand = ReactiveCommand.Create<SortingMode>(SortFiles);
-
         SubscribeToEvents();
         UpdateStateAsync().Forget();
     }
@@ -257,6 +261,8 @@ public class FilesPanelViewModel : ViewModelBase, IFilesPanelViewModel
 
         CurrentDirectoryChanged.Raise(this, EventArgs.Empty);
         this.RaisePropertyChanged(nameof(ParentDirectory));
+
+        _quickSearchService.ClearSearch();
     }
 
     private void UpdateNode(string nodePath) => RecreateNode(nodePath, nodePath);
@@ -438,4 +444,108 @@ public class FilesPanelViewModel : ViewModelBase, IFilesPanelViewModel
 
     private bool CheckIfShouldShowNode(string nodePath) =>
         _specification?.IsSatisfiedBy(_nodeService.GetNode(nodePath)) ?? true;
+
+    private int GetSelectedIndex()
+    {
+        if (SelectedFileSystemNodes.Count == 0)
+            return -1;
+        var oldSelected = SelectedFileSystemNodes.First();
+        var nodes = FileSystemNodes.ToList();
+        for (int i = 0; i < nodes.Count; i++)
+        {
+            var curr = nodes[i];
+            if (curr.FullPath == oldSelected.FullPath)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private IFileSystemNodeViewModel GetSelected()
+    {
+        int selectedIndex = GetSelectedIndex();
+        if (selectedIndex < 0)
+            return null;
+
+        var nodes = FileSystemNodes.ToList();
+        var selected = nodes[selectedIndex];
+        return selected;
+    }
+
+    private void SelectNodeEx(string newSelected, IFileSystemNodeViewModel oldSelected)
+    {
+        if (newSelected != null)
+        {
+            if (oldSelected != null)
+            {
+                UnselectNode(oldSelected.FullPath);
+            }
+            SelectNode(newSelected);
+        }
+    }
+
+    public void OnDataGridKeyDownCallback(Key key)
+    {
+        if (_quickSearchService.Enabled())
+        {
+            if (key == Key.Escape)
+            {
+                _quickSearchService.ClearSearch();
+                FileSystemNodes.ForEach(x => x.IsFilteredOut = false);
+            }
+        }
+    }
+
+    /// <summary>
+    /// We use specific handler for TextInput, and not reuse KeyDown,
+    /// since translation from Key to Char is language/keyboard dependent,
+    /// and should be done in caller level by Avalonia
+    /// </summary>
+    /// <param name="text"></param>
+    /// <param name="isShiftDown"></param>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
+    public void OnDataGridTextInputCallback(string text, bool isShiftDown)
+    {
+        if (_quickSearchService.Enabled())
+        {
+            if (string.IsNullOrEmpty(text) || text.Length != 1)
+                throw new ArgumentOutOfRangeException(nameof(text));
+
+            char c = text[0];
+            var files = CreateQuickSearchFiles();
+            _quickSearchService.OnCharDown(c, isShiftDown, files, out bool handled);
+            if (handled)
+                UpdateFilterAfterQuickSearch(files);
+        }
+    }
+
+    private void UpdateFilterAfterQuickSearch(List<QuickSearchFileModel> files)
+    {
+        if (!_quickSearchService.Enabled())
+            throw new InvalidOperationException();
+
+        string newSelected = null;
+        foreach (var file in files)
+        {
+            var node = (IFileSystemNodeViewModel)file.Tag;
+            node.IsFilteredOut = !file.Found;
+            if (file.Selected)
+                newSelected = node.FullPath;
+        }
+
+        var oldSelected = GetSelected();
+        SelectNodeEx(newSelected, oldSelected);
+    }
+
+    private List<QuickSearchFileModel> CreateQuickSearchFiles()
+    {
+        if (!_quickSearchService.Enabled())
+            throw new InvalidOperationException();
+
+        var result = FileSystemNodes
+            .Select(x => new QuickSearchFileModel() { Name = x.Name, Tag = x })
+            .ToList();
+        return result;
+    }
 }

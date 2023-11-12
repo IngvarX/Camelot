@@ -111,6 +111,8 @@
                   Items="{Binding FileSystemNodes}"
                   DragDrop.AllowDrop="True"
                   KeyDown="OnDataGridKeyDown"
+                  KeyUp="OnDataGridKeyUp"
+                  TextInput="OnDataGridTextInput"
                   DoubleTapped="OnDataGridDoubleTapped"
                   CellPointerPressed="OnDataGridCellPointerPressed"
                   SelectionChanged="OnDataGridSelectionChanged">
@@ -159,8 +161,16 @@
             <DataGrid.Styles>
                 <Style Selector="DataGridRow">
                     <Setter Property="ContextMenu" Value="{StaticResource RowContextMenu}" />
+                    <Setter Property="IsEnabled" Value="{Binding !IsFilteredOut}" />
+                    <Setter Property="Focusable" Value="{Binding !IsFilteredOut}" />
                 </Style>
-            </DataGrid.Styles>
+                <!-- See binding above, of IsEnabled to IsFilteredOut.
+                     Changing opacity of filtered items is based on muCommander"
+                -->
+                <Style Selector="DataGridRow[IsEnabled=false]">
+                    <Setter Property="Opacity" Value="{DynamicResource ThemeDisabledOpacity}"/>
+                </Style>
+           </DataGrid.Styles>
 
             <DataGrid.KeyBindings>
                 <KeyBinding Gesture="Ctrl+C" Command="{Binding ClipboardOperationsViewModel.CopyToClipboardCommand}" />
@@ -298,7 +308,8 @@
                                     </DataTemplate>
 
                                     <DataTemplate DataType="{x:Type nodes:FileViewModel}">
-                                        <TextBlock Classes="filePanelTextBlock" Text="{Binding Extension}"
+                                        <TextBlock Classes="filePanelTextBlock"
+                                                   Text="{Binding Extension}"
                                                    IsVisible="{Binding !IsEditing}" />
                                     </DataTemplate>
                                 </ContentControl.DataTemplates>
@@ -325,11 +336,13 @@
                             <ContentControl Content="{Binding DataContext, RelativeSource={RelativeSource AncestorType=DataGridCell}}">
                                 <ContentControl.DataTemplates>
                                     <DataTemplate DataType="{x:Type nodes:DirectoryViewModel}">
-                                        <TextBlock Classes="filePanelTextBlock" Text="{x:Static p:Resources.DirectoryTemplate}" />
+                                        <TextBlock Classes="filePanelTextBlock"
+                                                   Text="{x:Static p:Resources.DirectoryTemplate}" />
                                     </DataTemplate>
 
                                     <DataTemplate DataType="{x:Type nodes:FileViewModel}">
-                                        <TextBlock Classes="filePanelTextBlock" Text="{Binding FormattedSize}" />
+                                        <TextBlock Classes="filePanelTextBlock"
+                                                   Text="{Binding FormattedSize}" />
                                     </DataTemplate>
                                 </ContentControl.DataTemplates>
                             </ContentControl>
@@ -352,7 +365,9 @@
 
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Classes="filePanelTextBlock" Text="{Binding LastModifiedDateTime}" />
+                            <TextBlock Classes="filePanelTextBlock"
+                                       Text="{Binding LastModifiedDateTime}" />
+                            
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

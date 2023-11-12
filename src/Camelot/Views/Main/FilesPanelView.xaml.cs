@@ -1,20 +1,26 @@
 using System;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
+using System.Xml.Serialization;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Data.Converters;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using Avalonia.VisualTree;
 using Camelot.Avalonia.Interfaces;
 using Camelot.DependencyInjection;
 using Camelot.Extensions;
+using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Nodes;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Nodes;
 using Camelot.Views.Main.Controls;
 using DynamicData;
+using ReactiveUI;
 using Splat;
 
 namespace Camelot.Views.Main;
@@ -29,6 +35,7 @@ public class FilesPanelView : UserControl
     private bool _isCellPressed;
     private PointerEventArgs _pointerEventArgs;
     private IDataContextProvider _dataContextProvider;
+    private bool _shiftDown;
 
     private DataGrid FilesDataGrid => this.FindControl<DataGrid>("FilesDataGrid");
 
@@ -76,6 +83,13 @@ public class FilesPanelView : UserControl
         if (item is not null)
         {
             FilesDataGrid.SelectedItems.Add(item);
+        }
+
+        // In case event was triggerd by keyboard (up/down arrows, quick-search, etc),
+        // Need to make sure item is viewable
+        if (FilesDataGrid.SelectedItems.Count == 1)
+        {
+            FilesDataGrid.ScrollIntoView(item, null);
         }
     }
 
@@ -153,19 +167,34 @@ public class FilesPanelView : UserControl
         StopEditing(nodeViewModel);
         nodeViewModel.OpenCommand.Execute(null);
     }
-
+    
     private void OnDataGridKeyDown(object sender, KeyEventArgs args)
     {
-        if (args.Key != Key.Delete && args.Key != Key.Back)
+        if (args.Key == Key.Delete || args.Key == Key.Back)
         {
+            args.Handled = true;
+            ViewModel.OperationsViewModel.MoveToTrashCommand.Execute(null);
             return;
         }
 
-        args.Handled = true;
-
-        ViewModel.OperationsViewModel.MoveToTrashCommand.Execute(null);
+        _shiftDown = (args.KeyModifiers & KeyModifiers.Shift) > 0;
+        ViewModel.OnDataGridKeyDownCallback(args.Key);
     }
 
+    /// <summary>
+    /// Needed to get state of shift key 
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="args"></param>
+    private void OnDataGridKeyUp(object sender, KeyEventArgs args)
+    {
+        _shiftDown = (args.KeyModifiers & KeyModifiers.Shift) > 0;
+    }
+
+    private void OnDataGridTextInput(object sender, TextInputEventArgs args)
+    {
+        ViewModel.OnDataGridTextInputCallback(args.Text, _shiftDown);
+    }
     private void OnDataGridCellPointerPressed(object sender, DataGridCellPointerPressedEventArgs args)
     {
         ActivateViewModel();
@@ -355,3 +384,4 @@ public class FilesPanelView : UserControl
         }
     }
 }
+
