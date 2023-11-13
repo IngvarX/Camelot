@@ -1,26 +1,20 @@
 using System;
 using System.ComponentModel;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
-using System.Xml.Serialization;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Data.Converters;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
-using Avalonia.VisualTree;
 using Camelot.Avalonia.Interfaces;
 using Camelot.DependencyInjection;
 using Camelot.Extensions;
-using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Nodes;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Nodes;
 using Camelot.Views.Main.Controls;
 using DynamicData;
-using ReactiveUI;
 using Splat;
 
 namespace Camelot.Views.Main;
@@ -85,7 +79,7 @@ public class FilesPanelView : UserControl
             FilesDataGrid.SelectedItems.Add(item);
         }
 
-        // In case event was triggerd by keyboard (up/down arrows, quick-search, etc),
+        // In case event was triggered by keyboard (up/down arrows, quick-search, etc),
         // Need to make sure item is viewable
         if (FilesDataGrid.SelectedItems.Count == 1)
         {
@@ -170,15 +164,20 @@ public class FilesPanelView : UserControl
 
     private void OnDataGridKeyDown(object sender, KeyEventArgs args)
     {
-        if (args.Key == Key.Delete || args.Key == Key.Back)
+        if (args.Key is Key.Delete or Key.Back)
         {
             args.Handled = true;
             ViewModel.OperationsViewModel.MoveToTrashCommand.Execute(null);
+
             return;
         }
 
-        _shiftDown = (args.KeyModifiers & KeyModifiers.Shift) > 0;
-        ViewModel.OnDataGridKeyDownCallback(args.Key);
+        UpdateShiftKeyStatus(args);
+
+        if (args.Key == Key.Escape)
+        {
+            ViewModel.ClearQuickSearchCommand.Execute(null);
+        }
     }
 
     /// <summary>
@@ -186,16 +185,15 @@ public class FilesPanelView : UserControl
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="args"></param>
-    private void OnDataGridKeyUp(object sender, KeyEventArgs args)
-    {
-        _shiftDown = (args.KeyModifiers & KeyModifiers.Shift) > 0;
-    }
+    private void OnDataGridKeyUp(object sender, KeyEventArgs args) => UpdateShiftKeyStatus(args);
 
     private void OnDataGridTextInput(object sender, TextInputEventArgs args)
     {
         if (args.Text is not null && args.Text.Length == 1)
         {
-            ViewModel.OnDataGridTextInputCallback(args.Text[0], _shiftDown);
+            var parameter = new QuickSearchCommandModel(args.Text[0], _shiftDown);
+
+            ViewModel.QuickSearchCommand.Execute(parameter);
         }
     }
 
@@ -387,5 +385,8 @@ public class FilesPanelView : UserControl
             item.IsVisible = await ViewModel.ClipboardOperationsViewModel.CanPasteAsync();
         }
     }
+
+    private void UpdateShiftKeyStatus(KeyEventArgs args) =>
+        _shiftDown = (args.KeyModifiers & KeyModifiers.Shift) > 0;
 }
 

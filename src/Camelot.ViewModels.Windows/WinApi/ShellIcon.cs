@@ -1,5 +1,4 @@
 ﻿using Camelot.Services.Windows.WinApi;
-using System.Diagnostics;
 
 namespace Camelot.ViewModels.Windows.WinApi;
 

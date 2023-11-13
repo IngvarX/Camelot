@@ -6,7 +6,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Avalonia.Input;
 using Camelot.Avalonia.Interfaces;
 using Camelot.Extensions;
 using Camelot.Services.Abstractions;
@@ -82,7 +81,6 @@ public class FilesPanelViewModel : ViewModelBase, IFilesPanelViewModel
 
     public IList<IFileSystemNodeViewModel> SelectedFileSystemNodes => _selectedFileSystemNodes;
 
-
     [Reactive]
     public IFileSystemNodeViewModel CurrentNode { get; private set; }
 
@@ -112,11 +110,16 @@ public class FilesPanelViewModel : ViewModelBase, IFilesPanelViewModel
 
     public ICommand ActivateCommand { get; }
 
+    public ICommand QuickSearchCommand { get; }
+
+    public ICommand ClearQuickSearchCommand { get; }
+
     public ICommand RefreshCommand { get; }
 
     public ICommand GoToParentDirectoryCommand { get; }
 
     public ICommand SortFilesCommand { get; }
+
 
     public FilesPanelViewModel(
         IFileService fileService,
@@ -166,6 +169,8 @@ public class FilesPanelViewModel : ViewModelBase, IFilesPanelViewModel
         _selectedFileSystemNodes = new ObservableCollection<IFileSystemNodeViewModel>();
 
         ActivateCommand = ReactiveCommand.Create(Activate);
+        QuickSearchCommand = ReactiveCommand.Create<QuickSearchCommandModel>(QuickSearch);
+        ClearQuickSearchCommand = ReactiveCommand.Create(ClearQuickSearch);
         RefreshCommand = ReactiveCommand.Create(ReloadFiles);
         var canGoToParentDirectory = this.WhenAnyValue(vm => vm.ParentDirectory,
             (DirectoryModel dm) => dm is not null);
@@ -191,38 +196,6 @@ public class FilesPanelViewModel : ViewModelBase, IFilesPanelViewModel
         Deactivated.Raise(this, EventArgs.Empty);
 
         SelectedTab.IsGloballyActive = false;
-    }
-
-
-    public void OnDataGridKeyDownCallback(Key key)
-    {
-        if (!_quickSearchService.IsEnabled)
-        {
-            return;
-        }
-
-        if (key == Key.Escape)
-        {
-            _quickSearchService.ClearSearch();
-            FileSystemNodes.ForEach(x => x.IsFilteredOut = false);
-        }
-    }
-
-    /// <summary>
-    /// We use specific handler for TextInput, and not reuse KeyDown,
-    /// since translation from Key to Char is language/keyboard dependent,
-    /// and should be done in caller level by Avalonia
-    /// </summary>
-    public void OnDataGridTextInputCallback(char symbol, bool isBackwardsDirectionEnabled)
-    {
-        if (!_quickSearchService.IsEnabled)
-        {
-            return;
-        }
-
-        var nodes = CreateQuickSearchNodes();
-        var filteredNodes = _quickSearchService.FilterNodes(symbol, isBackwardsDirectionEnabled, nodes);
-        UpdateFilterAfterQuickSearch(filteredNodes);
     }
 
     private void SortFiles(SortingMode sortingMode)
@@ -539,6 +512,25 @@ public class FilesPanelViewModel : ViewModelBase, IFilesPanelViewModel
 
         var oldSelected = GetSelectedNode();
         ChangeSelectedNode(newSelected, oldSelected);
+    }
+
+    private void QuickSearch(QuickSearchCommandModel parameter)
+    {
+        if (!_quickSearchService.IsEnabled)
+        {
+            return;
+        }
+
+        var nodes = CreateQuickSearchNodes();
+        var filteredNodes = _quickSearchService.FilterNodes(
+            parameter.Symbol, parameter.IsBackwardsDirectionEnabled, nodes);
+        UpdateFilterAfterQuickSearch(filteredNodes);
+    }
+
+    private void ClearQuickSearch()
+    {
+        _quickSearchService.ClearSearch();
+        FileSystemNodes.ForEach(x => x.IsFilteredOut = false);
     }
 
     private IReadOnlyList<string> CreateQuickSearchNodes() =>

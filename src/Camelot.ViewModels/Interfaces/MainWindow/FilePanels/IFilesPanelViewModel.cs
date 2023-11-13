@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Input;
-using Avalonia.Input;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Nodes;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs;
 using Camelot.ViewModels.Interfaces.MainWindow.Operations;
@@ -43,11 +42,11 @@ public interface IFilesPanelViewModel
 
     ICommand ActivateCommand { get; }
 
+    ICommand QuickSearchCommand { get; }
+
+    ICommand ClearQuickSearchCommand { get; }
+
     void Activate();
 
     void Deactivate();
-
-    void OnDataGridTextInputCallback(char symbol, bool isShiftDown);
-
-    void OnDataGridKeyDownCallback(Key key);
 }
