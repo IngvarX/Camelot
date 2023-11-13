@@ -24,11 +24,8 @@ public interface IFilesPanelViewModel
     IClipboardOperationsViewModel ClipboardOperationsViewModel { get; }
 
     IList<IFileSystemNodeViewModel> SelectedFileSystemNodes { get; }
-    
-    IEnumerable<IFileSystemNodeViewModel> FileSystemNodes { get; }
 
-    void OnDataGridTextInputCallback(string text, bool isShiftDown);
-    void OnDataGridKeyDownCallback(Key key);
+    IEnumerable<IFileSystemNodeViewModel> FileSystemNodes { get; }
 
     bool IsActive { get; }
 
@@ -49,4 +46,8 @@ public interface IFilesPanelViewModel
     void Activate();
 
     void Deactivate();
+
+    void OnDataGridTextInputCallback(char symbol, bool isShiftDown);
+
+    void OnDataGridKeyDownCallback(Key key);
 }

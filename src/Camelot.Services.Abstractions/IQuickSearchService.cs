@@ -5,21 +5,18 @@ namespace Camelot.Services.Abstractions;
 
 public interface IQuickSearchService
 {
+    bool IsEnabled { get; }
+
     QuickSearchModel GetQuickSearchSettings();
 
     void SaveQuickSearchSettings(QuickSearchModel quickSearchModel);
 
-    /// <summary>
-    /// </summary>
-    /// <param name="c">
+    /// <param name="symbol">
     /// This arg is is of type 'char' and not 'Key', since translation from Key to char
-    //  is language/keyboard dependent, and should be done in caller level by Avalonia.</param>
-    /// <param name="isShiftDown"></param>
-    /// <param name="files"></param>
-    /// <param name="handled"></param>
-    void OnCharDown(char c, bool isShiftDown, List<QuickSearchFileModel> files, out bool handled);
+    ///  is language/keyboard dependent, and should be done in caller level by Avalonia.</param>
+    /// <param name="isBackwardsDirectionEnabled"></param>
+    /// <param name="nodes"></param>
+    IReadOnlyList<QuickSearchNodeModel> FilterNodes(char symbol, bool isBackwardsDirectionEnabled, IReadOnlyList<string> nodes);
 
     void ClearSearch();
-
-    bool Enabled();
 }

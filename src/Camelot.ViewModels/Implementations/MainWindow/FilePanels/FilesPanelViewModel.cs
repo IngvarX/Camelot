@@ -117,6 +117,7 @@ public class FilesPanelViewModel : ViewModelBase, IFilesPanelViewModel
     public ICommand GoToParentDirectoryCommand { get; }
 
     public ICommand SortFilesCommand { get; }
+
     public FilesPanelViewModel(
         IFileService fileService,
         IDirectoryService directoryService,
@@ -190,6 +191,38 @@ public class FilesPanelViewModel : ViewModelBase, IFilesPanelViewModel
         Deactivated.Raise(this, EventArgs.Empty);
 
         SelectedTab.IsGloballyActive = false;
+    }
+
+
+    public void OnDataGridKeyDownCallback(Key key)
+    {
+        if (!_quickSearchService.IsEnabled)
+        {
+            return;
+        }
+
+        if (key == Key.Escape)
+        {
+            _quickSearchService.ClearSearch();
+            FileSystemNodes.ForEach(x => x.IsFilteredOut = false);
+        }
+    }
+
+    /// <summary>
+    /// We use specific handler for TextInput, and not reuse KeyDown,
+    /// since translation from Key to Char is language/keyboard dependent,
+    /// and should be done in caller level by Avalonia
+    /// </summary>
+    public void OnDataGridTextInputCallback(char symbol, bool isBackwardsDirectionEnabled)
+    {
+        if (!_quickSearchService.IsEnabled)
+        {
+            return;
+        }
+
+        var nodes = CreateQuickSearchNodes();
+        var filteredNodes = _quickSearchService.FilterNodes(symbol, isBackwardsDirectionEnabled, nodes);
+        UpdateFilterAfterQuickSearch(filteredNodes);
     }
 
     private void SortFiles(SortingMode sortingMode)
@@ -448,10 +481,13 @@ public class FilesPanelViewModel : ViewModelBase, IFilesPanelViewModel
     private int GetSelectedIndex()
     {
         if (SelectedFileSystemNodes.Count == 0)
+        {
             return -1;
+        }
+
         var oldSelected = SelectedFileSystemNodes.First();
         var nodes = FileSystemNodes.ToList();
-        for (int i = 0; i < nodes.Count; i++)
+        for (var i = 0; i < nodes.Count; i++)
         {
             var curr = nodes[i];
             if (curr.FullPath == oldSelected.FullPath)
@@ -459,93 +495,54 @@ public class FilesPanelViewModel : ViewModelBase, IFilesPanelViewModel
                 return i;
             }
         }
+
         return -1;
     }
 
-    private IFileSystemNodeViewModel GetSelected()
+    private IFileSystemNodeViewModel GetSelectedNode()
     {
-        int selectedIndex = GetSelectedIndex();
-        if (selectedIndex < 0)
-            return null;
+        var selectedIndex = GetSelectedIndex();
 
-        var nodes = FileSystemNodes.ToList();
-        var selected = nodes[selectedIndex];
-        return selected;
+        return selectedIndex < 0 ? null : _fileSystemNodes[selectedIndex];
     }
 
-    private void SelectNodeEx(string newSelected, IFileSystemNodeViewModel oldSelected)
+    private void ChangeSelectedNode(string newSelected, IFileSystemNodeViewModel oldSelected)
     {
-        if (newSelected != null)
+        if (newSelected is null)
         {
-            if (oldSelected != null)
-            {
-                UnselectNode(oldSelected.FullPath);
-            }
-            SelectNode(newSelected);
+            return;
         }
-    }
 
-    public void OnDataGridKeyDownCallback(Key key)
-    {
-        if (_quickSearchService.Enabled())
+        if (oldSelected is not null)
         {
-            if (key == Key.Escape)
-            {
-                _quickSearchService.ClearSearch();
-                FileSystemNodes.ForEach(x => x.IsFilteredOut = false);
-            }
+            UnselectNode(oldSelected.FullPath);
         }
+
+        SelectNode(newSelected);
     }
 
-    /// <summary>
-    /// We use specific handler for TextInput, and not reuse KeyDown,
-    /// since translation from Key to Char is language/keyboard dependent,
-    /// and should be done in caller level by Avalonia
-    /// </summary>
-    /// <param name="text"></param>
-    /// <param name="isShiftDown"></param>
-    /// <exception cref="ArgumentOutOfRangeException"></exception>
-    public void OnDataGridTextInputCallback(string text, bool isShiftDown)
+    private void UpdateFilterAfterQuickSearch(IReadOnlyList<QuickSearchNodeModel> nodes)
     {
-        if (_quickSearchService.Enabled())
-        {
-            if (string.IsNullOrEmpty(text) || text.Length != 1)
-                throw new ArgumentOutOfRangeException(nameof(text));
-
-            char c = text[0];
-            var files = CreateQuickSearchFiles();
-            _quickSearchService.OnCharDown(c, isShiftDown, files, out bool handled);
-            if (handled)
-                UpdateFilterAfterQuickSearch(files);
-        }
-    }
-
-    private void UpdateFilterAfterQuickSearch(List<QuickSearchFileModel> files)
-    {
-        if (!_quickSearchService.Enabled())
-            throw new InvalidOperationException();
-
         string newSelected = null;
-        foreach (var file in files)
+
+        var startIndex = ParentDirectory is null ? 0 : 1;
+        for (var i = startIndex; i < _fileSystemNodes.Count; i++)
         {
-            var node = (IFileSystemNodeViewModel)file.Tag;
-            node.IsFilteredOut = !file.Found;
-            if (file.Selected)
+            var node = _fileSystemNodes[i];
+            var quickSearchNode = nodes[i];
+            node.IsFilteredOut = !quickSearchNode.IsFiltered;
+            if (quickSearchNode.Selected)
+            {
                 newSelected = node.FullPath;
+            }
         }
 
-        var oldSelected = GetSelected();
-        SelectNodeEx(newSelected, oldSelected);
+        var oldSelected = GetSelectedNode();
+        ChangeSelectedNode(newSelected, oldSelected);
     }
 
-    private List<QuickSearchFileModel> CreateQuickSearchFiles()
-    {
-        if (!_quickSearchService.Enabled())
-            throw new InvalidOperationException();
-
-        var result = FileSystemNodes
-            .Select(x => new QuickSearchFileModel() { Name = x.Name, Tag = x })
+    private IReadOnlyList<string> CreateQuickSearchNodes() =>
+        FileSystemNodes
+            .Select(n => n.Name)
             .ToList();
-        return result;
-    }
 }

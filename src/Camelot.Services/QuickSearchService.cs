@@ -13,127 +13,81 @@ namespace Camelot.Services;
 public class QuickSearchService : IQuickSearchService
 {
     private const string SettingsId = "QuickSearchSettings";
-    private readonly QuickSearchModel _default;
+
     private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-    private QuickSearchModel _cachedSettingsValue = null;
+
+    private QuickSearchModel _cachedSettingsValue;
     private string _searchWord = string.Empty;
     private char _searchLetter = Char.MinValue;
     private int _selectedIndex = -1;
+
+    public bool IsEnabled => _cachedSettingsValue.SelectedMode != QuickSearchMode.Disabled;
+
     public QuickSearchService(IUnitOfWorkFactory unitOfWorkFactory)
     {
         _unitOfWorkFactory = unitOfWorkFactory;
-        _default = new QuickSearchModel(QuickSearchMode.Letter);
-        GetQuickSearchSettings();
-    }
 
-    public bool Enabled()
-    {
-        return _cachedSettingsValue.SelectedMode != QuickSearchMode.Disabled;
+        GetQuickSearchSettings();
     }
 
     public QuickSearchModel GetQuickSearchSettings()
     {
-        if (_cachedSettingsValue == null)
+        if (_cachedSettingsValue is not null)
         {
-            using var uow = _unitOfWorkFactory.Create();
-            var repository = uow.GetRepository<QuickSearchModel>();
-            var dbModel = repository.GetById(SettingsId);
-            if (dbModel != null)
-                _cachedSettingsValue = dbModel;
-            else
-                _cachedSettingsValue = _default;
+            return _cachedSettingsValue;
         }
-        else
-        {
-            // we set value of _cachedValue in 'save',
-            // so no need to read from the repository every time.
-        }
-        return _cachedSettingsValue;
+
+        using var uow = _unitOfWorkFactory.Create();
+        var repository = uow.GetRepository<QuickSearchModel>();
+        var dbModel = repository.GetById(SettingsId) ?? new QuickSearchModel(QuickSearchMode.Disabled);
+
+        return _cachedSettingsValue = dbModel;
     }
 
-    public void OnCharDown(char c,
-        bool isShiftDown,
-        List<QuickSearchFileModel> files,
-        out bool handled)
+    public IReadOnlyList<QuickSearchNodeModel> FilterNodes(
+        char symbol, bool isBackwardsDirectionEnabled, IReadOnlyList<string> nodes)
     {
-        if (!Enabled())
-        {
-            handled = false;
-            return;
-        }
-
-        if (files == null)
-            throw new ArgumentNullException(nameof(files));
-        
-        c = Char.ToLower(c);
-        switch(_cachedSettingsValue.SelectedMode)
+        var lowercaseSymbol = Char.ToLower(symbol);
+        switch (_cachedSettingsValue.SelectedMode)
         {
             case QuickSearchMode.Letter:
+            {
+                if (_searchLetter != lowercaseSymbol)
                 {
-                    if (_searchLetter != c)
-                    {
-                        _selectedIndex = -1;
-                    }
-                    _searchLetter = c;
-                    break;
+                    _selectedIndex = -1;
                 }
+
+                _searchLetter = lowercaseSymbol;
+                break;
+            }
             case QuickSearchMode.Word:
-                {
-                    _searchWord += c;
-                    break;
-                }
+            {
+                _searchWord += lowercaseSymbol;
+                break;
+            }
             default:
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException(
+                    nameof(_cachedSettingsValue.SelectedMode), _cachedSettingsValue.SelectedMode, null);
         }
 
-        ResetSelectedItem(files);
-        var countFound = SearchFilesAndSetFound(files);
-        if (countFound > 0)
-            SetSelectedItem(files, isShiftDown);
-        handled = true;
-    }
-
-    /// <summary>
-    /// Set value of <see cref="QuickSearchFileModel.Found"/> 
-    /// which indicates whether file was found in quick search,
-    /// namely start with the typed letter/word
-    /// </summary>
-    private int SearchFilesAndSetFound(List<QuickSearchFileModel> files)
-    {
-        if (files == null)
-            throw new ArgumentNullException(nameof(files));
-
-        int found = 0;
-        for (int i = 0; i < files.Count; i++)
+        var result = nodes
+            .Select(n => new QuickSearchNodeModel {Name = n, IsFiltered = CheckIfShouldIncludeInSearchResults(n)})
+            .ToList();
+        if (result.Any(n => n.IsFiltered))
         {
-            var file = files[i];
-            if (IncludeInSearchResults(file))
-            {
-                file.Found = true;
-                found++;
-            }
-            else
-            {
-                file.Found = false;
-            }
+            SetSelectedItem(result, isBackwardsDirectionEnabled);
         }
-        return found;
+
+        return result;
     }
 
     /// <summary>
-    /// Set value of <see cref="QuickSearchFileModel.Selected"/> 
+    /// Set value of <see cref="QuickSearchNodeModel.Selected"/>
     /// which indicates to UI which item should be selected.
     /// </summary>
-
-    private void SetSelectedItem(List<QuickSearchFileModel> files,
-        bool isShiftDown)
+    private void SetSelectedItem(IReadOnlyList<QuickSearchNodeModel> files, bool isBackwardsDirectionEnabled)
     {
-        if (files == null)
-            throw new ArgumentNullException(nameof(files));
-        if (files.Where(x => x.Selected).Any())
-            throw new ArgumentOutOfRangeException(nameof(files));
-
-        _selectedIndex = ComputeNewSelectedIndex(files, _selectedIndex, isShiftDown);
+        _selectedIndex = ComputeNewSelectedIndex(files, _selectedIndex, isBackwardsDirectionEnabled);
         if (_selectedIndex >= 0)
         {
             var file = files[_selectedIndex];
@@ -141,62 +95,29 @@ public class QuickSearchService : IQuickSearchService
         }
     }
 
-    private void ResetSelectedItem(List<QuickSearchFileModel> files)
-    {
-        if (files == null)
-            throw new ArgumentNullException(nameof(files));
-        
-        files.ForEach(x => x.Selected = false);
-    }
-
-    static private int ComputeNewSelectedIndex(
-        List<QuickSearchFileModel> files,
+    private static int ComputeNewSelectedIndex(
+        IReadOnlyList<QuickSearchNodeModel> files,
         int selectedIndex,
-        bool isShiftDown)
+        bool isBackwardsDirectionEnabled)
     {
-        int start, end, jump;
-        if (!isShiftDown)
-        {
-            start = selectedIndex > -1 ? selectedIndex + 1 : 0;
-            end = files.Count;
-            jump = 1;
-        }
-        else
+        int start, jump;
+        if (isBackwardsDirectionEnabled)
         {
             start = selectedIndex > -1 ? selectedIndex - 1 : 0;
-            end = -1;
             jump = -1;
-        }
-        for (int i = start; i != end; i = i + jump)
-        {
-            var file = files[i];
-            if (file.Found)
-            {
-                return i;
-            }
-        }
-
-        // if not found yet, need to start search again from 'start'
-        // E.g. in case 'Shift' not down:
-        // "cycle from last to first"
-        // reset, so and start again from first
-        // Done in 2 'half' loops, in sake of effiency.
-        if (!isShiftDown)
-        {
-            start = 0;
-            end = selectedIndex > -1 ? selectedIndex : 0;
-            jump = 1;
         }
         else
         {
-            start = files.Count - 1;
-            end = selectedIndex > -1 ? selectedIndex : 0;
-            jump = -1;
+            start = selectedIndex > -1 ? selectedIndex + 1 : 0;
+            jump = 1;
         }
-        for (int i = start; i != end; i = i + jump)
+
+        start = (start + files.Count) % files.Count;
+
+        for (var i = start; i != start - jump; i = (i + jump + files.Count) % files.Count)
         {
             var file = files[i];
-            if (file.Found)
+            if (file.IsFiltered)
             {
                 return i;
             }
@@ -205,22 +126,17 @@ public class QuickSearchService : IQuickSearchService
         return -1;
     }
 
-    private bool IncludeInSearchResults(QuickSearchFileModel file)
-    {
-        switch (_cachedSettingsValue.SelectedMode)
+    private bool CheckIfShouldIncludeInSearchResults(string nodeName) =>
+        _cachedSettingsValue.SelectedMode switch
         {
-            case QuickSearchMode.Letter:
-                return char.ToLower(file.Name[0]) == _searchLetter;
-            case QuickSearchMode.Word:
-                return file.Name.StartsWith(_searchWord, StringComparison.OrdinalIgnoreCase);
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
-    }
+            QuickSearchMode.Letter => char.ToLower(nodeName[0]) == _searchLetter,
+            QuickSearchMode.Word => nodeName.StartsWith(_searchWord, StringComparison.OrdinalIgnoreCase),
+            _ => throw new ArgumentOutOfRangeException(nameof(_cachedSettingsValue.SelectedMode), _cachedSettingsValue, null)
+        };
 
     public void ClearSearch()
     {
-        if (!Enabled())
+        if (!IsEnabled)
         {
             return;
         }
@@ -232,11 +148,9 @@ public class QuickSearchService : IQuickSearchService
 
     public void SaveQuickSearchSettings(QuickSearchModel quickSearchModel)
     {
-        if (quickSearchModel == null)
-            throw new ArgumentNullException(nameof(quickSearchModel));
-
         using var uow = _unitOfWorkFactory.Create();
         var repository = uow.GetRepository<QuickSearchModel>();
+
         repository.Upsert(SettingsId, quickSearchModel);
         _cachedSettingsValue = quickSearchModel;
     }

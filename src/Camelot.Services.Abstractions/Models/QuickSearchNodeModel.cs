@@ -1,10 +1,11 @@
 ﻿
 namespace Camelot.Services.Abstractions.Models;
 
-public record QuickSearchFileModel
+public record QuickSearchNodeModel
 {
     public string Name { get; init; }
-    public object Tag { get; init; }
-    public bool Found { get; set; }
+
+    public bool IsFiltered { get; init; }
+
     public bool Selected { get; set; }
 }

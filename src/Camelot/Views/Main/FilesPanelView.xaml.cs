@@ -167,7 +167,7 @@ public class FilesPanelView : UserControl
         StopEditing(nodeViewModel);
         nodeViewModel.OpenCommand.Execute(null);
     }
-    
+
     private void OnDataGridKeyDown(object sender, KeyEventArgs args)
     {
         if (args.Key == Key.Delete || args.Key == Key.Back)
@@ -182,7 +182,7 @@ public class FilesPanelView : UserControl
     }
 
     /// <summary>
-    /// Needed to get state of shift key 
+    /// Needed to get state of shift key
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="args"></param>
@@ -193,8 +193,12 @@ public class FilesPanelView : UserControl
 
     private void OnDataGridTextInput(object sender, TextInputEventArgs args)
     {
-        ViewModel.OnDataGridTextInputCallback(args.Text, _shiftDown);
+        if (args.Text is not null && args.Text.Length == 1)
+        {
+            ViewModel.OnDataGridTextInputCallback(args.Text[0], _shiftDown);
+        }
     }
+
     private void OnDataGridCellPointerPressed(object sender, DataGridCellPointerPressedEventArgs args)
     {
         ActivateViewModel();
@@ -209,7 +213,7 @@ public class FilesPanelView : UserControl
     private void ProcessPointerClickInCell(PointerEventArgs args, IDataContextProvider cell)
     {
         var point = args.GetCurrentPoint(this);
-        if (point.Properties.IsMiddleButtonPressed 
+        if (point.Properties.IsMiddleButtonPressed
             && cell.DataContext is IDirectoryViewModel directoryViewModel)
         {
             args.Handled = true;
