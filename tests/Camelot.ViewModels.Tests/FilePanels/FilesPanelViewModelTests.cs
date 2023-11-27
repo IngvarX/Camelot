@@ -57,6 +57,7 @@ public class FilesPanelViewModelTests
     public void TestProperties()
     {
         var searchViewModel = _autoMocker.GetMock<ISearchViewModel>().Object;
+        var quickSearchViewModel = _autoMocker.GetMock<IQuickSearchViewModel>().Object;
         var tabsListViewModel = _autoMocker.GetMock<ITabsListViewModel>().Object;
         var operationsViewModel = _autoMocker.GetMock<IOperationsViewModel>().Object;
         var directorySelectorViewModel = _autoMocker.GetMock<IDirectorySelectorViewModel>().Object;
@@ -78,6 +79,7 @@ public class FilesPanelViewModelTests
             _autoMocker.GetMock<IPermissionsService>().Object,
             _autoMocker.GetMock<IDialogService>().Object,
             searchViewModel,
+            quickSearchViewModel,
             tabsListViewModel,
             operationsViewModel,
             directorySelectorViewModel,

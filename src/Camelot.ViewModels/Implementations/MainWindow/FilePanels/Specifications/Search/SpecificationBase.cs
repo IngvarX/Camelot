@@ -1,7 +1,7 @@
 using Camelot.Services.Abstractions.Models;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 
-namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Specifications;
+namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Specifications.Search;
 
 public abstract class SpecificationBase : INodeSpecification
 {

@@ -6,7 +6,7 @@ public interface ISearchViewModel
 {
     bool IsSearchEnabled { get; }
 
-    event EventHandler<EventArgs> SearchSettingsChanged;
+    event EventHandler<System.EventArgs> SearchSettingsChanged;
 
     INodeSpecification GetSpecification();
 

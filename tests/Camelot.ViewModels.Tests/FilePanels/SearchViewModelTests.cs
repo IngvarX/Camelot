@@ -4,7 +4,7 @@ using Camelot.Avalonia.Interfaces;
 using Camelot.Services.Environment.Interfaces;
 using Camelot.ViewModels.Configuration;
 using Camelot.ViewModels.Implementations.MainWindow.FilePanels;
-using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Specifications;
+using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Specifications.Search;
 using Camelot.ViewModels.Services.Interfaces;
 using Moq;
 using Moq.AutoMock;

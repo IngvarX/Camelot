@@ -914,5 +914,28 @@ namespace Camelot.Properties {
                 return ResourceManager.GetString("SupportedOnWindowsOnly", resourceCulture);
             }
         }
+    
+	public static string Keyboard {
+            get {
+                return ResourceManager.GetString("Keyboard", resourceCulture);
+            }
+        }
+    
+	public static string QuickSearch {
+            get {
+                return ResourceManager.GetString("QuickSearch", resourceCulture);
+            }
+        }
+    
+	public static string QuickSearchModeWithColon {
+            get {
+                return ResourceManager.GetString("QuickSearchModeWithColon", resourceCulture);
+            }
+        }
+	public static string QuickSearchHelp {
+            get {
+                return ResourceManager.GetString("QuickSearchHelp", resourceCulture);
+            }
+        }
     }
 }

@@ -1,8 +1,6 @@
-using System;
-
 namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs;
 
-public class TabMoveRequestedEventArgs : EventArgs
+public class TabMoveRequestedEventArgs : System.EventArgs
 {
     public ITabViewModel Target { get; }
 

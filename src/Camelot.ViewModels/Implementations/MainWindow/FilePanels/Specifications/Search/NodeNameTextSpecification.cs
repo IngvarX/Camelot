@@ -1,7 +1,7 @@
 using System;
 using Camelot.Services.Abstractions.Models;
 
-namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Specifications;
+namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Specifications.Search;
 
 public class NodeNameTextSpecification : SpecificationBase
 {

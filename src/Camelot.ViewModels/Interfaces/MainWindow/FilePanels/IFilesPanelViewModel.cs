@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Input;
+using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.EventArgs;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Nodes;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs;
 using Camelot.ViewModels.Interfaces.MainWindow.Operations;
@@ -14,6 +15,8 @@ public interface IFilesPanelViewModel
 
     ISearchViewModel SearchViewModel { get; }
 
+    IQuickSearchViewModel QuickSearchViewModel { get; }
+
     IOperationsViewModel OperationsViewModel { get; }
 
     IDirectorySelectorViewModel DirectorySelectorViewModel { get; }
@@ -24,15 +27,17 @@ public interface IFilesPanelViewModel
 
     IList<IFileSystemNodeViewModel> SelectedFileSystemNodes { get; }
 
+    IEnumerable<IFileSystemNodeViewModel> FileSystemNodes { get; }
+
     bool IsActive { get; }
 
     string CurrentDirectory { get; set; }
 
-    event EventHandler<EventArgs> Activated;
+    event EventHandler<System.EventArgs> Activated;
 
-    event EventHandler<EventArgs> Deactivated;
+    event EventHandler<System.EventArgs> Deactivated;
 
-    event EventHandler<EventArgs> CurrentDirectoryChanged;
+    event EventHandler<System.EventArgs> CurrentDirectoryChanged;
 
     event EventHandler<SelectionAddedEventArgs> SelectionAdded;
 

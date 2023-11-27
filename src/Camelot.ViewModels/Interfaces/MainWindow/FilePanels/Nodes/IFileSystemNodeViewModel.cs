@@ -10,5 +10,7 @@ public interface IFileSystemNodeViewModel
 
     bool IsEditing { get; set; }
 
+    bool IsFilteredOut { get; set; }
+
     ICommand OpenCommand { get; }
 }

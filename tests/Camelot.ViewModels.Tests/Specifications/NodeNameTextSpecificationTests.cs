@@ -1,5 +1,5 @@
 using Camelot.Services.Abstractions.Models;
-using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Specifications;
+using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Specifications.Search;
 using Xunit;
 
 namespace Camelot.ViewModels.Tests.Specifications;

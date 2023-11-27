@@ -1,0 +1,61 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:p="clr-namespace:Camelot.Properties"
+             xmlns:settings="clr-namespace:Camelot.ViewModels.Implementations.Settings;assembly=Camelot.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Camelot.Views.Dialogs.Settings.KeyboardSettingsView"
+             x:DataType="settings:KeyboardSettingsViewModel"
+             x:CompileBindings="True">
+
+    <Design.DataContext>
+        <settings:KeyboardSettingsViewModel />
+    </Design.DataContext>
+    <Grid RowDefinitions="150,Auto"
+          ColumnDefinitions="Auto" Margin="0">
+        <Panel Name="Quick Search" Margin="10"
+                Grid.Row="0">
+            <Border
+                BorderBrush="{DynamicResource SettingsTabBorderBrush}"
+                BorderThickness="2"
+                CornerRadius="3"
+                Padding="4">
+                <Grid RowDefinitions="Auto,Auto,Auto"
+                      ColumnDefinitions="20*,30*,50*" Margin="10">
+                    <TextBlock Grid.Row="0"
+                               Grid.Column="0"
+                               Grid.ColumnSpan="3"
+                               Classes="boldStyleTextBlock" Margin="5,8,10,0"
+                               FontSize="18"
+                               Text="{x:Static p:Resources.QuickSearch}" />
+                    <TextBlock Grid.Row="1"
+                               Grid.Column="0"
+                               Grid.ColumnSpan="3"
+                               Classes="settingsTabTextBlock" Margin="5,8,10,0"
+                               Text="{x:Static p:Resources.QuickSearchHelp}" />
+                    <TextBlock Grid.Row="2"
+                               Grid.Column="0"
+                               Grid.ColumnSpan="1"
+                               Classes="settingsTabTextBlock" Margin="5,8,10,0"
+                               Text="{x:Static p:Resources.QuickSearchModeWithColon}" />
+                    <ComboBox Grid.Row="2"
+                              Grid.Column="1"
+                              Grid.ColumnSpan="1"
+                              Items="{Binding QuickSearchModeOptions}"
+                              Margin="0,4,0,0"
+                              SelectedItem="{Binding CurrentQuickSearchMode, Mode=TwoWay}"
+                              Classes="settingsComboBox">
+                    </ComboBox>
+                    <Panel Name="Width limiter for combo"
+                           Grid.Row="2"
+                           Grid.Column="3"
+                           Grid.ColumnSpan="1"></Panel>
+                </Grid>
+            </Border>
+        </Panel>
+        <Panel Name="Blank, waiting for next settings..." Margin="10"
+            Grid.Row="1">
+        </Panel>
+    </Grid>
+</UserControl>
