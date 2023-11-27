@@ -1,8 +1,6 @@
-using System;
+namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels.EventArgs;
 
-namespace Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
-
-public class SelectionAddedEventArgs : EventArgs
+public class SelectionAddedEventArgs : System.EventArgs
 {
     public string NodePath { get; }
 

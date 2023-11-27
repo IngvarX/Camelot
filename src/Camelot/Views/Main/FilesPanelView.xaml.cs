@@ -12,6 +12,7 @@ using Camelot.Avalonia.Interfaces;
 using Camelot.DependencyInjection;
 using Camelot.Extensions;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
+using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.EventArgs;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Nodes;
 using Camelot.Views.Main.Controls;
 using DynamicData;
@@ -176,15 +177,10 @@ public class FilesPanelView : UserControl
 
         if (args.Key == Key.Escape)
         {
-            ViewModel.ClearQuickSearchCommand.Execute(null);
+            ViewModel.QuickSearchViewModel.ClearQuickSearchCommand.Execute(null);
         }
     }
 
-    /// <summary>
-    /// Needed to get state of shift key
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="args"></param>
     private void OnDataGridKeyUp(object sender, KeyEventArgs args) => UpdateShiftKeyStatus(args);
 
     private void OnDataGridTextInput(object sender, TextInputEventArgs args)
@@ -193,7 +189,7 @@ public class FilesPanelView : UserControl
         {
             var parameter = new QuickSearchCommandModel(args.Text[0], _shiftDown);
 
-            ViewModel.QuickSearchCommand.Execute(parameter);
+            ViewModel.QuickSearchViewModel.QuickSearchCommand.Execute(parameter);
         }
     }
 

@@ -10,7 +10,7 @@ public interface ITabsListViewModel
 
     IReadOnlyList<ITabViewModel> Tabs { get; }
 
-    event EventHandler<EventArgs> SelectedTabChanged;
+    event EventHandler<System.EventArgs> SelectedTabChanged;
 
     ICommand SelectTabToTheLeftCommand { get; }
 

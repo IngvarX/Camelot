@@ -302,6 +302,10 @@ public static class ViewModelsBootstrapper
             resolver.GetRequiredService<IApplicationDispatcher>(),
             resolver.GetRequiredService<SearchViewModelConfiguration>()
         ));
+        services.Register<IQuickSearchViewModel>(() => new QuickSearchViewModel(
+            resolver.GetRequiredService<IQuickSearchService>(),
+            resolver.GetRequiredService<IPathService>()
+        ));
         services.RegisterLazySingleton<IDrivesListViewModel>(() => new DrivesListViewModel(
             resolver.GetRequiredService<IMountedDriveService>(),
             resolver.GetRequiredService<IUnmountedDriveService>(),
@@ -375,12 +379,12 @@ public static class ViewModelsBootstrapper
             resolver.GetRequiredService<IPermissionsService>(),
             resolver.GetRequiredService<IDialogService>(),
             resolver.GetRequiredService<ISearchViewModel>(),
+            resolver.GetRequiredService<IQuickSearchViewModel>(),
             tabsListViewModel,
             resolver.GetRequiredService<IOperationsViewModel>(),
             directorySelectorViewModel,
             resolver.GetRequiredService<IDragAndDropOperationsMediator>(),
-            resolver.GetRequiredService<IClipboardOperationsViewModel>(),
-            resolver.GetRequiredService<IQuickSearchService>()
+            resolver.GetRequiredService<IClipboardOperationsViewModel>()
         );
 
         return filesPanelViewModel;

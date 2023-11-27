@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Input;
+using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.EventArgs;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Nodes;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs;
 using Camelot.ViewModels.Interfaces.MainWindow.Operations;
@@ -13,6 +14,8 @@ public interface IFilesPanelViewModel
     ITabsListViewModel TabsListViewModel { get; }
 
     ISearchViewModel SearchViewModel { get; }
+
+    IQuickSearchViewModel QuickSearchViewModel { get; }
 
     IOperationsViewModel OperationsViewModel { get; }
 
@@ -30,21 +33,17 @@ public interface IFilesPanelViewModel
 
     string CurrentDirectory { get; set; }
 
-    event EventHandler<EventArgs> Activated;
+    event EventHandler<System.EventArgs> Activated;
 
-    event EventHandler<EventArgs> Deactivated;
+    event EventHandler<System.EventArgs> Deactivated;
 
-    event EventHandler<EventArgs> CurrentDirectoryChanged;
+    event EventHandler<System.EventArgs> CurrentDirectoryChanged;
 
     event EventHandler<SelectionAddedEventArgs> SelectionAdded;
 
     event EventHandler<SelectionRemovedEventArgs> SelectionRemoved;
 
     ICommand ActivateCommand { get; }
-
-    ICommand QuickSearchCommand { get; }
-
-    ICommand ClearQuickSearchCommand { get; }
 
     void Activate();
 
