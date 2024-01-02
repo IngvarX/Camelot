@@ -25,7 +25,12 @@ public class SettingsDialogViewModelTests
             .Setup(m => m.Activate())
             .Verifiable();
 
+        var appearanceSettingsViewModel = new Mock<ISettingsViewModel>();
+             appearanceSettingsViewModel
+            .Setup(m => m.Activate())
+            .Verifiable();
         var dialogViewModel = new SettingsDialogViewModel(generalSettingsViewModel.Object,
+            appearanceSettingsViewModel.Object,
             terminalSettingsViewModel.Object,
             iconsSettingsViewModel.Object);
 
@@ -64,8 +69,13 @@ public class SettingsDialogViewModelTests
             .SetupGet(m => m.IsChanged)
             .Returns(true);
 
+    var appearanceSettingsViewModel = new Mock<ISettingsViewModel>();
+        appearanceSettingsViewModel
+            .Setup(m => m.Activate())
+            .Verifiable();
         var dialogViewModel = new SettingsDialogViewModel(
             generalSettingsViewModel.Object,
+            appearanceSettingsViewModel.Object,
             terminalSettingsViewModel.Object,
             iconsSettingsViewModel.Object);
 
@@ -95,8 +105,13 @@ public class SettingsDialogViewModelTests
             .Setup(m => m.Activate())
             .Verifiable();
 
+      var appearanceSettingsViewModel = new Mock<ISettingsViewModel>();
+        appearanceSettingsViewModel
+            .Setup(m => m.Activate())
+            .Verifiable();
         var dialogViewModel = new SettingsDialogViewModel(
             generalSettingsViewModel.Object, 
+            appearanceSettingsViewModel.Object,
             terminalSettingsViewModel.Object,
             iconsSettingsViewModel.Object);
 
@@ -126,8 +141,13 @@ public class SettingsDialogViewModelTests
             .Setup(m => m.Activate())
             .Verifiable();
 
+       var appearanceSettingsViewModel = new Mock<ISettingsViewModel>();
+        appearanceSettingsViewModel
+            .Setup(m => m.Activate())
+            .Verifiable();
         var dialogViewModel = new SettingsDialogViewModel(
             generalSettingsViewModel.Object, 
+            appearanceSettingsViewModel.Object,
             terminalSettingsViewModel.Object, 
             iconsSettingsViewModel.Object)
         {

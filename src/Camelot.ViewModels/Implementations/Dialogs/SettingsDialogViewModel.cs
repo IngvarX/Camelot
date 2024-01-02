@@ -17,6 +17,7 @@ public class SettingsDialogViewModel : DialogViewModelBase
     public ISettingsViewModel GeneralSettingsViewModel { get; set; }
     public ISettingsViewModel IconsSettingsViewModel { get; set; }
 
+    public ISettingsViewModel AppearanceSettingsViewModel { get; set; }
     public int SelectedIndex
     {
         get => _selectedIndex;
@@ -31,16 +32,21 @@ public class SettingsDialogViewModel : DialogViewModelBase
 
     public SettingsDialogViewModel(
         ISettingsViewModel generalSettingsViewModel,
+        ISettingsViewModel appearanceSettingsViewModel,
         ISettingsViewModel terminalSettingsViewModel,
         ISettingsViewModel iconsSettingsViewModel)
     {
         TerminalSettingsViewModel = terminalSettingsViewModel;
         GeneralSettingsViewModel = generalSettingsViewModel;
         IconsSettingsViewModel = iconsSettingsViewModel;
-
+        AppearanceSettingsViewModel = appearanceSettingsViewModel;
+        // Items in next array should be in same order as 'tabs' in xaml,
+        // Otherwise, Activate will called for wrong model.
+        // TODO: need to make it more dynamic, and not rely on order in view.
         _settingsViewModels = new[]
         {
             generalSettingsViewModel,
+            appearanceSettingsViewModel,
             terminalSettingsViewModel,
             iconsSettingsViewModel
         };
