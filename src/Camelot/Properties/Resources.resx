@@ -552,4 +552,10 @@
   <data name="SupportedOnWindowsOnly" xml:space="preserve">
     <value>* Supported on Windows only</value>
   </data>
+  <data name="Appearance" xml:space="preserve">
+    <value>Appearance</value>
+  </data>
+  <data name="ShowKeyboardShortcuts" xml:space="preserve">
+    <value>Show keyboard shortcuts</value>
+  </data>
 </root>
