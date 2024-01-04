@@ -49,8 +49,29 @@
                                     <Image.Source>
                                         <DrawingImage>
                                             <DrawingImage.Drawing>
-                                                <GeometryDrawing Brush="{DynamicResource ThemeForegroundBrush}"
-                                                                 Geometry="M0 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6zm13 .25v.5c0 .138.112.25.25.25h.5a.25.25 0 0 0 .25-.25v-.5a.25.25 0 0 0-.25-.25h-.5a.25.25 0 0 0-.25.25zM2.25 8a.25.25 0 0 0-.25.25v.5c0 .138.112.25.25.25h.5A.25.25 0 0 0 3 8.75v-.5A.25.25 0 0 0 2.75 8h-.5zM4 8.25v.5c0 .138.112.25.25.25h.5A.25.25 0 0 0 5 8.75v-.5A.25.25 0 0 0 4.75 8h-.5a.25.25 0 0 0-.25.25zM6.25 8a.25.25 0 0 0-.25.25v.5c0 .138.112.25.25.25h.5A.25.25 0 0 0 7 8.75v-.5A.25.25 0 0 0 6.75 8h-.5zM8 8.25v.5c0 .138.112.25.25.25h.5A.25.25 0 0 0 9 8.75v-.5A.25.25 0 0 0 8.75 8h-.5a.25.25 0 0 0-.25.25zM13.25 8a.25.25 0 0 0-.25.25v.5c0 .138.112.25.25.25h.5a.25.25 0 0 0 .25-.25v-.5a.25.25 0 0 0-.25-.25h-.5zm0 2a.25.25 0 0 0-.25.25v.5c0 .138.112.25.25.25h.5a.25.25 0 0 0 .25-.25v-.5a.25.25 0 0 0-.25-.25h-.5zm-3-2a.25.25 0 0 0-.25.25v.5c0 .138.112.25.25.25h1.5a.25.25 0 0 0 .25-.25v-.5a.25.25 0 0 0-.25-.25h-1.5zm.75 2.25v.5c0 .138.112.25.25.25h.5a.25.25 0 0 0 .25-.25v-.5a.25.25 0 0 0-.25-.25h-.5a.25.25 0 0 0-.25.25zM11.25 6a.25.25 0 0 0-.25.25v.5c0 .138.112.25.25.25h.5a.25.25 0 0 0 .25-.25v-.5a.25.25 0 0 0-.25-.25h-.5zM9 6.25v.5c0 .138.112.25.25.25h.5a.25.25 0 0 0 .25-.25v-.5A.25.25 0 0 0 9.75 6h-.5a.25.25 0 0 0-.25.25zM7.25 6a.25.25 0 0 0-.25.25v.5c0 .138.112.25.25.25h.5A.25.25 0 0 0 8 6.75v-.5A.25.25 0 0 0 7.75 6h-.5zM5 6.25v.5c0 .138.112.25.25.25h.5A.25.25 0 0 0 6 6.75v-.5A.25.25 0 0 0 5.75 6h-.5a.25.25 0 0 0-.25.25zM2.25 6a.25.25 0 0 0-.25.25v.5c0 .138.112.25.25.25h1.5A.25.25 0 0 0 4 6.75v-.5A.25.25 0 0 0 3.75 6h-1.5zM2 10.25v.5c0 .138.112.25.25.25h.5a.25.25 0 0 0 .25-.25v-.5a.25.25 0 0 0-.25-.25h-.5a.25.25 0 0 0-.25.25zM4.25 10a.25.25 0 0 0-.25.25v.5c0 .138.112.25.25.25h5.5a.25.25 0 0 0 .25-.25v-.5a.25.25 0 0 0-.25-.25h-5.5z"/>
+                                                <DrawingGroup ClipGeometry="M0,0 V24 H24 V0 H0 Z">
+                                                    <GeometryDrawing Brush="{DynamicResource ThemeForegroundBrush}" Geometry="F1 M24,24z M0,0z M13.4,2.096A10.08,10.08,0,0,0,4.463,5.427A10.054,10.054,0,0,0,2.096,13.4C2.626,17.294,5.554,20.607,9.381,21.646A9.982,9.982,0,0,0,11.999,22L12.141,21.999A3.001,3.001,0,0,0,14.657,20.573A2.989,2.989,0,0,0,14.81,17.694L14.611,17.278A1.919,1.919,0,0,1,14.705,15.366A2.004,2.004,0,0,1,17.281,14.611L17.693,14.808C18.105,15.006,18.543,15.107,18.994,15.107A3.022,3.022,0,0,0,22,12.14A9.935,9.935,0,0,0,21.647,9.38C20.607,5.554,17.294,2.626,13.4,2.096z M18.558,13.005L18.146,12.808C16.318,11.93 14.076,12.61 13.011,14.302 12.273,15.478 12.198,16.878 12.807,18.144L13.006,18.56A0.983,0.983,0,0,1,12.955,19.521A0.992,0.992,0,0,1,12.111,20L11.999,20A8.061,8.061,0,0,1,9.904,19.717C6.841,18.886 4.501,16.238 4.078,13.131 3.757,10.776 4.43,8.508 5.971,6.742A8.002,8.002,0,0,1,13.131,4.078C16.238,4.501 18.886,6.842 19.717,9.904 19.915,10.634 20.01,11.378 19.999,12.111 19.987,12.918 19.154,13.294 18.558,13.005z" />
+                                                    <GeometryDrawing Brush="{DynamicResource ThemeForegroundBrush}">
+                                                        <GeometryDrawing.Geometry>
+                                                            <EllipseGeometry RadiusX="1.5" RadiusY="1.5" Center="7.5,14.5" />
+                                                        </GeometryDrawing.Geometry>
+                                                    </GeometryDrawing>
+                                                    <GeometryDrawing Brush="{DynamicResource ThemeForegroundBrush}">
+                                                        <GeometryDrawing.Geometry>
+                                                            <EllipseGeometry RadiusX="1.5" RadiusY="1.5" Center="7.5,10.5" />
+                                                        </GeometryDrawing.Geometry>
+                                                    </GeometryDrawing>
+                                                    <GeometryDrawing Brush="{DynamicResource ThemeForegroundBrush}">
+                                                        <GeometryDrawing.Geometry>
+                                                            <EllipseGeometry RadiusX="1.5" RadiusY="1.5" Center="10.5,7.5" />
+                                                        </GeometryDrawing.Geometry>
+                                                    </GeometryDrawing>
+                                                    <GeometryDrawing Brush="{DynamicResource ThemeForegroundBrush}">
+                                                        <GeometryDrawing.Geometry>
+                                                            <EllipseGeometry RadiusX="1.5" RadiusY="1.5" Center="14.5,7.5" />
+                                                        </GeometryDrawing.Geometry>
+                                                    </GeometryDrawing>
+                                                </DrawingGroup>
                                             </DrawingImage.Drawing>
                                         </DrawingImage>
                                     </Image.Source>
