@@ -481,4 +481,16 @@
   <data name="MarkAsFavourite" xml:space="preserve">
     <value>Marcar favorito</value>
   </data>
+  <data name="FilesIconsWithColon" xml:space="preserve">
+    <value>Archivo de iconos:</value>
+  </data>
+  <data name="SupportedOnWindowsOnly" xml:space="preserve">
+    <value>* Sólo compatible con Windows</value>
+  </data>
+  <data name="ChangesRequireRestart" xml:space="preserve">
+    <value>Los cambios requieren reiniciar la aplicación para que surtan efecto.</value>
+  </data>
+  <data name="Icons" xml:space="preserve">
+    <value>Iconos</value>
+  </data>
 </root>

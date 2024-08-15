@@ -481,4 +481,16 @@
   <data name="GoToParentDirectory" xml:space="preserve">
     <value>Gå til inneholdende mappe</value>
   </data>
+  <data name="FilesIconsWithColon" xml:space="preserve">
+    <value>Filikoner:</value>
+  </data>
+  <data name="SupportedOnWindowsOnly" xml:space="preserve">
+    <value>* Støttes kun på Windows</value>
+  </data>
+  <data name="ChangesRequireRestart" xml:space="preserve">
+    <value>Endringer krever omstart av programmet for å ta effekt.</value>
+  </data>
+  <data name="Icons" xml:space="preserve">
+    <value>Ikoner</value>
+  </data>
 </root>

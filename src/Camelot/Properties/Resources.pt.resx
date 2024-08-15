@@ -481,4 +481,16 @@
   <data name="GoToParentDirectory" xml:space="preserve">
     <value>Ir para o diretório pai</value>
   </data>
+  <data name="FilesIconsWithColon" xml:space="preserve">
+    <value>Ficheiros de ícones:</value>
+  </data>
+  <data name="SupportedOnWindowsOnly" xml:space="preserve">
+    <value>* Apenas suportado em Windows</value>
+  </data>
+  <data name="ChangesRequireRestart" xml:space="preserve">
+    <value>Para que as alterações surtam efeito é necessário reiniciar a aplicação.</value>
+  </data>
+  <data name="Icons" xml:space="preserve">
+    <value>Ícones</value>
+  </data>
 </root>

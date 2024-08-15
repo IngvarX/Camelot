@@ -241,4 +241,112 @@
   <data name="FailedToMoveFileFromTo" xml:space="preserve">
     <value>Verplaatsen van {0} naar {1} is mislukt</value>
   </data>
+  <data name="Extract" xml:space="preserve">
+    <value>Extraheren</value>
+  </data>
+  <data name="ExtractingArchiveTo" xml:space="preserve">
+    <value>Etraheren van {0} naar {1}</value>
+  </data>
+  <data name="RemovingFileFromTo" xml:space="preserve">
+    <value>Verwijder {0} uit {1}</value>
+  </data>
+  <data name="ReplaceFileDestinationDirectory" xml:space="preserve">
+    <value>Er bestaat al een ander bestand met dezelfde naam in "{0}". Wil je het vervangen?</value>
+  </data>
+  <data name="PermanentlyRemoveFiles" xml:space="preserve">
+    <value>Wil je deze {0} bestanden permanent verwijderen?</value>
+  </data>
+  <data name="Size" xml:space="preserve">
+    <value>Grootte</value>
+  </data>
+  <data name="Skip" xml:space="preserve">
+    <value>Overslaan</value>
+  </data>
+  <data name="EnterFileNameWithColon" xml:space="preserve">
+    <value>Bestandsnaam invoeren:</value>
+  </data>
+  <data name="TotalSpaceWithColon" xml:space="preserve">
+    <value>Totale geheugenplaats:</value>
+  </data>
+  <data name="CreateFileTitle" xml:space="preserve">
+    <value>bestand aanmaken</value>
+  </data>
+  <data name="SizeWithColon" xml:space="preserve">
+    <value>Grootte:</value>
+  </data>
+  <data name="InvalidRegex" xml:space="preserve">
+    <value>Ongeldige regulaire uitdrukking</value>
+  </data>
+  <data name="Pack" xml:space="preserve">
+    <value>comprimeren</value>
+  </data>
+  <data name="MovedFileFromTo" xml:space="preserve">
+    <value>{0} naar {1} verplaatst</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>Bestand</value>
+  </data>
+  <data name="AvailableSpaceWithColon" xml:space="preserve">
+    <value>Beschikbare plaats:</value>
+  </data>
+  <data name="SearchForFilesAndDirectories" xml:space="preserve">
+    <value>Zoek naar bestanden en mappen</value>
+  </data>
+  <data name="FilesRemovingConfirmationTitle" xml:space="preserve">
+    <value>Bevestig verwijderen van bestanden</value>
+  </data>
+  <data name="MovingFileFromTo" xml:space="preserve">
+    <value>Verplaatsen van {0} naar {1}</value>
+  </data>
+  <data name="SettingsTitle" xml:space="preserve">
+    <value>Instellingen</value>
+  </data>
+  <data name="FileHeader" xml:space="preserve">
+    <value>_Bestand</value>
+  </data>
+  <data name="FailedToDeleteFilesAndDirectoriesFrom" xml:space="preserve">
+    <value>Verwijderen van {0} bestanden en {1} mappen van {2} mislukt</value>
+  </data>
+  <data name="SelectFromFilesAndDirectories" xml:space="preserve">
+    <value>{0} bestanden ({1}) en {2} mappen</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Zoeken</value>
+  </data>
+  <data name="MovedFilesFromAndDirectoriesTo" xml:space="preserve">
+    <value>{0} bestanden en {1} mappen naar {2} verplaatst</value>
+  </data>
+  <data name="MovingFromFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Verplaats {0} bestanden en {1} mappen naar {2}</value>
+  </data>
+  <data name="SelectNewNameForDestination" xml:space="preserve">
+    <value>Kies een nieuwe naam voor de bestemming</value>
+  </data>
+  <data name="RemovingFilesAndDirectoriesFrom" xml:space="preserve">
+    <value>Verwijdert {0} bestanden en {1} mappen uit {2}</value>
+  </data>
+  <data name="RemovingFilesToTrash" xml:space="preserve">
+    <value>Wil je deze {0} bestanden verwijderen naar de prullenbak?</value>
+  </data>
+  <data name="ShowProperties" xml:space="preserve">
+    <value>Toon eigenschappen</value>
+  </data>
+  <data name="SettingsHeader" xml:space="preserve">
+    <value>_Instellingen</value>
+  </data>
+  <data name="FailedToMoveFilesAndDirectoriesTo" xml:space="preserve">
+    <value>Verplaatsen van {0} bestanden en {1} mappen naar {2} mislukt</value>
+  </data>
+  <data name="PackingFileTo" xml:space="preserve">
+    <value>Bestand {0} ingepakt op {1}</value>
+  </data>
+  <data name="PackingFilesAndDirectoriesTo" xml:space="preserve">
+    <value>{0} bestanden en {1} folders ingepakt naar {2}</value>
+  </data>
+  <data name="ExtractedArchiveTo" xml:space="preserve">
+    <value>Archief {0} uitgepakt op {1}</value>
+  </data>
+  <data name="PackedFileTo" xml:space="preserve">
+    <value>Bestand {0} ingepakt op {1}</value>
+  </data>
 </root>

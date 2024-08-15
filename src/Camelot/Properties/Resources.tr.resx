@@ -481,4 +481,16 @@
   <data name="GoToParentDirectory" xml:space="preserve">
     <value>Ana dizine git</value>
   </data>
+  <data name="FilesIconsWithColon" xml:space="preserve">
+    <value>Dosyalar simgeleri:</value>
+  </data>
+  <data name="SupportedOnWindowsOnly" xml:space="preserve">
+    <value>* Yalnızca Windows üstünden desteklenir</value>
+  </data>
+  <data name="ChangesRequireRestart" xml:space="preserve">
+    <value>Değişikliklerin etkili olabilmesi için uygulamanın yeniden başlatılmasını gerekir.</value>
+  </data>
+  <data name="Icons" xml:space="preserve">
+    <value>Simgeler</value>
+  </data>
 </root>

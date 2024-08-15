@@ -424,4 +424,73 @@
   <data name="AboutCamelotTitle" xml:space="preserve">
     <value>Om Camelot</value>
   </data>
+  <data name="ApplyActionToTheAllFilesAndFolders" xml:space="preserve">
+    <value>Utför denna åtgärd på alla filer och mappar</value>
+  </data>
+  <data name="FilesIconsWithColon" xml:space="preserve">
+    <value>Fil ikoner:</value>
+  </data>
+  <data name="SupportedOnWindowsOnly" xml:space="preserve">
+    <value>* Stöds endast på Windows</value>
+  </data>
+  <data name="ReplaceIfOlder" xml:space="preserve">
+    <value>Byt ut om äldre</value>
+  </data>
+  <data name="AboutPage" xml:space="preserve">
+    <value>Camelot är filhanterare med dubbla paneler skriven i C#</value>
+  </data>
+  <data name="CaseSensitive" xml:space="preserve">
+    <value>Skiftlägeskänsliga</value>
+  </data>
+  <data name="InnerFilesWithColon" xml:space="preserve">
+    <value>Inre filer:</value>
+  </data>
+  <data name="CloseAllButThis" xml:space="preserve">
+    <value>Stäng alla utom denna</value>
+  </data>
+  <data name="Unmount" xml:space="preserve">
+    <value>Avmontera</value>
+  </data>
+  <data name="ClickToMount" xml:space="preserve">
+    <value>Klicka för att montera</value>
+  </data>
+  <data name="CreationDateWithColon" xml:space="preserve">
+    <value>Skapandedatum:</value>
+  </data>
+  <data name="OverwriteOptionsTitle" xml:space="preserve">
+    <value>Alternativ för överskrivning</value>
+  </data>
+  <data name="Maintainers" xml:space="preserve">
+    <value>Underhållare</value>
+  </data>
+  <data name="GoToParentDirectory" xml:space="preserve">
+    <value>Gå till överordnad katalog</value>
+  </data>
+  <data name="RegularExpression" xml:space="preserve">
+    <value>Vanligt uttryck</value>
+  </data>
+  <data name="Eject" xml:space="preserve">
+    <value>Mata ut</value>
+  </data>
+  <data name="PackToTheFileWithColon" xml:space="preserve">
+    <value>Packa till fil:</value>
+  </data>
+  <data name="InnerDirectoriesWithColon" xml:space="preserve">
+    <value>Inre kataloger:</value>
+  </data>
+  <data name="DuplicateOnOppositePanel" xml:space="preserve">
+    <value>Duplicera på motsatt panel</value>
+  </data>
+  <data name="SelectNewNameForDestination" xml:space="preserve">
+    <value>Välj ett nytt namn för destinationen</value>
+  </data>
+  <data name="RemovingFilesToTrash" xml:space="preserve">
+    <value>Vill du flytta dessa {0} filer till papperskorgen?</value>
+  </data>
+  <data name="ChangesRequireRestart" xml:space="preserve">
+    <value>Ändringar kräver omstart av programmet för att träda i kraft.</value>
+  </data>
+  <data name="Icons" xml:space="preserve">
+    <value>Ikoner</value>
+  </data>
 </root>

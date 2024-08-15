@@ -481,4 +481,16 @@
   <data name="InnerFilesWithColon" xml:space="preserve">
     <value>File dalam:</value>
   </data>
+  <data name="FilesIconsWithColon" xml:space="preserve">
+    <value>Ikon file:</value>
+  </data>
+  <data name="SupportedOnWindowsOnly" xml:space="preserve">
+    <value>* Didukung pada Windows hanya</value>
+  </data>
+  <data name="ChangesRequireRestart" xml:space="preserve">
+    <value>Perubahan memerlukan restart aplikasi untuk menerapkan efek.</value>
+  </data>
+  <data name="Icons" xml:space="preserve">
+    <value>Ikon</value>
+  </data>
 </root>

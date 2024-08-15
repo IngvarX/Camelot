@@ -478,4 +478,7 @@
   <data name="FailedToPackFilesAndDirectoriesTo" xml:space="preserve">
     <value>Fehler beim Packen von {0} Dateien und {1} Verzeichnissen in {2}</value>
   </data>
+  <data name="Icons" xml:space="preserve">
+    <value>Symbole</value>
+  </data>
 </root>

@@ -481,4 +481,16 @@
   <data name="GoToParentDirectory" xml:space="preserve">
     <value>Idi u nadređenu mapu</value>
   </data>
+  <data name="FilesIconsWithColon" xml:space="preserve">
+    <value>Ikone datoteka:</value>
+  </data>
+  <data name="SupportedOnWindowsOnly" xml:space="preserve">
+    <value>* Podržano samo u Windows sustavu</value>
+  </data>
+  <data name="ChangesRequireRestart" xml:space="preserve">
+    <value>Program se mora ponovo pokrenuti kako bi promjene stupile na snagu.</value>
+  </data>
+  <data name="Icons" xml:space="preserve">
+    <value>Ikone</value>
+  </data>
 </root>

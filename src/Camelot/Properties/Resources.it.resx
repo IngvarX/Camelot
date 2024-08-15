@@ -469,4 +469,22 @@
   <data name="MarkAsFavourite" xml:space="preserve">
     <value>Seleziona come preferito</value>
   </data>
+  <data name="FilesIconsWithColon" xml:space="preserve">
+    <value>Icone dei file:</value>
+  </data>
+  <data name="SupportedOnWindowsOnly" xml:space="preserve">
+    <value>* Supportato solo su Windows</value>
+  </data>
+  <data name="DuplicateOnOppositePanel" xml:space="preserve">
+    <value>Duplica sul pannello opposto</value>
+  </data>
+  <data name="PackingFileTo" xml:space="preserve">
+    <value>Il file {0} sta venendo compresso in {1}</value>
+  </data>
+  <data name="ChangesRequireRestart" xml:space="preserve">
+    <value>Le modifiche apportate richiedono il riavvio dell'applicazione per essere effettuate.</value>
+  </data>
+  <data name="Icons" xml:space="preserve">
+    <value>Icone</value>
+  </data>
 </root>
