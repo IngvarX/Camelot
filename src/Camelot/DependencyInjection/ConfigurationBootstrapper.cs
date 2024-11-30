@@ -47,7 +47,8 @@ public static class ConfigurationBootstrapper
 
     private static IConfiguration BuildConfiguration() =>
         new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json")
+            //setting reloadOnChange to false, see https://travisgosselin.com/configured-user-limit-inotify-instances/
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
             .Build();
 
     private static void RegisterAboutDialogConfiguration(IMutableDependencyResolver services,
