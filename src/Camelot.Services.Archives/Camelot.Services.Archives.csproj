@@ -1,18 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net6</TargetFramework>
-    </PropertyGroup>
-
     <ItemGroup>
       <ProjectReference Include="..\Camelot.Services.Abstractions\Camelot.Services.Abstractions.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="SharpCompress" Version="0.32.2" />
-      <PackageReference Update="Packaging.Targets">
-        <Version>0.1.220</Version>
-      </PackageReference>
+      <PackageReference Include="SharpCompress" />
     </ItemGroup>
 
 </Project>

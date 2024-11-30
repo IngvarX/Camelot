@@ -1,14 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net6</TargetFramework>
-    </PropertyGroup>
-
     <ItemGroup>
-      <PackageReference Include="LiteDB" Version="5.0.16" />
-      <PackageReference Update="Packaging.Targets">
-        <Version>0.1.220</Version>
-      </PackageReference>
+      <PackageReference Include="LiteDB" />
     </ItemGroup>
 
     <ItemGroup>
