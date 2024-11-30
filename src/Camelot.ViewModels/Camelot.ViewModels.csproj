@@ -1,16 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net6</TargetFramework>
-    </PropertyGroup>
-
     <ItemGroup>
-      <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.18" />
-      <PackageReference Include="ReactiveUI.Fody" Version="18.4.26" />
-      <PackageReference Include="ReactiveUI.Validation" Version="3.1.7" />
-      <PackageReference Update="Packaging.Targets">
-        <Version>0.1.220</Version>
-      </PackageReference>
+      <PackageReference Include="Avalonia.ReactiveUI" />
+      <PackageReference Include="ReactiveUI.Fody" />
+      <PackageReference Include="ReactiveUI.Validation" />
     </ItemGroup>
 
     <ItemGroup>

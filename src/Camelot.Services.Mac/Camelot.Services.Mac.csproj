@@ -1,18 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net6</TargetFramework>
-    </PropertyGroup>
-
     <ItemGroup>
       <ProjectReference Include="..\Camelot.Services.AllPlatforms\Camelot.Services.AllPlatforms.csproj" />
       <ProjectReference Include="..\Camelot.Services.Environment\Camelot.Services.Environment.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Update="Packaging.Targets">
-        <Version>0.1.220</Version>
-      </PackageReference>
     </ItemGroup>
 
 </Project>
