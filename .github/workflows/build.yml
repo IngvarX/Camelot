@@ -36,6 +36,8 @@ jobs:
       with:
         name: Code coverage ${{ matrix.os }}
         path: "**/coverage.cobertura.xml"
-    - name: Upload coverage to codecov
-      run: bash <(curl -s https://codecov.io/bash)
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v5
       if: runner.os == 'Linux'
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
