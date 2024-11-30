@@ -2,8 +2,6 @@
 
     <ItemGroup>
       <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
-      <PackageReference Include="Moq" />
-      <PackageReference Include="Moq.AutoMock" />
     </ItemGroup>
 
 </Project>
