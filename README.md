@@ -22,7 +22,7 @@ For more info check [installation documentation](/docs/INSTALL.md)
 
 ## Build
 
-.NET 6 SDK is required.
+.NET 8 SDK is required.
 
 ```
 git clone https://github.com/IngvarX/Camelot.git
