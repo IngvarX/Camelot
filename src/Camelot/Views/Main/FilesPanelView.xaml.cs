@@ -101,7 +101,7 @@ public class FilesPanelView : UserControl
     private IFileSystemNodeViewModel GetNode(string nodePath) => FilesDataGrid
         .Items
         .Cast<IFileSystemNodeViewModel>()
-        .SingleOrDefault(m => m.FullPath == nodePath);
+        .FirstOrDefault(m => m.FullPath == nodePath); // TODO: address duplicates on Linux
 
     private void OnDataGridSelectionChanged(object sender, SelectionChangedEventArgs args)
     {
@@ -180,7 +180,7 @@ public class FilesPanelView : UserControl
     private void ProcessPointerClickInCell(PointerEventArgs args, IDataContextProvider cell)
     {
         var point = args.GetCurrentPoint(this);
-        if (point.Properties.IsMiddleButtonPressed 
+        if (point.Properties.IsMiddleButtonPressed
             && cell.DataContext is IDirectoryViewModel directoryViewModel)
         {
             args.Handled = true;
