@@ -6,7 +6,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/src/Camelot/bin/Debug/netcoreapp3.1/Camelot.dll",
+            "program": "${workspaceFolder}/src/Camelot/bin/Debug/net8.0/Camelot.dll",
             "args": [],
             "cwd": "${workspaceFolder}/src/Camelot",
             "console": "externalTerminal",

@@ -20,7 +20,7 @@ jobs:
         dotnet publish -c Release -r win-x64 -p:PublishSingleFile=true -p:PublishReadyToRun=true --self-contained=true
     - name: Archive Artifact
       run: |
-        cd src/Camelot/bin/Release/netcoreapp3.1/win-x64/publish
+        cd src/Camelot/bin/Release/net8.0/win-x64/publish
         powershell Compress-Archive -LiteralPath camelot.exe,camelot.pdb -DestinationPath CamelotWindowsSingleExe.zip
     - name: Upload Release Asset
       id: upload-release-asset 
@@ -30,5 +30,5 @@ jobs:
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         tag: ${{ github.ref }}
-        file: ./src/Camelot/bin/Release/netcoreapp3.1/win-x64/publish/CamelotWindowsSingleExe.zip
+        file: ./src/Camelot/bin/Release/net8.0/win-x64/publish/CamelotWindowsSingleExe.zip
         asset_name: CamelotWindowsSingleExe.zip
