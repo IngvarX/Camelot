@@ -23,14 +23,6 @@ jobs:
       run: dotnet build --configuration Release --no-restore
     - name: Test
       run: dotnet test --configuration Release --no-build --verbosity normal --collect:"XPlat Code Coverage" --logger "GitHubActions" --logger "trx;LogFileName=test-results.trx" /p:CoverletOutputFormat=opencover --filter FullyQualifiedName!~Ui.Tests || true
-    - name: Test Report
-      uses: dorny/test-reporter@v1.9.1
-      if: github.event_name == 'push'
-      with:
-        name: test-results-${{ matrix.os }}
-        path: "**/*-results.trx"
-        reporter: dotnet-trx
-        fail-on-error: true
     - name: UploadCoverage
       run: bash <(curl -s https://codecov.io/bash)
       if: runner.os == 'Linux'
