@@ -5,7 +5,7 @@ using Camelot.Avalonia.Interfaces;
 using Camelot.Extensions;
 using Camelot.Services.Environment.Interfaces;
 using Camelot.ViewModels.Configuration;
-using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Specifications;
+using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Specifications.Search;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
 using Camelot.ViewModels.Services.Interfaces;
 using ReactiveUI;
@@ -38,7 +38,7 @@ public class SearchViewModel : ValidatableViewModelBase, ISearchViewModel
     [Reactive]
     public bool IsRecursiveSearchEnabled { get; set; }
 
-    public event EventHandler<EventArgs> SearchSettingsChanged;
+    public event EventHandler<System.EventArgs> SearchSettingsChanged;
 
     public ICommand ToggleSearchCommand { get; }
 

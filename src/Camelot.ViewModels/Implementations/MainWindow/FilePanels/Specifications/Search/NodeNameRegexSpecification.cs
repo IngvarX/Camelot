@@ -2,7 +2,7 @@ using System.Text.RegularExpressions;
 using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Environment.Interfaces;
 
-namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Specifications;
+namespace Camelot.ViewModels.Implementations.MainWindow.FilePanels.Specifications.Search;
 
 public class NodeNameRegexSpecification : SpecificationBase
 {

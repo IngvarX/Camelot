@@ -28,6 +28,9 @@ public abstract class FileSystemNodeViewModelBase : ViewModelBase, IFileSystemNo
     [Reactive]
     public bool IsEditing { get; set; }
 
+    [Reactive]
+    public bool IsFilteredOut { get; set; }
+
     public bool IsArchive => _fileSystemNodeFacade.CheckIfNodeIsArchive(FullPath);
 
     public bool ShouldShowOpenSubmenu { get; }

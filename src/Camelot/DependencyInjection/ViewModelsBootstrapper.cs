@@ -214,10 +214,15 @@ public static class ViewModelsBootstrapper
         services.Register(() => new SettingsDialogViewModel(
             resolver.GetRequiredService<GeneralSettingsViewModel>(),
             resolver.GetRequiredService<TerminalSettingsViewModel>(),
-            resolver.GetRequiredService<IconsSettingsViewModel>()
+            resolver.GetRequiredService<IconsSettingsViewModel>(),
+            resolver.GetRequiredService<KeyboardSettingsViewModel>()
         ));
         services.Register(() => new IconsSettingsViewModel(
             resolver.GetRequiredService<IIconsSettingsService>()
+        ));
+        services.Register(() => new KeyboardSettingsViewModel(
+            resolver.GetRequiredService<IQuickSearchService>()
+
         ));
         services.RegisterLazySingleton(() => new FilePropertiesBehavior(
             resolver.GetRequiredService<IDialogService>()
@@ -297,6 +302,10 @@ public static class ViewModelsBootstrapper
             resolver.GetRequiredService<IApplicationDispatcher>(),
             resolver.GetRequiredService<SearchViewModelConfiguration>()
         ));
+        services.Register<IQuickSearchViewModel>(() => new QuickSearchViewModel(
+            resolver.GetRequiredService<IQuickSearchService>(),
+            resolver.GetRequiredService<IPathService>()
+        ));
         services.RegisterLazySingleton<IDrivesListViewModel>(() => new DrivesListViewModel(
             resolver.GetRequiredService<IMountedDriveService>(),
             resolver.GetRequiredService<IUnmountedDriveService>(),
@@ -370,6 +379,7 @@ public static class ViewModelsBootstrapper
             resolver.GetRequiredService<IPermissionsService>(),
             resolver.GetRequiredService<IDialogService>(),
             resolver.GetRequiredService<ISearchViewModel>(),
+            resolver.GetRequiredService<IQuickSearchViewModel>(),
             tabsListViewModel,
             resolver.GetRequiredService<IOperationsViewModel>(),
             directorySelectorViewModel,

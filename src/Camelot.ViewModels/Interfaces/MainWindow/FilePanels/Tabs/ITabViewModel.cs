@@ -14,19 +14,19 @@ public interface ITabViewModel
 
     IFileSystemNodesSortingViewModel SortingViewModel { get; }
 
-    event EventHandler<EventArgs> ActivationRequested;
+    event EventHandler<System.EventArgs> ActivationRequested;
 
-    event EventHandler<EventArgs> NewTabRequested;
+    event EventHandler<System.EventArgs> NewTabRequested;
 
-    event EventHandler<EventArgs> NewTabOnOppositePanelRequested;
+    event EventHandler<System.EventArgs> NewTabOnOppositePanelRequested;
 
-    event EventHandler<EventArgs> CloseRequested;
+    event EventHandler<System.EventArgs> CloseRequested;
 
-    event EventHandler<EventArgs> ClosingTabsToTheLeftRequested;
+    event EventHandler<System.EventArgs> ClosingTabsToTheLeftRequested;
 
-    event EventHandler<EventArgs> ClosingTabsToTheRightRequested;
+    event EventHandler<System.EventArgs> ClosingTabsToTheRightRequested;
 
-    event EventHandler<EventArgs> ClosingAllTabsButThisRequested;
+    event EventHandler<System.EventArgs> ClosingAllTabsButThisRequested;
 
     event EventHandler<TabMoveRequestedEventArgs> MoveRequested;
 

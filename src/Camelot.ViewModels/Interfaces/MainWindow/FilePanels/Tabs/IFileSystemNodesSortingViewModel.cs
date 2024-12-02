@@ -11,5 +11,5 @@ public interface IFileSystemNodesSortingViewModel
 
     void ToggleSortingDirection();
 
-    event EventHandler<EventArgs> SortingSettingsChanged;
+    event EventHandler<System.EventArgs> SortingSettingsChanged;
 }

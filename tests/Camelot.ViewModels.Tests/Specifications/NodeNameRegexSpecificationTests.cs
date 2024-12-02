@@ -1,7 +1,7 @@
 using System.Text.RegularExpressions;
 using Camelot.Services.Abstractions.Models;
 using Camelot.Services.Environment.Interfaces;
-using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Specifications;
+using Camelot.ViewModels.Implementations.MainWindow.FilePanels.Specifications.Search;
 using Moq;
 using Xunit;
 

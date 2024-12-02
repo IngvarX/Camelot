@@ -25,14 +25,21 @@ public class SettingsDialogViewModelTests
             .Setup(m => m.Activate())
             .Verifiable();
 
+        var keyboardSettingsViewModel = new Mock<ISettingsViewModel>();
+        keyboardSettingsViewModel
+            .Setup(m => m.Activate())
+            .Verifiable();
+
         var dialogViewModel = new SettingsDialogViewModel(generalSettingsViewModel.Object,
             terminalSettingsViewModel.Object,
-            iconsSettingsViewModel.Object);
+            iconsSettingsViewModel.Object,
+            keyboardSettingsViewModel.Object);
 
         Assert.Equal(0, dialogViewModel.SelectedIndex);
         Assert.Equal(generalSettingsViewModel.Object, dialogViewModel.GeneralSettingsViewModel);
         Assert.Equal(terminalSettingsViewModel.Object, dialogViewModel.TerminalSettingsViewModel);
         Assert.Equal(iconsSettingsViewModel.Object, dialogViewModel.IconsSettingsViewModel);
+        Assert.Equal(keyboardSettingsViewModel.Object, dialogViewModel.KeyboardSettingsViewModel);
 
         generalSettingsViewModel.Verify(m => m.Activate(), Times.Once);
     }
@@ -64,10 +71,20 @@ public class SettingsDialogViewModelTests
             .SetupGet(m => m.IsChanged)
             .Returns(true);
 
+
+        var keyboardSettingsViewModel = new Mock<ISettingsViewModel>();
+        keyboardSettingsViewModel
+            .Setup(m => m.SaveChanges())
+            .Verifiable();
+        keyboardSettingsViewModel
+            .SetupGet(m => m.IsChanged)
+            .Returns(true);
+
         var dialogViewModel = new SettingsDialogViewModel(
             generalSettingsViewModel.Object,
             terminalSettingsViewModel.Object,
-            iconsSettingsViewModel.Object);
+            iconsSettingsViewModel.Object,
+            keyboardSettingsViewModel.Object);
 
         Assert.True(dialogViewModel.SaveCommand.CanExecute(null));
         dialogViewModel.SaveCommand.Execute(null);
@@ -75,6 +92,7 @@ public class SettingsDialogViewModelTests
         generalSettingsViewModel.Verify(m => m.SaveChanges(), Times.Once);
         terminalSettingsViewModel.Verify(m => m.SaveChanges(), Times.Once);
         iconsSettingsViewModel.Verify(m => m.SaveChanges(), Times.Once);
+        keyboardSettingsViewModel.Verify(m => m.SaveChanges(), Times.Once);
     }
 
     [Fact]
@@ -95,10 +113,16 @@ public class SettingsDialogViewModelTests
             .Setup(m => m.Activate())
             .Verifiable();
 
+        var keyboardSettingsViewModel = new Mock<ISettingsViewModel>();
+        keyboardSettingsViewModel
+            .Setup(m => m.Activate())
+            .Verifiable();
+
         var dialogViewModel = new SettingsDialogViewModel(
             generalSettingsViewModel.Object, 
             terminalSettingsViewModel.Object,
-            iconsSettingsViewModel.Object);
+            iconsSettingsViewModel.Object,
+            keyboardSettingsViewModel.Object);
 
         Assert.True(dialogViewModel.SaveCommand.CanExecute(null));
         dialogViewModel.SaveCommand.Execute(null);
@@ -126,10 +150,16 @@ public class SettingsDialogViewModelTests
             .Setup(m => m.Activate())
             .Verifiable();
 
+        var keyboardSettingsViewModel = new Mock<ISettingsViewModel>();
+        keyboardSettingsViewModel
+            .Setup(m => m.Activate())
+            .Verifiable();
+
         var dialogViewModel = new SettingsDialogViewModel(
             generalSettingsViewModel.Object, 
             terminalSettingsViewModel.Object, 
-            iconsSettingsViewModel.Object)
+            iconsSettingsViewModel.Object,
+            keyboardSettingsViewModel.Object)
         {
             SelectedIndex = 0
         };
@@ -138,5 +168,6 @@ public class SettingsDialogViewModelTests
         generalSettingsViewModel.Verify(m => m.Activate(), Times.Exactly(2));
         terminalSettingsViewModel.Verify(m => m.Activate(), Times.Never);
         iconsSettingsViewModel.Verify(m => m.Activate(), Times.Never);
+        keyboardSettingsViewModel.Verify(m => m.Activate(), Times.Never);
     }
 }

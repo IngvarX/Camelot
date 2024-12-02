@@ -18,10 +18,12 @@ using Camelot.ViewModels.Factories.Interfaces;
 using Camelot.ViewModels.Implementations.Dialogs;
 using Camelot.ViewModels.Implementations.Dialogs.NavigationParameters;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
+using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.EventArgs;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Nodes;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Tabs;
 using Camelot.ViewModels.Interfaces.MainWindow.Operations;
 using Camelot.ViewModels.Services.Interfaces;
+
 using DynamicData;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -49,7 +51,8 @@ public class FilesPanelViewModel : ViewModelBase, IFilesPanelViewModel
 
     private CancellationTokenSource _cancellationTokenSource;
     private string _currentDirectory;
-    private INodeSpecification _specification;
+    private INodeSpecification _searchSpecification;
+    private ISpecification<IFileSystemNodeViewModel> _filterSpecification;
 
     private IEnumerable<IFileViewModel> SelectedFiles => _selectedFileSystemNodes.OfType<IFileViewModel>();
 
@@ -62,6 +65,8 @@ public class FilesPanelViewModel : ViewModelBase, IFilesPanelViewModel
     public ITabViewModel SelectedTab => TabsListViewModel.SelectedTab;
 
     public ISearchViewModel SearchViewModel { get; }
+
+    public IQuickSearchViewModel QuickSearchViewModel { get; }
 
     public ITabsListViewModel TabsListViewModel { get; }
 
@@ -129,6 +134,7 @@ public class FilesPanelViewModel : ViewModelBase, IFilesPanelViewModel
         IPermissionsService permissionsService,
         IDialogService dialogService,
         ISearchViewModel searchViewModel,
+        IQuickSearchViewModel quickSearchViewModel,
         ITabsListViewModel tabsListViewModel,
         IOperationsViewModel operationsViewModel,
         IDirectorySelectorViewModel directorySelectorViewModel,
@@ -150,6 +156,7 @@ public class FilesPanelViewModel : ViewModelBase, IFilesPanelViewModel
         _dialogService = dialogService;
 
         SearchViewModel = searchViewModel;
+        QuickSearchViewModel = quickSearchViewModel;
         TabsListViewModel = tabsListViewModel;
         OperationsViewModel = operationsViewModel;
         DirectorySelectorViewModel = directorySelectorViewModel;
@@ -165,7 +172,6 @@ public class FilesPanelViewModel : ViewModelBase, IFilesPanelViewModel
             (DirectoryModel dm) => dm is not null);
         GoToParentDirectoryCommand = ReactiveCommand.Create(GoToParentDirectory, canGoToParentDirectory);
         SortFilesCommand = ReactiveCommand.Create<SortingMode>(SortFiles);
-
         SubscribeToEvents();
         UpdateStateAsync().Forget();
     }
@@ -209,6 +215,7 @@ public class FilesPanelViewModel : ViewModelBase, IFilesPanelViewModel
         SearchViewModel.SearchSettingsChanged += SearchViewModelOnSearchSettingsChanged;
         _filePanelDirectoryObserver.CurrentDirectoryChanged += async (_, _) => await UpdateStateAsync();
         _selectedFileSystemNodes.CollectionChanged += SelectedFileSystemNodesOnCollectionChanged;
+        QuickSearchViewModel.QuickSearchFilterChanged += QuickSearchViewModelOnQuickSearchFilterChanged;
 
         _fileSystemWatchingService.NodeCreated += (_, args) =>
             ExecuteInUiThread(() => InsertNode(args.Node));
@@ -257,6 +264,8 @@ public class FilesPanelViewModel : ViewModelBase, IFilesPanelViewModel
 
         CurrentDirectoryChanged.Raise(this, EventArgs.Empty);
         this.RaisePropertyChanged(nameof(ParentDirectory));
+
+        QuickSearchViewModel.ClearQuickSearch();
     }
 
     private void UpdateNode(string nodePath) => RecreateNode(nodePath, nodePath);
@@ -283,6 +292,7 @@ public class FilesPanelViewModel : ViewModelBase, IFilesPanelViewModel
 
         var index = GetInsertIndex(newNodeModel);
         _fileSystemNodes.Insert(index, newNodeModel);
+        UpdateNodeFiltering(newNodeModel);
 
         if (isSelected)
         {
@@ -328,14 +338,14 @@ public class FilesPanelViewModel : ViewModelBase, IFilesPanelViewModel
     {
         CancelPreviousSearchIfNeeded();
 
-        _specification = SearchViewModel.GetSpecification();
-        if (_specification.IsRecursive)
+        _searchSpecification = SearchViewModel.GetSpecification();
+        if (_searchSpecification.IsRecursive)
         {
-            RecursiveSearch(_specification);
+            RecursiveSearch(_searchSpecification);
         }
         else
         {
-            Search(_specification);
+            Search(_searchSpecification);
         }
 
         InsertParentDirectory();
@@ -420,6 +430,27 @@ public class FilesPanelViewModel : ViewModelBase, IFilesPanelViewModel
         this.RaisePropertyChanged(nameof(AreAnyFileSystemNodesSelected));
     }
 
+    private void QuickSearchViewModelOnQuickSearchFilterChanged(object sender, QuickSearchFilterChangedEventArgs e)
+    {
+        _filterSpecification = QuickSearchViewModel.GetSpecification();
+        _fileSystemNodes.ForEach(UpdateNodeFiltering);
+
+        MoveSelection(e.Direction);
+    }
+
+    private void MoveSelection(SelectionChangeDirection direction)
+    {
+        switch (direction)
+        {
+            case SelectionChangeDirection.Backward:
+                MoveSelection(-1);
+                break;
+            case SelectionChangeDirection.Forward:
+                MoveSelection(1);
+                break;
+        }
+    }
+
     private int GetInsertIndex(IFileSystemNodeViewModel newNodeViewModel)
     {
         var comparer = GetComparer();
@@ -428,8 +459,7 @@ public class FilesPanelViewModel : ViewModelBase, IFilesPanelViewModel
         return index < 0 ? index ^ -1 : index;
     }
 
-    private IComparer<IFileSystemNodeViewModel> GetComparer() =>
-        _comparerFactory.Create(SelectedTab.SortingViewModel);
+    private IComparer<IFileSystemNodeViewModel> GetComparer() => _comparerFactory.Create(SelectedTab.SortingViewModel);
 
     private IFileSystemNodeViewModel GetViewModel(string nodePath) =>
         _fileSystemNodes.FirstOrDefault(n => n.FullPath == nodePath);
@@ -437,5 +467,63 @@ public class FilesPanelViewModel : ViewModelBase, IFilesPanelViewModel
     private void ExecuteInUiThread(Action action) => _applicationDispatcher.Dispatch(action);
 
     private bool CheckIfShouldShowNode(string nodePath) =>
-        _specification?.IsSatisfiedBy(_nodeService.GetNode(nodePath)) ?? true;
+        _searchSpecification?.IsSatisfiedBy(_nodeService.GetNode(nodePath)) ?? true;
+
+    private void MoveSelection(int step)
+    {
+        var (selectedIndex, selectedNode) = GetSelectedNodeWithIndex();
+        var newNode = GetNewSelectedNode(selectedIndex, step);
+
+        ChangeSelectedNode(selectedNode, newNode);
+    }
+
+    private IFileSystemNodeViewModel GetNewSelectedNode(int selectedIndex, int step)
+    {
+        var count = _fileSystemNodes.Count;
+
+        var start = selectedIndex > -1 ? selectedIndex + step : 0;
+        start = (start + count) % count;
+
+        for (var i = start; i != start - step; i = (i + step + count) % count)
+        {
+            var file = _fileSystemNodes[i];
+            if (!file.IsFilteredOut)
+            {
+                return file;
+            }
+        }
+
+        return null;
+    }
+
+    private (int, IFileSystemNodeViewModel) GetSelectedNodeWithIndex()
+    {
+        // TODO: check if possible to improve
+        var currentSelectedNode = _selectedFileSystemNodes.FirstOrDefault();
+
+        return currentSelectedNode is null
+            ? (-1, null)
+            : (_fileSystemNodes.IndexOf(currentSelectedNode), currentSelectedNode);
+    }
+
+    private void ChangeSelectedNode(IFileSystemNodeViewModel oldNode, IFileSystemNodeViewModel newNode)
+    {
+        if (newNode is null)
+        {
+            return;
+        }
+
+        if (oldNode is not null)
+        {
+            UnselectNode(oldNode.FullPath);
+        }
+
+        SelectNode(newNode.FullPath);
+    }
+
+    private void UpdateNodeFiltering(IFileSystemNodeViewModel nodeViewModel) =>
+        nodeViewModel.IsFilteredOut = CheckIfShouldFilterOutNode(nodeViewModel);
+
+    private bool CheckIfShouldFilterOutNode(IFileSystemNodeViewModel nodeViewModel) =>
+        !_filterSpecification?.IsSatisfiedBy(nodeViewModel) ?? false;
 }

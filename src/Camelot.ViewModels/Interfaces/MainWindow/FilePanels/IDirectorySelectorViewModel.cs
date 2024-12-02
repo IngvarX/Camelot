@@ -9,7 +9,7 @@ public interface IDirectorySelectorViewModel
 
     bool ShouldShowSuggestions { get; set; }
 
-    event EventHandler<EventArgs> ActivationRequested;
+    event EventHandler<System.EventArgs> ActivationRequested;
 
     ICommand ToggleFavouriteStatusCommand { get; }
 

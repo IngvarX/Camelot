@@ -12,6 +12,7 @@ using Camelot.Avalonia.Interfaces;
 using Camelot.DependencyInjection;
 using Camelot.Extensions;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels;
+using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.EventArgs;
 using Camelot.ViewModels.Interfaces.MainWindow.FilePanels.Nodes;
 using Camelot.Views.Main.Controls;
 using DynamicData;
@@ -29,6 +30,7 @@ public class FilesPanelView : UserControl
     private bool _isCellPressed;
     private PointerEventArgs _pointerEventArgs;
     private IDataContextProvider _dataContextProvider;
+    private bool _shiftDown;
 
     private DataGrid FilesDataGrid => this.FindControl<DataGrid>("FilesDataGrid");
 
@@ -76,6 +78,13 @@ public class FilesPanelView : UserControl
         if (item is not null)
         {
             FilesDataGrid.SelectedItems.Add(item);
+        }
+
+        // In case event was triggered by keyboard (up/down arrows, quick-search, etc),
+        // Need to make sure item is viewable
+        if (FilesDataGrid.SelectedItems.Count == 1)
+        {
+            FilesDataGrid.ScrollIntoView(item, null);
         }
     }
 
@@ -156,14 +165,32 @@ public class FilesPanelView : UserControl
 
     private void OnDataGridKeyDown(object sender, KeyEventArgs args)
     {
-        if (args.Key != Key.Delete && args.Key != Key.Back)
+        if (args.Key is Key.Delete or Key.Back)
         {
+            args.Handled = true;
+            ViewModel.OperationsViewModel.MoveToTrashCommand.Execute(null);
+
             return;
         }
 
-        args.Handled = true;
+        UpdateShiftKeyStatus(args);
 
-        ViewModel.OperationsViewModel.MoveToTrashCommand.Execute(null);
+        if (args.Key == Key.Escape)
+        {
+            ViewModel.QuickSearchViewModel.ClearQuickSearchCommand.Execute(null);
+        }
+    }
+
+    private void OnDataGridKeyUp(object sender, KeyEventArgs args) => UpdateShiftKeyStatus(args);
+
+    private void OnDataGridTextInput(object sender, TextInputEventArgs args)
+    {
+        if (args.Text is not null && args.Text.Length == 1)
+        {
+            var parameter = new QuickSearchCommandModel(args.Text[0], _shiftDown);
+
+            ViewModel.QuickSearchViewModel.QuickSearchCommand.Execute(parameter);
+        }
     }
 
     private void OnDataGridCellPointerPressed(object sender, DataGridCellPointerPressedEventArgs args)
@@ -354,4 +381,8 @@ public class FilesPanelView : UserControl
             item.IsVisible = await ViewModel.ClipboardOperationsViewModel.CanPasteAsync();
         }
     }
+
+    private void UpdateShiftKeyStatus(KeyEventArgs args) =>
+        _shiftDown = (args.KeyModifiers & KeyModifiers.Shift) > 0;
 }
+
