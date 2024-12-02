@@ -37,7 +37,7 @@ public static class AvaloniaApp
     public static MainWindow GetMainWindow() => (MainWindow) GetApp().MainWindow;
 
     public static IClassicDesktopStyleApplicationLifetime GetApp() =>
-        (IClassicDesktopStyleApplicationLifetime) App.Current.ApplicationLifetime;
+        (IClassicDesktopStyleApplicationLifetime) Application.Current.ApplicationLifetime;
 
     public static AppBuilder BuildAvaloniaApp() =>
         AppBuilder
