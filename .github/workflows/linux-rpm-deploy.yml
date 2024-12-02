@@ -24,7 +24,7 @@ jobs:
         ./dotnet-rpm --configuration Release
     - name: Archive Artifact
       run: |
-        cd src/Camelot/bin/Release/netcoreapp3.1
+        cd src/Camelot/bin/Release/net8.0
         tar -czvf CamelotLinuxRpm.tar.gz camelot*.rpm
     - name: Upload Release Asset
       id: upload-release-asset 
@@ -34,5 +34,5 @@ jobs:
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         tag: ${{ github.ref }}
-        file: ./src/Camelot/bin/Release/netcoreapp3.1/CamelotLinuxRpm.tar.gz
+        file: ./src/Camelot/bin/Release/net8.0/CamelotLinuxRpm.tar.gz
         asset_name: CamelotLinuxRpm.tar.gz

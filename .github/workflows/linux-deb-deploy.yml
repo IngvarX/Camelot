@@ -24,7 +24,7 @@ jobs:
         ./dotnet-deb --configuration Release
     - name: Archive Artifact
       run: |
-        cd src/Camelot/bin/Release/netcoreapp3.1
+        cd src/Camelot/bin/Release/net8.0
         tar -czvf CamelotLinuxDeb.tar.gz camelot*.deb
     - name: Upload Release Asset
       id: upload-release-asset 
@@ -34,5 +34,5 @@ jobs:
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         tag: ${{ github.ref }}
-        file: ./src/Camelot/bin/Release/netcoreapp3.1/CamelotLinuxDeb.tar.gz
+        file: ./src/Camelot/bin/Release/net8.0/CamelotLinuxDeb.tar.gz
         asset_name: CamelotLinuxDeb.tar.gz

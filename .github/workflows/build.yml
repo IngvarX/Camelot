@@ -25,19 +25,12 @@ jobs:
       run: dotnet test --configuration Release --no-build --verbosity normal --collect:"XPlat Code Coverage" --logger "GitHubActions" --logger "trx;LogFileName=test-results.trx" /p:CoverletOutputFormat=opencover --filter FullyQualifiedName!~Ui.Tests || true
     - name: Test Report
       uses: dorny/test-reporter@v1.9.1
-      if: always()
+      if: github.event_name == 'push'
       with:
         name: test-results-${{ matrix.os }}
         path: "**/*-results.trx"
         reporter: dotnet-trx
         fail-on-error: true
-    - name: Upload coverage to github
-      uses: actions/upload-artifact@v4
-      with:
-        name: Code coverage ${{ matrix.os }}
-        path: "**/coverage.cobertura.xml"
-    - name: Upload coverage reports to Codecov
-      uses: codecov/codecov-action@v5
+    - name: UploadCoverage
+      run: bash <(curl -s https://codecov.io/bash)
       if: runner.os == 'Linux'
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}

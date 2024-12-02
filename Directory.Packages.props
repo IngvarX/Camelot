@@ -22,6 +22,10 @@
     <PackageVersion Include="Microsoft.Win32.Registry" Version="5.0.0" />
     <PackageVersion Include="Moq" Version="4.20.72" />
     <PackageVersion Include="Moq.AutoMock" Version="3.5.0" />
+    <PackageVersion Include="Packaging.Targets" Version="0.1.226">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageVersion>
     <PackageVersion Include="ReactiveUI.Fody" Version="18.4.26" />
     <PackageVersion Include="ReactiveUI.Validation" Version="3.1.7" />
     <PackageVersion Include="Serilog" Version="4.1.0" />

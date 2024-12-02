@@ -22,12 +22,12 @@ jobs:
         mkdir Assets/logo.iconset
         cp Assets/logo.png Assets/logo.iconset/icon_512x512.png
         iconutil -c icns Assets/logo.iconset
-        cp Assets/logo.icns bin/Release/netcoreapp3.1/osx-x64/publish/Camelot.app/Contents/Resources/logo.icns
+        cp Assets/logo.icns bin/Release/net8.0/osx-x64/publish/Camelot.app/Contents/Resources/logo.icns
         rm Assets/logo.icns
         rm -rf Assets/logo.iconset
     - name: Archive Artifact
       run: |
-        cd src/Camelot/bin/Release/netcoreapp3.1/osx-x64/publish
+        cd src/Camelot/bin/Release/net8.0/osx-x64/publish
         zip -r CamelotMacos.zip Camelot.app
     - name: Upload Release Asset
       id: upload-release-asset 
@@ -37,5 +37,5 @@ jobs:
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         tag: ${{ github.ref }}
-        file: ./src/Camelot/bin/Release/netcoreapp3.1/osx-x64/publish/CamelotMacos.zip
+        file: ./src/Camelot/bin/Release/net8.0/osx-x64/publish/CamelotMacos.zip
         asset_name: CamelotMacos.zip

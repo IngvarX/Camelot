@@ -20,7 +20,7 @@ jobs:
         dotnet publish -c Release -r linux-x64 -p:PublishSingleFile=true -p:PublishReadyToRun=true --self-contained=true
     - name: Archive Artifact
       run: |
-        cd src/Camelot/bin/Release/netcoreapp3.1/linux-x64/publish
+        cd src/Camelot/bin/Release/net8.0/linux-x64/publish
         tar -czvf CamelotLinux.tar.gz camelot camelot.pdb
     - name: Upload Release Asset
       id: upload-release-asset 
@@ -30,5 +30,5 @@ jobs:
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         tag: ${{ github.ref }}
-        file: ./src/Camelot/bin/Release/netcoreapp3.1/linux-x64/publish/CamelotLinux.tar.gz
+        file: ./src/Camelot/bin/Release/net8.0/linux-x64/publish/CamelotLinux.tar.gz
         asset_name: CamelotLinuxSingleExe.tar.gz
