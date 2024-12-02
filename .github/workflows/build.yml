@@ -22,7 +22,7 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release --no-restore
     - name: Test
-      run: dotnet test --configuration Release --no-build --verbosity normal --collect:"XPlat Code Coverage" --logger "GitHubActions" --logger "trx;LogFileName=test-results.trx" /p:CoverletOutputFormat=opencover --filter FullyQualifiedName!~Ui.Tests || true
+      run: dotnet test --configuration Release --no-build --verbosity normal --collect:"XPlat Code Coverage" --logger "GitHubActions" --logger "trx;LogFileName=test-results.trx" /p:CoverletOutputFormat=opencover --filter FullyQualifiedName!~Ui.Tests
     - name: UploadCoverage
       run: bash <(curl -s https://codecov.io/bash)
       if: runner.os == 'Linux'
