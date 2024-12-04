@@ -21,6 +21,7 @@ jobs:
       run: |
         cd src/Camelot
         ./dotnet-deb install
+        rm Directory.Build.props
         ./dotnet-deb --configuration Release
     - name: Archive Artifact
       run: |
