@@ -3,7 +3,6 @@ using Camelot.ViewModels.Services.Interfaces;
 using Camelot.ViewModels.Services.Interfaces.Enums;
 using Camelot.ViewModels.Services.Interfaces.Models;
 using Camelot.ViewModels.Windows.WinApi;
-using SystemBitmap = System.Drawing.Bitmap;
 using AvaloniaBitmap = Avalonia.Media.Imaging.Bitmap;
 
 namespace Camelot.ViewModels.Windows.ShellIcons;

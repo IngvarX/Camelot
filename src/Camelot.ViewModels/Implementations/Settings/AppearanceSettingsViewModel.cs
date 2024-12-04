@@ -17,7 +17,7 @@ public class AppearanceSettingsViewModel : ViewModelBase, ISettingsViewModel
 
 
     public bool IsChanged => _initialShowKeyboardShortcuts != ShowKeyboardShortcuts;
-    
+
     public AppearanceSettingsViewModel(
         IAppearanceSettingsService appearanceSettingService)
     {
@@ -34,13 +34,13 @@ public class AppearanceSettingsViewModel : ViewModelBase, ISettingsViewModel
         _isActivated = true;
 
         var model = _appearanceSettingService.GetAppearanceSettings();
-        _initialShowKeyboardShortcuts = model.ShowKeyboardShortcuts;
-        ShowKeyboardShortcuts = _initialShowKeyboardShortcuts;
+        ShowKeyboardShortcuts = _initialShowKeyboardShortcuts = model.ShowKeyboardShortcuts;
     }
 
     public void SaveChanges()
     {
         var model = new AppearanceSettingsModel(ShowKeyboardShortcuts);
+
         _appearanceSettingService.SaveAppearanceSettings(model);
     }
 }

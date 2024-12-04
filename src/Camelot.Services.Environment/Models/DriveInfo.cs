@@ -1,5 +1,4 @@
 using DriveType =  System.IO.DriveType;
-using IoDriveInfo = System.IO.DriveInfo;
 
 namespace Camelot.Services.Environment.Models;
 

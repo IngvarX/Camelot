@@ -2,6 +2,7 @@
 using Avalonia.Markup.Xaml;
 
 namespace Camelot.Views.Dialogs.Settings;
+
 public class AppearanceSettingsView : UserControl
 {
     public AppearanceSettingsView()
