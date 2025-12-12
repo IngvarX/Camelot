@@ -174,6 +174,12 @@ public class LinuxApplicationService : IApplicationService
     {
         var defaultApplicationsByExtensions = new Dictionary<string, HashSet<string>>();
         var defaultsApplicationsListByMimeType = await GetDesktopEntryAsync("/usr/share/applications/defaults.list");
+        if (defaultsApplicationsListByMimeType.Count == 0)
+        {
+            var homeDirectory = _homeDirectoryProvider.HomeDirectoryPath;
+            var newMimeAppsList = _pathService.Combine(homeDirectory, ".local/share/applications/mimeapps.list");
+            defaultsApplicationsListByMimeType = await GetDesktopEntryAsync(newMimeAppsList);
+        }
 
         foreach (var (key, value) in defaultsApplicationsListByMimeType)
         {
@@ -199,6 +205,11 @@ public class LinuxApplicationService : IApplicationService
 
     private async Task<IReadOnlyDictionary<string, string>> GetDesktopEntryAsync(string desktopFilePath)
     {
+        if (!_fileService.CheckIfExists(desktopFilePath))
+        {
+            return new Dictionary<string, string>();
+        }
+        
         await using var desktopFile = _fileService.OpenRead(desktopFilePath);
 
         return await _iniReader.ReadAsync(desktopFile);

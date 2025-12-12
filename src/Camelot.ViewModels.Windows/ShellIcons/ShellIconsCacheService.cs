@@ -133,15 +133,20 @@ public class ShellIconsCacheService : IShellIconsCacheService
 
     private IBitmap ShellIcon(string path)
     {
+        if (_shellIconsService == null)
+        {
+            return null;
+        }
+        
         IBitmap result;
 
         // step #2
-        // check if cache, and if not, get from shell.
+        // check if cached, and if not, get from shell.
         // IMPORTANT:
         // keys in cache are both extensions only, and full paths,
         // based on result returned from shell.
         // eg, on Windows all .txt files will have same shell icon,
-        // but each .exe will have its own icon (if was embdded in resource of .exe)
+        // but each .exe will have its own icon (if was embedded in resource of .exe)
         var iconType = _shellIconsService.GetIconType(path);
         switch (iconType)
         {

@@ -55,12 +55,6 @@ public static class ViewModelsBootstrapper
 
     private static void RegisterServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
     {
-        services.RegisterLazySingleton<IShellIconsCacheService>(() => new ShellIconsCacheService(
-            resolver.GetRequiredService<IPlatformService>()
-        ));
-        services.RegisterLazySingleton<IShellIconsCacheService>(() => new ShellIconsCacheService(
-            resolver.GetRequiredService<IPlatformService>()
-        ));
         services.RegisterLazySingleton<IFilesOperationsMediator>(() => new FilesOperationsMediator(
             resolver.GetRequiredService<IDirectoryService>()
         ));
